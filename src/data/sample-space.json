@@ -1,0 +1,48 @@
+{
+  "title": "Craters on our Earth and Other Planets",
+  "description": "In this exercise students use the Impact Calculator lab to investigate what happens when a comet it hits the Earth.",
+  "phases": [
+    {
+      "id": 0,
+      "index": 0,
+      "title": "Home",
+      "icon": "home",
+      "text": "This is the no phase."
+    },
+    {
+      "id": 1,
+      "index": 1,
+      "title": "Orientation",
+      "icon": "chevron-right",
+      "text": "This is the orientation phase."
+    },
+    {
+      "id": 2,
+      "index": 2,
+      "title": "Conceptualisation",
+      "icon": "chevron-right",
+      "text": "This is the concept phase."
+    },
+    {
+      "id": 3,
+      "index": 3,
+      "title": "Exploration",
+      "icon": "chevron-right",
+      "text": "This is the exploration phase."
+    },
+    {
+      "id": 4,
+      "index": 4,
+      "title": "Discussion",
+      "icon": "chevron-right",
+      "text": "This is the discussion phase."
+    },
+    {
+      "id": 5,
+      "index": 5,
+      "title": "Conclusion",
+      "icon": "chevron-right",
+      "text": "This is the conclusion phase."
+    }
+  ]
+}
