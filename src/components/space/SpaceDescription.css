@@ -1,0 +1,11 @@
+.SpaceDescription {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.SpaceDescriptionDiv {
+    justify-content: center;
+    align-items: center;
+}
