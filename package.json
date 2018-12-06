@@ -1,0 +1,96 @@
+{
+  "name": "graasp-desktop",
+  "version": "0.1.0",
+  "description": "Building and Publishing a React Based Electron App From Scratch",
+  "private": false,
+  "author": "Juan Carlos Farah",
+  "license": "MIT",
+  "homepage": "./",
+  "main": "public/electron.js",
+  "keywords": [
+    "Example",
+    "React",
+    "Electron"
+  ],
+  "scripts": {
+    "dev": "yarn react-scripts start",
+    "build": "react-scripts build",
+    "start": "concurrently \"cross-env BROWSER=none yarn react-scripts start\" \"wait-on http://localhost:3000 && electron .\"",
+    "pack": "electron-builder --dir",
+    "dist": "npx build --x64 --macos --win --linux --c.extraMetadata.main=build/electron.js -p always"
+  },
+  "dependencies": {
+    "@material-ui/core": "3.5.1",
+    "electron-is-dev": "1.0.1",
+    "electron-publisher-s3": "20.17.2",
+    "react": "16.6.3",
+    "react-dev-utils": "6.1.1",
+    "react-dom": "16.6.3"
+  },
+  "devDependencies": {
+    "concurrently": "4.1.0",
+    "cross-env": "5.2.0",
+    "electron": "3.0.10",
+    "electron-builder": "20.36.2",
+    "react-scripts": "2.1.1",
+    "version-bump-prompt": "4.2.1"
+  },
+  "build": {
+    "appId": "com.your-domain",
+    "compression": "normal",
+    "productName": "Example",
+    "directories": {
+      "buildResources": "build",
+      "output": "dist"
+    },
+    "mac": {
+      "icon": "assets/icon.icns",
+      "type": "distribution",
+      "target": [
+        "pkg",
+        "dmg",
+        "mas"
+      ],
+      "publish": {
+        "provider": "s3",
+        "bucket": "example-releases",
+        "path": "releases"
+      },
+      "category": "public.app-category.news"
+    },
+    "mas": {
+      "entitlements": "assets/entitlements.mas.plist",
+      "entitlementsInherit": "assets/entitlements.mas.inherit.plist",
+      "provisioningProfile": "assets/embedded.provisionprofile"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico",
+      "publish": {
+        "provider": "s3",
+        "bucket": "example-releases",
+        "path": "releases"
+      }
+    },
+    "linux": {
+      "icon": "assets/icon.png",
+      "target": [
+        "snap",
+        "AppImage"
+      ],
+      "description": "Example",
+      "category": "Network;Feed",
+      "publish": {
+        "provider": "s3",
+        "bucket": "example-releases",
+        "path": "releases"
+      }
+    }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

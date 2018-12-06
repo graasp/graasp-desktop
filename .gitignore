@@ -1,0 +1,54 @@
+# package directories
+jspm_packages
+/node_modules
+
+# serverless directories
+.serverless
+
+# testing
+/coverage
+
+# misc
+.DS_Store
+.env.*
+env*
+
+# include encrypted environment variables
+!.env*.encrypted
+!env*.encrypted
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/dist/
+
+# build
+.webpack
+
+# vim settings
+.rootdir
+
+# exclude logs
+*.log
+
+# exclude webstorm and idea files
+.idea
+*.iml
+
+# exclude sublime project files
+*.sublime-*
+
+# exclude unused coverage information
+.nyc_output
+coverage.lcov
+
+# cypress generated files
+/cypress/screenshots
+/cypress/videos
+
+# production
+build/*
+!build/favicon.ico
+
+# exclude keys
+*.aes
