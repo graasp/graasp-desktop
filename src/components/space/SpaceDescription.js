@@ -13,7 +13,7 @@ const SpaceDescription = ({
   <div className="SpaceDescription">
     <div>
       <h4 style={{ textAlign: 'center' }}>
-        {description}
+        <div dangerouslySetInnerHTML={{ __html: description }} />
       </h4>
       <Button variant="contained" className={classes.button} onClick={start} color="primary" style={{ display: 'block', width: '50%', margin: '0 auto' }}>
         Start

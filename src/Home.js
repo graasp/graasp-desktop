@@ -175,7 +175,7 @@ Home.propTypes = {
   classes: PropTypes.shape({ appBar: PropTypes.string.isRequired }).isRequired,
   theme: PropTypes.shape({ direction: PropTypes.string }).isRequired,
   dispatchGetSpaces: PropTypes.func.isRequired,
-  spaces: PropTypes.arrayOf({ id: PropTypes.string.isRequired }).isRequired,
+  spaces: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.string.isRequired })).isRequired,
   activity: PropTypes.bool.isRequired,
   history: PropTypes.shape({ length: PropTypes.number.isRequired }).isRequired,
 };

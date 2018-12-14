@@ -4,14 +4,22 @@ const isDev = require('electron-is-dev');
 const fs = require('fs');
 const isOnline = require('is-online');
 const fsPromises = fs.promises;
+const fse = require('fs-extra');
 const electronDl = require('electron-dl');
 const { download } = electronDl;
 const extract = require('extract-zip');
+const archiver = require('archiver');
+const { ncp } = require('ncp');
 
 
 let mainWindow;
 
 const savedSpacesPath = app.getPath('userData') + '/.meta';
+const spacesFileName = 'spaces.json';
+const ERROR_ZIP_CORRUPTED = 'ERROR_ZIP_CORRUPTED';
+const ERROR_JSON_CORRUPTED = 'ERROR_JSON_CORRUPTED';
+const ERROR_SPACE_ALREADY_AVAILABLE = 'ERROR_SPACE_ALREADY_AVAILABLE';
+const ERROR_GENERAL = 'ERROR_GENERAL';
 
 createWindow = () => {
   mainWindow = new BrowserWindow({
@@ -67,11 +75,19 @@ createWindow = () => {
   });
 };
 
+handleLoad = () => {
+  console.log('que vidinha');
+};
+
 generateMenu = () => {
   const template = [
     {
       label: 'File',
-      submenu: [{ label: 'Load Space', click() { app.quit() }}, { role: 'about' }, { role: 'quit' }],
+      submenu: [{
+        label: 'Load Space',
+        click() { this.handleLoad() }},
+        { role: 'about' },
+        { role: 'quit' }],
     },
     {type:'separator'},
     {
@@ -95,6 +111,7 @@ generateMenu = () => {
         { role: 'forcereload' },
         { role: 'toggledevtools' },
         { type: 'separator' },
+        { role: 'resetzoom' },
         { role: 'resetzoom' },
         { role: 'zoomin' },
         { role: 'zoomout' },
@@ -137,7 +154,7 @@ app.on('ready', () => {
   generateMenu();
   ipcMain.on('space:get', async (event, { id, spaces }) => {
     try {
-    const space = spaces.find(el => el.id === Number(id));
+    const space = spaces.find(el => Number(el.id) === Number(id));
     const { phases } = space;
       for (const phase of phases) {
         const { items = [] } = phase;
@@ -164,8 +181,9 @@ app.on('ready', () => {
                   .catch(console.log('error'));
               } else {
                 mainWindow.webContents.send(
-                  'space:gotten',
-                  1
+                  'space:get',
+                  ERROR_GENERAL
+
                 );
               }
             }
@@ -173,7 +191,7 @@ app.on('ready', () => {
         }
       }
       mainWindow.webContents.send(
-        'space:gotten',
+        'space:get',
         space
       );
     } catch (err) {
@@ -182,7 +200,7 @@ app.on('ready', () => {
   });
   ipcMain.on('spaces:get', () => {
       let spaces = [];
-      const spacesPath = `${savedSpacesPath}/ss.json`;
+      const spacesPath = `${savedSpacesPath}/${spacesFileName}`;
       fs.readFile(spacesPath, 'utf8', (err, data) => {
         // we dont have saved spaces yet
         if (err) {
@@ -199,67 +217,110 @@ app.on('ready', () => {
         }
       });
   });
+  ipcMain.on('space:delete', async (event, { id }) => {
+    try {
+      let spaces = [];
+      const spacesPath = `${savedSpacesPath}/${spacesFileName}`;
+      fs.readFile(spacesPath, 'utf8', async (err, data) => {
+        if (err) {
+          mainWindow.webContents.send(
+            'space:deleted',
+            ERROR_GENERAL
+          );
+        } else {
+          spaces = JSON.parse(data);
+          const newSpaces = spaces.filter(el => Number(el.id) !== Number(id));
+          const spacesString = JSON.stringify(newSpaces);
+          await fsPromises.writeFile(`${savedSpacesPath}/${spacesFileName}`, spacesString);
+          mainWindow.webContents.send(
+            'space:deleted',
+          );
+        }
+      });
+    } catch {
+      mainWindow.webContents.send(
+        'space:deleted',
+        ERROR_GENERAL
+      );
+    }
+  });
   ipcMain.on('space:load', async (event, { fileLocation }) => {
     try {
-      extract(fileLocation, {dir: savedSpacesPath}, async err => {
+      const extractPath = `${savedSpacesPath}/temp/`;
+      extract(fileLocation, {dir: extractPath}, async err => {
         if (err) {
           console.log(err);
         } else {
           let space = {};
-          const spacePath = `${savedSpacesPath}/space.json`;
+          const spacePath = `${extractPath}/space.json`;
           fs.readFile(spacePath, 'utf8', async (err, data) => {
             if (err) {
               mainWindow.webContents.send(
                 'space:loaded',
-                1
+                ERROR_ZIP_CORRUPTED
               );
-            } else {
-              let spaces = [];
-              space = JSON.parse(data);
-              const spacesPath = `${savedSpacesPath}/ss.json`;
-              fs.readFile(spacesPath, 'utf8', async (err, data) => {
-                // we dont have saved spaces yet
+              fse.remove(extractPath, (err) => {
                 if (err) {
-                  spaces.push(space);
-                  const spacesString = JSON.stringify(spaces);
-                  await fsPromises.writeFile(`${savedSpacesPath}/ss.json`, spacesString);
-                  mainWindow.webContents.send(
-                    'space:loaded',
-                    spaces
-                  );
-                } else {
-                  try {
-                    spaces = JSON.parse(data);
-                  } catch (e) {
-                    mainWindow.webContents.send(
-                      'space:loaded',
-                      2
-                    );
-                  }
-                  const spaceId = Number(space.id);
-                  const available = spaces.find(({ id }) => (Number(id) === spaceId));
-                  if (!available) {
+                  console.log(err);
+                }
+              });
+            } else {
+              ncp(extractPath, savedSpacesPath, async (err) => {
+                if (err) {
+                  return console.error(err);
+                }
+                let spaces = [];
+                space = JSON.parse(data);
+                const spacesPath = `${savedSpacesPath}/${spacesFileName}`;
+                fs.readFile(spacesPath, 'utf8', async (err, data) => {
+                  // we dont have saved spaces yet
+                  if (err) {
                     spaces.push(space);
                     const spacesString = JSON.stringify(spaces);
-                    await fsPromises.writeFile(`${savedSpacesPath}/ss.json`, spacesString);
+                    await fsPromises.writeFile(`${savedSpacesPath}/${spacesFileName}`, spacesString);
                     mainWindow.webContents.send(
                       'space:loaded',
                       spaces
                     );
                   } else {
-                    mainWindow.webContents.send(
-                      'space:loaded',
-                      3
-                    );
+                    try {
+                      spaces = JSON.parse(data);
+                    } catch (e) {
+                      mainWindow.webContents.send(
+                        'space:loaded',
+                        ERROR_JSON_CORRUPTED
+                      );
+                    }
+                    const spaceId = Number(space.id);
+                    const available = spaces.find(({ id }) => (Number(id) === spaceId));
+                    if (!available) {
+                      spaces.push(space);
+                      const spacesString = JSON.stringify(spaces);
+                      await fsPromises.writeFile(`${savedSpacesPath}/${spacesFileName}`, spacesString);
+                      mainWindow.webContents.send(
+                        'space:loaded',
+                        spaces
+                      );
+                    } else {
+                      mainWindow.webContents.send(
+                        'space:loaded',
+                        ERROR_SPACE_ALREADY_AVAILABLE
+                      );
+                    }
                   }
-                }
+                  fs.unlink(`${savedSpacesPath}/space.json`, (err) => {
+                    if (err) {
+                      console.log(err);
+                    }
+                  });
+                  fse.remove(extractPath, (err) => {
+                    if (err) {
+                      console.log(err);
+                    }
+                  });
+                });
               });
             }
-            fs.unlink(spacePath, (err) => {
-              if (err) {
-                console.log(err);
-              }
-            });
           });
         }
       });
@@ -267,16 +328,103 @@ app.on('ready', () => {
       console.log('error:', err);
     }
   });
-  ipcMain.on('show-open-dialog', ()=> {
-    const options = {
-      filters: [
-        { name: 'zip', extensions: ['zip'] },
-      ],
-    };
+  ipcMain.on('space:export', async (event, { archivePath, id, spaces } ) => {
+    try {
+      const space = spaces.find(el => Number(el.id) === Number(id));
+      const { phases } = space;
+      const spacesString = JSON.stringify(space);
+      const ssPath = `${savedSpacesPath}/space.json`;
+      await fsPromises.writeFile(ssPath, spacesString);
+      const filesPaths = [ssPath];
+      for (const phase of phases) {
+        const { items = [] } = phase;
+        for (let i=0; i < items.length; i++) {
+          const { resource } = items[i];
+          if (resource) {
+            const {
+              hash,
+              type,
+            } = resource;
+            const fileName = `${hash}.${type}`;
+            const filePath = `${savedSpacesPath}/${fileName}`;
+            const fileAvailable = await checkFileAvailable({ filePath });
+            if (fileAvailable){
+              filesPaths.push(filePath);
+            }
+          }
+        }
+      }
+      const output = fs.createWriteStream(archivePath);
+      const archive = archiver('zip', {
+        zlib: { level: 9 }
+      });
+      output.on('close', () => {
+        fs.unlink(ssPath, (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+        mainWindow.webContents.send(
+          'space:exported',
+        );
+      });
+      output.on('end', () => {
+        mainWindow.webContents.send(
+          'space:exported',
+          ERROR_GENERAL
+        );
+      });
+      archive.on('warning', err => {
+        if (err.code === 'ENOENT') {
+          console.log(err);
+        }
+      });
+      archive.on('error', err => {
+        mainWindow.webContents.send(
+          'space:exported',
+          ERROR_GENERAL
+        );
+      });
+      archive.pipe(output);
+      filesPaths.forEach( path => {
+        const pathArr = path.split('/');
+        archive.file(path, { name: pathArr[pathArr.length -1 ] });
+      });
+      archive.finalize();
+    } catch (err) {
+      console.log(err);
+      mainWindow.webContents.send(
+        'space:exported',
+        ERROR_GENERAL
+      );
+    }
+  });
+  ipcMain.on('show-open-dialog', (event, options)=> {
     dialog.showOpenDialog(null, options, (filePaths) => {
       mainWindow.webContents.send('open-dialog-paths-selected', filePaths)
     });
-  })
+  });
+  ipcMain.on('show-save-dialog', (event, spaceTitle) => {
+    const options = {
+      title: 'Save as',
+      defaultPath: `${spaceTitle}.zip`,
+    };
+    dialog.showSaveDialog(null, options, (filePath) => {
+      mainWindow.webContents.send('save-dialog-path-selected', filePath)
+    });
+  });
+  ipcMain.on('show-message-dialog', () => {
+    const options = {
+      type: 'warning',
+      buttons: ['Cancel', 'Delete'],
+      defaultId: 0,
+      cancelId: 0,
+      message: 'Are you sure you want to delete the space?'
+    };
+    dialog.showMessageBox(null, options, (respond) => {
+      mainWindow.webContents.send('message-dialog-respond', respond)
+    });
+  });
 });
 
 app.on('window-all-closed', () => {

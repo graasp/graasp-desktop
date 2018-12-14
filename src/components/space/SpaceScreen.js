@@ -9,7 +9,10 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Toolbar from '@material-ui/core/Toolbar/Toolbar';
 import IconButton from '@material-ui/core/IconButton/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import Button from '@material-ui/core/Button';
 import HomeIcon from '@material-ui/icons/Home';
+import UnarchiveIcon from '@material-ui/icons/Unarchive';
+import DeleteIcon from '@material-ui/icons/Delete';
 import Drawer from '@material-ui/core/Drawer/Drawer';
 import Divider from '@material-ui/core/Divider/Divider';
 import List from '@material-ui/core/List/List';
@@ -28,6 +31,9 @@ import {
   selectPhase,
   getSpace,
   clearPhase,
+  exportSpace,
+  deleteSpace,
+  clearSpace,
 } from '../../actions';
 import './SpaceScreen.css';
 import Styles from '../../Styles';
@@ -46,22 +52,36 @@ class SpaceScreen extends Component {
   };
 
   static propTypes = {
-    spaces: PropTypes.arrayOf({ id: PropTypes.string.isRequired }).isRequired,
+    spaces: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    })).isRequired,
     space: PropTypes.shape({ id: PropTypes.string.isRequired }).isRequired,
-    phase: PropTypes.arrayOf({ id: PropTypes.string.isRequired }).isRequired,
+    phase: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    })).isRequired,
     dispatchSelectPhase: PropTypes.func.isRequired,
     dispatchClearPhase: PropTypes.func.isRequired,
     activity: PropTypes.bool.isRequired,
+    deleted: PropTypes.bool.isRequired,
     classes: PropTypes.shape({ appBar: PropTypes.string.isRequired }).isRequired,
     theme: PropTypes.shape({ direction: PropTypes.string.isRequired }).isRequired,
     match: PropTypes.shape({ params: { id: PropTypes.string.isRequired } }).isRequired,
     dispatchGetSpace: PropTypes.func.isRequired,
     history: PropTypes.shape({ length: PropTypes.number.isRequired }).isRequired,
+    dispatchExportSpace: PropTypes.func.isRequired,
+    dispatchDeleteSpace: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
     const { match: { params: { id } }, dispatchGetSpace, spaces } = this.props;
     dispatchGetSpace({ id, spaces });
+  }
+
+  componentDidUpdate() {
+    const { deleted, history: { replace } } = this.props;
+    if (deleted) {
+      replace(HOME_PATH);
+    }
   }
 
   handleDrawerOpen = () => {
@@ -87,6 +107,21 @@ class SpaceScreen extends Component {
     });
     const { dispatchClearPhase } = this.props;
     dispatchClearPhase();
+  };
+
+  handleExport = () => {
+    const { space, spaces } = this.props;
+    const id = space.get('id');
+    const title = space.get('title');
+    const { dispatchExportSpace } = this.props;
+    dispatchExportSpace(id, spaces, title);
+  };
+
+  handleDelete = () => {
+    const { space } = this.props;
+    const id = space.get('id');
+    const { dispatchDeleteSpace } = this.props;
+    dispatchDeleteSpace({ id });
   };
 
   handleItemClicked = (id) => {
@@ -159,6 +194,16 @@ class SpaceScreen extends Component {
               <MenuIcon />
             </IconButton>
             {title}
+            <span style={{ position: 'absolute', right: 20 }}>
+              <Button color="inherit" onClick={this.handleDelete} className={classes.button}>
+                Delete
+                <DeleteIcon className={classes.rightIcon}>delete</DeleteIcon>
+              </Button>
+              <Button color="inherit" onClick={this.handleExport} className={classes.button}>
+                Export
+                <UnarchiveIcon className={classes.rightIcon}>export</UnarchiveIcon>
+              </Button>
+            </span>
           </Toolbar>
         </AppBar>
         <Drawer
@@ -237,6 +282,7 @@ const mapStateToProps = ({ Space, Phase }) => ({
   open: Space.get('current').get('menu').get('open'),
   phase: Phase.get('current').get('content'),
   activity: Space.get('current').get('activity'),
+  deleted: Space.get('current').get('deleted'),
   spaces: Space.get('saved'),
 });
 
@@ -244,6 +290,9 @@ const mapDispatchToProps = {
   dispatchSelectPhase: selectPhase,
   dispatchGetSpace: getSpace,
   dispatchClearPhase: clearPhase,
+  dispatchExportSpace: exportSpace,
+  dispatchDeleteSpace: deleteSpace,
+  dispatchClearSpace: clearSpace,
 };
 
 export default (

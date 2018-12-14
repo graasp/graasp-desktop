@@ -55,7 +55,7 @@ const mapDispatchToProps = {
 
 Phase.propTypes = {
   space: PropTypes.shape({ id: PropTypes.string.isRequired }).isRequired,
-  phase: PropTypes.arrayOf({ id: PropTypes.string.isRequired }).isRequired,
+  phase: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.string.isRequired })).isRequired,
   dispatchSelectPhase: PropTypes.func.isRequired,
   start: PropTypes.func.isRequired,
 };
