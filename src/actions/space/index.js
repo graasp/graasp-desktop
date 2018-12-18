@@ -7,7 +7,8 @@ import {
   CLEAR_SPACE,
   ON_GET_SPACE_SUCCESS,
   FLAG_EXPORTING_SPACE,
-  FLAG_DELETING_SPACE, ON_SPACE_DELETED,
+  FLAG_DELETING_SPACE,
+  ON_SPACE_DELETED,
 } from '../../types/space';
 import {
   ERROR_ZIP_CORRUPTED,
@@ -99,10 +100,10 @@ const exportSpace = (id, spaces, spaceTitle) => (dispatch) => {
   window.ipcRenderer.once('space:exported', (event, newSpaces) => {
     switch (newSpaces) {
       case ERROR_GENERAL:
-        toastr.error('Error', 'There was a problem exporting the space');
+        toastr.error('Error', 'There was a problem exporting this space.');
         break;
       default:
-        toastr.success('Success', 'Space exported successfully');
+        toastr.success('Success', 'Space was exported successfully');
     }
     dispatch(flagExportingSpace(false));
   });
@@ -121,10 +122,10 @@ const deleteSpace = ({ id }) => (dispatch) => {
   window.ipcRenderer.once('space:deleted', (event, deletedReply) => {
     switch (deletedReply) {
       case ERROR_GENERAL:
-        toastr.error('Error', 'There was a problem deleting the space');
+        toastr.error('Error', 'There was a problem deleting this space');
         break;
       default:
-        toastr.success('Success', 'Space deleted successfully');
+        toastr.success('Success', 'Space was deleted successfully');
         dispatch({
           type: ON_SPACE_DELETED,
           payload: true,
@@ -150,7 +151,7 @@ const loadSpace = ({ fileLocation }) => (dispatch) => {
         toastr.error('Error', 'A space with the same id is already available');
         break;
       default:
-        toastr.success('Success', 'Space Loaded successfully!');
+        toastr.success('Success', 'Space was loaded successfully!');
         dispatch({
           type: GET_SPACES,
           payload: newSpaces,

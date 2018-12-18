@@ -76,7 +76,7 @@ createWindow = () => {
 };
 
 handleLoad = () => {
-  console.log('que vidinha');
+  console.log('load');
 };
 
 generateMenu = () => {
@@ -154,8 +154,8 @@ app.on('ready', () => {
   generateMenu();
   ipcMain.on('space:get', async (event, { id, spaces }) => {
     try {
-    const space = spaces.find(el => Number(el.id) === Number(id));
-    const { phases } = space;
+      const space = spaces.find(el => Number(el.id) === Number(id));
+      const { phases } = space;
       for (const phase of phases) {
         const { items = [] } = phase;
         for (let i=0; i < items.length; i++) {
@@ -168,7 +168,7 @@ app.on('ready', () => {
             } = resource;
             const fileName = `${hash}.${type}`;
             const filePath = `${savedSpacesPath}/${fileName}`;
-            const fileAvailable = await checkFileAvailable({ filePath });
+            const fileAvailable = await checkFileAvailable(filePath);
             if (fileAvailable){
               phase.items[i].asset = filePath;
             } else {
@@ -178,12 +178,10 @@ app.on('ready', () => {
                   .then(dl => {
                     phase.items[i].asset = dl.getSavePath();
                   })
-                  .catch(console.log('error'));
               } else {
                 mainWindow.webContents.send(
                   'space:get',
                   ERROR_GENERAL
-
                 );
               }
             }
@@ -338,7 +336,7 @@ app.on('ready', () => {
       const filesPaths = [ssPath];
       for (const phase of phases) {
         const { items = [] } = phase;
-        for (let i=0; i < items.length; i++) {
+        for (let i = 0; i < items.length; i += 1) {
           const { resource } = items[i];
           if (resource) {
             const {
@@ -347,7 +345,7 @@ app.on('ready', () => {
             } = resource;
             const fileName = `${hash}.${type}`;
             const filePath = `${savedSpacesPath}/${fileName}`;
-            const fileAvailable = await checkFileAvailable({ filePath });
+            const fileAvailable = await checkFileAvailable(filePath);
             if (fileAvailable){
               filesPaths.push(filePath);
             }
@@ -388,7 +386,7 @@ app.on('ready', () => {
       archive.pipe(output);
       filesPaths.forEach( path => {
         const pathArr = path.split('/');
-        archive.file(path, { name: pathArr[pathArr.length -1 ] });
+        archive.file(path, { name: pathArr[pathArr.length - 1 ] });
       });
       archive.finalize();
     } catch (err) {
@@ -406,7 +404,7 @@ app.on('ready', () => {
   });
   ipcMain.on('show-save-dialog', (event, spaceTitle) => {
     const options = {
-      title: 'Save as',
+      title: 'Save As',
       defaultPath: `${spaceTitle}.zip`,
     };
     dialog.showSaveDialog(null, options, (filePath) => {
@@ -419,7 +417,7 @@ app.on('ready', () => {
       buttons: ['Cancel', 'Delete'],
       defaultId: 0,
       cancelId: 0,
-      message: 'Are you sure you want to delete the space?'
+      message: 'Are you sure you want to delete this space?'
     };
     dialog.showMessageBox(null, options, (respond) => {
       mainWindow.webContents.send('message-dialog-respond', respond)
@@ -441,5 +439,5 @@ ipcMain.on('load-page', (event, arg) => {
   mainWindow.loadURL(arg);
 });
 
-const checkFileAvailable = ({ filePath }) =>
+const checkFileAvailable = (filePath) =>
   new Promise(resolve => fs.access(filePath, fs.constants.F_OK, err => resolve(!err)));
