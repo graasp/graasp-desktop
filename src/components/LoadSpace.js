@@ -72,8 +72,13 @@ class LoadSpace extends Component {
   };
 
   handleBrowse = () => {
-    window.ipcRenderer.send('show-open-dialog');
-    window.ipcRenderer.on('open-dialog-paths-selected', (event, filePaths) => {
+    const options = {
+      filters: [
+        { name: 'zip', extensions: ['zip'] },
+      ],
+    };
+    window.ipcRenderer.send('show-open-dialog', options);
+    window.ipcRenderer.once('open-dialog-paths-selected', (event, filePaths) => {
       if (filePaths && filePaths.length > 0) {
         this.handleFileLocation(filePaths[0]);
       }
