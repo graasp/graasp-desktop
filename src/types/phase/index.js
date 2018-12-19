@@ -1,0 +1,3 @@
+export const SELECT_PHASE = 'SELECT_SPACE';
+export const FLAG_SELECTING_SPACE = 'FLAG_SELECTING_SPACE';
+export const CLEAR_PHASE = 'CLEAR_PHASE';
