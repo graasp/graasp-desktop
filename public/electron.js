@@ -10,6 +10,22 @@ const { download } = electronDl;
 const extract = require('extract-zip');
 const archiver = require('archiver');
 const { ncp } = require('ncp');
+const {
+  DELETE_SPACE_CHANNEL,
+  DELETED_SPACE_CHANNEL,
+  EXPORT_SPACE_CHANNEL,
+  EXPORTED_SPACE_CHANNEL,
+  GET_SPACE_CHANNEL,
+  GET_SPACES_CHANNEL,
+  LOAD_SPACE_CHANNEL,
+  LOADED_SPACE_CHANNEL,
+  MESSAGE_DIALOG_RESPOND_CHANNEL,
+  SAVE_DIALOG_PATH_SELECTED_CHANNEL,
+  SHOW_MESSAGE_DIALOG_CHANNEL,
+  SHOW_SAVE_DIALOG_CHANNEL,
+  SHOW_OPEN_DIALOG_CHANNEL,
+  OPEN_DIALOG_PATHS_SELECTED_CHANNEL,
+} = require('./channels');
 
 
 let mainWindow;
@@ -152,7 +168,7 @@ generateMenu = () => {
 app.on('ready', () => {
   createWindow();
   generateMenu();
-  ipcMain.on('space:get', async (event, { id, spaces }) => {
+  ipcMain.on(GET_SPACE_CHANNEL, async (event, { id, spaces }) => {
     try {
       const space = spaces.find(el => Number(el.id) === Number(id));
       const { phases } = space;
@@ -180,7 +196,7 @@ app.on('ready', () => {
                   })
               } else {
                 mainWindow.webContents.send(
-                  'space:get',
+                  GET_SPACE_CHANNEL,
                   ERROR_GENERAL
                 );
               }
@@ -189,40 +205,40 @@ app.on('ready', () => {
         }
       }
       mainWindow.webContents.send(
-        'space:get',
+        GET_SPACE_CHANNEL,
         space
       );
     } catch (err) {
       console.log('error:', err);
     }
   });
-  ipcMain.on('spaces:get', () => {
+  ipcMain.on(GET_SPACES_CHANNEL, () => {
       let spaces = [];
       const spacesPath = `${savedSpacesPath}/${spacesFileName}`;
       fs.readFile(spacesPath, 'utf8', (err, data) => {
         // we dont have saved spaces yet
         if (err) {
           mainWindow.webContents.send(
-            'spaces:get',
+            GET_SPACES_CHANNEL,
             spaces
           );
         } else {
           spaces = JSON.parse(data);
           mainWindow.webContents.send(
-            'spaces:get',
+            GET_SPACES_CHANNEL,
             spaces
           );
         }
       });
   });
-  ipcMain.on('space:delete', async (event, { id }) => {
+  ipcMain.on(DELETE_SPACE_CHANNEL, async (event, { id }) => {
     try {
       let spaces = [];
       const spacesPath = `${savedSpacesPath}/${spacesFileName}`;
       fs.readFile(spacesPath, 'utf8', async (err, data) => {
         if (err) {
           mainWindow.webContents.send(
-            'space:deleted',
+            DELETED_SPACE_CHANNEL,
             ERROR_GENERAL
           );
         } else {
@@ -231,18 +247,18 @@ app.on('ready', () => {
           const spacesString = JSON.stringify(newSpaces);
           await fsPromises.writeFile(`${savedSpacesPath}/${spacesFileName}`, spacesString);
           mainWindow.webContents.send(
-            'space:deleted',
+            DELETED_SPACE_CHANNEL,
           );
         }
       });
     } catch {
       mainWindow.webContents.send(
-        'space:deleted',
+        DELETED_SPACE_CHANNEL,
         ERROR_GENERAL
       );
     }
   });
-  ipcMain.on('space:load', async (event, { fileLocation }) => {
+  ipcMain.on(LOAD_SPACE_CHANNEL, async (event, { fileLocation }) => {
     try {
       const extractPath = `${savedSpacesPath}/temp/`;
       extract(fileLocation, {dir: extractPath}, async err => {
@@ -254,7 +270,7 @@ app.on('ready', () => {
           fs.readFile(spacePath, 'utf8', async (err, data) => {
             if (err) {
               mainWindow.webContents.send(
-                'space:loaded',
+                LOADED_SPACE_CHANNEL,
                 ERROR_ZIP_CORRUPTED
               );
               fse.remove(extractPath, (err) => {
@@ -277,7 +293,7 @@ app.on('ready', () => {
                     const spacesString = JSON.stringify(spaces);
                     await fsPromises.writeFile(`${savedSpacesPath}/${spacesFileName}`, spacesString);
                     mainWindow.webContents.send(
-                      'space:loaded',
+                      LOADED_SPACE_CHANNEL,
                       spaces
                     );
                   } else {
@@ -285,7 +301,7 @@ app.on('ready', () => {
                       spaces = JSON.parse(data);
                     } catch (e) {
                       mainWindow.webContents.send(
-                        'space:loaded',
+                        LOADED_SPACE_CHANNEL,
                         ERROR_JSON_CORRUPTED
                       );
                     }
@@ -296,12 +312,12 @@ app.on('ready', () => {
                       const spacesString = JSON.stringify(spaces);
                       await fsPromises.writeFile(`${savedSpacesPath}/${spacesFileName}`, spacesString);
                       mainWindow.webContents.send(
-                        'space:loaded',
+                        LOADED_SPACE_CHANNEL,
                         spaces
                       );
                     } else {
                       mainWindow.webContents.send(
-                        'space:loaded',
+                        LOADED_SPACE_CHANNEL,
                         ERROR_SPACE_ALREADY_AVAILABLE
                       );
                     }
@@ -326,7 +342,7 @@ app.on('ready', () => {
       console.log('error:', err);
     }
   });
-  ipcMain.on('space:export', async (event, { archivePath, id, spaces } ) => {
+  ipcMain.on(EXPORT_SPACE_CHANNEL, async (event, { archivePath, id, spaces } ) => {
     try {
       const space = spaces.find(el => Number(el.id) === Number(id));
       const { phases } = space;
@@ -363,12 +379,12 @@ app.on('ready', () => {
           }
         });
         mainWindow.webContents.send(
-          'space:exported',
+          EXPORTED_SPACE_CHANNEL,
         );
       });
       output.on('end', () => {
         mainWindow.webContents.send(
-          'space:exported',
+          EXPORTED_SPACE_CHANNEL,
           ERROR_GENERAL
         );
       });
@@ -379,7 +395,7 @@ app.on('ready', () => {
       });
       archive.on('error', err => {
         mainWindow.webContents.send(
-          'space:exported',
+          EXPORTED_SPACE_CHANNEL,
           ERROR_GENERAL
         );
       });
@@ -392,26 +408,26 @@ app.on('ready', () => {
     } catch (err) {
       console.log(err);
       mainWindow.webContents.send(
-        'space:exported',
+        EXPORTED_SPACE_CHANNEL,
         ERROR_GENERAL
       );
     }
   });
-  ipcMain.on('show-open-dialog', (event, options)=> {
+  ipcMain.on(SHOW_OPEN_DIALOG_CHANNEL, (event, options)=> {
     dialog.showOpenDialog(null, options, (filePaths) => {
-      mainWindow.webContents.send('open-dialog-paths-selected', filePaths)
+      mainWindow.webContents.send(OPEN_DIALOG_PATHS_SELECTED_CHANNEL, filePaths)
     });
   });
-  ipcMain.on('show-save-dialog', (event, spaceTitle) => {
+  ipcMain.on(SHOW_SAVE_DIALOG_CHANNEL, (event, spaceTitle) => {
     const options = {
       title: 'Save As',
       defaultPath: `${spaceTitle}.zip`,
     };
     dialog.showSaveDialog(null, options, (filePath) => {
-      mainWindow.webContents.send('save-dialog-path-selected', filePath)
+      mainWindow.webContents.send(SAVE_DIALOG_PATH_SELECTED_CHANNEL, filePath)
     });
   });
-  ipcMain.on('show-message-dialog', () => {
+  ipcMain.on(SHOW_MESSAGE_DIALOG_CHANNEL, () => {
     const options = {
       type: 'warning',
       buttons: ['Cancel', 'Delete'],
@@ -420,7 +436,7 @@ app.on('ready', () => {
       message: 'Are you sure you want to delete this space?'
     };
     dialog.showMessageBox(null, options, (respond) => {
-      mainWindow.webContents.send('message-dialog-respond', respond)
+      mainWindow.webContents.send(MESSAGE_DIALOG_RESPOND_CHANNEL, respond)
     });
   });
 });
