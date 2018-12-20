@@ -26,6 +26,7 @@ const {
   SHOW_OPEN_DIALOG_CHANNEL,
   OPEN_DIALOG_PATHS_SELECTED_CHANNEL,
 } = require('./channels');
+const { getExtension } = require('./Utils');
 
 
 let mainWindow;
@@ -212,10 +213,11 @@ app.on('ready', () => {
       console.log('error:', err);
     }
   });
-  ipcMain.on(GET_SPACES_CHANNEL, () => {
+  ipcMain.on(GET_SPACES_CHANNEL, async () => {
+    try {
       let spaces = [];
       const spacesPath = `${savedSpacesPath}/${spacesFileName}`;
-      fs.readFile(spacesPath, 'utf8', (err, data) => {
+      fs.readFile(spacesPath, 'utf8', async (err, data) => {
         // we dont have saved spaces yet
         if (err) {
           mainWindow.webContents.send(
@@ -224,12 +226,36 @@ app.on('ready', () => {
           );
         } else {
           spaces = JSON.parse(data);
+          for (const space of spaces) {
+            const { image: imageUrl, id } = space;
+            if (imageUrl) {
+              const extension = getExtension(imageUrl);
+              const backgroundImage = `background-${id}.${extension}`;
+              const backgroundImagePath = `${savedSpacesPath}/${backgroundImage}`;
+              const backgroundImageExists = await checkFileAvailable(backgroundImagePath);
+              if (backgroundImageExists) {
+                space.asset = `file://${backgroundImagePath}`;
+              } else {
+                const isConnected = await isOnline();
+                if (isConnected) {
+                  await download(mainWindow, imageUrl, { directory: savedSpacesPath, filename: backgroundImage })
+                    .then(dl => {
+                      space.asset = `file://${dl.getSavePath()}`;
+                    })
+                    .catch(e => console.log(e, 'error'));
+                }
+              }
+            }
+          }
           mainWindow.webContents.send(
             GET_SPACES_CHANNEL,
             spaces
           );
         }
       });
+    } catch (e) {
+      console.err(e);
+    }
   });
   ipcMain.on(DELETE_SPACE_CHANNEL, async (event, { id }) => {
     try {
@@ -345,11 +371,21 @@ app.on('ready', () => {
   ipcMain.on(EXPORT_SPACE_CHANNEL, async (event, { archivePath, id, spaces } ) => {
     try {
       const space = spaces.find(el => Number(el.id) === Number(id));
-      const { phases } = space;
+      const { phases, image: imageUrl } = space;
       const spacesString = JSON.stringify(space);
       const ssPath = `${savedSpacesPath}/space.json`;
-      await fsPromises.writeFile(ssPath, spacesString);
       const filesPaths = [ssPath];
+      if (imageUrl) {
+        // regex to get file extension
+        const extension = getExtension(imageUrl);
+        const backgroundImage = `background-${id}.${extension}`;
+        const backgroundImagePath = `${savedSpacesPath}/${backgroundImage}`;
+        const backgroundImageExists = await checkFileAvailable(backgroundImagePath);
+        if (backgroundImageExists) {
+          filesPaths.push(backgroundImagePath);
+        }
+      }
+      await fsPromises.writeFile(ssPath, spacesString);
       for (const phase of phases) {
         const { items = [] } = phase;
         for (let i = 0; i < items.length; i += 1) {
