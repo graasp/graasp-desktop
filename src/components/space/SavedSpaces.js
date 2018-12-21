@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography/Typography';
 import Grid from '@material-ui/core/Grid/Grid';
 import MediaCard from '../common/MediaCard';
 import { clearSpace } from '../../actions';
+import graaspImage from '../../data/graasp.jpg';
 
 class SavedSpaces extends Component {
   componentDidMount() {
@@ -28,6 +29,7 @@ class SavedSpaces extends Component {
         title,
         image,
         text,
+        asset,
       } = space;
       const { replace } = history;
       return (
@@ -35,7 +37,9 @@ class SavedSpaces extends Component {
           <MediaCard
             key={Number(id)}
             title={title}
-            image={image}
+            // show the local background image if exists, otherwise fetch
+            // the image from url if provided if not provided then pass the default background image
+            image={asset || image || graaspImage}
             text={text}
             button={(
               <Button
