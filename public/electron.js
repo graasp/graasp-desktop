@@ -26,6 +26,7 @@ const {
   SHOW_OPEN_DIALOG_CHANNEL,
   OPEN_DIALOG_PATHS_SELECTED_CHANNEL,
 } = require('./channels');
+const { getExtension } = require('./Utils');
 
 
 let mainWindow;
@@ -212,10 +213,11 @@ app.on('ready', () => {
       console.log('error:', err);
     }
   });
-  ipcMain.on(GET_SPACES_CHANNEL, () => {
+  ipcMain.on(GET_SPACES_CHANNEL, async () => {
+    try {
       let spaces = [];
       const spacesPath = `${savedSpacesPath}/${spacesFileName}`;
-      fs.readFile(spacesPath, 'utf8', (err, data) => {
+      fs.readFile(spacesPath, 'utf8', async (err, data) => {
         // we dont have saved spaces yet
         if (err) {
           mainWindow.webContents.send(
@@ -224,16 +226,41 @@ app.on('ready', () => {
           );
         } else {
           spaces = JSON.parse(data);
+          for (const space of spaces) {
+            const { image: imageUrl, id } = space;
+            if (imageUrl) {
+              const extension = getExtension(imageUrl);
+              const backgroundImage = `background-${id}.${extension}`;
+              const backgroundImagePath = `${savedSpacesPath}/${backgroundImage}`;
+              const backgroundImageExists = await checkFileAvailable(backgroundImagePath);
+              if (backgroundImageExists) {
+                space.asset = `file://${backgroundImagePath}`;
+              } else {
+                const isConnected = await isOnline();
+                if (isConnected) {
+                  await download(mainWindow, imageUrl, { directory: savedSpacesPath, filename: backgroundImage })
+                    .then(dl => {
+                      space.asset = `file://${dl.getSavePath()}`;
+                    })
+                    .catch(e => console.log(e, 'error'));
+                }
+              }
+            }
+          }
           mainWindow.webContents.send(
             GET_SPACES_CHANNEL,
             spaces
           );
         }
       });
+    } catch (e) {
+      console.err(e);
+    }
   });
   ipcMain.on(DELETE_SPACE_CHANNEL, async (event, { id }) => {
     try {
       let spaces = [];
+      let spaceImageUrl = '';
       const spacesPath = `${savedSpacesPath}/${spacesFileName}`;
       fs.readFile(spacesPath, 'utf8', async (err, data) => {
         if (err) {
@@ -243,6 +270,53 @@ app.on('ready', () => {
           );
         } else {
           spaces = JSON.parse(data);
+          const allResources = [];
+          const spaceResources = [];
+          for (const space of spaces) {
+            const { phases, id: spaceId, image: imageUrl } = space;
+            if ( spaceId === id ) {
+              // to get the extension of the background image for the space to be deleted
+              spaceImageUrl = imageUrl;
+            }
+            for (const phase of phases) {
+              const { items = [] } = phase;
+              for (let i = 0; i < items.length; i++) {
+                const { resource } = items[i];
+                if (resource) {
+                  const {
+                    hash,
+                    type,
+                  } = resource;
+                  const fileName = `${hash}.${type}`;
+                  const filePath = `${savedSpacesPath}/${fileName}`;
+                  const fileAvailable = await checkFileAvailable(filePath);
+                  if (fileAvailable) {
+                    if ( spaceId === id ) {
+                      spaceResources.push(filePath);
+                    } else {
+                      allResources.push(filePath);
+                    }
+                  }
+                }
+              }
+            }
+          }
+          // resources in the space but not used by other spaces
+          const allResourcesSet = new Set(allResources);
+          const spaceDistinctResources = new Set([...spaceResources].filter(filePath => !allResourcesSet.has(filePath)));
+          const extension = spaceImageUrl.match(/[^\\]*\.(\w+)$/)[1];
+          const backgroundImagePath = `${savedSpacesPath}/background-${id}.${extension}`;
+          const backgroundImageExists = await checkFileAvailable(backgroundImagePath);
+          if (backgroundImageExists) {
+            spaceDistinctResources.add(backgroundImagePath);
+          }
+          // delete all resources used by the space to be deleted only
+          [...spaceDistinctResources].forEach(filePath =>
+              fs.unlink(filePath, (err) => {
+              if (err) {
+                console.log(err);
+              }
+          }));
           const newSpaces = spaces.filter(el => Number(el.id) !== Number(id));
           const spacesString = JSON.stringify(newSpaces);
           await fsPromises.writeFile(`${savedSpacesPath}/${spacesFileName}`, spacesString);
@@ -345,11 +419,21 @@ app.on('ready', () => {
   ipcMain.on(EXPORT_SPACE_CHANNEL, async (event, { archivePath, id, spaces } ) => {
     try {
       const space = spaces.find(el => Number(el.id) === Number(id));
-      const { phases } = space;
+      const { phases, image: imageUrl } = space;
       const spacesString = JSON.stringify(space);
       const ssPath = `${savedSpacesPath}/space.json`;
-      await fsPromises.writeFile(ssPath, spacesString);
       const filesPaths = [ssPath];
+      if (imageUrl) {
+        // regex to get file extension
+        const extension = getExtension(imageUrl);
+        const backgroundImage = `background-${id}.${extension}`;
+        const backgroundImagePath = `${savedSpacesPath}/${backgroundImage}`;
+        const backgroundImageExists = await checkFileAvailable(backgroundImagePath);
+        if (backgroundImageExists) {
+          filesPaths.push(backgroundImagePath);
+        }
+      }
+      await fsPromises.writeFile(ssPath, spacesString);
       for (const phase of phases) {
         const { items = [] } = phase;
         for (let i = 0; i < items.length; i += 1) {
