@@ -75,11 +75,6 @@
         "dmg",
         "mas"
       ],
-      "publish": {
-        "provider": "s3",
-        "bucket": "example-releases",
-        "path": "releases"
-      },
       "category": "public.app-category.news"
     },
     "mas": {
@@ -89,12 +84,7 @@
     },
     "win": {
       "target": "nsis",
-      "icon": "assets/icon.ico",
-      "publish": {
-        "provider": "s3",
-        "bucket": "example-releases",
-        "path": "releases"
-      }
+      "icon": "assets/icon.ico"
     },
     "linux": {
       "icon": "assets/icon.png",
@@ -103,12 +93,7 @@
         "AppImage"
       ],
       "description": "Example",
-      "category": "Network;Feed",
-      "publish": {
-        "provider": "s3",
-        "bucket": "example-releases",
-        "path": "releases"
-      }
+      "category": "Network;Feed"
     }
   },
   "browserslist": [

@@ -145,7 +145,7 @@ generateMenu = () => {
         {
           click() {
             require('electron').shell.openExternal(
-              'https://getstream.io/winds',
+              'https://github.com/react-epfl/graasp-desktop/blob/master/README.md',
             );
           },
           label: 'Learn More',
@@ -153,7 +153,7 @@ generateMenu = () => {
         {
           click() {
             require('electron').shell.openExternal(
-              'https://github.com/GetStream/Winds/issues',
+              'https://github.com/react-epfl/graasp-desktop/issues',
             );
           },
           label: 'File Issue on GitHub',
@@ -393,7 +393,7 @@ app.on('ready', () => {
           console.log(err);
         }
       });
-      archive.on('error', err => {
+      archive.on('error', () => {
         mainWindow.webContents.send(
           EXPORTED_SPACE_CHANNEL,
           ERROR_GENERAL
