@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.1.2](https://github.com/graasp/graasp-desktop/compare/v0.1.1...v0.1.2) (2019-04-29)
+
+
+### Bug Fixes
+
+* update repository ([fc2ae9c](https://github.com/graasp/graasp-desktop/commit/fc2ae9c)), closes [#28](https://github.com/graasp/graasp-desktop/issues/28)
+
+
+
 ## [0.1.1](https://github.com/react-epfl/graasp-desktop/compare/v0.1.0...v0.1.1) (2019-04-29)
 
 
