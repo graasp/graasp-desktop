@@ -10,15 +10,13 @@ const path = require('path');
 const isDev = require('electron-is-dev');
 const fs = require('fs');
 const isOnline = require('is-online');
-
 const fsPromises = fs.promises;
 const fse = require('fs-extra');
 const electronDl = require('electron-dl');
-
-const { download } = electronDl;
 const extract = require('extract-zip');
 const archiver = require('archiver');
 const { ncp } = require('ncp');
+const log = require('electron-log');
 const { autoUpdater } = require('electron-updater');
 const {
   DELETE_SPACE_CHANNEL,
@@ -38,6 +36,7 @@ const {
 } = require('./channels');
 const { getExtension } = require('./Utils');
 
+const { download } = electronDl;
 let mainWindow;
 
 const savedSpacesPath = `${app.getPath('userData')}/.meta`;
@@ -187,7 +186,11 @@ const generateMenu = () => {
 };
 
 app.on('ready', () => {
+  // updater
+  log.transports.file.level = 'info';
+  autoUpdater.logger = log;
   autoUpdater.checkForUpdatesAndNotify();
+
   createWindow();
   generateMenu();
   ipcMain.on(GET_SPACE_CHANNEL, async (event, { id, spaces }) => {
