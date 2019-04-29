@@ -28,7 +28,8 @@
     "postinstall": "electron-builder install-app-deps",
     "predist": "yarn build",
     "dist": "env-cmd ./.env electron-builder",
-    "release": "env-cmd ./.env build"
+    "release": "git add CHANGELOG.md && standard-version -a",
+    "postrelease": "env-cmd ./.env build"
   },
   "dependencies": {
     "@material-ui/core": "3.9.3",
@@ -70,6 +71,7 @@
     "env-cmd": "8.0.2",
     "eslint-config-airbnb": "17.1.0",
     "react-scripts": "3.0.0",
+    "standard-version": "5.0.2",
     "version-bump-prompt": "5.0.1"
   },
   "build": {
@@ -117,6 +119,9 @@
         "github"
       ]
     }
+  },
+  "release": {
+    "analyzeCommits": "conventional"
   },
   "browserslist": [
     ">0.2%",
