@@ -26,8 +26,9 @@
     "start": "concurrently \"cross-env BROWSER=none yarn react-scripts start\" \"wait-on http://localhost:3000 && electron .\"",
     "pack": "electron-builder --dir",
     "postinstall": "electron-builder install-app-deps",
-    "dist": "env-cmd ./.env.prod electron-builder",
-    "release": "env-cmd ./.env.prod build"
+    "predist": "yarn build",
+    "dist": "env-cmd ./.env electron-builder",
+    "release": "env-cmd ./.env build"
   },
   "dependencies": {
     "@material-ui/core": "3.9.3",

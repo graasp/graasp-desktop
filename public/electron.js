@@ -10,6 +10,7 @@ const { download } = electronDl;
 const extract = require('extract-zip');
 const archiver = require('archiver');
 const { ncp } = require('ncp');
+const { autoUpdater } = require("electron-updater");
 const {
   DELETE_SPACE_CHANNEL,
   DELETED_SPACE_CHANNEL,
@@ -100,11 +101,20 @@ generateMenu = () => {
   const template = [
     {
       label: 'File',
-      submenu: [{
-        label: 'Load Space',
-        click() { this.handleLoad() }},
-        { role: 'about' },
-        { role: 'quit' }],
+      submenu: [
+        {
+          label: 'Load Space',
+          click() { this.handleLoad() }
+        },
+        {
+          label: 'About',
+          role: 'about',
+        },
+        {
+          label: 'Quit',
+          role: 'quit',
+        }
+      ],
     },
     {type:'separator'},
     {
@@ -167,6 +177,7 @@ generateMenu = () => {
 };
 
 app.on('ready', () => {
+  autoUpdater.checkForUpdatesAndNotify();
   createWindow();
   generateMenu();
   ipcMain.on(GET_SPACE_CHANNEL, async (event, { id, spaces }) => {
