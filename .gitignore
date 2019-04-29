@@ -12,6 +12,7 @@ jspm_packages
 .DS_Store
 .env.*
 env*
+.env*
 
 # include encrypted environment variables
 !.env*.encrypted
@@ -52,3 +53,9 @@ build/*
 
 # exclude keys
 *.aes
+
+# exclude provision profiles
+/assets/*.provisionprofile
+
+# exclude tarballs
+*.tgz

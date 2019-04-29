@@ -1,9 +1,13 @@
 {
   "name": "graasp-desktop",
   "version": "0.1.0",
-  "description": "Building and Publishing a React Based Electron App From Scratch",
+  "description": "Desktop application for the Graasp ecosystem.",
   "private": false,
-  "author": "Juan Carlos Farah",
+  "author": "React EPFL",
+  "contributors": [
+    "Juan Carlos Farah",
+    "Hassan Abdul Ghaffar"
+  ],
   "license": "MIT",
   "homepage": "./",
   "main": "public/electron.js",
@@ -12,40 +16,49 @@
     "React",
     "Electron"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/react-epfl/graasp-desktop"
+  },
   "scripts": {
     "dev": "yarn react-scripts start",
     "build": "react-scripts build",
     "start": "concurrently \"cross-env BROWSER=none yarn react-scripts start\" \"wait-on http://localhost:3000 && electron .\"",
     "pack": "electron-builder --dir",
-    "dist": "npx build --x64 --macos --win --linux --c.extraMetadata.main=build/electron.js -p always"
+    "postinstall": "electron-builder install-app-deps",
+    "predist": "yarn build",
+    "dist": "env-cmd ./.env electron-builder",
+    "release": "git add CHANGELOG.md && standard-version -a",
+    "postrelease": "env-cmd ./.env build"
   },
   "dependencies": {
-    "@material-ui/core": "3.5.1",
-    "@material-ui/icons": "3.0.1",
+    "@material-ui/core": "3.9.3",
+    "@material-ui/icons": "3.0.2",
     "archiver": "3.0.0",
     "classnames": "2.2.6",
-    "connected-react-router": "5.0.1",
+    "connected-react-router": "6.4.0",
     "electron-devtools-installer": "2.2.4",
-    "electron-dl": "1.12.0",
-    "electron-is-dev": "1.0.1",
+    "electron-dl": "1.14.0",
+    "electron-is-dev": "1.1.0",
     "electron-publisher-s3": "20.17.2",
+    "electron-updater": "4.0.6",
     "extract-zip": "1.6.7",
     "fs-extra": "7.0.1",
-    "history": "4.7.2",
+    "history": "4.9.0",
     "immutable": "4.0.0-rc.12",
-    "is-online": "8.0.0",
+    "is-online": "8.2.0",
     "ncp": "2.0.0",
-    "prop-types": "15.6.2",
-    "react": "16.6.3",
-    "react-dev-utils": "6.1.1",
-    "react-dom": "16.6.3",
+    "prop-types": "15.7.2",
+    "react": "16.8.6",
+    "react-dev-utils": "9.0.0",
+    "react-dom": "16.8.6",
     "react-loading": "2.0.3",
-    "react-redux": "5.1.1",
-    "react-redux-toastr": "7.4.4",
-    "react-router": "4.3.1",
-    "react-router-dom": "4.3.1",
+    "react-redux": "7.0.3",
+    "react-redux-toastr": "7.4.9",
+    "react-router": "5.0.0",
+    "react-router-dom": "5.0.0",
     "redux": "4.0.1",
-    "redux-devtools-extension": "2.13.5",
+    "redux-devtools-extension": "2.13.8",
     "redux-promise": "0.6.0",
     "redux-thunk": "2.3.0",
     "wait-on": "3.2.0"
@@ -53,16 +66,18 @@
   "devDependencies": {
     "concurrently": "4.1.0",
     "cross-env": "5.2.0",
-    "electron-builder": "20.36.2",
-    "electron": "3.0.10",
+    "electron": "5.0.0",
+    "electron-builder": "20.39.0",
+    "env-cmd": "8.0.2",
     "eslint-config-airbnb": "17.1.0",
-    "react-scripts": "2.1.1",
-    "version-bump-prompt": "4.2.1"
+    "react-scripts": "3.0.0",
+    "standard-version": "5.0.2",
+    "version-bump-prompt": "5.0.1"
   },
   "build": {
-    "appId": "com.your-domain",
+    "appId": "com.graasp",
     "compression": "normal",
-    "productName": "Graasp Desktop",
+    "productName": "Graasp",
     "directories": {
       "buildResources": "build",
       "output": "dist"
@@ -75,12 +90,10 @@
         "dmg",
         "mas"
       ],
-      "publish": {
-        "provider": "s3",
-        "bucket": "example-releases",
-        "path": "releases"
-      },
-      "category": "public.app-category.news"
+      "category": "public.app-category.education",
+      "publish": [
+        "github"
+      ]
     },
     "mas": {
       "entitlements": "assets/entitlements.mas.plist",
@@ -90,11 +103,9 @@
     "win": {
       "target": "nsis",
       "icon": "assets/icon.ico",
-      "publish": {
-        "provider": "s3",
-        "bucket": "example-releases",
-        "path": "releases"
-      }
+      "publish": [
+        "github"
+      ]
     },
     "linux": {
       "icon": "assets/icon.png",
@@ -104,12 +115,13 @@
       ],
       "description": "Example",
       "category": "Network;Feed",
-      "publish": {
-        "provider": "s3",
-        "bucket": "example-releases",
-        "path": "releases"
-      }
+      "publish": [
+        "github"
+      ]
     }
+  },
+  "release": {
+    "analyzeCommits": "conventional"
   },
   "browserslist": [
     ">0.2%",
