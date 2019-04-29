@@ -1,5 +1,5 @@
 build
-public
+dist
 coverage
 src/registerServiceWorker.js
 cypress/integration/examples

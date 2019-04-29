@@ -47,8 +47,14 @@ class PhaseLab extends Component {
     const { uri } = this.props;
     return (
       <div className="LabDiv">
-        <iframe className="Lab" sandbox="allow-scripts" src={uri} ref={f => this.iframe = f} />
-      </div>);
+        <iframe
+          className="Lab"
+          sandbox="allow-scripts"
+          src={uri}
+          ref={f => (this.iframe = f)}
+        />
+      </div>
+    );
   }
 }
 

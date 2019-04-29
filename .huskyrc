@@ -1,0 +1,10 @@
+{
+  "hooks": {
+    "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+    "post-checkout": "yarn install",
+    "pre-commit": "pretty-quick --staged && yarn lint && yarn test:once",
+    "post-commit": "git status",
+    "post-merge": "yarn install",
+    "pre-push": "yarn lint && yarn test:once && yarn build"
+  }
+}

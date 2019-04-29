@@ -1,5 +1,13 @@
 {
-  "extends": "airbnb",
+  "extends": [
+    "airbnb",
+    "prettier"
+  ],
+  "plugins": [
+    "import",
+    "jsx-a11y",
+    "react"
+  ],
   "env": {
     "browser": true,
     "node": true,
@@ -7,9 +15,6 @@
     "jest": true
   },
   "globals": {
-    "localStorage": true,
-    "document": true,
-    "window": true,
     "cy": true,
     "Cypress": true
   },
@@ -20,8 +25,7 @@
       {
         "allow": [
           "_id",
-          "__REDUX_DEVTOOLS_EXTENSION__",
-          "__coverage__"
+          "__REDUX_DEVTOOLS_EXTENSION__"
         ]
       }
     ],
