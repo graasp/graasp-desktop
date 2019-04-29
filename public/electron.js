@@ -5,12 +5,12 @@ const {
   ipcMain,
   Menu,
   dialog,
+  // eslint-disable-next-line import/no-extraneous-dependencies
 } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
 const fs = require('fs');
 const isOnline = require('is-online');
-const fsPromises = fs.promises;
 const fse = require('fs-extra');
 const electronDl = require('electron-dl');
 const extract = require('extract-zip');
@@ -37,6 +37,7 @@ const {
 const { getExtension } = require('./Utils');
 
 const { download } = electronDl;
+const fsPromises = fs.promises;
 let mainWindow;
 
 const savedSpacesPath = `${app.getPath('userData')}/.meta`;
@@ -72,6 +73,7 @@ const createWindow = () => {
       default: installExtension,
       REACT_DEVELOPER_TOOLS,
       REDUX_DEVTOOLS,
+      // eslint-disable-next-line global-require
     } = require('electron-devtools-installer');
 
     installExtension(REACT_DEVELOPER_TOOLS)
@@ -164,6 +166,7 @@ const generateMenu = () => {
       submenu: [
         {
           click() {
+            // eslint-disable-next-line
             require('electron').shell.openExternal(
               'https://github.com/react-epfl/graasp-desktop/blob/master/README.md'
             );
@@ -172,6 +175,7 @@ const generateMenu = () => {
         },
         {
           click() {
+            // eslint-disable-next-line
             require('electron').shell.openExternal(
               'https://github.com/react-epfl/graasp-desktop/issues'
             );
@@ -185,6 +189,11 @@ const generateMenu = () => {
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 };
 
+const checkFileAvailable = filePath =>
+  new Promise(resolve =>
+    fs.access(filePath, fs.constants.F_OK, err => resolve(!err))
+  );
+
 app.on('ready', () => {
   // updater
   log.transports.file.level = 'info';
@@ -197,20 +206,24 @@ app.on('ready', () => {
     try {
       const space = spaces.find(el => Number(el.id) === Number(id));
       const { phases } = space;
+      // eslint-disable-next-line no-restricted-syntax
       for (const phase of phases) {
         const { items = [] } = phase;
-        for (let i = 0; i < items.length; i++) {
+        for (let i = 0; i < items.length; i += 1) {
           const { resource } = items[i];
           if (resource) {
             const { uri, hash, type } = resource;
             const fileName = `${hash}.${type}`;
             const filePath = `${savedSpacesPath}/${fileName}`;
+            // eslint-disable-next-line no-await-in-loop
             const fileAvailable = await checkFileAvailable(filePath);
             if (fileAvailable) {
               phase.items[i].asset = filePath;
             } else {
+              // eslint-disable-next-line no-await-in-loop
               const isConnected = await isOnline();
               if (isConnected) {
+                // eslint-disable-next-line no-await-in-loop
                 await download(mainWindow, uri, {
                   directory: savedSpacesPath,
                   filename: fileName,
@@ -239,20 +252,24 @@ app.on('ready', () => {
           mainWindow.webContents.send(GET_SPACES_CHANNEL, spaces);
         } else {
           spaces = JSON.parse(data);
+          // eslint-disable-next-line no-restricted-syntax
           for (const space of spaces) {
             const { image: imageUrl, id } = space;
             if (imageUrl) {
               const extension = getExtension(imageUrl);
               const backgroundImage = `background-${id}.${extension}`;
               const backgroundImagePath = `${savedSpacesPath}/${backgroundImage}`;
+              // eslint-disable-next-line no-await-in-loop
               const backgroundImageExists = await checkFileAvailable(
                 backgroundImagePath
               );
               if (backgroundImageExists) {
                 space.asset = `file://${backgroundImagePath}`;
               } else {
+                // eslint-disable-next-line no-await-in-loop
                 const isConnected = await isOnline();
                 if (isConnected) {
+                  // eslint-disable-next-line no-await-in-loop
                   await download(mainWindow, imageUrl, {
                     directory: savedSpacesPath,
                     filename: backgroundImage,
@@ -284,20 +301,24 @@ app.on('ready', () => {
           spaces = JSON.parse(data);
           const allResources = [];
           const spaceResources = [];
+
+          // eslint-disable-next-line no-restricted-syntax
           for (const space of spaces) {
             const { phases, id: spaceId, image: imageUrl } = space;
             if (spaceId === id) {
               // to get the extension of the background image for the space to be deleted
               spaceImageUrl = imageUrl;
             }
+            // eslint-disable-next-line no-restricted-syntax
             for (const phase of phases) {
               const { items = [] } = phase;
-              for (let i = 0; i < items.length; i++) {
+              for (let i = 0; i < items.length; i += 1) {
                 const { resource } = items[i];
                 if (resource) {
                   const { hash, type } = resource;
                   const fileName = `${hash}.${type}`;
                   const filePath = `${savedSpacesPath}/${fileName}`;
+                  // eslint-disable-next-line no-await-in-loop
                   const fileAvailable = await checkFileAvailable(filePath);
                   if (fileAvailable) {
                     if (spaceId === id) {
@@ -327,9 +348,9 @@ app.on('ready', () => {
           }
           // delete all resources used by the space to be deleted only
           [...spaceDistinctResources].forEach(filePath =>
-            fs.unlink(filePath, err => {
-              if (err) {
-                console.log(err);
+            fs.unlink(filePath, error => {
+              if (error) {
+                console.log(error);
               }
             })
           );
@@ -355,49 +376,31 @@ app.on('ready', () => {
         } else {
           let space = {};
           const spacePath = `${extractPath}/space.json`;
-          fs.readFile(spacePath, 'utf8', async (err, data) => {
-            if (err) {
+          fs.readFile(spacePath, 'utf8', async (error, data) => {
+            if (error) {
               mainWindow.webContents.send(
                 LOADED_SPACE_CHANNEL,
                 ERROR_ZIP_CORRUPTED
               );
-              fse.remove(extractPath, err => {
-                if (err) {
-                  console.log(err);
+              fse.remove(extractPath, removeError => {
+                if (removeError) {
+                  console.log(removeError);
                 }
               });
             } else {
-              ncp(extractPath, savedSpacesPath, async err => {
-                if (err) {
-                  return console.error(err);
+              ncp(extractPath, savedSpacesPath, async ncpError => {
+                if (ncpError) {
+                  return console.error(ncpError);
                 }
                 let spaces = [];
                 space = JSON.parse(data);
                 const spacesPath = `${savedSpacesPath}/${spacesFileName}`;
-                fs.readFile(spacesPath, 'utf8', async (err, data) => {
-                  // we dont have saved spaces yet
-                  if (err) {
-                    spaces.push(space);
-                    const spacesString = JSON.stringify(spaces);
-                    await fsPromises.writeFile(
-                      `${savedSpacesPath}/${spacesFileName}`,
-                      spacesString
-                    );
-                    mainWindow.webContents.send(LOADED_SPACE_CHANNEL, spaces);
-                  } else {
-                    try {
-                      spaces = JSON.parse(data);
-                    } catch (e) {
-                      mainWindow.webContents.send(
-                        LOADED_SPACE_CHANNEL,
-                        ERROR_JSON_CORRUPTED
-                      );
-                    }
-                    const spaceId = Number(space.id);
-                    const available = spaces.find(
-                      ({ id }) => Number(id) === spaceId
-                    );
-                    if (!available) {
+                return fs.readFile(
+                  spacesPath,
+                  'utf8',
+                  async (readError, spacesData) => {
+                    // we dont have saved spaces yet
+                    if (readError) {
                       spaces.push(space);
                       const spacesString = JSON.stringify(spaces);
                       await fsPromises.writeFile(
@@ -406,23 +409,48 @@ app.on('ready', () => {
                       );
                       mainWindow.webContents.send(LOADED_SPACE_CHANNEL, spaces);
                     } else {
-                      mainWindow.webContents.send(
-                        LOADED_SPACE_CHANNEL,
-                        ERROR_SPACE_ALREADY_AVAILABLE
+                      try {
+                        spaces = JSON.parse(spacesData);
+                      } catch (e) {
+                        mainWindow.webContents.send(
+                          LOADED_SPACE_CHANNEL,
+                          ERROR_JSON_CORRUPTED
+                        );
+                      }
+                      const spaceId = Number(space.id);
+                      const available = spaces.find(
+                        ({ id }) => Number(id) === spaceId
                       );
+                      if (!available) {
+                        spaces.push(space);
+                        const spacesString = JSON.stringify(spaces);
+                        await fsPromises.writeFile(
+                          `${savedSpacesPath}/${spacesFileName}`,
+                          spacesString
+                        );
+                        mainWindow.webContents.send(
+                          LOADED_SPACE_CHANNEL,
+                          spaces
+                        );
+                      } else {
+                        mainWindow.webContents.send(
+                          LOADED_SPACE_CHANNEL,
+                          ERROR_SPACE_ALREADY_AVAILABLE
+                        );
+                      }
                     }
+                    fs.unlink(`${savedSpacesPath}/space.json`, unlinkError => {
+                      if (unlinkError) {
+                        console.log(unlinkError);
+                      }
+                    });
+                    fse.remove(extractPath, removeError => {
+                      if (removeError) {
+                        console.log(removeError);
+                      }
+                    });
                   }
-                  fs.unlink(`${savedSpacesPath}/space.json`, err => {
-                    if (err) {
-                      console.log(err);
-                    }
-                  });
-                  fse.remove(extractPath, err => {
-                    if (err) {
-                      console.log(err);
-                    }
-                  });
-                });
+                );
               });
             }
           });
@@ -454,6 +482,7 @@ app.on('ready', () => {
           }
         }
         await fsPromises.writeFile(ssPath, spacesString);
+        // eslint-disable-next-line no-restricted-syntax
         for (const phase of phases) {
           const { items = [] } = phase;
           for (let i = 0; i < items.length; i += 1) {
@@ -462,6 +491,7 @@ app.on('ready', () => {
               const { hash, type } = resource;
               const fileName = `${hash}.${type}`;
               const filePath = `${savedSpacesPath}/${fileName}`;
+              // eslint-disable-next-line no-await-in-loop
               const fileAvailable = await checkFileAvailable(filePath);
               if (fileAvailable) {
                 filesPaths.push(filePath);
@@ -493,9 +523,9 @@ app.on('ready', () => {
           mainWindow.webContents.send(EXPORTED_SPACE_CHANNEL, ERROR_GENERAL);
         });
         archive.pipe(output);
-        filesPaths.forEach(path => {
-          const pathArr = path.split('/');
-          archive.file(path, { name: pathArr[pathArr.length - 1] });
+        filesPaths.forEach(filePath => {
+          const pathArr = filePath.split('/');
+          archive.file(filePath, { name: pathArr[pathArr.length - 1] });
         });
         archive.finalize();
       } catch (err) {
@@ -548,8 +578,3 @@ app.on('activate', () => {
 ipcMain.on('load-page', (event, arg) => {
   mainWindow.loadURL(arg);
 });
-
-const checkFileAvailable = filePath =>
-  new Promise(resolve =>
-    fs.access(filePath, fs.constants.F_OK, err => resolve(!err))
-  );

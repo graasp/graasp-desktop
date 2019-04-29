@@ -1,4 +1,6 @@
+/* eslint-disable jsx-a11y/media-has-caption */
 import React from 'react';
+import PropTypes from 'prop-types';
 import './PhaseVideo.css';
 
 const PhaseVideo = ({ uri }) => (
@@ -8,5 +10,9 @@ const PhaseVideo = ({ uri }) => (
     </video>
   </div>
 );
+
+PhaseVideo.propTypes = {
+  uri: PropTypes.string.isRequired,
+};
 
 export default PhaseVideo;

@@ -1,4 +1,6 @@
+/* eslint-disable no-return-assign */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import './PhaseLab.css';
 
 class PhaseLab extends Component {
@@ -43,11 +45,16 @@ class PhaseLab extends Component {
   //   this.storeData(id, data);
   // };
 
+  static propTypes = {
+    uri: PropTypes.string.isRequired,
+  };
+
   render() {
     const { uri } = this.props;
     return (
       <div className="LabDiv">
         <iframe
+          title="Lab"
           className="Lab"
           sandbox="allow-scripts"
           src={uri}

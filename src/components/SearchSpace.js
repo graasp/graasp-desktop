@@ -23,11 +23,24 @@ import Language from '@material-ui/icons/Language';
 import Publish from '@material-ui/icons/Publish';
 import SettingsIcon from '@material-ui/icons/Settings';
 import Styles from '../Styles';
-import { HOME_PATH, LOAD_SPACE_PATH, SETTINGS_PATH, VISIT_PATH } from '../config/paths';
+import {
+  HOME_PATH,
+  LOAD_SPACE_PATH,
+  SETTINGS_PATH,
+  VISIT_PATH,
+} from '../config/paths';
 
 class SearchSpace extends Component {
   state = {
     open: false,
+  };
+
+  static propTypes = {
+    classes: PropTypes.shape({}).isRequired,
+    theme: PropTypes.shape({}).isRequired,
+    history: PropTypes.shape({
+      replace: PropTypes.func.isRequired,
+    }).isRequired,
   };
 
   handleDrawerOpen = () => {
@@ -38,8 +51,10 @@ class SearchSpace extends Component {
     this.setState({ open: false });
   };
 
-  handleItemClicked = (id) => {
-    const { history: { replace } } = this.props;
+  handleItemClicked = id => {
+    const {
+      history: { replace },
+    } = this.props;
     switch (id) {
       case 0:
         replace(HOME_PATH);
@@ -91,29 +106,43 @@ class SearchSpace extends Component {
         >
           <div className={classes.drawerHeader}>
             <IconButton onClick={this.handleDrawerClose}>
-              {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+              {theme.direction === 'ltr' ? (
+                <ChevronLeftIcon />
+              ) : (
+                <ChevronRightIcon />
+              )}
             </IconButton>
           </div>
           <Divider />
           <List>
             <MenuItem onClick={() => this.handleItemClicked(0)} button>
-              <ListItemIcon><SaveIcon /></ListItemIcon>
+              <ListItemIcon>
+                <SaveIcon />
+              </ListItemIcon>
               <ListItemText primary="Saved spaces" />
             </MenuItem>
             <MenuItem onClick={() => this.handleItemClicked(1)} button selected>
-              <ListItemIcon><SearchIcon /></ListItemIcon>
+              <ListItemIcon>
+                <SearchIcon />
+              </ListItemIcon>
               <ListItemText primary="Search Space" />
             </MenuItem>
             <MenuItem onClick={() => this.handleItemClicked(2)} button>
-              <ListItemIcon><Language /></ListItemIcon>
+              <ListItemIcon>
+                <Language />
+              </ListItemIcon>
               <ListItemText primary="Visit a space" />
             </MenuItem>
             <MenuItem onClick={() => this.handleItemClicked(3)} button>
-              <ListItemIcon><Publish /></ListItemIcon>
+              <ListItemIcon>
+                <Publish />
+              </ListItemIcon>
               <ListItemText primary="Load" />
             </MenuItem>
             <MenuItem onClick={() => this.handleItemClicked(4)} button>
-              <ListItemIcon><SettingsIcon /></ListItemIcon>
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
               <ListItemText primary="Settings" />
             </MenuItem>
           </List>
