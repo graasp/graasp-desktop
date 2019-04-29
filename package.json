@@ -2,7 +2,7 @@
   "name": "graasp-desktop",
   "version": "0.1.0",
   "description": "Desktop application for the Graasp ecosystem.",
-  "private": false,
+  "private": true,
   "author": "React EPFL",
   "contributors": [
     "Juan Carlos Farah",
@@ -28,6 +28,7 @@
     "postinstall": "electron-builder install-app-deps",
     "predist": "yarn build",
     "dist": "env-cmd ./.env electron-builder",
+    "prerelease": "yarn build",
     "release": "git add CHANGELOG.md && standard-version -a",
     "postrelease": "env-cmd ./.env build"
   },
