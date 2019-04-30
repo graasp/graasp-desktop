@@ -134,7 +134,7 @@
         "snap",
         "AppImage"
       ],
-      "description": "Example",
+      "description": "Desktop application for the Graasp ecosystem.",
       "category": "Network;Feed",
       "publish": [
         "github"

@@ -78,18 +78,18 @@ const createWindow = () => {
 
     installExtension(REACT_DEVELOPER_TOOLS)
       .then(name => {
-        console.log(`Added Extension: ${name}`);
+        log.info(`added extension: ${name}`);
       })
       .catch(err => {
-        console.log('An error occurred: ', err);
+        log.error(err);
       });
 
     installExtension(REDUX_DEVTOOLS)
       .then(name => {
-        console.log(`Added Extension: ${name}`);
+        log.info(`added extension: ${name}`);
       })
       .catch(err => {
-        console.log('An error occurred: ', err);
+        log.error(err);
       });
   }
 
@@ -103,7 +103,7 @@ const createWindow = () => {
 };
 
 const handleLoad = () => {
-  console.log('load');
+  log.info('load');
 };
 
 const generateMenu = () => {
@@ -239,7 +239,7 @@ app.on('ready', () => {
       }
       mainWindow.webContents.send(GET_SPACE_CHANNEL, space);
     } catch (err) {
-      console.log('error:', err);
+      log.error(err);
     }
   });
   ipcMain.on(GET_SPACES_CHANNEL, async () => {
@@ -277,7 +277,7 @@ app.on('ready', () => {
                     .then(dl => {
                       space.asset = `file://${dl.getSavePath()}`;
                     })
-                    .catch(e => console.log(e, 'error'));
+                    .catch(e => log.error(e));
                 }
               }
             }
@@ -286,7 +286,7 @@ app.on('ready', () => {
         }
       });
     } catch (e) {
-      console.err(e);
+      log.error(e);
     }
   });
   ipcMain.on(DELETE_SPACE_CHANNEL, async (event, { id }) => {
@@ -350,7 +350,7 @@ app.on('ready', () => {
           [...spaceDistinctResources].forEach(filePath =>
             fs.unlink(filePath, error => {
               if (error) {
-                console.log(error);
+                log.error(error);
               }
             })
           );
@@ -372,7 +372,7 @@ app.on('ready', () => {
       const extractPath = `${savedSpacesPath}/temp/`;
       extract(fileLocation, { dir: extractPath }, async err => {
         if (err) {
-          console.log(err);
+          log.error(err);
         } else {
           let space = {};
           const spacePath = `${extractPath}/space.json`;
@@ -384,13 +384,13 @@ app.on('ready', () => {
               );
               fse.remove(extractPath, removeError => {
                 if (removeError) {
-                  console.log(removeError);
+                  log.error(removeError);
                 }
               });
             } else {
               ncp(extractPath, savedSpacesPath, async ncpError => {
                 if (ncpError) {
-                  return console.error(ncpError);
+                  return log.error(ncpError);
                 }
                 let spaces = [];
                 space = JSON.parse(data);
@@ -441,12 +441,12 @@ app.on('ready', () => {
                     }
                     fs.unlink(`${savedSpacesPath}/space.json`, unlinkError => {
                       if (unlinkError) {
-                        console.log(unlinkError);
+                        log.error(unlinkError);
                       }
                     });
                     fse.remove(extractPath, removeError => {
                       if (removeError) {
-                        console.log(removeError);
+                        log.error(removeError);
                       }
                     });
                   }
@@ -457,7 +457,7 @@ app.on('ready', () => {
         }
       });
     } catch (err) {
-      console.log('error:', err);
+      log.error(err);
     }
   });
   ipcMain.on(
@@ -506,7 +506,7 @@ app.on('ready', () => {
         output.on('close', () => {
           fs.unlink(ssPath, err => {
             if (err) {
-              console.log(err);
+              log.error(err);
             }
           });
           mainWindow.webContents.send(EXPORTED_SPACE_CHANNEL);
@@ -516,7 +516,7 @@ app.on('ready', () => {
         });
         archive.on('warning', err => {
           if (err.code === 'ENOENT') {
-            console.log(err);
+            log.error(err);
           }
         });
         archive.on('error', () => {
@@ -529,7 +529,7 @@ app.on('ready', () => {
         });
         archive.finalize();
       } catch (err) {
-        console.log(err);
+        log.error(err);
         mainWindow.webContents.send(EXPORTED_SPACE_CHANNEL, ERROR_GENERAL);
       }
     }
