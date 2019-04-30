@@ -1,0 +1,11 @@
+run-lint:
+  build: .
+  dockerfile: Dockerfile.run.lint
+
+run-test:
+  build: .
+  dockerfile: Dockerfile.run.test
+  environment:
+    ENV: test
+    NODE_ENV: test
+  encrypted_env_file: .env.test.encrypted

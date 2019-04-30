@@ -1,6 +1,8 @@
 # Graasp Desktop
+
 [![CodeShip](https://app.codeship.com/projects/e0ef44e0-cff2-0136-9889-2aa8b2e23b88/status?branch=master)](https://app.codeship.com/projects/315997)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b46362710a304906bb6ce858408e59a2)](https://www.codacy.com/app/graasp/graasp-desktop)
 
 Desktop client for Graasp.
 

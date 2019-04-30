@@ -1,0 +1,12 @@
+# default
+# -------
+# always lint the codebase and run the tests
+- name: default
+  type: parallel
+  steps:
+    - name: lint
+      service: run-lint
+      command: yarn lint
+    - name: test
+      service: run-test
+      command: yarn test:ci
