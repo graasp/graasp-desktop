@@ -34,7 +34,7 @@ const {
   SHOW_OPEN_DIALOG_CHANNEL,
   OPEN_DIALOG_PATHS_SELECTED_CHANNEL,
 } = require('./channels');
-const { getExtension } = require('./Utils');
+const { getExtension } = require('./utilities');
 
 const { download } = electronDl;
 const fsPromises = fs.promises;
@@ -102,21 +102,21 @@ const createWindow = () => {
   });
 };
 
-const handleLoad = () => {
-  log.info('load');
-};
+// const handleLoad = () => {
+//   log.info('load');
+// };
 
 const generateMenu = () => {
   const template = [
     {
       label: 'File',
       submenu: [
-        {
-          label: 'Load Space',
-          click() {
-            handleLoad();
-          },
-        },
+        // {
+        //   label: 'Load Space',
+        //   click() {
+        //     handleLoad();
+        //   },
+        // },
         {
           label: 'About',
           role: 'about',

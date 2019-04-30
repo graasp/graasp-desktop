@@ -21,7 +21,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import SearchIcon from '@material-ui/icons/Search';
 import Language from '@material-ui/icons/Language';
 import Publish from '@material-ui/icons/Publish';
-import SettingsIcon from '@material-ui/icons/Settings';
+// import SettingsIcon from '@material-ui/icons/Settings';
 import { getSpaces } from './actions';
 import SavedSpaces from './components/space/SavedSpaces';
 import Styles from './Styles';
@@ -51,8 +51,10 @@ class Home extends Component {
     this.setState({ open: false });
   };
 
-  handleItemClicked = (id) => {
-    const { history: { replace } } = this.props;
+  handleItemClicked = id => {
+    const {
+      history: { replace },
+    } = this.props;
     switch (id) {
       case 1:
         replace(SEARCH_SPACE_PATH);
@@ -71,12 +73,7 @@ class Home extends Component {
   };
 
   render() {
-    const {
-      classes,
-      theme,
-      spaces,
-      activity,
-    } = this.props;
+    const { classes, theme, spaces, activity } = this.props;
     const { open } = this.state;
     if (activity) {
       return (
@@ -122,30 +119,38 @@ class Home extends Component {
         >
           <div className={classes.drawerHeader}>
             <IconButton onClick={this.handleDrawerClose}>
-              {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+              {theme.direction === 'ltr' ? (
+                <ChevronLeftIcon />
+              ) : (
+                <ChevronRightIcon />
+              )}
             </IconButton>
           </div>
           <Divider />
           <List>
             <MenuItem onClick={() => this.handleItemClicked(0)} button selected>
-              <ListItemIcon><SaveIcon /></ListItemIcon>
-              <ListItemText primary="Saved spaces" />
+              <ListItemIcon>
+                <SaveIcon />
+              </ListItemIcon>
+              <ListItemText primary="Saved Spaces" />
             </MenuItem>
             <MenuItem onClick={() => this.handleItemClicked(1)} button>
-              <ListItemIcon><SearchIcon /></ListItemIcon>
-              <ListItemText primary="Search Space" />
+              <ListItemIcon>
+                <SearchIcon />
+              </ListItemIcon>
+              <ListItemText primary="Spaces Nearby" />
             </MenuItem>
             <MenuItem onClick={() => this.handleItemClicked(2)} button>
-              <ListItemIcon><Language /></ListItemIcon>
-              <ListItemText primary="Visit a space" />
+              <ListItemIcon>
+                <Language />
+              </ListItemIcon>
+              <ListItemText primary="Visit a Space" />
             </MenuItem>
             <MenuItem onClick={() => this.handleItemClicked(3)} button>
-              <ListItemIcon><Publish /></ListItemIcon>
+              <ListItemIcon>
+                <Publish />
+              </ListItemIcon>
               <ListItemText primary="Load" />
-            </MenuItem>
-            <MenuItem onClick={() => this.handleItemClicked(4)} button>
-              <ListItemIcon><SettingsIcon /></ListItemIcon>
-              <ListItemText primary="Settings" />
             </MenuItem>
           </List>
         </Drawer>
@@ -175,10 +180,18 @@ Home.propTypes = {
   classes: PropTypes.shape({ appBar: PropTypes.string.isRequired }).isRequired,
   theme: PropTypes.shape({ direction: PropTypes.string }).isRequired,
   dispatchGetSpaces: PropTypes.func.isRequired,
-  spaces: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.string.isRequired })).isRequired,
+  spaces: PropTypes.arrayOf(
+    PropTypes.shape({ id: PropTypes.string.isRequired })
+  ).isRequired,
   activity: PropTypes.bool.isRequired,
   history: PropTypes.shape({ length: PropTypes.number.isRequired }).isRequired,
 };
 
-export default withRouter(withStyles(Styles,
-  { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(Home)));
+export default withRouter(
+  withStyles(Styles, { withTheme: true })(
+    connect(
+      mapStateToProps,
+      mapDispatchToProps
+    )(Home)
+  )
+);
