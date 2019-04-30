@@ -4,7 +4,7 @@ import {
   TOGGLE_SPACE_MENU,
   GET_SPACES,
   CLEAR_SPACE,
-  ON_GET_SPACE_SUCCESS,
+  GET_SPACE_SUCCEEDED,
   FLAG_GETTING_SPACE,
   FLAG_DELETING_SPACE,
   FLAG_GETTING_SPACES,
@@ -51,7 +51,7 @@ export default (state = INITIAL_STATE, { type, payload }) => {
       return state.setIn(['current', 'content'], Immutable.Map(payload));
     case TOGGLE_SPACE_MENU:
       return state.setIn(['current', 'menu', 'open'], payload);
-    case ON_GET_SPACE_SUCCESS:
+    case GET_SPACE_SUCCEEDED:
       return state.setIn(['current', 'content'], Immutable.Map(payload));
     default:
       return state;

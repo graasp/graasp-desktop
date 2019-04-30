@@ -21,9 +21,10 @@ import Language from '@material-ui/icons/Language';
 import Publish from '@material-ui/icons/Publish';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { withStyles } from '@material-ui/core';
+import { withRouter } from 'react-router';
 import Loader from '../common/Loader';
 import PhaseComponent from '../phase/Phase';
-import { selectPhase, getSpace, clearPhase, clearSpace } from '../../actions';
+import { selectPhase, clearPhase, clearSpace, getSpace } from '../../actions';
 import './SpaceScreen.css';
 import Styles from '../../Styles';
 import {
@@ -34,6 +35,7 @@ import {
   VISIT_PATH,
 } from '../../config/paths';
 import SpaceHeader from './SpaceHeader';
+import SpaceNotFound from './SpaceNotFound';
 
 class SpaceScreen extends Component {
   state = {
@@ -143,6 +145,7 @@ class SpaceScreen extends Component {
   render() {
     const { space, phase, activity, classes, theme } = this.props;
     const { openDrawer, selected } = this.state;
+
     if (activity) {
       return (
         <div className={classNames(classes.root, 'SpaceScreen')}>
@@ -157,7 +160,7 @@ class SpaceScreen extends Component {
       );
     }
     if (!space || space.isEmpty()) {
-      return <p>Space not found.</p>;
+      return <SpaceNotFound />;
     }
     const name = space.get('name');
     const phases = space.get('phases');
@@ -283,9 +286,13 @@ const mapDispatchToProps = {
   dispatchClearSpace: clearSpace,
 };
 
-export default withStyles(Styles, { withTheme: true })(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(SpaceScreen)
+const ConnectedComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SpaceScreen);
+
+const StyledComponent = withStyles(Styles, { withTheme: true })(
+  ConnectedComponent
 );
+
+export default withRouter(StyledComponent);

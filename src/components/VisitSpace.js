@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { toastr } from 'react-redux-toastr';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -22,6 +24,9 @@ import SearchIcon from '@material-ui/icons/Search';
 import Language from '@material-ui/icons/Language';
 import Publish from '@material-ui/icons/Publish';
 import SettingsIcon from '@material-ui/icons/Settings';
+import FormControl from '@material-ui/core/FormControl';
+import Input from '@material-ui/core/Input';
+import Button from '@material-ui/core/Button';
 import Styles from '../Styles';
 import {
   HOME_PATH,
@@ -29,18 +34,29 @@ import {
   SEARCH_SPACE_PATH,
   SETTINGS_PATH,
 } from '../config/paths';
+import Loader from './LoadSpace';
+import {
+  ERROR_MESSAGE_HEADER,
+  OFFLINE_ERROR_MESSAGE,
+} from '../config/messages';
 
 class VisitSpace extends Component {
   state = {
     open: false,
+    spaceId: '',
   };
 
   static propTypes = {
     classes: PropTypes.shape({}).isRequired,
     theme: PropTypes.shape({}).isRequired,
+    activity: PropTypes.bool,
     history: PropTypes.shape({
       replace: PropTypes.func.isRequired,
     }).isRequired,
+  };
+
+  static defaultProps = {
+    activity: false,
   };
 
   handleDrawerOpen = () => {
@@ -72,9 +88,42 @@ class VisitSpace extends Component {
     }
   };
 
+  handleChangeSpaceId = event => {
+    const spaceId = event.target.value;
+    this.setState({ spaceId });
+  };
+
+  handleClick = () => {
+    const { history } = this.props;
+    const { spaceId: id } = this.state;
+    if (!window.navigator.onLine) {
+      return toastr.error(ERROR_MESSAGE_HEADER, OFFLINE_ERROR_MESSAGE);
+    }
+    if (id && id !== '') {
+      const { replace } = history;
+      return replace(`/space/${id}`);
+    }
+    return false;
+  };
+
   render() {
-    const { classes, theme } = this.props;
-    const { open } = this.state;
+    const { classes, theme, activity } = this.props;
+    const { open, spaceId } = this.state;
+
+    if (activity) {
+      return (
+        <div className={classNames(classes.root, 'VisitSpace')}>
+          <CssBaseline />
+          <AppBar position="fixed">
+            <Toolbar />
+          </AppBar>
+          <main className="Main">
+            <Loader />
+          </main>
+        </div>
+      );
+    }
+
     return (
       <div className={classes.root}>
         <CssBaseline />
@@ -153,13 +202,48 @@ class VisitSpace extends Component {
           })}
         >
           <div className={classes.drawerHeader} />
-          <Typography variant="h5" color="inherit" align="center">
-            VisitSpace
-          </Typography>
+          <FormControl className={classes.formControl}>
+            <Typography
+              variant="h4"
+              color="inherit"
+              align="center"
+              style={{ margin: '2rem' }}
+            >
+              Visit a Space
+            </Typography>
+            <Input
+              className={classes.input}
+              required
+              onChange={this.handleChangeSpaceId}
+              inputProps={{
+                'aria-label': 'Space ID',
+              }}
+              autoFocus
+              value={spaceId}
+              type="text"
+            />
+            <Button
+              variant="contained"
+              onClick={this.handleClick}
+              color="primary"
+              className={classes.button}
+              disabled={!window.navigator.onLine || !spaceId || spaceId === ''}
+            >
+              Visit
+            </Button>
+          </FormControl>
         </main>
       </div>
     );
   }
 }
 
-export default withRouter(withStyles(Styles, { withTheme: true })(VisitSpace));
+const mapStateToProps = ({ Space }) => ({
+  activity: Space.get('current').get('activity'),
+});
+
+const ConnectedComponent = connect(mapStateToProps)(VisitSpace);
+const StyledComponent = withStyles(Styles, { withTheme: true })(
+  ConnectedComponent
+);
+export default withRouter(StyledComponent);

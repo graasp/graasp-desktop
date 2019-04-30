@@ -20,39 +20,25 @@ const styles = theme => ({
   },
 });
 
-const MediaCard = (props) => {
-  const {
-    classes,
-    title,
-    image,
-    text,
-    button,
-  } = props;
+const MediaCard = props => {
+  const { classes, name, image, text, button } = props;
   return (
     <Card className={classes.card}>
-      <CardMedia
-        className={classes.media}
-        image={image}
-        title={title}
-      />
+      <CardMedia className={classes.media} image={image} title={name} />
       <CardContent>
         <Typography gutterBottom variant="h5" component="h2">
-          {title}
+          {name}
         </Typography>
-        <Typography component="p">
-          {text}
-        </Typography>
+        <Typography component="p">{text}</Typography>
       </CardContent>
-      <CardActions>
-        {button}
-      </CardActions>
+      <CardActions>{button}</CardActions>
     </Card>
   );
 };
 
 MediaCard.propTypes = {
   classes: PropTypes.shape({ media: PropTypes.string.isRequired }).isRequired,
-  title: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   button: PropTypes.shape(Button).isRequired,

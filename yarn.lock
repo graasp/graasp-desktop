@@ -11140,6 +11140,11 @@ react-app-polyfill@^1.0.0:
     regenerator-runtime "0.13.2"
     whatwg-fetch "3.0.0"
 
+react-detect-offline@2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/react-detect-offline/-/react-detect-offline-2.3.0.tgz#7ff517a85d549ca27a70b3631ca5b18d95d78a06"
+  integrity sha512-PouVMhwCu2PxFe0yzlLa4ChObmjP6bpV0Mm18x98zMR5VRNwBUYQ6KuBgLiKHc7aDD7JpI2QoN0etF7kGXPYCg==
+
 react-dev-utils@9.0.0, react-dev-utils@^9.0.0:
   version "9.0.0"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-9.0.0.tgz#356d95db442441c5d4748e0e49f4fd1e71aecbbd"

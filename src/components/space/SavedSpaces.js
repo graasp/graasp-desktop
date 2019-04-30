@@ -18,41 +18,35 @@ class SavedSpaces extends Component {
   }
 
   render() {
-    const {
-      spaces,
-      classes,
-      history,
-    } = this.props;
-    const MediaCards = spaces.map((space) => {
-      const {
-        id,
-        title,
-        image,
-        text,
-        asset,
-      } = space;
+    const { spaces, classes, history } = this.props;
+    const MediaCards = spaces.map(space => {
+      const { id, name, image, text, asset } = space;
       const { replace } = history;
+      const ViewButton = (
+        <Button
+          variant="contained"
+          size="large"
+          color="primary"
+          id={Number(id)}
+          onClick={() => replace(`/space/${id}`)}
+        >
+          <RemoveRedEyeIcon
+            className={classes.leftIcon}
+            style={{ marginRight: '0.5rem' }}
+          />
+          View
+        </Button>
+      );
       return (
         <Grid key={Number(id)} item>
           <MediaCard
             key={Number(id)}
-            title={title}
+            name={name}
             // show the local background image if exists, otherwise fetch
             // the image from url if provided if not provided then pass the default background image
             image={asset || image || graaspImage}
             text={text}
-            button={(
-              <Button
-                variant="contained"
-                size="large"
-                color="primary"
-                id={Number(id)}
-                onClick={() => replace(`/space/${id}`)}
-              >
-                <RemoveRedEyeIcon className={classes.leftIcon} style={{ marginRight: '0.5rem' }} />
-                View
-              </Button>
-            )}
+            button={ViewButton}
           />
         </Grid>
       );
@@ -78,9 +72,18 @@ const mapDispatchToProps = {
 
 SavedSpaces.propTypes = {
   classes: PropTypes.shape({ appBar: PropTypes.string.isRequired }).isRequired,
-  spaces: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.string.isRequired })).isRequired,
+  spaces: PropTypes.arrayOf(
+    PropTypes.shape({ id: PropTypes.string.isRequired })
+  ).isRequired,
   history: PropTypes.shape({ length: PropTypes.number.isRequired }).isRequired,
   dispatchClearSpace: PropTypes.func.isRequired,
 };
 
-export default withRouter(withStyles({})(connect(null, mapDispatchToProps)(SavedSpaces)));
+export default withRouter(
+  withStyles({})(
+    connect(
+      null,
+      mapDispatchToProps
+    )(SavedSpaces)
+  )
+);

@@ -5,7 +5,7 @@ import {
   FLAG_GETTING_SPACES,
   FLAG_LOADING_SPACE,
   CLEAR_SPACE,
-  ON_GET_SPACE_SUCCESS,
+  GET_SPACE_SUCCEEDED,
   FLAG_EXPORTING_SPACE,
   FLAG_DELETING_SPACE,
   ON_SPACE_DELETED,
@@ -33,64 +33,98 @@ import {
 } from '../../config/channels';
 import {
   ERROR_DELETING_MESSAGE,
-  ERROR_DOWNLOADING_MESSAGE,
+  // ERROR_DOWNLOADING_MESSAGE,
   ERROR_EXPORTING_MESSAGE,
+  ERROR_GETTING_SPACE_MESSAGE,
   ERROR_JSON_CORRUPTED_MESSAGE,
   ERROR_SPACE_AVAILABLE_MESSAGE,
   ERROR_ZIP_CORRUPTED_MESSAGE,
   SUCCESS_DELETING_MESSAGE,
-  SUCCESS_EXPORTING_MESSAGE, SUCCESS_SPACE_LOADED_MESSAGE
+  SUCCESS_EXPORTING_MESSAGE,
+  SUCCESS_SPACE_LOADED_MESSAGE,
 } from '../../config/messages';
+import { createFlag, isErrorResponse } from '../common';
+import { generateGetSpaceEndpoint } from '../../config/endpoints';
+import { DEFAULT_GET_REQUEST } from '../../config/rest';
 
-const flagGettingSpace = flag => dispatch => dispatch({
-  type: FLAG_GETTING_SPACE,
-  payload: flag,
-});
+const flagGettingSpace = createFlag(FLAG_GETTING_SPACE);
+const flagGettingSpaces = createFlag(FLAG_GETTING_SPACES);
+const flagLoadingSpace = createFlag(FLAG_LOADING_SPACE);
+const flagDeletingSpace = createFlag(FLAG_DELETING_SPACE);
+const flagExportingSpace = createFlag(FLAG_EXPORTING_SPACE);
 
-const flagGettingSpaces = flag => dispatch => dispatch({
-  type: FLAG_GETTING_SPACES,
-  payload: flag,
-});
+// const getSpace = async ({ id, spaces }) => async (dispatch) => {
+//   // raise flag
+//   dispatch(flagGettingSpace(true));
+//   // tell electron to download space
+//   window.ipcRenderer.send(GET_SPACE_CHANNEL, { id, spaces });
+//   // create listener
+//   window.ipcRenderer.once(GET_SPACE_CHANNEL, (event, space) => {
+//     // dispatch that the getter has succeeded
+//     if (space === ERROR_GENERAL) {
+//       toastr.error('Error', ERROR_DOWNLOADING_MESSAGE);
+//     } else {
+//       dispatch({
+//         type: GET_SPACE_SUCCEEDED,
+//         payload: space,
+//       });
+//     }
+//     dispatch(flagGettingSpace(false));
+//   });
+//   // lower flag
+//   //   // delete the listener
+//   // });
+// };
 
-const flagLoadingSpace = flag => dispatch => dispatch({
-  type: FLAG_LOADING_SPACE,
-  payload: flag,
-});
+const getLocalSpace = async ({ id }) => async dispatch => {
+  try {
+    dispatch(flagGettingSpace(true));
 
-const flagDeletingSpace = flag => dispatch => dispatch({
-  type: FLAG_DELETING_SPACE,
-  payload: flag,
-});
+    // tell electron to get space
+    window.ipcRenderer.send(GET_SPACE_CHANNEL, { id });
 
-const flagExportingSpace = flag => dispatch => dispatch({
-  type: FLAG_EXPORTING_SPACE,
-  payload: flag,
-});
-
-const getSpace = async ({ id, spaces }) => async (dispatch) => {
-  // raise flag
-  dispatch(flagGettingSpace(true));
-  // tell electron to download space
-  window.ipcRenderer.send(GET_SPACE_CHANNEL, { id, spaces });
-  // create listener
-  window.ipcRenderer.once(GET_SPACE_CHANNEL, (event, space) => {
-    // dispatch that the getter has succeeded
-    if (space === ERROR_GENERAL) {
-      toastr.error('Error', ERROR_DOWNLOADING_MESSAGE);
-    } else {
-      dispatch({
-        type: ON_GET_SPACE_SUCCESS,
-        payload: space,
-      });
-    }
+    // create listener
+    window.ipcRenderer.once(GET_SPACE_CHANNEL, async (event, space) => {
+      // if there is no space offline, show error
+      if (!space) {
+        toastr.error('Error', ERROR_GETTING_SPACE_MESSAGE);
+      } else {
+        dispatch({
+          type: GET_SPACE_SUCCEEDED,
+          payload: space,
+        });
+      }
+    });
+  } catch (err) {
+    toastr.error('Error', ERROR_GETTING_SPACE_MESSAGE);
+  } finally {
     dispatch(flagGettingSpace(false));
-  });
-  // lower flag
-  //   // delete the listener
-  // });
+  }
 };
 
-const getSpaces = () => (dispatch) => {
+const getRemoteSpace = async ({ id }) => async dispatch => {
+  try {
+    dispatch(flagGettingSpace(true));
+
+    const url = generateGetSpaceEndpoint(id);
+    const response = await fetch(url, DEFAULT_GET_REQUEST);
+
+    // throws if it is an error
+    await isErrorResponse(response);
+
+    const space = await response.json();
+    dispatch({
+      type: GET_SPACE_SUCCEEDED,
+      payload: space,
+    });
+  } catch (err) {
+    toastr.error('Error', ERROR_GETTING_SPACE_MESSAGE);
+  } finally {
+    dispatch(flagGettingSpace(false));
+  }
+};
+
+const getSpaces = () => dispatch => {
   dispatch(flagGettingSpaces(true));
   window.ipcRenderer.send(GET_SPACES_CHANNEL);
   // create listener
@@ -104,23 +138,30 @@ const getSpaces = () => (dispatch) => {
   });
 };
 
-const clearSpace = () => (dispatch) => {
+const clearSpace = () => dispatch => {
   dispatch(clearPhase());
   return dispatch({
     type: CLEAR_SPACE,
   });
 };
 
-const exportSpace = (id, spaces, spaceTitle) => (dispatch) => {
+const exportSpace = (id, spaces, spaceName) => dispatch => {
   dispatch(flagExportingSpace(true));
-  window.ipcRenderer.send(SHOW_SAVE_DIALOG_CHANNEL, spaceTitle);
-  window.ipcRenderer.once(SAVE_DIALOG_PATH_SELECTED_CHANNEL, (event, archivePath) => {
-    if (archivePath) {
-      window.ipcRenderer.send(EXPORT_SPACE_CHANNEL, { archivePath, id, spaces });
-    } else {
-      dispatch(flagExportingSpace(false));
+  window.ipcRenderer.send(SHOW_SAVE_DIALOG_CHANNEL, spaceName);
+  window.ipcRenderer.once(
+    SAVE_DIALOG_PATH_SELECTED_CHANNEL,
+    (event, archivePath) => {
+      if (archivePath) {
+        window.ipcRenderer.send(EXPORT_SPACE_CHANNEL, {
+          archivePath,
+          id,
+          spaces,
+        });
+      } else {
+        dispatch(flagExportingSpace(false));
+      }
     }
-  });
+  );
   window.ipcRenderer.once(EXPORTED_SPACE_CHANNEL, (event, newSpaces) => {
     switch (newSpaces) {
       case ERROR_GENERAL:
@@ -133,7 +174,7 @@ const exportSpace = (id, spaces, spaceTitle) => (dispatch) => {
   });
 };
 
-const deleteSpace = ({ id }) => (dispatch) => {
+const deleteSpace = ({ id }) => dispatch => {
   dispatch(flagDeletingSpace(true));
   window.ipcRenderer.send(SHOW_MESSAGE_DIALOG_CHANNEL);
   window.ipcRenderer.once(MESSAGE_DIALOG_RESPOND_CHANNEL, (event, respond) => {
@@ -159,8 +200,7 @@ const deleteSpace = ({ id }) => (dispatch) => {
   });
 };
 
-
-const loadSpace = ({ fileLocation }) => (dispatch) => {
+const loadSpace = ({ fileLocation }) => dispatch => {
   dispatch(flagLoadingSpace(true));
   window.ipcRenderer.send(LOAD_SPACE_CHANNEL, { fileLocation });
   window.ipcRenderer.once(LOADED_SPACE_CHANNEL, (event, newSpaces) => {
@@ -183,6 +223,14 @@ const loadSpace = ({ fileLocation }) => (dispatch) => {
     }
     dispatch(flagLoadingSpace(false));
   });
+};
+
+const getSpace = ({ id }) => dispatch => {
+  if (window.navigator.onLine) {
+    dispatch(getRemoteSpace({ id }));
+  } else {
+    dispatch(getLocalSpace({ id }));
+  }
 };
 
 // const saveSpace = async () => async (dispatch) => {
@@ -210,6 +258,8 @@ export {
   clearSpace,
   deleteSpace,
   exportSpace,
-  getSpace,
+  getRemoteSpace,
+  getLocalSpace,
   getSpaces,
+  getSpace,
 };

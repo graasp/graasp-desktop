@@ -19,6 +19,10 @@ const { ncp } = require('ncp');
 const log = require('electron-log');
 const { autoUpdater } = require('electron-updater');
 const Sentry = require('@sentry/electron');
+const util = require('util');
+
+// convert fs.readFile into promise version of same
+const readFile = util.promisify(fs.readFile);
 
 const {
   DELETE_SPACE_CHANNEL,
@@ -208,44 +212,50 @@ app.on('ready', () => {
 
   createWindow();
   generateMenu();
-  ipcMain.on(GET_SPACE_CHANNEL, async (event, { id, spaces }) => {
+  ipcMain.on(GET_SPACE_CHANNEL, async (event, { id }) => {
     try {
-      const space = spaces.find(el => Number(el.id) === Number(id));
-      const { phases } = space;
-      // eslint-disable-next-line no-restricted-syntax
-      for (const phase of phases) {
-        const { items = [] } = phase;
-        for (let i = 0; i < items.length; i += 1) {
-          const { resource } = items[i];
-          if (resource) {
-            const { uri, hash, type } = resource;
-            const fileName = `${hash}.${type}`;
-            const filePath = `${savedSpacesPath}/${fileName}`;
-            // eslint-disable-next-line no-await-in-loop
-            const fileAvailable = await checkFileAvailable(filePath);
-            if (fileAvailable) {
-              phase.items[i].asset = filePath;
-            } else {
-              // eslint-disable-next-line no-await-in-loop
-              const isConnected = await isOnline();
-              if (isConnected) {
-                // eslint-disable-next-line no-await-in-loop
-                await download(mainWindow, uri, {
-                  directory: savedSpacesPath,
-                  filename: fileName,
-                }).then(dl => {
-                  phase.items[i].asset = dl.getSavePath();
-                });
-              } else {
-                mainWindow.webContents.send(GET_SPACE_CHANNEL, ERROR_GENERAL);
-              }
-            }
-          }
-        }
-      }
+      const spacesPath = `${savedSpacesPath}/${spacesFileName}`;
+      const data = await readFile(spacesPath, 'utf8');
+      const spaces = JSON.parse(data);
+      // id is a string
+      const space = spaces.find(el => el.id === id);
+
+      // const { phases } = space;
+      // // eslint-disable-next-line no-restricted-syntax
+      // for (const phase of phases) {
+      //   const { items = [] } = phase;
+      //   for (let i = 0; i < items.length; i += 1) {
+      //     const { resource } = items[i];
+      //     if (resource) {
+      //       const { uri, hash, type } = resource;
+      //       const fileName = `${hash}.${type}`;
+      //       const filePath = `${savedSpacesPath}/${fileName}`;
+      //       // eslint-disable-next-line no-await-in-loop
+      //       const fileAvailable = await checkFileAvailable(filePath);
+      //       if (fileAvailable) {
+      //         phase.items[i].asset = filePath;
+      //       } else {
+      //         // eslint-disable-next-line no-await-in-loop
+      //         const isConnected = await isOnline();
+      //         if (isConnected) {
+      //           // eslint-disable-next-line no-await-in-loop
+      //           await download(mainWindow, uri, {
+      //             directory: savedSpacesPath,
+      //             filename: fileName,
+      //           }).then(dl => {
+      //             phase.items[i].asset = dl.getSavePath();
+      //           });
+      //         } else {
+      //           mainWindow.webContents.send(GET_SPACE_CHANNEL, ERROR_GENERAL);
+      //         }
+      //       }
+      //     }
+      //   }
+      // }
       mainWindow.webContents.send(GET_SPACE_CHANNEL, space);
     } catch (err) {
       log.error(err);
+      mainWindow.webContents.send(GET_SPACE_CHANNEL, null);
     }
   });
   ipcMain.on(GET_SPACES_CHANNEL, async () => {
@@ -375,15 +385,16 @@ app.on('ready', () => {
   });
   ipcMain.on(LOAD_SPACE_CHANNEL, async (event, { fileLocation }) => {
     try {
-      const extractPath = `${savedSpacesPath}/temp/`;
-      extract(fileLocation, { dir: extractPath }, async err => {
-        if (err) {
-          log.error(err);
+      const extractPath = `${savedSpacesPath}/tmp`;
+      extract(fileLocation, { dir: extractPath }, async extractError => {
+        if (extractError) {
+          log.error(extractError);
         } else {
           let space = {};
           const spacePath = `${extractPath}/space.json`;
-          fs.readFile(spacePath, 'utf8', async (error, data) => {
-            if (error) {
+          fs.readFile(spacePath, 'utf8', async (readFileError, data) => {
+            if (readFileError) {
+              log.error(readFileError);
               mainWindow.webContents.send(
                 LOADED_SPACE_CHANNEL,
                 ERROR_ZIP_CORRUPTED
@@ -423,10 +434,9 @@ app.on('ready', () => {
                           ERROR_JSON_CORRUPTED
                         );
                       }
-                      const spaceId = Number(space.id);
-                      const available = spaces.find(
-                        ({ id }) => Number(id) === spaceId
-                      );
+                      // space id is a string
+                      const spaceId = space.id;
+                      const available = spaces.find(({ id }) => id === spaceId);
                       if (!available) {
                         spaces.push(space);
                         const spacesString = JSON.stringify(spaces);
@@ -470,7 +480,8 @@ app.on('ready', () => {
     EXPORT_SPACE_CHANNEL,
     async (event, { archivePath, id, spaces }) => {
       try {
-        const space = spaces.find(el => Number(el.id) === Number(id));
+        // space ids are strings
+        const space = spaces.find(el => el.id === id);
         const { phases, image: imageUrl } = space;
         const spacesString = JSON.stringify(space);
         const ssPath = `${savedSpacesPath}/space.json`;

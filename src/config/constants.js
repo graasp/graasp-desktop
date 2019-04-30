@@ -1,6 +1,7 @@
 // phase item types
-export const TEXT = 'text';
-export const VIDEO = 'video';
-export const IMAGE = 'image';
-export const LAB = 'lab';
-export const APP = 'app';
+export const TEXT = 'text/html';
+export const VIDEO = new RegExp('video/*');
+export const IMAGE = new RegExp('image/*');
+export const RESOURCE = 'Resource';
+export const APPLICATION = 'Application';
+export const IFRAME = 'application/octet-stream';

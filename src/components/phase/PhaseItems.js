@@ -3,66 +3,47 @@ import {
   TEXT,
   IMAGE,
   VIDEO,
-  LAB,
-  APP,
+  RESOURCE,
+  APPLICATION,
+  IFRAME,
 } from '../../config/constants';
 import PhaseText from './PhaseText';
 import PhaseImage from './PhaseImage';
 import PhaseVideo from './PhaseVideo';
-import PhaseLab from './PhaseLab';
 import PhaseApp from './PhaseApp';
 
-const renderPhaseItem = (item) => {
-  const { id, type, content } = item;
-  switch (type) {
-    case TEXT:
-      return (
-        <PhaseText
-          key={id}
-          id={id}
-          content={content}
-        />
-      );
-    case IMAGE:
-      return (
-        <PhaseImage
-          key={id}
-          id={id}
-          uri={`file://${item.asset}`}
-        />
-      );
-    case LAB:
-      return (
-        <PhaseLab
-          key={id}
-          id={id}
-          uri={`file://${item.asset}`}
-        />
-      );
-    case APP:
-      return (
-        <PhaseApp
-          key={id}
-          id={id}
-          uri={`file://${item.asset}`}
-        />
-      );
-    case VIDEO:
-      return (
-        <PhaseVideo
-          key={id}
-          id={id}
-          uri={`file://${item.asset}`}
-        />
-      );
+const renderResource = item => {
+  const { id, mimeType, content, asset, url, name } = item;
+  if (mimeType === TEXT) {
+    return <PhaseText key={id} id={id} content={content} />;
+  }
+
+  if (IMAGE.test(mimeType)) {
+    return <PhaseImage key={id} id={id} url={url} asset={asset} name={name} />;
+  }
+
+  if (VIDEO.test(mimeType)) {
+    return <PhaseVideo key={id} id={id} uri={`file://${asset}`} />;
+  }
+
+  if (mimeType === IFRAME) {
+    return null;
+  }
+
+  return <div key={id} id={id} />;
+};
+
+const renderPhaseItem = item => {
+  const { id, category, asset } = item;
+  switch (category) {
+    case RESOURCE:
+      return renderResource(item);
+
+    case APPLICATION:
+      return <PhaseApp key={id} id={id} uri={`file://${asset}`} />;
 
     default:
-      return (
-        <div
-          key={id}
-          id={id}
-        />
-      );
+      return <div key={id} id={id} />;
   }
 };
 
