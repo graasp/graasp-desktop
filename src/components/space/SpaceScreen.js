@@ -8,11 +8,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Toolbar from '@material-ui/core/Toolbar/Toolbar';
 import IconButton from '@material-ui/core/IconButton/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import Button from '@material-ui/core/Button';
 import HomeIcon from '@material-ui/icons/Home';
-import UnarchiveIcon from '@material-ui/icons/Unarchive';
-import DeleteIcon from '@material-ui/icons/Delete';
 import Drawer from '@material-ui/core/Drawer/Drawer';
 import Divider from '@material-ui/core/Divider/Divider';
 import List from '@material-ui/core/List/List';
@@ -27,14 +23,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { withStyles } from '@material-ui/core';
 import Loader from '../common/Loader';
 import PhaseComponent from '../phase/Phase';
-import {
-  selectPhase,
-  getSpace,
-  clearPhase,
-  exportSpace,
-  deleteSpace,
-  clearSpace,
-} from '../../actions';
+import { selectPhase, getSpace, clearPhase, clearSpace } from '../../actions';
 import './SpaceScreen.css';
 import Styles from '../../Styles';
 import {
@@ -44,6 +33,7 @@ import {
   SETTINGS_PATH,
   VISIT_PATH,
 } from '../../config/paths';
+import SpaceHeader from './SpaceHeader';
 
 class SpaceScreen extends Component {
   state = {
@@ -52,33 +42,48 @@ class SpaceScreen extends Component {
   };
 
   static propTypes = {
-    spaces: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    })).isRequired,
+    spaces: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+      })
+    ).isRequired,
     space: PropTypes.shape({ id: PropTypes.string.isRequired }).isRequired,
-    phase: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    })).isRequired,
+    phase: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+      })
+    ).isRequired,
     dispatchSelectPhase: PropTypes.func.isRequired,
     dispatchClearPhase: PropTypes.func.isRequired,
     activity: PropTypes.bool.isRequired,
     deleted: PropTypes.bool.isRequired,
-    classes: PropTypes.shape({ appBar: PropTypes.string.isRequired }).isRequired,
-    theme: PropTypes.shape({ direction: PropTypes.string.isRequired }).isRequired,
-    match: PropTypes.shape({ params: { id: PropTypes.string.isRequired } }).isRequired,
+    classes: PropTypes.shape({ appBar: PropTypes.string.isRequired })
+      .isRequired,
+    theme: PropTypes.shape({ direction: PropTypes.string.isRequired })
+      .isRequired,
+    match: PropTypes.shape({ params: { id: PropTypes.string.isRequired } })
+      .isRequired,
     dispatchGetSpace: PropTypes.func.isRequired,
-    history: PropTypes.shape({ length: PropTypes.number.isRequired }).isRequired,
-    dispatchExportSpace: PropTypes.func.isRequired,
-    dispatchDeleteSpace: PropTypes.func.isRequired,
+    history: PropTypes.shape({ length: PropTypes.number.isRequired })
+      .isRequired,
   };
 
   componentDidMount() {
-    const { match: { params: { id } }, dispatchGetSpace, spaces } = this.props;
+    const {
+      match: {
+        params: { id },
+      },
+      dispatchGetSpace,
+      spaces,
+    } = this.props;
     dispatchGetSpace({ id, spaces });
   }
 
   componentDidUpdate() {
-    const { deleted, history: { replace } } = this.props;
+    const {
+      deleted,
+      history: { replace },
+    } = this.props;
     if (deleted) {
       replace(HOME_PATH);
     }
@@ -92,7 +97,7 @@ class SpaceScreen extends Component {
     this.setState({ openDrawer: false });
   };
 
-  handlePhaseClicked = (i) => {
+  handlePhaseClicked = i => {
     const { dispatchSelectPhase, space } = this.props;
     const phases = space.get('phases');
     dispatchSelectPhase(phases[i]);
@@ -109,23 +114,11 @@ class SpaceScreen extends Component {
     dispatchClearPhase();
   };
 
-  handleExport = () => {
-    const { space, spaces } = this.props;
-    const id = space.get('id');
-    const title = space.get('title');
-    const { dispatchExportSpace } = this.props;
-    dispatchExportSpace(id, spaces, title);
-  };
-
-  handleDelete = () => {
-    const { space } = this.props;
-    const id = space.get('id');
-    const { dispatchDeleteSpace } = this.props;
-    dispatchDeleteSpace({ id });
-  };
-
-  handleItemClicked = (id) => {
-    const { history: { replace }, dispatchClearPhase } = this.props;
+  handleItemClicked = id => {
+    const {
+      history: { replace },
+      dispatchClearPhase,
+    } = this.props;
     dispatchClearPhase();
     switch (id) {
       case 0:
@@ -148,13 +141,7 @@ class SpaceScreen extends Component {
   };
 
   render() {
-    const {
-      space,
-      phase,
-      activity,
-      classes,
-      theme,
-    } = this.props;
+    const { space, phase, activity, classes, theme } = this.props;
     const { openDrawer, selected } = this.state;
     if (activity) {
       return (
@@ -172,40 +159,18 @@ class SpaceScreen extends Component {
     if (!space || space.isEmpty()) {
       return <p>Space not found.</p>;
     }
-    const title = space.get('title');
+    const name = space.get('name');
     const phases = space.get('phases');
     //  const description = space.get('description');
     return (
       <div className={classes.root} style={{ height: '100%' }}>
         <CssBaseline />
-        <AppBar
-          position="fixed"
-          className={classNames(classes.appBar, {
-            [classes.appBarShift]: openDrawer,
-          })}
-        >
-          <Toolbar disableGutters={!openDrawer}>
-            <IconButton
-              color="inherit"
-              aria-label="Open drawer"
-              onClick={this.handleDrawerOpen}
-              className={classNames(classes.menuButton, openDrawer && classes.hide)}
-            >
-              <MenuIcon />
-            </IconButton>
-            {title}
-            <span style={{ position: 'absolute', right: 20 }}>
-              <Button color="inherit" onClick={this.handleDelete} className={classes.button}>
-                Delete
-                <DeleteIcon className={classes.rightIcon}>delete</DeleteIcon>
-              </Button>
-              <Button color="inherit" onClick={this.handleExport} className={classes.button}>
-                Export
-                <UnarchiveIcon className={classes.rightIcon}>export</UnarchiveIcon>
-              </Button>
-            </span>
-          </Toolbar>
-        </AppBar>
+        <SpaceHeader
+          id={space.id}
+          name={name}
+          handleDrawerOpen={this.handleDrawerOpen}
+          openDrawer={openDrawer}
+        />
         <Drawer
           className={classes.drawer}
           variant="persistent"
@@ -217,48 +182,68 @@ class SpaceScreen extends Component {
         >
           <div className={classes.drawerHeader}>
             <IconButton onClick={this.handleDrawerClose}>
-              {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+              {theme.direction === 'ltr' ? (
+                <ChevronLeftIcon />
+              ) : (
+                <ChevronRightIcon />
+              )}
             </IconButton>
           </div>
           <Divider />
           <List>
-            <MenuItem onClick={this.handleClearPhase} button selected={selected === -1}>
-              <ListItemIcon><HomeIcon /></ListItemIcon>
+            <MenuItem
+              onClick={this.handleClearPhase}
+              button
+              selected={selected === -1}
+            >
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
               <ListItemText primary="Home" />
             </MenuItem>
-            {
-              phases.map((item, i) => (
-                <MenuItem
-                  onClick={() => this.handlePhaseClicked(i)}
-                  key={item.id}
-                  selected={selected === i}
-                >
-                  <ListItemIcon><ChevronRightIcon /></ListItemIcon>
-                  <ListItemText primary={item.title} />
-                </MenuItem>
-              ))
-            }
+            {phases.map((item, i) => (
+              <MenuItem
+                onClick={() => this.handlePhaseClicked(i)}
+                key={item.id}
+                selected={selected === i}
+              >
+                <ListItemIcon>
+                  <ChevronRightIcon />
+                </ListItemIcon>
+                <ListItemText primary={item.name} />
+              </MenuItem>
+            ))}
           </List>
           <Divider />
           <List>
             <MenuItem onClick={() => this.handleItemClicked(0)} button>
-              <ListItemIcon><SaveIcon /></ListItemIcon>
+              <ListItemIcon>
+                <SaveIcon />
+              </ListItemIcon>
               <ListItemText primary="Saved spaces" />
             </MenuItem>
             <MenuItem onClick={() => this.handleItemClicked(1)} button>
-              <ListItemIcon><SearchIcon /></ListItemIcon>
+              <ListItemIcon>
+                <SearchIcon />
+              </ListItemIcon>
               <ListItemText primary="Search Space" />
             </MenuItem>
             <MenuItem onClick={() => this.handleItemClicked(2)} button>
-              <ListItemIcon><Language /></ListItemIcon>
+              <ListItemIcon>
+                <Language />
+              </ListItemIcon>
               <ListItemText primary="Visit a space" />
             </MenuItem>
             <MenuItem onClick={() => this.handleItemClicked(3)} button>
-              <ListItemIcon><Publish /></ListItemIcon>
+              <ListItemIcon>
+                <Publish />
+              </ListItemIcon>
               <ListItemText primary="Load" />
             </MenuItem>
             <MenuItem onClick={() => this.handleItemClicked(4)} button>
-              <ListItemIcon><SettingsIcon /></ListItemIcon>
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
               <ListItemText primary="Settings" />
             </MenuItem>
           </List>
@@ -270,7 +255,10 @@ class SpaceScreen extends Component {
           style={{ height: '100%' }}
         >
           <div className={classes.drawerHeader} />
-          <PhaseComponent phase={phase} start={() => this.handlePhaseClicked(0)} />
+          <PhaseComponent
+            phase={phase}
+            start={() => this.handlePhaseClicked(0)}
+          />
         </main>
       </div>
     );
@@ -279,7 +267,9 @@ class SpaceScreen extends Component {
 
 const mapStateToProps = ({ Space, Phase }) => ({
   space: Space.get('current').get('content'),
-  open: Space.get('current').get('menu').get('open'),
+  open: Space.get('current')
+    .get('menu')
+    .get('open'),
   phase: Phase.get('current').get('content'),
   activity: Space.get('current').get('activity'),
   deleted: Space.get('current').get('deleted'),
@@ -290,11 +280,12 @@ const mapDispatchToProps = {
   dispatchSelectPhase: selectPhase,
   dispatchGetSpace: getSpace,
   dispatchClearPhase: clearPhase,
-  dispatchExportSpace: exportSpace,
-  dispatchDeleteSpace: deleteSpace,
   dispatchClearSpace: clearSpace,
 };
 
-export default (
-  withStyles(Styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(SpaceScreen))
+export default withStyles(Styles, { withTheme: true })(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(SpaceScreen)
 );
