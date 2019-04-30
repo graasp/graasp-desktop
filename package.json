@@ -109,7 +109,8 @@
       "target": [
         "pkg",
         "dmg",
-        "mas"
+        "mas",
+        "zip"
       ],
       "category": "public.app-category.education",
       "publish": [
