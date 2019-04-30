@@ -18,6 +18,8 @@ const archiver = require('archiver');
 const { ncp } = require('ncp');
 const log = require('electron-log');
 const { autoUpdater } = require('electron-updater');
+const Sentry = require('@sentry/electron');
+
 const {
   DELETE_SPACE_CHANNEL,
   DELETED_SPACE_CHANNEL,
@@ -46,6 +48,10 @@ const ERROR_ZIP_CORRUPTED = 'ERROR_ZIP_CORRUPTED';
 const ERROR_JSON_CORRUPTED = 'ERROR_JSON_CORRUPTED';
 const ERROR_SPACE_ALREADY_AVAILABLE = 'ERROR_SPACE_ALREADY_AVAILABLE';
 const ERROR_GENERAL = 'ERROR_GENERAL';
+
+// set up sentry
+const { SENTRY_DSN } = process.env;
+Sentry.init({ dsn: SENTRY_DSN });
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
