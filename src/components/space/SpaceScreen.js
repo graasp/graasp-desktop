@@ -66,6 +66,7 @@ class SpaceScreen extends Component {
     match: PropTypes.shape({ params: { id: PropTypes.string.isRequired } })
       .isRequired,
     dispatchGetSpace: PropTypes.func.isRequired,
+    dispatchClearSpace: PropTypes.func.isRequired,
     history: PropTypes.shape({ length: PropTypes.number.isRequired })
       .isRequired,
   };
@@ -89,6 +90,11 @@ class SpaceScreen extends Component {
     if (deleted) {
       replace(HOME_PATH);
     }
+  }
+
+  componentWillUnmount() {
+    const { dispatchClearSpace } = this.props;
+    dispatchClearSpace();
   }
 
   handleDrawerOpen = () => {
