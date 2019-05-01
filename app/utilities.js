@@ -1,9 +1,12 @@
+const mkdirp = require('mkdirp');
 const mime = require('mime-types');
 const md5 = require('md5');
+const logger = require('./logger');
 const {
   DOWNLOADABLE_MIME_TYPES,
   APPLICATION,
   RESOURCE,
+  VAR_FOLDER,
 } = require('./config/config');
 
 const getExtension = ({ url, mimeType }) => {
@@ -42,4 +45,18 @@ const generateHash = resource => {
   return md5(url);
 };
 
-module.exports = { getExtension, isDownloadable, generateHash };
+// create space directory
+const createSpaceDirectory = async ({ id }) => {
+  try {
+    mkdirp.sync(`${VAR_FOLDER}/${id}`);
+  } catch (err) {
+    logger.error(err);
+  }
+};
+
+module.exports = {
+  getExtension,
+  isDownloadable,
+  generateHash,
+  createSpaceDirectory,
+};

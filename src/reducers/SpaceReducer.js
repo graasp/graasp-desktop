@@ -10,7 +10,7 @@ import {
   FLAG_GETTING_SPACES,
   FLAG_LOADING_SPACE,
   FLAG_EXPORTING_SPACE,
-  ON_SPACE_DELETED,
+  DELETE_SPACE_SUCCESS,
   SAVE_SPACE_SUCCEEDED,
 } from '../types';
 
@@ -44,7 +44,7 @@ export default (state = INITIAL_STATE, { type, payload }) => {
       return state.setIn(['current', 'activity'], payload);
     case FLAG_DELETING_SPACE:
       return state.setIn(['current', 'activity'], payload);
-    case ON_SPACE_DELETED:
+    case DELETE_SPACE_SUCCESS:
       return state.setIn(['current', 'deleted'], payload);
     case GET_SPACES:
       return state.setIn(['saved'], payload);

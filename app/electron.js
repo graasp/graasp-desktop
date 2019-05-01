@@ -12,6 +12,7 @@ const isDev = require('electron-is-dev');
 const fs = require('fs');
 const isOnline = require('is-online');
 const electronDl = require('electron-dl');
+const rimraf = require('rimraf');
 // const fse = require('fs-extra');
 // const extract = require('extract-zip');
 // const archiver = require('archiver');
@@ -19,23 +20,28 @@ const electronDl = require('electron-dl');
 const { autoUpdater } = require('electron-updater');
 const Sentry = require('@sentry/electron');
 const {
-  // DELETE_SPACE_CHANNEL,
-  // DELETED_SPACE_CHANNEL,
   // EXPORT_SPACE_CHANNEL,
   // EXPORTED_SPACE_CHANNEL,
   // LOAD_SPACE_CHANNEL,
   // LOADED_SPACE_CHANNEL,
+  DELETE_SPACE_CHANNEL,
+  DELETED_SPACE_CHANNEL,
   GET_SPACE_CHANNEL,
-  MESSAGE_DIALOG_RESPOND_CHANNEL,
   GET_SPACES_CHANNEL,
   SAVE_DIALOG_PATH_SELECTED_CHANNEL,
-  SHOW_MESSAGE_DIALOG_CHANNEL,
+  RESPOND_DELETE_SPACE_PROMPT_CHANNEL,
+  SHOW_DELETE_SPACE_PROMPT_CHANNEL,
   SHOW_SAVE_DIALOG_CHANNEL,
   SHOW_OPEN_DIALOG_CHANNEL,
   OPEN_DIALOG_PATHS_SELECTED_CHANNEL,
   SAVE_SPACE_CHANNEL,
 } = require('../src/config/channels');
-const { getExtension, isDownloadable, generateHash } = require('./utilities');
+const {
+  getExtension,
+  isDownloadable,
+  generateHash,
+  createSpaceDirectory,
+} = require('./utilities');
 const {
   ensureDatabaseExists,
   bootstrapDatabase,
@@ -44,6 +50,7 @@ const {
 const {
   ERROR_SPACE_ALREADY_AVAILABLE,
   ERROR_DOWNLOADING_FILE,
+  ERROR_GENERAL,
 } = require('../src/config/errors');
 const logger = require('./logger');
 
@@ -232,6 +239,9 @@ app.on('ready', async () => {
         );
       }
 
+      // create directory where resources will be stored
+      createSpaceDirectory({ id });
+
       const { phases } = spaceToSave;
       // eslint-disable-next-line no-restricted-syntax
       for (const phase of phases) {
@@ -245,7 +255,8 @@ app.on('ready', async () => {
             const hash = generateHash(resource);
             const ext = getExtension(resource);
             const fileName = `${hash}.${ext}`;
-            const filePath = `${VAR_FOLDER}/${fileName}`;
+            const spacePath = `${VAR_FOLDER}/${id}`;
+            const filePath = `${spacePath}/${fileName}`;
             phase.items[i].hash = hash;
 
             // eslint-disable-next-line no-await-in-loop
@@ -260,7 +271,7 @@ app.on('ready', async () => {
               if (isConnected) {
                 // eslint-disable-next-line no-await-in-loop
                 const dl = await download(mainWindow, url, {
-                  directory: VAR_FOLDER,
+                  directory: spacePath,
                   filename: fileName,
                 });
                 phase.items[i].asset = dl.getSavePath();
@@ -310,84 +321,18 @@ app.on('ready', async () => {
     }
   });
 
-  // ipcMain.on(DELETE_SPACE_CHANNEL, async (event, { id }) => {
-  //   try {
-  //     let spaces = [];
-  //     let spaceImageUrl = '';
-  //     const spacesPath = `${savedSpacesPath}/${spacesFileName}`;
-  //     fs.readFile(spacesPath, 'utf8', async (err, data) => {
-  //       if (err) {
-  //         mainWindow.webContents.send(DELETED_SPACE_CHANNEL, ERROR_GENERAL);
-  //       } else {
-  //         spaces = JSON.parse(data);
-  //         const allResources = [];
-  //         const spaceResources = [];
-  //
-  //         // eslint-disable-next-line no-restricted-syntax
-  //         for (const space of spaces) {
-  //           const { phases, id: spaceId, image: imageUrl } = space;
-  //           if (spaceId === id) {
-  //             // to get the extension of the background image for the space to be deleted
-  //             spaceImageUrl = imageUrl;
-  //           }
-  //           // eslint-disable-next-line no-restricted-syntax
-  //           for (const phase of phases) {
-  //             const { items = [] } = phase;
-  //             for (let i = 0; i < items.length; i += 1) {
-  //               const { resource } = items[i];
-  //               if (resource) {
-  //                 const { hash, type } = resource;
-  //                 const fileName = `${hash}.${type}`;
-  //                 const filePath = `${savedSpacesPath}/${fileName}`;
-  //                 // eslint-disable-next-line no-await-in-loop
-  //                 const fileAvailable = await isFileAvailable(filePath);
-  //                 if (fileAvailable) {
-  //                   if (spaceId === id) {
-  //                     spaceResources.push(filePath);
-  //                   } else {
-  //                     allResources.push(filePath);
-  //                   }
-  //                 }
-  //               }
-  //             }
-  //           }
-  //         }
-  //         // resources in the space but not used by other spaces
-  //         const allResourcesSet = new Set(allResources);
-  //         const spaceDistinctResources = new Set(
-  //           [...spaceResources].filter(
-  //             filePath => !allResourcesSet.has(filePath)
-  //           )
-  //         );
-  //         const extension = spaceImageUrl.match(/[^\\]*\.(\w+)$/)[1];
-  //         const backgroundImagePath = `${savedSpacesPath}/background-${id}.${extension}`;
-  //         const backgroundImageExists = await isFileAvailable(
-  //           backgroundImagePath
-  //         );
-  //         if (backgroundImageExists) {
-  //           spaceDistinctResources.add(backgroundImagePath);
-  //         }
-  //         // delete all resources used by the space to be deleted only
-  //         [...spaceDistinctResources].forEach(filePath =>
-  //           fs.unlink(filePath, error => {
-  //             if (error) {
-  //               logger.error(error);
-  //             }
-  //           })
-  //         );
-  //         const newSpaces = spaces.filter(el => Number(el.id) !== Number(id));
-  //         const spacesString = JSON.stringify(newSpaces);
-  //         await fsPromises.writeFile(
-  //           `${savedSpacesPath}/${spacesFileName}`,
-  //           spacesString
-  //         );
-  //         mainWindow.webContents.send(DELETED_SPACE_CHANNEL);
-  //       }
-  //     });
-  //   } catch {
-  //     mainWindow.webContents.send(DELETED_SPACE_CHANNEL, ERROR_GENERAL);
-  //   }
-  // });
+  // called when deleting a space
+  ipcMain.on(DELETE_SPACE_CHANNEL, async (event, { id }) => {
+    try {
+      db.get(SPACES_COLLECTION)
+        .remove({ id })
+        .write();
+      rimraf.sync(`${VAR_FOLDER}/${id}`);
+      mainWindow.webContents.send(DELETED_SPACE_CHANNEL);
+    } catch (err) {
+      mainWindow.webContents.send(DELETED_SPACE_CHANNEL, ERROR_GENERAL);
+    }
+  });
 
   // ipcMain.on(LOAD_SPACE_CHANNEL, async (event, { fileLocation }) => {
   //   try {
@@ -576,7 +521,7 @@ app.on('ready', async () => {
       mainWindow.webContents.send(SAVE_DIALOG_PATH_SELECTED_CHANNEL, filePath);
     });
   });
-  ipcMain.on(SHOW_MESSAGE_DIALOG_CHANNEL, () => {
+  ipcMain.on(SHOW_DELETE_SPACE_PROMPT_CHANNEL, () => {
     const options = {
       type: 'warning',
       buttons: ['Cancel', 'Delete'],
@@ -585,7 +530,7 @@ app.on('ready', async () => {
       message: 'Are you sure you want to delete this space?',
     };
     dialog.showMessageBox(null, options, respond => {
-      mainWindow.webContents.send(MESSAGE_DIALOG_RESPOND_CHANNEL, respond);
+      mainWindow.webContents.send(RESPOND_DELETE_SPACE_PROMPT_CHANNEL, respond);
     });
   });
 });

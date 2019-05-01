@@ -87,6 +87,7 @@ class SpaceScreen extends Component {
       deleted,
       history: { replace },
     } = this.props;
+    // redirect to home if space is deleted
     if (deleted) {
       replace(HOME_PATH);
     }

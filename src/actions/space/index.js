@@ -8,7 +8,7 @@ import {
   GET_SPACE_SUCCEEDED,
   FLAG_EXPORTING_SPACE,
   FLAG_DELETING_SPACE,
-  ON_SPACE_DELETED,
+  DELETE_SPACE_SUCCESS,
   FLAG_SAVING_SPACE,
   SAVE_SPACE_SUCCEEDED,
 } from '../../types';
@@ -29,9 +29,9 @@ import {
   GET_SPACES_CHANNEL,
   LOAD_SPACE_CHANNEL,
   LOADED_SPACE_CHANNEL,
-  MESSAGE_DIALOG_RESPOND_CHANNEL,
+  RESPOND_DELETE_SPACE_PROMPT_CHANNEL,
   SAVE_DIALOG_PATH_SELECTED_CHANNEL,
-  SHOW_MESSAGE_DIALOG_CHANNEL,
+  SHOW_DELETE_SPACE_PROMPT_CHANNEL,
   SHOW_SAVE_DIALOG_CHANNEL,
   SAVE_SPACE_CHANNEL,
 } from '../../config/channels';
@@ -262,26 +262,26 @@ const exportSpace = (id, spaces, spaceName) => dispatch => {
 };
 
 const deleteSpace = ({ id }) => dispatch => {
-  dispatch(flagDeletingSpace(true));
-  window.ipcRenderer.send(SHOW_MESSAGE_DIALOG_CHANNEL);
-  window.ipcRenderer.once(MESSAGE_DIALOG_RESPOND_CHANNEL, (event, respond) => {
-    if (respond === 1) {
-      window.ipcRenderer.send(DELETE_SPACE_CHANNEL, { id });
-    } else {
-      dispatch(flagExportingSpace(false));
+  // show confirmation prompt
+  window.ipcRenderer.send(SHOW_DELETE_SPACE_PROMPT_CHANNEL);
+  window.ipcRenderer.once(
+    RESPOND_DELETE_SPACE_PROMPT_CHANNEL,
+    (event, response) => {
+      if (response === 1) {
+        dispatch(flagDeletingSpace(true));
+        window.ipcRenderer.send(DELETE_SPACE_CHANNEL, { id });
+      }
     }
-  });
-  window.ipcRenderer.once(DELETED_SPACE_CHANNEL, (event, deletedReply) => {
-    switch (deletedReply) {
-      case ERROR_GENERAL:
-        toastr.error('Error', ERROR_DELETING_MESSAGE);
-        break;
-      default:
-        toastr.success('Success', SUCCESS_DELETING_MESSAGE);
-        dispatch({
-          type: ON_SPACE_DELETED,
-          payload: true,
-        });
+  );
+  window.ipcRenderer.once(DELETED_SPACE_CHANNEL, (event, response) => {
+    if (response === ERROR_GENERAL) {
+      toastr.error('Error', ERROR_DELETING_MESSAGE);
+    } else {
+      toastr.success('Success', SUCCESS_DELETING_MESSAGE);
+      dispatch({
+        type: DELETE_SPACE_SUCCESS,
+        payload: true,
+      });
     }
     dispatch(flagDeletingSpace(false));
   });
