@@ -9,12 +9,15 @@ import {
   FLAG_EXPORTING_SPACE,
   FLAG_DELETING_SPACE,
   ON_SPACE_DELETED,
-} from '../../types/space';
+  FLAG_SAVING_SPACE,
+  SAVE_SPACE_SUCCEEDED,
+} from '../../types';
 import {
   ERROR_ZIP_CORRUPTED,
   ERROR_JSON_CORRUPTED,
   ERROR_SPACE_ALREADY_AVAILABLE,
   ERROR_GENERAL,
+  ERROR_DOWNLOADING_FILE,
 } from '../../config/errors';
 import { clearPhase } from '../phase';
 import {
@@ -30,17 +33,23 @@ import {
   SAVE_DIALOG_PATH_SELECTED_CHANNEL,
   SHOW_MESSAGE_DIALOG_CHANNEL,
   SHOW_SAVE_DIALOG_CHANNEL,
+  SAVE_SPACE_CHANNEL,
 } from '../../config/channels';
 import {
-  ERROR_DELETING_MESSAGE,
   // ERROR_DOWNLOADING_MESSAGE,
+  ERROR_DELETING_MESSAGE,
+  ERROR_DOWNLOADING_MESSAGE,
   ERROR_EXPORTING_MESSAGE,
   ERROR_GETTING_SPACE_MESSAGE,
   ERROR_JSON_CORRUPTED_MESSAGE,
-  ERROR_SPACE_AVAILABLE_MESSAGE,
+  ERROR_MESSAGE_HEADER,
+  ERROR_SAVING_SPACE_MESSAGE,
+  ERROR_SPACE_ALREADY_AVAILABLE_MESSAGE,
   ERROR_ZIP_CORRUPTED_MESSAGE,
   SUCCESS_DELETING_MESSAGE,
   SUCCESS_EXPORTING_MESSAGE,
+  SUCCESS_MESSAGE_HEADER,
+  SUCCESS_SAVING_MESSAGE,
   SUCCESS_SPACE_LOADED_MESSAGE,
 } from '../../config/messages';
 import { createFlag, isErrorResponse } from '../common';
@@ -52,6 +61,7 @@ const flagGettingSpaces = createFlag(FLAG_GETTING_SPACES);
 const flagLoadingSpace = createFlag(FLAG_LOADING_SPACE);
 const flagDeletingSpace = createFlag(FLAG_DELETING_SPACE);
 const flagExportingSpace = createFlag(FLAG_EXPORTING_SPACE);
+const flagSavingSpace = createFlag(FLAG_SAVING_SPACE);
 
 // const getSpace = async ({ id, spaces }) => async (dispatch) => {
 //   // raise flag
@@ -138,6 +148,46 @@ const getSpaces = () => dispatch => {
   });
 };
 
+const saveSpace = async ({ space }) => async dispatch => {
+  try {
+    dispatch(flagSavingSpace(true));
+
+    // tell electron to get space
+    window.ipcRenderer.send(SAVE_SPACE_CHANNEL, { space });
+
+    // create listener
+    window.ipcRenderer.once(SAVE_SPACE_CHANNEL, async (event, response) => {
+      // if there is no response, show error
+      if (!response) {
+        return toastr.error(ERROR_MESSAGE_HEADER, ERROR_SAVING_SPACE_MESSAGE);
+      }
+
+      switch (response) {
+        case ERROR_SPACE_ALREADY_AVAILABLE:
+          return toastr.error(
+            ERROR_MESSAGE_HEADER,
+            ERROR_SPACE_ALREADY_AVAILABLE_MESSAGE
+          );
+
+        case ERROR_DOWNLOADING_FILE:
+          return toastr.error(ERROR_MESSAGE_HEADER, ERROR_DOWNLOADING_MESSAGE);
+
+        // todo: check that it is actually a space before dispatching success
+        default:
+          toastr.success(SUCCESS_MESSAGE_HEADER, SUCCESS_SAVING_MESSAGE);
+          return dispatch({
+            type: SAVE_SPACE_SUCCEEDED,
+            payload: response,
+          });
+      }
+    });
+  } catch (err) {
+    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SAVING_SPACE_MESSAGE);
+  } finally {
+    dispatch(flagSavingSpace(false));
+  }
+};
+
 const clearSpace = () => dispatch => {
   dispatch(clearPhase());
   return dispatch({
@@ -212,7 +262,7 @@ const loadSpace = ({ fileLocation }) => dispatch => {
         toastr.error('Error', ERROR_JSON_CORRUPTED_MESSAGE);
         break;
       case ERROR_SPACE_ALREADY_AVAILABLE:
-        toastr.error('Error', ERROR_SPACE_AVAILABLE_MESSAGE);
+        toastr.error('Error', ERROR_SPACE_ALREADY_AVAILABLE_MESSAGE);
         break;
       default:
         toastr.success('Success', SUCCESS_SPACE_LOADED_MESSAGE);
@@ -233,26 +283,6 @@ const getSpace = ({ id }) => dispatch => {
   }
 };
 
-// const saveSpace = async () => async (dispatch) => {
-//   // download all clips si that they are easily fetched later
-//   try {
-//     await Promise.all([].map(async (asset, i) => {
-//       const baseUrl = '';
-//       const { uri, hash, id, type } = asset;
-//       const asset = new Asset({
-//         uri,
-//         hash,
-//         name: id,
-//         type: 'mp3',
-//       });
-//       await asset.downloadAsync();
-//       // quiz.questions[i].clip.asset = asset;
-//     }));
-//   } catch (err) {
-//     console.error(err);
-//   }
-// }
-
 export {
   loadSpace,
   clearSpace,
@@ -262,4 +292,5 @@ export {
   getLocalSpace,
   getSpaces,
   getSpace,
+  saveSpace,
 };

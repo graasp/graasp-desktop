@@ -168,15 +168,12 @@ class SpaceScreen extends Component {
     if (!space || space.isEmpty()) {
       return <SpaceNotFound />;
     }
-    const name = space.get('name');
     const phases = space.get('phases');
     //  const description = space.get('description');
     return (
       <div className={classes.root} style={{ height: '100%' }}>
         <CssBaseline />
         <SpaceHeader
-          id={space.id}
-          name={name}
           handleDrawerOpen={this.handleDrawerOpen}
           openDrawer={openDrawer}
         />

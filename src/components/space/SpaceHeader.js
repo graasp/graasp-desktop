@@ -11,47 +11,58 @@ import Toolbar from '@material-ui/core/Toolbar/Toolbar';
 import IconButton from '@material-ui/core/IconButton/IconButton';
 import { withStyles } from '@material-ui/core';
 import Styles from '../../Styles';
-import { deleteSpace, exportSpace } from '../../actions/space';
+import { deleteSpace, exportSpace, saveSpace } from '../../actions/space';
 
 class SpaceHeader extends Component {
   static propTypes = {
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
     spaces: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.string.isRequired,
+        saved: PropTypes.bool,
       })
     ).isRequired,
+    space: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+    }).isRequired,
     classes: PropTypes.shape({ appBar: PropTypes.string.isRequired })
       .isRequired,
     handleDrawerOpen: PropTypes.func.isRequired,
     openDrawer: PropTypes.func.isRequired,
     dispatchExportSpace: PropTypes.func.isRequired,
     dispatchDeleteSpace: PropTypes.func.isRequired,
-    saved: PropTypes.bool,
-  };
-
-  static defaultProps = {
-    saved: false,
+    dispatchSaveSpace: PropTypes.func.isRequired,
   };
 
   handleExport = () => {
-    const { id, name, spaces } = this.props;
-    const { dispatchExportSpace } = this.props;
+    const { space, spaces, dispatchExportSpace } = this.props;
+    const { id, name } = space;
     dispatchExportSpace(id, spaces, name);
   };
 
   handleDelete = () => {
-    const { id } = this.props;
-    const { dispatchDeleteSpace } = this.props;
+    const {
+      space: { id },
+      dispatchDeleteSpace,
+    } = this.props;
     dispatchDeleteSpace({ id });
   };
 
+  handleSave = () => {
+    const { space, dispatchSaveSpace } = this.props;
+    dispatchSaveSpace({ space });
+  };
+
   renderSaveButton() {
-    const { saved, classes } = this.props;
+    const { space, classes } = this.props;
+    const { saved } = space;
     if (!saved) {
       return (
-        <IconButton className={classes.button} color="inherit">
+        <IconButton
+          className={classes.button}
+          color="inherit"
+          onClick={this.handleSave}
+        >
           <SaveIcon />
         </IconButton>
       );
@@ -60,7 +71,8 @@ class SpaceHeader extends Component {
   }
 
   renderExportButton() {
-    const { saved, classes } = this.props;
+    const { space, classes } = this.props;
+    const { saved } = space;
     if (saved) {
       return (
         <IconButton
@@ -76,7 +88,12 @@ class SpaceHeader extends Component {
   }
 
   render() {
-    const { openDrawer, classes, name, handleDrawerOpen } = this.props;
+    const {
+      openDrawer,
+      classes,
+      space: { name },
+      handleDrawerOpen,
+    } = this.props;
     return (
       <AppBar
         position="fixed"
@@ -114,13 +131,20 @@ class SpaceHeader extends Component {
   }
 }
 
+const mapStateToProps = ({ Space }) => ({
+  space: Space.get('current')
+    .get('content')
+    .toJS(),
+});
+
 const mapDispatchToProps = {
   dispatchExportSpace: exportSpace,
   dispatchDeleteSpace: deleteSpace,
+  dispatchSaveSpace: saveSpace,
 };
 
 const ConnectedComponent = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(SpaceHeader);
 

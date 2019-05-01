@@ -11,6 +11,7 @@ import {
   FLAG_LOADING_SPACE,
   FLAG_EXPORTING_SPACE,
   ON_SPACE_DELETED,
+  SAVE_SPACE_SUCCEEDED,
 } from '../types';
 
 const INITIAL_STATE = Immutable.Map({
@@ -52,6 +53,8 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case TOGGLE_SPACE_MENU:
       return state.setIn(['current', 'menu', 'open'], payload);
     case GET_SPACE_SUCCEEDED:
+      return state.setIn(['current', 'content'], Immutable.Map(payload));
+    case SAVE_SPACE_SUCCEEDED:
       return state.setIn(['current', 'content'], Immutable.Map(payload));
     default:
       return state;
