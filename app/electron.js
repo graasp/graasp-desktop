@@ -23,9 +23,9 @@ const {
   // DELETED_SPACE_CHANNEL,
   // EXPORT_SPACE_CHANNEL,
   // EXPORTED_SPACE_CHANNEL,
-  // GET_SPACE_CHANNEL,
   // LOAD_SPACE_CHANNEL,
   // LOADED_SPACE_CHANNEL,
+  GET_SPACE_CHANNEL,
   MESSAGE_DIALOG_RESPOND_CHANNEL,
   GET_SPACES_CHANNEL,
   SAVE_DIALOG_PATH_SELECTED_CHANNEL,
@@ -36,7 +36,11 @@ const {
   SAVE_SPACE_CHANNEL,
 } = require('../src/config/channels');
 const { getExtension, isDownloadable, generateHash } = require('./utilities');
-const { ensureDatabaseExists, bootstrapDatabase } = require('./db');
+const {
+  ensureDatabaseExists,
+  bootstrapDatabase,
+  SPACES_COLLECTION,
+} = require('./db');
 const {
   ERROR_SPACE_ALREADY_AVAILABLE,
   ERROR_DOWNLOADING_FILE,
@@ -217,7 +221,7 @@ app.on('ready', async () => {
     const spaceToSave = { ...space };
     try {
       // get handle to spaces collection
-      const spaces = db.get('spaces');
+      const spaces = db.get(SPACES_COLLECTION);
       const { id } = space;
       const existingSpace = spaces.find({ id }).value();
 
@@ -280,57 +284,26 @@ app.on('ready', async () => {
     }
   });
 
-  // ipcMain.on(GET_SPACE_CHANNEL, async (event, { id }) => {
-  //   try {
-  //     const spacesPath = `${savedSpacesPath}/${spacesFileName}`;
-  //     const data = await readFile(spacesPath, 'utf8');
-  //     const spaces = JSON.parse(data);
-  //     // id is a string
-  //     const space = spaces.find(el => el.id === id);
-  //
-  //     // const { phases } = space;
-  //     // // eslint-disable-next-line no-restricted-syntax
-  //     // for (const phase of phases) {
-  //     //   const { items = [] } = phase;
-  //     //   for (let i = 0; i < items.length; i += 1) {
-  //     //     const { resource } = items[i];
-  //     //     if (resource) {
-  //     //       const { uri, hash, type } = resource;
-  //     //       const fileName = `${hash}.${type}`;
-  //     //       const filePath = `${savedSpacesPath}/${fileName}`;
-  //     //       // eslint-disable-next-line no-await-in-loop
-  //     //       const fileAvailable = await isFileAvailable(filePath);
-  //     //       if (fileAvailable) {
-  //     //         phase.items[i].asset = filePath;
-  //     //       } else {
-  //     //         // eslint-disable-next-line no-await-in-loop
-  //     //         const isConnected = await isOnline();
-  //     //         if (isConnected) {
-  //     //           // eslint-disable-next-line no-await-in-loop
-  //     //           await download(mainWindow, uri, {
-  //     //             directory: savedSpacesPath,
-  //     //             filename: fileName,
-  //     //           }).then(dl => {
-  //     //             phase.items[i].asset = dl.getSavePath();
-  //     //           });
-  //     //         } else {
-  //     //           mainWindow.webContents.send(GET_SPACE_CHANNEL, ERROR_GENERAL);
-  //     //         }
-  //     //       }
-  //     //     }
-  //     //   }
-  //     // }
-  //     mainWindow.webContents.send(GET_SPACE_CHANNEL, space);
-  //   } catch (err) {
-  //     logger.error(err);
-  //     mainWindow.webContents.send(GET_SPACE_CHANNEL, null);
-  //   }
-  // });
+  // called when getting a space
+  ipcMain.on(GET_SPACE_CHANNEL, async (event, { id }) => {
+    try {
+      // get handle to spaces collection
+      const space = db
+        .get(SPACES_COLLECTION)
+        .find({ id })
+        .value();
+      mainWindow.webContents.send(GET_SPACE_CHANNEL, space);
+    } catch (err) {
+      logger.error(err);
+      mainWindow.webContents.send(GET_SPACE_CHANNEL, null);
+    }
+  });
 
+  // called when getting all spaces
   ipcMain.on(GET_SPACES_CHANNEL, async () => {
     try {
       // get handle to spaces collection
-      const spaces = db.get('spaces').value();
+      const spaces = db.get(SPACES_COLLECTION).value();
       mainWindow.webContents.send(GET_SPACES_CHANNEL, spaces);
     } catch (e) {
       logger.error(e);

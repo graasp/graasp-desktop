@@ -87,6 +87,23 @@ class SpaceHeader extends Component {
     return null;
   }
 
+  renderDeleteButton() {
+    const { space, classes } = this.props;
+    const { saved } = space;
+    if (saved) {
+      return (
+        <IconButton
+          color="inherit"
+          onClick={this.handleDelete}
+          className={classes.button}
+        >
+          <DeleteIcon className={classes.rightIcon} />
+        </IconButton>
+      );
+    }
+    return null;
+  }
+
   render() {
     const {
       openDrawer,
@@ -115,13 +132,7 @@ class SpaceHeader extends Component {
           </IconButton>
           {name}
           <span style={{ position: 'absolute', right: 20 }}>
-            <IconButton
-              color="inherit"
-              onClick={this.handleDelete}
-              className={classes.button}
-            >
-              <DeleteIcon className={classes.rightIcon} />
-            </IconButton>
+            {this.renderDeleteButton()}
             {this.renderExportButton()}
             {this.renderSaveButton()}
           </span>

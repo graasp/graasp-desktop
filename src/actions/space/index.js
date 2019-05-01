@@ -86,6 +86,33 @@ const flagSavingSpace = createFlag(FLAG_SAVING_SPACE);
 //   // });
 // };
 
+/**
+ * helper function to wrap a listener to the get space channel around a promise
+ * @param online
+ * @returns {Promise<any>}
+ */
+const waitForSpace = ({ online }) =>
+  new Promise((resolve, reject) => {
+    // if online we are just using this to merge locally, so if the space
+    // does not exist, it is not a big deal
+    if (online) {
+      return window.ipcRenderer.once(
+        GET_SPACE_CHANNEL,
+        async (event, space = {}) => {
+          resolve(space);
+        }
+      );
+    }
+    // if offline, we want to error if the space does not exist
+    return window.ipcRenderer.once(GET_SPACE_CHANNEL, async (event, space) => {
+      // if there is no space offline, show error
+      if (!space) {
+        reject(new Error());
+      }
+      resolve(space);
+    });
+  });
+
 const getLocalSpace = async ({ id }) => async dispatch => {
   try {
     dispatch(flagGettingSpace(true));
@@ -93,17 +120,11 @@ const getLocalSpace = async ({ id }) => async dispatch => {
     // tell electron to get space
     window.ipcRenderer.send(GET_SPACE_CHANNEL, { id });
 
-    // create listener
-    window.ipcRenderer.once(GET_SPACE_CHANNEL, async (event, space) => {
-      // if there is no space offline, show error
-      if (!space) {
-        toastr.error('Error', ERROR_GETTING_SPACE_MESSAGE);
-      } else {
-        dispatch({
-          type: GET_SPACE_SUCCEEDED,
-          payload: space,
-        });
-      }
+    const space = await waitForSpace({ online: false });
+
+    dispatch({
+      type: GET_SPACE_SUCCEEDED,
+      payload: space,
     });
   } catch (err) {
     toastr.error('Error', ERROR_GETTING_SPACE_MESSAGE);
@@ -122,7 +143,23 @@ const getRemoteSpace = async ({ id }) => async dispatch => {
     // throws if it is an error
     await isErrorResponse(response);
 
-    const space = await response.json();
+    const remoteSpace = await response.json();
+    let localSpace = {};
+
+    // try to merge with local space if available
+    try {
+      window.ipcRenderer.send(GET_SPACE_CHANNEL, { id });
+      localSpace = await waitForSpace({ online: true });
+    } catch (localError) {
+      // ignore error
+    }
+
+    // in the future we could probably try to deep merge
+    const space = {
+      ...remoteSpace,
+      ...localSpace,
+    };
+
     dispatch({
       type: GET_SPACE_SUCCEEDED,
       payload: space,

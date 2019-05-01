@@ -8,6 +8,8 @@ const { DATABASE_PATH, VAR_FOLDER } = require('./config/config');
 // use promisified fs
 const fsPromises = fs.promises;
 
+const SPACES_COLLECTION = 'spaces';
+
 // bootstrap database
 const ensureDatabaseExists = async (dbPath = DATABASE_PATH) => {
   try {
@@ -28,11 +30,12 @@ const bootstrapDatabase = (dbPath = DATABASE_PATH) => {
   const db = low(adapter);
 
   // set some defaults (required if json file is empty)
-  db.defaults({ spaces: [] }).write();
+  db.defaults({ [SPACES_COLLECTION]: [] }).write();
   return db;
 };
 
 module.exports = {
+  SPACES_COLLECTION,
   ensureDatabaseExists,
   bootstrapDatabase,
 };
