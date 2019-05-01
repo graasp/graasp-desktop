@@ -13,7 +13,7 @@ const styles = theme => ({
     maxWidth: 345,
   },
   media: {
-    height: 160,
+    height: 300,
   },
   leftIcon: {
     marginRight: theme.spacing.unit,

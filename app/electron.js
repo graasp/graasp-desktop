@@ -239,10 +239,40 @@ app.on('ready', async () => {
         );
       }
 
+      // only download if connection is available
+      const isConnected = await isOnline();
+      if (!isConnected) {
+        return mainWindow.webContents.send(
+          SAVE_SPACE_CHANNEL,
+          ERROR_DOWNLOADING_FILE
+        );
+      }
+
       // create directory where resources will be stored
       createSpaceDirectory({ id });
 
-      const { phases } = spaceToSave;
+      const { phases, image } = spaceToSave;
+
+      const spacePath = `${VAR_FOLDER}/${id}`;
+
+      // todo: follow new format
+      // if there is a background/thumbnail image, save it
+      if (image) {
+        const ext = getExtension({ url: image });
+        const hash = generateHash({ url: image });
+        const imageFileName = `${hash}.${ext}`;
+        const imagePath = `${spacePath}/${imageFileName}`;
+        const imageAvailable = await isFileAvailable(imagePath);
+        if (imageAvailable) {
+          spaceToSave.image = `file://${imagePath}`;
+        } else {
+          const imageDl = await download(mainWindow, image, {
+            directory: spacePath,
+            filename: imageFileName,
+          });
+          spaceToSave.image = `file://${imageDl.getSavePath()}`;
+        }
+      }
       // eslint-disable-next-line no-restricted-syntax
       for (const phase of phases) {
         const { items = [] } = phase;
@@ -255,7 +285,6 @@ app.on('ready', async () => {
             const hash = generateHash(resource);
             const ext = getExtension(resource);
             const fileName = `${hash}.${ext}`;
-            const spacePath = `${VAR_FOLDER}/${id}`;
             const filePath = `${spacePath}/${fileName}`;
             phase.items[i].hash = hash;
 
@@ -267,20 +296,11 @@ app.on('ready', async () => {
               phase.items[i].asset = filePath;
             } else {
               // eslint-disable-next-line no-await-in-loop
-              const isConnected = await isOnline();
-              if (isConnected) {
-                // eslint-disable-next-line no-await-in-loop
-                const dl = await download(mainWindow, url, {
-                  directory: spacePath,
-                  filename: fileName,
-                });
-                phase.items[i].asset = dl.getSavePath();
-              } else {
-                return mainWindow.webContents.send(
-                  SAVE_SPACE_CHANNEL,
-                  ERROR_DOWNLOADING_FILE
-                );
-              }
+              const dl = await download(mainWindow, url, {
+                directory: spacePath,
+                filename: fileName,
+              });
+              phase.items[i].asset = dl.getSavePath();
             }
           }
         }
