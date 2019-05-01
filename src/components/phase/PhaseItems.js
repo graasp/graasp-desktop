@@ -34,13 +34,13 @@ const renderResource = item => {
 };
 
 const renderPhaseItem = item => {
-  const { id, category, asset } = item;
+  const { id, category, asset, url, name } = item;
   switch (category) {
     case RESOURCE:
       return renderResource(item);
 
     case APPLICATION:
-      return <PhaseApp key={id} id={id} uri={`file://${asset}`} />;
+      return <PhaseApp key={id} id={id} url={url} asset={asset} name={name} />;
 
     default:
       return <div key={id} id={id} />;
