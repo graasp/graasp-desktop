@@ -36,7 +36,10 @@ import {
   VISIT_PATH,
 } from '../config/paths';
 import Loader from './common/Loader';
-
+import {
+  RESPOND_LOAD_SPACE_PROMPT_CHANNEL,
+  SHOW_LOAD_SPACE_PROMPT_CHANNEL,
+} from '../config/channels';
 
 class LoadSpace extends Component {
   state = {
@@ -46,10 +49,13 @@ class LoadSpace extends Component {
 
   static propTypes = {
     dispatchLoadSpace: PropTypes.func.isRequired,
-    theme: PropTypes.shape({ direction: PropTypes.string.isRequired }).isRequired,
+    theme: PropTypes.shape({ direction: PropTypes.string.isRequired })
+      .isRequired,
     activity: PropTypes.bool.isRequired,
-    history: PropTypes.shape({ length: PropTypes.number.isRequired }).isRequired,
-    classes: PropTypes.shape({ appBar: PropTypes.string.isRequired }).isRequired,
+    history: PropTypes.shape({ length: PropTypes.number.isRequired })
+      .isRequired,
+    classes: PropTypes.shape({ appBar: PropTypes.string.isRequired })
+      .isRequired,
   };
 
   handleDrawerOpen = () => {
@@ -60,7 +66,7 @@ class LoadSpace extends Component {
     this.setState({ open: false });
   };
 
-  handleFileLocation = (selectedPath) => {
+  handleFileLocation = selectedPath => {
     this.setState({ fileLocation: selectedPath });
   };
 
@@ -73,20 +79,23 @@ class LoadSpace extends Component {
 
   handleBrowse = () => {
     const options = {
-      filters: [
-        { name: 'zip', extensions: ['zip'] },
-      ],
+      filters: [{ name: 'zip', extensions: ['zip'] }],
     };
-    window.ipcRenderer.send('show-open-dialog', options);
-    window.ipcRenderer.once('open-dialog-paths-selected', (event, filePaths) => {
-      if (filePaths && filePaths.length > 0) {
-        this.handleFileLocation(filePaths[0]);
+    window.ipcRenderer.send(SHOW_LOAD_SPACE_PROMPT_CHANNEL, options);
+    window.ipcRenderer.once(
+      RESPOND_LOAD_SPACE_PROMPT_CHANNEL,
+      (event, filePaths) => {
+        if (filePaths && filePaths.length) {
+          this.handleFileLocation(filePaths[0]);
+        }
       }
-    });
+    );
   };
 
-  handleItemClicked = (id) => {
-    const { history: { replace } } = this.props;
+  handleItemClicked = id => {
+    const {
+      history: { replace },
+    } = this.props;
     switch (id) {
       case 0:
         replace(HOME_PATH);
@@ -151,29 +160,43 @@ class LoadSpace extends Component {
         >
           <div className={classes.drawerHeader}>
             <IconButton onClick={this.handleDrawerClose}>
-              {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+              {theme.direction === 'ltr' ? (
+                <ChevronLeftIcon />
+              ) : (
+                <ChevronRightIcon />
+              )}
             </IconButton>
           </div>
           <Divider />
           <List>
             <MenuItem onClick={() => this.handleItemClicked(0)} button>
-              <ListItemIcon><SaveIcon /></ListItemIcon>
+              <ListItemIcon>
+                <SaveIcon />
+              </ListItemIcon>
               <ListItemText primary="Saved spaces" />
             </MenuItem>
             <MenuItem onClick={() => this.handleItemClicked(1)} button>
-              <ListItemIcon><SearchSpace /></ListItemIcon>
+              <ListItemIcon>
+                <SearchSpace />
+              </ListItemIcon>
               <ListItemText primary="Search Space" />
             </MenuItem>
             <MenuItem onClick={() => this.handleItemClicked(2)} button>
-              <ListItemIcon><Language /></ListItemIcon>
+              <ListItemIcon>
+                <Language />
+              </ListItemIcon>
               <ListItemText primary="Visit a space" />
             </MenuItem>
             <MenuItem onClick={() => this.handleItemClicked(3)} button selected>
-              <ListItemIcon><Publish /></ListItemIcon>
+              <ListItemIcon>
+                <Publish />
+              </ListItemIcon>
               <ListItemText primary="Load" />
             </MenuItem>
             <MenuItem onClick={() => this.handleItemClicked(4)} button>
-              <ListItemIcon><SettingsIcon /></ListItemIcon>
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
               <ListItemText primary="Settings" />
             </MenuItem>
           </List>
@@ -185,10 +208,15 @@ class LoadSpace extends Component {
         >
           <div className={classes.drawerHeader} />
           <FormControl className={classes.formControl}>
-            <Typography variant="h4" color="inherit" align="center" style={{ margin: '2rem' }}>
-              Load your space compressed archive
+            <Typography variant="h4" color="inherit" style={{ margin: '2rem' }}>
+              Load a Space from a File
             </Typography>
-            <Button variant="contained" onClick={this.handleBrowse} color="primary" className={classes.button}>
+            <Button
+              variant="contained"
+              onClick={this.handleBrowse}
+              color="primary"
+              className={classes.button}
+            >
               Browse
             </Button>
             <Input
@@ -202,7 +230,13 @@ class LoadSpace extends Component {
               value={fileLocation}
               type="text"
             />
-            <Button variant="contained" onClick={this.handleLoad} color="primary" className={classes.button} disabled={!fileLocation.endsWith('.zip')}>
+            <Button
+              variant="contained"
+              onClick={this.handleLoad}
+              color="primary"
+              className={classes.button}
+              disabled={!fileLocation.endsWith('.zip')}
+            >
               Load
             </Button>
           </FormControl>
@@ -220,5 +254,11 @@ const mapStateToProps = ({ Space }) => ({
   activity: Space.get('current').get('activity'),
 });
 
-export default withRouter(withStyles(Styles,
-  { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(LoadSpace)));
+export default withRouter(
+  withStyles(Styles, { withTheme: true })(
+    connect(
+      mapStateToProps,
+      mapDispatchToProps
+    )(LoadSpace)
+  )
+);

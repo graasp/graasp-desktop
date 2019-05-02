@@ -32,9 +32,11 @@ const APPLICATION = 'Application';
 
 const VAR_FOLDER = `${app.getPath('userData')}/var`;
 const DATABASE_PATH = `${VAR_FOLDER}/db.json`;
+const TEMPORARY_EXTRACT_FOLDER = 'tmp';
 
 module.exports = {
   DOWNLOADABLE_MIME_TYPES,
+  TEMPORARY_EXTRACT_FOLDER,
   RESOURCE,
   APPLICATION,
   DATABASE_PATH,

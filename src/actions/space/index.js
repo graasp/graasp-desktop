@@ -42,6 +42,7 @@ import {
   ERROR_EXPORTING_MESSAGE,
   ERROR_GETTING_SPACE_MESSAGE,
   ERROR_JSON_CORRUPTED_MESSAGE,
+  ERROR_LOADING_MESSAGE,
   ERROR_MESSAGE_HEADER,
   ERROR_SAVING_SPACE_MESSAGE,
   ERROR_SPACE_ALREADY_AVAILABLE_MESSAGE,
@@ -273,9 +274,9 @@ const deleteSpace = ({ id }) => dispatch => {
   );
   window.ipcRenderer.once(DELETED_SPACE_CHANNEL, (event, response) => {
     if (response === ERROR_GENERAL) {
-      toastr.error('Error', ERROR_DELETING_MESSAGE);
+      toastr.error(ERROR_MESSAGE_HEADER, ERROR_DELETING_MESSAGE);
     } else {
-      toastr.success('Success', SUCCESS_DELETING_MESSAGE);
+      toastr.success(SUCCESS_MESSAGE_HEADER, SUCCESS_DELETING_MESSAGE);
       dispatch({
         type: DELETE_SPACE_SUCCESS,
         payload: true,
@@ -288,23 +289,25 @@ const deleteSpace = ({ id }) => dispatch => {
 const loadSpace = ({ fileLocation }) => dispatch => {
   dispatch(flagLoadingSpace(true));
   window.ipcRenderer.send(LOAD_SPACE_CHANNEL, { fileLocation });
-  window.ipcRenderer.once(LOADED_SPACE_CHANNEL, (event, newSpaces) => {
-    switch (newSpaces) {
+  window.ipcRenderer.once(LOADED_SPACE_CHANNEL, (event, response) => {
+    switch (response) {
       case ERROR_ZIP_CORRUPTED:
-        toastr.error('Error', ERROR_ZIP_CORRUPTED_MESSAGE);
+        toastr.error(ERROR_MESSAGE_HEADER, ERROR_ZIP_CORRUPTED_MESSAGE);
         break;
       case ERROR_JSON_CORRUPTED:
-        toastr.error('Error', ERROR_JSON_CORRUPTED_MESSAGE);
+        toastr.error(ERROR_MESSAGE_HEADER, ERROR_JSON_CORRUPTED_MESSAGE);
         break;
       case ERROR_SPACE_ALREADY_AVAILABLE:
-        toastr.error('Error', ERROR_SPACE_ALREADY_AVAILABLE_MESSAGE);
+        toastr.error(
+          ERROR_MESSAGE_HEADER,
+          ERROR_SPACE_ALREADY_AVAILABLE_MESSAGE
+        );
+        break;
+      case ERROR_GENERAL:
+        toastr.error(ERROR_MESSAGE_HEADER, ERROR_LOADING_MESSAGE);
         break;
       default:
-        toastr.success('Success', SUCCESS_SPACE_LOADED_MESSAGE);
-        dispatch({
-          type: GET_SPACES,
-          payload: newSpaces,
-        });
+        toastr.success(SUCCESS_MESSAGE_HEADER, SUCCESS_SPACE_LOADED_MESSAGE);
     }
     dispatch(flagLoadingSpace(false));
   });

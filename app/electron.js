@@ -13,15 +13,13 @@ const fs = require('fs');
 const isOnline = require('is-online');
 const electronDl = require('electron-dl');
 const rimraf = require('rimraf');
-// const fse = require('fs-extra');
-// const extract = require('extract-zip');
+const extract = require('extract-zip');
 const archiver = require('archiver');
-// const { ncp } = require('ncp');
 const { autoUpdater } = require('electron-updater');
 const Sentry = require('@sentry/electron');
 const {
-  // LOAD_SPACE_CHANNEL,
-  // LOADED_SPACE_CHANNEL,
+  LOAD_SPACE_CHANNEL,
+  LOADED_SPACE_CHANNEL,
   EXPORT_SPACE_CHANNEL,
   EXPORTED_SPACE_CHANNEL,
   DELETE_SPACE_CHANNEL,
@@ -32,8 +30,8 @@ const {
   RESPOND_DELETE_SPACE_PROMPT_CHANNEL,
   SHOW_DELETE_SPACE_PROMPT_CHANNEL,
   SHOW_EXPORT_SPACE_PROMPT_CHANNEL,
-  SHOW_OPEN_DIALOG_CHANNEL,
-  OPEN_DIALOG_PATHS_SELECTED_CHANNEL,
+  SHOW_LOAD_SPACE_PROMPT_CHANNEL,
+  RESPOND_LOAD_SPACE_PROMPT_CHANNEL,
   SAVE_SPACE_CHANNEL,
 } = require('../src/config/channels');
 const {
@@ -51,14 +49,17 @@ const {
   ERROR_SPACE_ALREADY_AVAILABLE,
   ERROR_DOWNLOADING_FILE,
   ERROR_GENERAL,
+  ERROR_ZIP_CORRUPTED,
 } = require('../src/config/errors');
 const logger = require('./logger');
+const {
+  VAR_FOLDER,
+  DATABASE_PATH,
+  TEMPORARY_EXTRACT_FOLDER,
+} = require('./config/config');
 
 // use promisified fs
 const fsPromises = fs.promises;
-
-const VAR_FOLDER = `${app.getPath('userData')}/var`;
-const DATABASE_PATH = `${VAR_FOLDER}/db.json`;
 
 const isFileAvailable = filePath =>
   new Promise(resolve =>
@@ -357,99 +358,73 @@ app.on('ready', async () => {
     }
   });
 
-  // ipcMain.on(LOAD_SPACE_CHANNEL, async (event, { fileLocation }) => {
-  //   try {
-  //     const extractPath = `${savedSpacesPath}/tmp`;
-  //     extract(fileLocation, { dir: extractPath }, async extractError => {
-  //       if (extractError) {
-  //         logger.error(extractError);
-  //       } else {
-  //         let space = {};
-  //         const spacePath = `${extractPath}/space.json`;
-  //         fs.readFile(spacePath, 'utf8', async (readFileError, data) => {
-  //           if (readFileError) {
-  //             logger.error(readFileError);
-  //             mainWindow.webContents.send(
-  //               LOADED_SPACE_CHANNEL,
-  //               ERROR_ZIP_CORRUPTED
-  //             );
-  //             fse.remove(extractPath, removeError => {
-  //               if (removeError) {
-  //                 logger.error(removeError);
-  //               }
-  //             });
-  //           } else {
-  //             ncp(extractPath, savedSpacesPath, async ncpError => {
-  //               if (ncpError) {
-  //                 return logger.error(ncpError);
-  //               }
-  //               let spaces = [];
-  //               space = JSON.parse(data);
-  //               const spacesPath = `${savedSpacesPath}/${spacesFileName}`;
-  //               return fs.readFile(
-  //                 spacesPath,
-  //                 'utf8',
-  //                 async (readError, spacesData) => {
-  //                   // we dont have saved spaces yet
-  //                   if (readError) {
-  //                     spaces.push(space);
-  //                     const spacesString = JSON.stringify(spaces);
-  //                     await fsPromises.writeFile(
-  //                       `${savedSpacesPath}/${spacesFileName}`,
-  //                       spacesString
-  //                     );
-  //                     mainWindow.webContents.send(LOADED_SPACE_CHANNEL, spaces);
-  //                   } else {
-  //                     try {
-  //                       spaces = JSON.parse(spacesData);
-  //                     } catch (e) {
-  //                       mainWindow.webContents.send(
-  //                         LOADED_SPACE_CHANNEL,
-  //                         ERROR_JSON_CORRUPTED
-  //                       );
-  //                     }
-  //                     // space id is a string
-  //                     const spaceId = space.id;
-  //                     const available = spaces.find(({ id }) => id === spaceId);
-  //                     if (!available) {
-  //                       spaces.push(space);
-  //                       const spacesString = JSON.stringify(spaces);
-  //                       await fsPromises.writeFile(
-  //                         `${savedSpacesPath}/${spacesFileName}`,
-  //                         spacesString
-  //                       );
-  //                       mainWindow.webContents.send(
-  //                         LOADED_SPACE_CHANNEL,
-  //                         spaces
-  //                       );
-  //                     } else {
-  //                       mainWindow.webContents.send(
-  //                         LOADED_SPACE_CHANNEL,
-  //                         ERROR_SPACE_ALREADY_AVAILABLE
-  //                       );
-  //                     }
-  //                   }
-  //                   fs.unlink(`${savedSpacesPath}/space.json`, unlinkError => {
-  //                     if (unlinkError) {
-  //                       logger.error(unlinkError);
-  //                     }
-  //                   });
-  //                   fse.remove(extractPath, removeError => {
-  //                     if (removeError) {
-  //                       logger.error(removeError);
-  //                     }
-  //                   });
-  //                 }
-  //               );
-  //             });
-  //           }
-  //         });
-  //       }
-  //     });
-  //   } catch (err) {
-  //     logger.error(err);
-  //   }
-  // });
+  // called when loading a space
+  ipcMain.on(LOAD_SPACE_CHANNEL, async (event, { fileLocation }) => {
+    const extractPath = `${VAR_FOLDER}/${TEMPORARY_EXTRACT_FOLDER}`;
+    try {
+      extract(fileLocation, { dir: extractPath }, async extractError => {
+        if (extractError) {
+          logger.error(extractError);
+          return mainWindow.webContents.send(
+            LOADED_SPACE_CHANNEL,
+            ERROR_GENERAL
+          );
+        }
+        // get basic information from manifest
+        const manifestPath = `${extractPath}/manifest.json`;
+        // abort if there is no manifest
+        const hasManifest = await isFileAvailable(manifestPath);
+        if (!hasManifest) {
+          rimraf.sync(extractPath);
+          return mainWindow.webContents.send(
+            LOADED_SPACE_CHANNEL,
+            ERROR_ZIP_CORRUPTED
+          );
+        }
+        const manifestString = await fsPromises.readFile(manifestPath);
+        const manifest = JSON.parse(manifestString);
+        const { id } = manifest;
+        const spacePath = `${extractPath}/${id}.json`;
+
+        // get handle to spaces collection
+        const spaces = db.get(SPACES_COLLECTION);
+        const existingSpace = spaces.find({ id }).value();
+
+        // abort if there is already a space with that id
+        if (existingSpace) {
+          rimraf.sync(extractPath);
+          return mainWindow.webContents.send(
+            LOADED_SPACE_CHANNEL,
+            ERROR_SPACE_ALREADY_AVAILABLE
+          );
+        }
+
+        // abort if there is no space
+        const hasSpace = await isFileAvailable(spacePath);
+        if (!hasSpace) {
+          rimraf.sync(extractPath);
+          return mainWindow.webContents.send(
+            LOADED_SPACE_CHANNEL,
+            ERROR_ZIP_CORRUPTED
+          );
+        }
+
+        const spaceString = await fsPromises.readFile(spacePath);
+        const space = JSON.parse(spaceString);
+        const finalPath = `${VAR_FOLDER}/${id}`;
+        await fsPromises.rename(extractPath, finalPath);
+
+        // write to database
+        spaces.push(space).write();
+
+        return mainWindow.webContents.send(LOADED_SPACE_CHANNEL);
+      });
+    } catch (err) {
+      logger.error(err);
+      mainWindow.webContents.send(LOADED_SPACE_CHANNEL, ERROR_GENERAL);
+      rimraf.sync(extractPath);
+    }
+  });
 
   // called when exporting a space
   ipcMain.on(EXPORT_SPACE_CHANNEL, async (event, { archivePath, id }) => {
@@ -464,11 +439,23 @@ app.on('ready', async () => {
       if (!space) {
         mainWindow.webContents.send(EXPORTED_SPACE_CHANNEL, ERROR_GENERAL);
       } else {
-        // stringify and write space to json file inside space folder
+        // stringify space
         const spaceString = JSON.stringify(space);
         const spaceDirectory = `${VAR_FOLDER}/${id}`;
         const spacePath = `${spaceDirectory}/${id}.json`;
+
+        // create manifest
+        const manifest = {
+          id,
+          version: app.getVersion(),
+          createdAt: new Date().toISOString(),
+        };
+        const manifestString = JSON.stringify(manifest);
+        const manifestPath = `${spaceDirectory}/manifest.json`;
+
+        // write space and manifest to json file inside space folder
         await fsPromises.writeFile(spacePath, spaceString);
+        await fsPromises.writeFile(manifestPath, manifestString);
 
         // prepare output file for zip
         const output = fs.createWriteStream(archivePath);
@@ -501,12 +488,10 @@ app.on('ready', async () => {
     }
   });
 
-  ipcMain.on(SHOW_OPEN_DIALOG_CHANNEL, (event, options) => {
+  // prompt when loading a space
+  ipcMain.on(SHOW_LOAD_SPACE_PROMPT_CHANNEL, (event, options) => {
     dialog.showOpenDialog(null, options, filePaths => {
-      mainWindow.webContents.send(
-        OPEN_DIALOG_PATHS_SELECTED_CHANNEL,
-        filePaths
-      );
+      mainWindow.webContents.send(RESPOND_LOAD_SPACE_PROMPT_CHANNEL, filePaths);
     });
   });
 
@@ -523,6 +508,8 @@ app.on('ready', async () => {
       );
     });
   });
+
+  // prompt when deleting a space
   ipcMain.on(SHOW_DELETE_SPACE_PROMPT_CHANNEL, () => {
     const options = {
       type: 'warning',

@@ -1,6 +1,7 @@
 // this file needs to use module.exports as it is used both by react and electron
 
 const ERROR_DOWNLOADING_MESSAGE = 'There was a problem downloading your files';
+const ERROR_LOADING_MESSAGE = 'There was a problem loading your space';
 const ERROR_EXPORTING_MESSAGE = 'There was a problem exporting this space';
 const SUCCESS_EXPORTING_MESSAGE = 'Space was exported successfully';
 const ERROR_DELETING_MESSAGE = 'There was a problem deleting this space';
@@ -36,4 +37,5 @@ module.exports = {
   SUCCESS_SPACE_LOADED_MESSAGE,
   UNEXPECTED_ERROR_MESSAGE,
   OFFLINE_ERROR_MESSAGE,
+  ERROR_LOADING_MESSAGE,
 };
