@@ -10,36 +10,22 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import FormControl from '@material-ui/core/FormControl';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import SaveIcon from '@material-ui/icons/Save';
-import SearchSpace from '@material-ui/icons/Search';
-import Language from '@material-ui/icons/Language';
-import Publish from '@material-ui/icons/Publish';
 import Input from '@material-ui/core/Input';
-import SettingsIcon from '@material-ui/icons/Settings';
 import { loadSpace } from '../actions/space';
 import './LoadSpace.css';
 import Styles from '../Styles';
-import {
-  HOME_PATH,
-  SEARCH_SPACE_PATH,
-  SETTINGS_PATH,
-  VISIT_PATH,
-} from '../config/paths';
 import Loader from './common/Loader';
 import {
   RESPOND_LOAD_SPACE_PROMPT_CHANNEL,
   SHOW_LOAD_SPACE_PROMPT_CHANNEL,
 } from '../config/channels';
+import MainMenu from './common/MainMenu';
 
 class LoadSpace extends Component {
   state = {
@@ -90,27 +76,6 @@ class LoadSpace extends Component {
         }
       }
     );
-  };
-
-  handleItemClicked = id => {
-    const {
-      history: { replace },
-    } = this.props;
-    switch (id) {
-      case 0:
-        replace(HOME_PATH);
-        break;
-      case 1:
-        replace(SEARCH_SPACE_PATH);
-        break;
-      case 2:
-        replace(VISIT_PATH);
-        break;
-      case 4:
-        replace(SETTINGS_PATH);
-        break;
-      default:
-    }
   };
 
   render() {
@@ -168,38 +133,7 @@ class LoadSpace extends Component {
             </IconButton>
           </div>
           <Divider />
-          <List>
-            <MenuItem onClick={() => this.handleItemClicked(0)} button>
-              <ListItemIcon>
-                <SaveIcon />
-              </ListItemIcon>
-              <ListItemText primary="Saved spaces" />
-            </MenuItem>
-            <MenuItem onClick={() => this.handleItemClicked(1)} button>
-              <ListItemIcon>
-                <SearchSpace />
-              </ListItemIcon>
-              <ListItemText primary="Search Space" />
-            </MenuItem>
-            <MenuItem onClick={() => this.handleItemClicked(2)} button>
-              <ListItemIcon>
-                <Language />
-              </ListItemIcon>
-              <ListItemText primary="Visit a space" />
-            </MenuItem>
-            <MenuItem onClick={() => this.handleItemClicked(3)} button selected>
-              <ListItemIcon>
-                <Publish />
-              </ListItemIcon>
-              <ListItemText primary="Load" />
-            </MenuItem>
-            <MenuItem onClick={() => this.handleItemClicked(4)} button>
-              <ListItemIcon>
-                <SettingsIcon />
-              </ListItemIcon>
-              <ListItemText primary="Settings" />
-            </MenuItem>
-          </List>
+          <MainMenu />
         </Drawer>
         <main
           className={classNames('Main', classes.content, {

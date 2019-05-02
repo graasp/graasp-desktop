@@ -15,11 +15,6 @@ import List from '@material-ui/core/List/List';
 import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText/ListItemText';
-import SaveIcon from '@material-ui/icons/Save';
-import SearchIcon from '@material-ui/icons/Search';
-import Language from '@material-ui/icons/Language';
-import Publish from '@material-ui/icons/Publish';
-import SettingsIcon from '@material-ui/icons/Settings';
 import { withStyles } from '@material-ui/core';
 import { withRouter } from 'react-router';
 import Loader from '../common/Loader';
@@ -27,15 +22,10 @@ import PhaseComponent from '../phase/Phase';
 import { selectPhase, clearPhase, clearSpace, getSpace } from '../../actions';
 import './SpaceScreen.css';
 import Styles from '../../Styles';
-import {
-  HOME_PATH,
-  LOAD_SPACE_PATH,
-  SEARCH_SPACE_PATH,
-  SETTINGS_PATH,
-  VISIT_PATH,
-} from '../../config/paths';
+import { HOME_PATH } from '../../config/paths';
 import SpaceHeader from './SpaceHeader';
 import SpaceNotFound from './SpaceNotFound';
+import MainMenu from '../common/MainMenu';
 
 class SpaceScreen extends Component {
   state = {
@@ -123,32 +113,6 @@ class SpaceScreen extends Component {
     dispatchClearPhase();
   };
 
-  handleItemClicked = id => {
-    const {
-      history: { replace },
-      dispatchClearPhase,
-    } = this.props;
-    dispatchClearPhase();
-    switch (id) {
-      case 0:
-        replace(HOME_PATH);
-        break;
-      case 1:
-        replace(SEARCH_SPACE_PATH);
-        break;
-      case 2:
-        replace(VISIT_PATH);
-        break;
-      case 3:
-        replace(LOAD_SPACE_PATH);
-        break;
-      case 4:
-        replace(SETTINGS_PATH);
-        break;
-      default:
-    }
-  };
-
   render() {
     const { space, phase, activity, classes, theme } = this.props;
     const { openDrawer, selected } = this.state;
@@ -222,38 +186,7 @@ class SpaceScreen extends Component {
             ))}
           </List>
           <Divider />
-          <List>
-            <MenuItem onClick={() => this.handleItemClicked(0)} button>
-              <ListItemIcon>
-                <SaveIcon />
-              </ListItemIcon>
-              <ListItemText primary="Saved spaces" />
-            </MenuItem>
-            <MenuItem onClick={() => this.handleItemClicked(1)} button>
-              <ListItemIcon>
-                <SearchIcon />
-              </ListItemIcon>
-              <ListItemText primary="Search Space" />
-            </MenuItem>
-            <MenuItem onClick={() => this.handleItemClicked(2)} button>
-              <ListItemIcon>
-                <Language />
-              </ListItemIcon>
-              <ListItemText primary="Visit a space" />
-            </MenuItem>
-            <MenuItem onClick={() => this.handleItemClicked(3)} button>
-              <ListItemIcon>
-                <Publish />
-              </ListItemIcon>
-              <ListItemText primary="Load" />
-            </MenuItem>
-            <MenuItem onClick={() => this.handleItemClicked(4)} button>
-              <ListItemIcon>
-                <SettingsIcon />
-              </ListItemIcon>
-              <ListItemText primary="Settings" />
-            </MenuItem>
-          </List>
+          <MainMenu />
         </Drawer>
         <main
           className={classNames(classes.content, {

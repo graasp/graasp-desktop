@@ -8,30 +8,16 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { connect } from 'react-redux';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import SaveIcon from '@material-ui/icons/Save';
-import SearchIcon from '@material-ui/icons/Search';
-import Language from '@material-ui/icons/Language';
-import Publish from '@material-ui/icons/Publish';
-// import SettingsIcon from '@material-ui/icons/Settings';
 import { getSpaces } from './actions';
 import SavedSpaces from './components/space/SavedSpaces';
 import Styles from './Styles';
-import {
-  LOAD_SPACE_PATH,
-  SEARCH_SPACE_PATH,
-  SETTINGS_PATH,
-  VISIT_PATH,
-} from './config/paths';
 import Loader from './components/common/Loader';
+import MainMenu from './components/common/MainMenu';
 
 class Home extends Component {
   state = {
@@ -49,27 +35,6 @@ class Home extends Component {
 
   handleDrawerClose = () => {
     this.setState({ open: false });
-  };
-
-  handleItemClicked = id => {
-    const {
-      history: { replace },
-    } = this.props;
-    switch (id) {
-      case 1:
-        replace(SEARCH_SPACE_PATH);
-        break;
-      case 2:
-        replace(VISIT_PATH);
-        break;
-      case 3:
-        replace(LOAD_SPACE_PATH);
-        break;
-      case 4:
-        replace(SETTINGS_PATH);
-        break;
-      default:
-    }
   };
 
   render() {
@@ -127,32 +92,7 @@ class Home extends Component {
             </IconButton>
           </div>
           <Divider />
-          <List>
-            <MenuItem onClick={() => this.handleItemClicked(0)} button selected>
-              <ListItemIcon>
-                <SaveIcon />
-              </ListItemIcon>
-              <ListItemText primary="Saved Spaces" />
-            </MenuItem>
-            <MenuItem onClick={() => this.handleItemClicked(1)} button>
-              <ListItemIcon>
-                <SearchIcon />
-              </ListItemIcon>
-              <ListItemText primary="Spaces Nearby" />
-            </MenuItem>
-            <MenuItem onClick={() => this.handleItemClicked(2)} button>
-              <ListItemIcon>
-                <Language />
-              </ListItemIcon>
-              <ListItemText primary="Visit a Space" />
-            </MenuItem>
-            <MenuItem onClick={() => this.handleItemClicked(3)} button>
-              <ListItemIcon>
-                <Publish />
-              </ListItemIcon>
-              <ListItemText primary="Load" />
-            </MenuItem>
-          </List>
+          <MainMenu />
         </Drawer>
         <main
           className={classNames(classes.content, {

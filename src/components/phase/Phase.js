@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { selectPhase } from '../../actions';
+import { clearPhase, selectPhase } from '../../actions';
 import SpaceDescription from '../space/SpaceDescription';
 import PhaseDescription from './PhaseDescription';
 import PhaseItems from './PhaseItems';
@@ -14,29 +14,47 @@ const styles = {
 
 const { containerStyle } = styles;
 
-const Phase = ({ phase, space, dispatchSelectPhase, start }) => {
-  const phases = space.get('phases');
-  const description = space.get('description');
-  if (!phase || phase.isEmpty()) {
+class Phase extends Component {
+  static propTypes = {
+    space: PropTypes.shape({ id: PropTypes.string.isRequired }).isRequired,
+    phase: PropTypes.arrayOf(
+      PropTypes.shape({ id: PropTypes.string.isRequired })
+    ).isRequired,
+    dispatchSelectPhase: PropTypes.func.isRequired,
+    dispatchClearPhase: PropTypes.func.isRequired,
+    start: PropTypes.func.isRequired,
+  };
+
+  componentWillUnmount() {
+    const { dispatchClearPhase } = this.props;
+    dispatchClearPhase();
+  }
+
+  render() {
+    const { phase, space, dispatchSelectPhase, start } = this.props;
+    const phases = space.get('phases');
+    const description = space.get('description');
+    if (!phase || phase.isEmpty()) {
+      return (
+        <SpaceDescription
+          phases={phases}
+          description={description}
+          selectPhase={dispatchSelectPhase}
+          start={start}
+        />
+      );
+    }
+    const phaseDescription = phase.get('description');
+
+    const items = phase.get('items');
     return (
-      <SpaceDescription
-        phases={phases}
-        description={description}
-        selectPhase={dispatchSelectPhase}
-        start={start}
-      />
+      <div style={containerStyle}>
+        <PhaseDescription description={phaseDescription} />
+        <PhaseItems items={items} />
+      </div>
     );
   }
-  const phaseDescription = phase.get('description');
-
-  const items = phase.get('items');
-  return (
-    <div style={containerStyle}>
-      <PhaseDescription description={phaseDescription} />
-      <PhaseItems items={items} />
-    </div>
-  );
-};
+}
 
 const mapStateToProps = ({ Space }) => ({
   space: Space.get('current').get('content'),
@@ -44,14 +62,7 @@ const mapStateToProps = ({ Space }) => ({
 
 const mapDispatchToProps = {
   dispatchSelectPhase: selectPhase,
-};
-
-Phase.propTypes = {
-  space: PropTypes.shape({ id: PropTypes.string.isRequired }).isRequired,
-  phase: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.string.isRequired }))
-    .isRequired,
-  dispatchSelectPhase: PropTypes.func.isRequired,
-  start: PropTypes.func.isRequired,
+  dispatchClearPhase: clearPhase,
 };
 
 export default connect(
