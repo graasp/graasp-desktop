@@ -52,15 +52,16 @@ class LoadSpace extends Component {
     this.setState({ open: false });
   };
 
-  handleFileLocation = selectedPath => {
-    this.setState({ fileLocation: selectedPath });
+  handleFileLocation = event => {
+    const fileLocation = event.target.value;
+    this.setState({ fileLocation });
   };
 
   handleLoad = () => {
     const { fileLocation } = this.state;
     const { dispatchLoadSpace } = this.props;
     dispatchLoadSpace({ fileLocation });
-    this.handleFileLocation('');
+    this.setState({ fileLocation });
   };
 
   handleBrowse = () => {
@@ -81,6 +82,7 @@ class LoadSpace extends Component {
   render() {
     const { classes, theme, activity } = this.props;
     const { open, fileLocation } = this.state;
+
     if (activity) {
       return (
         <div className={classNames(classes.root, 'LoadSpace')}>
