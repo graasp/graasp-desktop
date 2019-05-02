@@ -15,23 +15,23 @@ const electronDl = require('electron-dl');
 const rimraf = require('rimraf');
 // const fse = require('fs-extra');
 // const extract = require('extract-zip');
-// const archiver = require('archiver');
+const archiver = require('archiver');
 // const { ncp } = require('ncp');
 const { autoUpdater } = require('electron-updater');
 const Sentry = require('@sentry/electron');
 const {
-  // EXPORT_SPACE_CHANNEL,
-  // EXPORTED_SPACE_CHANNEL,
   // LOAD_SPACE_CHANNEL,
   // LOADED_SPACE_CHANNEL,
+  EXPORT_SPACE_CHANNEL,
+  EXPORTED_SPACE_CHANNEL,
   DELETE_SPACE_CHANNEL,
   DELETED_SPACE_CHANNEL,
   GET_SPACE_CHANNEL,
   GET_SPACES_CHANNEL,
-  SAVE_DIALOG_PATH_SELECTED_CHANNEL,
+  RESPOND_EXPORT_SPACE_PROMPT_CHANNEL,
   RESPOND_DELETE_SPACE_PROMPT_CHANNEL,
   SHOW_DELETE_SPACE_PROMPT_CHANNEL,
-  SHOW_SAVE_DIALOG_CHANNEL,
+  SHOW_EXPORT_SPACE_PROMPT_CHANNEL,
   SHOW_OPEN_DIALOG_CHANNEL,
   OPEN_DIALOG_PATHS_SELECTED_CHANNEL,
   SAVE_SPACE_CHANNEL,
@@ -53,6 +53,9 @@ const {
   ERROR_GENERAL,
 } = require('../src/config/errors');
 const logger = require('./logger');
+
+// use promisified fs
+const fsPromises = fs.promises;
 
 const VAR_FOLDER = `${app.getPath('userData')}/var`;
 const DATABASE_PATH = `${VAR_FOLDER}/db.json`;
@@ -318,7 +321,7 @@ app.on('ready', async () => {
   // called when getting a space
   ipcMain.on(GET_SPACE_CHANNEL, async (event, { id }) => {
     try {
-      // get handle to spaces collection
+      // get space from local db
       const space = db
         .get(SPACES_COLLECTION)
         .find({ id })
@@ -448,81 +451,55 @@ app.on('ready', async () => {
   //   }
   // });
 
-  // ipcMain.on(
-  //   EXPORT_SPACE_CHANNEL,
-  //   async (event, { archivePath, id, spaces }) => {
-  //     try {
-  //       // space ids are strings
-  //       const space = spaces.find(el => el.id === id);
-  //       const { phases, image: imageUrl } = space;
-  //       const spacesString = JSON.stringify(space);
-  //       const ssPath = `${savedSpacesPath}/space.json`;
-  //       const filesPaths = [ssPath];
-  //       if (imageUrl) {
-  //         // regex to get file extension
-  //         const extension = getExtension({ url: imageUrl });
-  //         const backgroundImage = `background-${id}.${extension}`;
-  //         const backgroundImagePath = `${savedSpacesPath}/${backgroundImage}`;
-  //         const backgroundImageExists = await isFileAvailable(
-  //           backgroundImagePath
-  //         );
-  //         if (backgroundImageExists) {
-  //           filesPaths.push(backgroundImagePath);
-  //         }
-  //       }
-  //       await fsPromises.writeFile(ssPath, spacesString);
-  //       // eslint-disable-next-line no-restricted-syntax
-  //       for (const phase of phases) {
-  //         const { items = [] } = phase;
-  //         for (let i = 0; i < items.length; i += 1) {
-  //           const { resource } = items[i];
-  //           if (resource) {
-  //             const { hash, type } = resource;
-  //             const fileName = `${hash}.${type}`;
-  //             const filePath = `${savedSpacesPath}/${fileName}`;
-  //             // eslint-disable-next-line no-await-in-loop
-  //             const fileAvailable = await isFileAvailable(filePath);
-  //             if (fileAvailable) {
-  //               filesPaths.push(filePath);
-  //             }
-  //           }
-  //         }
-  //       }
-  //       const output = fs.createWriteStream(archivePath);
-  //       const archive = archiver('zip', {
-  //         zlib: { level: 9 },
-  //       });
-  //       output.on('close', () => {
-  //         fs.unlink(ssPath, err => {
-  //           if (err) {
-  //             logger.error(err);
-  //           }
-  //         });
-  //         mainWindow.webContents.send(EXPORTED_SPACE_CHANNEL);
-  //       });
-  //       output.on('end', () => {
-  //         mainWindow.webContents.send(EXPORTED_SPACE_CHANNEL, ERROR_GENERAL);
-  //       });
-  //       archive.on('warning', err => {
-  //         if (err.code === 'ENOENT') {
-  //           logger.error(err);
-  //         }
-  //       });
-  //       archive.on('error', () => {
-  //         mainWindow.webContents.send(EXPORTED_SPACE_CHANNEL, ERROR_GENERAL);
-  //       });
-  //       archive.pipe(output);
-  //       filesPaths.forEach(filePath => {
-  //         const pathArr = filePath.split('/');
-  //         archive.file(filePath, { name: pathArr[pathArr.length - 1] });
-  //       });
-  //       archive.finalize();
-  //     } catch (err) {
-  //       logger.error(err);
-  //       mainWindow.webContents.send(EXPORTED_SPACE_CHANNEL, ERROR_GENERAL);
-  //     }
-  //   }
-  // );
+  // called when exporting a space
+  ipcMain.on(EXPORT_SPACE_CHANNEL, async (event, { archivePath, id }) => {
+    try {
+      // get space from local database
+      const space = db
+        .get(SPACES_COLLECTION)
+        .find({ id })
+        .value();
+
+      // abort if space does not exist
+      if (!space) {
+        mainWindow.webContents.send(EXPORTED_SPACE_CHANNEL, ERROR_GENERAL);
+      } else {
+        // stringify and write space to json file inside space folder
+        const spaceString = JSON.stringify(space);
+        const spaceDirectory = `${VAR_FOLDER}/${id}`;
+        const spacePath = `${spaceDirectory}/${id}.json`;
+        await fsPromises.writeFile(spacePath, spaceString);
+
+        // prepare output file for zip
+        const output = fs.createWriteStream(archivePath);
+        output.on('close', () => {
+          mainWindow.webContents.send(EXPORTED_SPACE_CHANNEL);
+        });
+        output.on('end', () => {
+          mainWindow.webContents.send(EXPORTED_SPACE_CHANNEL, ERROR_GENERAL);
+        });
+
+        // archive space folder into zip
+        const archive = archiver('zip', {
+          zlib: { level: 9 },
+        });
+        archive.on('warning', err => {
+          if (err.code === 'ENOENT') {
+            logger.error(err);
+          }
+        });
+        archive.on('error', () => {
+          mainWindow.webContents.send(EXPORTED_SPACE_CHANNEL, ERROR_GENERAL);
+        });
+        archive.pipe(output);
+        archive.directory(spaceDirectory, false);
+        archive.finalize();
+      }
+    } catch (err) {
+      logger.error(err);
+      mainWindow.webContents.send(EXPORTED_SPACE_CHANNEL, ERROR_GENERAL);
+    }
+  });
 
   ipcMain.on(SHOW_OPEN_DIALOG_CHANNEL, (event, options) => {
     dialog.showOpenDialog(null, options, filePaths => {
@@ -532,13 +509,18 @@ app.on('ready', async () => {
       );
     });
   });
-  ipcMain.on(SHOW_SAVE_DIALOG_CHANNEL, (event, spaceTitle) => {
+
+  // prompt when exporting a space
+  ipcMain.on(SHOW_EXPORT_SPACE_PROMPT_CHANNEL, (event, spaceTitle) => {
     const options = {
       title: 'Save As',
       defaultPath: `${spaceTitle}.zip`,
     };
     dialog.showSaveDialog(null, options, filePath => {
-      mainWindow.webContents.send(SAVE_DIALOG_PATH_SELECTED_CHANNEL, filePath);
+      mainWindow.webContents.send(
+        RESPOND_EXPORT_SPACE_PROMPT_CHANNEL,
+        filePath
+      );
     });
   });
   ipcMain.on(SHOW_DELETE_SPACE_PROMPT_CHANNEL, () => {

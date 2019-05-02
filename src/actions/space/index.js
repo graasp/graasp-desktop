@@ -30,9 +30,9 @@ import {
   LOAD_SPACE_CHANNEL,
   LOADED_SPACE_CHANNEL,
   RESPOND_DELETE_SPACE_PROMPT_CHANNEL,
-  SAVE_DIALOG_PATH_SELECTED_CHANNEL,
+  RESPOND_EXPORT_SPACE_PROMPT_CHANNEL,
   SHOW_DELETE_SPACE_PROMPT_CHANNEL,
-  SHOW_SAVE_DIALOG_CHANNEL,
+  SHOW_EXPORT_SPACE_PROMPT_CHANNEL,
   SAVE_SPACE_CHANNEL,
 } from '../../config/channels';
 import {
@@ -233,11 +233,11 @@ const clearSpace = () => dispatch => {
 };
 
 const exportSpace = (id, spaces, spaceName) => dispatch => {
-  dispatch(flagExportingSpace(true));
-  window.ipcRenderer.send(SHOW_SAVE_DIALOG_CHANNEL, spaceName);
+  window.ipcRenderer.send(SHOW_EXPORT_SPACE_PROMPT_CHANNEL, spaceName);
   window.ipcRenderer.once(
-    SAVE_DIALOG_PATH_SELECTED_CHANNEL,
+    RESPOND_EXPORT_SPACE_PROMPT_CHANNEL,
     (event, archivePath) => {
+      dispatch(flagExportingSpace(true));
       if (archivePath) {
         window.ipcRenderer.send(EXPORT_SPACE_CHANNEL, {
           archivePath,
@@ -249,13 +249,11 @@ const exportSpace = (id, spaces, spaceName) => dispatch => {
       }
     }
   );
-  window.ipcRenderer.once(EXPORTED_SPACE_CHANNEL, (event, newSpaces) => {
-    switch (newSpaces) {
-      case ERROR_GENERAL:
-        toastr.error('Error', ERROR_EXPORTING_MESSAGE);
-        break;
-      default:
-        toastr.success('Success', SUCCESS_EXPORTING_MESSAGE);
+  window.ipcRenderer.once(EXPORTED_SPACE_CHANNEL, (event, response) => {
+    if (response === ERROR_GENERAL) {
+      toastr.error('Error', ERROR_EXPORTING_MESSAGE);
+    } else {
+      toastr.success('Success', SUCCESS_EXPORTING_MESSAGE);
     }
     dispatch(flagExportingSpace(false));
   });

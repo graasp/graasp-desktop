@@ -10,9 +10,9 @@ module.exports = {
   EXPORT_SPACE_CHANNEL: 'space:export',
   EXPORTED_SPACE_CHANNEL: 'space:exported',
   SHOW_OPEN_DIALOG_CHANNEL: 'show-open-dialog',
-  SHOW_SAVE_DIALOG_CHANNEL: 'show-save-dialog',
   OPEN_DIALOG_PATHS_SELECTED_CHANNEL: 'open-dialog-paths-selected',
-  SAVE_DIALOG_PATH_SELECTED_CHANNEL: 'save-dialog-path-selected',
+  SHOW_EXPORT_SPACE_PROMPT_CHANNEL: 'prompt:space:export:show',
   SHOW_DELETE_SPACE_PROMPT_CHANNEL: 'prompt:space:delete:show',
+  RESPOND_EXPORT_SPACE_PROMPT_CHANNEL: 'prompt:space:export:respond',
   RESPOND_DELETE_SPACE_PROMPT_CHANNEL: 'prompt:space:delete:respond',
 };
