@@ -12,6 +12,7 @@ import {
   FLAG_EXPORTING_SPACE,
   DELETE_SPACE_SUCCESS,
   SAVE_SPACE_SUCCEEDED,
+  FLAG_SAVING_SPACE,
 } from '../types';
 
 const INITIAL_STATE = Immutable.Map({
@@ -34,6 +35,8 @@ export default (state = INITIAL_STATE, { type, payload }) => {
       return state
         .setIn(['current', 'content'], Immutable.Map())
         .setIn(['current', 'deleted'], false);
+    case FLAG_SAVING_SPACE:
+      return state.setIn(['current', 'activity'], payload);
     case FLAG_GETTING_SPACE:
       return state.setIn(['current', 'activity'], payload);
     case FLAG_GETTING_SPACES:

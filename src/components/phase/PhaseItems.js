@@ -23,7 +23,16 @@ const renderResource = item => {
   }
 
   if (VIDEO.test(mimeType)) {
-    return <PhaseVideo key={id} id={id} uri={`file://${asset}`} />;
+    return (
+      <PhaseVideo
+        key={id}
+        id={id}
+        url={url}
+        asset={asset}
+        name={name}
+        mimeType={mimeType}
+      />
+    );
   }
 
   if (mimeType === IFRAME) {

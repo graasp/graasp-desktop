@@ -202,26 +202,28 @@ const saveSpace = async ({ space }) => async dispatch => {
 
       switch (response) {
         case ERROR_SPACE_ALREADY_AVAILABLE:
-          return toastr.error(
+          toastr.error(
             ERROR_MESSAGE_HEADER,
             ERROR_SPACE_ALREADY_AVAILABLE_MESSAGE
           );
+          break;
 
         case ERROR_DOWNLOADING_FILE:
-          return toastr.error(ERROR_MESSAGE_HEADER, ERROR_DOWNLOADING_MESSAGE);
+          toastr.error(ERROR_MESSAGE_HEADER, ERROR_DOWNLOADING_MESSAGE);
+          break;
 
         // todo: check that it is actually a space before dispatching success
         default:
           toastr.success(SUCCESS_MESSAGE_HEADER, SUCCESS_SAVING_MESSAGE);
-          return dispatch({
+          dispatch({
             type: SAVE_SPACE_SUCCEEDED,
             payload: response,
           });
       }
+      return dispatch(flagSavingSpace(false));
     });
   } catch (err) {
     toastr.error(ERROR_MESSAGE_HEADER, ERROR_SAVING_SPACE_MESSAGE);
-  } finally {
     dispatch(flagSavingSpace(false));
   }
 };

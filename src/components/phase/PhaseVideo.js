@@ -3,16 +3,32 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './PhaseVideo.css';
 
-const PhaseVideo = ({ uri }) => (
-  <div className="VideoDiv">
-    <video className="Video" controls>
-      <source src={uri} type="video/mp4" />
-    </video>
-  </div>
-);
+const PhaseVideo = ({ url, asset, name, mimeType }) => {
+  let uri = url;
+  if (asset) {
+    uri = `file://${asset}`;
+  }
+  return (
+    <div className="VideoDiv">
+      <video title={name} className="Video" controls>
+        <source src={uri} type={mimeType} />
+      </video>
+    </div>
+  );
+};
 
 PhaseVideo.propTypes = {
-  uri: PropTypes.string.isRequired,
+  url: PropTypes.string,
+  asset: PropTypes.string,
+  name: PropTypes.string,
+  mimeType: PropTypes.string,
+};
+
+PhaseVideo.defaultProps = {
+  url: null,
+  asset: null,
+  name: 'Video',
+  mimeType: 'video/mp4',
 };
 
 export default PhaseVideo;
