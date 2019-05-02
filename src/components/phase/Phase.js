@@ -14,12 +14,7 @@ const styles = {
 
 const { containerStyle } = styles;
 
-const Phase = ({
-  phase,
-  space,
-  dispatchSelectPhase,
-  start,
-}) => {
+const Phase = ({ phase, space, dispatchSelectPhase, start }) => {
   const phases = space.get('phases');
   const description = space.get('description');
   if (!phase || phase.isEmpty()) {
@@ -32,14 +27,12 @@ const Phase = ({
       />
     );
   }
-  const phaseDescription = phase.get('description') || 'missing description';
+  const phaseDescription = phase.get('description');
 
   const items = phase.get('items');
   return (
     <div style={containerStyle}>
-      <PhaseDescription
-        description={phaseDescription}
-      />
+      <PhaseDescription description={phaseDescription} />
       <PhaseItems items={items} />
     </div>
   );
@@ -55,9 +48,13 @@ const mapDispatchToProps = {
 
 Phase.propTypes = {
   space: PropTypes.shape({ id: PropTypes.string.isRequired }).isRequired,
-  phase: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.string.isRequired })).isRequired,
+  phase: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.string.isRequired }))
+    .isRequired,
   dispatchSelectPhase: PropTypes.func.isRequired,
   start: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Phase);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Phase);
