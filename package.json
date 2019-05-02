@@ -45,6 +45,7 @@
   "dependencies": {
     "@material-ui/core": "3.9.3",
     "@material-ui/icons": "3.0.2",
+    "@sentry/browser": "5.1.1",
     "@sentry/electron": "0.17.1",
     "archiver": "3.0.0",
     "classnames": "2.2.6",

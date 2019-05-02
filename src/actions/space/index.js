@@ -128,7 +128,7 @@ const getLocalSpace = async ({ id }) => async dispatch => {
       payload: space,
     });
   } catch (err) {
-    toastr.error('Error', ERROR_GETTING_SPACE_MESSAGE);
+    toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_SPACE_MESSAGE);
   } finally {
     dispatch(flagGettingSpace(false));
   }
@@ -166,7 +166,7 @@ const getRemoteSpace = async ({ id }) => async dispatch => {
       payload: space,
     });
   } catch (err) {
-    toastr.error('Error', ERROR_GETTING_SPACE_MESSAGE);
+    toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_SPACE_MESSAGE);
   } finally {
     dispatch(flagGettingSpace(false));
   }
@@ -254,9 +254,9 @@ const exportSpace = (id, spaces, spaceName) => dispatch => {
   );
   window.ipcRenderer.once(EXPORTED_SPACE_CHANNEL, (event, response) => {
     if (response === ERROR_GENERAL) {
-      toastr.error('Error', ERROR_EXPORTING_MESSAGE);
+      toastr.error(ERROR_MESSAGE_HEADER, ERROR_EXPORTING_MESSAGE);
     } else {
-      toastr.success('Success', SUCCESS_EXPORTING_MESSAGE);
+      toastr.success(SUCCESS_MESSAGE_HEADER, SUCCESS_EXPORTING_MESSAGE);
     }
     dispatch(flagExportingSpace(false));
   });
