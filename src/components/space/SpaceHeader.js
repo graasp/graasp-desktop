@@ -19,6 +19,7 @@ class SpaceHeader extends Component {
       PropTypes.shape({
         id: PropTypes.string.isRequired,
         saved: PropTypes.bool,
+        offline: PropTypes.bool,
       })
     ).isRequired,
     space: PropTypes.shape({
@@ -55,8 +56,8 @@ class SpaceHeader extends Component {
 
   renderSaveButton() {
     const { space, classes } = this.props;
-    const { saved } = space;
-    if (!saved) {
+    const { saved, offlineSupport } = space;
+    if (!saved && offlineSupport) {
       return (
         <IconButton
           className={classes.button}
