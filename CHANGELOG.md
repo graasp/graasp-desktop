@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [0.2.0](https://github.com/graasp/graasp-desktop/compare/v0.1.6...v0.2.0) (2019-05-03)
+
+### Bug Fixes
+
+- clear space when navigating away ([4433367](https://github.com/graasp/graasp-desktop/commit/4433367)), closes [#41](https://github.com/graasp/graasp-desktop/issues/41)
+- do not show missing description message ([1deb087](https://github.com/graasp/graasp-desktop/commit/1deb087)), closes [#51](https://github.com/graasp/graasp-desktop/issues/51)
+- fileLocation.endsWith is not a function ([17dfa76](https://github.com/graasp/graasp-desktop/commit/17dfa76)), closes [#53](https://github.com/graasp/graasp-desktop/issues/53)
+- fix folder structure ([61844d0](https://github.com/graasp/graasp-desktop/commit/61844d0)), closes [#64](https://github.com/graasp/graasp-desktop/issues/64)
+
+### Features
+
+- allow labs and apps to work online and offline ([4209a41](https://github.com/graasp/graasp-desktop/commit/4209a41)), closes [#46](https://github.com/graasp/graasp-desktop/issues/46)
+- allow spaces to be saved ([1de5dfa](https://github.com/graasp/graasp-desktop/commit/1de5dfa)), closes [#42](https://github.com/graasp/graasp-desktop/issues/42) [#43](https://github.com/graasp/graasp-desktop/issues/43)
+- allow user to delete a saved space ([37bc8c4](https://github.com/graasp/graasp-desktop/commit/37bc8c4)), closes [#45](https://github.com/graasp/graasp-desktop/issues/45)
+- allow user to export a space ([5de9625](https://github.com/graasp/graasp-desktop/commit/5de9625)), closes [#49](https://github.com/graasp/graasp-desktop/issues/49)
+- allow user to load a space ([51788f9](https://github.com/graasp/graasp-desktop/commit/51788f9)), closes [#50](https://github.com/graasp/graasp-desktop/issues/50)
+- allow users to visit an online space ([f7c9cfb](https://github.com/graasp/graasp-desktop/commit/f7c9cfb)), closes [#39](https://github.com/graasp/graasp-desktop/issues/39)
+- download space image for offline use ([7a09413](https://github.com/graasp/graasp-desktop/commit/7a09413)), closes [#47](https://github.com/graasp/graasp-desktop/issues/47)
+- get space from lowdb ([3eaee98](https://github.com/graasp/graasp-desktop/commit/3eaee98)), closes [#44](https://github.com/graasp/graasp-desktop/issues/44)
+- support local and remote videos ([0b586f6](https://github.com/graasp/graasp-desktop/commit/0b586f6)), closes [#52](https://github.com/graasp/graasp-desktop/issues/52)
+- support sentry in the front end ([8ea8c53](https://github.com/graasp/graasp-desktop/commit/8ea8c53)), closes [#63](https://github.com/graasp/graasp-desktop/issues/63)
+
 ## [0.1.6](https://github.com/graasp/graasp-desktop/compare/v0.1.5...v0.1.6) (2019-04-30)
 
 ### Bug Fixes
