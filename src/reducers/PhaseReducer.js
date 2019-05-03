@@ -1,8 +1,5 @@
 import Immutable from 'immutable';
-import {
-  CLEAR_PHASE,
-  SELECT_PHASE,
-} from '../types';
+import { CLEAR_PHASE, SELECT_PHASE } from '../types';
 
 const INITIAL_STATE = Immutable.Map({
   current: Immutable.Map({

@@ -1,7 +1,4 @@
-import {
-  createStore,
-  applyMiddleware,
-} from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 import { createBrowserHistory } from 'history';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
@@ -14,7 +11,7 @@ import reducers from '../reducers';
  * @param state
  * @returns {{store: Store<any>, history}}
  */
-const configure = (state) => {
+const configure = state => {
   // apply history to the middleware
   const history = createBrowserHistory();
   const RouterMiddleware = routerMiddleware(history);
@@ -23,7 +20,9 @@ const configure = (state) => {
   const store = createStore(
     connectRouter(history)(reducers),
     state,
-    composeWithDevTools(applyMiddleware(ReduxThunk, ReduxPromise, RouterMiddleware)),
+    composeWithDevTools(
+      applyMiddleware(ReduxThunk, ReduxPromise, RouterMiddleware)
+    )
   );
   return {
     store,
