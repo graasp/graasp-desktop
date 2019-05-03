@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography/Typography';
 import Grid from '@material-ui/core/Grid/Grid';
 import MediaCard from '../common/MediaCard';
 import { clearSpace } from '../../actions';
-import graaspImage from '../../data/graasp.jpg';
+import DefaultThumbnail from '../../data/graasp.jpg';
 
 class SavedSpaces extends Component {
   componentDidMount() {
@@ -17,10 +17,41 @@ class SavedSpaces extends Component {
     dispatchClearSpace();
   }
 
+  // show the local background image if exists, otherwise fetch
+  // the image from url if provided if not provided then pass
+  // the default background image
+  generateThumbnail = ({ image }) => {
+    const {
+      backgroundUrl,
+      thumbnailUrl,
+      backgroundAsset,
+      thumbnailAsset,
+    } = image;
+
+    // prioritise assets
+    if (thumbnailAsset) {
+      return `file://${thumbnailAsset}`;
+    }
+    if (backgroundAsset) {
+      return `file://${backgroundAsset}`;
+    }
+
+    // fallback on urls
+    if (thumbnailUrl) {
+      return thumbnailUrl;
+    }
+    if (backgroundUrl) {
+      return backgroundUrl;
+    }
+
+    // if nothing present return default image
+    return DefaultThumbnail;
+  };
+
   render() {
     const { spaces, classes, history } = this.props;
     const MediaCards = spaces.map(space => {
-      const { id, name, image, text, asset } = space;
+      const { id, name, image = {}, text } = space;
       const { replace } = history;
       const ViewButton = (
         <Button
@@ -38,13 +69,11 @@ class SavedSpaces extends Component {
         </Button>
       );
       return (
-        <Grid key={Number(id)} item>
+        <Grid key={id} item>
           <MediaCard
-            key={Number(id)}
+            key={id}
             name={name}
-            // show the local background image if exists, otherwise fetch
-            // the image from url if provided if not provided then pass the default background image
-            image={asset || image || graaspImage}
+            image={this.generateThumbnail({ image })}
             text={text}
             button={ViewButton}
           />
@@ -53,7 +82,7 @@ class SavedSpaces extends Component {
     });
     if (MediaCards.length === 0) {
       return (
-        <Typography variant="h5" color="inherit" align="center">
+        <Typography variant="h5" color="inherit">
           No saved spaces available
         </Typography>
       );

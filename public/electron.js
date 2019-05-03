@@ -262,19 +262,33 @@ app.on('ready', async () => {
       // todo: follow new format
       // if there is a background/thumbnail image, save it
       if (image) {
-        const ext = getExtension({ url: image });
-        const hash = generateHash({ url: image });
-        const imageFileName = `${hash}.${ext}`;
-        const imagePath = `${spacePath}/${imageFileName}`;
-        const imageAvailable = await isFileAvailable(imagePath);
-        if (imageAvailable) {
-          spaceToSave.image = `file://${imagePath}`;
-        } else {
-          const imageDl = await download(mainWindow, image, {
-            directory: spacePath,
-            filename: imageFileName,
-          });
-          spaceToSave.image = `file://${imageDl.getSavePath()}`;
+        const { thumbnailUrl, backgroundUrl } = image;
+        const assets = [
+          { url: thumbnailUrl, key: 'thumbnailAsset' },
+          { url: backgroundUrl, key: 'backgroundAsset' },
+        ];
+
+        // eslint-disable-next-line no-restricted-syntax
+        for (const asset of assets) {
+          const { url, key } = asset;
+          if (url) {
+            const ext = getExtension({ url });
+            const hash = generateHash({ url });
+            const imageFileName = `${hash}.${ext}`;
+            const imagePath = `${spacePath}/${imageFileName}`;
+            // eslint-disable-next-line no-await-in-loop
+            const imageAvailable = await isFileAvailable(imagePath);
+            if (imageAvailable) {
+              spaceToSave.image[key] = imagePath;
+            } else {
+              // eslint-disable-next-line no-await-in-loop
+              const imageDl = await download(mainWindow, url, {
+                directory: spacePath,
+                filename: imageFileName,
+              });
+              spaceToSave.image[key] = imageDl.getSavePath();
+            }
+          }
         }
       }
       // eslint-disable-next-line no-restricted-syntax
