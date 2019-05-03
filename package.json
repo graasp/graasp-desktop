@@ -22,8 +22,8 @@
   },
   "scripts": {
     "dev": "yarn react-scripts start",
-    "build": "react-scripts build",
-    "start": "concurrently \"cross-env BROWSER=none yarn react-scripts start\" \"wait-on http://localhost:3000 && electron .\"",
+    "build": "env-cmd ./.env react-scripts build",
+    "start": "concurrently \"cross-env BROWSER=none yarn react-scripts start\" \"wait-on http://localhost:3000 && env-cmd ./.env electron .\"",
     "pack": "electron-builder --dir",
     "postinstall": "electron-builder install-app-deps",
     "predist": "yarn build",

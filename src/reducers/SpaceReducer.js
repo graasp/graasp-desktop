@@ -13,6 +13,8 @@ import {
   DELETE_SPACE_SUCCESS,
   SAVE_SPACE_SUCCEEDED,
   FLAG_SAVING_SPACE,
+  FLAG_GETTING_SPACES_NEARBY,
+  GET_SPACES_NEARBY_SUCCEEDED,
 } from '../types';
 
 const INITIAL_STATE = Immutable.Map({
@@ -26,6 +28,7 @@ const INITIAL_STATE = Immutable.Map({
     deleted: false,
   }),
   saved: Immutable.Set(),
+  nearby: Immutable.Set(),
 });
 
 export default (state = INITIAL_STATE, { type, payload }) => {
@@ -59,6 +62,10 @@ export default (state = INITIAL_STATE, { type, payload }) => {
       return state.setIn(['current', 'content'], Immutable.Map(payload));
     case SAVE_SPACE_SUCCEEDED:
       return state.setIn(['current', 'content'], Immutable.Map(payload));
+    case FLAG_GETTING_SPACES_NEARBY:
+      return state.setIn(['current', 'activity'], payload);
+    case GET_SPACES_NEARBY_SUCCEEDED:
+      return state.setIn(['nearby'], payload);
     default:
       return state;
   }

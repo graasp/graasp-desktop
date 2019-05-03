@@ -20,6 +20,10 @@ const ERROR_MESSAGE_HEADER = 'Error';
 const ERROR_SAVING_SPACE_MESSAGE = 'There was an error saving the space';
 const SUCCESS_SAVING_MESSAGE = 'Space was saved successfully';
 const SUCCESS_MESSAGE_HEADER = 'Success';
+const ERROR_GETTING_GEOLOCATION =
+  'There was an error getting your current location';
+const ERROR_GETTING_SPACES_NEARBY =
+  'There was an error getting the spaces nearby';
 
 module.exports = {
   ERROR_DOWNLOADING_MESSAGE,
@@ -39,4 +43,6 @@ module.exports = {
   UNEXPECTED_ERROR_MESSAGE,
   OFFLINE_ERROR_MESSAGE,
   ERROR_LOADING_MESSAGE,
+  ERROR_GETTING_GEOLOCATION,
+  ERROR_GETTING_SPACES_NEARBY,
 };

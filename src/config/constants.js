@@ -5,3 +5,4 @@ export const IMAGE = new RegExp('image/*');
 export const RESOURCE = 'Resource';
 export const APPLICATION = 'Application';
 export const IFRAME = 'application/octet-stream';
+export const DEFAULT_RADIUS = 50;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Set } from 'immutable';
 import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
 import Button from '@material-ui/core/Button/Button';
 import { withStyles } from '@material-ui/core';
@@ -11,7 +12,7 @@ import MediaCard from '../common/MediaCard';
 import { clearSpace } from '../../actions';
 import DefaultThumbnail from '../../data/graasp.jpg';
 
-class SavedSpaces extends Component {
+class SpaceGrid extends Component {
   componentDidMount() {
     const { dispatchClearSpace } = this.props;
     dispatchClearSpace();
@@ -83,7 +84,7 @@ class SavedSpaces extends Component {
     if (MediaCards.length === 0) {
       return (
         <Typography variant="h5" color="inherit">
-          No saved spaces available
+          No spaces available.
         </Typography>
       );
     }
@@ -99,11 +100,9 @@ const mapDispatchToProps = {
   dispatchClearSpace: clearSpace,
 };
 
-SavedSpaces.propTypes = {
+SpaceGrid.propTypes = {
   classes: PropTypes.shape({ appBar: PropTypes.string.isRequired }).isRequired,
-  spaces: PropTypes.arrayOf(
-    PropTypes.shape({ id: PropTypes.string.isRequired })
-  ).isRequired,
+  spaces: PropTypes.instanceOf(Set).isRequired,
   history: PropTypes.shape({ length: PropTypes.number.isRequired }).isRequired,
   dispatchClearSpace: PropTypes.func.isRequired,
 };
@@ -113,6 +112,6 @@ export default withRouter(
     connect(
       null,
       mapDispatchToProps
-    )(SavedSpaces)
+    )(SpaceGrid)
   )
 );

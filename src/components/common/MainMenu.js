@@ -9,10 +9,11 @@ import List from '@material-ui/core/List';
 import SearchIcon from '@material-ui/icons/Search';
 import Language from '@material-ui/icons/Language';
 import Publish from '@material-ui/icons/Publish';
+import { Online } from 'react-detect-offline';
 import {
   HOME_PATH,
   LOAD_SPACE_PATH,
-  SEARCH_SPACE_PATH,
+  SPACES_NEARBY_PATH,
   VISIT_PATH,
 } from '../../config/paths';
 
@@ -31,7 +32,7 @@ class MainMenu extends Component {
         replace(HOME_PATH);
         break;
       case 1:
-        replace(SEARCH_SPACE_PATH);
+        replace(SPACES_NEARBY_PATH);
         break;
       case 2:
         replace(VISIT_PATH);
@@ -59,26 +60,28 @@ class MainMenu extends Component {
           </ListItemIcon>
           <ListItemText primary="Saved Spaces" />
         </MenuItem>
-        <MenuItem
-          onClick={() => this.handleItemClicked(1)}
-          button
-          selected={path === SEARCH_SPACE_PATH}
-        >
-          <ListItemIcon>
-            <SearchIcon />
-          </ListItemIcon>
-          <ListItemText primary="Spaces Nearby" />
-        </MenuItem>
-        <MenuItem
-          onClick={() => this.handleItemClicked(2)}
-          button
-          selected={path === VISIT_PATH}
-        >
-          <ListItemIcon>
-            <Language />
-          </ListItemIcon>
-          <ListItemText primary="Visit a Space" />
-        </MenuItem>
+        <Online>
+          <MenuItem
+            onClick={() => this.handleItemClicked(1)}
+            button
+            selected={path === SPACES_NEARBY_PATH}
+          >
+            <ListItemIcon>
+              <SearchIcon />
+            </ListItemIcon>
+            <ListItemText primary="Spaces Nearby" />
+          </MenuItem>
+          <MenuItem
+            onClick={() => this.handleItemClicked(2)}
+            button
+            selected={path === VISIT_PATH}
+          >
+            <ListItemIcon>
+              <Language />
+            </ListItemIcon>
+            <ListItemText primary="Visit a Space" />
+          </MenuItem>
+        </Online>
         <MenuItem
           onClick={() => this.handleItemClicked(3)}
           button

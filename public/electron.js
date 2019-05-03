@@ -57,6 +57,13 @@ const {
   ERROR_GENERAL,
   ERROR_ZIP_CORRUPTED,
 } = require('./app/config/errors');
+const mapping = require('./app/config/mapping');
+const env = require('./env.json');
+
+// add keys to process
+Object.keys(env).forEach(key => {
+  process.env[key] = env[key];
+});
 
 // use promisified fs
 const fsPromises = fs.promises;
@@ -297,7 +304,12 @@ app.on('ready', async () => {
         for (let i = 0; i < items.length; i += 1) {
           const resource = items[i];
           if (resource && isDownloadable(resource)) {
-            const { url } = resource;
+            let { url } = resource;
+
+            // check mappings for files
+            if (mapping[url]) {
+              url = mapping[url];
+            }
 
             // generate hash and get extension to save file
             const hash = generateHash(resource);

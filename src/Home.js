@@ -14,7 +14,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { getSpaces } from './actions';
-import SavedSpaces from './components/space/SavedSpaces';
+import SpaceGrid from './components/space/SpaceGrid';
 import Styles from './Styles';
 import Loader from './components/common/Loader';
 import MainMenu from './components/common/MainMenu';
@@ -100,7 +100,7 @@ class Home extends Component {
           })}
         >
           <div className={classes.drawerHeader} />
-          <SavedSpaces spaces={spaces} />
+          <SpaceGrid spaces={spaces} />
         </main>
       </div>
     );

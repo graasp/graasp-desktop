@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import ReduxToastr from 'react-redux-toastr';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from './Home';
 import VisitSpace from './components/VisitSpace';
-import SearchSpace from './components/SearchSpace';
+import SpacesNearby from './components/SpacesNearby';
 import Settings from './components/Settings';
 import LoadSpace from './components/LoadSpace';
 import SpaceScreen from './components/space/SpaceScreen';
@@ -12,10 +14,11 @@ import {
   SETTINGS_PATH,
   SPACE_PATH,
   HOME_PATH,
-  SEARCH_SPACE_PATH,
+  SPACES_NEARBY_PATH,
   VISIT_PATH,
   LOAD_SPACE_PATH,
 } from './config/paths';
+import { getGeolocation } from './actions/user';
 
 const theme = createMuiTheme({
   typography: {
@@ -33,7 +36,13 @@ const theme = createMuiTheme({
 export class App extends Component {
   state = { height: 0 };
 
+  static propTypes = {
+    dispatchGetGeolocation: PropTypes.func.isRequired,
+  };
+
   componentDidMount() {
+    const { dispatchGetGeolocation } = this.props;
+    dispatchGetGeolocation();
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);
   }
@@ -61,7 +70,7 @@ export class App extends Component {
           <div className="app" style={{ height }}>
             <Switch>
               <Route exact path={HOME_PATH} component={Home} />
-              <Route exact path={SEARCH_SPACE_PATH} component={SearchSpace} />
+              <Route exact path={SPACES_NEARBY_PATH} component={SpacesNearby} />
               <Route exact path={VISIT_PATH} component={VisitSpace} />
               <Route exact path={LOAD_SPACE_PATH} component={LoadSpace} />
               <Route exact path={SETTINGS_PATH} component={Settings} />
@@ -74,4 +83,11 @@ export class App extends Component {
   }
 }
 
-export default App;
+const mapDispatchToProps = {
+  dispatchGetGeolocation: getGeolocation,
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(App);

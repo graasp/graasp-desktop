@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Map, Set } from 'immutable';
 import { withRouter } from 'react-router';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
@@ -15,8 +17,10 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Styles from '../Styles';
 import MainMenu from './common/MainMenu';
+import { getSpacesNearby } from '../actions';
+import SpaceGrid from './space/SpaceGrid';
 
-class SearchSpace extends Component {
+class SpacesNearby extends Component {
   state = {
     open: false,
   };
@@ -27,6 +31,31 @@ class SearchSpace extends Component {
     history: PropTypes.shape({
       replace: PropTypes.func.isRequired,
     }).isRequired,
+    dispatchGetSpacesNearby: PropTypes.func.isRequired,
+    geolocation: PropTypes.instanceOf(Map),
+    spaces: PropTypes.instanceOf(Set).isRequired,
+  };
+
+  static defaultProps = {
+    geolocation: Map(),
+  };
+
+  constructor(props) {
+    super(props);
+    this.getSpacesNearby();
+  }
+
+  getSpacesNearby = () => {
+    const { dispatchGetSpacesNearby, geolocation } = this.props;
+    if (!geolocation.isEmpty()) {
+      const {
+        coords: { latitude, longitude },
+      } = geolocation.toJS();
+      dispatchGetSpacesNearby({
+        latitude,
+        longitude,
+      });
+    }
   };
 
   handleDrawerOpen = () => {
@@ -38,7 +67,7 @@ class SearchSpace extends Component {
   };
 
   render() {
-    const { classes, theme } = this.props;
+    const { classes, theme, spaces } = this.props;
     const { open } = this.state;
     return (
       <div className={classes.root}>
@@ -52,7 +81,7 @@ class SearchSpace extends Component {
           <Toolbar disableGutters={!open}>
             <IconButton
               color="inherit"
-              aria-label="Open drawer"
+              aria-label="Open Drawer"
               onClick={this.handleDrawerOpen}
               className={classNames(classes.menuButton, open && classes.hide)}
             >
@@ -87,13 +116,31 @@ class SearchSpace extends Component {
           })}
         >
           <div className={classes.drawerHeader} />
-          <Typography variant="h5" color="inherit" align="center">
-            Search Space
+          <Typography variant="h5" color="inherit">
+            Spaces Nearby
           </Typography>
+          <SpaceGrid spaces={spaces} />
         </main>
       </div>
     );
   }
 }
 
-export default withRouter(withStyles(Styles, { withTheme: true })(SearchSpace));
+const mapStateToProps = ({ User, Space }) => ({
+  spaces: Space.get('nearby'),
+  geolocation: User.getIn(['current', 'geolocation']),
+});
+
+const mapDispatchToProps = {
+  dispatchGetSpacesNearby: getSpacesNearby,
+};
+
+const ConnectedComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SpacesNearby);
+const StyledComponent = withStyles(Styles, { withTheme: true })(
+  ConnectedComponent
+);
+
+export default withRouter(StyledComponent);

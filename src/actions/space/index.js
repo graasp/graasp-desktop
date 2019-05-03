@@ -11,6 +11,8 @@ import {
   DELETE_SPACE_SUCCESS,
   FLAG_SAVING_SPACE,
   SAVE_SPACE_SUCCEEDED,
+  FLAG_GETTING_SPACES_NEARBY,
+  GET_SPACES_NEARBY_SUCCEEDED,
 } from '../../types';
 import {
   ERROR_ZIP_CORRUPTED,
@@ -41,6 +43,7 @@ import {
   ERROR_DOWNLOADING_MESSAGE,
   ERROR_EXPORTING_MESSAGE,
   ERROR_GETTING_SPACE_MESSAGE,
+  ERROR_GETTING_SPACES_NEARBY,
   ERROR_JSON_CORRUPTED_MESSAGE,
   ERROR_LOADING_MESSAGE,
   ERROR_MESSAGE_HEADER,
@@ -54,8 +57,12 @@ import {
   SUCCESS_SPACE_LOADED_MESSAGE,
 } from '../../config/messages';
 import { createFlag, isErrorResponse } from '../common';
-import { generateGetSpaceEndpoint } from '../../config/endpoints';
+import {
+  generateGetSpaceEndpoint,
+  GET_SPACES_NEARBY_ENDPOINT,
+} from '../../config/endpoints';
 import { DEFAULT_GET_REQUEST } from '../../config/rest';
+import { DEFAULT_RADIUS } from '../../config/constants';
 
 const flagGettingSpace = createFlag(FLAG_GETTING_SPACE);
 const flagGettingSpaces = createFlag(FLAG_GETTING_SPACES);
@@ -63,29 +70,7 @@ const flagLoadingSpace = createFlag(FLAG_LOADING_SPACE);
 const flagDeletingSpace = createFlag(FLAG_DELETING_SPACE);
 const flagExportingSpace = createFlag(FLAG_EXPORTING_SPACE);
 const flagSavingSpace = createFlag(FLAG_SAVING_SPACE);
-
-// const getSpace = async ({ id, spaces }) => async (dispatch) => {
-//   // raise flag
-//   dispatch(flagGettingSpace(true));
-//   // tell electron to download space
-//   window.ipcRenderer.send(GET_SPACE_CHANNEL, { id, spaces });
-//   // create listener
-//   window.ipcRenderer.once(GET_SPACE_CHANNEL, (event, space) => {
-//     // dispatch that the getter has succeeded
-//     if (space === ERROR_GENERAL) {
-//       toastr.error('Error', ERROR_DOWNLOADING_MESSAGE);
-//     } else {
-//       dispatch({
-//         type: GET_SPACE_SUCCEEDED,
-//         payload: space,
-//       });
-//     }
-//     dispatch(flagGettingSpace(false));
-//   });
-//   // lower flag
-//   //   // delete the listener
-//   // });
-// };
+const flagGettingSpacesNearby = createFlag(FLAG_GETTING_SPACES_NEARBY);
 
 /**
  * helper function to wrap a listener to the get space channel around a promise
@@ -323,6 +308,33 @@ const getSpace = ({ id }) => dispatch => {
   }
 };
 
+const getSpacesNearby = async ({
+  latitude,
+  longitude,
+  radius = DEFAULT_RADIUS,
+}) => async dispatch => {
+  try {
+    flagGettingSpacesNearby(true);
+
+    const url = `${GET_SPACES_NEARBY_ENDPOINT}?lat=${latitude}&lon=${longitude}&radius=${radius}`;
+    const response = await fetch(url, DEFAULT_GET_REQUEST);
+
+    // throws if it is an error
+    await isErrorResponse(response);
+
+    const spaces = await response.json();
+
+    dispatch({
+      type: GET_SPACES_NEARBY_SUCCEEDED,
+      payload: spaces,
+    });
+  } catch (err) {
+    toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_SPACES_NEARBY);
+  } finally {
+    dispatch(flagGettingSpace(false));
+  }
+};
+
 export {
   loadSpace,
   clearSpace,
@@ -333,4 +345,5 @@ export {
   getSpaces,
   getSpace,
   saveSpace,
+  getSpacesNearby,
 };

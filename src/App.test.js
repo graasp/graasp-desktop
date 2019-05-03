@@ -9,9 +9,7 @@ describe('<App />', () => {
       changeLanguage: jest.fn(),
     },
     t: jest.fn(),
-    dispatchGetContext: jest.fn(),
-    dispatchGetAppInstance: jest.fn(),
-    dispatchGetAppInstanceResources: jest.fn(),
+    dispatchGetGeolocation: jest.fn(),
   };
   const component = shallow(<App {...props} />);
   it('renders correctly', () => {
