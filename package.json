@@ -10,7 +10,7 @@
   ],
   "license": "MIT",
   "homepage": "./",
-  "main": "app/electron.js",
+  "main": "public/electron.js",
   "keywords": [
     "Graasp Desktop",
     "React",

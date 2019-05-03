@@ -17,6 +17,23 @@ const extract = require('extract-zip');
 const archiver = require('archiver');
 const { autoUpdater } = require('electron-updater');
 const Sentry = require('@sentry/electron');
+const logger = require('./app/logger');
+const {
+  getExtension,
+  isDownloadable,
+  generateHash,
+  createSpaceDirectory,
+} = require('./app/utilities');
+const {
+  ensureDatabaseExists,
+  bootstrapDatabase,
+  SPACES_COLLECTION,
+} = require('./app/db');
+const {
+  VAR_FOLDER,
+  DATABASE_PATH,
+  TEMPORARY_EXTRACT_FOLDER,
+} = require('./app/config/config');
 const {
   LOAD_SPACE_CHANNEL,
   LOADED_SPACE_CHANNEL,
@@ -33,30 +50,13 @@ const {
   SHOW_LOAD_SPACE_PROMPT_CHANNEL,
   RESPOND_LOAD_SPACE_PROMPT_CHANNEL,
   SAVE_SPACE_CHANNEL,
-} = require('../src/config/channels');
-const {
-  getExtension,
-  isDownloadable,
-  generateHash,
-  createSpaceDirectory,
-} = require('./utilities');
-const {
-  ensureDatabaseExists,
-  bootstrapDatabase,
-  SPACES_COLLECTION,
-} = require('./db');
+} = require('./app/config/channels');
 const {
   ERROR_SPACE_ALREADY_AVAILABLE,
   ERROR_DOWNLOADING_FILE,
   ERROR_GENERAL,
   ERROR_ZIP_CORRUPTED,
-} = require('../src/config/errors');
-const logger = require('./logger');
-const {
-  VAR_FOLDER,
-  DATABASE_PATH,
-  TEMPORARY_EXTRACT_FOLDER,
-} = require('./config/config');
+} = require('./app/config/errors');
 
 // use promisified fs
 const fsPromises = fs.promises;
@@ -81,7 +81,7 @@ const createWindow = () => {
     movable: true,
     webPreferences: {
       nodeIntegration: false,
-      preload: `${__dirname}/preload.js`,
+      preload: `${__dirname}/app/preload.js`,
       webSecurity: false,
     },
     height: 860,
@@ -91,7 +91,7 @@ const createWindow = () => {
   mainWindow.loadURL(
     isDev
       ? 'http://localhost:3000'
-      : `file://${path.join(__dirname, '../build/index.html')}`
+      : `file://${path.join(__dirname, './index.html')}`
   );
 
   if (isDev) {
