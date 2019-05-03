@@ -32,7 +32,7 @@
     "prettier:write": "prettier --write '{src,app}/**/*.js'",
     "test": "react-scripts test",
     "dist": "env-cmd ./.env electron-builder",
-    "prerelease": "yarn build",
+    "prerelease": "yarn test:once && yarn build",
     "release": "git add CHANGELOG.md && standard-version -a && env-cmd ./.env build -mwl",
     "hooks:uninstall": "node node_modules/husky/husky.js uninstall",
     "hooks:install": "node node_modules/husky/husky.js install",
