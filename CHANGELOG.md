@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [0.3.0](https://github.com/graasp/graasp-desktop/compare/v0.2.0...v0.3.0) (2019-05-04)
+
+### Bug Fixes
+
+- update images for cards ([abb647f](https://github.com/graasp/graasp-desktop/commit/abb647f)), closes [#65](https://github.com/graasp/graasp-desktop/issues/65)
+
+### Features
+
+- allow a user to see public spaces nearby ([16d6bec](https://github.com/graasp/graasp-desktop/commit/16d6bec)), closes [#66](https://github.com/graasp/graasp-desktop/issues/66)
+- only allow saving spaces that have been marked as offline ([715bab5](https://github.com/graasp/graasp-desktop/commit/715bab5)), closes [#67](https://github.com/graasp/graasp-desktop/issues/67)
+
 # [0.2.0](https://github.com/graasp/graasp-desktop/compare/v0.1.6...v0.2.0) (2019-05-03)
 
 ### Bug Fixes
