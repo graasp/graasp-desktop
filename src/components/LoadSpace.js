@@ -53,7 +53,7 @@ class LoadSpace extends Component {
   };
 
   handleFileLocation = event => {
-    const fileLocation = event.target.value;
+    const fileLocation = event.target ? event.target.value : event;
     this.setState({ fileLocation });
   };
 
