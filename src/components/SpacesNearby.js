@@ -9,7 +9,6 @@ import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -19,6 +18,7 @@ import Styles from '../Styles';
 import MainMenu from './common/MainMenu';
 import { getSpacesNearby } from '../actions';
 import SpaceGrid from './space/SpaceGrid';
+import Loader from './common/Loader';
 
 class SpacesNearby extends Component {
   state = {
@@ -34,10 +34,12 @@ class SpacesNearby extends Component {
     dispatchGetSpacesNearby: PropTypes.func.isRequired,
     geolocation: PropTypes.instanceOf(Map),
     spaces: PropTypes.instanceOf(Set).isRequired,
+    activity: PropTypes.bool,
   };
 
   static defaultProps = {
     geolocation: Map(),
+    activity: false,
   };
 
   constructor(props) {
@@ -74,8 +76,23 @@ class SpacesNearby extends Component {
   };
 
   render() {
-    const { classes, theme, spaces } = this.props;
+    const { classes, theme, spaces, activity } = this.props;
     const { open } = this.state;
+
+    if (activity) {
+      return (
+        <div className={classNames(classes.root)} style={{ height: '100%' }}>
+          <CssBaseline />
+          <AppBar position="fixed">
+            <Toolbar />
+          </AppBar>
+          <main className="Main">
+            <Loader />
+          </main>
+        </div>
+      );
+    }
+
     return (
       <div className={classes.root}>
         <CssBaseline />
@@ -123,9 +140,6 @@ class SpacesNearby extends Component {
           })}
         >
           <div className={classes.drawerHeader} />
-          <Typography variant="h5" color="inherit">
-            Spaces Nearby
-          </Typography>
           <SpaceGrid spaces={spaces} />
         </main>
       </div>
@@ -134,8 +148,9 @@ class SpacesNearby extends Component {
 }
 
 const mapStateToProps = ({ User, Space }) => ({
-  spaces: Space.get('nearby'),
   geolocation: User.getIn(['current', 'geolocation']),
+  spaces: Space.getIn(['nearby', 'content']),
+  activity: Space.getIn(['nearby', 'activity']),
 });
 
 const mapDispatchToProps = {

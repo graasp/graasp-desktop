@@ -314,7 +314,7 @@ const getSpacesNearby = async ({
   radius = DEFAULT_RADIUS,
 }) => async dispatch => {
   try {
-    flagGettingSpacesNearby(true);
+    dispatch(flagGettingSpacesNearby(true));
 
     const url = `${GET_SPACES_NEARBY_ENDPOINT}?lat=${latitude}&lon=${longitude}&radius=${radius}`;
     const response = await fetch(url, DEFAULT_GET_REQUEST);
@@ -331,7 +331,7 @@ const getSpacesNearby = async ({
   } catch (err) {
     toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_SPACES_NEARBY);
   } finally {
-    dispatch(flagGettingSpace(false));
+    dispatch(flagGettingSpacesNearby(false));
   }
 };
 

@@ -28,7 +28,10 @@ const INITIAL_STATE = Immutable.Map({
     deleted: false,
   }),
   saved: Immutable.Set(),
-  nearby: Immutable.Set(),
+  nearby: Immutable.Map({
+    content: Immutable.Set(),
+    activity: false,
+  }),
 });
 
 export default (state = INITIAL_STATE, { type, payload }) => {
@@ -63,9 +66,9 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case SAVE_SPACE_SUCCEEDED:
       return state.setIn(['current', 'content'], Immutable.Map(payload));
     case FLAG_GETTING_SPACES_NEARBY:
-      return state.setIn(['current', 'activity'], payload);
+      return state.setIn(['nearby', 'activity'], payload);
     case GET_SPACES_NEARBY_SUCCEEDED:
-      return state.setIn(['nearby'], payload);
+      return state.setIn(['nearby', 'content'], payload);
     default:
       return state;
   }
