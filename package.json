@@ -66,12 +66,12 @@
     "md5": "2.2.1",
     "mime-types": "2.1.24",
     "mkdirp": "0.5.1",
+    "node-machine-id": "1.1.10",
     "prop-types": "15.7.2",
     "react": "16.8.6",
     "react-detect-offline": "2.3.0",
     "react-dev-utils": "9.0.0",
     "react-dom": "16.8.6",
-    "react-ga": "2.5.7",
     "react-loading": "2.0.3",
     "react-redux": "7.0.3",
     "react-redux-toastr": "7.4.9",
@@ -82,6 +82,7 @@
     "redux-promise": "0.6.0",
     "redux-thunk": "2.3.0",
     "rimraf": "2.6.3",
+    "universal-analytics": "0.4.20",
     "wait-on": "3.2.0"
   },
   "devDependencies": {

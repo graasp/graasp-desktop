@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactGa from 'react-ga';
 import ReactDOM from 'react-dom';
 import './index.css';
 import { Provider } from 'react-redux';
@@ -9,10 +8,7 @@ import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 import App from './App';
 import configureStore from './store/configure';
 
-const { REACT_APP_SENTRY_DSN, REACT_APP_GOOGLE_ANALYTICS_ID } = process.env;
-
-// set up google analytics
-ReactGa.initialize(REACT_APP_GOOGLE_ANALYTICS_ID);
+const { REACT_APP_SENTRY_DSN } = process.env;
 
 // set up sentry
 Sentry.init({

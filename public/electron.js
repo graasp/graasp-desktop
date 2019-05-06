@@ -17,6 +17,8 @@ const extract = require('extract-zip');
 const archiver = require('archiver');
 const { autoUpdater } = require('electron-updater');
 const Sentry = require('@sentry/electron');
+const ua = require('universal-analytics');
+const { machineIdSync } = require('node-machine-id');
 const logger = require('./app/logger');
 const {
   getExtension,
@@ -77,8 +79,11 @@ const { download } = electronDl;
 let mainWindow;
 
 // set up sentry
-const { SENTRY_DSN } = process.env;
+const { SENTRY_DSN, GOOGLE_ANALYTICS_ID } = process.env;
 Sentry.init({ dsn: SENTRY_DSN });
+
+// get unique identifier for this machine
+const machineId = machineIdSync();
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
@@ -232,6 +237,10 @@ app.on('ready', async () => {
 
   createWindow();
   generateMenu();
+
+  // record page view
+  const visitor = ua(GOOGLE_ANALYTICS_ID, machineId);
+  visitor.pageview('/').send();
 
   // called when saving a space
   ipcMain.on(SAVE_SPACE_CHANNEL, async (event, { space }) => {
