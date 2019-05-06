@@ -9,11 +9,9 @@ const PhaseVideo = ({ url, asset, name, mimeType }) => {
     uri = `file://${asset}`;
   }
   return (
-    <div className="VideoDiv">
-      <video title={name} className="Video" controls>
-        <source src={uri} type={mimeType} />
-      </video>
-    </div>
+    <video title={name} className="Video" controls>
+      <source src={uri} type={mimeType} />
+    </video>
   );
 };
 

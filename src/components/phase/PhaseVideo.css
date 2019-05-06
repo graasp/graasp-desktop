@@ -1,4 +1,3 @@
-.VideoDiv {
-    display: flex;
-    justify-content: center;
+.Video {
+  width: 100%;
 }
