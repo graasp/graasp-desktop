@@ -45,6 +45,13 @@ class SpacesNearby extends Component {
     this.getSpacesNearby();
   }
 
+  componentDidUpdate({ geolocation: prevGeolocation }) {
+    const { geolocation } = this.props;
+    if (!geolocation.equals(prevGeolocation)) {
+      this.getSpacesNearby();
+    }
+  }
+
   getSpacesNearby = () => {
     const { dispatchGetSpacesNearby, geolocation } = this.props;
     if (!geolocation.isEmpty()) {
