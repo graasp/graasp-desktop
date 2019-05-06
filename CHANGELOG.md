@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.1](https://github.com/graasp/graasp-desktop/compare/v0.4.0...v0.4.1) (2019-05-06)
+
+### Bug Fixes
+
+- fix video resize error ([499bbc9](https://github.com/graasp/graasp-desktop/commit/499bbc9)), closes [#74](https://github.com/graasp/graasp-desktop/issues/74)
+- google analytics for universal analytics ([843f49e](https://github.com/graasp/graasp-desktop/commit/843f49e)), closes [#75](https://github.com/graasp/graasp-desktop/issues/75)
+
 # 0.4.0 (2019-05-06)
 
 ### Bug Fixes
