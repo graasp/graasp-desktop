@@ -23,7 +23,7 @@
   "scripts": {
     "dev": "yarn react-scripts start",
     "build": "env-cmd ./.env react-scripts build",
-    "start": "concurrently \"cross-env BROWSER=none yarn react-scripts start\" \"wait-on http://localhost:3000 && env-cmd ./.env electron .\"",
+    "start": "concurrently \"env-cmd ./.env.local react-scripts start\" \"wait-on http://localhost:3000 && env-cmd ./.env.local electron .\"",
     "pack": "electron-builder --dir",
     "postinstall": "electron-builder install-app-deps",
     "predist": "yarn build",
@@ -71,6 +71,7 @@
     "react-detect-offline": "2.3.0",
     "react-dev-utils": "9.0.0",
     "react-dom": "16.8.6",
+    "react-ga": "2.5.7",
     "react-loading": "2.0.3",
     "react-redux": "7.0.3",
     "react-redux-toastr": "7.4.9",

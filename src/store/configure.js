@@ -4,6 +4,7 @@ import { createBrowserHistory } from 'history';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 import ReduxThunk from 'redux-thunk';
 import ReduxPromise from 'redux-promise';
+import ReactGa from 'react-ga';
 import reducers from '../reducers';
 
 /**
@@ -14,6 +15,10 @@ import reducers from '../reducers';
 const configure = state => {
   // apply history to the middleware
   const history = createBrowserHistory();
+  history.listen(location => {
+    ReactGa.set({ page: location.pathname });
+    ReactGa.pageview(location.pathname);
+  });
   const RouterMiddleware = routerMiddleware(history);
 
   // create the store
