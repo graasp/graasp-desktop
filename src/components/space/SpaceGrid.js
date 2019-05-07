@@ -13,6 +13,16 @@ import { clearSpace } from '../../actions';
 import DefaultThumbnail from '../../data/graasp.jpg';
 
 class SpaceGrid extends Component {
+  static propTypes = {
+    folder: PropTypes.string.isRequired,
+    classes: PropTypes.shape({ appBar: PropTypes.string.isRequired })
+      .isRequired,
+    spaces: PropTypes.instanceOf(Set).isRequired,
+    history: PropTypes.shape({ length: PropTypes.number.isRequired })
+      .isRequired,
+    dispatchClearSpace: PropTypes.func.isRequired,
+  };
+
   componentDidMount() {
     const { dispatchClearSpace } = this.props;
     dispatchClearSpace();
@@ -22,6 +32,7 @@ class SpaceGrid extends Component {
   // the image from url if provided if not provided then pass
   // the default background image
   generateThumbnail = ({ image }) => {
+    const { folder } = this.props;
     const {
       backgroundUrl,
       thumbnailUrl,
@@ -31,10 +42,10 @@ class SpaceGrid extends Component {
 
     // prioritise assets
     if (thumbnailAsset) {
-      return `file://${thumbnailAsset}`;
+      return `file://${folder}/${thumbnailAsset}`;
     }
     if (backgroundAsset) {
-      return `file://${backgroundAsset}`;
+      return `file://${folder}/${backgroundAsset}`;
     }
 
     // fallback on urls
@@ -51,6 +62,7 @@ class SpaceGrid extends Component {
 
   render() {
     const { spaces, classes, history } = this.props;
+
     const MediaCards = spaces.map(space => {
       const { id, name, image = {}, text } = space;
       const { replace } = history;
@@ -96,22 +108,17 @@ class SpaceGrid extends Component {
   }
 }
 
+const mapStateToProps = ({ User }) => ({
+  folder: User.getIn(['current', 'folder']),
+});
+
 const mapDispatchToProps = {
   dispatchClearSpace: clearSpace,
 };
 
-SpaceGrid.propTypes = {
-  classes: PropTypes.shape({ appBar: PropTypes.string.isRequired }).isRequired,
-  spaces: PropTypes.instanceOf(Set).isRequired,
-  history: PropTypes.shape({ length: PropTypes.number.isRequired }).isRequired,
-  dispatchClearSpace: PropTypes.func.isRequired,
-};
+const ConnectedComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SpaceGrid);
 
-export default withRouter(
-  withStyles({})(
-    connect(
-      null,
-      mapDispatchToProps
-    )(SpaceGrid)
-  )
-);
+export default withRouter(withStyles({})(ConnectedComponent));

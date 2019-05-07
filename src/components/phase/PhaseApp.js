@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import './PhaseApp.css';
 
-const PhaseApp = ({ url, asset, name }) => {
+const PhaseApp = ({ url, asset, name, folder }) => {
   let uri = url;
   if (asset) {
-    uri = `file://${asset}`;
+    uri = `file://${folder}/${asset}`;
   }
   return (
     // state = {
@@ -58,6 +59,7 @@ PhaseApp.propTypes = {
   url: PropTypes.string,
   asset: PropTypes.string,
   name: PropTypes.string,
+  folder: PropTypes.string.isRequired,
 };
 
 PhaseApp.defaultProps = {
@@ -66,4 +68,10 @@ PhaseApp.defaultProps = {
   name: 'Image',
 };
 
-export default PhaseApp;
+const mapStateToProps = ({ User }) => ({
+  folder: User.getIn(['current', 'folder']),
+});
+
+const ConnectedComponent = connect(mapStateToProps)(PhaseApp);
+
+export default ConnectedComponent;

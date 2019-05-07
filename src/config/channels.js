@@ -17,4 +17,5 @@ module.exports = {
   RESPOND_LOAD_SPACE_PROMPT_CHANNEL: 'prompt:space:load:response',
   RESPOND_EXPORT_SPACE_PROMPT_CHANNEL: 'prompt:space:export:respond',
   RESPOND_DELETE_SPACE_PROMPT_CHANNEL: 'prompt:space:delete:respond',
+  GET_USER_FOLDER_CHANNEL: 'user:folder:get',
 };

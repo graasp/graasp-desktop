@@ -52,6 +52,7 @@ const {
   SHOW_LOAD_SPACE_PROMPT_CHANNEL,
   RESPOND_LOAD_SPACE_PROMPT_CHANNEL,
   SAVE_SPACE_CHANNEL,
+  GET_USER_FOLDER_CHANNEL,
 } = require('./app/config/channels');
 const {
   ERROR_SPACE_ALREADY_AVAILABLE,
@@ -273,7 +274,7 @@ app.on('ready', async () => {
 
       const { phases, image } = spaceToSave;
 
-      const spacePath = `${VAR_FOLDER}/${id}`;
+      const spacePath = id;
 
       // todo: follow new format
       // if there is a background/thumbnail image, save it
@@ -292,18 +293,18 @@ app.on('ready', async () => {
             const hash = generateHash({ url });
             const imageFileName = `${hash}.${ext}`;
             const imagePath = `${spacePath}/${imageFileName}`;
+            const absoluteSpacePath = `${VAR_FOLDER}/${spacePath}`;
+            const absoluteImagePath = `${VAR_FOLDER}/${imagePath}`;
             // eslint-disable-next-line no-await-in-loop
-            const imageAvailable = await isFileAvailable(imagePath);
-            if (imageAvailable) {
-              spaceToSave.image[key] = imagePath;
-            } else {
+            const imageAvailable = await isFileAvailable(absoluteImagePath);
+            if (!imageAvailable) {
               // eslint-disable-next-line no-await-in-loop
-              const imageDl = await download(mainWindow, url, {
-                directory: spacePath,
+              await download(mainWindow, url, {
+                directory: absoluteSpacePath,
                 filename: imageFileName,
               });
-              spaceToSave.image[key] = imageDl.getSavePath();
             }
+            spaceToSave.image[key] = imagePath;
           }
         }
       }
@@ -325,22 +326,22 @@ app.on('ready', async () => {
             const ext = getExtension(resource);
             const fileName = `${hash}.${ext}`;
             const filePath = `${spacePath}/${fileName}`;
+            const absoluteSpacePath = `${VAR_FOLDER}/${spacePath}`;
+            const absoluteFilePath = `${VAR_FOLDER}/${filePath}`;
             phase.items[i].hash = hash;
 
             // eslint-disable-next-line no-await-in-loop
-            const fileAvailable = await isFileAvailable(filePath);
+            const fileAvailable = await isFileAvailable(absoluteFilePath);
 
             // if the file is available, point this resource to its path
-            if (fileAvailable) {
-              phase.items[i].asset = filePath;
-            } else {
+            if (!fileAvailable) {
               // eslint-disable-next-line no-await-in-loop
-              const dl = await download(mainWindow, url, {
-                directory: spacePath,
+              await download(mainWindow, url, {
+                directory: absoluteSpacePath,
                 filename: fileName,
               });
-              phase.items[i].asset = dl.getSavePath();
             }
+            phase.items[i].asset = filePath;
           }
         }
       }
@@ -556,6 +557,16 @@ app.on('ready', async () => {
     dialog.showMessageBox(null, options, respond => {
       mainWindow.webContents.send(RESPOND_DELETE_SPACE_PROMPT_CHANNEL, respond);
     });
+  });
+
+  // called when getting user folder
+  ipcMain.on(GET_USER_FOLDER_CHANNEL, () => {
+    try {
+      mainWindow.webContents.send(GET_USER_FOLDER_CHANNEL, VAR_FOLDER);
+    } catch (e) {
+      logger.error(e);
+      mainWindow.webContents.send(GET_USER_FOLDER_CHANNEL, ERROR_GENERAL);
+    }
   });
 });
 

@@ -18,7 +18,7 @@ import {
   VISIT_PATH,
   LOAD_SPACE_PATH,
 } from './config/paths';
-import { getGeolocation } from './actions/user';
+import { getGeolocation, getUserFolder } from './actions/user';
 
 const theme = createMuiTheme({
   typography: {
@@ -38,7 +38,14 @@ export class App extends Component {
 
   static propTypes = {
     dispatchGetGeolocation: PropTypes.func.isRequired,
+    dispatchGetUserFolder: PropTypes.func.isRequired,
   };
+
+  constructor(props) {
+    super(props);
+    const { dispatchGetUserFolder } = this.props;
+    dispatchGetUserFolder();
+  }
 
   componentDidMount() {
     const { dispatchGetGeolocation } = this.props;
@@ -85,6 +92,7 @@ export class App extends Component {
 
 const mapDispatchToProps = {
   dispatchGetGeolocation: getGeolocation,
+  dispatchGetUserFolder: getUserFolder,
 };
 
 export default connect(

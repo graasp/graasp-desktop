@@ -1,2 +1,3 @@
-// eslint-disable-next-line import/prefer-default-export
 export const GET_GEOLOCATION_SUCCEEDED = 'GET_GEOLOCATION_SUCCEEDED';
+export const FLAG_GETTING_USER_FOLDER = 'FLAG_GETTING_USER_FOLDER';
+export const GET_USER_FOLDER_SUCCEEDED = 'GET_USER_FOLDER_SUCCEEDED';

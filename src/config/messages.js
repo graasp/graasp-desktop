@@ -24,6 +24,8 @@ const ERROR_GETTING_GEOLOCATION =
   'There was an error getting your current location';
 const ERROR_GETTING_SPACES_NEARBY =
   'There was an error getting the spaces nearby';
+const ERROR_GETTING_USER_FOLDER =
+  'There was an error getting your user folder.';
 
 module.exports = {
   ERROR_DOWNLOADING_MESSAGE,
@@ -45,4 +47,5 @@ module.exports = {
   ERROR_LOADING_MESSAGE,
   ERROR_GETTING_GEOLOCATION,
   ERROR_GETTING_SPACES_NEARBY,
+  ERROR_GETTING_USER_FOLDER,
 };

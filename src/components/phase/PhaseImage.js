@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import './PhaseImage.css';
 
-const PhaseImage = ({ url, asset, name }) => {
+const PhaseImage = ({ url, asset, name, folder }) => {
   let uri = url;
   if (asset) {
-    uri = `file://${asset}`;
+    uri = `file://${folder}/${asset}`;
   }
   return (
     <div className="ImageDiv">
@@ -18,6 +19,7 @@ PhaseImage.propTypes = {
   url: PropTypes.string,
   asset: PropTypes.string,
   name: PropTypes.string,
+  folder: PropTypes.string.isRequired,
 };
 
 PhaseImage.defaultProps = {
@@ -26,4 +28,10 @@ PhaseImage.defaultProps = {
   name: 'Image',
 };
 
-export default PhaseImage;
+const mapStateToProps = ({ User }) => ({
+  folder: User.getIn(['current', 'folder']),
+});
+
+const ConnectedComponent = connect(mapStateToProps)(PhaseImage);
+
+export default ConnectedComponent;
