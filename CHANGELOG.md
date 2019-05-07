@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.2](https://github.com/graasp/graasp-desktop/compare/v0.4.1...v0.4.2) (2019-05-07)
+
+### Bug Fixes
+
+- make asset paths relative ([731a9cd](https://github.com/graasp/graasp-desktop/commit/731a9cd)), closes [#76](https://github.com/graasp/graasp-desktop/issues/76)
+
 ## [0.4.1](https://github.com/graasp/graasp-desktop/compare/v0.4.0...v0.4.1) (2019-05-06)
 
 ### Bug Fixes
