@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import { Provider } from 'react-redux';
 import * as Sentry from '@sentry/browser';
+import { I18nextProvider } from 'react-i18next';
+import i18nConfig from './config/i18n';
 import { WHITELISTED_ERRORS } from './config/errors';
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 import App from './App';
@@ -27,7 +29,9 @@ const { store } = configureStore();
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <I18nextProvider i18n={i18nConfig}>
+      <App />
+    </I18nextProvider>
   </Provider>,
   document.getElementById('root')
 );

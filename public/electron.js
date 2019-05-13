@@ -53,6 +53,8 @@ const {
   RESPOND_LOAD_SPACE_PROMPT_CHANNEL,
   SAVE_SPACE_CHANNEL,
   GET_USER_FOLDER_CHANNEL,
+  GET_LANGUAGE_CHANNEL,
+  SET_LANGUAGE_CHANNEL,
 } = require('./app/config/channels');
 const {
   ERROR_SPACE_ALREADY_AVAILABLE,
@@ -566,6 +568,28 @@ app.on('ready', async () => {
     } catch (e) {
       logger.error(e);
       mainWindow.webContents.send(GET_USER_FOLDER_CHANNEL, ERROR_GENERAL);
+    }
+  });
+
+  // called when getting language
+  ipcMain.on(GET_LANGUAGE_CHANNEL, () => {
+    try {
+      const lang = db.get('user.lang').value();
+      mainWindow.webContents.send(GET_LANGUAGE_CHANNEL, lang);
+    } catch (e) {
+      logger.error(e);
+      mainWindow.webContents.send(GET_LANGUAGE_CHANNEL, ERROR_GENERAL);
+    }
+  });
+
+  // called when getting language
+  ipcMain.on(SET_LANGUAGE_CHANNEL, (event, lang) => {
+    try {
+      db.set('user.lang', lang).write();
+      mainWindow.webContents.send(SET_LANGUAGE_CHANNEL, lang);
+    } catch (e) {
+      logger.error(e);
+      mainWindow.webContents.send(SET_LANGUAGE_CHANNEL, ERROR_GENERAL);
     }
   });
 });

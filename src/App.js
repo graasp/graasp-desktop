@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import ReduxToastr from 'react-redux-toastr';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
+import { withTranslation } from 'react-i18next';
 import Home from './Home';
 import VisitSpace from './components/VisitSpace';
 import SpacesNearby from './components/SpacesNearby';
@@ -18,7 +19,8 @@ import {
   VISIT_PATH,
   LOAD_SPACE_PATH,
 } from './config/paths';
-import { getGeolocation, getUserFolder } from './actions/user';
+import { getGeolocation, getUserFolder, getLanguage } from './actions/user';
+import { DEFAULT_LANGUAGE } from './config/constants';
 
 const theme = createMuiTheme({
   typography: {
@@ -39,11 +41,21 @@ export class App extends Component {
   static propTypes = {
     dispatchGetGeolocation: PropTypes.func.isRequired,
     dispatchGetUserFolder: PropTypes.func.isRequired,
+    dispatchGetLanguage: PropTypes.func.isRequired,
+    lang: PropTypes.string,
+    i18n: PropTypes.shape({
+      changeLanguage: PropTypes.func.isRequired,
+    }).isRequired,
+  };
+
+  static defaultProps = {
+    lang: DEFAULT_LANGUAGE,
   };
 
   constructor(props) {
     super(props);
-    const { dispatchGetUserFolder } = this.props;
+    const { dispatchGetUserFolder, dispatchGetLanguage } = this.props;
+    dispatchGetLanguage();
     dispatchGetUserFolder();
   }
 
@@ -52,6 +64,13 @@ export class App extends Component {
     dispatchGetGeolocation();
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);
+  }
+
+  componentDidUpdate({ lang: prevLang }) {
+    const { lang, i18n } = this.props;
+    if (lang !== prevLang) {
+      i18n.changeLanguage(lang);
+    }
   }
 
   componentWillUnmount() {
@@ -90,12 +109,21 @@ export class App extends Component {
   }
 }
 
+const mapStateToProps = ({ User }) => ({
+  lang: User.getIn(['current', 'lang']),
+});
+
 const mapDispatchToProps = {
   dispatchGetGeolocation: getGeolocation,
   dispatchGetUserFolder: getUserFolder,
+  dispatchGetLanguage: getLanguage,
 };
 
-export default connect(
-  null,
+const ConnectedApp = connect(
+  mapStateToProps,
   mapDispatchToProps
 )(App);
+
+const TranslatedApp = withTranslation()(ConnectedApp);
+
+export default TranslatedApp;

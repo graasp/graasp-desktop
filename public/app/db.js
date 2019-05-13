@@ -3,7 +3,7 @@ const low = require('lowdb');
 const fs = require('fs');
 const FileSync = require('lowdb/adapters/FileSync');
 const logger = require('./logger');
-const { DATABASE_PATH, VAR_FOLDER } = require('./config/config');
+const { DATABASE_PATH, VAR_FOLDER, DEFAULT_LANG } = require('./config/config');
 
 // use promisified fs
 const fsPromises = fs.promises;
@@ -30,7 +30,10 @@ const bootstrapDatabase = (dbPath = DATABASE_PATH) => {
   const db = low(adapter);
 
   // set some defaults (required if json file is empty)
-  db.defaults({ [SPACES_COLLECTION]: [] }).write();
+  db.defaults({
+    [SPACES_COLLECTION]: [],
+    user: { lang: DEFAULT_LANG },
+  }).write();
   return db;
 };
 

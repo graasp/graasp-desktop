@@ -6,3 +6,4 @@ export const RESOURCE = 'Resource';
 export const APPLICATION = 'Application';
 export const IFRAME = 'application/octet-stream';
 export const DEFAULT_RADIUS = 50;
+export const DEFAULT_LANGUAGE = 'en_all';

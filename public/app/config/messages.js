@@ -20,8 +20,18 @@ const ERROR_MESSAGE_HEADER = 'Error';
 const ERROR_SAVING_SPACE_MESSAGE = 'There was an error saving the space';
 const SUCCESS_SAVING_MESSAGE = 'Space was saved successfully';
 const SUCCESS_MESSAGE_HEADER = 'Success';
+const ERROR_GETTING_GEOLOCATION =
+  'There was an error getting your current location';
+const ERROR_GETTING_SPACES_NEARBY =
+  'There was an error getting the spaces nearby';
+const ERROR_GETTING_USER_FOLDER =
+  'There was an error getting your user folder.';
+const ERROR_GETTING_LANGUAGE = 'There was an error getting the language.';
+const ERROR_SETTING_LANGUAGE = 'There was an error setting the language.';
 
 module.exports = {
+  ERROR_GETTING_LANGUAGE,
+  ERROR_SETTING_LANGUAGE,
   ERROR_DOWNLOADING_MESSAGE,
   ERROR_MESSAGE_HEADER,
   ERROR_SAVING_SPACE_MESSAGE,
@@ -39,4 +49,7 @@ module.exports = {
   UNEXPECTED_ERROR_MESSAGE,
   OFFLINE_ERROR_MESSAGE,
   ERROR_LOADING_MESSAGE,
+  ERROR_GETTING_GEOLOCATION,
+  ERROR_GETTING_SPACES_NEARBY,
+  ERROR_GETTING_USER_FOLDER,
 };

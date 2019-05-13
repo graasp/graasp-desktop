@@ -13,8 +13,10 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import { withTranslation } from 'react-i18next';
 import Styles from '../Styles';
 import MainMenu from './common/MainMenu';
+import LanguageSelect from './common/LanguageSelect';
 
 class Settings extends Component {
   state = {
@@ -22,10 +24,14 @@ class Settings extends Component {
   };
 
   static propTypes = {
+    t: PropTypes.func.isRequired,
     classes: PropTypes.shape({}).isRequired,
     theme: PropTypes.shape({}).isRequired,
     history: PropTypes.shape({
       replace: PropTypes.func.isRequired,
+    }).isRequired,
+    i18n: PropTypes.shape({
+      changeLanguage: PropTypes.func.isRequired,
     }).isRequired,
   };
 
@@ -38,7 +44,7 @@ class Settings extends Component {
   };
 
   render() {
-    const { classes, theme } = this.props;
+    const { classes, theme, t } = this.props;
     const { open } = this.state;
     return (
       <div className={classes.root}>
@@ -87,13 +93,18 @@ class Settings extends Component {
           })}
         >
           <div className={classes.drawerHeader} />
-          <Typography variant="h5" color="inherit" align="center">
-            Console Management
+          <Typography variant="h5" color="inherit">
+            {t('Settings')}
           </Typography>
+          <LanguageSelect />
         </main>
       </div>
     );
   }
 }
 
-export default withRouter(withStyles(Styles, { withTheme: true })(Settings));
+const StyledComponent = withStyles(Styles, { withTheme: true })(Settings);
+
+const TranslatedComponent = withTranslation()(StyledComponent);
+
+export default withRouter(TranslatedComponent);

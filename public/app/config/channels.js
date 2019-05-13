@@ -18,4 +18,6 @@ module.exports = {
   RESPOND_EXPORT_SPACE_PROMPT_CHANNEL: 'prompt:space:export:respond',
   RESPOND_DELETE_SPACE_PROMPT_CHANNEL: 'prompt:space:delete:respond',
   GET_USER_FOLDER_CHANNEL: 'user:folder:get',
+  GET_LANGUAGE_CHANNEL: 'user:lang:get',
+  SET_LANGUAGE_CHANNEL: 'user:lang:set',
 };

@@ -8,17 +8,21 @@ import ListItemText from '@material-ui/core/ListItemText';
 import List from '@material-ui/core/List';
 import SearchIcon from '@material-ui/icons/Search';
 import Language from '@material-ui/icons/Language';
-import Publish from '@material-ui/icons/Publish';
+import PublishIcon from '@material-ui/icons/Publish';
+import SettingsIcon from '@material-ui/icons/Settings';
 import { Online } from 'react-detect-offline';
+import { withTranslation } from 'react-i18next';
 import {
   HOME_PATH,
   LOAD_SPACE_PATH,
+  SETTINGS_PATH,
   SPACES_NEARBY_PATH,
   VISIT_PATH,
 } from '../../config/paths';
 
 class MainMenu extends Component {
   static propTypes = {
+    t: PropTypes.func.isRequired,
     history: PropTypes.shape({ replace: PropTypes.func.isRequired }).isRequired,
     match: PropTypes.shape({ path: PropTypes.string.isRequired }).isRequired,
   };
@@ -40,6 +44,9 @@ class MainMenu extends Component {
       case 3:
         replace(LOAD_SPACE_PATH);
         break;
+      case 4:
+        replace(SETTINGS_PATH);
+        break;
       default:
     }
   };
@@ -47,6 +54,7 @@ class MainMenu extends Component {
   render() {
     const {
       match: { path },
+      t,
     } = this.props;
     return (
       <List>
@@ -58,7 +66,7 @@ class MainMenu extends Component {
           <ListItemIcon>
             <SaveIcon />
           </ListItemIcon>
-          <ListItemText primary="Saved Spaces" />
+          <ListItemText primary={t('Saved Spaces')} />
         </MenuItem>
         <Online>
           <MenuItem
@@ -69,7 +77,7 @@ class MainMenu extends Component {
             <ListItemIcon>
               <SearchIcon />
             </ListItemIcon>
-            <ListItemText primary="Spaces Nearby" />
+            <ListItemText primary={t('Spaces Nearby')} />
           </MenuItem>
           <MenuItem
             onClick={() => this.handleItemClicked(2)}
@@ -79,7 +87,7 @@ class MainMenu extends Component {
             <ListItemIcon>
               <Language />
             </ListItemIcon>
-            <ListItemText primary="Visit a Space" />
+            <ListItemText primary={t('Visit a Space')} />
           </MenuItem>
         </Online>
         <MenuItem
@@ -88,13 +96,24 @@ class MainMenu extends Component {
           selected={path === LOAD_SPACE_PATH}
         >
           <ListItemIcon>
-            <Publish />
+            <PublishIcon />
           </ListItemIcon>
-          <ListItemText primary="Load" />
+          <ListItemText primary={t('Load')} />
+        </MenuItem>
+        <MenuItem
+          onClick={() => this.handleItemClicked(4)}
+          button
+          selected={path === SETTINGS_PATH}
+        >
+          <ListItemIcon>
+            <SettingsIcon />
+          </ListItemIcon>
+          <ListItemText primary={t('Settings')} />
         </MenuItem>
       </List>
     );
   }
 }
 
-export default withRouter(MainMenu);
+const TranslatedComponent = withTranslation()(MainMenu);
+export default withRouter(TranslatedComponent);

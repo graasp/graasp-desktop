@@ -33,6 +33,7 @@ const APPLICATION = 'Application';
 const VAR_FOLDER = `${app.getPath('userData')}/var`;
 const DATABASE_PATH = `${VAR_FOLDER}/db.json`;
 const TEMPORARY_EXTRACT_FOLDER = 'tmp';
+const DEFAULT_LANG = 'en_all';
 
 module.exports = {
   DOWNLOADABLE_MIME_TYPES,
@@ -41,4 +42,5 @@ module.exports = {
   APPLICATION,
   DATABASE_PATH,
   VAR_FOLDER,
+  DEFAULT_LANG,
 };
