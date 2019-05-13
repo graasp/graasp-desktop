@@ -48,6 +48,7 @@
     "@sentry/browser": "5.1.1",
     "@sentry/electron": "0.17.1",
     "archiver": "3.0.0",
+    "cheerio": "1.0.0-rc.3",
     "classnames": "2.2.6",
     "connected-react-router": "6.4.0",
     "electron-devtools-installer": "2.2.4",
@@ -83,6 +84,7 @@
     "redux-devtools-extension": "2.13.8",
     "redux-promise": "0.6.0",
     "redux-thunk": "2.3.0",
+    "request-promise": "4.2.4",
     "rimraf": "2.6.3",
     "universal-analytics": "0.4.20",
     "wait-on": "3.2.0"

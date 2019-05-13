@@ -20,6 +20,7 @@ const Sentry = require('@sentry/electron');
 const ua = require('universal-analytics');
 const { machineIdSync } = require('node-machine-id');
 const logger = require('./app/logger');
+const { getDownloadUrl } = require('./app/download');
 const {
   getExtension,
   isDownloadable,
@@ -252,6 +253,7 @@ app.on('ready', async () => {
     try {
       // get handle to spaces collection
       const spaces = db.get(SPACES_COLLECTION);
+      const lang = db.get('user.lang').value();
       const { id } = space;
       const existingSpace = spaces.find({ id }).value();
 
@@ -321,6 +323,13 @@ app.on('ready', async () => {
             // check mappings for files
             if (mapping[url]) {
               url = mapping[url];
+            }
+
+            // download from proxy url if available
+            // eslint-disable-next-line no-await-in-loop
+            const downloadUrl = await getDownloadUrl({ url, lang });
+            if (downloadUrl) {
+              url = downloadUrl;
             }
 
             // generate hash and get extension to save file
