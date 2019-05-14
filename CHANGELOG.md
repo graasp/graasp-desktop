@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [0.5.0](https://github.com/graasp/graasp-desktop/compare/v0.4.2...v0.5.0) (2019-05-14)
+
+### Features
+
+- download phet labs in requested language ([3f2c432](https://github.com/graasp/graasp-desktop/commit/3f2c432)), closes [#78](https://github.com/graasp/graasp-desktop/issues/78)
+- support multiple languages ([a4c3adf](https://github.com/graasp/graasp-desktop/commit/a4c3adf)), closes [#77](https://github.com/graasp/graasp-desktop/issues/77)
+
 ## [0.4.2](https://github.com/graasp/graasp-desktop/compare/v0.4.1...v0.4.2) (2019-05-07)
 
 ### Bug Fixes
