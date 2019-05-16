@@ -58,6 +58,9 @@ const Styles = theme => ({
   input: {
     margin: theme.spacing.unit,
   },
+  button: {
+    margin: theme.spacing.unit,
+  },
 });
 
 export default Styles;

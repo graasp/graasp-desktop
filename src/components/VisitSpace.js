@@ -22,9 +22,11 @@ import Styles from '../Styles';
 import Loader from './LoadSpace';
 import {
   ERROR_MESSAGE_HEADER,
+  INVALID_SPACE_ID,
   OFFLINE_ERROR_MESSAGE,
 } from '../config/messages';
 import MainMenu from './common/MainMenu';
+import { isValidSpaceId } from '../utils/validators';
 
 class VisitSpace extends Component {
   state = {
@@ -64,11 +66,20 @@ class VisitSpace extends Component {
     if (!window.navigator.onLine) {
       return toastr.error(ERROR_MESSAGE_HEADER, OFFLINE_ERROR_MESSAGE);
     }
+    if (!isValidSpaceId(id)) {
+      return toastr.error(ERROR_MESSAGE_HEADER, INVALID_SPACE_ID);
+    }
     if (id && id !== '') {
       const { replace } = history;
       return replace(`/space/${id}`);
     }
     return false;
+  };
+
+  handleKeyPress = event => {
+    if (event.key === 'Enter') {
+      this.handleClick();
+    }
   };
 
   render() {
@@ -137,12 +148,7 @@ class VisitSpace extends Component {
         >
           <div className={classes.drawerHeader} />
           <FormControl className={classes.formControl}>
-            <Typography
-              variant="h4"
-              color="inherit"
-              align="center"
-              style={{ margin: '2rem' }}
-            >
+            <Typography variant="h4" color="inherit" style={{ margin: '2rem' }}>
               Visit a Space
             </Typography>
             <Input
@@ -152,6 +158,7 @@ class VisitSpace extends Component {
               inputProps={{
                 'aria-label': 'Space ID',
               }}
+              onKeyPress={this.handleKeyPress}
               autoFocus
               value={spaceId}
               type="text"
