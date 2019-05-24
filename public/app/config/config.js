@@ -33,7 +33,7 @@ const APPLICATION = 'Application';
 const VAR_FOLDER = `${app.getPath('userData')}/var`;
 const DATABASE_PATH = `${VAR_FOLDER}/db.json`;
 const TEMPORARY_EXTRACT_FOLDER = 'tmp';
-const DEFAULT_LANG = 'en_ALL';
+const DEFAULT_LANG = 'en';
 
 module.exports = {
   DOWNLOADABLE_MIME_TYPES,
