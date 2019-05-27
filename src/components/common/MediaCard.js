@@ -30,7 +30,7 @@ const MediaCard = props => {
         <Typography gutterBottom variant="h5" component="h2">
           {name}
         </Typography>
-        <Typography component="p">{text}</Typography>
+        <Typography component="p" dangerouslySetInnerHTML={{ __html: text }} />
       </CardContent>
       <CardActions>{button}</CardActions>
     </Card>
@@ -41,8 +41,12 @@ MediaCard.propTypes = {
   classes: PropTypes.shape({ media: PropTypes.string.isRequired }).isRequired,
   name: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired,
+  text: PropTypes.string,
   button: PropTypes.shape(Button).isRequired,
+};
+
+MediaCard.defaultProps = {
+  text: '',
 };
 
 export default withStyles(styles)(MediaCard);

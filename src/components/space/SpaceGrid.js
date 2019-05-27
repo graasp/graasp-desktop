@@ -81,7 +81,7 @@ class SpaceGrid extends Component {
     const { spaces, classes, history } = this.props;
 
     const MediaCards = spaces.map(space => {
-      const { id, name, image = {}, text } = space;
+      const { id, name, image = {}, description } = space;
       const { replace } = history;
       const ViewButton = (
         <Button
@@ -90,6 +90,7 @@ class SpaceGrid extends Component {
           color="primary"
           id={Number(id)}
           onClick={() => replace(`/space/${id}`)}
+          fullWidth
         >
           <RemoveRedEyeIcon className={classes.leftIcon} />
           View
@@ -101,7 +102,7 @@ class SpaceGrid extends Component {
             key={id}
             name={name}
             image={this.generateThumbnail({ image })}
-            text={text}
+            text={description}
             button={ViewButton}
           />
         </Grid>
