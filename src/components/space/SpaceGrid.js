@@ -20,7 +20,7 @@ class SpaceGrid extends Component {
   };
 
   static propTypes = {
-    folder: PropTypes.string.isRequired,
+    folder: PropTypes.string,
     classes: PropTypes.shape({
       leftIcon: PropTypes.string.isRequired,
     }).isRequired,
@@ -32,6 +32,10 @@ class SpaceGrid extends Component {
     history: PropTypes.shape({ length: PropTypes.number.isRequired })
       .isRequired,
     dispatchClearSpace: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    folder: null,
   };
 
   componentDidMount() {
@@ -52,11 +56,13 @@ class SpaceGrid extends Component {
     } = image;
 
     // prioritise assets
-    if (thumbnailAsset) {
-      return `file://${folder}/${thumbnailAsset}`;
-    }
-    if (backgroundAsset) {
-      return `file://${folder}/${backgroundAsset}`;
+    if (folder) {
+      if (thumbnailAsset) {
+        return `file://${folder}/${thumbnailAsset}`;
+      }
+      if (backgroundAsset) {
+        return `file://${folder}/${backgroundAsset}`;
+      }
     }
 
     // fallback on urls
