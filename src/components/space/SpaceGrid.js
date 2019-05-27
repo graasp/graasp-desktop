@@ -88,7 +88,7 @@ class SpaceGrid extends Component {
           variant="contained"
           size="large"
           color="primary"
-          id={Number(id)}
+          id={id}
           onClick={() => replace(`/space/${id}`)}
           fullWidth
         >
