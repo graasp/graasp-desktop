@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { withRouter } from 'react-router';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
@@ -22,6 +23,21 @@ import MainMenu from './components/common/MainMenu';
 class Home extends Component {
   state = {
     open: false,
+  };
+
+  static propTypes = {
+    classes: PropTypes.shape({ appBar: PropTypes.string.isRequired })
+      .isRequired,
+    theme: PropTypes.shape({ direction: PropTypes.string }).isRequired,
+    dispatchGetSpaces: PropTypes.func.isRequired,
+    spaces: ImmutablePropTypes.setOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+      })
+    ).isRequired,
+    activity: PropTypes.bool.isRequired,
+    history: PropTypes.shape({ length: PropTypes.number.isRequired })
+      .isRequired,
   };
 
   componentDidMount() {
@@ -114,17 +130,6 @@ const mapStateToProps = ({ Space }) => ({
 
 const mapDispatchToProps = {
   dispatchGetSpaces: getSpaces,
-};
-
-Home.propTypes = {
-  classes: PropTypes.shape({ appBar: PropTypes.string.isRequired }).isRequired,
-  theme: PropTypes.shape({ direction: PropTypes.string }).isRequired,
-  dispatchGetSpaces: PropTypes.func.isRequired,
-  spaces: PropTypes.arrayOf(
-    PropTypes.shape({ id: PropTypes.string.isRequired })
-  ).isRequired,
-  activity: PropTypes.bool.isRequired,
-  history: PropTypes.shape({ length: PropTypes.number.isRequired }).isRequired,
 };
 
 export default withRouter(

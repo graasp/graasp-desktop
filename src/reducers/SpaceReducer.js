@@ -1,4 +1,4 @@
-import Immutable from 'immutable';
+import { Set, Map } from 'immutable';
 import {
   GET_SPACE,
   TOGGLE_SPACE_MENU,
@@ -17,19 +17,19 @@ import {
   GET_SPACES_NEARBY_SUCCEEDED,
 } from '../types';
 
-const INITIAL_STATE = Immutable.Map({
-  current: Immutable.Map({
-    content: Immutable.Map(),
+const INITIAL_STATE = Map({
+  current: Map({
+    content: Map(),
     activity: false,
     error: null,
-    menu: Immutable.Map({
+    menu: Map({
       open: false,
     }),
     deleted: false,
   }),
-  saved: Immutable.Set(),
-  nearby: Immutable.Map({
-    content: Immutable.Set(),
+  saved: Set(),
+  nearby: Map({
+    content: Set(),
     activity: false,
   }),
 });
@@ -39,7 +39,7 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case CLEAR_SPACE:
       // set content to empty map
       return state
-        .setIn(['current', 'content'], Immutable.Map())
+        .setIn(['current', 'content'], Map())
         .setIn(['current', 'deleted'], false);
     case FLAG_SAVING_SPACE:
       return state.setIn(['current', 'activity'], payload);
@@ -56,19 +56,19 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case DELETE_SPACE_SUCCESS:
       return state.setIn(['current', 'deleted'], payload);
     case GET_SPACES:
-      return state.setIn(['saved'], payload);
+      return state.setIn(['saved'], Set(payload));
     case GET_SPACE:
-      return state.setIn(['current', 'content'], Immutable.Map(payload));
+      return state.setIn(['current', 'content'], Map(payload));
     case TOGGLE_SPACE_MENU:
       return state.setIn(['current', 'menu', 'open'], payload);
     case GET_SPACE_SUCCEEDED:
-      return state.setIn(['current', 'content'], Immutable.Map(payload));
+      return state.setIn(['current', 'content'], Map(payload));
     case SAVE_SPACE_SUCCEEDED:
-      return state.setIn(['current', 'content'], Immutable.Map(payload));
+      return state.setIn(['current', 'content'], Map(payload));
     case FLAG_GETTING_SPACES_NEARBY:
       return state.setIn(['nearby', 'activity'], payload);
     case GET_SPACES_NEARBY_SUCCEEDED:
-      return state.setIn(['nearby', 'content'], payload);
+      return state.setIn(['nearby', 'content'], Set(payload));
     default:
       return state;
   }

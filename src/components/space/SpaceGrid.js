@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Set } from 'immutable';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
 import Button from '@material-ui/core/Button/Button';
 import { withStyles } from '@material-ui/core';
@@ -24,7 +24,11 @@ class SpaceGrid extends Component {
     classes: PropTypes.shape({
       leftIcon: PropTypes.string.isRequired,
     }).isRequired,
-    spaces: PropTypes.instanceOf(Set).isRequired,
+    spaces: ImmutablePropTypes.setOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+      })
+    ).isRequired,
     history: PropTypes.shape({ length: PropTypes.number.isRequired })
       .isRequired,
     dispatchClearSpace: PropTypes.func.isRequired,
