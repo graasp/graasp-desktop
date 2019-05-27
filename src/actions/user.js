@@ -1,5 +1,5 @@
 import { toastr } from 'react-redux-toastr';
-import { getCurrentPosition } from '../../utils/geolocation';
+import { getCurrentPosition } from '../utils/geolocation';
 import {
   GET_GEOLOCATION_SUCCEEDED,
   GET_USER_FOLDER_SUCCEEDED,
@@ -7,21 +7,21 @@ import {
   FLAG_GETTING_LANGUAGE,
   FLAG_SETTING_LANGUAGE,
   GET_LANGUAGE_SUCCEEDED,
-} from '../../types';
+} from '../types';
 import {
   ERROR_GETTING_GEOLOCATION,
   ERROR_GETTING_LANGUAGE,
   ERROR_GETTING_USER_FOLDER,
   ERROR_MESSAGE_HEADER,
   ERROR_SETTING_LANGUAGE,
-} from '../../config/messages';
+} from '../config/messages';
 import {
   GET_USER_FOLDER_CHANNEL,
   GET_LANGUAGE_CHANNEL,
   SET_LANGUAGE_CHANNEL,
-} from '../../config/channels';
-import { createFlag } from '../common';
-import { ERROR_GENERAL } from '../../config/errors';
+} from '../config/channels';
+import { createFlag } from './common';
+import { ERROR_GENERAL } from '../config/errors';
 
 const flagGettingUserFolder = createFlag(FLAG_GETTING_USER_FOLDER);
 const flagGettingLanguage = createFlag(FLAG_GETTING_LANGUAGE);

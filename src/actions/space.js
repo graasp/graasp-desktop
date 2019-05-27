@@ -13,15 +13,15 @@ import {
   SAVE_SPACE_SUCCEEDED,
   FLAG_GETTING_SPACES_NEARBY,
   GET_SPACES_NEARBY_SUCCEEDED,
-} from '../../types';
+} from '../types';
 import {
   ERROR_ZIP_CORRUPTED,
   ERROR_JSON_CORRUPTED,
   ERROR_SPACE_ALREADY_AVAILABLE,
   ERROR_GENERAL,
   ERROR_DOWNLOADING_FILE,
-} from '../../config/errors';
-import { clearPhase } from '../phase';
+} from '../config/errors';
+import { clearPhase } from './phase';
 import {
   DELETE_SPACE_CHANNEL,
   DELETED_SPACE_CHANNEL,
@@ -36,7 +36,7 @@ import {
   SHOW_DELETE_SPACE_PROMPT_CHANNEL,
   SHOW_EXPORT_SPACE_PROMPT_CHANNEL,
   SAVE_SPACE_CHANNEL,
-} from '../../config/channels';
+} from '../config/channels';
 import {
   // ERROR_DOWNLOADING_MESSAGE,
   ERROR_DELETING_MESSAGE,
@@ -55,14 +55,14 @@ import {
   SUCCESS_MESSAGE_HEADER,
   SUCCESS_SAVING_MESSAGE,
   SUCCESS_SPACE_LOADED_MESSAGE,
-} from '../../config/messages';
-import { createFlag, isErrorResponse } from '../common';
+} from '../config/messages';
+import { createFlag, isErrorResponse } from './common';
 import {
   generateGetSpaceEndpoint,
   GET_SPACES_NEARBY_ENDPOINT,
-} from '../../config/endpoints';
-import { DEFAULT_GET_REQUEST } from '../../config/rest';
-import { DEFAULT_RADIUS } from '../../config/constants';
+} from '../config/endpoints';
+import { DEFAULT_GET_REQUEST } from '../config/rest';
+import { DEFAULT_RADIUS } from '../config/constants';
 
 const flagGettingSpace = createFlag(FLAG_GETTING_SPACE);
 const flagGettingSpaces = createFlag(FLAG_GETTING_SPACES);
@@ -220,7 +220,7 @@ const clearSpace = () => dispatch => {
   });
 };
 
-const exportSpace = (id, spaces, spaceName) => dispatch => {
+const exportSpace = (id, spaceName) => dispatch => {
   window.ipcRenderer.send(SHOW_EXPORT_SPACE_PROMPT_CHANNEL, spaceName);
   window.ipcRenderer.once(
     RESPOND_EXPORT_SPACE_PROMPT_CHANNEL,
@@ -230,7 +230,6 @@ const exportSpace = (id, spaces, spaceName) => dispatch => {
         window.ipcRenderer.send(EXPORT_SPACE_CHANNEL, {
           archivePath,
           id,
-          spaces,
         });
       } else {
         dispatch(flagExportingSpace(false));

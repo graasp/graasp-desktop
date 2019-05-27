@@ -1,66 +1,28 @@
 import React from 'react';
-import {
-  TEXT,
-  IMAGE,
-  VIDEO,
-  RESOURCE,
-  APPLICATION,
-  IFRAME,
-} from '../../config/constants';
-import PhaseText from './PhaseText';
-import PhaseImage from './PhaseImage';
-import PhaseVideo from './PhaseVideo';
-import PhaseApp from './PhaseApp';
+import PropTypes from 'prop-types';
+import PhaseItem from './PhaseItem';
 
-const renderResource = item => {
-  const { id, mimeType, content, asset, url, name } = item;
-  if (mimeType === TEXT) {
-    return <PhaseText key={id} id={id} content={content} />;
-  }
-
-  if (IMAGE.test(mimeType)) {
-    return <PhaseImage key={id} id={id} url={url} asset={asset} name={name} />;
-  }
-
-  if (VIDEO.test(mimeType)) {
-    return (
-      <PhaseVideo
-        key={id}
-        id={id}
-        url={url}
-        asset={asset}
-        name={name}
-        mimeType={mimeType}
-      />
-    );
-  }
-
-  if (mimeType === IFRAME) {
+const PhaseItems = ({ items, phaseId, spaceId }) => {
+  if (!items) {
     return null;
   }
-
-  return <div key={id} id={id} />;
+  return items.map(item => (
+    <PhaseItem key={item.id} phaseId={phaseId} spaceId={spaceId} item={item} />
+  ));
 };
 
-const renderPhaseItem = item => {
-  const { id, category, asset, url, name } = item;
-  switch (category) {
-    case RESOURCE:
-      return renderResource(item);
-
-    case APPLICATION:
-      return <PhaseApp key={id} id={id} url={url} asset={asset} name={name} />;
-
-    default:
-      return <div key={id} id={id} />;
-  }
-};
-
-const PhaseItems = ({ items }) => {
-  if (!items) {
-    return <div />;
-  }
-  return items.map(item => renderPhaseItem(item));
+PhaseItems.propTypes = {
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      category: PropTypes.string,
+      asset: PropTypes.string,
+      url: PropTypes.string,
+      name: PropTypes.string,
+    })
+  ),
+  phaseId: PropTypes.string.isRequired,
+  spaceId: PropTypes.string.isRequired,
 };
 
 export default PhaseItems;

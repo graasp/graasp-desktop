@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { clearPhase, selectPhase } from '../../actions';
 import SpaceDescription from '../space/SpaceDescription';
@@ -16,10 +17,13 @@ const { containerStyle } = styles;
 
 class Phase extends Component {
   static propTypes = {
-    space: PropTypes.shape({ id: PropTypes.string.isRequired }).isRequired,
-    phase: PropTypes.arrayOf(
-      PropTypes.shape({ id: PropTypes.string.isRequired })
-    ).isRequired,
+    space: ImmutablePropTypes.contains({
+      id: PropTypes.string.isRequired,
+      description: PropTypes.string,
+    }).isRequired,
+    phase: ImmutablePropTypes.contains({
+      id: PropTypes.string,
+    }).isRequired,
     dispatchSelectPhase: PropTypes.func.isRequired,
     dispatchClearPhase: PropTypes.func.isRequired,
     start: PropTypes.func.isRequired,
@@ -46,11 +50,13 @@ class Phase extends Component {
     }
     const phaseDescription = phase.get('description');
 
+    const phaseId = phase.get('id');
+    const spaceId = space.get('id');
     const items = phase.get('items');
     return (
       <div style={containerStyle}>
         <PhaseDescription description={phaseDescription} />
-        <PhaseItems items={items} />
+        <PhaseItems items={items} spaceId={spaceId} phaseId={phaseId} />
       </div>
     );
   }

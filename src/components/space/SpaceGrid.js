@@ -13,10 +13,17 @@ import { clearSpace } from '../../actions';
 import DefaultThumbnail from '../../data/graasp.jpg';
 
 class SpaceGrid extends Component {
+  static styles = {
+    leftIcon: {
+      marginRight: '0.5rem',
+    },
+  };
+
   static propTypes = {
     folder: PropTypes.string.isRequired,
-    classes: PropTypes.shape({ appBar: PropTypes.string.isRequired })
-      .isRequired,
+    classes: PropTypes.shape({
+      leftIcon: PropTypes.string.isRequired,
+    }).isRequired,
     spaces: PropTypes.instanceOf(Set).isRequired,
     history: PropTypes.shape({ length: PropTypes.number.isRequired })
       .isRequired,
@@ -74,10 +81,7 @@ class SpaceGrid extends Component {
           id={Number(id)}
           onClick={() => replace(`/space/${id}`)}
         >
-          <RemoveRedEyeIcon
-            className={classes.leftIcon}
-            style={{ marginRight: '0.5rem' }}
-          />
+          <RemoveRedEyeIcon className={classes.leftIcon} />
           View
         </Button>
       );
@@ -101,7 +105,7 @@ class SpaceGrid extends Component {
       );
     }
     return (
-      <Grid container className={classes.demo} spacing={16}>
+      <Grid container spacing={16}>
         {MediaCards}
       </Grid>
     );
@@ -121,4 +125,4 @@ const ConnectedComponent = connect(
   mapDispatchToProps
 )(SpaceGrid);
 
-export default withRouter(withStyles({})(ConnectedComponent));
+export default withRouter(withStyles(SpaceGrid.styles)(ConnectedComponent));

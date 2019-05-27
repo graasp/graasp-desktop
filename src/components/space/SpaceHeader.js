@@ -15,30 +15,23 @@ import { deleteSpace, exportSpace, saveSpace } from '../../actions/space';
 
 class SpaceHeader extends Component {
   static propTypes = {
-    spaces: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        saved: PropTypes.bool,
-        offline: PropTypes.bool,
-      })
-    ).isRequired,
     space: PropTypes.shape({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
     }).isRequired,
     classes: PropTypes.shape({ appBar: PropTypes.string.isRequired })
       .isRequired,
+    openDrawer: PropTypes.bool.isRequired,
     handleDrawerOpen: PropTypes.func.isRequired,
-    openDrawer: PropTypes.func.isRequired,
     dispatchExportSpace: PropTypes.func.isRequired,
     dispatchDeleteSpace: PropTypes.func.isRequired,
     dispatchSaveSpace: PropTypes.func.isRequired,
   };
 
   handleExport = () => {
-    const { space, spaces, dispatchExportSpace } = this.props;
+    const { space, dispatchExportSpace } = this.props;
     const { id, name } = space;
-    dispatchExportSpace(id, spaces, name);
+    dispatchExportSpace(id, name);
   };
 
   handleDelete = () => {
@@ -122,7 +115,7 @@ class SpaceHeader extends Component {
         <Toolbar disableGutters={!openDrawer}>
           <IconButton
             color="inherit"
-            aria-label="Open drawer"
+            aria-label="Open Drawer"
             onClick={handleDrawerOpen}
             className={classNames(
               classes.menuButton,

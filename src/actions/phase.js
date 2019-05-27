@@ -1,4 +1,4 @@
-import { SELECT_PHASE, CLEAR_PHASE } from '../../types';
+import { SELECT_PHASE, CLEAR_PHASE } from '../types';
 
 const clearPhase = () => dispatch =>
   dispatch({

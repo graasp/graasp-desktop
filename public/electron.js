@@ -15,6 +15,7 @@ const electronDl = require('electron-dl');
 const rimraf = require('rimraf');
 const extract = require('extract-zip');
 const archiver = require('archiver');
+const ObjectId = require('bson-objectid');
 const { autoUpdater } = require('electron-updater');
 const Sentry = require('@sentry/electron');
 const ua = require('universal-analytics');
@@ -56,6 +57,10 @@ const {
   GET_USER_FOLDER_CHANNEL,
   GET_LANGUAGE_CHANNEL,
   SET_LANGUAGE_CHANNEL,
+  GET_APP_INSTANCE_RESOURCES_CHANNEL,
+  POST_APP_INSTANCE_RESOURCE_CHANNEL,
+  PATCH_APP_INSTANCE_RESOURCE_CHANNEL,
+  GET_APP_INSTANCE_CHANNEL,
 } = require('./app/config/channels');
 const {
   ERROR_SPACE_ALREADY_AVAILABLE,
@@ -599,6 +604,147 @@ app.on('ready', async () => {
     } catch (e) {
       logger.error(e);
       mainWindow.webContents.send(SET_LANGUAGE_CHANNEL, ERROR_GENERAL);
+    }
+  });
+
+  // called when getting AppInstanceResources
+  ipcMain.on(GET_APP_INSTANCE_RESOURCES_CHANNEL, (event, data = {}) => {
+    const defaultResponse = [];
+    try {
+      const { userId, appInstanceId, spaceId, subSpaceId, type } = data;
+      const appInstanceResourcesHandle = db
+        .get('spaces')
+        .find({ id: spaceId })
+        .get('phases')
+        .find({ id: subSpaceId })
+        .get('items')
+        .find({ id: appInstanceId })
+        .get('appInstanceResources');
+
+      // only filter by type if provided
+      if (type) {
+        appInstanceResourcesHandle.filter({ type });
+      }
+
+      // only filter by user if provided
+      if (userId) {
+        appInstanceResourcesHandle.filter({ user: userId });
+      }
+
+      const appInstanceResources = appInstanceResourcesHandle.value();
+
+      const response = appInstanceResources || defaultResponse;
+      mainWindow.webContents.send(GET_APP_INSTANCE_RESOURCES_CHANNEL, response);
+    } catch (e) {
+      console.error(e);
+      mainWindow.webContents.send(
+        GET_APP_INSTANCE_RESOURCES_CHANNEL,
+        defaultResponse
+      );
+    }
+  });
+
+  // called when creating an AppInstanceResource
+  ipcMain.on(POST_APP_INSTANCE_RESOURCE_CHANNEL, (event, payload = {}) => {
+    try {
+      const {
+        userId,
+        appInstanceId,
+        spaceId,
+        subSpaceId,
+        format,
+        type,
+        data,
+        visibility = 'private',
+      } = payload;
+
+      // prepare the timestamp
+      const now = new Date();
+
+      // prepare the resource that we will create
+      const resourceToWrite = {
+        appInstance: appInstanceId,
+        createdAt: now,
+        updatedAt: now,
+        data,
+        format,
+        type,
+        visibility,
+        user: userId,
+        id: ObjectId().str,
+      };
+
+      // write the resource to the database
+      db.get('spaces')
+        .find({ id: spaceId })
+        .get('phases')
+        .find({ id: subSpaceId })
+        .get('items')
+        .find({ id: appInstanceId })
+        .get('appInstanceResources')
+        .push(resourceToWrite)
+        .write();
+
+      // send back the resource
+      mainWindow.webContents.send(
+        POST_APP_INSTANCE_RESOURCE_CHANNEL,
+        resourceToWrite
+      );
+    } catch (e) {
+      console.error(e);
+      mainWindow.webContents.send(POST_APP_INSTANCE_RESOURCE_CHANNEL, null);
+    }
+  });
+
+  // called when updating an AppInstanceResource
+  ipcMain.on(PATCH_APP_INSTANCE_RESOURCE_CHANNEL, (event, payload = {}) => {
+    try {
+      const { appInstanceId, spaceId, subSpaceId, data, id } = payload;
+      const now = new Date();
+      const fieldsToUpdate = {
+        updatedAt: now,
+        data,
+      };
+      const resource = db
+        .get('spaces')
+        .find({ id: spaceId })
+        .get('phases')
+        .find({ id: subSpaceId })
+        .get('items')
+        .find({ id: appInstanceId })
+        .get('appInstanceResources')
+        .find({ id })
+        .assign(fieldsToUpdate)
+        .value();
+      db.write();
+      mainWindow.webContents.send(
+        PATCH_APP_INSTANCE_RESOURCE_CHANNEL,
+        resource
+      );
+    } catch (e) {
+      console.error(e);
+      mainWindow.webContents.send(PATCH_APP_INSTANCE_RESOURCE_CHANNEL, null);
+    }
+  });
+
+  // called when getting an AppInstance
+  ipcMain.on(GET_APP_INSTANCE_CHANNEL, (event, payload = {}) => {
+    try {
+      const { spaceId, subSpaceId, id } = payload;
+      const appInstance = db
+        .get('spaces')
+        .find({ id: spaceId })
+        .get('phases')
+        .find({ id: subSpaceId })
+        .get('items')
+        .find({ appInstanceId: id })
+        .get('appInstance')
+        .value();
+
+      mainWindow.webContents.send(GET_APP_INSTANCE_CHANNEL, appInstance);
+    } catch (e) {
+      console.error(e);
+      mainWindow.webContents.send(GET_APP_INSTANCE_CHANNEL, null);
     }
   });
 });

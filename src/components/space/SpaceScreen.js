@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import CssBaseline from '@material-ui/core/CssBaseline/CssBaseline';
 import AppBar from '@material-ui/core/AppBar/AppBar';
 import classNames from 'classnames';
@@ -34,29 +35,28 @@ class SpaceScreen extends Component {
   };
 
   static propTypes = {
-    spaces: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string.isRequired,
-      })
-    ).isRequired,
-    space: PropTypes.shape({ id: PropTypes.string.isRequired }).isRequired,
-    phase: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string.isRequired,
-      })
-    ).isRequired,
+    space: ImmutablePropTypes.contains({
+      id: PropTypes.string,
+      description: PropTypes.string,
+    }).isRequired,
+    phase: ImmutablePropTypes.contains({
+      id: PropTypes.string,
+    }).isRequired,
     dispatchSelectPhase: PropTypes.func.isRequired,
     dispatchClearPhase: PropTypes.func.isRequired,
+    dispatchGetSpace: PropTypes.func.isRequired,
+    dispatchClearSpace: PropTypes.func.isRequired,
     activity: PropTypes.bool.isRequired,
     deleted: PropTypes.bool.isRequired,
     classes: PropTypes.shape({ appBar: PropTypes.string.isRequired })
       .isRequired,
     theme: PropTypes.shape({ direction: PropTypes.string.isRequired })
       .isRequired,
-    match: PropTypes.shape({ params: { id: PropTypes.string.isRequired } })
-      .isRequired,
-    dispatchGetSpace: PropTypes.func.isRequired,
-    dispatchClearSpace: PropTypes.func.isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+      }),
+    }).isRequired,
     history: PropTypes.shape({ length: PropTypes.number.isRequired })
       .isRequired,
   };
@@ -67,9 +67,8 @@ class SpaceScreen extends Component {
         params: { id },
       },
       dispatchGetSpace,
-      spaces,
     } = this.props;
-    dispatchGetSpace({ id, spaces });
+    dispatchGetSpace({ id });
   }
 
   componentDidUpdate() {
@@ -213,7 +212,6 @@ const mapStateToProps = ({ Space, Phase }) => ({
   phase: Phase.get('current').get('content'),
   activity: Space.get('current').get('activity'),
   deleted: Space.get('current').get('deleted'),
-  spaces: Space.get('saved'),
 });
 
 const mapDispatchToProps = {
