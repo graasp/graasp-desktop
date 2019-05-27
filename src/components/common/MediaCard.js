@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import Button from '@material-ui/core/Button/Button';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -42,7 +41,7 @@ MediaCard.propTypes = {
   name: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
   text: PropTypes.string,
-  button: PropTypes.shape(Button).isRequired,
+  button: PropTypes.node.isRequired,
 };
 
 MediaCard.defaultProps = {
