@@ -15,6 +15,11 @@ import {
   postAppInstanceResource,
   getAppInstance,
 } from '../../actions';
+import {
+  DEFAULT_LANGUAGE,
+  SMART_GATEWAY_QUERY_STRING_DIVIDER,
+} from '../../config/constants';
+import { isSmartGatewayUrl } from '../../utils/url';
 
 class PhaseApp extends Component {
   static propTypes = {
@@ -25,12 +30,14 @@ class PhaseApp extends Component {
     id: PropTypes.string.isRequired,
     phaseId: PropTypes.string.isRequired,
     spaceId: PropTypes.string.isRequired,
+    lang: PropTypes.string,
   };
 
   static defaultProps = {
     url: null,
     asset: null,
     name: 'Image',
+    lang: DEFAULT_LANGUAGE,
   };
 
   componentDidMount() {
@@ -74,7 +81,7 @@ class PhaseApp extends Component {
   };
 
   render() {
-    const { url, asset, name, id, folder, spaceId, phaseId } = this.props;
+    const { url, lang, asset, name, id, folder, spaceId, phaseId } = this.props;
     let uri = url;
     if (asset) {
       uri = `file://${folder}/${asset}`;
@@ -83,9 +90,15 @@ class PhaseApp extends Component {
     // todo: get user dynamically, currently we are just using a fake one
     const userId = '5ce422795fe28eeca1001e0a';
 
+    // for some reason, smart gateway urls use `#` instead of `?` as a query string indicator
+    const divider = isSmartGatewayUrl(url)
+      ? SMART_GATEWAY_QUERY_STRING_DIVIDER
+      : '?';
+
     const params = {
       spaceId,
       userId,
+      lang,
       offline: true,
       appInstanceId: id,
       subSpaceId: phaseId,
@@ -98,7 +111,7 @@ class PhaseApp extends Component {
         <iframe
           title={name}
           className="App"
-          src={`${uri}?${queryString}`}
+          src={uri + divider + queryString}
           ref={c => {
             this.iframe = c;
           }}
@@ -108,8 +121,12 @@ class PhaseApp extends Component {
   }
 }
 
-const mapStateToProps = ({ User }) => ({
+const mapStateToProps = ({ User, Space }) => ({
   folder: User.getIn(['current', 'folder']),
+  // get language from space, otherwise fall back on user language
+  lang:
+    Space.getIn(['current', 'content', 'language']) ||
+    User.getIn(['current', 'lang']),
 });
 
 const ConnectedComponent = connect(mapStateToProps)(PhaseApp);

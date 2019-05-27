@@ -37,6 +37,7 @@ class Phase extends Component {
   render() {
     const { phase, space, dispatchSelectPhase, start } = this.props;
     const phases = space.get('phases');
+    const lang = space.get('language');
     const description = space.get('description');
     if (!phase || phase.isEmpty()) {
       return (
@@ -45,6 +46,7 @@ class Phase extends Component {
           description={description}
           selectPhase={dispatchSelectPhase}
           start={start}
+          lang={lang}
         />
       );
     }

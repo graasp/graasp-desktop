@@ -37,6 +37,7 @@ const {
   VAR_FOLDER,
   DATABASE_PATH,
   TEMPORARY_EXTRACT_FOLDER,
+  DEFAULT_LANG,
 } = require('./app/config/config');
 const {
   LOAD_SPACE_CHANNEL,
@@ -258,8 +259,7 @@ app.on('ready', async () => {
     try {
       // get handle to spaces collection
       const spaces = db.get(SPACES_COLLECTION);
-      const lang = db.get('user.lang').value();
-      const { id } = space;
+      const { id, language } = space;
       const existingSpace = spaces.find({ id }).value();
 
       if (existingSpace) {
@@ -284,6 +284,11 @@ app.on('ready', async () => {
       const { phases, image } = spaceToSave;
 
       const spacePath = id;
+
+      // use language defined in space otherwise fall back on
+      // user language, otherwise fall back on the global default
+      const userLang = db.get('user.lang').value();
+      const lang = language || userLang || DEFAULT_LANG;
 
       // todo: follow new format
       // if there is a background/thumbnail image, save it
@@ -588,7 +593,7 @@ app.on('ready', async () => {
   // called when getting language
   ipcMain.on(GET_LANGUAGE_CHANNEL, () => {
     try {
-      const lang = db.get('user.lang').value();
+      const lang = db.get('user.lang').value() || DEFAULT_LANG;
       mainWindow.webContents.send(GET_LANGUAGE_CHANNEL, lang);
     } catch (e) {
       logger.error(e);
