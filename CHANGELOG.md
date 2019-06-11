@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [0.6.0](https://github.com/graasp/graasp-desktop/compare/v0.5.0...v0.6.0) (2019-06-11)
+
+### Bug Fixes
+
+- display space description in media card ([fdd9052](https://github.com/graasp/graasp-desktop/commit/fdd9052)), closes [#57](https://github.com/graasp/graasp-desktop/issues/57)
+- do not cast id to number ([ed1436c](https://github.com/graasp/graasp-desktop/commit/ed1436c)), closes [#59](https://github.com/graasp/graasp-desktop/issues/59)
+- fix default language code ([74028a0](https://github.com/graasp/graasp-desktop/commit/74028a0)), closes [#79](https://github.com/graasp/graasp-desktop/issues/79)
+- folder prop is not required ([9b7a3e2](https://github.com/graasp/graasp-desktop/commit/9b7a3e2)), closes [#84](https://github.com/graasp/graasp-desktop/issues/84)
+- handle spaces as an immutable set ([2d2b003](https://github.com/graasp/graasp-desktop/commit/2d2b003)), closes [#54](https://github.com/graasp/graasp-desktop/issues/54)
+- provide better error handling for invalid space ids ([81a952c](https://github.com/graasp/graasp-desktop/commit/81a952c)), closes [#81](https://github.com/graasp/graasp-desktop/issues/81)
+- remove all suffix from languages ([3778274](https://github.com/graasp/graasp-desktop/commit/3778274)), closes [#82](https://github.com/graasp/graasp-desktop/issues/82)
+- specify node as prop type for media card button ([61811f9](https://github.com/graasp/graasp-desktop/commit/61811f9)), closes [#85](https://github.com/graasp/graasp-desktop/issues/85)
+
+### Features
+
+- get language for space from space itself ([9e927d4](https://github.com/graasp/graasp-desktop/commit/9e927d4)), closes [#80](https://github.com/graasp/graasp-desktop/issues/80)
+- support offline actions ([f4c8b7e](https://github.com/graasp/graasp-desktop/commit/f4c8b7e)), closes [#83](https://github.com/graasp/graasp-desktop/issues/83)
+
 # [0.5.0](https://github.com/graasp/graasp-desktop/compare/v0.4.2...v0.5.0) (2019-05-14)
 
 ### Features
