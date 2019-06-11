@@ -4,7 +4,7 @@ import ReactLoading from 'react-loading';
 
 const Loader = ({ type }) => (
   <div className="Loader">
-    <ReactLoading type={type} color="#444" />
+    <ReactLoading type={type} color="#5348d3" />
   </div>
 );
 

@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { langs } from '../../config/i18n';
 import { getLanguage, setLanguage } from '../../actions';
+import Loader from './Loader';
 
 const styles = theme => ({
   formControl: {
@@ -19,6 +20,7 @@ const styles = theme => ({
 
 class LanguageSelect extends Component {
   static propTypes = {
+    activity: PropTypes.bool.isRequired,
     i18n: PropTypes.shape({
       changeLanguage: PropTypes.func.isRequired,
     }).isRequired,
@@ -27,7 +29,7 @@ class LanguageSelect extends Component {
     dispatchSetLanguage: PropTypes.func.isRequired,
     dispatchGetLanguage: PropTypes.func.isRequired,
     classes: PropTypes.shape({
-      formControl: PropTypes.object.isRequired,
+      formControl: PropTypes.string.isRequired,
     }).isRequired,
   };
 
@@ -52,7 +54,11 @@ class LanguageSelect extends Component {
     ));
 
   render() {
-    const { classes, t, lang } = this.props;
+    const { classes, t, lang, activity } = this.props;
+
+    if (activity) {
+      return <Loader />;
+    }
 
     return (
       <FormControl className={classes.formControl}>
@@ -74,7 +80,7 @@ class LanguageSelect extends Component {
 
 const mapStateToProps = ({ User }) => ({
   lang: User.getIn(['current', 'lang']),
-  activity: User.getIn(['current', 'activity']),
+  activity: User.getIn(['current', 'activity']).size,
 });
 
 const mapDispatchToProps = {

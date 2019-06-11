@@ -13,10 +13,12 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import { FormGroup } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import Styles from '../Styles';
 import MainMenu from './common/MainMenu';
 import LanguageSelect from './common/LanguageSelect';
+import DeveloperSwitch from './common/DeveloperSwitch';
 
 class Settings extends Component {
   state = {
@@ -46,6 +48,7 @@ class Settings extends Component {
   render() {
     const { classes, theme, t } = this.props;
     const { open } = this.state;
+
     return (
       <div className={classes.root}>
         <CssBaseline />
@@ -96,7 +99,10 @@ class Settings extends Component {
           <Typography variant="h5" color="inherit">
             {t('Settings')}
           </Typography>
-          <LanguageSelect />
+          <FormGroup>
+            <LanguageSelect />
+            <DeveloperSwitch />
+          </FormGroup>
         </main>
       </div>
     );

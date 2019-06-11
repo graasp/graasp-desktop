@@ -7,6 +7,11 @@ import {
   FLAG_GETTING_LANGUAGE,
   FLAG_SETTING_LANGUAGE,
   GET_LANGUAGE_SUCCEEDED,
+  SET_LANGUAGE_SUCCEEDED,
+  FLAG_GETTING_DEVELOPER_MODE,
+  FLAG_SETTING_DEVELOPER_MODE,
+  GET_DEVELOPER_MODE_SUCCEEDED,
+  SET_DEVELOPER_MODE_SUCCEEDED,
 } from '../types';
 import {
   ERROR_GETTING_GEOLOCATION,
@@ -14,11 +19,15 @@ import {
   ERROR_GETTING_USER_FOLDER,
   ERROR_MESSAGE_HEADER,
   ERROR_SETTING_LANGUAGE,
+  ERROR_SETTING_DEVELOPER_MODE,
+  ERROR_GETTING_DEVELOPER_MODE,
 } from '../config/messages';
 import {
   GET_USER_FOLDER_CHANNEL,
   GET_LANGUAGE_CHANNEL,
   SET_LANGUAGE_CHANNEL,
+  GET_DEVELOPER_MODE_CHANNEL,
+  SET_DEVELOPER_MODE_CHANNEL,
 } from '../config/channels';
 import { createFlag } from './common';
 import { ERROR_GENERAL } from '../config/errors';
@@ -26,6 +35,8 @@ import { ERROR_GENERAL } from '../config/errors';
 const flagGettingUserFolder = createFlag(FLAG_GETTING_USER_FOLDER);
 const flagGettingLanguage = createFlag(FLAG_GETTING_LANGUAGE);
 const flagSettingLanguage = createFlag(FLAG_SETTING_LANGUAGE);
+const flagGettingDeveloperMode = createFlag(FLAG_GETTING_DEVELOPER_MODE);
+const flagSettingDeveloperMode = createFlag(FLAG_SETTING_DEVELOPER_MODE);
 
 const getGeolocation = async () => async dispatch => {
   // only fetch location if online
@@ -107,7 +118,7 @@ const setLanguage = async ({ lang }) => dispatch => {
         toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_LANGUAGE);
       } else {
         dispatch({
-          type: GET_LANGUAGE_SUCCEEDED,
+          type: SET_LANGUAGE_SUCCEEDED,
           payload: language,
         });
       }
@@ -119,4 +130,56 @@ const setLanguage = async ({ lang }) => dispatch => {
   }
 };
 
-export { getUserFolder, getGeolocation, getLanguage, setLanguage };
+const getDeveloperMode = async () => dispatch => {
+  try {
+    dispatch(flagGettingDeveloperMode(true));
+    window.ipcRenderer.send(GET_DEVELOPER_MODE_CHANNEL);
+    window.ipcRenderer.once(
+      GET_DEVELOPER_MODE_CHANNEL,
+      (event, developerMode) => {
+        if (developerMode === ERROR_GENERAL) {
+          toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_DEVELOPER_MODE);
+        } else {
+          dispatch({
+            type: GET_DEVELOPER_MODE_SUCCEEDED,
+            payload: developerMode,
+          });
+        }
+        dispatch(flagGettingDeveloperMode(false));
+      }
+    );
+  } catch (e) {
+    console.error(e);
+    toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_DEVELOPER_MODE);
+  }
+};
+
+const setDeveloperMode = async developerMode => dispatch => {
+  try {
+    dispatch(flagSettingDeveloperMode(true));
+    window.ipcRenderer.send(SET_DEVELOPER_MODE_CHANNEL, developerMode);
+    window.ipcRenderer.once(SET_DEVELOPER_MODE_CHANNEL, (event, mode) => {
+      if (mode === ERROR_GENERAL) {
+        toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_DEVELOPER_MODE);
+      } else {
+        dispatch({
+          type: SET_DEVELOPER_MODE_SUCCEEDED,
+          payload: mode,
+        });
+      }
+      dispatch(flagSettingDeveloperMode(false));
+    });
+  } catch (e) {
+    console.error(e);
+    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_DEVELOPER_MODE);
+  }
+};
+
+export {
+  getUserFolder,
+  getGeolocation,
+  getLanguage,
+  setLanguage,
+  getDeveloperMode,
+  setDeveloperMode,
+};

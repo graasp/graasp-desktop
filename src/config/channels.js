@@ -20,6 +20,8 @@ module.exports = {
   GET_USER_FOLDER_CHANNEL: 'user:folder:get',
   GET_LANGUAGE_CHANNEL: 'user:lang:get',
   SET_LANGUAGE_CHANNEL: 'user:lang:set',
+  SET_DEVELOPER_MODE_CHANNEL: 'user:developer-mode:set',
+  GET_DEVELOPER_MODE_CHANNEL: 'user:developer-mode:get',
   GET_APP_INSTANCE_RESOURCES_CHANNEL: 'app-instance-resources:get',
   POST_APP_INSTANCE_RESOURCE_CHANNEL: 'app-instance-resource:post',
   PATCH_APP_INSTANCE_RESOURCE_CHANNEL: 'app-instance-resource:patch',

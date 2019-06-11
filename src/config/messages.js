@@ -29,8 +29,14 @@ const ERROR_GETTING_USER_FOLDER =
 const ERROR_GETTING_LANGUAGE = 'There was an error getting the language.';
 const ERROR_SETTING_LANGUAGE = 'There was an error setting the language.';
 const INVALID_SPACE_ID = 'Invalid space ID.';
+const ERROR_GETTING_DEVELOPER_MODE =
+  'There was an error getting the developer mode';
+const ERROR_SETTING_DEVELOPER_MODE =
+  'There was an error setting the developer mode';
 
 module.exports = {
+  ERROR_GETTING_DEVELOPER_MODE,
+  ERROR_SETTING_DEVELOPER_MODE,
   ERROR_GETTING_LANGUAGE,
   ERROR_SETTING_LANGUAGE,
   ERROR_DOWNLOADING_MESSAGE,

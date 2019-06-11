@@ -38,6 +38,7 @@ const {
   DATABASE_PATH,
   TEMPORARY_EXTRACT_FOLDER,
   DEFAULT_LANG,
+  DEFAULT_DEVELOPER_MODE,
 } = require('./app/config/config');
 const {
   LOAD_SPACE_CHANNEL,
@@ -62,6 +63,8 @@ const {
   POST_APP_INSTANCE_RESOURCE_CHANNEL,
   PATCH_APP_INSTANCE_RESOURCE_CHANNEL,
   GET_APP_INSTANCE_CHANNEL,
+  GET_DEVELOPER_MODE_CHANNEL,
+  SET_DEVELOPER_MODE_CHANNEL,
 } = require('./app/config/channels');
 const {
   ERROR_SPACE_ALREADY_AVAILABLE,
@@ -601,7 +604,7 @@ app.on('ready', async () => {
     }
   });
 
-  // called when getting language
+  // called when setting language
   ipcMain.on(SET_LANGUAGE_CHANNEL, (event, lang) => {
     try {
       db.set('user.lang', lang).write();
@@ -609,6 +612,29 @@ app.on('ready', async () => {
     } catch (e) {
       logger.error(e);
       mainWindow.webContents.send(SET_LANGUAGE_CHANNEL, ERROR_GENERAL);
+    }
+  });
+
+  // called when getting developer mode
+  ipcMain.on(GET_DEVELOPER_MODE_CHANNEL, () => {
+    try {
+      const developerMode =
+        db.get('user.developerMode').value() || DEFAULT_DEVELOPER_MODE;
+      mainWindow.webContents.send(GET_DEVELOPER_MODE_CHANNEL, developerMode);
+    } catch (e) {
+      logger.error(e);
+      mainWindow.webContents.send(GET_DEVELOPER_MODE_CHANNEL, ERROR_GENERAL);
+    }
+  });
+
+  // called when setting developer mode
+  ipcMain.on(SET_DEVELOPER_MODE_CHANNEL, (event, developerMode) => {
+    try {
+      db.set('user.developerMode', developerMode).write();
+      mainWindow.webContents.send(SET_DEVELOPER_MODE_CHANNEL, developerMode);
+    } catch (e) {
+      logger.error(e);
+      mainWindow.webContents.send(SET_DEVELOPER_MODE_CHANNEL, ERROR_GENERAL);
     }
   });
 

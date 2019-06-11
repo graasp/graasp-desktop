@@ -1,4 +1,4 @@
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
 import {
   FLAG_GETTING_USER_FOLDER,
   FLAG_SETTING_LANGUAGE,
@@ -7,15 +7,21 @@ import {
   GET_USER_FOLDER_SUCCEEDED,
   SET_LANGUAGE_SUCCEEDED,
   GET_LANGUAGE_SUCCEEDED,
+  GET_DEVELOPER_MODE_SUCCEEDED,
+  SET_DEVELOPER_MODE_SUCCEEDED,
+  FLAG_SETTING_DEVELOPER_MODE,
+  FLAG_GETTING_DEVELOPER_MODE,
 } from '../types';
-import { DEFAULT_LANGUAGE } from '../config/constants';
+import { DEFAULT_DEVELOPER_MODE, DEFAULT_LANGUAGE } from '../config/constants';
+import { updateActivityList } from './common';
 
 const INITIAL_STATE = Map({
   current: Map({
     geolocation: Map(),
     folder: null,
-    activity: false,
+    activity: List(),
     lang: DEFAULT_LANGUAGE,
+    developerMode: DEFAULT_DEVELOPER_MODE,
   }),
 });
 
@@ -24,15 +30,22 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case FLAG_SETTING_LANGUAGE:
     case FLAG_GETTING_LANGUAGE:
     case FLAG_GETTING_USER_FOLDER:
-      return state.setIn(['current', 'activity'], payload);
+    case FLAG_SETTING_DEVELOPER_MODE:
+    case FLAG_GETTING_DEVELOPER_MODE:
+      return state.updateIn(
+        ['current', 'activity'],
+        updateActivityList(payload)
+      );
     case GET_USER_FOLDER_SUCCEEDED:
       return state.setIn(['current', 'folder'], payload);
     case GET_GEOLOCATION_SUCCEEDED:
       return state.setIn(['current', 'geolocation'], Map(payload));
+    case GET_LANGUAGE_SUCCEEDED:
     case SET_LANGUAGE_SUCCEEDED:
       return state.setIn(['current', 'lang'], payload);
-    case GET_LANGUAGE_SUCCEEDED:
-      return state.setIn(['current', 'lang'], payload);
+    case GET_DEVELOPER_MODE_SUCCEEDED:
+    case SET_DEVELOPER_MODE_SUCCEEDED:
+      return state.setIn(['current', 'developerMode'], payload);
     default:
       return state;
   }
