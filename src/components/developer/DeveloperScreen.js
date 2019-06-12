@@ -97,11 +97,13 @@ class DeveloperScreen extends Component {
           <Typography variant="h4" className={classes.screenTitle}>
             {t('Developer')}
           </Typography>
+          <br />
           <Typography variant="h6" className={classes.alert}>
             {t(
               'Danger Zone! Proceed with caution as changes to this section might lead to data loss.'
             )}
           </Typography>
+          <br />
           <DatabaseEditor />
         </main>
       </div>

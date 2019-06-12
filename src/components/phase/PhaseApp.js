@@ -100,7 +100,15 @@ class PhaseApp extends Component {
       ? SMART_GATEWAY_QUERY_STRING_DIVIDER
       : '?';
 
+    // handle existing query strings
+    let existingParams = {};
+    const existingQueryString = uri.split('?')[1];
+    if (existingQueryString) {
+      existingParams = Qs.parse(existingQueryString);
+    }
+
     const params = {
+      ...existingParams,
       spaceId,
       userId,
       lang,

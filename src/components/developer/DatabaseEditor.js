@@ -60,6 +60,7 @@ class DatabaseEditor extends Component {
           onAdd={this.handleEdit}
           onDelete={this.handleEdit}
         />
+        <br />
         <Button
           variant="contained"
           className={classes.button}
