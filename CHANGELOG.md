@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [0.7.0](https://github.com/graasp/graasp-desktop/compare/v0.6.0...v0.7.0) (2019-06-12)
+
+### Bug Fixes
+
+- allow urls with query strings ([c2ef55f](https://github.com/graasp/graasp-desktop/commit/c2ef55f)), closes [#92](https://github.com/graasp/graasp-desktop/issues/92)
+- show message when no spaces are available ([d187018](https://github.com/graasp/graasp-desktop/commit/d187018)), closes [#91](https://github.com/graasp/graasp-desktop/issues/91)
+
+### Features
+
+- allow developer to edit the database directly ([edc96b7](https://github.com/graasp/graasp-desktop/commit/edc96b7)), closes [#90](https://github.com/graasp/graasp-desktop/issues/90)
+- allow user to set app to developer mode ([f8c65bf](https://github.com/graasp/graasp-desktop/commit/f8c65bf)), closes [#88](https://github.com/graasp/graasp-desktop/issues/88)
+
 # [0.6.0](https://github.com/graasp/graasp-desktop/compare/v0.5.0...v0.6.0) (2019-06-11)
 
 ### Bug Fixes
