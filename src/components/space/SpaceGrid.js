@@ -80,6 +80,7 @@ class SpaceGrid extends Component {
   render() {
     const { spaces, classes, history } = this.props;
 
+    // spaces is a set to mapping through it will return a set
     const MediaCards = spaces.map(space => {
       const { id, name, image = {}, description } = space;
       const { replace } = history;
@@ -108,7 +109,8 @@ class SpaceGrid extends Component {
         </Grid>
       );
     });
-    if (MediaCards.length === 0) {
+
+    if (!MediaCards.size) {
       return (
         <Typography variant="h5" color="inherit">
           No spaces available.
