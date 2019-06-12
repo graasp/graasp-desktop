@@ -1,5 +1,6 @@
-// this file needs to use module.exports as it is used both by react and electron
-// make sure this file is identical in both src/config and public/app/config
+// this file needs to use module.exports as it is used both by react and
+// electron make sure this file is identical in both src/config/channels.js
+// and public/app/config/channels.js
 
 module.exports = {
   SAVE_SPACE_CHANNEL: 'space:save',
@@ -28,4 +29,6 @@ module.exports = {
   DELETE_APP_INSTANCE_RESOURCE_CHANNEL: 'app-instance-resource:delete',
   GET_APP_INSTANCE_CHANNEL: 'app-instance:get',
   PATCH_APP_INSTANCE_CHANNEL: 'app-instance:patch',
+  GET_DATABASE_CHANNEL: 'developer:database:get',
+  SET_DATABASE_CHANNEL: 'developer:database:set',
 };

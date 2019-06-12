@@ -6,6 +6,10 @@
     "Spaces Nearby": "Spaces Nearby",
     "Visit a Space": "Visit a Space",
     "Load": "Load",
-    "Start": "Start"
+    "Start": "Start",
+    "Developer": "Developer",
+    "Danger Zone! Proceed with caution as changes to this section might lead to data loss.": "Danger Zone! Proceed with caution as changes to this section might lead to data loss.",
+    "Manually Edit the Database": "Manually Edit the Database",
+    "Use Sample Database": "Use Sample Database"
   }
 }

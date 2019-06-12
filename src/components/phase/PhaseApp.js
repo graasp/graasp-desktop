@@ -84,7 +84,12 @@ class PhaseApp extends Component {
     const { url, lang, asset, name, id, folder, spaceId, phaseId } = this.props;
     let uri = url;
     if (asset) {
-      uri = `file://${folder}/${asset}`;
+      // assets with absolute paths are usually for testing
+      if (asset.startsWith('/')) {
+        uri = `file://${asset}`;
+      } else {
+        uri = `file://${folder}/${asset}`;
+      }
     }
 
     // todo: get user dynamically, currently we are just using a fake one

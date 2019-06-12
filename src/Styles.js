@@ -61,6 +61,14 @@ const Styles = theme => ({
   button: {
     margin: theme.spacing.unit,
   },
+  screenTitle: {
+    marginBottom: theme.spacing.unit * 2,
+  },
+  alert: {
+    backgroundColor: theme.status.danger.background[500],
+    color: theme.status.danger.color,
+    textAlign: 'center',
+  },
 });
 
 export default Styles;

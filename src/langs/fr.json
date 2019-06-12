@@ -6,6 +6,10 @@
     "Spaces Nearby": "Espaces à Proximité",
     "Visit a Space": "Visiter un Espace",
     "Load": "Charger un Espace",
-    "Start": "Démarrer"
+    "Start": "Démarrer",
+    "Developer": "Développeur",
+    "Danger Zone! Proceed with caution as changes to this section might lead to data loss.": "Attention ! Les changements que vous faites ici peuvent causer la parte de données.",
+    "Manually Edit the Database": "Modifier Manuellement la Base de Données",
+    "Use Sample Database": "Utiliser une Base de Données Exemple"
   }
 }

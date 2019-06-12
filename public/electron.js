@@ -65,6 +65,8 @@ const {
   GET_APP_INSTANCE_CHANNEL,
   GET_DEVELOPER_MODE_CHANNEL,
   SET_DEVELOPER_MODE_CHANNEL,
+  GET_DATABASE_CHANNEL,
+  SET_DATABASE_CHANNEL,
 } = require('./app/config/channels');
 const {
   ERROR_SPACE_ALREADY_AVAILABLE,
@@ -776,6 +778,32 @@ app.on('ready', async () => {
     } catch (e) {
       console.error(e);
       mainWindow.webContents.send(GET_APP_INSTANCE_CHANNEL, null);
+    }
+  });
+
+  // called when getting the database
+  ipcMain.on(GET_DATABASE_CHANNEL, async () => {
+    try {
+      // get space from local db
+      const database = db.getState();
+      mainWindow.webContents.send(GET_DATABASE_CHANNEL, database);
+    } catch (err) {
+      logger.error(err);
+      mainWindow.webContents.send(GET_DATABASE_CHANNEL, null);
+    }
+  });
+
+  // called when setting the database
+  ipcMain.on(SET_DATABASE_CHANNEL, async (event, payload) => {
+    try {
+      // get space from local db
+      db.setState(payload).write();
+      const database = db.getState();
+
+      mainWindow.webContents.send(SET_DATABASE_CHANNEL, database);
+    } catch (err) {
+      logger.error(err);
+      mainWindow.webContents.send(SET_DATABASE_CHANNEL, null);
     }
   });
 });

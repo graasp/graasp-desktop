@@ -80,7 +80,7 @@ class LanguageSelect extends Component {
 
 const mapStateToProps = ({ User }) => ({
   lang: User.getIn(['current', 'lang']),
-  activity: User.getIn(['current', 'activity']).size,
+  activity: Boolean(User.getIn(['current', 'activity']).size),
 });
 
 const mapDispatchToProps = {

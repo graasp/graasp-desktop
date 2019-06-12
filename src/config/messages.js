@@ -1,5 +1,6 @@
-// this file needs to use module.exports as it is used both by react and electron
-// make sure this file is identical in both src/config and public/app/config
+// this file needs to use module.exports as it is used both by react and
+// electron make sure this file is identical in both src/config/messages.js
+// and public/app/config/messages.js
 
 const ERROR_DOWNLOADING_MESSAGE = 'There was a problem downloading your files';
 const ERROR_LOADING_MESSAGE = 'There was a problem loading your space';
@@ -33,6 +34,8 @@ const ERROR_GETTING_DEVELOPER_MODE =
   'There was an error getting the developer mode';
 const ERROR_SETTING_DEVELOPER_MODE =
   'There was an error setting the developer mode';
+const ERROR_GETTING_DATABASE = 'There was an error getting the database.';
+const ERROR_SETTING_DATABASE = 'There was an error updating the database.';
 
 module.exports = {
   ERROR_GETTING_DEVELOPER_MODE,
@@ -60,4 +63,6 @@ module.exports = {
   ERROR_GETTING_SPACES_NEARBY,
   ERROR_GETTING_USER_FOLDER,
   INVALID_SPACE_ID,
+  ERROR_GETTING_DATABASE,
+  ERROR_SETTING_DATABASE,
 };

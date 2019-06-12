@@ -132,7 +132,9 @@ class SpaceScreen extends Component {
     if (!space || space.isEmpty()) {
       return <SpaceNotFound />;
     }
-    const phases = space.get('phases');
+
+    // fall back on empty array if no phases
+    const phases = space.get('phases') || [];
     //  const description = space.get('description');
     return (
       <div className={classes.root} style={{ height: '100%' }}>
