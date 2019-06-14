@@ -182,6 +182,7 @@ const saveSpace = async ({ space }) => async dispatch => {
     window.ipcRenderer.once(SAVE_SPACE_CHANNEL, async (event, response) => {
       // if there is no response, show error
       if (!response) {
+        dispatch(flagSavingSpace(false));
         return toastr.error(ERROR_MESSAGE_HEADER, ERROR_SAVING_SPACE_MESSAGE);
       }
 

@@ -11,7 +11,7 @@ const path = require('path');
 const isDev = require('electron-is-dev');
 const fs = require('fs');
 const isOnline = require('is-online');
-const electronDl = require('electron-dl');
+const download = require('download');
 const rimraf = require('rimraf');
 const extract = require('extract-zip');
 const archiver = require('archiver');
@@ -90,7 +90,6 @@ const isFileAvailable = filePath =>
     fs.access(filePath, fs.constants.F_OK, err => resolve(!err))
   );
 
-const { download } = electronDl;
 let mainWindow;
 
 // set up sentry
@@ -259,6 +258,7 @@ app.on('ready', async () => {
 
   // called when saving a space
   ipcMain.on(SAVE_SPACE_CHANNEL, async (event, { space }) => {
+    logger.debug('saving space');
     // make a working copy of the space to save
     const spaceToSave = { ...space };
     try {
@@ -306,8 +306,13 @@ app.on('ready', async () => {
 
         // eslint-disable-next-line no-restricted-syntax
         for (const asset of assets) {
-          const { url, key } = asset;
+          let { url } = asset;
+          const { key } = asset;
           if (url) {
+            // default to https
+            if (url.startsWith('//')) {
+              url = `https:${url}`;
+            }
             const ext = getExtension({ url });
             const hash = generateHash({ url });
             const imageFileName = `${hash}.${ext}`;
@@ -317,11 +322,12 @@ app.on('ready', async () => {
             // eslint-disable-next-line no-await-in-loop
             const imageAvailable = await isFileAvailable(absoluteImagePath);
             if (!imageAvailable) {
+              logger.debug(`downloading ${url}`);
               // eslint-disable-next-line no-await-in-loop
-              await download(mainWindow, url, {
-                directory: absoluteSpacePath,
-                filename: imageFileName,
-              });
+              await download(url, `${absoluteSpacePath}/${imageFileName}`);
+              logger.debug(
+                `downloaded ${url} to ${absoluteSpacePath}/${imageFileName}`
+              );
             }
             spaceToSave.image[key] = imagePath;
           }
@@ -347,6 +353,11 @@ app.on('ready', async () => {
               url = downloadUrl;
             }
 
+            // default to https
+            if (url.startsWith('//')) {
+              url = `https:${url}`;
+            }
+
             // generate hash and get extension to save file
             const hash = generateHash(resource);
             const ext = getExtension(resource);
@@ -361,11 +372,12 @@ app.on('ready', async () => {
 
             // if the file is available, point this resource to its path
             if (!fileAvailable) {
+              logger.debug(`downloading ${url}`);
               // eslint-disable-next-line no-await-in-loop
-              await download(mainWindow, url, {
-                directory: absoluteSpacePath,
-                filename: fileName,
-              });
+              await download(url, `${absoluteSpacePath}/${fileName}`);
+              logger.debug(
+                `downloaded ${url} to ${absoluteSpacePath}/${fileName}`
+              );
             }
             phase.items[i].asset = filePath;
           }
