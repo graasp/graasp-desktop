@@ -27,6 +27,7 @@ class PhaseApp extends Component {
     asset: PropTypes.string,
     name: PropTypes.string,
     folder: PropTypes.string.isRequired,
+    dispatchGetAppInstance: PropTypes.func.isRequired,
     id: PropTypes.string.isRequired,
     phaseId: PropTypes.string.isRequired,
     spaceId: PropTypes.string.isRequired,
@@ -60,6 +61,7 @@ class PhaseApp extends Component {
 
   handleReceiveMessage = event => {
     try {
+      const { dispatchGetAppInstance } = this.props;
       const { type, payload } = JSON.parse(event.data);
 
       switch (type) {
@@ -70,7 +72,7 @@ class PhaseApp extends Component {
         case PATCH_APP_INSTANCE_RESOURCE:
           return patchAppInstanceResource(payload, this.postMessage);
         case GET_APP_INSTANCE:
-          return getAppInstance(payload, this.postMessage);
+          return dispatchGetAppInstance(payload, this.postMessage);
         default:
           return false;
       }
@@ -142,6 +144,13 @@ const mapStateToProps = ({ User, Space }) => ({
     User.getIn(['current', 'lang']),
 });
 
-const ConnectedComponent = connect(mapStateToProps)(PhaseApp);
+const mapDispatchToProps = {
+  dispatchGetAppInstance: getAppInstance,
+};
+
+const ConnectedComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PhaseApp);
 
 export default ConnectedComponent;

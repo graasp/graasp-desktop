@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
   GET_APP_INSTANCE_CHANNEL,
   PATCH_APP_INSTANCE_CHANNEL,
@@ -7,23 +8,37 @@ import {
   PATCH_APP_INSTANCE_SUCCEEDED,
 } from '../types';
 
-const getAppInstance = async ({ id, spaceId, subSpaceId } = {}, callback) => {
+const getAppInstance = async (
+  { id, spaceId, subSpaceId } = {},
+  callback
+) => async (dispatch, getState) => {
   try {
-    window.ipcRenderer.send(GET_APP_INSTANCE_CHANNEL, {
-      id,
-      spaceId,
-      subSpaceId,
-    });
+    // first check to see if app instance is available in the redux store
+    const { Phase } = getState();
+    const items = Phase.getIn(['current', 'content', 'items']);
+    const item = items && _.find(items, ['id', id]);
+    if (item && item.appInstance) {
+      callback({
+        type: GET_APP_INSTANCE_SUCCEEDED,
+        payload: item.appInstance,
+      });
+    } else {
+      window.ipcRenderer.send(GET_APP_INSTANCE_CHANNEL, {
+        id,
+        spaceId,
+        subSpaceId,
+      });
 
-    window.ipcRenderer.once(
-      GET_APP_INSTANCE_CHANNEL,
-      async (event, response) => {
-        callback({
-          type: GET_APP_INSTANCE_SUCCEEDED,
-          payload: response,
-        });
-      }
-    );
+      window.ipcRenderer.once(
+        GET_APP_INSTANCE_CHANNEL,
+        async (event, response) => {
+          callback({
+            type: GET_APP_INSTANCE_SUCCEEDED,
+            payload: response,
+          });
+        }
+      );
+    }
   } catch (err) {
     console.error(err);
   }
