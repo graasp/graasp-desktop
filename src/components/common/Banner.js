@@ -1,10 +1,11 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import WarningIcon from '@material-ui/icons/Warning';
+import ErrorIcon from '@material-ui/icons/Error';
+import InfoIcon from '@material-ui/icons/Info';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
@@ -14,6 +15,9 @@ import PropTypes from 'prop-types';
 const styles = theme => ({
   banner: {
     marginBottom: theme.spacing(2),
+  },
+  paper: {
+    padding: theme.spacing(2),
   },
 });
 
@@ -25,20 +29,26 @@ const renderButton = buttonText => (
   </Grid>
 );
 
-const Banner = ({ text, buttonText, classes }) => {
+const renderIcon = type => {
+  switch (type) {
+    case 'warning':
+      return <WarningIcon color="error" fontSize="large" />;
+    case 'error':
+      return <ErrorIcon color="error" fontSize="large" />;
+    case 'info':
+    default:
+      return <InfoIcon color="primary" fontSize="large" />;
+  }
+};
+
+const Banner = ({ text, buttonText, classes, type }) => {
   return (
     <div className={classes.banner}>
       <CssBaseline />
-      <Paper elevation={0}>
+      <Paper elevation={0} className={classes.paper}>
         <Box pt={2} pr={1} pb={1} pl={2}>
           <Grid container spacing={6} alignItems="center" wrap="nowrap">
-            <Grid item>
-              <Box bgcolor="primary.main" clone>
-                <Avatar>
-                  <WarningIcon />
-                </Avatar>
-              </Box>
-            </Grid>
+            <Grid item>{renderIcon(type)}</Grid>
             <Grid item>
               <Typography>{text}</Typography>
             </Grid>
@@ -52,12 +62,14 @@ const Banner = ({ text, buttonText, classes }) => {
 };
 
 Banner.propTypes = {
+  type: PropTypes.oneOf(['warning', 'error', 'info']),
   text: PropTypes.string,
   buttonText: PropTypes.string,
   classes: PropTypes.shape({ banner: PropTypes.string.isRequired }).isRequired,
 };
 
 Banner.defaultProps = {
+  type: 'info',
   text: null,
   buttonText: null,
 };

@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import ReduxToastr from 'react-redux-toastr';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import red from '@material-ui/core/colors/red';
 import { withTranslation } from 'react-i18next';
 import Home from './Home';
 import VisitSpace from './components/VisitSpace';
@@ -38,12 +37,6 @@ const theme = createMuiTheme({
   palette: {
     primary: { light: '#5050d2', main: '#5050d2', dark: '#5050d2' },
     secondary: { light: '#00b904', main: '#00b904', dark: '#00b904' },
-  },
-  status: {
-    danger: {
-      background: red,
-      color: '#fff',
-    },
   },
 });
 

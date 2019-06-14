@@ -17,6 +17,7 @@ import PropTypes from 'prop-types';
 import MainMenu from '../common/MainMenu';
 import DatabaseEditor from './DatabaseEditor';
 import Styles from '../../Styles';
+import Banner from '../common/Banner';
 
 class DeveloperScreen extends Component {
   state = {
@@ -98,12 +99,12 @@ class DeveloperScreen extends Component {
             {t('Developer')}
           </Typography>
           <br />
-          <Typography variant="h6" className={classes.alert}>
-            {t(
+          <Banner
+            text={t(
               'Danger Zone! Proceed with caution as changes to this section might lead to data loss.'
             )}
-          </Typography>
-          <br />
+            type="error"
+          />
           <DatabaseEditor />
         </main>
       </div>

@@ -11,6 +11,7 @@ import Banner from '../common/Banner';
 const renderPreviewWarning = t => {
   return (
     <Banner
+      type="warning"
       text={t(
         'Warning: You are previewing this space. Any input or changes will not be saved.'
       )}

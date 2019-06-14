@@ -65,11 +65,6 @@ const Styles = theme => ({
   screenTitle: {
     marginBottom: theme.spacing(2),
   },
-  alert: {
-    backgroundColor: theme.status.danger.background[500],
-    color: theme.status.danger.color,
-    textAlign: 'center',
-  },
   spaceDescription: {
     marginBottom: theme.spacing(3),
   },
