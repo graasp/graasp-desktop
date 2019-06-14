@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Qs from 'qs';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -57,6 +58,9 @@ class SpaceScreen extends Component {
         id: PropTypes.string.isRequired,
       }),
     }).isRequired,
+    location: PropTypes.shape({
+      search: PropTypes.string.isRequired,
+    }).isRequired,
     history: PropTypes.shape({ length: PropTypes.number.isRequired })
       .isRequired,
   };
@@ -66,9 +70,13 @@ class SpaceScreen extends Component {
       match: {
         params: { id },
       },
+      location: { search },
       dispatchGetSpace,
     } = this.props;
-    dispatchGetSpace({ id });
+
+    // tell action creator if this space has already been saved
+    const { saved } = Qs.parse(search, { ignoreQueryPrefix: true });
+    dispatchGetSpace({ id, saved: saved === 'true' });
   }
 
   componentDidUpdate() {
@@ -137,7 +145,7 @@ class SpaceScreen extends Component {
     const phases = space.get('phases') || [];
     //  const description = space.get('description');
     return (
-      <div className={classes.root} style={{ height: '100%' }}>
+      <div className={classes.root}>
         <CssBaseline />
         <SpaceHeader
           handleDrawerOpen={this.handleDrawerOpen}

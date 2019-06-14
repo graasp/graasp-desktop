@@ -32,10 +32,12 @@ class SpaceGrid extends Component {
     history: PropTypes.shape({ length: PropTypes.number.isRequired })
       .isRequired,
     dispatchClearSpace: PropTypes.func.isRequired,
+    saved: PropTypes.bool,
   };
 
   static defaultProps = {
     folder: null,
+    saved: false,
   };
 
   componentDidMount() {
@@ -78,7 +80,7 @@ class SpaceGrid extends Component {
   };
 
   render() {
-    const { spaces, classes, history } = this.props;
+    const { spaces, classes, history, saved } = this.props;
 
     // spaces is a set to mapping through it will return a set
     const MediaCards = spaces.map(space => {
@@ -90,7 +92,7 @@ class SpaceGrid extends Component {
           size="large"
           color="primary"
           id={id}
-          onClick={() => replace(`/space/${id}`)}
+          onClick={() => replace(`/space/${id}?saved=${saved}`)}
           fullWidth
         >
           <RemoveRedEyeIcon className={classes.leftIcon} />
@@ -118,7 +120,7 @@ class SpaceGrid extends Component {
       );
     }
     return (
-      <Grid container spacing={16}>
+      <Grid container spacing={6}>
         {MediaCards}
       </Grid>
     );

@@ -299,8 +299,9 @@ const loadSpace = ({ fileLocation }) => dispatch => {
   });
 };
 
-const getSpace = ({ id }) => dispatch => {
-  if (window.navigator.onLine) {
+const getSpace = ({ id, saved = false }) => dispatch => {
+  // only get the space from the api if not saved
+  if (!saved) {
     dispatch(getRemoteSpace({ id }));
   } else {
     dispatch(getLocalSpace({ id }));
