@@ -3,6 +3,7 @@ const drawerWidth = 240;
 const Styles = theme => ({
   root: {
     display: 'flex',
+    height: '100%',
   },
   appBar: {
     transition: theme.transitions.create(['margin', 'width'], {
@@ -41,7 +42,7 @@ const Styles = theme => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing.unit * 3,
+    padding: theme.spacing(3),
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -56,18 +57,21 @@ const Styles = theme => ({
     marginLeft: 0,
   },
   input: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(),
   },
   button: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(),
   },
   screenTitle: {
-    marginBottom: theme.spacing.unit * 2,
+    marginBottom: theme.spacing(2),
   },
   alert: {
     backgroundColor: theme.status.danger.background[500],
     color: theme.status.danger.color,
     textAlign: 'center',
+  },
+  spaceDescription: {
+    marginBottom: theme.spacing(3),
   },
 });
 

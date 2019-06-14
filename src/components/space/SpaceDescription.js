@@ -1,13 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core';
+import { Typography, withStyles } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import Styles from '../../Styles';
 import './SpaceDescription.css';
 import { DEFAULT_LANGUAGE } from '../../config/constants';
+import Banner from '../common/Banner';
 
-const SpaceDescription = ({ description, classes, start, lang }) => {
+const renderPreviewWarning = t => {
+  return (
+    <Banner
+      text={t(
+        'Warning: You are previewing this space. Any input or changes will not be saved.'
+      )}
+    />
+  );
+};
+
+const SpaceDescription = ({ description, classes, start, lang, saved }) => {
   const { i18n } = useTranslation();
 
   // we use the fixed translation for spaces as they
@@ -16,17 +27,19 @@ const SpaceDescription = ({ description, classes, start, lang }) => {
   return (
     <div className="SpaceDescription">
       <div>
-        <h4 style={{ textAlign: 'center' }}>
+        {saved ? null : renderPreviewWarning(t)}
+        <Typography variant="h4" className={classes.spaceDescription}>
           <div dangerouslySetInnerHTML={{ __html: description }} />
-        </h4>
+        </Typography>
         <Button
           variant="contained"
           className={classes.button}
           onClick={start}
+          size="large"
           color="primary"
           style={{ display: 'block', margin: '0 auto' }}
         >
-          {t('Start')}
+          {saved ? t('Start') : t('Preview')}
         </Button>
       </div>
     </div>
@@ -38,10 +51,12 @@ SpaceDescription.propTypes = {
   lang: PropTypes.string,
   classes: PropTypes.shape({ appBar: PropTypes.string.isRequired }).isRequired,
   start: PropTypes.func.isRequired,
+  saved: PropTypes.bool,
 };
 
 SpaceDescription.defaultProps = {
   lang: DEFAULT_LANGUAGE,
+  saved: false,
 };
 
 export default withStyles(Styles, { withTheme: true })(SpaceDescription);

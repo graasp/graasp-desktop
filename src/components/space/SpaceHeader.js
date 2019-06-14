@@ -7,8 +7,11 @@ import AppBar from '@material-ui/core/AppBar/AppBar';
 import UnarchiveIcon from '@material-ui/icons/Unarchive';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
+import WarningIcon from '@material-ui/icons/Warning';
 import Toolbar from '@material-ui/core/Toolbar/Toolbar';
+import { withTranslation } from 'react-i18next';
 import IconButton from '@material-ui/core/IconButton/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core';
 import Styles from '../../Styles';
 import { deleteSpace, exportSpace, saveSpace } from '../../actions/space';
@@ -26,6 +29,7 @@ class SpaceHeader extends Component {
     dispatchExportSpace: PropTypes.func.isRequired,
     dispatchDeleteSpace: PropTypes.func.isRequired,
     dispatchSaveSpace: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   handleExport = () => {
@@ -98,6 +102,25 @@ class SpaceHeader extends Component {
     return null;
   }
 
+  renderPreviewIcon() {
+    const { space, classes, t } = this.props;
+    const { saved } = space;
+    if (!saved) {
+      return (
+        <IconButton color="inherit" className={classes.button}>
+          <Tooltip
+            title={t(
+              'You are previewing this space. Any input or changes will not be saved.'
+            )}
+          >
+            <WarningIcon className={classes.rightIcon} />
+          </Tooltip>
+        </IconButton>
+      );
+    }
+    return null;
+  }
+
   render() {
     const {
       openDrawer,
@@ -126,6 +149,7 @@ class SpaceHeader extends Component {
           </IconButton>
           {name}
           <span style={{ position: 'absolute', right: 20 }}>
+            {this.renderPreviewIcon()}
             {this.renderDeleteButton()}
             {this.renderExportButton()}
             {this.renderSaveButton()}
@@ -157,4 +181,6 @@ const StyledComponent = withStyles(Styles, { withTheme: true })(
   ConnectedComponent
 );
 
-export default StyledComponent;
+const TranslatedComponent = withTranslation()(StyledComponent);
+
+export default TranslatedComponent;
