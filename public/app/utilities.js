@@ -1,6 +1,7 @@
 const mkdirp = require('mkdirp');
 const mime = require('mime-types');
 const md5 = require('md5');
+const fs = require('fs');
 const logger = require('./logger');
 const {
   DOWNLOADABLE_MIME_TYPES,
@@ -8,6 +9,11 @@ const {
   RESOURCE,
   VAR_FOLDER,
 } = require('./config/config');
+
+const isFileAvailable = filePath =>
+  new Promise(resolve =>
+    fs.access(filePath, fs.constants.F_OK, err => resolve(!err))
+  );
 
 const getExtension = ({ url, mimeType }) => {
   // default to mime type
@@ -59,4 +65,5 @@ module.exports = {
   isDownloadable,
   generateHash,
   createSpaceDirectory,
+  isFileAvailable,
 };

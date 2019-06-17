@@ -10,10 +10,7 @@ const {
 const path = require('path');
 const isDev = require('electron-is-dev');
 const fs = require('fs');
-const isOnline = require('is-online');
-const download = require('download');
 const rimraf = require('rimraf');
-const extract = require('extract-zip');
 const archiver = require('archiver');
 const ObjectId = require('bson-objectid');
 const { autoUpdater } = require('electron-updater');
@@ -21,13 +18,6 @@ const Sentry = require('@sentry/electron');
 const ua = require('universal-analytics');
 const { machineIdSync } = require('node-machine-id');
 const logger = require('./app/logger');
-const { getDownloadUrl } = require('./app/download');
-const {
-  getExtension,
-  isDownloadable,
-  generateHash,
-  createSpaceDirectory,
-} = require('./app/utilities');
 const {
   ensureDatabaseExists,
   bootstrapDatabase,
@@ -36,13 +26,11 @@ const {
 const {
   VAR_FOLDER,
   DATABASE_PATH,
-  TEMPORARY_EXTRACT_FOLDER,
   DEFAULT_LANG,
   DEFAULT_DEVELOPER_MODE,
 } = require('./app/config/config');
 const {
   LOAD_SPACE_CHANNEL,
-  LOADED_SPACE_CHANNEL,
   EXPORT_SPACE_CHANNEL,
   EXPORTED_SPACE_CHANNEL,
   DELETE_SPACE_CHANNEL,
@@ -68,14 +56,9 @@ const {
   GET_DATABASE_CHANNEL,
   SET_DATABASE_CHANNEL,
 } = require('./app/config/channels');
-const {
-  ERROR_SPACE_ALREADY_AVAILABLE,
-  ERROR_DOWNLOADING_FILE,
-  ERROR_GENERAL,
-  ERROR_ZIP_CORRUPTED,
-} = require('./app/config/errors');
-const mapping = require('./app/config/mapping');
+const { ERROR_GENERAL } = require('./app/config/errors');
 const env = require('./env.json');
+const { loadSpace, saveSpace } = require('./app/listeners');
 
 // add keys to process
 Object.keys(env).forEach(key => {
@@ -84,11 +67,6 @@ Object.keys(env).forEach(key => {
 
 // use promisified fs
 const fsPromises = fs.promises;
-
-const isFileAvailable = filePath =>
-  new Promise(resolve =>
-    fs.access(filePath, fs.constants.F_OK, err => resolve(!err))
-  );
 
 let mainWindow;
 
@@ -257,141 +235,7 @@ app.on('ready', async () => {
   visitor.pageview('/').send();
 
   // called when saving a space
-  ipcMain.on(SAVE_SPACE_CHANNEL, async (event, { space }) => {
-    logger.debug('saving space');
-    // make a working copy of the space to save
-    const spaceToSave = { ...space };
-    try {
-      // get handle to spaces collection
-      const spaces = db.get(SPACES_COLLECTION);
-      const { id, language } = space;
-      const existingSpace = spaces.find({ id }).value();
-
-      if (existingSpace) {
-        return mainWindow.webContents.send(
-          SAVE_SPACE_CHANNEL,
-          ERROR_SPACE_ALREADY_AVAILABLE
-        );
-      }
-
-      // only download if connection is available
-      const isConnected = await isOnline();
-      if (!isConnected) {
-        return mainWindow.webContents.send(
-          SAVE_SPACE_CHANNEL,
-          ERROR_DOWNLOADING_FILE
-        );
-      }
-
-      // create directory where resources will be stored
-      createSpaceDirectory({ id });
-
-      const { phases, image } = spaceToSave;
-
-      const spacePath = id;
-
-      // use language defined in space otherwise fall back on
-      // user language, otherwise fall back on the global default
-      const userLang = db.get('user.lang').value();
-      const lang = language || userLang || DEFAULT_LANG;
-
-      // todo: follow new format
-      // if there is a background/thumbnail image, save it
-      if (image) {
-        const { thumbnailUrl, backgroundUrl } = image;
-        const assets = [
-          { url: thumbnailUrl, key: 'thumbnailAsset' },
-          { url: backgroundUrl, key: 'backgroundAsset' },
-        ];
-
-        // eslint-disable-next-line no-restricted-syntax
-        for (const asset of assets) {
-          let { url } = asset;
-          const { key } = asset;
-          if (url) {
-            // default to https
-            if (url.startsWith('//')) {
-              url = `https:${url}`;
-            }
-            const ext = getExtension({ url });
-            const hash = generateHash({ url });
-            const imageFileName = `${hash}.${ext}`;
-            const imagePath = `${spacePath}/${imageFileName}`;
-            const absoluteSpacePath = `${VAR_FOLDER}/${spacePath}`;
-            const absoluteImagePath = `${VAR_FOLDER}/${imagePath}`;
-            // eslint-disable-next-line no-await-in-loop
-            const imageAvailable = await isFileAvailable(absoluteImagePath);
-            if (!imageAvailable) {
-              logger.debug(`downloading ${url}`);
-              // eslint-disable-next-line no-await-in-loop
-              await download(url, `${absoluteSpacePath}/${imageFileName}`);
-              logger.debug(
-                `downloaded ${url} to ${absoluteSpacePath}/${imageFileName}`
-              );
-            }
-            spaceToSave.image[key] = imagePath;
-          }
-        }
-      }
-      // eslint-disable-next-line no-restricted-syntax
-      for (const phase of phases) {
-        const { items = [] } = phase;
-        for (let i = 0; i < items.length; i += 1) {
-          const resource = items[i];
-          if (resource && isDownloadable(resource)) {
-            let { url } = resource;
-
-            // check mappings for files
-            if (mapping[url]) {
-              url = mapping[url];
-            }
-
-            // download from proxy url if available
-            // eslint-disable-next-line no-await-in-loop
-            const downloadUrl = await getDownloadUrl({ url, lang });
-            if (downloadUrl) {
-              url = downloadUrl;
-            }
-
-            // default to https
-            if (url.startsWith('//')) {
-              url = `https:${url}`;
-            }
-
-            // generate hash and get extension to save file
-            const hash = generateHash(resource);
-            const ext = getExtension(resource);
-            const fileName = `${hash}.${ext}`;
-            const filePath = `${spacePath}/${fileName}`;
-            const absoluteSpacePath = `${VAR_FOLDER}/${spacePath}`;
-            const absoluteFilePath = `${VAR_FOLDER}/${filePath}`;
-            phase.items[i].hash = hash;
-
-            // eslint-disable-next-line no-await-in-loop
-            const fileAvailable = await isFileAvailable(absoluteFilePath);
-
-            // if the file is available, point this resource to its path
-            if (!fileAvailable) {
-              logger.debug(`downloading ${url}`);
-              // eslint-disable-next-line no-await-in-loop
-              await download(url, `${absoluteSpacePath}/${fileName}`);
-              logger.debug(
-                `downloaded ${url} to ${absoluteSpacePath}/${fileName}`
-              );
-            }
-            phase.items[i].asset = filePath;
-          }
-        }
-      }
-      // mark space as saved
-      spaceToSave.saved = true;
-      spaces.push(spaceToSave).write();
-      return mainWindow.webContents.send(SAVE_SPACE_CHANNEL, spaceToSave);
-    } catch (err) {
-      logger.error(err);
-      return mainWindow.webContents.send(SAVE_SPACE_CHANNEL, null);
-    }
-  });
+  ipcMain.on(SAVE_SPACE_CHANNEL, saveSpace(mainWindow, db));
 
   // called when getting a space
   ipcMain.on(GET_SPACE_CHANNEL, async (event, { id }) => {
@@ -433,72 +277,7 @@ app.on('ready', async () => {
   });
 
   // called when loading a space
-  ipcMain.on(LOAD_SPACE_CHANNEL, async (event, { fileLocation }) => {
-    const extractPath = `${VAR_FOLDER}/${TEMPORARY_EXTRACT_FOLDER}`;
-    try {
-      extract(fileLocation, { dir: extractPath }, async extractError => {
-        if (extractError) {
-          logger.error(extractError);
-          return mainWindow.webContents.send(
-            LOADED_SPACE_CHANNEL,
-            ERROR_GENERAL
-          );
-        }
-        // get basic information from manifest
-        const manifestPath = `${extractPath}/manifest.json`;
-        // abort if there is no manifest
-        const hasManifest = await isFileAvailable(manifestPath);
-        if (!hasManifest) {
-          rimraf.sync(extractPath);
-          return mainWindow.webContents.send(
-            LOADED_SPACE_CHANNEL,
-            ERROR_ZIP_CORRUPTED
-          );
-        }
-        const manifestString = await fsPromises.readFile(manifestPath);
-        const manifest = JSON.parse(manifestString);
-        const { id } = manifest;
-        const spacePath = `${extractPath}/${id}.json`;
-
-        // get handle to spaces collection
-        const spaces = db.get(SPACES_COLLECTION);
-        const existingSpace = spaces.find({ id }).value();
-
-        // abort if there is already a space with that id
-        if (existingSpace) {
-          rimraf.sync(extractPath);
-          return mainWindow.webContents.send(
-            LOADED_SPACE_CHANNEL,
-            ERROR_SPACE_ALREADY_AVAILABLE
-          );
-        }
-
-        // abort if there is no space
-        const hasSpace = await isFileAvailable(spacePath);
-        if (!hasSpace) {
-          rimraf.sync(extractPath);
-          return mainWindow.webContents.send(
-            LOADED_SPACE_CHANNEL,
-            ERROR_ZIP_CORRUPTED
-          );
-        }
-
-        const spaceString = await fsPromises.readFile(spacePath);
-        const space = JSON.parse(spaceString);
-        const finalPath = `${VAR_FOLDER}/${id}`;
-        await fsPromises.rename(extractPath, finalPath);
-
-        // write to database
-        spaces.push(space).write();
-
-        return mainWindow.webContents.send(LOADED_SPACE_CHANNEL);
-      });
-    } catch (err) {
-      logger.error(err);
-      mainWindow.webContents.send(LOADED_SPACE_CHANNEL, ERROR_GENERAL);
-      rimraf.sync(extractPath);
-    }
-  });
+  ipcMain.on(LOAD_SPACE_CHANNEL, loadSpace(mainWindow, db));
 
   // called when exporting a space
   ipcMain.on(EXPORT_SPACE_CHANNEL, async (event, { archivePath, id }) => {
