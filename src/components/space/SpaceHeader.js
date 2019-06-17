@@ -8,6 +8,7 @@ import UnarchiveIcon from '@material-ui/icons/Unarchive';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
 import WarningIcon from '@material-ui/icons/Warning';
+import WifiIcon from '@material-ui/icons/Wifi';
 import Toolbar from '@material-ui/core/Toolbar/Toolbar';
 import { withTranslation } from 'react-i18next';
 import IconButton from '@material-ui/core/IconButton/IconButton';
@@ -52,51 +53,66 @@ class SpaceHeader extends Component {
   };
 
   renderSaveButton() {
-    const { space, classes } = this.props;
+    const { space, classes, t } = this.props;
     const { saved, offlineSupport } = space;
-    if (!saved && offlineSupport) {
+    if (!saved) {
+      if (offlineSupport) {
+        return (
+          <Tooltip title={t('Save this space for offline use.')}>
+            <IconButton
+              className={classes.button}
+              color="inherit"
+              onClick={this.handleSave}
+            >
+              <SaveIcon />
+            </IconButton>
+          </Tooltip>
+        );
+      }
       return (
-        <IconButton
-          className={classes.button}
-          color="inherit"
-          onClick={this.handleSave}
-        >
-          <SaveIcon />
-        </IconButton>
+        <Tooltip title={t('This space requires an internet connection.')}>
+          <IconButton className={classes.button} color="inherit">
+            <WifiIcon />
+          </IconButton>
+        </Tooltip>
       );
     }
     return null;
   }
 
   renderExportButton() {
-    const { space, classes } = this.props;
+    const { space, classes, t } = this.props;
     const { saved } = space;
     if (saved) {
       return (
-        <IconButton
-          color="inherit"
-          onClick={this.handleExport}
-          className={classes.button}
-        >
-          <UnarchiveIcon className={classes.rightIcon} />
-        </IconButton>
+        <Tooltip title={t('Export this space to share with others.')}>
+          <IconButton
+            color="inherit"
+            onClick={this.handleExport}
+            className={classes.button}
+          >
+            <UnarchiveIcon className={classes.rightIcon} />
+          </IconButton>
+        </Tooltip>
       );
     }
     return null;
   }
 
   renderDeleteButton() {
-    const { space, classes } = this.props;
+    const { space, classes, t } = this.props;
     const { saved } = space;
     if (saved) {
       return (
-        <IconButton
-          color="inherit"
-          onClick={this.handleDelete}
-          className={classes.button}
-        >
-          <DeleteIcon className={classes.rightIcon} />
-        </IconButton>
+        <Tooltip title={t('Delete this space.')}>
+          <IconButton
+            color="inherit"
+            onClick={this.handleDelete}
+            className={classes.button}
+          >
+            <DeleteIcon className={classes.rightIcon} />
+          </IconButton>
+        </Tooltip>
       );
     }
     return null;
@@ -107,15 +123,15 @@ class SpaceHeader extends Component {
     const { saved } = space;
     if (!saved) {
       return (
-        <IconButton color="inherit" className={classes.button}>
-          <Tooltip
-            title={t(
-              'You are previewing this space. Any input or changes will not be saved.'
-            )}
-          >
+        <Tooltip
+          title={t(
+            'You are previewing this space. Any input or changes will not be saved.'
+          )}
+        >
+          <IconButton color="inherit" className={classes.button}>
             <WarningIcon className={classes.rightIcon} />
-          </Tooltip>
-        </IconButton>
+          </IconButton>
+        </Tooltip>
       );
     }
     return null;
