@@ -60,6 +60,16 @@ you can get [here](https://developers.google.com/maps/documentation/geolocation/
 The `BROWSER=none` assignment simply tells Electron not to use a browser to load, but instead to
 use the native OS windows.
 
+Currently you also need to create a file in the `public/` folder called `env.json` with the
+following contents.
+
+```json
+{
+  "SENTRY_DSN": "",
+  "GOOGLE_API_KEY": ""
+}
+```
+
 ### Running Locally
 
 To run Graasp Desktop locally, run `yarn start`. This will launch an Electron window and the
