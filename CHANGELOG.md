@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [0.8.0](https://github.com/graasp/graasp-desktop/compare/v0.7.0...v0.8.0) (2019-06-20)
+
+### Bug Fixes
+
+- allow online use to access app instance ([31d4e59](https://github.com/graasp/graasp-desktop/commit/31d4e59)), closes [#94](https://github.com/graasp/graasp-desktop/issues/94)
+- do not fetch from api if space is saved ([3778518](https://github.com/graasp/graasp-desktop/commit/3778518)), closes [#95](https://github.com/graasp/graasp-desktop/issues/95)
+- save files to correct directory and rename them in the process ([442755b](https://github.com/graasp/graasp-desktop/commit/442755b)), closes [#103](https://github.com/graasp/graasp-desktop/issues/103)
+- specify protocol in url when downloading file ([3accc64](https://github.com/graasp/graasp-desktop/commit/3accc64)), closes [#99](https://github.com/graasp/graasp-desktop/issues/99)
+- update call for offline download ([2859b14](https://github.com/graasp/graasp-desktop/commit/2859b14)), closes [#93](https://github.com/graasp/graasp-desktop/issues/93)
+
+### Features
+
+- make banner for warnings, info and errors ([e04951a](https://github.com/graasp/graasp-desktop/commit/e04951a)), closes [#98](https://github.com/graasp/graasp-desktop/issues/98)
+- show users when they are previewing a space ([be10b87](https://github.com/graasp/graasp-desktop/commit/be10b87)), closes [#96](https://github.com/graasp/graasp-desktop/issues/96)
+- signal when a space does not support offline use ([72d0cf5](https://github.com/graasp/graasp-desktop/commit/72d0cf5)), closes [#105](https://github.com/graasp/graasp-desktop/issues/105)
+
 # [0.7.0](https://github.com/graasp/graasp-desktop/compare/v0.6.0...v0.7.0) (2019-06-12)
 
 ### Bug Fixes
