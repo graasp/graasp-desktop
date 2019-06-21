@@ -32,14 +32,14 @@ const APPLICATION = 'Application';
 
 const VAR_FOLDER = `${app.getPath('userData')}/var`;
 const DATABASE_PATH = `${VAR_FOLDER}/db.json`;
-const TEMPORARY_EXTRACT_FOLDER = 'tmp';
+const TMP_FOLDER = 'tmp';
 const DEFAULT_LANG = 'en';
 const DEFAULT_DEVELOPER_MODE = false;
 
 module.exports = {
   DEFAULT_DEVELOPER_MODE,
   DOWNLOADABLE_MIME_TYPES,
-  TEMPORARY_EXTRACT_FOLDER,
+  TMP_FOLDER,
   RESOURCE,
   APPLICATION,
   DATABASE_PATH,

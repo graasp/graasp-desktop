@@ -1,6 +1,5 @@
 import { Set, Map } from 'immutable';
 import {
-  GET_SPACE,
   TOGGLE_SPACE_MENU,
   GET_SPACES,
   CLEAR_SPACE,
@@ -15,6 +14,8 @@ import {
   FLAG_SAVING_SPACE,
   FLAG_GETTING_SPACES_NEARBY,
   GET_SPACES_NEARBY_SUCCEEDED,
+  FLAG_SYNCING_SPACE,
+  SYNC_SPACE_SUCCEEDED,
 } from '../types';
 
 const INITIAL_STATE = Map({
@@ -42,28 +43,22 @@ export default (state = INITIAL_STATE, { type, payload }) => {
         .setIn(['current', 'content'], Map())
         .setIn(['current', 'deleted'], false);
     case FLAG_SAVING_SPACE:
-      return state.setIn(['current', 'activity'], payload);
     case FLAG_GETTING_SPACE:
-      return state.setIn(['current', 'activity'], payload);
     case FLAG_GETTING_SPACES:
-      return state.setIn(['current', 'activity'], payload);
     case FLAG_LOADING_SPACE:
-      return state.setIn(['current', 'activity'], payload);
     case FLAG_EXPORTING_SPACE:
-      return state.setIn(['current', 'activity'], payload);
     case FLAG_DELETING_SPACE:
+    case FLAG_SYNCING_SPACE:
       return state.setIn(['current', 'activity'], payload);
     case DELETE_SPACE_SUCCESS:
       return state.setIn(['current', 'deleted'], payload);
     case GET_SPACES:
       return state.setIn(['saved'], Set(payload));
-    case GET_SPACE:
-      return state.setIn(['current', 'content'], Map(payload));
     case TOGGLE_SPACE_MENU:
       return state.setIn(['current', 'menu', 'open'], payload);
     case GET_SPACE_SUCCEEDED:
-      return state.setIn(['current', 'content'], Map(payload));
     case SAVE_SPACE_SUCCEEDED:
+    case SYNC_SPACE_SUCCEEDED:
       return state.setIn(['current', 'content'], Map(payload));
     case FLAG_GETTING_SPACES_NEARBY:
       return state.setIn(['nearby', 'activity'], payload);

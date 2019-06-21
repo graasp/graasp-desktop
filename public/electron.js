@@ -55,10 +55,18 @@ const {
   SET_DEVELOPER_MODE_CHANNEL,
   GET_DATABASE_CHANNEL,
   SET_DATABASE_CHANNEL,
+  SHOW_SYNC_SPACE_PROMPT_CHANNEL,
+  SYNC_SPACE_CHANNEL,
 } = require('./app/config/channels');
 const { ERROR_GENERAL } = require('./app/config/errors');
 const env = require('./env.json');
-const { loadSpace, saveSpace, getSpace } = require('./app/listeners');
+const {
+  loadSpace,
+  saveSpace,
+  showSyncSpacePrompt,
+  syncSpace,
+  getSpace,
+} = require('./app/listeners');
 
 // add keys to process
 Object.keys(env).forEach(key => {
@@ -592,6 +600,12 @@ app.on('ready', async () => {
       mainWindow.webContents.send(SET_DATABASE_CHANNEL, null);
     }
   });
+
+  // prompt when syncing a space
+  ipcMain.on(SHOW_SYNC_SPACE_PROMPT_CHANNEL, showSyncSpacePrompt(mainWindow));
+
+  // called when syncing a space
+  ipcMain.on(SYNC_SPACE_CHANNEL, syncSpace(mainWindow, db));
 });
 
 app.on('window-all-closed', () => {

@@ -1,7 +1,7 @@
 const extract = require('extract-zip');
 const rimraf = require('rimraf');
 const fs = require('fs');
-const { VAR_FOLDER, TEMPORARY_EXTRACT_FOLDER } = require('../config/config');
+const { VAR_FOLDER, TMP_FOLDER } = require('../config/config');
 const { LOADED_SPACE_CHANNEL } = require('../config/channels');
 const {
   ERROR_SPACE_ALREADY_AVAILABLE,
@@ -16,7 +16,7 @@ const { SPACES_COLLECTION } = require('../db');
 const fsPromises = fs.promises;
 
 const loadSpace = (mainWindow, db) => async (event, { fileLocation }) => {
-  const extractPath = `${VAR_FOLDER}/${TEMPORARY_EXTRACT_FOLDER}`;
+  const extractPath = `${VAR_FOLDER}/${TMP_FOLDER}`;
   try {
     extract(fileLocation, { dir: extractPath }, async extractError => {
       if (extractError) {

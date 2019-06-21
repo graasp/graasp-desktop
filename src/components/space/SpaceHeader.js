@@ -9,13 +9,20 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
 import WarningIcon from '@material-ui/icons/Warning';
 import WifiIcon from '@material-ui/icons/Wifi';
+import SyncIcon from '@material-ui/icons/Sync';
 import Toolbar from '@material-ui/core/Toolbar/Toolbar';
+import { Online } from 'react-detect-offline';
 import { withTranslation } from 'react-i18next';
 import IconButton from '@material-ui/core/IconButton/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core';
 import Styles from '../../Styles';
-import { deleteSpace, exportSpace, saveSpace } from '../../actions/space';
+import {
+  deleteSpace,
+  exportSpace,
+  saveSpace,
+  syncSpace,
+} from '../../actions/space';
 
 class SpaceHeader extends Component {
   static propTypes = {
@@ -30,6 +37,7 @@ class SpaceHeader extends Component {
     dispatchExportSpace: PropTypes.func.isRequired,
     dispatchDeleteSpace: PropTypes.func.isRequired,
     dispatchSaveSpace: PropTypes.func.isRequired,
+    dispatchSyncSpace: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
   };
 
@@ -50,6 +58,14 @@ class SpaceHeader extends Component {
   handleSave = () => {
     const { space, dispatchSaveSpace } = this.props;
     dispatchSaveSpace({ space });
+  };
+
+  handleSync = () => {
+    const {
+      space: { id },
+      dispatchSyncSpace,
+    } = this.props;
+    dispatchSyncSpace({ id });
   };
 
   renderSaveButton() {
@@ -137,6 +153,30 @@ class SpaceHeader extends Component {
     return null;
   }
 
+  renderSyncButton() {
+    const { space, classes, t } = this.props;
+    const { saved } = space;
+    if (saved) {
+      return (
+        <Online>
+          <Tooltip
+            title={t(
+              'Synchronize this space with its online version. All user input will be deleted.'
+            )}
+          >
+            <IconButton color="inherit" className={classes.button}>
+              <SyncIcon
+                className={classes.rightIcon}
+                onClick={this.handleSync}
+              />
+            </IconButton>
+          </Tooltip>
+        </Online>
+      );
+    }
+    return null;
+  }
+
   render() {
     const {
       openDrawer,
@@ -165,6 +205,7 @@ class SpaceHeader extends Component {
           </IconButton>
           {name}
           <span style={{ position: 'absolute', right: 20 }}>
+            {this.renderSyncButton()}
             {this.renderPreviewIcon()}
             {this.renderDeleteButton()}
             {this.renderExportButton()}
@@ -186,6 +227,7 @@ const mapDispatchToProps = {
   dispatchExportSpace: exportSpace,
   dispatchDeleteSpace: deleteSpace,
   dispatchSaveSpace: saveSpace,
+  dispatchSyncSpace: syncSpace,
 };
 
 const ConnectedComponent = connect(

@@ -8,6 +8,7 @@ const {
   APPLICATION,
   RESOURCE,
   VAR_FOLDER,
+  TMP_FOLDER,
 } = require('./config/config');
 
 const isFileAvailable = filePath =>
@@ -52,11 +53,15 @@ const generateHash = resource => {
 };
 
 // create space directory
-const createSpaceDirectory = async ({ id }) => {
+const createSpaceDirectory = ({ id, tmp }) => {
   try {
-    mkdirp.sync(`${VAR_FOLDER}/${id}`);
+    const rootPath = tmp ? `${VAR_FOLDER}/${TMP_FOLDER}` : VAR_FOLDER;
+    const p = `${rootPath}/${id}`;
+    mkdirp.sync(p);
+    return p;
   } catch (err) {
     logger.error(err);
+    return false;
   }
 };
 
