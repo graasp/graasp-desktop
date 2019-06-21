@@ -62,7 +62,7 @@ const {
   loadSpace,
   saveSpace,
   getSpace,
-  getAllSpaces,
+  getSpaces,
 } = require('./app/listeners');
 
 // add keys to process
@@ -246,7 +246,7 @@ app.on('ready', async () => {
   ipcMain.on(GET_SPACE_CHANNEL, getSpace(mainWindow, db));
 
   // called when getting all spaces
-  ipcMain.on(GET_SPACES_CHANNEL, getAllSpaces(mainWindow, db));
+  ipcMain.on(GET_SPACES_CHANNEL, getSpaces(mainWindow, db));
 
   // called when deleting a space
   ipcMain.on(DELETE_SPACE_CHANNEL, async (event, { id }) => {

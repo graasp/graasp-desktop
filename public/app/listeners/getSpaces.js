@@ -2,7 +2,7 @@ const { GET_SPACES_CHANNEL } = require('../config/channels');
 const logger = require('../logger');
 const { SPACES_COLLECTION } = require('../db');
 
-const getAllSpaces = (mainWindow, db) => async () => {
+const getSpaces = (mainWindow, db) => async () => {
   try {
     // get handle to spaces collection
     const spaces = db.get(SPACES_COLLECTION).value();
@@ -12,4 +12,4 @@ const getAllSpaces = (mainWindow, db) => async () => {
   }
 };
 
-module.exports = getAllSpaces;
+module.exports = getSpaces;
