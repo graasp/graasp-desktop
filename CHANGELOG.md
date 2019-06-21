@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.8.1](https://github.com/graasp/graasp-desktop/compare/v0.8.0...v0.8.1) (2019-06-21)
+
+### Bug Fixes
+
+- add app instance id to phase app ([dd93a91](https://github.com/graasp/graasp-desktop/commit/dd93a91)), closes [#111](https://github.com/graasp/graasp-desktop/issues/111)
+
 # [0.8.0](https://github.com/graasp/graasp-desktop/compare/v0.7.0...v0.8.0) (2019-06-20)
 
 ### Bug Fixes
