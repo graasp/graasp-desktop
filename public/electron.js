@@ -58,7 +58,12 @@ const {
 } = require('./app/config/channels');
 const { ERROR_GENERAL } = require('./app/config/errors');
 const env = require('./env.json');
-const { loadSpace, saveSpace, getSpace } = require('./app/listeners');
+const {
+  loadSpace,
+  saveSpace,
+  getSpace,
+  getAllSpaces,
+} = require('./app/listeners');
 
 // add keys to process
 Object.keys(env).forEach(key => {
@@ -241,15 +246,7 @@ app.on('ready', async () => {
   ipcMain.on(GET_SPACE_CHANNEL, getSpace(mainWindow, db));
 
   // called when getting all spaces
-  ipcMain.on(GET_SPACES_CHANNEL, async () => {
-    try {
-      // get handle to spaces collection
-      const spaces = db.get(SPACES_COLLECTION).value();
-      mainWindow.webContents.send(GET_SPACES_CHANNEL, spaces);
-    } catch (e) {
-      logger.error(e);
-    }
-  });
+  ipcMain.on(GET_SPACES_CHANNEL, getAllSpaces(mainWindow, db));
 
   // called when deleting a space
   ipcMain.on(DELETE_SPACE_CHANNEL, async (event, { id }) => {
