@@ -36,6 +36,8 @@ const ERROR_SETTING_DEVELOPER_MODE =
   'There was an error setting the developer mode';
 const ERROR_GETTING_DATABASE = 'There was an error getting the database.';
 const ERROR_SETTING_DATABASE = 'There was an error updating the database.';
+const SUCCESS_SYNCING_MESSAGE = 'Space was successfully synced';
+const ERROR_SYNCING_MESSAGE = 'There was an error syncing the space.';
 
 module.exports = {
   ERROR_GETTING_DEVELOPER_MODE,
@@ -65,4 +67,6 @@ module.exports = {
   INVALID_SPACE_ID,
   ERROR_GETTING_DATABASE,
   ERROR_SETTING_DATABASE,
+  SUCCESS_SYNCING_MESSAGE,
+  ERROR_SYNCING_MESSAGE,
 };

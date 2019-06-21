@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [0.9.0](https://github.com/graasp/graasp-desktop/compare/v0.8.1...v0.9.0) (2019-06-21)
+
+### Bug Fixes
+
+- export getSpace correctly ([33fc4a5](https://github.com/graasp/graasp-desktop/commit/33fc4a5)), closes [#111](https://github.com/graasp/graasp-desktop/issues/111)
+
+### Features
+
+- allow a user to sync a space with the remote ([2e468fa](https://github.com/graasp/graasp-desktop/commit/2e468fa)), closes [#114](https://github.com/graasp/graasp-desktop/issues/114)
+
 ## [0.8.1](https://github.com/graasp/graasp-desktop/compare/v0.8.0...v0.8.1) (2019-06-21)
 
 ### Bug Fixes

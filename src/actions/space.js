@@ -13,6 +13,8 @@ import {
   SAVE_SPACE_SUCCEEDED,
   FLAG_GETTING_SPACES_NEARBY,
   GET_SPACES_NEARBY_SUCCEEDED,
+  FLAG_SYNCING_SPACE,
+  SYNC_SPACE_SUCCEEDED,
 } from '../types';
 import {
   ERROR_ZIP_CORRUPTED,
@@ -31,11 +33,15 @@ import {
   GET_SPACES_CHANNEL,
   LOAD_SPACE_CHANNEL,
   LOADED_SPACE_CHANNEL,
-  RESPOND_DELETE_SPACE_PROMPT_CHANNEL,
-  RESPOND_EXPORT_SPACE_PROMPT_CHANNEL,
   SHOW_DELETE_SPACE_PROMPT_CHANNEL,
+  RESPOND_DELETE_SPACE_PROMPT_CHANNEL,
   SHOW_EXPORT_SPACE_PROMPT_CHANNEL,
+  RESPOND_EXPORT_SPACE_PROMPT_CHANNEL,
   SAVE_SPACE_CHANNEL,
+  SHOW_SYNC_SPACE_PROMPT_CHANNEL,
+  RESPOND_SYNC_SPACE_PROMPT_CHANNEL,
+  SYNC_SPACE_CHANNEL,
+  SYNCED_SPACE_CHANNEL,
 } from '../config/channels';
 import {
   // ERROR_DOWNLOADING_MESSAGE,
@@ -55,6 +61,8 @@ import {
   SUCCESS_MESSAGE_HEADER,
   SUCCESS_SAVING_MESSAGE,
   SUCCESS_SPACE_LOADED_MESSAGE,
+  SUCCESS_SYNCING_MESSAGE,
+  ERROR_SYNCING_MESSAGE,
 } from '../config/messages';
 import { createFlag, isErrorResponse } from './common';
 import {
@@ -71,6 +79,7 @@ const flagDeletingSpace = createFlag(FLAG_DELETING_SPACE);
 const flagExportingSpace = createFlag(FLAG_EXPORTING_SPACE);
 const flagSavingSpace = createFlag(FLAG_SAVING_SPACE);
 const flagGettingSpacesNearby = createFlag(FLAG_GETTING_SPACES_NEARBY);
+const flagSyncingSpace = createFlag(FLAG_SYNCING_SPACE);
 
 /**
  * helper function to wrap a listener to the get space channel around a promise
@@ -273,6 +282,45 @@ const deleteSpace = ({ id }) => dispatch => {
   });
 };
 
+const syncSpace = async ({ id }) => async dispatch => {
+  try {
+    const url = generateGetSpaceEndpoint(id);
+    const response = await fetch(url, DEFAULT_GET_REQUEST);
+    // throws if it is an error
+    await isErrorResponse(response);
+    const remoteSpace = await response.json();
+
+    // show confirmation prompt
+    window.ipcRenderer.send(SHOW_SYNC_SPACE_PROMPT_CHANNEL);
+
+    // this runs when the user has responded to the sync dialog
+    window.ipcRenderer.once(RESPOND_SYNC_SPACE_PROMPT_CHANNEL, (event, res) => {
+      // only sync the space if the response is positive
+      if (res === 1) {
+        dispatch(flagSyncingSpace(true));
+        window.ipcRenderer.send(SYNC_SPACE_CHANNEL, { remoteSpace });
+      }
+    });
+
+    // this runs once the space has been synced
+    window.ipcRenderer.once(SYNCED_SPACE_CHANNEL, (event, res) => {
+      if (res === ERROR_GENERAL) {
+        toastr.error(ERROR_MESSAGE_HEADER, ERROR_SYNCING_MESSAGE);
+      } else {
+        toastr.success(SUCCESS_MESSAGE_HEADER, SUCCESS_SYNCING_MESSAGE);
+        dispatch({
+          type: SYNC_SPACE_SUCCEEDED,
+          payload: res,
+        });
+      }
+      dispatch(flagSyncingSpace(false));
+    });
+  } catch (err) {
+    dispatch(flagSyncingSpace(false));
+    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SYNCING_MESSAGE);
+  }
+};
+
 const loadSpace = ({ fileLocation }) => dispatch => {
   dispatch(flagLoadingSpace(true));
   window.ipcRenderer.send(LOAD_SPACE_CHANNEL, { fileLocation });
@@ -347,4 +395,5 @@ export {
   getSpace,
   saveSpace,
   getSpacesNearby,
+  syncSpace,
 };
