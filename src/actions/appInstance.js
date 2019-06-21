@@ -13,14 +13,23 @@ const getAppInstance = async (
   callback
 ) => async (dispatch, getState) => {
   try {
-    // first check to see if app instance is available in the redux store
+    // first check to see if items are available in the content
+    // of the phase that is currently in the redux store
     const { Phase } = getState();
-    const items = Phase.getIn(['current', 'content', 'items']);
-    const item = items && _.find(items, ['id', id]);
-    if (item && item.appInstance) {
+    const items = Phase.getIn(['current', 'content', 'items']) || [];
+
+    // only consider items that have app instances
+    const appInstances = items
+      .filter(item => item.appInstance)
+      .map(item => item.appInstance);
+
+    // find the app instance with this id
+    const appInstance = _.find(appInstances, ['id', id]);
+
+    if (appInstance) {
       callback({
         type: GET_APP_INSTANCE_SUCCEEDED,
-        payload: item.appInstance,
+        payload: appInstance,
       });
     } else {
       window.ipcRenderer.send(GET_APP_INSTANCE_CHANNEL, {

@@ -44,7 +44,7 @@ const renderResource = item => {
 };
 
 const PhaseItem = ({ item, spaceId, phaseId }) => {
-  const { id, category, asset, url, name } = item;
+  const { id, category, asset, url, name, appInstance } = item;
   switch (category) {
     case RESOURCE:
       return renderResource(item);
@@ -59,6 +59,7 @@ const PhaseItem = ({ item, spaceId, phaseId }) => {
           name={name}
           spaceId={spaceId}
           phaseId={phaseId}
+          appInstance={appInstance}
         />
       );
 
@@ -77,6 +78,13 @@ PhaseItem.propTypes = {
   }).isRequired,
   phaseId: PropTypes.string.isRequired,
   spaceId: PropTypes.string.isRequired,
+  appInstance: PropTypes.shape({
+    id: PropTypes.string,
+  }),
+};
+
+PhaseItem.defaultProps = {
+  appInstance: null,
 };
 
 export default PhaseItem;

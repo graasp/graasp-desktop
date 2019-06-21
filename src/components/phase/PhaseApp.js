@@ -32,11 +32,15 @@ class PhaseApp extends Component {
     phaseId: PropTypes.string.isRequired,
     spaceId: PropTypes.string.isRequired,
     lang: PropTypes.string,
+    appInstance: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }),
   };
 
   static defaultProps = {
     url: null,
     asset: null,
+    appInstance: null,
     name: 'Image',
     lang: DEFAULT_LANGUAGE,
   };
@@ -83,7 +87,17 @@ class PhaseApp extends Component {
   };
 
   render() {
-    const { url, lang, asset, name, id, folder, spaceId, phaseId } = this.props;
+    const {
+      url,
+      lang,
+      asset,
+      name,
+      id,
+      folder,
+      spaceId,
+      phaseId,
+      appInstance,
+    } = this.props;
     let uri = url;
     if (asset) {
       // assets with absolute paths are usually for testing
@@ -109,13 +123,16 @@ class PhaseApp extends Component {
       existingParams = Qs.parse(existingQueryString);
     }
 
+    const { id: appInstanceId } = appInstance || {};
+
     const params = {
       ...existingParams,
       spaceId,
       userId,
       lang,
+      appInstanceId,
+      itemId: id,
       offline: true,
-      appInstanceId: id,
       subSpaceId: phaseId,
     };
 

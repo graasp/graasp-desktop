@@ -430,8 +430,10 @@ app.on('ready', async () => {
         .get('phases')
         .find({ id: subSpaceId })
         .get('items')
+        .filter(item => item.appInstance)
+        .map(item => item.appInstance)
         .find({ id: appInstanceId })
-        .get('appInstanceResources');
+        .get('resources');
 
       // only filter by type if provided
       if (type) {
@@ -492,8 +494,10 @@ app.on('ready', async () => {
         .get('phases')
         .find({ id: subSpaceId })
         .get('items')
+        .filter(item => item.appInstance)
+        .map(item => item.appInstance)
         .find({ id: appInstanceId })
-        .get('appInstanceResources')
+        .get('resources')
         .push(resourceToWrite)
         .write();
 
@@ -523,8 +527,10 @@ app.on('ready', async () => {
         .get('phases')
         .find({ id: subSpaceId })
         .get('items')
+        .filter(item => item.appInstance)
+        .map(item => item.appInstance)
         .find({ id: appInstanceId })
-        .get('appInstanceResources')
+        .get('resources')
         .find({ id })
         .assign(fieldsToUpdate)
         .value();
@@ -549,8 +555,9 @@ app.on('ready', async () => {
         .get('phases')
         .find({ id: subSpaceId })
         .get('items')
-        .find({ appInstanceId: id })
-        .get('appInstance')
+        .filter(item => item.appInstance)
+        .map(item => item.appInstance)
+        .find({ id })
         .value();
 
       mainWindow.webContents.send(GET_APP_INSTANCE_CHANNEL, appInstance);
