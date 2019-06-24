@@ -63,6 +63,7 @@ const env = require('./env.json');
 const {
   loadSpace,
   saveSpace,
+  getSpaces,
   showSyncSpacePrompt,
   syncSpace,
   getSpace,
@@ -249,15 +250,7 @@ app.on('ready', async () => {
   ipcMain.on(GET_SPACE_CHANNEL, getSpace(mainWindow, db));
 
   // called when getting all spaces
-  ipcMain.on(GET_SPACES_CHANNEL, async () => {
-    try {
-      // get handle to spaces collection
-      const spaces = db.get(SPACES_COLLECTION).value();
-      mainWindow.webContents.send(GET_SPACES_CHANNEL, spaces);
-    } catch (e) {
-      logger.error(e);
-    }
-  });
+  ipcMain.on(GET_SPACES_CHANNEL, getSpaces(mainWindow, db));
 
   // called when deleting a space
   ipcMain.on(DELETE_SPACE_CHANNEL, async (event, { id }) => {
