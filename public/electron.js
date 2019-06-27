@@ -10,7 +10,6 @@ const {
 const path = require('path');
 const isDev = require('electron-is-dev');
 const fs = require('fs');
-const rimraf = require('rimraf');
 const archiver = require('archiver');
 const ObjectId = require('bson-objectid');
 const { autoUpdater } = require('electron-updater');
@@ -34,7 +33,6 @@ const {
   EXPORT_SPACE_CHANNEL,
   EXPORTED_SPACE_CHANNEL,
   DELETE_SPACE_CHANNEL,
-  DELETED_SPACE_CHANNEL,
   GET_SPACE_CHANNEL,
   GET_SPACES_CHANNEL,
   RESPOND_EXPORT_SPACE_PROMPT_CHANNEL,
@@ -67,6 +65,7 @@ const {
   showSyncSpacePrompt,
   syncSpace,
   getSpace,
+  deleteSpace,
 } = require('./app/listeners');
 
 // add keys to process
@@ -253,17 +252,7 @@ app.on('ready', async () => {
   ipcMain.on(GET_SPACES_CHANNEL, getSpaces(mainWindow, db));
 
   // called when deleting a space
-  ipcMain.on(DELETE_SPACE_CHANNEL, async (event, { id }) => {
-    try {
-      db.get(SPACES_COLLECTION)
-        .remove({ id })
-        .write();
-      rimraf.sync(`${VAR_FOLDER}/${id}`);
-      mainWindow.webContents.send(DELETED_SPACE_CHANNEL);
-    } catch (err) {
-      mainWindow.webContents.send(DELETED_SPACE_CHANNEL, ERROR_GENERAL);
-    }
-  });
+  ipcMain.on(DELETE_SPACE_CHANNEL, deleteSpace(mainWindow, db));
 
   // called when loading a space
   ipcMain.on(LOAD_SPACE_CHANNEL, loadSpace(mainWindow, db));
