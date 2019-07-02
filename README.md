@@ -39,6 +39,7 @@ REACT_APP_GRAASP_API_HOST=https://api.graasp.eu
 REACT_APP_GRAASP_HOST=https://graasp.eu
 REACT_APP_GOOGLE_ANALYTICS_ID=
 REACT_APP_SENTRY_DSN=
+SENTRY_DSN=
 GOOGLE_API_KEY=
 BROWSER=none
 ```
@@ -60,8 +61,10 @@ you can get [here](https://developers.google.com/maps/documentation/geolocation/
 The `BROWSER=none` assignment simply tells Electron not to use a browser to load, but instead to
 use the native OS windows.
 
-Currently you also need to create a file in the `public/` folder called `env.json` with the
-following contents.
+When you first run or build the application, a file called `env.json` will be created under the
+`public/` folder. If you update your `.env.local` and `.env` file with values for the variables
+below, the contents of this file will also update the next time you run or build. This process is
+handled by `scripts/setup.js`.
 
 ```json
 {
