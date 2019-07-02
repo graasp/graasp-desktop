@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [0.10.0](https://github.com/graasp/graasp-desktop/compare/v0.9.0...v0.10.0) (2019-07-02)
+
+### Bug Fixes
+
+- update translations ([121725c](https://github.com/graasp/graasp-desktop/commit/121725c)), closes [#120](https://github.com/graasp/graasp-desktop/issues/120)
+
+### Features
+
+- add japanese and swahili ([58ae1f4](https://github.com/graasp/graasp-desktop/commit/58ae1f4)), closes [#101](https://github.com/graasp/graasp-desktop/issues/101) [#119](https://github.com/graasp/graasp-desktop/issues/119)
+
 # [0.9.0](https://github.com/graasp/graasp-desktop/compare/v0.8.1...v0.9.0) (2019-06-21)
 
 ### Bug Fixes
