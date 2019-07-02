@@ -2,11 +2,15 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import en from '../langs/en';
 import fr from '../langs/fr';
+import ja from '../langs/ja';
+import sw from '../langs/sw';
 
 i18n.use(initReactI18next).init({
   resources: {
     en,
     fr,
+    ja,
+    sw,
   },
   fallbackLng: 'en',
   // debug only when not in production
@@ -36,7 +40,7 @@ const langs = {
   fr: 'Français',
   // hu: "Magyar",
   // it: "Italiano",
-  // ja: "日本語",
+  ja: '日本語',
   // ka: "ქართული",
   // lt: "lietuvių kalba",
   // lv: "Latviešu",
@@ -47,7 +51,7 @@ const langs = {
   // sk: "Slovenský",
   // sl: "Slovenščina",
   // sr: "српски језик",
-  // sw: "Kiswahili",
+  sw: 'Kiswahili',
   // tr: "Türkçe",
   // uk: "Українська",
   // vi: "Tiếng Việt",
