@@ -6,8 +6,14 @@ import './PhaseImage.css';
 const PhaseImage = ({ url, asset, name, folder }) => {
   let uri = url;
   if (asset) {
-    uri = `file://${folder}/${asset}`;
+    // assets with absolute paths are usually for testing
+    if (asset.startsWith('/')) {
+      uri = `file://${asset}`;
+    } else {
+      uri = `file://${folder}/${asset}`;
+    }
   }
+
   return (
     <div className="ImageDiv">
       <img src={uri} alt={name} className="Image" />

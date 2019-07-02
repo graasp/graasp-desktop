@@ -7,8 +7,14 @@ import './PhaseVideo.css';
 const PhaseVideo = ({ url, asset, name, mimeType, folder }) => {
   let uri = url;
   if (asset) {
-    uri = `file://${folder}/${asset}`;
+    // assets with absolute paths are usually for testing
+    if (asset.startsWith('/')) {
+      uri = `file://${asset}`;
+    } else {
+      uri = `file://${folder}/${asset}`;
+    }
   }
+
   return (
     <video title={name} className="Video" controls>
       <source src={uri} type={mimeType} />

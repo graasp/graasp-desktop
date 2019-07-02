@@ -7,6 +7,9 @@ WORKDIR /usr/src/app
 COPY package.json /usr/src/app/
 RUN yarn install
 
+# prebuild before testing
+RUN yarn prebuild
+
 # bundle app source
 COPY . /usr/src/app
 
