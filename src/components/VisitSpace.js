@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
+import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -35,6 +36,7 @@ class VisitSpace extends Component {
   };
 
   static propTypes = {
+    t: PropTypes.func.isRequired,
     classes: PropTypes.shape({}).isRequired,
     theme: PropTypes.shape({}).isRequired,
     activity: PropTypes.bool,
@@ -83,7 +85,7 @@ class VisitSpace extends Component {
   };
 
   render() {
-    const { classes, theme, activity } = this.props;
+    const { classes, theme, activity, t } = this.props;
     const { open, spaceId } = this.state;
 
     if (activity) {
@@ -149,7 +151,7 @@ class VisitSpace extends Component {
           <div className={classes.drawerHeader} />
           <FormControl className={classes.formControl}>
             <Typography variant="h4" color="inherit" style={{ margin: '2rem' }}>
-              Visit a Space
+              {t('Visit a Space')}
             </Typography>
             <Input
               className={classes.input}
@@ -170,7 +172,7 @@ class VisitSpace extends Component {
               className={classes.button}
               disabled={!window.navigator.onLine || !spaceId || spaceId === ''}
             >
-              Visit
+              {t('Visit')}
             </Button>
           </FormControl>
         </main>
@@ -184,7 +186,10 @@ const mapStateToProps = ({ Space }) => ({
 });
 
 const ConnectedComponent = connect(mapStateToProps)(VisitSpace);
+
+const TranslatedComponent = withTranslation()(ConnectedComponent);
+
 const StyledComponent = withStyles(Styles, { withTheme: true })(
-  ConnectedComponent
+  TranslatedComponent
 );
 export default withRouter(StyledComponent);

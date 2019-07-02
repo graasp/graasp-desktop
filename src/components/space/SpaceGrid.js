@@ -6,6 +6,7 @@ import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
 import Button from '@material-ui/core/Button/Button';
 import { withStyles } from '@material-ui/core';
 import { withRouter } from 'react-router';
+import { withTranslation } from 'react-i18next';
 import Typography from '@material-ui/core/Typography/Typography';
 import Grid from '@material-ui/core/Grid/Grid';
 import MediaCard from '../common/MediaCard';
@@ -32,6 +33,7 @@ class SpaceGrid extends Component {
     history: PropTypes.shape({ length: PropTypes.number.isRequired })
       .isRequired,
     dispatchClearSpace: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired,
     saved: PropTypes.bool,
   };
 
@@ -80,7 +82,7 @@ class SpaceGrid extends Component {
   };
 
   render() {
-    const { spaces, classes, history, saved } = this.props;
+    const { spaces, classes, history, saved, t } = this.props;
 
     // spaces is a set to mapping through it will return a set
     const MediaCards = spaces.map(space => {
@@ -96,7 +98,7 @@ class SpaceGrid extends Component {
           fullWidth
         >
           <RemoveRedEyeIcon className={classes.leftIcon} />
-          View
+          {t('View')}
         </Button>
       );
       return (
@@ -115,7 +117,7 @@ class SpaceGrid extends Component {
     if (!MediaCards.size) {
       return (
         <Typography variant="h5" color="inherit">
-          No spaces available.
+          {t('No Spaces Available')}
         </Typography>
       );
     }
@@ -140,4 +142,6 @@ const ConnectedComponent = connect(
   mapDispatchToProps
 )(SpaceGrid);
 
-export default withRouter(withStyles(SpaceGrid.styles)(ConnectedComponent));
+const TranslatedComponent = withTranslation()(ConnectedComponent);
+
+export default withRouter(withStyles(SpaceGrid.styles)(TranslatedComponent));

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import { withTranslation } from 'react-i18next';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -34,6 +35,7 @@ class LoadSpace extends Component {
   };
 
   static propTypes = {
+    t: PropTypes.func.isRequired,
     dispatchLoadSpace: PropTypes.func.isRequired,
     theme: PropTypes.shape({ direction: PropTypes.string.isRequired })
       .isRequired,
@@ -80,7 +82,7 @@ class LoadSpace extends Component {
   };
 
   render() {
-    const { classes, theme, activity } = this.props;
+    const { classes, theme, activity, t } = this.props;
     const { open, fileLocation } = this.state;
 
     if (activity) {
@@ -145,7 +147,7 @@ class LoadSpace extends Component {
           <div className={classes.drawerHeader} />
           <FormControl className={classes.formControl}>
             <Typography variant="h4" color="inherit" style={{ margin: '2rem' }}>
-              Load a Space from a File
+              {t('Load a Space')}
             </Typography>
             <Button
               variant="contained"
@@ -153,7 +155,7 @@ class LoadSpace extends Component {
               color="primary"
               className={classes.button}
             >
-              Browse
+              {t('Browse')}
             </Button>
             <Input
               required
@@ -173,7 +175,7 @@ class LoadSpace extends Component {
               className={classes.button}
               disabled={!fileLocation.endsWith('.zip')}
             >
-              Load
+              {t('Load')}
             </Button>
           </FormControl>
         </main>
@@ -190,11 +192,14 @@ const mapStateToProps = ({ Space }) => ({
   activity: Space.get('current').get('activity'),
 });
 
-export default withRouter(
-  withStyles(Styles, { withTheme: true })(
-    connect(
-      mapStateToProps,
-      mapDispatchToProps
-    )(LoadSpace)
-  )
+const ConnectedComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LoadSpace);
+
+const TranslatedComponent = withTranslation()(ConnectedComponent);
+
+const StyledComponent = withStyles(Styles, { withTheme: true })(
+  TranslatedComponent
 );
+export default withRouter(StyledComponent);

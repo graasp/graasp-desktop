@@ -5,7 +5,6 @@ import { Typography, withStyles } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import Styles from '../../Styles';
 import './SpaceDescription.css';
-import { DEFAULT_LANGUAGE } from '../../config/constants';
 import Banner from '../common/Banner';
 
 const renderPreviewWarning = t => {
@@ -13,18 +12,15 @@ const renderPreviewWarning = t => {
     <Banner
       type="warning"
       text={t(
-        'Warning: You are previewing this space. Any input or changes will not be saved.'
+        'You are previewing this space. Any input or changes will not be saved.'
       )}
     />
   );
 };
 
-const SpaceDescription = ({ description, classes, start, lang, saved }) => {
-  const { i18n } = useTranslation();
+const SpaceDescription = ({ description, classes, start, saved }) => {
+  const { t } = useTranslation();
 
-  // we use the fixed translation for spaces as they
-  // are meant to be consumed in the predefined language
-  const t = i18n.getFixedT(lang);
   return (
     <div className="SpaceDescription">
       <div>
@@ -49,14 +45,12 @@ const SpaceDescription = ({ description, classes, start, lang, saved }) => {
 
 SpaceDescription.propTypes = {
   description: PropTypes.string.isRequired,
-  lang: PropTypes.string,
   classes: PropTypes.shape({ appBar: PropTypes.string.isRequired }).isRequired,
   start: PropTypes.func.isRequired,
   saved: PropTypes.bool,
 };
 
 SpaceDescription.defaultProps = {
-  lang: DEFAULT_LANGUAGE,
   saved: false,
 };
 
