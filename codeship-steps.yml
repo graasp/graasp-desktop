@@ -9,4 +9,4 @@
       command: yarn lint
     - name: test
       service: run-test
-      command: yarn test:ci
+      command: yarn ci

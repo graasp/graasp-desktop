@@ -42,8 +42,10 @@
     "postrelease": "git push --follow-tags origin master",
     "test:once": "cross-env CI=true env-cmd -f ./.env.test react-scripts test --env=jsdom",
     "test:coverage": "cross-env CI=true env-cmd -f ./.env.test react-scripts test --env=jsdom --coverage",
-    "test:ci": "run-s test:coverage report",
-    "report": "cat ./coverage/lcov.info | env-cmd -f ./.env.test codacy-coverage"
+    "ci": "run-s test:ci report:ci",
+    "test:ci": "react-scripts test --env=jsdom --coverage",
+    "report": "cat ./coverage/lcov.info | env-cmd -f ./.env.test codacy-coverage",
+    "report:ci": "cat ./coverage/lcov.info | codacy-coverage"
   },
   "dependencies": {
     "@material-ui/core": "4.1.1",
