@@ -28,6 +28,7 @@
     "postinstall": "electron-builder install-app-deps",
     "prestart": "env-cmd -f ./.env.local node scripts/setup.js",
     "prebuild": "env-cmd -f ./.env node scripts/setup.js",
+    "setup": "node scripts/setup.js",
     "predist": "yarn build",
     "lint": "eslint .",
     "prettier:check": "prettier --check '{src,public}/**/*.js'",
