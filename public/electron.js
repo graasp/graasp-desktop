@@ -9,19 +9,13 @@ const {
 } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
-const fs = require('fs');
-const archiver = require('archiver');
 const ObjectId = require('bson-objectid');
 const { autoUpdater } = require('electron-updater');
 const Sentry = require('@sentry/electron');
 const ua = require('universal-analytics');
 const { machineIdSync } = require('node-machine-id');
 const logger = require('./app/logger');
-const {
-  ensureDatabaseExists,
-  bootstrapDatabase,
-  SPACES_COLLECTION,
-} = require('./app/db');
+const { ensureDatabaseExists, bootstrapDatabase } = require('./app/db');
 const {
   VAR_FOLDER,
   DATABASE_PATH,
@@ -31,7 +25,6 @@ const {
 const {
   LOAD_SPACE_CHANNEL,
   EXPORT_SPACE_CHANNEL,
-  EXPORTED_SPACE_CHANNEL,
   DELETE_SPACE_CHANNEL,
   GET_SPACE_CHANNEL,
   GET_SPACES_CHANNEL,
@@ -66,15 +59,13 @@ const {
   syncSpace,
   getSpace,
   deleteSpace,
+  exportSpace,
 } = require('./app/listeners');
 
 // add keys to process
 Object.keys(env).forEach(key => {
   process.env[key] = env[key];
 });
-
-// use promisified fs
-const fsPromises = fs.promises;
 
 let mainWindow;
 
@@ -258,66 +249,7 @@ app.on('ready', async () => {
   ipcMain.on(LOAD_SPACE_CHANNEL, loadSpace(mainWindow, db));
 
   // called when exporting a space
-  ipcMain.on(EXPORT_SPACE_CHANNEL, async (event, { archivePath, id }) => {
-    try {
-      // get space from local database
-      const space = db
-        .get(SPACES_COLLECTION)
-        .find({ id })
-        .value();
-
-      // abort if space does not exist
-      if (!space) {
-        mainWindow.webContents.send(EXPORTED_SPACE_CHANNEL, ERROR_GENERAL);
-      } else {
-        // stringify space
-        const spaceString = JSON.stringify(space);
-        const spaceDirectory = `${VAR_FOLDER}/${id}`;
-        const spacePath = `${spaceDirectory}/${id}.json`;
-
-        // create manifest
-        const manifest = {
-          id,
-          version: app.getVersion(),
-          createdAt: new Date().toISOString(),
-        };
-        const manifestString = JSON.stringify(manifest);
-        const manifestPath = `${spaceDirectory}/manifest.json`;
-
-        // write space and manifest to json file inside space folder
-        await fsPromises.writeFile(spacePath, spaceString);
-        await fsPromises.writeFile(manifestPath, manifestString);
-
-        // prepare output file for zip
-        const output = fs.createWriteStream(archivePath);
-        output.on('close', () => {
-          mainWindow.webContents.send(EXPORTED_SPACE_CHANNEL);
-        });
-        output.on('end', () => {
-          mainWindow.webContents.send(EXPORTED_SPACE_CHANNEL, ERROR_GENERAL);
-        });
-
-        // archive space folder into zip
-        const archive = archiver('zip', {
-          zlib: { level: 9 },
-        });
-        archive.on('warning', err => {
-          if (err.code === 'ENOENT') {
-            logger.error(err);
-          }
-        });
-        archive.on('error', () => {
-          mainWindow.webContents.send(EXPORTED_SPACE_CHANNEL, ERROR_GENERAL);
-        });
-        archive.pipe(output);
-        archive.directory(spaceDirectory, false);
-        archive.finalize();
-      }
-    } catch (err) {
-      logger.error(err);
-      mainWindow.webContents.send(EXPORTED_SPACE_CHANNEL, ERROR_GENERAL);
-    }
-  });
+  ipcMain.on(EXPORT_SPACE_CHANNEL, exportSpace(mainWindow, db));
 
   // prompt when loading a space
   ipcMain.on(SHOW_LOAD_SPACE_PROMPT_CHANNEL, (event, options) => {
