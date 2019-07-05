@@ -33,7 +33,6 @@ const {
   SHOW_DELETE_SPACE_PROMPT_CHANNEL,
   SHOW_EXPORT_SPACE_PROMPT_CHANNEL,
   SHOW_LOAD_SPACE_PROMPT_CHANNEL,
-  RESPOND_LOAD_SPACE_PROMPT_CHANNEL,
   SAVE_SPACE_CHANNEL,
   GET_USER_FOLDER_CHANNEL,
   GET_LANGUAGE_CHANNEL,
@@ -60,6 +59,7 @@ const {
   getSpace,
   deleteSpace,
   exportSpace,
+  showLoadSpace,
 } = require('./app/listeners');
 
 // add keys to process
@@ -252,11 +252,7 @@ app.on('ready', async () => {
   ipcMain.on(EXPORT_SPACE_CHANNEL, exportSpace(mainWindow, db));
 
   // prompt when loading a space
-  ipcMain.on(SHOW_LOAD_SPACE_PROMPT_CHANNEL, (event, options) => {
-    dialog.showOpenDialog(null, options, filePaths => {
-      mainWindow.webContents.send(RESPOND_LOAD_SPACE_PROMPT_CHANNEL, filePaths);
-    });
-  });
+  ipcMain.on(SHOW_LOAD_SPACE_PROMPT_CHANNEL, showLoadSpace(mainWindow));
 
   // prompt when exporting a space
   ipcMain.on(SHOW_EXPORT_SPACE_PROMPT_CHANNEL, (event, spaceTitle) => {
