@@ -12,6 +12,7 @@ import Settings from './components/Settings';
 import LoadSpace from './components/LoadSpace';
 import SpaceScreen from './components/space/SpaceScreen';
 import DeveloperScreen from './components/developer/DeveloperScreen';
+import LoginScreen from './components/login/LoginScreen';
 import {
   SETTINGS_PATH,
   SPACE_PATH,
@@ -20,6 +21,7 @@ import {
   VISIT_PATH,
   LOAD_SPACE_PATH,
   DEVELOPER_PATH,
+  LOGIN_PATH,
 } from './config/paths';
 import {
   getGeolocation,
@@ -108,6 +110,7 @@ export class App extends Component {
           <div className="app" style={{ height }}>
             <Switch>
               <Route exact path={HOME_PATH} component={Home} />
+              <Route exact path={LOGIN_PATH} component={LoginScreen} />
               <Route exact path={SPACES_NEARBY_PATH} component={SpacesNearby} />
               <Route exact path={VISIT_PATH} component={VisitSpace} />
               <Route exact path={LOAD_SPACE_PATH} component={LoadSpace} />
