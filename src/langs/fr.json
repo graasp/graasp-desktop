@@ -12,6 +12,8 @@
     "Manually Edit the Database": "Modifier Manuellement la Base de Données",
     "Use Sample Database": "Utiliser une Base de Données Exemple",
     "Developer Mode": "Mode Développeur",
+    "Geolocation Enabled": "Géolocalisation Activée",
+    "Enable Geolocation": "Activer la Géolocalisation",
     "Load a Space": "Charger un Espace",
     "View": "Voir",
     "Open": "Ouvrir",
@@ -30,6 +32,6 @@
     "Sync": "Synchroniser",
     "Save As": "Enregistrer Sous",
     "Cancel": "Annuler",
-    "Are you sure you want to sync this space? All user input will be deleted.": "Êtes-vous sur de vouloir synchroniser cet espace? Toute entrée utilisateur sera supprimée."
+    "Are you sure you want to sync this space? All user input will be deleted.": "Êtes-vous sûr de vouloir synchroniser cet espace? Toute entrée utilisateur sera supprimée."
   }
 }

@@ -34,6 +34,10 @@ const ERROR_GETTING_DEVELOPER_MODE =
   'There was an error getting the developer mode';
 const ERROR_SETTING_DEVELOPER_MODE =
   'There was an error setting the developer mode';
+const ERROR_GETTING_GEOLOCATION_ENABLED =
+  'There was an error getting the geolocation active enabled';
+const ERROR_SETTING_GEOLOCATION_ENABLED =
+  'There was an error setting the geolocation enabled';
 const ERROR_GETTING_DATABASE = 'There was an error getting the database.';
 const ERROR_SETTING_DATABASE = 'There was an error updating the database.';
 const SUCCESS_SYNCING_MESSAGE = 'Space was successfully synced';
@@ -42,6 +46,8 @@ const ERROR_SYNCING_MESSAGE = 'There was an error syncing the space.';
 module.exports = {
   ERROR_GETTING_DEVELOPER_MODE,
   ERROR_SETTING_DEVELOPER_MODE,
+  ERROR_GETTING_GEOLOCATION_ENABLED,
+  ERROR_SETTING_GEOLOCATION_ENABLED,
   ERROR_GETTING_LANGUAGE,
   ERROR_SETTING_LANGUAGE,
   ERROR_DOWNLOADING_MESSAGE,

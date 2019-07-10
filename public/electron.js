@@ -21,6 +21,7 @@ const {
   DATABASE_PATH,
   DEFAULT_LANG,
   DEFAULT_DEVELOPER_MODE,
+  DEFAULT_GEOLOCATION_ENABLED,
 } = require('./app/config/config');
 const {
   LOAD_SPACE_CHANNEL,
@@ -44,6 +45,8 @@ const {
   GET_APP_INSTANCE_CHANNEL,
   GET_DEVELOPER_MODE_CHANNEL,
   SET_DEVELOPER_MODE_CHANNEL,
+  GET_GEOLOCATION_ENABLED_CHANNEL,
+  SET_GEOLOCATION_ENABLED_CHANNEL,
   GET_DATABASE_CHANNEL,
   SET_DATABASE_CHANNEL,
   SHOW_SYNC_SPACE_PROMPT_CHANNEL,
@@ -338,6 +341,42 @@ app.on('ready', async () => {
     } catch (e) {
       logger.error(e);
       mainWindow.webContents.send(SET_DEVELOPER_MODE_CHANNEL, ERROR_GENERAL);
+    }
+  });
+
+  // called when getting geolocation enabled
+  ipcMain.on(GET_GEOLOCATION_ENABLED_CHANNEL, () => {
+    try {
+      const geolocationEnabled =
+        db.get('user.geolocationEnabled').value() ||
+        DEFAULT_GEOLOCATION_ENABLED;
+      mainWindow.webContents.send(
+        GET_GEOLOCATION_ENABLED_CHANNEL,
+        geolocationEnabled
+      );
+    } catch (e) {
+      logger.error(e);
+      mainWindow.webContents.send(
+        GET_GEOLOCATION_ENABLED_CHANNEL,
+        ERROR_GENERAL
+      );
+    }
+  });
+
+  // called when setting geolocation enabled
+  ipcMain.on(SET_GEOLOCATION_ENABLED_CHANNEL, (event, geolocationEnabled) => {
+    try {
+      db.set('user.geolocationEnabled', geolocationEnabled).write();
+      mainWindow.webContents.send(
+        SET_GEOLOCATION_ENABLED_CHANNEL,
+        geolocationEnabled
+      );
+    } catch (e) {
+      logger.error(e);
+      mainWindow.webContents.send(
+        SET_GEOLOCATION_ENABLED_CHANNEL,
+        ERROR_GENERAL
+      );
     }
   });
 

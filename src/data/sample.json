@@ -88,6 +88,7 @@
   ],
   "user": {
     "lang": "en",
-    "developerMode": true
+    "developerMode": true,
+    "geolocationEnabled": false
   }
 }

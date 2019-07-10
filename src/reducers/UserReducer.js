@@ -11,8 +11,16 @@ import {
   SET_DEVELOPER_MODE_SUCCEEDED,
   FLAG_SETTING_DEVELOPER_MODE,
   FLAG_GETTING_DEVELOPER_MODE,
+  GET_GEOLOCATION_ENABLED_SUCCEEDED,
+  SET_GEOLOCATION_ENABLED_SUCCEEDED,
+  FLAG_SETTING_GEOLOCATION_ENABLED,
+  FLAG_GETTING_GEOLOCATION_ENABLED,
 } from '../types';
-import { DEFAULT_DEVELOPER_MODE, DEFAULT_LANGUAGE } from '../config/constants';
+import {
+  DEFAULT_DEVELOPER_MODE,
+  DEFAULT_LANGUAGE,
+  DEFAULT_GEOLOCATION_ENABLED,
+} from '../config/constants';
 import { updateActivityList } from './common';
 
 const INITIAL_STATE = Map({
@@ -22,6 +30,7 @@ const INITIAL_STATE = Map({
     activity: List(),
     lang: DEFAULT_LANGUAGE,
     developerMode: DEFAULT_DEVELOPER_MODE,
+    geolocationEnabled: DEFAULT_GEOLOCATION_ENABLED,
   }),
 });
 
@@ -32,6 +41,8 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case FLAG_GETTING_USER_FOLDER:
     case FLAG_SETTING_DEVELOPER_MODE:
     case FLAG_GETTING_DEVELOPER_MODE:
+    case FLAG_SETTING_GEOLOCATION_ENABLED:
+    case FLAG_GETTING_GEOLOCATION_ENABLED:
       return state.updateIn(
         ['current', 'activity'],
         updateActivityList(payload)
@@ -46,6 +57,9 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case GET_DEVELOPER_MODE_SUCCEEDED:
     case SET_DEVELOPER_MODE_SUCCEEDED:
       return state.setIn(['current', 'developerMode'], payload);
+    case GET_GEOLOCATION_ENABLED_SUCCEEDED:
+    case SET_GEOLOCATION_ENABLED_SUCCEEDED:
+      return state.setIn(['current', 'geolocationEnabled'], payload);
     default:
       return state;
   }
