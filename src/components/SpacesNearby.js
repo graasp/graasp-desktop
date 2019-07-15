@@ -20,6 +20,7 @@ import { getSpacesNearby } from '../actions';
 import SpaceGrid from './space/SpaceGrid';
 import Loader from './common/Loader';
 import GeolocationControl from './common/GeolocationControl';
+import { CONTROLS } from '../config/constants';
 
 class SpacesNearby extends Component {
   state = {
@@ -98,7 +99,7 @@ class SpacesNearby extends Component {
     const geolocationContent = geolocationEnabled ? (
       <SpaceGrid spaces={spaces} />
     ) : (
-      <GeolocationControl isButton />
+      <GeolocationControl controlType={CONTROLS.BUTTON} />
     );
 
     return (

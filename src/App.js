@@ -83,7 +83,7 @@ export class App extends Component {
 
   componentDidUpdate({
     lang: prevLang,
-    geolocationEnabled: prevLocationEnabled,
+    geolocationEnabled: prevGeolocationEnabled,
     dispatchGetGeolocation,
   }) {
     const { lang, i18n, geolocationEnabled } = this.props;
@@ -92,7 +92,7 @@ export class App extends Component {
     }
 
     // fetch geolocation only if enabled
-    if (geolocationEnabled && geolocationEnabled !== prevLocationEnabled) {
+    if (geolocationEnabled && geolocationEnabled !== prevGeolocationEnabled) {
       dispatchGetGeolocation();
     }
   }

@@ -35,7 +35,7 @@ const ERROR_GETTING_DEVELOPER_MODE =
 const ERROR_SETTING_DEVELOPER_MODE =
   'There was an error setting the developer mode';
 const ERROR_GETTING_GEOLOCATION_ENABLED =
-  'There was an error getting the geolocation active enabled';
+  'There was an error getting the geolocation enabled';
 const ERROR_SETTING_GEOLOCATION_ENABLED =
   'There was an error setting the geolocation enabled';
 const ERROR_GETTING_DATABASE = 'There was an error getting the database.';

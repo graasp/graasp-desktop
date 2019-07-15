@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { getGeolocationEnabled, setGeolocationEnabled } from '../../actions';
 import Loader from './Loader';
+import { CONTROLS } from '../../config/constants';
 
 const styles = theme => ({
   formControl: {
@@ -27,11 +28,11 @@ class GeolocationControl extends Component {
     classes: PropTypes.shape({
       formControl: PropTypes.string.isRequired,
     }).isRequired,
-    isButton: PropTypes.bool,
+    controlType: PropTypes.oneOf(Object.keys(CONTROLS)),
   };
 
   static defaultProps = {
-    isButton: false,
+    controlType: CONTROLS.SWITCH,
   };
 
   constructor(props) {
@@ -57,8 +58,10 @@ class GeolocationControl extends Component {
       t,
       geolocationEnabled,
       activity,
-      isButton = false,
+      controlType = CONTROLS.SWITCH,
     } = this.props;
+
+    console.log(controlType);
 
     if (activity) {
       return <Loader />;
@@ -75,21 +78,29 @@ class GeolocationControl extends Component {
 
     return (
       <FormControl className={classes.formControl}>
-        {isButton ? (
-          <Button
-            variant="contained"
-            onClick={this.handleClick}
-            color="primary"
-            className={classes.button}
-          >
-            {t('Enable Geolocation')}
-          </Button>
-        ) : (
-          <FormControlLabel
-            control={switchControl}
-            label={t('Geolocation Enabled')}
-          />
-        )}
+        {(() => {
+          switch (controlType) {
+            case CONTROLS.BUTTON:
+              return (
+                <Button
+                  variant="contained"
+                  onClick={this.handleClick}
+                  color="primary"
+                  className={classes.button}
+                >
+                  {t('Enable Geolocation')}
+                </Button>
+              );
+            case CONTROLS.SWITCH:
+            default:
+              return (
+                <FormControlLabel
+                  control={switchControl}
+                  label={t('Geolocation Enabled')}
+                />
+              );
+          }
+        })()}
       </FormControl>
     );
   }
