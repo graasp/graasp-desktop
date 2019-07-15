@@ -13,6 +13,7 @@ import LoadSpace from './components/LoadSpace';
 import SpaceScreen from './components/space/SpaceScreen';
 import DeveloperScreen from './components/developer/DeveloperScreen';
 import LoginScreen from './components/login/LoginScreen';
+import Authorizaton from './components/Authorization';
 import {
   SETTINGS_PATH,
   SPACE_PATH,
@@ -31,6 +32,7 @@ import {
 } from './actions/user';
 import { DEFAULT_LANGUAGE } from './config/constants';
 import './App.css';
+import { getAuthenticated } from './actions';
 
 const theme = createMuiTheme({
   typography: {
@@ -49,6 +51,7 @@ export class App extends Component {
     dispatchGetGeolocation: PropTypes.func.isRequired,
     dispatchGetUserFolder: PropTypes.func.isRequired,
     dispatchGetLanguage: PropTypes.func.isRequired,
+    dispatchGetAuthenticated: PropTypes.func.isRequired,
     dispatchGetDeveloperMode: PropTypes.func.isRequired,
     lang: PropTypes.string,
     i18n: PropTypes.shape({
@@ -66,8 +69,10 @@ export class App extends Component {
       dispatchGetUserFolder,
       dispatchGetLanguage,
       dispatchGetDeveloperMode,
+      dispatchGetAuthenticated,
     } = this.props;
 
+    dispatchGetAuthenticated();
     dispatchGetLanguage();
     dispatchGetDeveloperMode();
     dispatchGetUserFolder();
@@ -109,14 +114,38 @@ export class App extends Component {
         <Router>
           <div className="app" style={{ height }}>
             <Switch>
-              <Route exact path={HOME_PATH} component={Home} />
               <Route exact path={LOGIN_PATH} component={LoginScreen} />
-              <Route exact path={SPACES_NEARBY_PATH} component={SpacesNearby} />
-              <Route exact path={VISIT_PATH} component={VisitSpace} />
-              <Route exact path={LOAD_SPACE_PATH} component={LoadSpace} />
-              <Route exact path={SETTINGS_PATH} component={Settings} />
-              <Route exact path={SPACE_PATH} component={SpaceScreen} />
-              <Route exact path={DEVELOPER_PATH} component={DeveloperScreen} />
+              <Route exact path={HOME_PATH} component={Authorizaton()(Home)} />
+              <Route
+                exact
+                path={SPACES_NEARBY_PATH}
+                component={Authorizaton()(SpacesNearby)}
+              />
+              <Route
+                exact
+                path={VISIT_PATH}
+                component={Authorizaton()(VisitSpace)}
+              />
+              <Route
+                exact
+                path={LOAD_SPACE_PATH}
+                component={Authorizaton()(LoadSpace)}
+              />
+              <Route
+                exact
+                path={SETTINGS_PATH}
+                component={Authorizaton()(Settings)}
+              />
+              <Route
+                exact
+                path={SPACE_PATH}
+                component={Authorizaton()(SpaceScreen)}
+              />
+              <Route
+                exact
+                path={DEVELOPER_PATH}
+                component={Authorizaton()(DeveloperScreen)}
+              />
             </Switch>
           </div>
         </Router>
@@ -134,6 +163,7 @@ const mapDispatchToProps = {
   dispatchGetUserFolder: getUserFolder,
   dispatchGetLanguage: getLanguage,
   dispatchGetDeveloperMode: getDeveloperMode,
+  dispatchGetAuthenticated: getAuthenticated,
 };
 
 const ConnectedApp = connect(

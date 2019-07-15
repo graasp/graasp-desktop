@@ -6,6 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import SaveIcon from '@material-ui/icons/Save';
 import CodeIcon from '@material-ui/icons/Code';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 import ListItemText from '@material-ui/core/ListItemText';
 import List from '@material-ui/core/List';
 import SearchIcon from '@material-ui/icons/Search';
@@ -14,6 +15,7 @@ import PublishIcon from '@material-ui/icons/Publish';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { Online } from 'react-detect-offline';
 import { withTranslation } from 'react-i18next';
+import { signOutUser } from '../../actions/authentication';
 import {
   HOME_PATH,
   LOAD_SPACE_PATH,
@@ -21,7 +23,9 @@ import {
   SPACES_NEARBY_PATH,
   VISIT_PATH,
   DEVELOPER_PATH,
+  LOGIN_PATH,
 } from '../../config/paths';
+import { AUTHENTICATED } from '../../config/constants';
 
 class MainMenu extends Component {
   static propTypes = {
@@ -29,6 +33,8 @@ class MainMenu extends Component {
     developerMode: PropTypes.bool.isRequired,
     history: PropTypes.shape({ replace: PropTypes.func.isRequired }).isRequired,
     match: PropTypes.shape({ path: PropTypes.string.isRequired }).isRequired,
+    dispatchUserLogout: PropTypes.func.isRequired,
+    authenticated: PropTypes.bool.isRequired,
   };
 
   handleClick = path => {
@@ -42,6 +48,44 @@ class MainMenu extends Component {
       replace(HOME_PATH);
     }
   };
+
+  renderLogOut() {
+    const {
+      dispatchUserLogout,
+      authenticated,
+      t,
+      match: { path },
+    } = this.props;
+
+    if (authenticated) {
+      return (
+        <MenuItem
+          onClick={() => {
+            dispatchUserLogout();
+          }}
+          selected={path === LOGIN_PATH}
+          button
+        >
+          <ListItemIcon>
+            <AccountCircle />
+          </ListItemIcon>
+          <ListItemText primary={t('Log Out')} />
+        </MenuItem>
+      );
+    }
+    return (
+      <MenuItem
+        onClick={() => this.handleClick(LOGIN_PATH)}
+        button
+        selected={path === LOGIN_PATH}
+      >
+        <ListItemIcon>
+          <SaveIcon />
+        </ListItemIcon>
+        <ListItemText primary={t('Login')} />
+      </MenuItem>
+    );
+  }
 
   renderDeveloperMode() {
     const {
@@ -127,17 +171,26 @@ class MainMenu extends Component {
           <ListItemText primary={t('Settings')} />
         </MenuItem>
         {this.renderDeveloperMode()}
+        {this.renderLogOut()}
       </List>
     );
   }
 }
 
-const mapStateToProps = ({ User }) => ({
+const mapStateToProps = ({ User, Authentication }) => ({
+  authenticated: Authentication.getIn(['authenticated']) === AUTHENTICATED,
   developerMode: User.getIn(['current', 'developerMode']),
   activity: Boolean(User.getIn(['current', 'activity']).size),
 });
 
-const ConnectedComponent = connect(mapStateToProps)(MainMenu);
+const mapDispatchToProps = {
+  dispatchUserLogout: signOutUser,
+};
+
+const ConnectedComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MainMenu);
 
 const TranslatedComponent = withTranslation()(ConnectedComponent);
 

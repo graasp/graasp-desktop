@@ -15,14 +15,18 @@ import {
 import { DEFAULT_DEVELOPER_MODE, DEFAULT_LANGUAGE } from '../config/constants';
 import { updateActivityList } from './common';
 
-const INITIAL_STATE = Map({
-  current: Map({
-    geolocation: Map(),
-    folder: null,
-    activity: List(),
-    lang: DEFAULT_LANGUAGE,
-    developerMode: DEFAULT_DEVELOPER_MODE,
-  }),
+export const DEFAULT_USER = Map({
+  geolocation: Map(),
+  folder: null,
+  activity: List(),
+  lang: DEFAULT_LANGUAGE,
+  developerMode: DEFAULT_DEVELOPER_MODE,
+});
+
+export const INITIAL_STATE = Map({
+  current: DEFAULT_USER,
+  authenticated: false,
+  user: Map(),
 });
 
 export default (state = INITIAL_STATE, { type, payload }) => {

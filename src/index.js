@@ -4,6 +4,7 @@ import './index.css';
 import { Provider } from 'react-redux';
 import * as Sentry from '@sentry/browser';
 import { I18nextProvider } from 'react-i18next';
+import { ConnectedRouter } from 'connected-react-router';
 import i18nConfig from './config/i18n';
 import { WHITELISTED_ERRORS } from './config/errors';
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
@@ -25,13 +26,15 @@ Sentry.init({
   },
 });
 
-const { store } = configureStore();
+const { store, history } = configureStore();
 
 ReactDOM.render(
   <Provider store={store}>
-    <I18nextProvider i18n={i18nConfig}>
-      <App />
-    </I18nextProvider>
+    <ConnectedRouter history={history}>
+      <I18nextProvider i18n={i18nConfig}>
+        <App />
+      </I18nextProvider>
+    </ConnectedRouter>
   </Provider>,
   document.getElementById('root')
 );

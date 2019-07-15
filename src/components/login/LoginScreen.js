@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
+// import { Map } from 'immutable';
 import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -19,10 +21,14 @@ import TextField from '@material-ui/core/TextField';
 import PropTypes from 'prop-types';
 import MainMenu from '../common/MainMenu';
 import Styles from '../../Styles';
+import { signInUser, signOutUser } from '../../actions/authentication';
+import { AUTHENTICATED } from '../../config/constants';
+import { HOME_PATH } from '../../config/paths';
 
 class LoginScreen extends Component {
   state = {
     open: false,
+    username: null,
   };
 
   static propTypes = {
@@ -35,6 +41,39 @@ class LoginScreen extends Component {
     i18n: PropTypes.shape({
       changeLanguage: PropTypes.func.isRequired,
     }).isRequired,
+    dispatchUserLogin: PropTypes.func.isRequired,
+    dispatchUserLogout: PropTypes.func.isRequired,
+    // username: PropTypes.string,
+    // user: PropTypes.shape({}).isRequired,
+    authenticated: PropTypes.bool.isRequired,
+  };
+
+  componentDidMount = () => {
+    const { authenticated } = this.props;
+    // redirect to home if already authenticated
+    if (authenticated) {
+      this.redirect();
+    }
+  };
+
+  redirect = () => {
+    const {
+      history: { replace },
+    } = this.props;
+    const path = sessionStorage.getItem('redirect') || HOME_PATH;
+    if (path) {
+      replace(path);
+    } else {
+      replace(HOME_PATH);
+    }
+  };
+
+  componentDidUpdate = () => {
+    const { authenticated } = this.props;
+    // redirect to home if already authenticated
+    if (authenticated) {
+      this.redirect();
+    }
   };
 
   handleDrawerOpen = () => {
@@ -45,11 +84,25 @@ class LoginScreen extends Component {
     this.setState({ open: false });
   };
 
-  handleClick = () => {};
+  handleLogin = () => {
+    const { username } = this.state;
+    const { dispatchUserLogin } = this.props;
+    dispatchUserLogin({ username });
+  };
+
+  handleLogout = () => {
+    const { dispatchUserLogout } = this.props;
+    dispatchUserLogout();
+  };
+
+  handleUsername = event => {
+    const username = event.target ? event.target.value : event;
+    this.setState({ username });
+  };
 
   render() {
-    const { classes, theme, t } = this.props;
-    const { open } = this.state;
+    const { classes, theme, t, authenticated } = this.props;
+    const { open, username } = this.state;
 
     return (
       <div className={classes.root}>
@@ -98,51 +151,84 @@ class LoginScreen extends Component {
           })}
         >
           <div className={classes.drawerHeader} />
-          <FormControl className={classes.formControl}>
-            <Typography
-              variant="h4"
-              className={classes.screenTitle}
-              align="center"
-            >
-              {t('Login')}
-            </Typography>
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.button}
-            >
-              {t('Login with Graasp')}
-            </Button>
+          {authenticated === AUTHENTICATED ? (
+            <FormControl className={classes.formControl}>
+              <Typography
+                variant="h4"
+                className={classes.screenTitle}
+                align="center"
+              >
+                {t('Logout')}
+              </Typography>
 
-            <Divider />
+              <Button
+                variant="contained"
+                onClick={this.handleLogout}
+                color="primary"
+                className={classes.button}
+              >
+                {t('Logout')}
+              </Button>
+            </FormControl>
+          ) : (
+            <FormControl className={classes.formControl}>
+              <Typography
+                variant="h4"
+                className={classes.screenTitle}
+                align="center"
+              >
+                {t('Login')}
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+              >
+                {t('Login with Graasp')}
+              </Button>
 
-            <TextField
-              label="Enter your Username"
-              floatingLabelText="Username"
-            />
-            <br />
-            <TextField
-              type="password"
-              label="Enter your Password"
-              floatingLabelText="Password"
-            />
-            <Button
-              variant="contained"
-              onClick={this.handleClick()}
-              color="primary"
-              className={classes.button}
-            >
-              {t('Login')}
-            </Button>
-          </FormControl>
+              <Divider />
+
+              <TextField
+                label="Enter your Username"
+                floatingLabelText="Username"
+                value={username}
+                onChange={this.handleUsername}
+              />
+              <br />
+              <Button
+                variant="contained"
+                onClick={this.handleLogin}
+                color="primary"
+                className={classes.button}
+              >
+                {t('Login')}
+              </Button>
+            </FormControl>
+          )}
         </main>
       </div>
     );
   }
 }
 
+const mapStateToProps = ({ Authentication }) => ({
+  user: Authentication.getIn(['user']),
+  authenticated: Authentication.getIn(['authenticated']) === AUTHENTICATED,
+});
+
+const mapDispatchToProps = {
+  dispatchUserLogin: signInUser,
+  dispatchUserLogout: signOutUser,
+};
+
 const StyledComponent = withStyles(Styles, { withTheme: true })(LoginScreen);
 
 const TranslatedComponent = withTranslation()(StyledComponent);
 
-export default withRouter(TranslatedComponent);
+const ConnectedComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TranslatedComponent);
+
+export default withRouter(ConnectedComponent);

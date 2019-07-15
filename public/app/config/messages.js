@@ -38,6 +38,9 @@ const ERROR_GETTING_DATABASE = 'There was an error getting the database.';
 const ERROR_SETTING_DATABASE = 'There was an error updating the database.';
 const SUCCESS_SYNCING_MESSAGE = 'Space was successfully synced';
 const ERROR_SYNCING_MESSAGE = 'There was an error syncing the space.';
+const ERROR_LOGGING_IN_USER = 'There was an error logging in the user';
+const ERROR_LOGGING_OUT_USER = 'There was an error logging out the user';
+const ERROR_GETTING_AUTHENTICATED = 'There was an error getting authenticated';
 
 module.exports = {
   ERROR_GETTING_DEVELOPER_MODE,
@@ -69,4 +72,7 @@ module.exports = {
   ERROR_SETTING_DATABASE,
   SUCCESS_SYNCING_MESSAGE,
   ERROR_SYNCING_MESSAGE,
+  ERROR_LOGGING_IN_USER,
+  ERROR_LOGGING_OUT_USER,
+  ERROR_GETTING_AUTHENTICATED,
 };

@@ -21,6 +21,7 @@ const {
   DATABASE_PATH,
   DEFAULT_LANG,
   DEFAULT_DEVELOPER_MODE,
+  DEFAULT_AUTHENTICATED,
 } = require('./app/config/config');
 const {
   LOAD_SPACE_CHANNEL,
@@ -48,6 +49,9 @@ const {
   SET_DATABASE_CHANNEL,
   SHOW_SYNC_SPACE_PROMPT_CHANNEL,
   SYNC_SPACE_CHANNEL,
+  GET_AUTHENTICATED_CHANNEL,
+  LOGIN_USER_CHANNEL,
+  LOGOUT_USER_CHANNEL,
 } = require('./app/config/channels');
 const { ERROR_GENERAL } = require('./app/config/errors');
 const env = require('./env.json');
@@ -60,6 +64,7 @@ const {
   getSpace,
   deleteSpace,
   exportSpace,
+  signInUser,
 } = require('./app/listeners');
 
 // add keys to process
@@ -250,6 +255,31 @@ app.on('ready', async () => {
 
   // called when exporting a space
   ipcMain.on(EXPORT_SPACE_CHANNEL, exportSpace(mainWindow, db));
+
+  // called when logging in a user
+  ipcMain.on(LOGIN_USER_CHANNEL, signInUser(mainWindow, db));
+
+  // called when logging out a user
+  ipcMain.on(LOGOUT_USER_CHANNEL, () => {
+    try {
+      mainWindow.webContents.send(LOGOUT_USER_CHANNEL);
+    } catch (e) {
+      logger.error(e);
+      mainWindow.webContents.send(LOGOUT_USER_CHANNEL, ERROR_GENERAL);
+    }
+  });
+
+  // called when getting authenticated
+  ipcMain.on(GET_AUTHENTICATED_CHANNEL, () => {
+    try {
+      const authenticated =
+        db.get('user.authenticated').value() || DEFAULT_AUTHENTICATED;
+      mainWindow.webContents.send(GET_AUTHENTICATED_CHANNEL, authenticated);
+    } catch (e) {
+      logger.error(e);
+      mainWindow.webContents.send(GET_AUTHENTICATED_CHANNEL, ERROR_GENERAL);
+    }
+  });
 
   // prompt when loading a space
   ipcMain.on(SHOW_LOAD_SPACE_PROMPT_CHANNEL, (event, options) => {

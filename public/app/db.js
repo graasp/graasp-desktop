@@ -9,6 +9,7 @@ const { DATABASE_PATH, VAR_FOLDER, DEFAULT_LANG } = require('./config/config');
 const fsPromises = fs.promises;
 
 const SPACES_COLLECTION = 'spaces';
+const USERS_COLLECTION = 'users';
 
 // bootstrap database
 const ensureDatabaseExists = async (dbPath = DATABASE_PATH) => {
@@ -32,6 +33,7 @@ const bootstrapDatabase = (dbPath = DATABASE_PATH) => {
   // set some defaults (required if json file is empty)
   db.defaults({
     [SPACES_COLLECTION]: [],
+    [USERS_COLLECTION]: [],
     user: { lang: DEFAULT_LANG },
   }).write();
   return db;
@@ -39,6 +41,7 @@ const bootstrapDatabase = (dbPath = DATABASE_PATH) => {
 
 module.exports = {
   SPACES_COLLECTION,
+  USERS_COLLECTION,
   ensureDatabaseExists,
   bootstrapDatabase,
 };

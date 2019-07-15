@@ -1,4 +1,4 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 import { createBrowserHistory } from 'history';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
@@ -16,9 +16,14 @@ const configure = state => {
   const history = createBrowserHistory();
   const RouterMiddleware = routerMiddleware(history);
 
+  const rootReducers = combineReducers({
+    ...reducers,
+    router: connectRouter(history),
+  });
+
   // create the store
   const store = createStore(
-    connectRouter(history)(reducers),
+    rootReducers,
     state,
     composeWithDevTools(
       applyMiddleware(ReduxThunk, ReduxPromise, RouterMiddleware)

@@ -11,3 +11,4 @@ export const DEFAULT_DEVELOPER_MODE = false;
 export const SHORT_ID_LENGTH = 6;
 export const SMART_GATEWAY_HOST = 'gateway.golabz.eu';
 export const SMART_GATEWAY_QUERY_STRING_DIVIDER = '#';
+export const AUTHENTICATED = 'authenticated';

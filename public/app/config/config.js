@@ -35,6 +35,7 @@ const DATABASE_PATH = `${VAR_FOLDER}/db.json`;
 const TMP_FOLDER = 'tmp';
 const DEFAULT_LANG = 'en';
 const DEFAULT_DEVELOPER_MODE = false;
+const DEFAULT_AUTHENTICATED = false;
 
 module.exports = {
   DEFAULT_DEVELOPER_MODE,
@@ -45,4 +46,5 @@ module.exports = {
   DATABASE_PATH,
   VAR_FOLDER,
   DEFAULT_LANG,
+  DEFAULT_AUTHENTICATED,
 };
