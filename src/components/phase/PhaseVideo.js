@@ -15,6 +15,12 @@ const PhaseVideo = ({ url, asset, name, mimeType, folder }) => {
     }
   }
 
+  // assign quicktime videos to mp4
+  if (mimeType === 'video/quicktime') {
+    // eslint-disable-next-line no-param-reassign
+    mimeType = 'video/mp4';
+  }
+
   return (
     <video title={name} className="Video" controls>
       <source src={uri} type={mimeType} />
