@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.10.1](https://github.com/graasp/graasp-desktop/compare/v0.10.0...v0.10.1) (2019-07-16)
+
+### Bug Fixes
+
+- automatically write env.json with contents from env ([128b276](https://github.com/graasp/graasp-desktop/commit/128b276)), closes [#116](https://github.com/graasp/graasp-desktop/issues/116)
+- fix order of commands in dockerfile ([e1176fc](https://github.com/graasp/graasp-desktop/commit/e1176fc)), closes [#123](https://github.com/graasp/graasp-desktop/issues/123)
+- setup before testing ([93c360c](https://github.com/graasp/graasp-desktop/commit/93c360c)), closes [#122](https://github.com/graasp/graasp-desktop/issues/122)
+- show quicktime videos using mp4 ([1c59c04](https://github.com/graasp/graasp-desktop/commit/1c59c04)), closes [#133](https://github.com/graasp/graasp-desktop/issues/133)
+- support editing video and images locally ([4f0e960](https://github.com/graasp/graasp-desktop/commit/4f0e960)), closes [#121](https://github.com/graasp/graasp-desktop/issues/121)
+
 # [0.10.0](https://github.com/graasp/graasp-desktop/compare/v0.9.0...v0.10.0) (2019-07-02)
 
 ### Bug Fixes
