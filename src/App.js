@@ -26,6 +26,7 @@ import {
   getUserFolder,
   getLanguage,
   getDeveloperMode,
+  getGeolocationEnabled,
 } from './actions/user';
 import { DEFAULT_LANGUAGE } from './config/constants';
 import './App.css';
@@ -48,10 +49,12 @@ export class App extends Component {
     dispatchGetUserFolder: PropTypes.func.isRequired,
     dispatchGetLanguage: PropTypes.func.isRequired,
     dispatchGetDeveloperMode: PropTypes.func.isRequired,
+    dispatchGetGeolocationEnabled: PropTypes.func.isRequired,
     lang: PropTypes.string,
     i18n: PropTypes.shape({
       changeLanguage: PropTypes.func.isRequired,
     }).isRequired,
+    geolocationEnabled: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -64,24 +67,33 @@ export class App extends Component {
       dispatchGetUserFolder,
       dispatchGetLanguage,
       dispatchGetDeveloperMode,
+      dispatchGetGeolocationEnabled,
     } = this.props;
 
     dispatchGetLanguage();
     dispatchGetDeveloperMode();
     dispatchGetUserFolder();
+    dispatchGetGeolocationEnabled();
   }
 
   componentDidMount() {
-    const { dispatchGetGeolocation } = this.props;
-    dispatchGetGeolocation();
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);
   }
 
-  componentDidUpdate({ lang: prevLang }) {
-    const { lang, i18n } = this.props;
+  componentDidUpdate({
+    lang: prevLang,
+    geolocationEnabled: prevGeolocationEnabled,
+    dispatchGetGeolocation,
+  }) {
+    const { lang, i18n, geolocationEnabled } = this.props;
     if (lang !== prevLang) {
       i18n.changeLanguage(lang);
+    }
+
+    // fetch geolocation only if enabled
+    if (geolocationEnabled && geolocationEnabled !== prevGeolocationEnabled) {
+      dispatchGetGeolocation();
     }
   }
 
@@ -124,6 +136,7 @@ export class App extends Component {
 
 const mapStateToProps = ({ User }) => ({
   lang: User.getIn(['current', 'lang']),
+  geolocationEnabled: User.getIn(['current', 'geolocationEnabled']),
 });
 
 const mapDispatchToProps = {
@@ -131,6 +144,7 @@ const mapDispatchToProps = {
   dispatchGetUserFolder: getUserFolder,
   dispatchGetLanguage: getLanguage,
   dispatchGetDeveloperMode: getDeveloperMode,
+  dispatchGetGeolocationEnabled: getGeolocationEnabled,
 };
 
 const ConnectedApp = connect(

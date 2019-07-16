@@ -44,6 +44,8 @@ const {
   GET_APP_INSTANCE_CHANNEL,
   GET_DEVELOPER_MODE_CHANNEL,
   SET_DEVELOPER_MODE_CHANNEL,
+  GET_GEOLOCATION_ENABLED_CHANNEL,
+  SET_GEOLOCATION_ENABLED_CHANNEL,
   GET_DATABASE_CHANNEL,
   SET_DATABASE_CHANNEL,
   SHOW_SYNC_SPACE_PROMPT_CHANNEL,
@@ -60,6 +62,8 @@ const {
   getSpace,
   deleteSpace,
   exportSpace,
+  getGeolocationEnabled,
+  setGeolocationEnabled,
 } = require('./app/listeners');
 
 // add keys to process
@@ -340,6 +344,18 @@ app.on('ready', async () => {
       mainWindow.webContents.send(SET_DEVELOPER_MODE_CHANNEL, ERROR_GENERAL);
     }
   });
+
+  // called when getting geolocation enabled
+  ipcMain.on(
+    GET_GEOLOCATION_ENABLED_CHANNEL,
+    getGeolocationEnabled(mainWindow, db)
+  );
+
+  // called when setting geolocation enabled
+  ipcMain.on(
+    SET_GEOLOCATION_ENABLED_CHANNEL,
+    setGeolocationEnabled(mainWindow, db)
+  );
 
   // called when getting AppInstanceResources
   ipcMain.on(GET_APP_INSTANCE_RESOURCES_CHANNEL, (event, data = {}) => {

@@ -13,6 +13,8 @@ describe('<App />', () => {
     dispatchGetUserFolder: jest.fn(),
     dispatchGetLanguage: jest.fn(),
     dispatchGetDeveloperMode: jest.fn(),
+    dispatchGetGeolocationEnabled: jest.fn(),
+    geolocationEnabled: false,
   };
   const component = shallow(<App {...props} />);
   it('renders correctly', () => {

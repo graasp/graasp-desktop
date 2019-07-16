@@ -19,6 +19,7 @@ import Styles from '../Styles';
 import MainMenu from './common/MainMenu';
 import LanguageSelect from './common/LanguageSelect';
 import DeveloperSwitch from './common/DeveloperSwitch';
+import GeolocationControl from './common/GeolocationControl';
 
 class Settings extends Component {
   state = {
@@ -102,6 +103,7 @@ class Settings extends Component {
           <FormGroup>
             <LanguageSelect />
             <DeveloperSwitch />
+            <GeolocationControl />
           </FormGroup>
         </main>
       </div>

@@ -12,6 +12,10 @@ import {
   FLAG_SETTING_DEVELOPER_MODE,
   GET_DEVELOPER_MODE_SUCCEEDED,
   SET_DEVELOPER_MODE_SUCCEEDED,
+  FLAG_GETTING_GEOLOCATION_ENABLED,
+  FLAG_SETTING_GEOLOCATION_ENABLED,
+  GET_GEOLOCATION_ENABLED_SUCCEEDED,
+  SET_GEOLOCATION_ENABLED_SUCCEEDED,
 } from '../types';
 import {
   ERROR_GETTING_GEOLOCATION,
@@ -21,6 +25,8 @@ import {
   ERROR_SETTING_LANGUAGE,
   ERROR_SETTING_DEVELOPER_MODE,
   ERROR_GETTING_DEVELOPER_MODE,
+  ERROR_SETTING_GEOLOCATION_ENABLED,
+  ERROR_GETTING_GEOLOCATION_ENABLED,
 } from '../config/messages';
 import {
   GET_USER_FOLDER_CHANNEL,
@@ -28,6 +34,8 @@ import {
   SET_LANGUAGE_CHANNEL,
   GET_DEVELOPER_MODE_CHANNEL,
   SET_DEVELOPER_MODE_CHANNEL,
+  GET_GEOLOCATION_ENABLED_CHANNEL,
+  SET_GEOLOCATION_ENABLED_CHANNEL,
 } from '../config/channels';
 import { createFlag } from './common';
 import { ERROR_GENERAL } from '../config/errors';
@@ -37,6 +45,12 @@ const flagGettingLanguage = createFlag(FLAG_GETTING_LANGUAGE);
 const flagSettingLanguage = createFlag(FLAG_SETTING_LANGUAGE);
 const flagGettingDeveloperMode = createFlag(FLAG_GETTING_DEVELOPER_MODE);
 const flagSettingDeveloperMode = createFlag(FLAG_SETTING_DEVELOPER_MODE);
+const flagGettingGeolocationEnabled = createFlag(
+  FLAG_GETTING_GEOLOCATION_ENABLED
+);
+const flagSettingGeolocationEnabled = createFlag(
+  FLAG_SETTING_GEOLOCATION_ENABLED
+);
 
 const getGeolocation = async () => async dispatch => {
   // only fetch location if online
@@ -175,6 +189,57 @@ const setDeveloperMode = async developerMode => dispatch => {
   }
 };
 
+const getGeolocationEnabled = async () => dispatch => {
+  try {
+    dispatch(flagGettingGeolocationEnabled(true));
+    window.ipcRenderer.send(GET_GEOLOCATION_ENABLED_CHANNEL);
+    window.ipcRenderer.once(
+      GET_GEOLOCATION_ENABLED_CHANNEL,
+      (event, geolocationEnabled) => {
+        if (geolocationEnabled === ERROR_GENERAL) {
+          toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_GEOLOCATION_ENABLED);
+        } else {
+          dispatch({
+            type: GET_GEOLOCATION_ENABLED_SUCCEEDED,
+            payload: geolocationEnabled,
+          });
+        }
+        dispatch(flagGettingGeolocationEnabled(false));
+      }
+    );
+  } catch (e) {
+    console.error(e);
+    toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_GEOLOCATION_ENABLED);
+  }
+};
+
+const setGeolocationEnabled = async geolocationEnabled => dispatch => {
+  try {
+    dispatch(flagSettingGeolocationEnabled(true));
+    window.ipcRenderer.send(
+      SET_GEOLOCATION_ENABLED_CHANNEL,
+      geolocationEnabled
+    );
+    window.ipcRenderer.once(
+      SET_GEOLOCATION_ENABLED_CHANNEL,
+      (event, enabled) => {
+        if (enabled === ERROR_GENERAL) {
+          toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_GEOLOCATION_ENABLED);
+        } else {
+          dispatch({
+            type: SET_GEOLOCATION_ENABLED_SUCCEEDED,
+            payload: enabled,
+          });
+        }
+        dispatch(flagSettingGeolocationEnabled(false));
+      }
+    );
+  } catch (e) {
+    console.error(e);
+    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_GEOLOCATION_ENABLED);
+  }
+};
+
 export {
   getUserFolder,
   getGeolocation,
@@ -182,4 +247,6 @@ export {
   setLanguage,
   getDeveloperMode,
   setDeveloperMode,
+  getGeolocationEnabled,
+  setGeolocationEnabled,
 };
