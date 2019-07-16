@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { getGeolocationEnabled, setGeolocationEnabled } from '../../actions';
 import Loader from './Loader';
-import { CONTROLS } from '../../config/constants';
+import { CONTROL_TYPES } from '../../config/constants';
 
 const styles = theme => ({
   formControl: {
@@ -28,11 +28,11 @@ class GeolocationControl extends Component {
     classes: PropTypes.shape({
       formControl: PropTypes.string.isRequired,
     }).isRequired,
-    controlType: PropTypes.oneOf(Object.keys(CONTROLS)),
+    controlType: PropTypes.oneOf(Object.keys(CONTROL_TYPES)),
   };
 
   static defaultProps = {
-    controlType: CONTROLS.SWITCH,
+    controlType: CONTROL_TYPES.SWITCH,
   };
 
   constructor(props) {
@@ -58,10 +58,8 @@ class GeolocationControl extends Component {
       t,
       geolocationEnabled,
       activity,
-      controlType = CONTROLS.SWITCH,
+      controlType = CONTROL_TYPES.SWITCH,
     } = this.props;
-
-    console.log(controlType);
 
     if (activity) {
       return <Loader />;
@@ -80,7 +78,7 @@ class GeolocationControl extends Component {
       <FormControl className={classes.formControl}>
         {(() => {
           switch (controlType) {
-            case CONTROLS.BUTTON:
+            case CONTROL_TYPES.BUTTON:
               return (
                 <Button
                   variant="contained"
@@ -91,7 +89,7 @@ class GeolocationControl extends Component {
                   {t('Enable Geolocation')}
                 </Button>
               );
-            case CONTROLS.SWITCH:
+            case CONTROL_TYPES.SWITCH:
             default:
               return (
                 <FormControlLabel

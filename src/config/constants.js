@@ -12,7 +12,7 @@ export const DEFAULT_GEOLOCATION_ENABLED = false;
 export const SHORT_ID_LENGTH = 6;
 export const SMART_GATEWAY_HOST = 'gateway.golabz.eu';
 export const SMART_GATEWAY_QUERY_STRING_DIVIDER = '#';
-export const CONTROLS = {
+export const CONTROL_TYPES = {
   BUTTON: 'BUTTON',
   SWITCH: 'SWITCH',
 };
