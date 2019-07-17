@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [0.11.0](https://github.com/graasp/graasp-desktop/compare/v0.10.1...v0.11.0) (2019-07-17)
+
+### Bug Fixes
+
+- show nearby spaces below header ([4225cce](https://github.com/graasp/graasp-desktop/commit/4225cce)), closes [#138](https://github.com/graasp/graasp-desktop/issues/138)
+
+### Features
+
+- activation / deactivation of location sharing ([455e554](https://github.com/graasp/graasp-desktop/commit/455e554)), closes [#107](https://github.com/graasp/graasp-desktop/issues/107)
+- make apps resizable ([f8bd12c](https://github.com/graasp/graasp-desktop/commit/f8bd12c)), closes [#139](https://github.com/graasp/graasp-desktop/issues/139)
+
 ## [0.10.1](https://github.com/graasp/graasp-desktop/compare/v0.10.0...v0.10.1) (2019-07-16)
 
 ### Bug Fixes
