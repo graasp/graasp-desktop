@@ -6,7 +6,7 @@ const deleteSpace = require('./deleteSpace');
 const showSyncSpacePrompt = require('./showSyncSpacePrompt');
 const syncSpace = require('./syncSpace');
 const exportSpace = require('./exportSpace');
-const signInUser = require('./signInUser');
+const signIn = require('./signIn');
 
 module.exports = {
   loadSpace,
@@ -17,5 +17,5 @@ module.exports = {
   syncSpace,
   deleteSpace,
   exportSpace,
-  signInUser,
+  signIn,
 };

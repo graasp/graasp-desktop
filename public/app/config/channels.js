@@ -35,7 +35,7 @@ module.exports = {
   RESPOND_SYNC_SPACE_PROMPT_CHANNEL: 'prompt:space:sync:respond',
   SYNC_SPACE_CHANNEL: 'space:sync',
   SYNCED_SPACE_CHANNEL: 'space:synced',
-  LOGIN_USER_CHANNEL: 'auth:user:login',
-  LOGOUT_USER_CHANNEL: 'auth:user:logout',
-  GET_AUTHENTICATED_CHANNEL: 'auth:authenticated:get',
+  SIGN_IN_CHANNEL: 'auth:signin',
+  SIGN_OUT_CHANNEL: 'auth:signout',
+  IS_AUTHENTICATED_CHANNEL: 'auth:authenticated:get',
 };

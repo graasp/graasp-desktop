@@ -13,7 +13,7 @@ describe('<App />', () => {
     dispatchGetUserFolder: jest.fn(),
     dispatchGetLanguage: jest.fn(),
     dispatchGetDeveloperMode: jest.fn(),
-    dispatchGetAuthenticated: jest.fn(),
+    dispatchIsAuthenticated: jest.fn(),
   };
   const component = shallow(<App {...props} />);
   it('renders correctly', () => {

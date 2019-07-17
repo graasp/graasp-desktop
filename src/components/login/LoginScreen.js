@@ -21,7 +21,7 @@ import TextField from '@material-ui/core/TextField';
 import PropTypes from 'prop-types';
 import MainMenu from '../common/MainMenu';
 import Styles from '../../Styles';
-import { signInUser, signOutUser } from '../../actions/authentication';
+import { signIn, signOutUser } from '../../actions/authentication';
 import { AUTHENTICATED } from '../../config/constants';
 import { HOME_PATH } from '../../config/paths';
 
@@ -41,8 +41,8 @@ class LoginScreen extends Component {
     i18n: PropTypes.shape({
       changeLanguage: PropTypes.func.isRequired,
     }).isRequired,
-    dispatchUserLogin: PropTypes.func.isRequired,
-    dispatchUserLogout: PropTypes.func.isRequired,
+    dispatchSignIn: PropTypes.func.isRequired,
+    dispatchSignOut: PropTypes.func.isRequired,
     // username: PropTypes.string,
     // user: PropTypes.shape({}).isRequired,
     authenticated: PropTypes.bool.isRequired,
@@ -84,15 +84,15 @@ class LoginScreen extends Component {
     this.setState({ open: false });
   };
 
-  handleLogin = () => {
+  handleSignIn = () => {
     const { username } = this.state;
-    const { dispatchUserLogin } = this.props;
-    dispatchUserLogin({ username });
+    const { dispatchSignIn } = this.props;
+    dispatchSignIn({ username });
   };
 
-  handleLogout = () => {
-    const { dispatchUserLogout } = this.props;
-    dispatchUserLogout();
+  handleSignOut = () => {
+    const { dispatchSignOut } = this.props;
+    dispatchSignOut();
   };
 
   handleUsername = event => {
@@ -163,7 +163,7 @@ class LoginScreen extends Component {
 
               <Button
                 variant="contained"
-                onClick={this.handleLogout}
+                onClick={this.handleSignOut}
                 color="primary"
                 className={classes.button}
               >
@@ -198,7 +198,7 @@ class LoginScreen extends Component {
               <br />
               <Button
                 variant="contained"
-                onClick={this.handleLogin}
+                onClick={this.handleSignIn}
                 color="primary"
                 className={classes.button}
               >
@@ -218,8 +218,8 @@ const mapStateToProps = ({ Authentication }) => ({
 });
 
 const mapDispatchToProps = {
-  dispatchUserLogin: signInUser,
-  dispatchUserLogout: signOutUser,
+  dispatchSignIn: signIn,
+  dispatchSignOut: signOutUser,
 };
 
 const StyledComponent = withStyles(Styles, { withTheme: true })(LoginScreen);

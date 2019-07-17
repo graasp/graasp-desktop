@@ -1,40 +1,40 @@
 import { toastr } from 'react-redux-toastr';
 import {
-  FLAG_LOGGING_IN,
-  FLAG_LOGGING_OUT,
-  LOGIN_USER_SUCCEEDED,
-  LOGOUT_USER_SUCCEEDED,
+  FLAG_SIGNING_IN,
+  FLAG_SIGNING_OUT,
+  SIGN_IN_SUCCEEDED,
+  SIGN_OUT_SUCCEEDED,
   FLAG_GETTING_AUTHENTICATED,
-  GET_AUTHENTICATED_SUCCEEDED,
+  IS_AUTHENTICATED_SUCCEEDED,
 } from '../types';
 import {
-  ERROR_LOGGING_IN_USER,
+  ERROR_SIGNING_IN,
   ERROR_GETTING_AUTHENTICATED,
   ERROR_MESSAGE_HEADER,
-  ERROR_LOGGING_OUT_USER,
+  ERROR_SIGNING_OUT,
 } from '../config/messages';
 import {
-  LOGIN_USER_CHANNEL,
-  LOGOUT_USER_CHANNEL,
-  GET_AUTHENTICATED_CHANNEL,
+  SIGN_IN_CHANNEL,
+  SIGN_OUT_CHANNEL,
+  IS_AUTHENTICATED_CHANNEL,
 } from '../config/channels';
 import { createFlag } from './common';
 import { ERROR_GENERAL } from '../config/errors';
 
-const flagLoggingInUser = createFlag(FLAG_LOGGING_IN);
-const flagLoggingOutUser = createFlag(FLAG_LOGGING_OUT);
+const flagLoggingInUser = createFlag(FLAG_SIGNING_IN);
+const flagLoggingOutUser = createFlag(FLAG_SIGNING_OUT);
 const flagGettingAuthenticated = createFlag(FLAG_GETTING_AUTHENTICATED);
 
-const signInUser = ({ username }) => dispatch => {
+const signIn = ({ username }) => dispatch => {
   try {
     dispatch(flagLoggingInUser(true));
-    window.ipcRenderer.send(LOGIN_USER_CHANNEL, { username });
-    window.ipcRenderer.once(LOGIN_USER_CHANNEL, (event, user) => {
+    window.ipcRenderer.send(SIGN_IN_CHANNEL, { username });
+    window.ipcRenderer.once(SIGN_IN_CHANNEL, (event, user) => {
       if (user === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_LOGGING_IN_USER);
+        toastr.error(ERROR_MESSAGE_HEADER, ERROR_SIGNING_IN);
       } else {
         dispatch({
-          type: LOGIN_USER_SUCCEEDED,
+          type: SIGN_IN_SUCCEEDED,
           payload: user,
         });
       }
@@ -42,7 +42,7 @@ const signInUser = ({ username }) => dispatch => {
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_LOGGING_IN_USER);
+    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SIGNING_IN);
     dispatch(flagLoggingInUser(false));
   }
 };
@@ -50,13 +50,13 @@ const signInUser = ({ username }) => dispatch => {
 const signOutUser = () => dispatch => {
   try {
     dispatch(flagLoggingOutUser(true));
-    window.ipcRenderer.send(LOGOUT_USER_CHANNEL);
-    window.ipcRenderer.once(LOGOUT_USER_CHANNEL, (event, response) => {
+    window.ipcRenderer.send(SIGN_OUT_CHANNEL);
+    window.ipcRenderer.once(SIGN_OUT_CHANNEL, (event, response) => {
       if (response === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_LOGGING_OUT_USER);
+        toastr.error(ERROR_MESSAGE_HEADER, ERROR_SIGNING_OUT);
       } else {
         dispatch({
-          type: LOGOUT_USER_SUCCEEDED,
+          type: SIGN_OUT_SUCCEEDED,
           payload: response,
         });
       }
@@ -64,23 +64,23 @@ const signOutUser = () => dispatch => {
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_LOGGING_OUT_USER);
+    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SIGNING_OUT);
     dispatch(flagLoggingOutUser(false));
   }
 };
 
-const getAuthenticated = async () => dispatch => {
+const isAuthenticated = async () => dispatch => {
   try {
     dispatch(flagGettingAuthenticated(true));
-    window.ipcRenderer.send(GET_AUTHENTICATED_CHANNEL);
+    window.ipcRenderer.send(IS_AUTHENTICATED_CHANNEL);
     window.ipcRenderer.once(
-      GET_AUTHENTICATED_CHANNEL,
+      IS_AUTHENTICATED_CHANNEL,
       (event, authenticated) => {
         if (authenticated === ERROR_GENERAL) {
           toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_AUTHENTICATED);
         } else {
           dispatch({
-            type: GET_AUTHENTICATED_SUCCEEDED,
+            type: IS_AUTHENTICATED_SUCCEEDED,
             payload: authenticated,
           });
         }
@@ -94,4 +94,4 @@ const getAuthenticated = async () => dispatch => {
   }
 };
 
-export { signInUser, signOutUser, getAuthenticated };
+export { signIn, signOutUser, isAuthenticated };
