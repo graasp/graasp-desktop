@@ -54,6 +54,17 @@ class PhaseApp extends Component {
   }
 
   postMessage = data => {
+    // get component app instance id
+    const { appInstance } = this.props;
+    const { id: componentAppInstanceId } = appInstance || {};
+    // get app instance id in message
+    const { appInstanceId: messageAppInstanceId } = data;
+
+    // only post message to intended app instance
+    if (componentAppInstanceId !== messageAppInstanceId) {
+      return;
+    }
+
     const message = JSON.stringify(data);
 
     if (this.iframe.contentWindow.postMessage) {
