@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Qs from 'qs';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { ResizableBox } from 'react-resizable';
 import './PhaseApp.css';
 import {
   GET_APP_INSTANCE_RESOURCES,
@@ -139,7 +140,12 @@ class PhaseApp extends Component {
     const queryString = Qs.stringify(params);
 
     return (
-      <div className="AppDiv">
+      <ResizableBox
+        minConstraints={[0, 200]}
+        maxConstraints={[0, 600]}
+        height={300}
+        axis="y"
+      >
         <iframe
           title={name}
           className="App"
@@ -148,7 +154,7 @@ class PhaseApp extends Component {
             this.iframe = c;
           }}
         />
-      </div>
+      </ResizableBox>
     );
   }
 }
