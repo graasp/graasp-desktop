@@ -52,6 +52,7 @@
     "@material-ui/icons": "4.2.0",
     "@sentry/browser": "5.1.1",
     "@sentry/electron": "0.17.1",
+    "about-window": "1.13.1",
     "archiver": "3.0.0",
     "bson-objectid": "1.2.5",
     "cheerio": "1.0.0-rc.3",

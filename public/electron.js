@@ -14,11 +14,14 @@ const { autoUpdater } = require('electron-updater');
 const Sentry = require('@sentry/electron');
 const ua = require('universal-analytics');
 const { machineIdSync } = require('node-machine-id');
+const openAboutWindow = require('about-window').default;
 const logger = require('./app/logger');
 const { ensureDatabaseExists, bootstrapDatabase } = require('./app/db');
 const {
   VAR_FOLDER,
   DATABASE_PATH,
+  ICON_PATH,
+  PRODUCT_NAME,
   DEFAULT_LANG,
   DEFAULT_DEVELOPER_MODE,
 } = require('./app/config/config');
@@ -152,7 +155,13 @@ const generateMenu = () => {
         // },
         {
           label: 'About',
-          role: 'about',
+          click: () => {
+            openAboutWindow({
+              icon_path: ICON_PATH,
+              copyright: 'Copyright © 2019 React',
+              product_name: PRODUCT_NAME,
+            });
+          },
         },
         {
           label: 'Quit',
