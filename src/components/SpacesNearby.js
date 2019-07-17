@@ -144,7 +144,7 @@ class SpacesNearby extends Component {
           <MainMenu />
         </Drawer>
         <main
-          className={classNames('Main', classes.content, {
+          className={classNames(classes.content, {
             [classes.contentShift]: open,
           })}
         >
