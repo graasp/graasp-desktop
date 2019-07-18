@@ -26,6 +26,8 @@ const getAppInstanceResources = async (
       GET_APP_INSTANCE_RESOURCES_CHANNEL,
       async (event, response) => {
         callback({
+          // have to include the appInstanceId to avoid broadcasting
+          appInstanceId,
           type: GET_APP_INSTANCE_RESOURCES_SUCCEEDED,
           payload: response,
         });
@@ -55,6 +57,8 @@ const postAppInstanceResource = async (
       POST_APP_INSTANCE_RESOURCE_CHANNEL,
       async (event, response) => {
         callback({
+          // have to include the appInstanceId to avoid broadcasting
+          appInstanceId,
           type: POST_APP_INSTANCE_RESOURCE_SUCCEEDED,
           payload: response,
         });
@@ -82,6 +86,7 @@ const patchAppInstanceResource = async (
       PATCH_APP_INSTANCE_RESOURCE_CHANNEL,
       async (event, response) => {
         callback({
+          appInstanceId,
           type: PATCH_APP_INSTANCE_RESOURCE_SUCCEEDED,
           payload: response,
         });
