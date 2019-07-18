@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.1](https://github.com/graasp/graasp-desktop/compare/v0.11.0...v0.11.1) (2019-07-18)
+
+### Bug Fixes
+
+- only respond to app that sent message ([19f9a3d](https://github.com/graasp/graasp-desktop/commit/19f9a3d)), closes [#136](https://github.com/graasp/graasp-desktop/issues/136)
+
 # [0.11.0](https://github.com/graasp/graasp-desktop/compare/v0.10.1...v0.11.0) (2019-07-17)
 
 ### Bug Fixes
