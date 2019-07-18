@@ -4,13 +4,8 @@ import { withStyles } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-// import { Map } from 'immutable';
-import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Button from '@material-ui/core/Button';
@@ -19,16 +14,51 @@ import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
 import PropTypes from 'prop-types';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import MenuIcon from '@material-ui/icons/Menu';
+import logo from '../../assets/icon.png';
 import MainMenu from '../common/MainMenu';
 import Styles from '../../Styles';
 import { signIn, signOutUser } from '../../actions/authentication';
 import { AUTHENTICATED } from '../../config/constants';
 import { HOME_PATH } from '../../config/paths';
 
+const CssTextField = withStyles({
+  root: {
+    '& input': {
+      color: 'white',
+    },
+    '& label, & label.Mui-focused': {
+      color: 'white',
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: 'white',
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: 'white',
+      },
+      '&:hover fieldset': {
+        borderColor: 'white',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: 'white',
+      },
+    },
+  },
+})(TextField);
+
 class LoginScreen extends Component {
   state = {
     open: false,
     username: null,
+  };
+
+  styles = {
+    root: {
+      background: '#504FD2',
+    },
   };
 
   static propTypes = {
@@ -43,8 +73,6 @@ class LoginScreen extends Component {
     }).isRequired,
     dispatchSignIn: PropTypes.func.isRequired,
     dispatchSignOut: PropTypes.func.isRequired,
-    // username: PropTypes.string,
-    // user: PropTypes.shape({}).isRequired,
     authenticated: PropTypes.bool.isRequired,
   };
 
@@ -100,12 +128,18 @@ class LoginScreen extends Component {
     this.setState({ username });
   };
 
+  handleKeyPressed = event => {
+    if (event.key === 'Enter') {
+      this.handleSignIn();
+    }
+  };
+
   render() {
-    const { classes, theme, t, authenticated } = this.props;
+    const { classes, theme, t } = this.props;
     const { open, username } = this.state;
 
     return (
-      <div className={classes.root}>
+      <div className={classes.root} style={this.styles.root}>
         <CssBaseline />
         <AppBar
           position="fixed"
@@ -151,61 +185,26 @@ class LoginScreen extends Component {
           })}
         >
           <div className={classes.drawerHeader} />
-          {authenticated === AUTHENTICATED ? (
-            <FormControl className={classes.formControl}>
-              <Typography
-                variant="h4"
-                className={classes.screenTitle}
-                align="center"
-              >
-                {t('Logout')}
-              </Typography>
-
-              <Button
-                variant="contained"
-                onClick={this.handleSignOut}
-                color="primary"
-                className={classes.button}
-              >
-                {t('Logout')}
-              </Button>
-            </FormControl>
-          ) : (
-            <FormControl className={classes.formControl}>
-              <Typography
-                variant="h4"
-                className={classes.screenTitle}
-                align="center"
-              >
-                {t('Login')}
-              </Typography>
-              <Button
-                variant="contained"
-                color="primary"
-                className={classes.button}
-              >
-                {t('Login with Graasp')}
-              </Button>
-
-              <Divider />
-
-              <TextField
-                label="Enter your Username"
-                floatingLabelText="Username"
-                value={username}
-                onChange={this.handleUsername}
-              />
-              <br />
-              <Button
-                variant="contained"
-                onClick={this.handleSignIn}
-                color="primary"
-                className={classes.button}
-              >
-                {t('Login')}
-              </Button>
-            </FormControl>
-          )}
+          <FormControl className={classes.formControl}>
+            <img src={logo} alt="graasp logo" />
+            <CssTextField
+              label={t('Username')}
+              variant="outlined"
+              floatingLabelText="Username"
+              onChange={this.handleUsername}
+              onKeyPress={this.handleKeyPressed}
+              value={username}
+            />
+            <br />
+            <Button
+              variant="contained"
+              onClick={this.handleSignIn}
+              color="secondary"
+              className={classes.button}
+            >
+              {t('Login')}
+            </Button>
+          </FormControl>
         </main>
       </div>
     );

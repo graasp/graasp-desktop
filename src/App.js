@@ -40,7 +40,7 @@ const theme = createMuiTheme({
   },
   palette: {
     primary: { light: '#5050d2', main: '#5050d2', dark: '#5050d2' },
-    secondary: { light: '#00b904', main: '#00b904', dark: '#00b904' },
+    secondary: { light: '#eeeeee', main: '#eeeeee', dark: '#eeeeee' },
   },
 });
 
@@ -131,21 +131,13 @@ export class App extends Component {
                 path={LOAD_SPACE_PATH}
                 component={Authorization()(LoadSpace)}
               />
-              <Route
-                exact
-                path={SETTINGS_PATH}
-                component={Authorization()(Settings)}
-              />
+              <Route exact path={SETTINGS_PATH} component={Settings} />
               <Route
                 exact
                 path={SPACE_PATH}
                 component={Authorization()(SpaceScreen)}
               />
-              <Route
-                exact
-                path={DEVELOPER_PATH}
-                component={Authorization()(DeveloperScreen)}
-              />
+              <Route exact path={DEVELOPER_PATH} component={DeveloperScreen} />
             </Switch>
           </div>
         </Router>

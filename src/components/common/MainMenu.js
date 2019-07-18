@@ -33,7 +33,7 @@ class MainMenu extends Component {
     developerMode: PropTypes.bool.isRequired,
     history: PropTypes.shape({ replace: PropTypes.func.isRequired }).isRequired,
     match: PropTypes.shape({ path: PropTypes.string.isRequired }).isRequired,
-    dispatchUserLogout: PropTypes.func.isRequired,
+    dispatchSignOut: PropTypes.func.isRequired,
     authenticated: PropTypes.bool.isRequired,
   };
 
@@ -51,7 +51,7 @@ class MainMenu extends Component {
 
   renderLogOut() {
     const {
-      dispatchUserLogout,
+      dispatchSignOut,
       authenticated,
       t,
       match: { path },
@@ -61,7 +61,7 @@ class MainMenu extends Component {
       return (
         <MenuItem
           onClick={() => {
-            dispatchUserLogout();
+            dispatchSignOut();
           }}
           selected={path === LOGIN_PATH}
           button
@@ -73,18 +73,7 @@ class MainMenu extends Component {
         </MenuItem>
       );
     }
-    return (
-      <MenuItem
-        onClick={() => this.handleClick(LOGIN_PATH)}
-        button
-        selected={path === LOGIN_PATH}
-      >
-        <ListItemIcon>
-          <SaveIcon />
-        </ListItemIcon>
-        <ListItemText primary={t('Login')} />
-      </MenuItem>
-    );
+    return null;
   }
 
   renderDeveloperMode() {
@@ -111,6 +100,77 @@ class MainMenu extends Component {
     return null;
   }
 
+  renderAuthenticatedMenu() {
+    const {
+      authenticated,
+      t,
+      match: { path },
+    } = this.props;
+
+    if (authenticated) {
+      return (
+        <>
+          <MenuItem
+            onClick={() => this.handleClick(HOME_PATH)}
+            button
+            selected={path === HOME_PATH}
+          >
+            <ListItemIcon>
+              <SaveIcon />
+            </ListItemIcon>
+            <ListItemText primary={t('Saved Spaces')} />
+          </MenuItem>
+          <Online>
+            <MenuItem
+              onClick={() => this.handleClick(SPACES_NEARBY_PATH)}
+              button
+              selected={path === SPACES_NEARBY_PATH}
+            >
+              <ListItemIcon>
+                <SearchIcon />
+              </ListItemIcon>
+              <ListItemText primary={t('Spaces Nearby')} />
+            </MenuItem>
+            <MenuItem
+              onClick={() => this.handleClick(VISIT_PATH)}
+              button
+              selected={path === VISIT_PATH}
+            >
+              <ListItemIcon>
+                <Language />
+              </ListItemIcon>
+              <ListItemText primary={t('Visit a Space')} />
+            </MenuItem>
+          </Online>
+          <MenuItem
+            onClick={() => this.handleClick(LOAD_SPACE_PATH)}
+            button
+            selected={path === LOAD_SPACE_PATH}
+          >
+            <ListItemIcon>
+              <PublishIcon />
+            </ListItemIcon>
+            <ListItemText primary={t('Load')} />
+          </MenuItem>
+        </>
+      );
+    }
+    return (
+      <MenuItem
+        onClick={() => {
+          this.handleClick(LOGIN_PATH);
+        }}
+        selected={path === LOGIN_PATH}
+        button
+      >
+        <ListItemIcon>
+          <AccountCircle />
+        </ListItemIcon>
+        <ListItemText primary={t('Log In')} />
+      </MenuItem>
+    );
+  }
+
   render() {
     const {
       match: { path },
@@ -118,48 +178,7 @@ class MainMenu extends Component {
     } = this.props;
     return (
       <List>
-        <MenuItem
-          onClick={() => this.handleClick(HOME_PATH)}
-          button
-          selected={path === HOME_PATH}
-        >
-          <ListItemIcon>
-            <SaveIcon />
-          </ListItemIcon>
-          <ListItemText primary={t('Saved Spaces')} />
-        </MenuItem>
-        <Online>
-          <MenuItem
-            onClick={() => this.handleClick(SPACES_NEARBY_PATH)}
-            button
-            selected={path === SPACES_NEARBY_PATH}
-          >
-            <ListItemIcon>
-              <SearchIcon />
-            </ListItemIcon>
-            <ListItemText primary={t('Spaces Nearby')} />
-          </MenuItem>
-          <MenuItem
-            onClick={() => this.handleClick(VISIT_PATH)}
-            button
-            selected={path === VISIT_PATH}
-          >
-            <ListItemIcon>
-              <Language />
-            </ListItemIcon>
-            <ListItemText primary={t('Visit a Space')} />
-          </MenuItem>
-        </Online>
-        <MenuItem
-          onClick={() => this.handleClick(LOAD_SPACE_PATH)}
-          button
-          selected={path === LOAD_SPACE_PATH}
-        >
-          <ListItemIcon>
-            <PublishIcon />
-          </ListItemIcon>
-          <ListItemText primary={t('Load')} />
-        </MenuItem>
+        {this.renderAuthenticatedMenu()}
         <MenuItem
           onClick={() => this.handleClick(SETTINGS_PATH)}
           button
@@ -184,7 +203,7 @@ const mapStateToProps = ({ User, Authentication }) => ({
 });
 
 const mapDispatchToProps = {
-  dispatchUserLogout: signOutUser,
+  dispatchSignOut: signOutUser,
 };
 
 const ConnectedComponent = connect(
