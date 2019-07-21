@@ -9,6 +9,7 @@ import {
   PATCH_APP_INSTANCE_RESOURCE,
   GET_APP_INSTANCE,
   POST_APP_INSTANCE_RESOURCE,
+  APP_INSTANCE_RESOURCE_TYPES,
 } from '../../types';
 import {
   getAppInstanceResources,
@@ -62,36 +63,45 @@ class PhaseApp extends Component {
     const { appInstanceId: messageAppInstanceId } = data;
 
     // only post message to intended app instance
-    if (componentAppInstanceId !== messageAppInstanceId) {
-      return;
-    }
+    if (componentAppInstanceId === messageAppInstanceId) {
+      const message = JSON.stringify(data);
 
-    const message = JSON.stringify(data);
-
-    if (this.iframe.contentWindow.postMessage) {
-      this.iframe.contentWindow.postMessage(message, '*');
-    } else {
-      console.error('unable to find postMessage');
+      if (this.iframe.contentWindow.postMessage) {
+        this.iframe.contentWindow.postMessage(message, '*');
+      } else {
+        console.error('unable to find postMessage');
+      }
     }
   };
 
   handleReceiveMessage = event => {
     try {
-      const { dispatchGetAppInstance } = this.props;
-      const { type, payload } = JSON.parse(event.data);
+      const { dispatchGetAppInstance, appInstance } = this.props;
 
-      switch (type) {
-        case GET_APP_INSTANCE_RESOURCES:
-          return getAppInstanceResources(payload, this.postMessage);
-        case POST_APP_INSTANCE_RESOURCE:
-          return postAppInstanceResource(payload, this.postMessage);
-        case PATCH_APP_INSTANCE_RESOURCE:
-          return patchAppInstanceResource(payload, this.postMessage);
-        case GET_APP_INSTANCE:
-          return dispatchGetAppInstance(payload, this.postMessage);
-        default:
-          return false;
+      // get app instance id in message
+      const { id: componentAppInstanceId } = appInstance || {};
+      const { type, payload } = JSON.parse(event.data);
+      let { id: messageAppInstanceId } = payload;
+      if (APP_INSTANCE_RESOURCE_TYPES.includes(type)) {
+        ({ appInstanceId: messageAppInstanceId } = payload);
       }
+
+      // only receive message from intended app instance
+      if (componentAppInstanceId === messageAppInstanceId) {
+        switch (type) {
+          case GET_APP_INSTANCE_RESOURCES:
+            return getAppInstanceResources(payload, this.postMessage);
+          case POST_APP_INSTANCE_RESOURCE:
+            return postAppInstanceResource(payload, this.postMessage);
+          case PATCH_APP_INSTANCE_RESOURCE:
+            return patchAppInstanceResource(payload, this.postMessage);
+          case GET_APP_INSTANCE:
+            return dispatchGetAppInstance(payload, this.postMessage);
+          default:
+            return false;
+        }
+      }
+      return false;
     } catch (e) {
       console.error(e);
       return false;
