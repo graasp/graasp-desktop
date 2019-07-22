@@ -32,6 +32,8 @@ const APPLICATION = 'Application';
 
 const VAR_FOLDER = `${app.getPath('userData')}/var`;
 const DATABASE_PATH = `${VAR_FOLDER}/db.json`;
+const ICON_PATH = `${app.getAppPath()}/assets/icon.png`;
+const PRODUCT_NAME = 'Graasp';
 const TMP_FOLDER = 'tmp';
 const DEFAULT_LANG = 'en';
 const DEFAULT_DEVELOPER_MODE = false;
@@ -47,4 +49,6 @@ module.exports = {
   DATABASE_PATH,
   VAR_FOLDER,
   DEFAULT_LANG,
+  ICON_PATH,
+  PRODUCT_NAME,
 };
