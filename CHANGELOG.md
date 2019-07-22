@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.3](https://github.com/graasp/graasp-desktop/compare/v0.11.2...v0.11.3) (2019-07-22)
+
+### Bug Fixes
+
+- use channel specific to each app instance to get resources ([85fa4f4](https://github.com/graasp/graasp-desktop/commit/85fa4f4)), closes [#136](https://github.com/graasp/graasp-desktop/issues/136)
+
 ## [0.11.2](https://github.com/graasp/graasp-desktop/compare/v0.11.1...v0.11.2) (2019-07-21)
 
 ### Bug Fixes
