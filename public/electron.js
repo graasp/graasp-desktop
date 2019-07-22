@@ -360,8 +360,8 @@ app.on('ready', async () => {
   // called when getting AppInstanceResources
   ipcMain.on(GET_APP_INSTANCE_RESOURCES_CHANNEL, (event, data = {}) => {
     const defaultResponse = [];
+    const { userId, appInstanceId, spaceId, subSpaceId, type } = data;
     try {
-      const { userId, appInstanceId, spaceId, subSpaceId, type } = data;
       const appInstanceResourcesHandle = db
         .get('spaces')
         .find({ id: spaceId })
@@ -386,12 +386,24 @@ app.on('ready', async () => {
       const appInstanceResources = appInstanceResourcesHandle.value();
 
       const response = appInstanceResources || defaultResponse;
-      mainWindow.webContents.send(GET_APP_INSTANCE_RESOURCES_CHANNEL, response);
+
+      // response is sent back to channel specific for this app instance
+      mainWindow.webContents.send(
+        `${GET_APP_INSTANCE_RESOURCES_CHANNEL}_${appInstanceId}`,
+        {
+          appInstanceId,
+          payload: response,
+        }
+      );
     } catch (e) {
       console.error(e);
+      // error is sent back to channel specific for this app instance
       mainWindow.webContents.send(
-        GET_APP_INSTANCE_RESOURCES_CHANNEL,
-        defaultResponse
+        `${GET_APP_INSTANCE_RESOURCES_CHANNEL}_${appInstanceId}`,
+        {
+          appInstanceId,
+          payload: defaultResponse,
+        }
       );
     }
   });
