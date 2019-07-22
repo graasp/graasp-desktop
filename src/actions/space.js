@@ -108,12 +108,12 @@ const waitForSpace = ({ online }) =>
     });
   });
 
-const getLocalSpace = async ({ id }) => async dispatch => {
+const getLocalSpace = async ({ id, user }) => async dispatch => {
   try {
     dispatch(flagGettingSpace(true));
 
     // tell electron to get space
-    window.ipcRenderer.send(GET_SPACE_CHANNEL, { id });
+    window.ipcRenderer.send(GET_SPACE_CHANNEL, { id, user });
 
     const space = await waitForSpace({ online: false });
 
@@ -128,11 +128,14 @@ const getLocalSpace = async ({ id }) => async dispatch => {
   }
 };
 
-const getRemoteSpace = async ({ id }) => async dispatch => {
+const getRemoteSpace = async ({ id, user }) => async dispatch => {
   try {
     dispatch(flagGettingSpace(true));
 
+    // @TODO get token for given user and space
+
     const url = generateGetSpaceEndpoint(id);
+    // @TODO use token in request
     const response = await fetch(url, DEFAULT_GET_REQUEST);
 
     // throws if it is an error
@@ -143,7 +146,7 @@ const getRemoteSpace = async ({ id }) => async dispatch => {
 
     // try to merge with local space if available
     try {
-      window.ipcRenderer.send(GET_SPACE_CHANNEL, { id });
+      window.ipcRenderer.send(GET_SPACE_CHANNEL, { id, user });
       localSpace = await waitForSpace({ online: true });
     } catch (localError) {
       // ignore error
@@ -348,12 +351,12 @@ const loadSpace = ({ fileLocation }) => dispatch => {
   });
 };
 
-const getSpace = ({ id, saved = false }) => dispatch => {
+const getSpace = ({ id, user, saved = false }) => dispatch => {
   // only get the space from the api if not saved
   if (!saved) {
-    dispatch(getRemoteSpace({ id }));
+    dispatch(getRemoteSpace({ id, user }));
   } else {
-    dispatch(getLocalSpace({ id }));
+    dispatch(getLocalSpace({ id, user }));
   }
 };
 

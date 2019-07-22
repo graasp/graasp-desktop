@@ -63,6 +63,10 @@ class SpaceScreen extends Component {
     }).isRequired,
     history: PropTypes.shape({ length: PropTypes.number.isRequired })
       .isRequired,
+    user: PropTypes.shape({
+      username: PropTypes.string.isRequired,
+      userId: PropTypes.string.isRequired,
+    }).isRequired,
   };
 
   componentDidMount() {
@@ -72,11 +76,12 @@ class SpaceScreen extends Component {
       },
       location: { search },
       dispatchGetSpace,
+      user,
     } = this.props;
 
     // tell action creator if this space has already been saved
     const { saved } = Qs.parse(search, { ignoreQueryPrefix: true });
-    dispatchGetSpace({ id, saved: saved === 'true' });
+    dispatchGetSpace({ id, user, saved: saved === 'true' });
   }
 
   componentDidUpdate() {
@@ -214,7 +219,7 @@ class SpaceScreen extends Component {
   }
 }
 
-const mapStateToProps = ({ Space, Phase }) => ({
+const mapStateToProps = ({ Space, Phase, Authentication }) => ({
   space: Space.get('current').get('content'),
   open: Space.get('current')
     .get('menu')
@@ -222,6 +227,7 @@ const mapStateToProps = ({ Space, Phase }) => ({
   phase: Phase.get('current').get('content'),
   activity: Space.get('current').get('activity'),
   deleted: Space.get('current').get('deleted'),
+  user: Authentication.get('user'),
 });
 
 const mapDispatchToProps = {

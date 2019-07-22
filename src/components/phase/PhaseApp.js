@@ -35,6 +35,8 @@ class PhaseApp extends Component {
     appInstance: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }),
+    username: PropTypes.string.isRequired,
+    userId: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -97,6 +99,8 @@ class PhaseApp extends Component {
       spaceId,
       phaseId,
       appInstance,
+      username,
+      userId,
     } = this.props;
     let uri = url;
     if (asset) {
@@ -107,9 +111,6 @@ class PhaseApp extends Component {
         uri = `file://${folder}/${asset}`;
       }
     }
-
-    // todo: get user dynamically, currently we are just using a fake one
-    const userId = '5ce422795fe28eeca1001e0a';
 
     // for some reason, smart gateway urls use `#` instead of `?` as a query string indicator
     const divider = isSmartGatewayUrl(url)
@@ -129,6 +130,7 @@ class PhaseApp extends Component {
       ...existingParams,
       spaceId,
       userId,
+      username,
       lang,
       appInstanceId,
       itemId: id,
@@ -153,12 +155,14 @@ class PhaseApp extends Component {
   }
 }
 
-const mapStateToProps = ({ User, Space }) => ({
+const mapStateToProps = ({ User, Space, Authentication }) => ({
   folder: User.getIn(['current', 'folder']),
   // get language from space, otherwise fall back on user language
   lang:
     Space.getIn(['current', 'content', 'language']) ||
     User.getIn(['current', 'lang']),
+  username: Authentication.getIn(['user', 'username']),
+  userId: Authentication.getIn(['user', 'userId']),
 });
 
 const mapDispatchToProps = {
