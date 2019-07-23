@@ -5,6 +5,7 @@ const {
   ipcMain,
   Menu,
   dialog,
+  session,
   // eslint-disable-next-line import/no-extraneous-dependencies
 } = require('electron');
 const path = require('path');
@@ -262,6 +263,12 @@ app.on('ready', async () => {
   // called when logging out a user
   ipcMain.on(SIGN_OUT_CHANNEL, () => {
     try {
+      // clear cookies
+      session.defaultSession.clearStorageData(
+        { options: { storages: ['cookies'] } },
+        () => {}
+      );
+
       mainWindow.webContents.send(SIGN_OUT_CHANNEL);
     } catch (e) {
       logger.error(e);

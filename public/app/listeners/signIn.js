@@ -4,8 +4,10 @@ const { SIGN_IN_CHANNEL } = require('../config/channels');
 
 const DEFAULT_USER = {};
 
-const signIn = (mainWindow, db) => async (event, { username }) => {
+const signIn = (mainWindow, db) => async (event, { username, password }) => {
   const users = db.get(USERS_COLLECTION);
+
+  // @TODO hash password
 
   // check in db if username exists
   const user = users.find({ username }).value();
@@ -15,7 +17,7 @@ const signIn = (mainWindow, db) => async (event, { username }) => {
     const userId = ObjectId().str;
     // assignment inside function to avoid sharing the same array among users
     DEFAULT_USER.tokens = [];
-    const newUser = { userId, username, ...DEFAULT_USER };
+    const newUser = { userId, username, password, ...DEFAULT_USER };
     users.push(newUser).write();
     mainWindow.webContents.send(SIGN_IN_CHANNEL, newUser);
   }

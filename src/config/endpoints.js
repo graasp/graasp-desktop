@@ -4,3 +4,5 @@ export const generateGetSpaceEndpoint = id =>
   `${REACT_APP_GRAASP_API_HOST}/spaces/${id}/offline-structure`;
 
 export const GET_SPACES_NEARBY_ENDPOINT = `${REACT_APP_GRAASP_HOST}/spaces/nearby`;
+
+export const REACT_APP_GRAASP_LOGIN = 'https://graasp.eu/login';

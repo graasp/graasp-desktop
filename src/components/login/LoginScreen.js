@@ -53,6 +53,7 @@ class LoginScreen extends Component {
   state = {
     open: false,
     username: null,
+    password: null,
   };
 
   styles = {
@@ -113,9 +114,9 @@ class LoginScreen extends Component {
   };
 
   handleSignIn = () => {
-    const { username } = this.state;
+    const { username, password } = this.state;
     const { dispatchSignIn } = this.props;
-    dispatchSignIn({ username });
+    dispatchSignIn({ username, password });
   };
 
   handleSignOut = () => {
@@ -128,6 +129,11 @@ class LoginScreen extends Component {
     this.setState({ username });
   };
 
+  handlePassword = event => {
+    const password = event.target ? event.target.value : event;
+    this.setState({ password });
+  };
+
   handleKeyPressed = event => {
     if (event.key === 'Enter') {
       this.handleSignIn();
@@ -136,7 +142,7 @@ class LoginScreen extends Component {
 
   render() {
     const { classes, theme, t } = this.props;
-    const { open, username } = this.state;
+    const { open, username, password } = this.state;
 
     return (
       <div className={classes.root} style={this.styles.root}>
@@ -190,10 +196,20 @@ class LoginScreen extends Component {
             <CssTextField
               label={t('Username')}
               variant="outlined"
-              floatingLabelText="Username"
+              floatingLabelText="Enter your username"
               onChange={this.handleUsername}
               onKeyPress={this.handleKeyPressed}
               value={username}
+            />
+            <br />
+            <CssTextField
+              label={t('Password')}
+              variant="outlined"
+              floatingLabelText="Enter your password"
+              onChange={this.handlePassword}
+              onKeyPress={this.handleKeyPressed}
+              value={password}
+              type="password"
             />
             <br />
             <Button

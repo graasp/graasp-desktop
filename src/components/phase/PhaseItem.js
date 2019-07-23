@@ -15,7 +15,15 @@ import PhaseApp from './PhaseApp';
 
 const renderResource = item => {
   const { id, mimeType, content, asset, url, name } = item;
+
   if (mimeType === TEXT) {
+    if (!content) {
+      fetch(item.url).then(response => {
+        response.text().then(text => {
+          console.log('html content', text);
+        });
+      });
+    }
     return <PhaseText key={id} id={id} content={content} />;
   }
 

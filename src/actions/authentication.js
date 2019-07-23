@@ -18,6 +18,7 @@ import {
   SIGN_OUT_CHANNEL,
   IS_AUTHENTICATED_CHANNEL,
 } from '../config/channels';
+import { REACT_APP_GRAASP_LOGIN } from '../config/endpoints';
 import { createFlag } from './common';
 import { ERROR_GENERAL } from '../config/errors';
 
@@ -25,14 +26,23 @@ const flagLoggingInUser = createFlag(FLAG_SIGNING_IN);
 const flagLoggingOutUser = createFlag(FLAG_SIGNING_OUT);
 const flagGettingAuthenticated = createFlag(FLAG_GETTING_AUTHENTICATED);
 
-const signIn = ({ username }) => dispatch => {
+const signIn = async ({ username, password }) => async dispatch => {
   try {
     dispatch(flagLoggingInUser(true));
-    window.ipcRenderer.send(SIGN_IN_CHANNEL, { username });
-    window.ipcRenderer.once(SIGN_IN_CHANNEL, (event, user) => {
+    window.ipcRenderer.send(SIGN_IN_CHANNEL, { username, password });
+    window.ipcRenderer.once(SIGN_IN_CHANNEL, async (event, user) => {
       if (user === ERROR_GENERAL) {
         toastr.error(ERROR_MESSAGE_HEADER, ERROR_SIGNING_IN);
       } else {
+        // obtain user cookie
+        await fetch(REACT_APP_GRAASP_LOGIN, {
+          body: `email=${user.username}&password=${user.password}`,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          method: 'post',
+        });
+
         dispatch({
           type: SIGN_IN_SUCCEEDED,
           payload: user,
