@@ -22,21 +22,27 @@ import { REACT_APP_GRAASP_LOGIN } from '../config/endpoints';
 import { createFlag } from './common';
 import { ERROR_GENERAL } from '../config/errors';
 
-const flagLoggingInUser = createFlag(FLAG_SIGNING_IN);
-const flagLoggingOutUser = createFlag(FLAG_SIGNING_OUT);
+const flagSigningInUser = createFlag(FLAG_SIGNING_IN);
+const flagSigningOutUser = createFlag(FLAG_SIGNING_OUT);
 const flagGettingAuthenticated = createFlag(FLAG_GETTING_AUTHENTICATED);
 
 const signIn = async ({ username, password }) => async dispatch => {
   try {
-    dispatch(flagLoggingInUser(true));
+    dispatch(flagSigningInUser(true));
     window.ipcRenderer.send(SIGN_IN_CHANNEL, { username, password });
     window.ipcRenderer.once(SIGN_IN_CHANNEL, async (event, user) => {
       if (user === ERROR_GENERAL) {
         toastr.error(ERROR_MESSAGE_HEADER, ERROR_SIGNING_IN);
       } else {
         // obtain user cookie
+        const formBody = Object.keys({ username, password })
+          .map(
+            key => `${encodeURIComponent(key)}=${encodeURIComponent(user[key])}`
+          )
+          .join('&');
+
         await fetch(REACT_APP_GRAASP_LOGIN, {
-          body: `email=${user.username}&password=${user.password}`,
+          body: formBody,
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
@@ -48,18 +54,18 @@ const signIn = async ({ username, password }) => async dispatch => {
           payload: user,
         });
       }
-      dispatch(flagLoggingInUser(false));
+      dispatch(flagSigningInUser(false));
     });
   } catch (e) {
     console.error(e);
     toastr.error(ERROR_MESSAGE_HEADER, ERROR_SIGNING_IN);
-    dispatch(flagLoggingInUser(false));
+    dispatch(flagSigningInUser(false));
   }
 };
 
 const signOutUser = () => dispatch => {
   try {
-    dispatch(flagLoggingOutUser(true));
+    dispatch(flagSigningOutUser(true));
     window.ipcRenderer.send(SIGN_OUT_CHANNEL);
     window.ipcRenderer.once(SIGN_OUT_CHANNEL, (event, response) => {
       if (response === ERROR_GENERAL) {
@@ -70,12 +76,12 @@ const signOutUser = () => dispatch => {
           payload: response,
         });
       }
-      dispatch(flagLoggingOutUser(false));
+      dispatch(flagSigningOutUser(false));
     });
   } catch (e) {
     console.error(e);
     toastr.error(ERROR_MESSAGE_HEADER, ERROR_SIGNING_OUT);
-    dispatch(flagLoggingOutUser(false));
+    dispatch(flagSigningOutUser(false));
   }
 };
 
