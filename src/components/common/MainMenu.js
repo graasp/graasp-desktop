@@ -35,6 +35,8 @@ class MainMenu extends Component {
     match: PropTypes.shape({ path: PropTypes.string.isRequired }).isRequired,
     dispatchSignOut: PropTypes.func.isRequired,
     authenticated: PropTypes.bool.isRequired,
+    location: PropTypes.shape({ pathname: PropTypes.string.isRequired })
+      .isRequired,
   };
 
   handleClick = path => {
@@ -49,9 +51,18 @@ class MainMenu extends Component {
     }
   };
 
+  handleSignOut() {
+    // pathname inside location matches the path in url
+    const { location: { pathname } = {}, dispatchSignOut } = this.props;
+    if (pathname) {
+      sessionStorage.setItem('redirect', pathname);
+    }
+
+    dispatchSignOut();
+  }
+
   renderLogOut() {
     const {
-      dispatchSignOut,
       authenticated,
       t,
       match: { path },
@@ -61,7 +72,7 @@ class MainMenu extends Component {
       return (
         <MenuItem
           onClick={() => {
-            dispatchSignOut();
+            this.handleSignOut();
           }}
           selected={path === LOGIN_PATH}
           button
