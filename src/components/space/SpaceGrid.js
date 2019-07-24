@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
-import Button from '@material-ui/core/Button/Button';
+import Fab from '@material-ui/core/Fab';
 import { withStyles } from '@material-ui/core';
 import { withRouter } from 'react-router';
 import { withTranslation } from 'react-i18next';
@@ -35,11 +35,15 @@ class SpaceGrid extends Component {
     dispatchClearSpace: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
     saved: PropTypes.bool,
+
+    columnNb: PropTypes.number,
   };
 
   static defaultProps = {
     folder: null,
     saved: false,
+
+    columnNb: 4,
   };
 
   componentDidMount() {
@@ -82,26 +86,37 @@ class SpaceGrid extends Component {
   };
 
   render() {
-    const { spaces, classes, history, saved, t } = this.props;
+    const { spaces, classes, history, saved, t, columnNb } = this.props;
 
     // spaces is a set to mapping through it will return a set
-    const MediaCards = spaces.map(space => {
+
+    const columnWrapper = [];
+    for (let i = 0; i < columnNb; i += 1) {
+      columnWrapper[`column${i}`] = [];
+    }
+
+    let index = 0;
+    spaces.forEach(space => {
       const { id, name, image = {}, description } = space;
       const { replace } = history;
       const ViewButton = (
-        <Button
-          variant="contained"
-          size="large"
+        <Fab
+          variant="extended"
+          size="medium"
           color="primary"
-          id={id}
+          aria-label="Add"
+          className={classes.margin}
+          styles="box-shadow:0"
           onClick={() => replace(`/space/${id}?saved=${saved}`)}
-          fullWidth
+          id={id}
         >
           <RemoveRedEyeIcon className={classes.leftIcon} />
           {t('View')}
-        </Button>
+        </Fab>
       );
-      return (
+      const columnIndex = index % columnNb;
+      index += 1;
+      const card = (
         <Grid key={id} item>
           <MediaCard
             key={id}
@@ -112,9 +127,25 @@ class SpaceGrid extends Component {
           />
         </Grid>
       );
+      columnWrapper[`column${columnIndex}`].push(card);
     });
 
-    if (!MediaCards.size) {
+    const MediaCards = [];
+
+    for (let i = 0; i < columnNb; i += 1) {
+      MediaCards.push(
+        <div
+          style={{
+            flex: 1,
+            flexWrap: 'wrap',
+          }}
+        >
+          {columnWrapper[`column${i}`]}
+        </div>
+      );
+    }
+
+    if (!MediaCards.length) {
       return (
         <Typography variant="h5" color="inherit">
           {t('No Spaces Available')}
@@ -122,7 +153,7 @@ class SpaceGrid extends Component {
       );
     }
     return (
-      <Grid container spacing={6}>
+      <Grid container spacing={10} style={{ display: 'flex' }}>
         {MediaCards}
       </Grid>
     );
