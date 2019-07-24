@@ -177,7 +177,7 @@ class MainMenu extends Component {
         <ListItemIcon>
           <AccountCircle />
         </ListItemIcon>
-        <ListItemText primary={t('Log In')} />
+        <ListItemText primary={t('Login')} />
       </MenuItem>
     );
   }

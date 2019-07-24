@@ -28,6 +28,7 @@ const flagGettingAuthenticated = createFlag(FLAG_GETTING_AUTHENTICATED);
 
 const signIn = async ({ username, password }) => async dispatch => {
   try {
+    console.log(username, password);
     dispatch(flagSigningInUser(true));
     window.ipcRenderer.send(SIGN_IN_CHANNEL, { username, password });
     window.ipcRenderer.once(SIGN_IN_CHANNEL, async (event, user) => {
@@ -35,14 +36,10 @@ const signIn = async ({ username, password }) => async dispatch => {
         toastr.error(ERROR_MESSAGE_HEADER, ERROR_SIGNING_IN);
       } else {
         // obtain user cookie
-        const formBody = Object.keys({ username, password })
-          .map(
-            key => `${encodeURIComponent(key)}=${encodeURIComponent(user[key])}`
-          )
-          .join('&');
-
         await fetch(REACT_APP_GRAASP_LOGIN, {
-          body: formBody,
+          body: `email=${encodeURIComponent(
+            user.username
+          )}&password=${encodeURIComponent(user.password)}`,
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
           },

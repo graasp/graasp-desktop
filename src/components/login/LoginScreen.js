@@ -196,7 +196,6 @@ class LoginScreen extends Component {
             <CssTextField
               label={t('Username')}
               variant="outlined"
-              floatingLabelText="Enter your username"
               onChange={this.handleUsername}
               onKeyPress={this.handleKeyPressed}
               value={username}
@@ -205,7 +204,6 @@ class LoginScreen extends Component {
             <CssTextField
               label={t('Password')}
               variant="outlined"
-              floatingLabelText="Enter your password"
               onChange={this.handlePassword}
               onKeyPress={this.handleKeyPressed}
               value={password}
