@@ -160,6 +160,21 @@ const generateMenu = () => {
               icon_path: ICON_PATH,
               copyright: 'Copyright © 2019 React',
               product_name: PRODUCT_NAME,
+              use_version_info: false,
+              adjust_window_size: true,
+              win_options: {
+                parent: mainWindow,
+                resizable: false,
+                minimizable: false,
+                maximizable: false,
+                movable: true,
+                frame: true,
+              },
+              // ? automatically showing info from package.json is nice but not translated into different languages
+              // package_json_dir: path.join(__dirname, '../'),
+              // bug_link_text: 'Report a bug/issue',
+              // ? nor is a close button
+              // show_close_button: 'Close',
             });
           },
         },
@@ -228,7 +243,8 @@ const generateMenu = () => {
     },
   ];
 
-  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+  Menu.setApplicationMenu(null);
+  mainWindow.setMenu(Menu.buildFromTemplate(template));
 };
 
 app.on('ready', async () => {
