@@ -56,4 +56,5 @@ module.exports = {
   DEFAULT_LANG,
   ICON_PATH,
   PRODUCT_NAME,
+  resolvePath,
 };
