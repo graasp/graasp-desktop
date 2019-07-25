@@ -37,7 +37,7 @@ const APPLICATION = 'Application';
 
 const VAR_FOLDER = `${resolvePath(app.getPath('userData'))}/var`;
 const DATABASE_PATH = `${VAR_FOLDER}/db.json`;
-const ICON_PATH = `${resolvePath(app.getAppPath())}/assets/icon.png`;
+const ICON_PATH = 'app/assets/icon.png';
 const PRODUCT_NAME = 'Graasp';
 const TMP_FOLDER = 'tmp';
 const DEFAULT_LANG = 'en';

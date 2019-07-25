@@ -159,7 +159,7 @@ const generateMenu = () => {
           click: () => {
             openAboutWindow({
               base_path: resolvePath(app.getAppPath()),
-              icon_path: ICON_PATH,
+              icon_path: path.join(__dirname, ICON_PATH),
               copyright: 'Copyright © 2019 React',
               product_name: PRODUCT_NAME,
             });
