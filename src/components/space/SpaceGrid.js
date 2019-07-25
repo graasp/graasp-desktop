@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import path from 'path';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
 import Fab from '@material-ui/core/Fab';
@@ -66,7 +67,7 @@ class SpaceGrid extends Component {
     // prioritise assets
     if (folder) {
       if (thumbnailAsset) {
-        return `file://${folder}/${thumbnailAsset}`;
+        return path.join(`file://`, folder, thumbnailAsset);
       }
       if (backgroundAsset) {
         return `file://${folder}/${backgroundAsset}`;
@@ -98,6 +99,8 @@ class SpaceGrid extends Component {
     let index = 0;
     spaces.forEach(space => {
       const { id, name, image = {}, description } = space;
+
+      console.log('11', this.generateThumbnail({ image }));
       const { replace } = history;
       const ViewButton = (
         <Fab
