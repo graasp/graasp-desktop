@@ -272,6 +272,9 @@ const deleteSpace = ({ id }) => dispatch => {
     if (response === ERROR_GENERAL) {
       toastr.error(ERROR_MESSAGE_HEADER, ERROR_DELETING_MESSAGE);
     } else {
+      // update saved spaces in state
+      dispatch(getSpaces());
+
       toastr.success(SUCCESS_MESSAGE_HEADER, SUCCESS_DELETING_MESSAGE);
       dispatch({
         type: DELETE_SPACE_SUCCESS,

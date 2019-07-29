@@ -36,7 +36,6 @@ class SpaceGrid extends Component {
     dispatchClearSpace: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
     saved: PropTypes.bool,
-
     columnNb: PropTypes.number,
   };
 
@@ -99,8 +98,6 @@ class SpaceGrid extends Component {
     let index = 0;
     spaces.forEach(space => {
       const { id, name, image = {}, description } = space;
-
-      console.log('11', this.generateThumbnail({ image }));
       const { replace } = history;
       const ViewButton = (
         <Fab
@@ -123,6 +120,7 @@ class SpaceGrid extends Component {
         <Grid key={id} item>
           <MediaCard
             key={id}
+            id={id}
             name={name}
             image={this.generateThumbnail({ image })}
             text={description}
@@ -163,8 +161,9 @@ class SpaceGrid extends Component {
   }
 }
 
-const mapStateToProps = ({ User }) => ({
+const mapStateToProps = ({ User, Space }) => ({
   folder: User.getIn(['current', 'folder']),
+  deleted: Space.getIn(['current', 'deleted']),
 });
 
 const mapDispatchToProps = {

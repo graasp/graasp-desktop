@@ -220,7 +220,7 @@ const mapStateToProps = ({ Space, Phase }) => ({
     .get('menu')
     .get('open'),
   phase: Phase.get('current').get('content'),
-  activity: Space.get('current').get('activity'),
+  activity: Boolean(Space.getIn(['current', 'activity']).size),
   deleted: Space.get('current').get('deleted'),
 });
 
