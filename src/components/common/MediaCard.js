@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import DeleteButton from '../space/DeleteButton';
 
 const styles = theme => ({
   card: {
@@ -37,11 +38,12 @@ const styles = theme => ({
 });
 
 const MediaCard = props => {
-  const { classes, name, image, text, button } = props;
+  const { classes, name, image, text, button, id } = props;
   const [expanded, setExpanded] = React.useState(false);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
   return (
     <Card className={classes.card}>
       <CardMedia className={classes.media} image={image} title={name} />
@@ -51,6 +53,7 @@ const MediaCard = props => {
           {name}
         </Typography>
       </CardContent>
+
       <CardActions disableSpacing>
         {button}
         {text && (
@@ -65,6 +68,7 @@ const MediaCard = props => {
             <ExpandMoreIcon />
           </IconButton>
         )}
+        <DeleteButton id={id} />
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
@@ -84,6 +88,7 @@ MediaCard.propTypes = {
   image: PropTypes.string.isRequired,
   text: PropTypes.string,
   button: PropTypes.node.isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 MediaCard.defaultProps = {
