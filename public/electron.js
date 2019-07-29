@@ -144,7 +144,26 @@ const createWindow = () => {
 // };
 
 const generateMenu = () => {
+  const isMac = process.platform === 'darwin';
   const template = [
+    ...(isMac
+      ? [
+          {
+            label: app.getName(),
+            submenu: [
+              { role: 'about' },
+              { type: 'separator' },
+              { role: 'services' },
+              { type: 'separator' },
+              { role: 'hide' },
+              { role: 'hideothers' },
+              { role: 'unhide' },
+              { type: 'separator' },
+              { role: 'quit' },
+            ],
+          },
+        ]
+      : []),
     {
       label: 'File',
       submenu: [
@@ -181,10 +200,7 @@ const generateMenu = () => {
             });
           },
         },
-        {
-          label: 'Quit',
-          role: 'quit',
-        },
+        isMac ? { role: 'close' } : { role: 'quit' },
       ],
     },
     { type: 'separator' },
@@ -197,9 +213,7 @@ const generateMenu = () => {
         { role: 'cut' },
         { role: 'copy' },
         { role: 'paste' },
-        { role: 'pasteandmatchstyle' },
-        { role: 'delete' },
-        { role: 'selectall' },
+        { role: 'selectAll' },
       ],
     },
     {
@@ -210,7 +224,6 @@ const generateMenu = () => {
         { role: 'toggledevtools' },
         { type: 'separator' },
         { role: 'resetzoom' },
-        { role: 'resetzoom' },
         { role: 'zoomin' },
         { role: 'zoomout' },
         { type: 'separator' },
@@ -219,7 +232,18 @@ const generateMenu = () => {
     },
     {
       role: 'window',
-      submenu: [{ role: 'minimize' }, { role: 'close' }],
+      submenu: [
+        { role: 'minimize' },
+        { role: 'zoom' },
+        ...(isMac
+          ? [
+              { type: 'separator' },
+              { role: 'front' },
+              { type: 'separator' },
+              { role: 'window' },
+            ]
+          : [{ role: 'close' }]),
+      ],
     },
     {
       role: 'help',
