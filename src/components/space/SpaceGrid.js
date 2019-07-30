@@ -21,6 +21,10 @@ class SpaceGrid extends Component {
     },
   };
 
+  state = {
+    columnNb: 4,
+  };
+
   static propTypes = {
     folder: PropTypes.string,
     classes: PropTypes.shape({
@@ -36,20 +40,29 @@ class SpaceGrid extends Component {
     dispatchClearSpace: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
     saved: PropTypes.bool,
-    columnNb: PropTypes.number,
   };
 
   static defaultProps = {
     folder: null,
     saved: false,
-
-    columnNb: 4,
   };
 
   componentDidMount() {
+    this.updateColumnNb();
+    window.addEventListener('resize', this.updateColumnNb);
+
     const { dispatchClearSpace } = this.props;
     dispatchClearSpace();
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateColumnNb);
+  }
+
+  updateColumnNb = () => {
+    // @TODO use mediaCard width + padding
+    this.setState({ columnNb: Math.floor(window.innerWidth / 350) || 1 });
+  };
 
   // show the local background image if exists, otherwise fetch
   // the image from url if provided if not provided then pass
@@ -86,7 +99,8 @@ class SpaceGrid extends Component {
   };
 
   render() {
-    const { spaces, classes, history, saved, t, columnNb } = this.props;
+    const { spaces, classes, history, saved, t } = this.props;
+    const { columnNb } = this.state;
 
     // spaces is a set to mapping through it will return a set
 
@@ -95,8 +109,7 @@ class SpaceGrid extends Component {
       columnWrapper[`column${i}`] = [];
     }
 
-    let index = 0;
-    spaces.forEach(space => {
+    [...spaces].forEach((space, index) => {
       const { id, name, image = {}, description } = space;
       const { replace } = history;
       const ViewButton = (
@@ -115,7 +128,6 @@ class SpaceGrid extends Component {
         </Fab>
       );
       const columnIndex = index % columnNb;
-      index += 1;
       const card = (
         <Grid key={id} item>
           <MediaCard
@@ -154,7 +166,11 @@ class SpaceGrid extends Component {
       );
     }
     return (
-      <Grid container spacing={10} style={{ display: 'flex' }}>
+      <Grid
+        container
+        spacing={10}
+        style={{ display: 'flex', paddingLeft: 30, paddingRight: 30 }}
+      >
         {MediaCards}
       </Grid>
     );
