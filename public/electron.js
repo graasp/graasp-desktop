@@ -171,8 +171,8 @@ const generateMenu = () => {
                 frame: true,
               },
               // ? automatically showing info from package.json is nice but not translated into different languages
-              // package_json_dir: path.join(__dirname, '../'),
-              // bug_link_text: 'Report a bug/issue',
+              package_json_dir: path.join(__dirname, '../'),
+              bug_link_text: 'Report a Bug/Issue',
               // ? nor is a close button
               // show_close_button: 'Close',
             });
