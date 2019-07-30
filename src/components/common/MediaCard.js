@@ -54,8 +54,20 @@ const MediaCard = props => {
         </Typography>
       </CardContent>
 
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <CardContent>
+          <Typography
+            component="p"
+            dangerouslySetInnerHTML={{ __html: text }}
+          />
+        </CardContent>
+      </Collapse>
+
       <CardActions disableSpacing>
         {button}
+
+        <DeleteButton id={id} />
+
         {text && (
           <IconButton
             className={clsx(classes.expand, {
@@ -68,16 +80,7 @@ const MediaCard = props => {
             <ExpandMoreIcon />
           </IconButton>
         )}
-        <DeleteButton id={id} />
       </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          <Typography
-            component="p"
-            dangerouslySetInnerHTML={{ __html: text }}
-          />
-        </CardContent>
-      </Collapse>
     </Card>
   );
 };

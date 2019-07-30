@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import path from 'path';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
 import Fab from '@material-ui/core/Fab';
-import { withStyles } from '@material-ui/core';
+import Tooltip from '@material-ui/core/Tooltip';
+import { withStyles, IconButton } from '@material-ui/core';
 import { withRouter } from 'react-router';
 import { withTranslation } from 'react-i18next';
 import Typography from '@material-ui/core/Typography/Typography';
 import Grid from '@material-ui/core/Grid/Grid';
+import PlayArrow from '@material-ui/icons/PlayArrow';
 import MediaCard from '../common/MediaCard';
 import { clearSpace } from '../../actions';
 import DefaultThumbnail from '../../data/graasp.jpg';
@@ -27,9 +28,6 @@ class SpaceGrid extends Component {
 
   static propTypes = {
     folder: PropTypes.string,
-    classes: PropTypes.shape({
-      leftIcon: PropTypes.string.isRequired,
-    }).isRequired,
     spaces: ImmutablePropTypes.setOf(
       PropTypes.shape({
         id: PropTypes.string.isRequired,
@@ -99,7 +97,7 @@ class SpaceGrid extends Component {
   };
 
   render() {
-    const { spaces, classes, history, saved, t } = this.props;
+    const { spaces, history, saved, t } = this.props;
     const { columnNb } = this.state;
 
     // spaces is a set to mapping through it will return a set
@@ -113,19 +111,20 @@ class SpaceGrid extends Component {
       const { id, name, image = {}, description } = space;
       const { replace } = history;
       const ViewButton = (
-        <Fab
-          variant="extended"
-          size="medium"
-          color="primary"
-          aria-label="Add"
-          className={classes.margin}
-          styles="box-shadow:0"
-          onClick={() => replace(`/space/${id}?saved=${saved}`)}
-          id={id}
-        >
-          <RemoveRedEyeIcon className={classes.leftIcon} />
-          {t('View')}
-        </Fab>
+        <Tooltip title={t('View')}>
+          <Fab
+            size="large"
+            color="primary"
+            aria-label="Add"
+            styles="box-shadow:0"
+            onClick={() => replace(`/space/${id}?saved=${saved}`)}
+            id={id}
+          >
+            <IconButton color="secondary">
+              <PlayArrow fontSize="large" />
+            </IconButton>
+          </Fab>
+        </Tooltip>
       );
       const columnIndex = index % columnNb;
       const card = (
