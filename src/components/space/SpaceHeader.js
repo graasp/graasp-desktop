@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import MenuIcon from '@material-ui/icons/Menu';
 import AppBar from '@material-ui/core/AppBar/AppBar';
 import UnarchiveIcon from '@material-ui/icons/Unarchive';
-import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
 import WarningIcon from '@material-ui/icons/Warning';
 import WifiIcon from '@material-ui/icons/Wifi';
@@ -17,12 +16,8 @@ import IconButton from '@material-ui/core/IconButton/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core';
 import Styles from '../../Styles';
-import {
-  deleteSpace,
-  exportSpace,
-  saveSpace,
-  syncSpace,
-} from '../../actions/space';
+import { exportSpace, saveSpace, syncSpace } from '../../actions/space';
+import DeleteButton from './DeleteButton';
 
 class SpaceHeader extends Component {
   static propTypes = {
@@ -35,7 +30,6 @@ class SpaceHeader extends Component {
     openDrawer: PropTypes.bool.isRequired,
     handleDrawerOpen: PropTypes.func.isRequired,
     dispatchExportSpace: PropTypes.func.isRequired,
-    dispatchDeleteSpace: PropTypes.func.isRequired,
     dispatchSaveSpace: PropTypes.func.isRequired,
     dispatchSyncSpace: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
@@ -45,14 +39,6 @@ class SpaceHeader extends Component {
     const { space, dispatchExportSpace } = this.props;
     const { id, name } = space;
     dispatchExportSpace(id, name);
-  };
-
-  handleDelete = () => {
-    const {
-      space: { id },
-      dispatchDeleteSpace,
-    } = this.props;
-    dispatchDeleteSpace({ id });
   };
 
   handleSave = () => {
@@ -116,20 +102,10 @@ class SpaceHeader extends Component {
   }
 
   renderDeleteButton() {
-    const { space, classes, t } = this.props;
-    const { saved } = space;
+    const { space } = this.props;
+    const { saved, id } = space;
     if (saved) {
-      return (
-        <Tooltip title={t('Delete this space.')}>
-          <IconButton
-            color="inherit"
-            onClick={this.handleDelete}
-            className={classes.button}
-          >
-            <DeleteIcon className={classes.rightIcon} />
-          </IconButton>
-        </Tooltip>
-      );
+      return <DeleteButton id={id} />;
     }
     return null;
   }
@@ -225,7 +201,6 @@ const mapStateToProps = ({ Space }) => ({
 
 const mapDispatchToProps = {
   dispatchExportSpace: exportSpace,
-  dispatchDeleteSpace: deleteSpace,
   dispatchSaveSpace: saveSpace,
   dispatchSyncSpace: syncSpace,
 };
