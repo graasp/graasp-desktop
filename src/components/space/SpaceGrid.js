@@ -116,9 +116,11 @@ class SpaceGrid extends Component {
 
     if (!MediaCards.size) {
       return (
-        <Typography variant="h5" color="inherit">
-          {t('No Spaces Available')}
-        </Typography>
+        <div className="Main">
+          <Typography variant="h5" color="inherit">
+            {t('No Spaces Available')}
+          </Typography>
+        </div>
       );
     }
     return (
