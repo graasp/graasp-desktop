@@ -58,8 +58,8 @@ class SpaceGrid extends Component {
   }
 
   updateColumnNb = () => {
-    // @TODO use mediaCard width + padding
-    this.setState({ columnNb: Math.floor(window.innerWidth / 350) || 1 });
+    // @TODO use mediaCard min width
+    this.setState({ columnNb: Math.floor(window.innerWidth / 390) || 1 });
   };
 
   // show the local background image if exists, otherwise fetch
@@ -100,6 +100,8 @@ class SpaceGrid extends Component {
     const { spaces, history, saved, t } = this.props;
     const { columnNb } = this.state;
 
+    const cardMargin = 15;
+
     // spaces is a set to mapping through it will return a set
 
     const columnWrapper = [];
@@ -126,7 +128,7 @@ class SpaceGrid extends Component {
       );
       const columnIndex = index % columnNb;
       const card = (
-        <Grid key={id} item>
+        <Grid key={id} item style={{ margin: cardMargin }}>
           <MediaCard
             key={id}
             space={space}
@@ -165,7 +167,7 @@ class SpaceGrid extends Component {
       <Grid
         container
         spacing={10}
-        style={{ display: 'flex', paddingLeft: 30, paddingRight: 30 }}
+        style={{ display: 'flex', padding: cardMargin * 2 }}
       >
         {MediaCards}
       </Grid>

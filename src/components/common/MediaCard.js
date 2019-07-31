@@ -16,11 +16,13 @@ import SyncButton from '../space/SyncButton';
 
 const styles = theme => ({
   card: {
-    maxWidth: 345,
+    width: '100%',
     minWidth: 345,
     margin: 'auto',
     marginBottom: 15,
   },
+  cardTitle: { paddingBottom: 0 },
+  cardDescription: { margin: 0, paddingTop: 0, paddingBottom: 0 },
   media: {
     height: 300,
   },
@@ -51,14 +53,14 @@ const MediaCard = props => {
     <Card className={classes.card}>
       <CardMedia className={classes.media} image={image} title={name} />
 
-      <CardContent>
+      <CardContent className={classes.cardTitle}>
         <Typography variant="h5" component="h2">
           {name}
         </Typography>
       </CardContent>
 
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
+      <Collapse disableSpacing in={expanded} timeout="auto" unmountOnExit>
+        <CardContent className={classes.cardDescription}>
           <Typography
             component="p"
             dangerouslySetInnerHTML={{ __html: text }}
