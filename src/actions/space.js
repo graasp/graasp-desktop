@@ -310,6 +310,9 @@ const syncSpace = async ({ id }) => async dispatch => {
       if (res === ERROR_GENERAL) {
         toastr.error(ERROR_MESSAGE_HEADER, ERROR_SYNCING_MESSAGE);
       } else {
+        // update saved spaces in state
+        dispatch(getSpaces());
+
         toastr.success(SUCCESS_MESSAGE_HEADER, SUCCESS_SYNCING_MESSAGE);
         dispatch({
           type: SYNC_SPACE_SUCCEEDED,

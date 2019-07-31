@@ -12,6 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DeleteButton from '../space/DeleteButton';
 import ExportButton from '../space/ExportButton';
+import SyncButton from '../space/SyncButton';
 
 const styles = theme => ({
   card: {
@@ -70,6 +71,7 @@ const MediaCard = props => {
 
         <DeleteButton id={id} />
         <ExportButton space={space} />
+        <SyncButton id={id} />
 
         {text && (
           <IconButton
