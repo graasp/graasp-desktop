@@ -11,6 +11,7 @@ import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DeleteButton from '../space/DeleteButton';
+import ExportButton from '../space/ExportButton';
 
 const styles = theme => ({
   card: {
@@ -38,7 +39,8 @@ const styles = theme => ({
 });
 
 const MediaCard = props => {
-  const { classes, name, image, text, button, id } = props;
+  const { classes, image, text, button, space } = props;
+  const { id, name } = space;
   const [expanded, setExpanded] = React.useState(false);
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -67,6 +69,7 @@ const MediaCard = props => {
         {button}
 
         <DeleteButton id={id} />
+        <ExportButton space={space} />
 
         {text && (
           <IconButton
@@ -87,11 +90,13 @@ const MediaCard = props => {
 
 MediaCard.propTypes = {
   classes: PropTypes.shape({ media: PropTypes.string.isRequired }).isRequired,
-  name: PropTypes.string.isRequired,
+  space: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
   image: PropTypes.string.isRequired,
   text: PropTypes.string,
   button: PropTypes.node.isRequired,
-  id: PropTypes.string.isRequired,
 };
 
 MediaCard.defaultProps = {

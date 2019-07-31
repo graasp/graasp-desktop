@@ -5,7 +5,7 @@ import path from 'path';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Fab from '@material-ui/core/Fab';
 import Tooltip from '@material-ui/core/Tooltip';
-import { withStyles, IconButton } from '@material-ui/core';
+import { withStyles } from '@material-ui/core';
 import { withRouter } from 'react-router';
 import { withTranslation } from 'react-i18next';
 import Typography from '@material-ui/core/Typography/Typography';
@@ -108,7 +108,7 @@ class SpaceGrid extends Component {
     }
 
     [...spaces].forEach((space, index) => {
-      const { id, name, image = {}, description } = space;
+      const { id, image = {}, description } = space;
       const { replace } = history;
       const ViewButton = (
         <Tooltip title={t('View')}>
@@ -120,9 +120,7 @@ class SpaceGrid extends Component {
             onClick={() => replace(`/space/${id}?saved=${saved}`)}
             id={id}
           >
-            <IconButton color="secondary">
-              <PlayArrow fontSize="large" />
-            </IconButton>
+            <PlayArrow fontSize="large" />
           </Fab>
         </Tooltip>
       );
@@ -131,8 +129,7 @@ class SpaceGrid extends Component {
         <Grid key={id} item>
           <MediaCard
             key={id}
-            id={id}
-            name={name}
+            space={space}
             image={this.generateThumbnail({ image })}
             text={description}
             button={ViewButton}
