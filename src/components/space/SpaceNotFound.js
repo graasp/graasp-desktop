@@ -39,7 +39,7 @@ class SpaceNotFound extends Component {
   };
 
   render() {
-    const { open } = this.state;
+    const { open, t } = this.state;
     const {
       history: { replace },
       classes,
@@ -94,7 +94,7 @@ class SpaceNotFound extends Component {
           <div className={classes.drawerHeader} />
           <div>
             <Typography variant="h5" color="inherit" style={{ margin: '2rem' }}>
-              Space Not Found
+              {t('Space Not Found')}
             </Typography>
             <Button
               variant="contained"
@@ -102,7 +102,7 @@ class SpaceNotFound extends Component {
               className={classes.button}
               onClick={() => replace(HOME_PATH)}
             >
-              Home
+              {t('Home')}
             </Button>
             <Button
               variant="contained"
@@ -110,7 +110,7 @@ class SpaceNotFound extends Component {
               className={classes.button}
               onClick={() => replace(VISIT_PATH)}
             >
-              Visit Another Space
+              {t('Visit Another Space')}
             </Button>
           </div>
         </main>
