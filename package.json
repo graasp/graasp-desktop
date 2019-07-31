@@ -9,7 +9,7 @@
     "Hassan Abdul Ghaffar"
   ],
   "license": "MIT",
-  "homepage": "./",
+  "homepage": "https://graasp.eu/",
   "main": "public/electron.js",
   "keywords": [
     "Graasp Desktop",
@@ -19,6 +19,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/graasp/graasp-desktop"
+  },
+  "bugs": {
+    "url": "https://github.com/graasp/graasp-desktop/issues"
   },
   "scripts": {
     "dev": "yarn react-scripts start",
