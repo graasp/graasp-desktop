@@ -104,14 +104,22 @@ class SpaceGrid extends Component {
 
     // spaces is a set to mapping through it will return a set
 
-    const columnWrapper = [];
-    for (let i = 0; i < columnNb; i += 1) {
-      columnWrapper[`column${i}`] = [];
-    }
+    // dispatch cards in columns
+    const columnWrapper = {
+      items: [],
+      updateColumnWrapper(card, index) {
+        if (this.items[index]) {
+          this.items[index].push(card);
+        } else {
+          this.items[index] = [card];
+        }
+      },
+    };
 
     [...spaces].forEach((space, index) => {
       const { id, image = {}, description } = space;
       const { replace } = history;
+
       const ViewButton = (
         <Tooltip title={t('View')}>
           <Fab
@@ -126,7 +134,7 @@ class SpaceGrid extends Component {
           </Fab>
         </Tooltip>
       );
-      const columnIndex = index % columnNb;
+
       const card = (
         <Grid key={id} item style={{ margin: cardMargin }}>
           <MediaCard
@@ -138,12 +146,13 @@ class SpaceGrid extends Component {
           />
         </Grid>
       );
-      columnWrapper[`column${columnIndex}`].push(card);
+
+      columnWrapper.updateColumnWrapper(card, index % columnNb);
     });
 
     const MediaCards = [];
 
-    for (let i = 0; i < columnNb; i += 1) {
+    columnWrapper.items.forEach(column => {
       MediaCards.push(
         <div
           style={{
@@ -151,10 +160,10 @@ class SpaceGrid extends Component {
             flexWrap: 'wrap',
           }}
         >
-          {columnWrapper[`column${i}`]}
+          {column}
         </div>
       );
-    }
+    });
 
     if (!MediaCards.length) {
       return (
@@ -164,11 +173,7 @@ class SpaceGrid extends Component {
       );
     }
     return (
-      <Grid
-        container
-        spacing={10}
-        style={{ display: 'flex', padding: cardMargin * 2 }}
-      >
+      <Grid container style={{ display: 'flex' }}>
         {MediaCards}
       </Grid>
     );
