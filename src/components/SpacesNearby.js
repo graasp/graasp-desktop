@@ -99,7 +99,9 @@ class SpacesNearby extends Component {
     const geolocationContent = geolocationEnabled ? (
       <SpaceGrid spaces={spaces} />
     ) : (
-      <GeolocationControl controlType={CONTROL_TYPES.BUTTON} />
+      <div className="Main">
+        <GeolocationControl controlType={CONTROL_TYPES.BUTTON} />
+      </div>
     );
 
     return (

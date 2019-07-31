@@ -144,7 +144,7 @@ class VisitSpace extends Component {
           <MainMenu />
         </Drawer>
         <main
-          className={classNames(classes.content, {
+          className={classNames('Main', classes.content, {
             [classes.contentShift]: open,
           })}
         >
