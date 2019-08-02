@@ -282,7 +282,7 @@ app.on('ready', async () => {
 
   // prompt when loading a space
   ipcMain.on(SHOW_LOAD_SPACE_PROMPT_CHANNEL, (event, options) => {
-    dialog.showOpenDialog(null, options, filePaths => {
+    dialog.showOpenDialog(mainWindow, options, filePaths => {
       mainWindow.webContents.send(RESPOND_LOAD_SPACE_PROMPT_CHANNEL, filePaths);
     });
   });
@@ -293,7 +293,7 @@ app.on('ready', async () => {
       title: 'Save As',
       defaultPath: `${spaceTitle}.zip`,
     };
-    dialog.showSaveDialog(null, options, filePath => {
+    dialog.showSaveDialog(mainWindow, options, filePath => {
       mainWindow.webContents.send(
         RESPOND_EXPORT_SPACE_PROMPT_CHANNEL,
         filePath
@@ -310,7 +310,7 @@ app.on('ready', async () => {
       cancelId: 0,
       message: 'Are you sure you want to delete this space?',
     };
-    dialog.showMessageBox(null, options, respond => {
+    dialog.showMessageBox(mainWindow, options, respond => {
       mainWindow.webContents.send(RESPOND_DELETE_SPACE_PROMPT_CHANNEL, respond);
     });
   });
