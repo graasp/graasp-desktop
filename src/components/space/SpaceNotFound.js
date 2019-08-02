@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
+import { withTranslation } from 'react-i18next';
 import Button from '@material-ui/core//Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -24,6 +25,7 @@ class SpaceNotFound extends Component {
   };
 
   static propTypes = {
+    t: PropTypes.func.isRequired,
     classes: PropTypes.shape({}).isRequired,
     theme: PropTypes.shape({}).isRequired,
     history: PropTypes.shape({ length: PropTypes.number.isRequired })
@@ -39,11 +41,12 @@ class SpaceNotFound extends Component {
   };
 
   render() {
-    const { open, t } = this.state;
+    const { open } = this.state;
     const {
       history: { replace },
       classes,
       theme,
+      t,
     } = this.props;
     return (
       <div className={classes.root}>
@@ -121,4 +124,6 @@ class SpaceNotFound extends Component {
 
 const StyledComponent = withStyles(Styles, { withTheme: true })(SpaceNotFound);
 
-export default withRouter(StyledComponent);
+const TranslatedComponent = withTranslation()(StyledComponent);
+
+export default withRouter(TranslatedComponent);
