@@ -1,19 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import path from 'path';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import Fab from '@material-ui/core/Fab';
-import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core';
 import { withRouter } from 'react-router';
 import { withTranslation } from 'react-i18next';
 import Typography from '@material-ui/core/Typography/Typography';
 import Grid from '@material-ui/core/Grid/Grid';
-import PlayArrow from '@material-ui/icons/PlayArrow';
 import MediaCard from '../common/MediaCard';
 import { clearSpace } from '../../actions';
 import DefaultThumbnail from '../../data/graasp.jpg';
+import { MIN_CARD_WIDTH } from '../../config/constants';
 
 class SpaceGrid extends Component {
   static styles = {
@@ -58,8 +55,9 @@ class SpaceGrid extends Component {
   }
 
   updateColumnNb = () => {
-    // @TODO use mediaCard min width
-    this.setState({ columnNb: Math.floor(window.innerWidth / 390) || 1 });
+    this.setState({
+      columnNb: Math.floor(window.innerWidth / MIN_CARD_WIDTH) || 1,
+    });
   };
 
   // show the local background image if exists, otherwise fetch
@@ -77,7 +75,7 @@ class SpaceGrid extends Component {
     // prioritise assets
     if (folder) {
       if (thumbnailAsset) {
-        return path.join(`file://`, folder, thumbnailAsset);
+        return `file://${folder}/${thumbnailAsset}`;
       }
       if (backgroundAsset) {
         return `file://${folder}/${backgroundAsset}`;
@@ -120,20 +118,9 @@ class SpaceGrid extends Component {
       const { id, image = {}, description } = space;
       const { replace } = history;
 
-      const ViewButton = (
-        <Tooltip title={t('View')}>
-          <Fab
-            size="large"
-            color="primary"
-            aria-label="Add"
-            styles="box-shadow:0"
-            onClick={() => replace(`/space/${id}?saved=${saved}`)}
-            id={id}
-          >
-            <PlayArrow fontSize="large" />
-          </Fab>
-        </Tooltip>
-      );
+      const viewLink = () => {
+        replace(`/space/${id}?saved=${saved}`);
+      };
 
       const card = (
         <Grid key={id} item style={{ margin: cardMargin }}>
@@ -142,7 +129,7 @@ class SpaceGrid extends Component {
             space={space}
             image={this.generateThumbnail({ image })}
             text={description}
-            button={ViewButton}
+            viewLink={viewLink}
           />
         </Grid>
       );

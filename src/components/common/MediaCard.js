@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -13,15 +14,15 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DeleteButton from '../space/DeleteButton';
 import ExportButton from '../space/ExportButton';
 import SyncButton from '../space/SyncButton';
+import { MIN_CARD_WIDTH } from '../../config/constants';
 
 const styles = theme => ({
   card: {
     width: '100%',
-    minWidth: 345,
+    minWidth: MIN_CARD_WIDTH,
     margin: 'auto',
     marginBottom: 15,
   },
-  cardTitle: { paddingBottom: 0 },
   cardDescription: { margin: 0, paddingTop: 0, paddingBottom: 0 },
   media: {
     height: 300,
@@ -42,7 +43,7 @@ const styles = theme => ({
 });
 
 const MediaCard = props => {
-  const { classes, image, text, button, space } = props;
+  const { classes, image, text, viewLink, space } = props;
   const { id, name } = space;
   const [expanded, setExpanded] = React.useState(false);
   const handleExpandClick = () => {
@@ -51,13 +52,15 @@ const MediaCard = props => {
 
   return (
     <Card className={classes.card}>
-      <CardMedia className={classes.media} image={image} title={name} />
+      <CardActionArea onClick={viewLink}>
+        <CardMedia className={classes.media} image={image} title={name} />
 
-      <CardContent className={classes.cardTitle}>
-        <Typography variant="h5" component="h2">
-          {name}
-        </Typography>
-      </CardContent>
+        <CardContent>
+          <Typography variant="h5" component="h2">
+            {name}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
 
       <Collapse disableSpacing in={expanded} timeout="auto" unmountOnExit>
         <CardContent className={classes.cardDescription}>
@@ -69,8 +72,6 @@ const MediaCard = props => {
       </Collapse>
 
       <CardActions disableSpacing>
-        {button}
-
         <DeleteButton id={id} />
         <ExportButton space={space} />
         <SyncButton id={id} />
@@ -100,7 +101,7 @@ MediaCard.propTypes = {
   }).isRequired,
   image: PropTypes.string.isRequired,
   text: PropTypes.string,
-  button: PropTypes.node.isRequired,
+  viewLink: PropTypes.func.isRequired,
 };
 
 MediaCard.defaultProps = {
