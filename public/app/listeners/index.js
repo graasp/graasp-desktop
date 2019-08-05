@@ -6,8 +6,8 @@ const deleteSpace = require('./deleteSpace');
 const showSyncSpacePrompt = require('./showSyncSpacePrompt');
 const syncSpace = require('./syncSpace');
 const exportSpace = require('./exportSpace');
-const showLoadSpace = require('./showLoadSpace');
-const showExportSpace = require('./showExportSpace');
+const showLoadSpacePrompt = require('./showLoadSpacePrompt');
+const showExportSpacePrompt = require('./showExportSpacePrompt');
 
 module.exports = {
   loadSpace,
@@ -18,6 +18,6 @@ module.exports = {
   syncSpace,
   deleteSpace,
   exportSpace,
-  showLoadSpace,
-  showExportSpace,
+  showLoadSpacePrompt,
+  showExportSpacePrompt,
 };
