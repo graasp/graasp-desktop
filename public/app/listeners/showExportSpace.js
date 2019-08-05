@@ -2,7 +2,7 @@
 const { dialog } = require('electron');
 const { RESPOND_EXPORT_SPACE_PROMPT_CHANNEL } = require('../config/channels');
 
-const showExportSpace = mainWindow => (event, spaceTitle) => {
+const showExportSpacePrompt = mainWindow => (event, spaceTitle) => {
   const options = {
     title: 'Save As',
     defaultPath: `${spaceTitle}.zip`,
@@ -12,4 +12,4 @@ const showExportSpace = mainWindow => (event, spaceTitle) => {
   });
 };
 
-module.exports = showExportSpace;
+module.exports = showExportSpacePrompt;
