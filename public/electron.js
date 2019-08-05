@@ -24,6 +24,7 @@ const {
   PRODUCT_NAME,
   DEFAULT_LANG,
   DEFAULT_DEVELOPER_MODE,
+  resolvePath,
 } = require('./app/config/config');
 const {
   LOAD_SPACE_CHANNEL,
@@ -157,7 +158,8 @@ const generateMenu = () => {
           label: 'About',
           click: () => {
             openAboutWindow({
-              icon_path: ICON_PATH,
+              base_path: resolvePath(app.getAppPath()),
+              icon_path: path.join(__dirname, ICON_PATH),
               copyright: 'Copyright © 2019 React',
               product_name: PRODUCT_NAME,
               use_version_info: false,

@@ -16,3 +16,4 @@ export const CONTROL_TYPES = {
   BUTTON: 'BUTTON',
   SWITCH: 'SWITCH',
 };
+export const MIN_CARD_WIDTH = 345;
