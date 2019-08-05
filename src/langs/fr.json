@@ -5,6 +5,7 @@
     "Saved Spaces": "Espaces Enregistrés",
     "Spaces Nearby": "Espaces à Proximité",
     "Visit a Space": "Visiter un Espace",
+    "Space Not Found": "Espace introuvable",
     "Load": "Charger",
     "Start": "Démarrer",
     "Developer": "Développeur",
@@ -12,11 +13,15 @@
     "Manually Edit the Database": "Modifier Manuellement la Base de Données",
     "Use Sample Database": "Utiliser une Base de Données Exemple",
     "Developer Mode": "Mode Développeur",
+    "Geolocation Enabled": "Géolocalisation Activée",
+    "Enable Geolocation": "Activer la Géolocalisation",
     "Load a Space": "Charger un Espace",
     "View": "Voir",
     "Open": "Ouvrir",
     "Browse": "Parcourir",
     "Visit": "Visiter",
+    "Visit Another Space": "Visiter un autre Espace",
+    "Home": "Accueil",
     "No Spaces Available": "Aucun Espace Disponible",
     "Preview": "Tester",
     "You are previewing this space. Any input or changes will not be saved.": "Vous testez cet espace. Toute entrée ou modification ne sera pas sauvegardée.",
@@ -30,6 +35,6 @@
     "Sync": "Synchroniser",
     "Save As": "Enregistrer Sous",
     "Cancel": "Annuler",
-    "Are you sure you want to sync this space? All user input will be deleted.": "Êtes-vous sur de vouloir synchroniser cet espace? Toute entrée utilisateur sera supprimée."
+    "Are you sure you want to sync this space? All user input will be deleted.": "Êtes-vous sûr de vouloir synchroniser cet espace? Toute entrée utilisateur sera supprimée."
   }
 }

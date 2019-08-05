@@ -125,7 +125,7 @@ class Home extends Component {
 
 const mapStateToProps = ({ Space }) => ({
   spaces: Space.get('saved'),
-  activity: Space.get('current').get('activity'),
+  activity: Boolean(Space.getIn(['current', 'activity']).size),
 });
 
 const mapDispatchToProps = {

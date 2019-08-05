@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import Qs from 'qs';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { ResizableBox } from 'react-resizable';
 import './PhaseApp.css';
 import {
   GET_APP_INSTANCE_RESOURCES,
   PATCH_APP_INSTANCE_RESOURCE,
   GET_APP_INSTANCE,
   POST_APP_INSTANCE_RESOURCE,
+  APP_INSTANCE_RESOURCE_TYPES,
 } from '../../types';
 import {
   getAppInstanceResources,
@@ -54,32 +56,52 @@ class PhaseApp extends Component {
   }
 
   postMessage = data => {
-    const message = JSON.stringify(data);
+    // get component app instance id
+    const { appInstance } = this.props;
+    const { id: componentAppInstanceId } = appInstance || {};
+    // get app instance id in message
+    const { appInstanceId: messageAppInstanceId } = data;
 
-    if (this.iframe.contentWindow.postMessage) {
-      this.iframe.contentWindow.postMessage(message, '*');
-    } else {
-      console.error('unable to find postMessage');
+    // only post message to intended app instance
+    if (componentAppInstanceId === messageAppInstanceId) {
+      const message = JSON.stringify(data);
+
+      if (this.iframe.contentWindow.postMessage) {
+        this.iframe.contentWindow.postMessage(message, '*');
+      } else {
+        console.error('unable to find postMessage');
+      }
     }
   };
 
   handleReceiveMessage = event => {
     try {
-      const { dispatchGetAppInstance } = this.props;
-      const { type, payload } = JSON.parse(event.data);
+      const { dispatchGetAppInstance, appInstance } = this.props;
 
-      switch (type) {
-        case GET_APP_INSTANCE_RESOURCES:
-          return getAppInstanceResources(payload, this.postMessage);
-        case POST_APP_INSTANCE_RESOURCE:
-          return postAppInstanceResource(payload, this.postMessage);
-        case PATCH_APP_INSTANCE_RESOURCE:
-          return patchAppInstanceResource(payload, this.postMessage);
-        case GET_APP_INSTANCE:
-          return dispatchGetAppInstance(payload, this.postMessage);
-        default:
-          return false;
+      // get app instance id in message
+      const { id: componentAppInstanceId } = appInstance || {};
+      const { type, payload } = JSON.parse(event.data);
+      let { id: messageAppInstanceId } = payload;
+      if (APP_INSTANCE_RESOURCE_TYPES.includes(type)) {
+        ({ appInstanceId: messageAppInstanceId } = payload);
       }
+
+      // only receive message from intended app instance
+      if (componentAppInstanceId === messageAppInstanceId) {
+        switch (type) {
+          case GET_APP_INSTANCE_RESOURCES:
+            return getAppInstanceResources(payload, this.postMessage);
+          case POST_APP_INSTANCE_RESOURCE:
+            return postAppInstanceResource(payload, this.postMessage);
+          case PATCH_APP_INSTANCE_RESOURCE:
+            return patchAppInstanceResource(payload, this.postMessage);
+          case GET_APP_INSTANCE:
+            return dispatchGetAppInstance(payload, this.postMessage);
+          default:
+            return false;
+        }
+      }
+      return false;
     } catch (e) {
       console.error(e);
       return false;
@@ -139,7 +161,12 @@ class PhaseApp extends Component {
     const queryString = Qs.stringify(params);
 
     return (
-      <div className="AppDiv">
+      <ResizableBox
+        minConstraints={[0, 200]}
+        maxConstraints={[0, 600]}
+        height={300}
+        axis="y"
+      >
         <iframe
           title={name}
           className="App"
@@ -148,7 +175,7 @@ class PhaseApp extends Component {
             this.iframe = c;
           }}
         />
-      </div>
+      </ResizableBox>
     );
   }
 }

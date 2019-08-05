@@ -19,6 +19,8 @@ import MainMenu from './common/MainMenu';
 import { getSpacesNearby } from '../actions';
 import SpaceGrid from './space/SpaceGrid';
 import Loader from './common/Loader';
+import GeolocationControl from './common/GeolocationControl';
+import { CONTROL_TYPES } from '../config/constants';
 
 class SpacesNearby extends Component {
   state = {
@@ -35,6 +37,7 @@ class SpacesNearby extends Component {
     geolocation: PropTypes.instanceOf(Map),
     spaces: PropTypes.instanceOf(Set).isRequired,
     activity: PropTypes.bool,
+    geolocationEnabled: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -76,7 +79,7 @@ class SpacesNearby extends Component {
   };
 
   render() {
-    const { classes, theme, spaces, activity } = this.props;
+    const { classes, theme, spaces, activity, geolocationEnabled } = this.props;
     const { open } = this.state;
 
     if (activity) {
@@ -92,6 +95,14 @@ class SpacesNearby extends Component {
         </div>
       );
     }
+
+    const geolocationContent = geolocationEnabled ? (
+      <SpaceGrid spaces={spaces} />
+    ) : (
+      <div className="Main">
+        <GeolocationControl controlType={CONTROL_TYPES.BUTTON} />
+      </div>
+    );
 
     return (
       <div className={classes.root}>
@@ -140,7 +151,7 @@ class SpacesNearby extends Component {
           })}
         >
           <div className={classes.drawerHeader} />
-          <SpaceGrid spaces={spaces} />
+          {geolocationContent}
         </main>
       </div>
     );
@@ -150,7 +161,8 @@ class SpacesNearby extends Component {
 const mapStateToProps = ({ User, Space }) => ({
   geolocation: User.getIn(['current', 'geolocation']),
   spaces: Space.getIn(['nearby', 'content']),
-  activity: Space.getIn(['nearby', 'activity']),
+  activity: Boolean(Space.getIn(['nearby', 'activity']).size),
+  geolocationEnabled: User.getIn(['current', 'geolocationEnabled']),
 });
 
 const mapDispatchToProps = {
@@ -161,6 +173,7 @@ const ConnectedComponent = connect(
   mapStateToProps,
   mapDispatchToProps
 )(SpacesNearby);
+
 const StyledComponent = withStyles(Styles, { withTheme: true })(
   ConnectedComponent
 );

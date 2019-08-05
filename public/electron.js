@@ -14,13 +14,17 @@ const { autoUpdater } = require('electron-updater');
 const Sentry = require('@sentry/electron');
 const ua = require('universal-analytics');
 const { machineIdSync } = require('node-machine-id');
+const openAboutWindow = require('about-window').default;
 const logger = require('./app/logger');
 const { ensureDatabaseExists, bootstrapDatabase } = require('./app/db');
 const {
   VAR_FOLDER,
   DATABASE_PATH,
+  ICON_PATH,
+  PRODUCT_NAME,
   DEFAULT_LANG,
   DEFAULT_DEVELOPER_MODE,
+  escapeEscapeCharacter,
 } = require('./app/config/config');
 const {
   LOAD_SPACE_CHANNEL,
@@ -42,6 +46,8 @@ const {
   GET_APP_INSTANCE_CHANNEL,
   GET_DEVELOPER_MODE_CHANNEL,
   SET_DEVELOPER_MODE_CHANNEL,
+  GET_GEOLOCATION_ENABLED_CHANNEL,
+  SET_GEOLOCATION_ENABLED_CHANNEL,
   GET_DATABASE_CHANNEL,
   SET_DATABASE_CHANNEL,
   SHOW_SYNC_SPACE_PROMPT_CHANNEL,
@@ -131,29 +137,63 @@ const createWindow = () => {
   });
 };
 
-// const handleLoad = () => {
-//   logger.info('load');
-// };
+const macAppMenu = [
+  {
+    label: app.getName(),
+    submenu: [
+      { role: 'about' },
+      { type: 'separator' },
+      { role: 'services' },
+      { type: 'separator' },
+      { role: 'hide' },
+      { role: 'hideothers' },
+      { role: 'unhide' },
+      { type: 'separator' },
+      { role: 'quit' },
+    ],
+  },
+];
+const standardAppMenu = [];
+const macFileSubmenu =  [{ role: 'close' }];
+const standardFileSubmenu = [{
+  label: 'About',
+  click: () => {
+    openAboutWindow({
+      // asset for icon is in the public/assets folder
+      base_path: escapeEscapeCharacter(app.getAppPath()),
+      icon_path: path.join(__dirname, ICON_PATH),
+      copyright: 'Copyright © 2019 React',
+      product_name: PRODUCT_NAME,
+      use_version_info: false,
+      adjust_window_size: true,
+      win_options: {
+        parent: mainWindow,
+        resizable: false,
+        minimizable: false,
+        maximizable: false,
+        movable: true,
+        frame: true,
+      },
+      // automatically show info from package.json
+      package_json_dir: path.join(__dirname, '../'),
+      bug_link_text: 'Report a Bug/Issue',
+    });
+  },
+},
+  { role: 'quit' },
+];
+
+const learnMoreLink = 'https://github.com/react-epfl/graasp-desktop/blob/master/README.md';
+const fileIssueLink = 'https://github.com/react-epfl/graasp-desktop/issues';
 
 const generateMenu = () => {
+  const isMac = process.platform === 'darwin';
   const template = [
+    ...(isMac ? macAppMenu : standardAppMenu),
     {
       label: 'File',
       submenu: [
-        // {
-        //   label: 'Load Space',
-        //   click() {
-        //     handleLoad();
-        //   },
-        // },
-        {
-          label: 'About',
-          role: 'about',
-        },
-        {
-          label: 'Quit',
-          role: 'quit',
-        },
+        ...(isMac ? macFileSubmenu : standardFileSubmenu),
       ],
     },
     { type: 'separator' },
@@ -166,9 +206,7 @@ const generateMenu = () => {
         { role: 'cut' },
         { role: 'copy' },
         { role: 'paste' },
-        { role: 'pasteandmatchstyle' },
-        { role: 'delete' },
-        { role: 'selectall' },
+        { role: 'selectAll' },
       ],
     },
     {
@@ -179,7 +217,6 @@ const generateMenu = () => {
         { role: 'toggledevtools' },
         { type: 'separator' },
         { role: 'resetzoom' },
-        { role: 'resetzoom' },
         { role: 'zoomin' },
         { role: 'zoomout' },
         { type: 'separator' },
@@ -188,7 +225,18 @@ const generateMenu = () => {
     },
     {
       role: 'window',
-      submenu: [{ role: 'minimize' }, { role: 'close' }],
+      submenu: [
+        { role: 'minimize' },
+        { role: 'zoom' },
+        ...(isMac
+          ? [
+            { type: 'separator' },
+            { role: 'front' },
+            { type: 'separator' },
+            { role: 'window' },
+          ]
+          : [{ role: 'close' }]),
+      ],
     },
     {
       role: 'help',
@@ -196,18 +244,14 @@ const generateMenu = () => {
         {
           click() {
             // eslint-disable-next-line
-            require('electron').shell.openExternal(
-              'https://github.com/react-epfl/graasp-desktop/blob/master/README.md'
-            );
+            require('electron').shell.openExternal(learnMoreLink);
           },
           label: 'Learn More',
         },
         {
           click() {
             // eslint-disable-next-line
-            require('electron').shell.openExternal(
-              'https://github.com/react-epfl/graasp-desktop/issues'
-            );
+            require('electron').shell.openExternal(fileIssueLink);
           },
           label: 'File Issue on GitHub',
         },
@@ -215,7 +259,8 @@ const generateMenu = () => {
     },
   ];
 
-  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+  Menu.setApplicationMenu(null);
+  mainWindow.setMenu(Menu.buildFromTemplate(template));
 };
 
 app.on('ready', async () => {
@@ -326,11 +371,23 @@ app.on('ready', async () => {
     }
   });
 
+  // called when getting geolocation enabled
+  ipcMain.on(
+    GET_GEOLOCATION_ENABLED_CHANNEL,
+    getGeolocationEnabled(mainWindow, db)
+  );
+
+  // called when setting geolocation enabled
+  ipcMain.on(
+    SET_GEOLOCATION_ENABLED_CHANNEL,
+    setGeolocationEnabled(mainWindow, db)
+  );
+
   // called when getting AppInstanceResources
   ipcMain.on(GET_APP_INSTANCE_RESOURCES_CHANNEL, (event, data = {}) => {
     const defaultResponse = [];
+    const { userId, appInstanceId, spaceId, subSpaceId, type } = data;
     try {
-      const { userId, appInstanceId, spaceId, subSpaceId, type } = data;
       const appInstanceResourcesHandle = db
         .get('spaces')
         .find({ id: spaceId })
@@ -355,12 +412,24 @@ app.on('ready', async () => {
       const appInstanceResources = appInstanceResourcesHandle.value();
 
       const response = appInstanceResources || defaultResponse;
-      mainWindow.webContents.send(GET_APP_INSTANCE_RESOURCES_CHANNEL, response);
+
+      // response is sent back to channel specific for this app instance
+      mainWindow.webContents.send(
+        `${GET_APP_INSTANCE_RESOURCES_CHANNEL}_${appInstanceId}`,
+        {
+          appInstanceId,
+          payload: response,
+        }
+      );
     } catch (e) {
       console.error(e);
+      // error is sent back to channel specific for this app instance
       mainWindow.webContents.send(
-        GET_APP_INSTANCE_RESOURCES_CHANNEL,
-        defaultResponse
+        `${GET_APP_INSTANCE_RESOURCES_CHANNEL}_${appInstanceId}`,
+        {
+          appInstanceId,
+          payload: defaultResponse,
+        }
       );
     }
   });

@@ -10,6 +10,7 @@ import PhaseItems from './PhaseItems';
 const styles = {
   containerStyle: {
     flex: 1,
+    paddingBottom: '2rem',
   },
 };
 
