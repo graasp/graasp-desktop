@@ -75,7 +75,7 @@
     "i18next": "15.1.0",
     "immutable": "4.0.0-rc.12",
     "is-online": "8.2.0",
-    "lodash": "4.17.11",
+    "lodash": "4.17.13",
     "lowdb": "1.0.0",
     "md5": "2.2.1",
     "mime-types": "2.1.24",
