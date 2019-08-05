@@ -58,8 +58,8 @@ const {
   getSpace,
   deleteSpace,
   exportSpace,
-  showLoadSpace,
-  showExportSpace,
+  showLoadSpacePrompt,
+  showExportSpacePrompt,
 } = require('./app/listeners');
 
 // add keys to process
@@ -252,10 +252,10 @@ app.on('ready', async () => {
   ipcMain.on(EXPORT_SPACE_CHANNEL, exportSpace(mainWindow, db));
 
   // prompt when loading a space
-  ipcMain.on(SHOW_LOAD_SPACE_PROMPT_CHANNEL, showLoadSpace(mainWindow));
+  ipcMain.on(SHOW_LOAD_SPACE_PROMPT_CHANNEL, showLoadSpacePrompt(mainWindow));
 
   // prompt when exporting a space
-  ipcMain.on(SHOW_EXPORT_SPACE_PROMPT_CHANNEL, showExportSpace(mainWindow));
+  ipcMain.on(SHOW_EXPORT_SPACE_PROMPT_CHANNEL, showExportSpacePrompt(mainWindow));
 
   // prompt when deleting a space
   ipcMain.on(SHOW_DELETE_SPACE_PROMPT_CHANNEL, () => {
