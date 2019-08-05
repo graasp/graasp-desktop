@@ -139,52 +139,63 @@ const createWindow = () => {
   });
 };
 
-// const handleLoad = () => {
-//   logger.info('load');
-// };
+const macAppMenu = [
+  {
+    label: app.getName(),
+    submenu: [
+      { role: 'about' },
+      { type: 'separator' },
+      { role: 'services' },
+      { type: 'separator' },
+      { role: 'hide' },
+      { role: 'hideothers' },
+      { role: 'unhide' },
+      { type: 'separator' },
+      { role: 'quit' },
+    ],
+  },
+];
+const standardAppMenu = [];
+const macFileSubmenu =  [{ role: 'close' }];
+const standardFileSubmenu = [{
+  label: 'About',
+  click: () => {
+    openAboutWindow({
+      // asset for icon is in the public/assets folder
+      base_path: escapeEscapeCharacter(app.getAppPath()),
+      icon_path: path.join(__dirname, ICON_PATH),
+      copyright: 'Copyright © 2019 React',
+      product_name: PRODUCT_NAME,
+      use_version_info: false,
+      adjust_window_size: true,
+      win_options: {
+        parent: mainWindow,
+        resizable: false,
+        minimizable: false,
+        maximizable: false,
+        movable: true,
+        frame: true,
+      },
+      // automatically show info from package.json
+      package_json_dir: path.join(__dirname, '../'),
+      bug_link_text: 'Report a Bug/Issue',
+    });
+  },
+},
+  { role: 'quit' },
+];
+
+const learnMoreLink = 'https://github.com/react-epfl/graasp-desktop/blob/master/README.md';
+const fileIssueLink = 'https://github.com/react-epfl/graasp-desktop/issues';
 
 const generateMenu = () => {
+  const isMac = process.platform === 'darwin';
   const template = [
+    ...(isMac ? macAppMenu : standardAppMenu),
     {
       label: 'File',
       submenu: [
-        // {
-        //   label: 'Load Space',
-        //   click() {
-        //     handleLoad();
-        //   },
-        // },
-        {
-          label: 'About',
-          click: () => {
-            openAboutWindow({
-              // asset for icon is in the public/assets folder
-              base_path: escapeEscapeCharacter(app.getAppPath()),
-              icon_path: path.join(__dirname, ICON_PATH),
-              copyright: 'Copyright © 2019 React',
-              product_name: PRODUCT_NAME,
-              use_version_info: false,
-              adjust_window_size: true,
-              win_options: {
-                parent: mainWindow,
-                resizable: false,
-                minimizable: false,
-                maximizable: false,
-                movable: true,
-                frame: true,
-              },
-              // ? automatically showing info from package.json is nice but not translated into different languages
-              package_json_dir: path.join(__dirname, '../'),
-              bug_link_text: 'Report a Bug/Issue',
-              // ? nor is a close button
-              // show_close_button: 'Close',
-            });
-          },
-        },
-        {
-          label: 'Quit',
-          role: 'quit',
-        },
+        ...(isMac ? macFileSubmenu : standardFileSubmenu),
       ],
     },
     { type: 'separator' },
@@ -197,9 +208,7 @@ const generateMenu = () => {
         { role: 'cut' },
         { role: 'copy' },
         { role: 'paste' },
-        { role: 'pasteandmatchstyle' },
-        { role: 'delete' },
-        { role: 'selectall' },
+        { role: 'selectAll' },
       ],
     },
     {
@@ -210,7 +219,6 @@ const generateMenu = () => {
         { role: 'toggledevtools' },
         { type: 'separator' },
         { role: 'resetzoom' },
-        { role: 'resetzoom' },
         { role: 'zoomin' },
         { role: 'zoomout' },
         { type: 'separator' },
@@ -219,7 +227,18 @@ const generateMenu = () => {
     },
     {
       role: 'window',
-      submenu: [{ role: 'minimize' }, { role: 'close' }],
+      submenu: [
+        { role: 'minimize' },
+        { role: 'zoom' },
+        ...(isMac
+          ? [
+            { type: 'separator' },
+            { role: 'front' },
+            { type: 'separator' },
+            { role: 'window' },
+          ]
+          : [{ role: 'close' }]),
+      ],
     },
     {
       role: 'help',
@@ -227,18 +246,14 @@ const generateMenu = () => {
         {
           click() {
             // eslint-disable-next-line
-            require('electron').shell.openExternal(
-              'https://github.com/react-epfl/graasp-desktop/blob/master/README.md'
-            );
+            require('electron').shell.openExternal(learnMoreLink);
           },
           label: 'Learn More',
         },
         {
           click() {
             // eslint-disable-next-line
-            require('electron').shell.openExternal(
-              'https://github.com/react-epfl/graasp-desktop/issues'
-            );
+            require('electron').shell.openExternal(fileIssueLink);
           },
           label: 'File Issue on GitHub',
         },
