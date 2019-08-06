@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.5](https://github.com/graasp/graasp-desktop/compare/v0.11.4...v0.11.5) (2019-08-06)
+
+### Bug Fixes
+
+- define homepage in openAboutWindow not package.json ([9b81fc5](https://github.com/graasp/graasp-desktop/commit/9b81fc5)), closes [#156](https://github.com/graasp/graasp-desktop/issues/156)
+
 ## [0.11.4](https://github.com/graasp/graasp-desktop/compare/v0.11.3...v0.11.4) (2019-08-06)
 
 ### Bug Fixes
