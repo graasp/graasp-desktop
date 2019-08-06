@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.4](https://github.com/graasp/graasp-desktop/compare/v0.11.3...v0.11.4) (2019-08-06)
+
+### Bug Fixes
+
+- about menu working for Windows and Linux ([27b8826](https://github.com/graasp/graasp-desktop/commit/27b8826)), closes [#134](https://github.com/graasp/graasp-desktop/issues/134)
+- display icon image in about menu for pack ([cb45bab](https://github.com/graasp/graasp-desktop/commit/cb45bab)), closes [#134](https://github.com/graasp/graasp-desktop/issues/134)
+- do not fail if extension is missing ([b3bf56a](https://github.com/graasp/graasp-desktop/commit/b3bf56a)), closes [#155](https://github.com/graasp/graasp-desktop/issues/155)
+- implement translate function correctly ([3816c2d](https://github.com/graasp/graasp-desktop/commit/3816c2d)), closes [#150](https://github.com/graasp/graasp-desktop/issues/150)
+- open openAboutWindow after pack ([a7f1b62](https://github.com/graasp/graasp-desktop/commit/a7f1b62))
+- remove menu bar from about window (and others) ([13d63ad](https://github.com/graasp/graasp-desktop/commit/13d63ad))
+- resolve path for app.getPath for Windows ([714cd5d](https://github.com/graasp/graasp-desktop/commit/714cd5d)), closes [#144](https://github.com/graasp/graasp-desktop/issues/144)
+- set bug report link and pull info from package.json in about window ([787b19e](https://github.com/graasp/graasp-desktop/commit/787b19e)), closes [#142](https://github.com/graasp/graasp-desktop/issues/142)
+
 ## [0.11.3](https://github.com/graasp/graasp-desktop/compare/v0.11.2...v0.11.3) (2019-07-22)
 
 ### Bug Fixes
