@@ -156,36 +156,41 @@ const macAppMenu = [
   },
 ];
 const standardAppMenu = [];
-const macFileSubmenu =  [{ role: 'close' }];
-const standardFileSubmenu = [{
-  label: 'About',
-  click: () => {
-    openAboutWindow({
-      // asset for icon is in the public/assets folder
-      base_path: escapeEscapeCharacter(app.getAppPath()),
-      icon_path: path.join(__dirname, ICON_PATH),
-      copyright: 'Copyright © 2019 React',
-      product_name: PRODUCT_NAME,
-      use_version_info: false,
-      adjust_window_size: true,
-      win_options: {
-        parent: mainWindow,
-        resizable: false,
-        minimizable: false,
-        maximizable: false,
-        movable: true,
-        frame: true,
-      },
-      // automatically show info from package.json
-      package_json_dir: path.join(__dirname, '../'),
-      bug_link_text: 'Report a Bug/Issue',
-    });
+const macFileSubmenu = [{ role: 'close' }];
+const standardFileSubmenu = [
+  {
+    label: 'About',
+    click: () => {
+      openAboutWindow({
+        // asset for icon is in the public/assets folder
+        base_path: escapeEscapeCharacter(app.getAppPath()),
+        icon_path: path.join(__dirname, ICON_PATH),
+        copyright: 'Copyright © 2019 React',
+        product_name: PRODUCT_NAME,
+        use_version_info: false,
+        adjust_window_size: true,
+        win_options: {
+          parent: mainWindow,
+          resizable: false,
+          minimizable: false,
+          maximizable: false,
+          movable: true,
+          frame: true,
+        },
+        // automatically show info from package.json
+        package_json_dir: path.join(__dirname, '../'),
+        bug_link_text: 'Report a Bug/Issue',
+        // we cannot use homepage from package.json as
+        // create-react-app uses it to build the frontend
+        homepage: 'https://graasp.eu/',
+      });
+    },
   },
-},
   { role: 'quit' },
 ];
 
-const learnMoreLink = 'https://github.com/react-epfl/graasp-desktop/blob/master/README.md';
+const learnMoreLink =
+  'https://github.com/react-epfl/graasp-desktop/blob/master/README.md';
 const fileIssueLink = 'https://github.com/react-epfl/graasp-desktop/issues';
 
 const generateMenu = () => {
@@ -194,9 +199,7 @@ const generateMenu = () => {
     ...(isMac ? macAppMenu : standardAppMenu),
     {
       label: 'File',
-      submenu: [
-        ...(isMac ? macFileSubmenu : standardFileSubmenu),
-      ],
+      submenu: [...(isMac ? macFileSubmenu : standardFileSubmenu)],
     },
     { type: 'separator' },
     {
@@ -232,11 +235,11 @@ const generateMenu = () => {
         { role: 'zoom' },
         ...(isMac
           ? [
-            { type: 'separator' },
-            { role: 'front' },
-            { type: 'separator' },
-            { role: 'window' },
-          ]
+              { type: 'separator' },
+              { role: 'front' },
+              { type: 'separator' },
+              { role: 'window' },
+            ]
           : [{ role: 'close' }]),
       ],
     },

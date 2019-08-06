@@ -9,7 +9,7 @@
     "Hassan Abdul Ghaffar"
   ],
   "license": "MIT",
-  "homepage": "https://graasp.eu/",
+  "homepage": "./",
   "main": "public/electron.js",
   "keywords": [
     "Graasp Desktop",
