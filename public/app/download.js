@@ -55,24 +55,31 @@ const downloadSpaceResources = async ({ lang, space, absoluteSpacePath }) => {
         if (url.startsWith('//')) {
           url = `https:${url}`;
         }
+
+        // get extension to save file
         const ext = getExtension({ url });
-        const hash = generateHash({ url });
-        const imageFileName = `${hash}.${ext}`;
-        const relativeImagePath = `${relativeSpacePath}/${imageFileName}`;
-        const absoluteImagePath = `${absoluteSpacePath}/${imageFileName}`;
-        // eslint-disable-next-line no-await-in-loop
-        const imageAvailable = await isFileAvailable(absoluteImagePath);
-        if (!imageAvailable) {
-          logger.debug(`downloading ${url}`);
+
+        // only download if extension is present
+        if (ext) {
+          // generate hash to save file
+          const hash = generateHash({ url });
+          const imageFileName = `${hash}.${ext}`;
+          const relativeImagePath = `${relativeSpacePath}/${imageFileName}`;
+          const absoluteImagePath = `${absoluteSpacePath}/${imageFileName}`;
           // eslint-disable-next-line no-await-in-loop
-          await download(url, absoluteSpacePath, {
-            filename: imageFileName,
-          });
-          logger.debug(
-            `downloaded ${url} to ${absoluteSpacePath}/${imageFileName}`
-          );
+          const imageAvailable = await isFileAvailable(absoluteImagePath);
+          if (!imageAvailable) {
+            logger.debug(`downloading ${url}`);
+            // eslint-disable-next-line no-await-in-loop
+            await download(url, absoluteSpacePath, {
+              filename: imageFileName,
+            });
+            logger.debug(
+              `downloaded ${url} to ${absoluteSpacePath}/${imageFileName}`
+            );
+          }
+          spaceToSave.image[key] = relativeImagePath;
         }
-        spaceToSave.image[key] = relativeImagePath;
       }
     }
   }
@@ -101,27 +108,34 @@ const downloadSpaceResources = async ({ lang, space, absoluteSpacePath }) => {
           url = `https:${url}`;
         }
 
-        // generate hash and get extension to save file
-        const hash = generateHash(resource);
+        // get extension to save file
         const ext = getExtension(resource);
-        const fileName = `${hash}.${ext}`;
-        const relativeFilePath = `${relativeSpacePath}/${fileName}`;
-        const absoluteFilePath = `${absoluteSpacePath}/${fileName}`;
-        phase.items[i].hash = hash;
 
-        // eslint-disable-next-line no-await-in-loop
-        const fileAvailable = await isFileAvailable(absoluteFilePath);
+        // only download if extension is present
+        if (ext) {
+          // generate hash to save file
+          const hash = generateHash(resource);
+          const fileName = `${hash}.${ext}`;
+          const relativeFilePath = `${relativeSpacePath}/${fileName}`;
+          const absoluteFilePath = `${absoluteSpacePath}/${fileName}`;
+          phase.items[i].hash = hash;
 
-        // if the file is available, point this resource to its path
-        if (!fileAvailable) {
-          logger.debug(`downloading ${url}`);
           // eslint-disable-next-line no-await-in-loop
-          await download(url, absoluteSpacePath, {
-            filename: fileName,
-          });
-          logger.debug(`downloaded ${url} to ${absoluteSpacePath}/${fileName}`);
+          const fileAvailable = await isFileAvailable(absoluteFilePath);
+
+          // if the file is available, point this resource to its path
+          if (!fileAvailable) {
+            logger.debug(`downloading ${url}`);
+            // eslint-disable-next-line no-await-in-loop
+            await download(url, absoluteSpacePath, {
+              filename: fileName,
+            });
+            logger.debug(
+              `downloaded ${url} to ${absoluteSpacePath}/${fileName}`
+            );
+          }
+          phase.items[i].asset = relativeFilePath;
         }
-        phase.items[i].asset = relativeFilePath;
       }
     }
   }

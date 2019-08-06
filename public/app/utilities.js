@@ -21,7 +21,14 @@ const getExtension = ({ url, mimeType }) => {
   if (mimeType) {
     return mime.extension(mimeType);
   }
-  return url.match(/[^\\]*\.(\w+)$/)[1];
+  logger.debug(url, mimeType);
+  const matchExtension = url.match(/[^\\]*\.(\w+)$/);
+  logger.debug(matchExtension);
+  if (matchExtension && matchExtension.length) {
+    // extension is in index 1
+    return matchExtension[1];
+  }
+  return null;
 };
 
 const isDownloadable = resource => {
