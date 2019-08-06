@@ -37,7 +37,6 @@ const {
   SHOW_DELETE_SPACE_PROMPT_CHANNEL,
   SHOW_EXPORT_SPACE_PROMPT_CHANNEL,
   SHOW_LOAD_SPACE_PROMPT_CHANNEL,
-  RESPOND_LOAD_SPACE_PROMPT_CHANNEL,
   SAVE_SPACE_CHANNEL,
   GET_USER_FOLDER_CHANNEL,
   GET_LANGUAGE_CHANNEL,
@@ -66,6 +65,7 @@ const {
   getSpace,
   deleteSpace,
   exportSpace,
+  showLoadSpace,
   getGeolocationEnabled,
   setGeolocationEnabled,
 } = require('./app/listeners');
@@ -156,36 +156,38 @@ const macAppMenu = [
   },
 ];
 const standardAppMenu = [];
-const macFileSubmenu =  [{ role: 'close' }];
-const standardFileSubmenu = [{
-  label: 'About',
-  click: () => {
-    openAboutWindow({
-      // asset for icon is in the public/assets folder
-      base_path: escapeEscapeCharacter(app.getAppPath()),
-      icon_path: path.join(__dirname, ICON_PATH),
-      copyright: 'Copyright © 2019 React',
-      product_name: PRODUCT_NAME,
-      use_version_info: false,
-      adjust_window_size: true,
-      win_options: {
-        parent: mainWindow,
-        resizable: false,
-        minimizable: false,
-        maximizable: false,
-        movable: true,
-        frame: true,
-      },
-      // automatically show info from package.json
-      package_json_dir: path.join(__dirname, '../'),
-      bug_link_text: 'Report a Bug/Issue',
-    });
+const macFileSubmenu = [{ role: 'close' }];
+const standardFileSubmenu = [
+  {
+    label: 'About',
+    click: () => {
+      openAboutWindow({
+        // asset for icon is in the public/assets folder
+        base_path: escapeEscapeCharacter(app.getAppPath()),
+        icon_path: path.join(__dirname, ICON_PATH),
+        copyright: 'Copyright © 2019 React',
+        product_name: PRODUCT_NAME,
+        use_version_info: false,
+        adjust_window_size: true,
+        win_options: {
+          parent: mainWindow,
+          resizable: false,
+          minimizable: false,
+          maximizable: false,
+          movable: true,
+          frame: true,
+        },
+        // automatically show info from package.json
+        package_json_dir: path.join(__dirname, '../'),
+        bug_link_text: 'Report a Bug/Issue',
+      });
+    },
   },
-},
   { role: 'quit' },
 ];
 
-const learnMoreLink = 'https://github.com/react-epfl/graasp-desktop/blob/master/README.md';
+const learnMoreLink =
+  'https://github.com/react-epfl/graasp-desktop/blob/master/README.md';
 const fileIssueLink = 'https://github.com/react-epfl/graasp-desktop/issues';
 
 const generateMenu = () => {
@@ -194,9 +196,7 @@ const generateMenu = () => {
     ...(isMac ? macAppMenu : standardAppMenu),
     {
       label: 'File',
-      submenu: [
-        ...(isMac ? macFileSubmenu : standardFileSubmenu),
-      ],
+      submenu: [...(isMac ? macFileSubmenu : standardFileSubmenu)],
     },
     { type: 'separator' },
     {
@@ -232,11 +232,11 @@ const generateMenu = () => {
         { role: 'zoom' },
         ...(isMac
           ? [
-            { type: 'separator' },
-            { role: 'front' },
-            { type: 'separator' },
-            { role: 'window' },
-          ]
+              { type: 'separator' },
+              { role: 'front' },
+              { type: 'separator' },
+              { role: 'window' },
+            ]
           : [{ role: 'close' }]),
       ],
     },
@@ -299,11 +299,7 @@ app.on('ready', async () => {
   ipcMain.on(EXPORT_SPACE_CHANNEL, exportSpace(mainWindow, db));
 
   // prompt when loading a space
-  ipcMain.on(SHOW_LOAD_SPACE_PROMPT_CHANNEL, (event, options) => {
-    dialog.showOpenDialog(null, options, filePaths => {
-      mainWindow.webContents.send(RESPOND_LOAD_SPACE_PROMPT_CHANNEL, filePaths);
-    });
-  });
+  ipcMain.on(SHOW_LOAD_SPACE_PROMPT_CHANNEL, showLoadSpace(mainWindow, db));
 
   // prompt when exporting a space
   ipcMain.on(SHOW_EXPORT_SPACE_PROMPT_CHANNEL, (event, spaceTitle) => {
