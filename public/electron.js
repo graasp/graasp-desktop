@@ -69,6 +69,7 @@ const {
   getGeolocationEnabled,
   setGeolocationEnabled,
 } = require('./app/listeners');
+const isMac = require('./app/utils/isMac');
 
 // add keys to process
 Object.keys(env).forEach(key => {
@@ -194,12 +195,11 @@ const learnMoreLink =
 const fileIssueLink = 'https://github.com/react-epfl/graasp-desktop/issues';
 
 const generateMenu = () => {
-  const isMac = process.platform === 'darwin';
   const template = [
-    ...(isMac ? macAppMenu : standardAppMenu),
+    ...(isMac() ? macAppMenu : standardAppMenu),
     {
       label: 'File',
-      submenu: [...(isMac ? macFileSubmenu : standardFileSubmenu)],
+      submenu: [...(isMac() ? macFileSubmenu : standardFileSubmenu)],
     },
     { type: 'separator' },
     {
@@ -233,7 +233,7 @@ const generateMenu = () => {
       submenu: [
         { role: 'minimize' },
         { role: 'zoom' },
-        ...(isMac
+        ...(isMac()
           ? [
               { type: 'separator' },
               { role: 'front' },
@@ -264,8 +264,14 @@ const generateMenu = () => {
     },
   ];
 
-  Menu.setApplicationMenu(null);
-  mainWindow.setMenu(Menu.buildFromTemplate(template));
+  if (isMac()) {
+    Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+  } else {
+    // this causes the menu to change on mac after first use
+    // and it's no longer possible to use the mac defaults
+    Menu.setApplicationMenu(null);
+    mainWindow.setMenu(Menu.buildFromTemplate(template));
+  }
 };
 
 app.on('ready', async () => {

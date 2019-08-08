@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const { app } = require('electron');
-const process = require('process');
+const isWindows = require('../utils/isWindows');
 
 // types that we support downloading
 const DOWNLOADABLE_MIME_TYPES = [
@@ -29,7 +29,7 @@ const DOWNLOADABLE_MIME_TYPES = [
 
 // resolve path for windows '\'
 const escapeEscapeCharacter = str => {
-  return process.platform === 'win32' ? str.replace(/\\/g, '\\\\') : str;
+  return isWindows() ? str.replace(/\\/g, '\\\\') : str;
 };
 
 // categories

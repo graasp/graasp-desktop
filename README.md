@@ -109,3 +109,11 @@ see the issue for details on the typos fixed
 
 fixes #12
 ```
+
+## Logs
+
+Following the `electron-log` defaults, logs are written to the following locations:
+
+- Linux: `~/.config/<app name>/log.log`
+- macOS: `~/Library/Logs/<app name>/log.log`
+- Windows: `%USERPROFILE%\AppData\Roaming\<app name>\log.log`

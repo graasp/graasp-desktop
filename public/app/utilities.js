@@ -1,8 +1,11 @@
 const mkdirp = require('mkdirp');
+const rimraf = require('rimraf');
+const { promisify } = require('util');
 const mime = require('mime-types');
 const md5 = require('md5');
 const fs = require('fs');
 const logger = require('./logger');
+const isWindows = require('./utils/isWindows');
 const {
   DOWNLOADABLE_MIME_TYPES,
   APPLICATION,
@@ -10,6 +13,9 @@ const {
   VAR_FOLDER,
   TMP_FOLDER,
 } = require('./config/config');
+
+// use promisified fs
+const fsPromises = fs.promises;
 
 const isFileAvailable = filePath =>
   new Promise(resolve =>
@@ -72,7 +78,49 @@ const createSpaceDirectory = ({ id, tmp }) => {
   }
 };
 
+// wraps file system operation so that it can be retried
+// many times for windows operating systems
+const performFileSystemOperation = functionToWrap => (...args) => {
+  let tryOperation = true;
+  // windows operations require silly amounts of retries
+  // because it will not release handles promptly (#159)
+  const retries = isWindows() ? 100 : 1;
+  let i = 0;
+  do {
+    let threw = true;
+    try {
+      functionToWrap(...args);
+      threw = false;
+    } finally {
+      i += 1;
+      if (i >= retries || !threw) {
+        tryOperation = false;
+        // eslint-disable-next-line no-unsafe-finally
+        break;
+      } else {
+        logger.error(`failed operation ${functionToWrap.name} on try ${i}`);
+        // eslint-disable-next-line no-continue, no-unsafe-finally
+        continue;
+      }
+    }
+  } while (tryOperation);
+};
+
+// waits until directory is accessed before removing it
+// and thus allowing windows to release the file handle
+const clean = async dir => {
+  try {
+    await fsPromises.access(dir);
+  } catch (err) {
+    // does not exist so all good
+    return true;
+  }
+  return promisify(rimraf)(dir);
+};
+
 module.exports = {
+  clean,
+  performFileSystemOperation,
   getExtension,
   isDownloadable,
   generateHash,
