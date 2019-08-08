@@ -1,9 +1,11 @@
+const _ = require('lodash');
 const request = require('request-promise');
 const cheerio = require('cheerio');
 const download = require('download');
 const providers = require('./config/providers');
 const logger = require('./logger');
 const mapping = require('./config/mapping');
+const { DEFAULT_PROTOCOL } = require('./config/config');
 const {
   getExtension,
   isDownloadable,
@@ -52,8 +54,8 @@ const downloadSpaceResources = async ({ lang, space, absoluteSpacePath }) => {
       const { key } = asset;
       if (url) {
         // default to https
-        if (url.startsWith('//')) {
-          url = `https:${url}`;
+        if (_.isString(url) && url.startsWith('//')) {
+          url = `${DEFAULT_PROTOCOL}:${url}`;
         }
 
         // get extension to save file

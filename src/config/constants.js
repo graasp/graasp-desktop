@@ -17,3 +17,4 @@ export const CONTROL_TYPES = {
   SWITCH: 'SWITCH',
 };
 export const MIN_CARD_WIDTH = 345;
+export const DEFAULT_PROTOCOL = 'https';
