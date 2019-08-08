@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.6](https://github.com/graasp/graasp-desktop/compare/v0.11.5...v0.11.6) (2019-08-08)
+
+### Bug Fixes
+
+- default to using https if url has no protocol ([3b6441e](https://github.com/graasp/graasp-desktop/commit/3b6441e)), closes [#161](https://github.com/graasp/graasp-desktop/issues/161)
+- fix windows exceptions on loading and deleting spaces ([77afd33](https://github.com/graasp/graasp-desktop/commit/77afd33)), closes [#159](https://github.com/graasp/graasp-desktop/issues/159)
+
 ## [0.11.5](https://github.com/graasp/graasp-desktop/compare/v0.11.4...v0.11.5) (2019-08-06)
 
 ### Bug Fixes
