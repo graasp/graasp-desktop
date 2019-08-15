@@ -47,6 +47,11 @@ class PhaseApp extends Component {
     lang: DEFAULT_LANGUAGE,
   };
 
+  static style = {
+    marginTop: '2rem',
+    marginBottom: '2rem',
+  };
+
   componentDidMount() {
     window.addEventListener('message', this.handleReceiveMessage);
   }
