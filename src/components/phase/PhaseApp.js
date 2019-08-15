@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Qs from 'qs';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { ResizableBox } from 'react-resizable';
+import { Resizable } from 're-resizable';
 import './PhaseApp.css';
 import {
   GET_APP_INSTANCE_RESOURCES,
@@ -22,6 +22,12 @@ import {
   SMART_GATEWAY_QUERY_STRING_DIVIDER,
 } from '../../config/constants';
 import { isSmartGatewayUrl } from '../../utils/url';
+import { getHeight, setHeight } from '../../actions/layout';
+import {
+  DEFAULT_APP_HEIGHT,
+  MAX_APP_HEIGHT,
+  MIN_APP_HEIGHT,
+} from '../../config/layout';
 
 class PhaseApp extends Component {
   static propTypes = {
@@ -51,6 +57,16 @@ class PhaseApp extends Component {
     marginTop: '2rem',
     marginBottom: '2rem',
   };
+
+  state = {
+    height: DEFAULT_APP_HEIGHT,
+  };
+
+  constructor(props) {
+    super(props);
+    const { id } = props;
+    this.state.height = getHeight(id) || DEFAULT_APP_HEIGHT;
+  }
 
   componentDidMount() {
     window.addEventListener('message', this.handleReceiveMessage);
@@ -165,12 +181,36 @@ class PhaseApp extends Component {
 
     const queryString = Qs.stringify(params);
 
+    // get style
+    const { style } = this;
+    const { height } = this.state;
     return (
-      <ResizableBox
-        minConstraints={[0, 200]}
-        maxConstraints={[0, 600]}
-        height={300}
-        axis="y"
+      <Resizable
+        style={style}
+        defaultSize={{
+          height,
+          width: 'auto',
+        }}
+        minHeight={MIN_APP_HEIGHT}
+        maxHeight={MAX_APP_HEIGHT}
+        enable={{
+          top: false,
+          right: false,
+          bottom: true,
+          left: false,
+          topRight: false,
+          bottomRight: false,
+          bottomLeft: false,
+          topLeft: false,
+        }}
+        onResizeStop={(e, direction, ref, d) => {
+          const { height: oldHeight } = this.state;
+          const newHeight = oldHeight + d.height;
+          this.setState({
+            height: newHeight,
+          });
+          setHeight(id, newHeight);
+        }}
       >
         <iframe
           title={name}
@@ -180,7 +220,7 @@ class PhaseApp extends Component {
             this.iframe = c;
           }}
         />
-      </ResizableBox>
+      </Resizable>
     );
   }
 }

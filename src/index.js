@@ -8,7 +8,6 @@ import katex from 'katex';
 import i18nConfig from './config/i18n';
 import { WHITELISTED_ERRORS } from './config/errors';
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
-import 'react-resizable/css/styles.css';
 import 'katex/dist/katex.min.css';
 import 'react-quill/dist/quill.core.css';
 import App from './App';

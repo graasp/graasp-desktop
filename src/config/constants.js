@@ -26,3 +26,4 @@ export const BLOCK_MATH_INDICATOR = '\\[';
 export const INLINE_MATH_INDICATOR = '\\(';
 export const BLOCK_MATH_REGEX = /(\\\[(.*?)\\])/g;
 export const INLINE_MATH_REGEX = /(\\\((.*?)\\\))/g;
+export const RADIX = 10;
