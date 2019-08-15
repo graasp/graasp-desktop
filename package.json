@@ -8,6 +8,9 @@
     "Juan Carlos Farah",
     "Hassan Abdul Ghaffar"
   ],
+  "engines": {
+    "node": "12"
+  },
   "license": "MIT",
   "homepage": "./",
   "main": "public/electron.js",
