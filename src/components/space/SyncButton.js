@@ -38,7 +38,7 @@ class SyncButton extends Component {
             className={classes.button}
             onClick={this.handleSync}
           >
-            <SyncIcon className={classes.rightIcon} />
+            <SyncIcon />
           </IconButton>
         </Tooltip>
       </Online>

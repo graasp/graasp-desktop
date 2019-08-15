@@ -3,6 +3,8 @@ import Qs from 'qs';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Resizable } from 're-resizable';
+import SwapVerticalCircleIcon from '@material-ui/icons/SwapVerticalCircle';
+import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import './PhaseApp.css';
 import {
   GET_APP_INSTANCE_RESOURCES,
@@ -33,6 +35,8 @@ const style = {
   marginTop: '2rem',
   marginBottom: '2rem',
 };
+
+const iconStyle = { background: 'white', borderRadius: '12px' };
 
 class PhaseApp extends Component {
   static propTypes = {
@@ -129,6 +133,33 @@ class PhaseApp extends Component {
     }
   };
 
+  renderHandleIcon = () => {
+    const { height } = this.state;
+    if (height >= MAX_APP_HEIGHT) {
+      return (
+        <PlayCircleFilledIcon
+          color="primary"
+          style={{
+            ...iconStyle,
+            transform: 'rotate(-90deg)',
+          }}
+        />
+      );
+    }
+    if (height <= MIN_APP_HEIGHT) {
+      return (
+        <PlayCircleFilledIcon
+          color="primary"
+          style={{
+            ...iconStyle,
+            transform: 'rotate(90deg)',
+          }}
+        />
+      );
+    }
+    return <SwapVerticalCircleIcon color="primary" style={iconStyle} />;
+  };
+
   render() {
     const {
       url,
@@ -210,15 +241,30 @@ class PhaseApp extends Component {
           });
           setHeight(id, newHeight);
         }}
+        handleComponent={{
+          bottom: (
+            <div
+              style={{
+                width: '100%',
+                textAlign: 'center',
+                marginTop: '-8px',
+              }}
+            >
+              {this.renderHandleIcon()}
+            </div>
+          ),
+        }}
       >
-        <iframe
-          title={name}
-          className="App"
-          src={uri + divider + queryString}
-          ref={c => {
-            this.iframe = c;
-          }}
-        />
+        <div style={{ height: '100%', overflowY: 'hidden' }}>
+          <iframe
+            title={name}
+            className="App"
+            src={uri + divider + queryString}
+            ref={c => {
+              this.iframe = c;
+            }}
+          />
+        </div>
       </Resizable>
     );
   }

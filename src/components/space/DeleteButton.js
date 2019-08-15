@@ -32,7 +32,7 @@ class DeleteButton extends Component {
           onClick={this.handleDelete}
           className={classes.button}
         >
-          <DeleteIcon className={classes.rightIcon} />
+          <DeleteIcon />
         </IconButton>
       </Tooltip>
     );

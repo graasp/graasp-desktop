@@ -94,7 +94,7 @@ class SpaceHeader extends Component {
           )}
         >
           <IconButton color="inherit" className={classes.button}>
-            <WarningIcon className={classes.rightIcon} />
+            <WarningIcon />
           </IconButton>
         </Tooltip>
       );
