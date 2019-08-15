@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://babeljs.io/">
+  <a href="https://graasp.eu">
     <img alt="Graasp" src="https://avatars3.githubusercontent.com/u/43075056" width="300" />
   </a>
 </p>
