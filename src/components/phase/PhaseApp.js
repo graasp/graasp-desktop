@@ -29,6 +29,11 @@ import {
   MIN_APP_HEIGHT,
 } from '../../config/layout';
 
+const style = {
+  marginTop: '2rem',
+  marginBottom: '2rem',
+};
+
 class PhaseApp extends Component {
   static propTypes = {
     url: PropTypes.string,
@@ -51,11 +56,6 @@ class PhaseApp extends Component {
     appInstance: null,
     name: 'Image',
     lang: DEFAULT_LANGUAGE,
-  };
-
-  static style = {
-    marginTop: '2rem',
-    marginBottom: '2rem',
   };
 
   state = {
@@ -182,7 +182,6 @@ class PhaseApp extends Component {
     const queryString = Qs.stringify(params);
 
     // get style
-    const { style } = this;
     const { height } = this.state;
     return (
       <Resizable
