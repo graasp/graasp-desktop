@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://babeljs.io/">
-    <img alt="Graasp" src="https://avatars3.githubusercontent.com/u/43075056" width="300">
+    <img alt="Graasp" src="https://avatars3.githubusercontent.com/u/43075056" width="300" />
   </a>
 </p>
 
@@ -15,20 +15,32 @@
     <img
       alt="CodeShip"
       src="https://app.codeship.com/projects/e0ef44e0-cff2-0136-9889-2aa8b2e23b88/status?branch=master"
-    >
+    />
   </a>
   <a href="https://www.codacy.com/app/graasp/graasp-desktop">
-      <img
-        alt="Codacy Badge"
-        src="https://api.codacy.com/project/badge/Grade/b46362710a304906bb6ce858408e59a2"
-      >
-    </a>
+    <img
+      alt="Codacy Badge"
+      src="https://api.codacy.com/project/badge/Grade/b46362710a304906bb6ce858408e59a2"
+    />
+  </a>
   <a href="https://conventionalcommits.org">
-      <img
-        alt="Conventional Commits"
-        src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg"
-      >
-    </a>
+    <img
+      alt="Conventional Commits"
+      src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg"
+    />
+  </a>
+  <a href="https://github.com/prettier/prettier">
+    <img
+      alt="Prettier"
+      src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg"
+    />
+  </a>
+  <a href="https://github.com/graasp/graasp-desktop/blob/master/LICENSE">
+    <img
+      alt="License"
+      src="https://img.shields.io/badge/license-AGPLv3.0-blue.svg"
+    />
+  </a>
 </p>
 
 ## Official Distributions
