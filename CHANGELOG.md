@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [0.12.0](https://github.com/graasp/graasp-desktop/compare/v0.11.6...v0.12.0) (2019-08-16)
+
+### Bug Fixes
+
+- add vertical margin between apps/labs ([da3253d](https://github.com/graasp/graasp-desktop/commit/da3253d)), closes [#167](https://github.com/graasp/graasp-desktop/issues/167)
+- fix space between apps/labs ([01c0e28](https://github.com/graasp/graasp-desktop/commit/01c0e28)), closes [#167](https://github.com/graasp/graasp-desktop/issues/167)
+- hide app content that is below resize div ([9bac761](https://github.com/graasp/graasp-desktop/commit/9bac761)), closes [#172](https://github.com/graasp/graasp-desktop/issues/172)
+- show item descriptions ([31d6427](https://github.com/graasp/graasp-desktop/commit/31d6427)), closes [#170](https://github.com/graasp/graasp-desktop/issues/170)
+
+### Features
+
+- remember the height of the apps/labs ([9fa527d](https://github.com/graasp/graasp-desktop/commit/9fa527d)), closes [#165](https://github.com/graasp/graasp-desktop/issues/165)
+- support math equations ([1140667](https://github.com/graasp/graasp-desktop/commit/1140667)), closes [#164](https://github.com/graasp/graasp-desktop/issues/164)
+
 ## [0.11.6](https://github.com/graasp/graasp-desktop/compare/v0.11.5...v0.11.6) (2019-08-08)
 
 ### Bug Fixes
