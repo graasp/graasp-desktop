@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.13.1](https://github.com/graasp/graasp-desktop/compare/v0.13.0...v0.13.1) (2019-08-20)
+
+### Bug Fixes
+
+- fall back on default language for proxied labs ([a7007b2](https://github.com/graasp/graasp-desktop/commit/a7007b2)), closes [#173](https://github.com/graasp/graasp-desktop/issues/173)
+
 # [0.13.0](https://github.com/graasp/graasp-desktop/compare/v0.12.0...v0.13.0) (2019-08-20)
 
 ### Features
