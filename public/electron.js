@@ -414,16 +414,33 @@ app.on('ready', async () => {
     const defaultResponse = [];
     const { userId, appInstanceId, spaceId, subSpaceId, type } = data;
     try {
-      const appInstanceResourcesHandle = db
-        .get('spaces')
-        .find({ id: spaceId })
-        .get('phases')
-        .find({ id: subSpaceId })
-        .get('items')
-        .filter(item => item.appInstance)
-        .map(item => item.appInstance)
-        .find({ id: appInstanceId })
-        .get('resources');
+      // tools live on the parent
+      const tool = spaceId === subSpaceId;
+
+      let appInstanceResourcesHandle;
+
+      // if not a tool, we need to go one step further into the phase
+      if (!tool) {
+        appInstanceResourcesHandle = db
+          .get('spaces')
+          .find({ id: spaceId })
+          .get('phases')
+          .find({ id: subSpaceId })
+          .get('items')
+          .filter(item => item.appInstance)
+          .map(item => item.appInstance)
+          .find({ id: appInstanceId })
+          .get('resources');
+      } else {
+        appInstanceResourcesHandle = db
+          .get('spaces')
+          .find({ id: spaceId })
+          .get('items')
+          .filter(item => item.appInstance)
+          .map(item => item.appInstance)
+          .find({ id: appInstanceId })
+          .get('resources');
+      }
 
       // only filter by type if provided
       if (type) {
@@ -490,18 +507,34 @@ app.on('ready', async () => {
         id: ObjectId().str,
       };
 
+      // tools live on the parent
+      const tool = spaceId === subSpaceId;
+
       // write the resource to the database
-      db.get('spaces')
-        .find({ id: spaceId })
-        .get('phases')
-        .find({ id: subSpaceId })
-        .get('items')
-        .filter(item => item.appInstance)
-        .map(item => item.appInstance)
-        .find({ id: appInstanceId })
-        .get('resources')
-        .push(resourceToWrite)
-        .write();
+      // if not a tool, we need to go one step further into the phase
+      if (!tool) {
+        db.get('spaces')
+          .find({ id: spaceId })
+          .get('phases')
+          .find({ id: subSpaceId })
+          .get('items')
+          .filter(item => item.appInstance)
+          .map(item => item.appInstance)
+          .find({ id: appInstanceId })
+          .get('resources')
+          .push(resourceToWrite)
+          .write();
+      } else {
+        db.get('spaces')
+          .find({ id: spaceId })
+          .get('items')
+          .filter(item => item.appInstance)
+          .map(item => item.appInstance)
+          .find({ id: appInstanceId })
+          .get('resources')
+          .push(resourceToWrite)
+          .write();
+      }
 
       // send back the resource
       mainWindow.webContents.send(
@@ -523,19 +556,41 @@ app.on('ready', async () => {
         updatedAt: now,
         data,
       };
-      const resource = db
-        .get('spaces')
-        .find({ id: spaceId })
-        .get('phases')
-        .find({ id: subSpaceId })
-        .get('items')
-        .filter(item => item.appInstance)
-        .map(item => item.appInstance)
-        .find({ id: appInstanceId })
-        .get('resources')
-        .find({ id })
-        .assign(fieldsToUpdate)
-        .value();
+
+      let resource;
+
+      // tools live on the parent
+      const tool = spaceId === subSpaceId;
+
+      // if not a tool, we need to go one step further into the phase
+      if (!tool) {
+        resource = db
+          .get('spaces')
+          .find({ id: spaceId })
+          .get('phases')
+          .find({ id: subSpaceId })
+          .get('items')
+          .filter(item => item.appInstance)
+          .map(item => item.appInstance)
+          .find({ id: appInstanceId })
+          .get('resources')
+          .find({ id })
+          .assign(fieldsToUpdate)
+          .value();
+      } else {
+        resource = db
+          .get('spaces')
+          .find({ id: spaceId })
+          .get('items')
+          .filter(item => item.appInstance)
+          .map(item => item.appInstance)
+          .find({ id: appInstanceId })
+          .get('resources')
+          .find({ id })
+          .assign(fieldsToUpdate)
+          .value();
+      }
+
       db.write();
       mainWindow.webContents.send(
         PATCH_APP_INSTANCE_RESOURCE_CHANNEL,
@@ -551,16 +606,34 @@ app.on('ready', async () => {
   ipcMain.on(GET_APP_INSTANCE_CHANNEL, (event, payload = {}) => {
     try {
       const { spaceId, subSpaceId, id } = payload;
-      const appInstance = db
-        .get('spaces')
-        .find({ id: spaceId })
-        .get('phases')
-        .find({ id: subSpaceId })
-        .get('items')
-        .filter(item => item.appInstance)
-        .map(item => item.appInstance)
-        .find({ id })
-        .value();
+
+      let appInstance;
+
+      // tools live on the parent
+      const tool = spaceId === subSpaceId;
+
+      // if not a tool, we need to go one step further into the phase
+      if (!tool) {
+        appInstance = db
+          .get('spaces')
+          .find({ id: spaceId })
+          .get('phases')
+          .find({ id: subSpaceId })
+          .get('items')
+          .filter(item => item.appInstance)
+          .map(item => item.appInstance)
+          .find({ id })
+          .value();
+      } else {
+        appInstance = db
+          .get('spaces')
+          .find({ id: spaceId })
+          .get('items')
+          .filter(item => item.appInstance)
+          .map(item => item.appInstance)
+          .find({ id })
+          .value();
+      }
 
       mainWindow.webContents.send(GET_APP_INSTANCE_CHANNEL, appInstance);
     } catch (e) {

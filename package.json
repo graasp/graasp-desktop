@@ -103,6 +103,7 @@
     "react-redux-toastr": "7.4.9",
     "react-router": "5.0.0",
     "react-router-dom": "5.0.0",
+    "react-split-pane": "0.1.87",
     "redux": "4.0.1",
     "redux-devtools-extension": "2.13.8",
     "redux-promise": "0.6.0",

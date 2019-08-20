@@ -4,3 +4,4 @@ export * from './user';
 export * from './appInstance';
 export * from './appInstanceResource';
 export * from './developer';
+export * from './layout';

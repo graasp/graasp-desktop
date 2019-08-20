@@ -42,7 +42,6 @@ const Styles = theme => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3),
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -67,6 +66,12 @@ const Styles = theme => ({
   },
   spaceDescription: {
     marginBottom: theme.spacing(3),
+  },
+  settings: {
+    padding: theme.spacing(3),
+  },
+  developer: {
+    padding: theme.spacing(3),
   },
 });
 

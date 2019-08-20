@@ -33,11 +33,72 @@ const getDownloadUrl = async ({ url, lang }) => {
   return false;
 };
 
+const downloadResource = async ({
+  resource,
+  absoluteSpacePath,
+  lang,
+  relativeSpacePath,
+}) => {
+  if (resource && isDownloadable(resource)) {
+    let { url } = resource;
+
+    // check mappings for files
+    if (mapping[url]) {
+      url = mapping[url];
+    }
+
+    // download from proxy url if available
+    // eslint-disable-next-line no-await-in-loop
+    const downloadUrl = await getDownloadUrl({ url, lang });
+    if (downloadUrl) {
+      url = downloadUrl;
+    }
+
+    // default to https
+    if (url.startsWith('//')) {
+      url = `https:${url}`;
+    }
+
+    // get extension to save file
+    const ext = getExtension(resource);
+
+    // only download if extension is present
+    if (ext) {
+      // generate hash to save file
+      const hash = generateHash(resource);
+      const fileName = `${hash}.${ext}`;
+      const relativeFilePath = `${relativeSpacePath}/${fileName}`;
+      const absoluteFilePath = `${absoluteSpacePath}/${fileName}`;
+
+      // eslint-disable-next-line no-await-in-loop
+      const fileAvailable = await isFileAvailable(absoluteFilePath);
+
+      // if the file is available, point this resource to its path
+      if (!fileAvailable) {
+        logger.debug(`downloading ${url}`);
+        // eslint-disable-next-line no-await-in-loop
+        await download(url, absoluteSpacePath, {
+          filename: fileName,
+        });
+        logger.debug(`downloaded ${url} to ${absoluteSpacePath}/${fileName}`);
+      }
+
+      // returning this indicates that resource was downloaded successfully
+      return {
+        asset: relativeFilePath,
+        hash,
+      };
+    }
+    return false;
+  }
+  return false;
+};
+
 const downloadSpaceResources = async ({ lang, space, absoluteSpacePath }) => {
   // make a working copy of the space to save
   const spaceToSave = { ...space };
 
-  const { phases, image, id } = spaceToSave;
+  const { phases, image, id, items: tools } = spaceToSave;
   const relativeSpacePath = id;
 
   // if there is a background/thumbnail image, save it
@@ -85,59 +146,42 @@ const downloadSpaceResources = async ({ lang, space, absoluteSpacePath }) => {
       }
     }
   }
+
+  // if there are top level items, also download them
+  if (!_.isEmpty(tools)) {
+    for (let i = 0; i < tools.length; i += 1) {
+      const resource = tools[i];
+      // eslint-disable-next-line no-await-in-loop
+      const rvalue = await downloadResource({
+        resource,
+        absoluteSpacePath,
+        lang,
+        relativeSpacePath,
+      });
+      if (rvalue) {
+        const { hash, asset } = rvalue;
+        spaceToSave.items[i].hash = hash;
+        spaceToSave.items[i].asset = asset;
+      }
+    }
+  }
+
   // eslint-disable-next-line no-restricted-syntax
   for (const phase of phases) {
     const { items = [] } = phase;
     for (let i = 0; i < items.length; i += 1) {
       const resource = items[i];
-      if (resource && isDownloadable(resource)) {
-        let { url } = resource;
-
-        // check mappings for files
-        if (mapping[url]) {
-          url = mapping[url];
-        }
-
-        // download from proxy url if available
-        // eslint-disable-next-line no-await-in-loop
-        const downloadUrl = await getDownloadUrl({ url, lang });
-        if (downloadUrl) {
-          url = downloadUrl;
-        }
-
-        // default to https
-        if (url.startsWith('//')) {
-          url = `https:${url}`;
-        }
-
-        // get extension to save file
-        const ext = getExtension(resource);
-
-        // only download if extension is present
-        if (ext) {
-          // generate hash to save file
-          const hash = generateHash(resource);
-          const fileName = `${hash}.${ext}`;
-          const relativeFilePath = `${relativeSpacePath}/${fileName}`;
-          const absoluteFilePath = `${absoluteSpacePath}/${fileName}`;
-          phase.items[i].hash = hash;
-
-          // eslint-disable-next-line no-await-in-loop
-          const fileAvailable = await isFileAvailable(absoluteFilePath);
-
-          // if the file is available, point this resource to its path
-          if (!fileAvailable) {
-            logger.debug(`downloading ${url}`);
-            // eslint-disable-next-line no-await-in-loop
-            await download(url, absoluteSpacePath, {
-              filename: fileName,
-            });
-            logger.debug(
-              `downloaded ${url} to ${absoluteSpacePath}/${fileName}`
-            );
-          }
-          phase.items[i].asset = relativeFilePath;
-        }
+      // eslint-disable-next-line no-await-in-loop
+      const rvalue = await downloadResource({
+        resource,
+        absoluteSpacePath,
+        lang,
+        relativeSpacePath,
+      });
+      if (rvalue) {
+        const { hash, asset } = rvalue;
+        phase.items[i].hash = hash;
+        phase.items[i].asset = asset;
       }
     }
   }
