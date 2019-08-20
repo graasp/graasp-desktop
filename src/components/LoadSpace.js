@@ -189,7 +189,7 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = ({ Space }) => ({
-  activity: Space.get('current').get('activity'),
+  activity: Boolean(Space.getIn(['current', 'activity']).size),
 });
 
 const ConnectedComponent = connect(

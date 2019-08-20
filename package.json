@@ -1,6 +1,6 @@
 {
   "name": "graasp-desktop",
-  "version": "0.10.0",
+  "version": "0.11.3",
   "description": "Desktop application for the Graasp ecosystem.",
   "private": true,
   "author": "React EPFL",
@@ -9,7 +9,7 @@
     "Hassan Abdul Ghaffar"
   ],
   "license": "MIT",
-  "homepage": "./",
+  "homepage": "https://graasp.eu/",
   "main": "public/electron.js",
   "keywords": [
     "Graasp Desktop",
@@ -19,6 +19,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/graasp/graasp-desktop"
+  },
+  "bugs": {
+    "url": "https://github.com/graasp/graasp-desktop/issues"
   },
   "scripts": {
     "dev": "yarn react-scripts start",
@@ -52,10 +55,12 @@
     "@material-ui/icons": "4.2.0",
     "@sentry/browser": "5.1.1",
     "@sentry/electron": "0.17.1",
+    "about-window": "1.13.1",
     "archiver": "3.0.0",
     "bson-objectid": "1.2.5",
     "cheerio": "1.0.0-rc.3",
     "classnames": "2.2.6",
+    "clsx": "1.0.4",
     "connected-react-router": "6.4.0",
     "download": "7.1.0",
     "electron-devtools-installer": "2.2.4",
@@ -70,7 +75,7 @@
     "i18next": "15.1.0",
     "immutable": "4.0.0-rc.12",
     "is-online": "8.2.0",
-    "lodash": "4.17.11",
+    "lodash": "4.17.13",
     "lowdb": "1.0.0",
     "md5": "2.2.1",
     "mime-types": "2.1.24",
@@ -88,6 +93,7 @@
     "react-loading": "2.0.3",
     "react-redux": "7.0.3",
     "react-redux-toastr": "7.4.9",
+    "react-resizable": "1.8.0",
     "react-router": "5.0.0",
     "react-router-dom": "5.0.0",
     "redux": "4.0.1",

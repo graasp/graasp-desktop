@@ -144,7 +144,7 @@ class VisitSpace extends Component {
           <MainMenu />
         </Drawer>
         <main
-          className={classNames(classes.content, {
+          className={classNames('Main', classes.content, {
             [classes.contentShift]: open,
           })}
         >
@@ -182,7 +182,7 @@ class VisitSpace extends Component {
 }
 
 const mapStateToProps = ({ Space }) => ({
-  activity: Space.get('current').get('activity'),
+  activity: Boolean(Space.getIn(['current', 'activity']).size),
 });
 
 const ConnectedComponent = connect(mapStateToProps)(VisitSpace);

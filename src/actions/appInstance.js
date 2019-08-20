@@ -28,6 +28,7 @@ const getAppInstance = async (
 
     if (appInstance) {
       callback({
+        appInstanceId: id,
         type: GET_APP_INSTANCE_SUCCEEDED,
         payload: appInstance,
       });
@@ -42,6 +43,7 @@ const getAppInstance = async (
         GET_APP_INSTANCE_CHANNEL,
         async (event, response) => {
           callback({
+            appInstanceId: id,
             type: GET_APP_INSTANCE_SUCCEEDED,
             payload: response,
           });

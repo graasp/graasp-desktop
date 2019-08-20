@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
-import Button from '@material-ui/core/Button/Button';
 import { withStyles } from '@material-ui/core';
 import { withRouter } from 'react-router';
 import { withTranslation } from 'react-i18next';
@@ -12,6 +10,7 @@ import Grid from '@material-ui/core/Grid/Grid';
 import MediaCard from '../common/MediaCard';
 import { clearSpace } from '../../actions';
 import DefaultThumbnail from '../../data/graasp.jpg';
+import { MIN_CARD_WIDTH } from '../../config/constants';
 
 class SpaceGrid extends Component {
   static styles = {
@@ -20,11 +19,12 @@ class SpaceGrid extends Component {
     },
   };
 
+  state = {
+    columnNb: 4,
+  };
+
   static propTypes = {
     folder: PropTypes.string,
-    classes: PropTypes.shape({
-      leftIcon: PropTypes.string.isRequired,
-    }).isRequired,
     spaces: ImmutablePropTypes.setOf(
       PropTypes.shape({
         id: PropTypes.string.isRequired,
@@ -43,9 +43,22 @@ class SpaceGrid extends Component {
   };
 
   componentDidMount() {
+    this.updateColumnNb();
+    window.addEventListener('resize', this.updateColumnNb);
+
     const { dispatchClearSpace } = this.props;
     dispatchClearSpace();
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateColumnNb);
+  }
+
+  updateColumnNb = () => {
+    this.setState({
+      columnNb: Math.floor(window.innerWidth / MIN_CARD_WIDTH) || 1,
+    });
+  };
 
   // show the local background image if exists, otherwise fetch
   // the image from url if provided if not provided then pass
@@ -82,55 +95,83 @@ class SpaceGrid extends Component {
   };
 
   render() {
-    const { spaces, classes, history, saved, t } = this.props;
+    const { spaces, history, saved, t } = this.props;
+    const { columnNb } = this.state;
+
+    const cardMargin = 15;
 
     // spaces is a set to mapping through it will return a set
-    const MediaCards = spaces.map(space => {
-      const { id, name, image = {}, description } = space;
+
+    // dispatch cards in columns
+    const columnWrapper = {
+      items: [],
+      updateColumnWrapper(card, index) {
+        if (this.items[index]) {
+          this.items[index].push(card);
+        } else {
+          this.items[index] = [card];
+        }
+      },
+    };
+
+    [...spaces].forEach((space, index) => {
+      const { id, image = {}, description } = space;
       const { replace } = history;
-      const ViewButton = (
-        <Button
-          variant="contained"
-          size="large"
-          color="primary"
-          id={id}
-          onClick={() => replace(`/space/${id}?saved=${saved}`)}
-          fullWidth
-        >
-          <RemoveRedEyeIcon className={classes.leftIcon} />
-          {t('View')}
-        </Button>
-      );
-      return (
-        <Grid key={id} item>
+
+      const viewLink = () => {
+        replace(`/space/${id}?saved=${saved}`);
+      };
+
+      const card = (
+        <Grid key={id} item style={{ margin: cardMargin }}>
           <MediaCard
             key={id}
-            name={name}
+            space={space}
             image={this.generateThumbnail({ image })}
             text={description}
-            button={ViewButton}
+            viewLink={viewLink}
           />
         </Grid>
       );
+
+      columnWrapper.updateColumnWrapper(card, index % columnNb);
     });
 
-    if (!MediaCards.size) {
+    const MediaCards = [];
+
+    columnWrapper.items.forEach(column => {
+      MediaCards.push(
+        <div
+          style={{
+            flex: 1,
+            flexWrap: 'wrap',
+          }}
+        >
+          {column}
+        </div>
+      );
+    });
+
+    if (!MediaCards.length) {
       return (
-        <Typography variant="h5" color="inherit">
-          {t('No Spaces Available')}
-        </Typography>
+        <div className="Main">
+          <Typography variant="h5" color="inherit">
+            {t('No Spaces Available')}
+          </Typography>
+        </div>
       );
     }
     return (
-      <Grid container spacing={6}>
+      <Grid container style={{ display: 'flex' }}>
         {MediaCards}
       </Grid>
     );
   }
 }
 
-const mapStateToProps = ({ User }) => ({
+const mapStateToProps = ({ User, Space }) => ({
   folder: User.getIn(['current', 'folder']),
+  deleted: Space.getIn(['current', 'deleted']),
 });
 
 const mapDispatchToProps = {

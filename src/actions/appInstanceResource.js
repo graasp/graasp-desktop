@@ -14,6 +14,7 @@ const getAppInstanceResources = async (
   callback
 ) => {
   try {
+    // send a message to the generic channel
     window.ipcRenderer.send(GET_APP_INSTANCE_RESOURCES_CHANNEL, {
       userId,
       appInstanceId,
@@ -22,12 +23,16 @@ const getAppInstanceResources = async (
       type,
     });
 
+    // set a listener to a channel specific for this app instance
     window.ipcRenderer.once(
-      GET_APP_INSTANCE_RESOURCES_CHANNEL,
+      `${GET_APP_INSTANCE_RESOURCES_CHANNEL}_${appInstanceId}`,
       async (event, response) => {
+        const { payload, appInstanceId: responseAppInstanceId } = response;
         callback({
+          payload,
+          // have to include the appInstanceId to avoid broadcasting
+          appInstanceId: responseAppInstanceId,
           type: GET_APP_INSTANCE_RESOURCES_SUCCEEDED,
-          payload: response,
         });
       }
     );
@@ -55,6 +60,8 @@ const postAppInstanceResource = async (
       POST_APP_INSTANCE_RESOURCE_CHANNEL,
       async (event, response) => {
         callback({
+          // have to include the appInstanceId to avoid broadcasting
+          appInstanceId,
           type: POST_APP_INSTANCE_RESOURCE_SUCCEEDED,
           payload: response,
         });
@@ -82,6 +89,7 @@ const patchAppInstanceResource = async (
       PATCH_APP_INSTANCE_RESOURCE_CHANNEL,
       async (event, response) => {
         callback({
+          appInstanceId,
           type: PATCH_APP_INSTANCE_RESOURCE_SUCCEEDED,
           payload: response,
         });

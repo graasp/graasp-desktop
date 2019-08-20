@@ -2,6 +2,45 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.3](https://github.com/graasp/graasp-desktop/compare/v0.11.2...v0.11.3) (2019-07-22)
+
+### Bug Fixes
+
+- use channel specific to each app instance to get resources ([85fa4f4](https://github.com/graasp/graasp-desktop/commit/85fa4f4)), closes [#136](https://github.com/graasp/graasp-desktop/issues/136)
+
+## [0.11.2](https://github.com/graasp/graasp-desktop/compare/v0.11.1...v0.11.2) (2019-07-21)
+
+### Bug Fixes
+
+- only receive messages from intended app ([7b3cfbc](https://github.com/graasp/graasp-desktop/commit/7b3cfbc)), closes [#136](https://github.com/graasp/graasp-desktop/issues/136)
+
+## [0.11.1](https://github.com/graasp/graasp-desktop/compare/v0.11.0...v0.11.1) (2019-07-18)
+
+### Bug Fixes
+
+- only respond to app that sent message ([19f9a3d](https://github.com/graasp/graasp-desktop/commit/19f9a3d)), closes [#136](https://github.com/graasp/graasp-desktop/issues/136)
+
+# [0.11.0](https://github.com/graasp/graasp-desktop/compare/v0.10.1...v0.11.0) (2019-07-17)
+
+### Bug Fixes
+
+- show nearby spaces below header ([4225cce](https://github.com/graasp/graasp-desktop/commit/4225cce)), closes [#138](https://github.com/graasp/graasp-desktop/issues/138)
+
+### Features
+
+- activation / deactivation of location sharing ([455e554](https://github.com/graasp/graasp-desktop/commit/455e554)), closes [#107](https://github.com/graasp/graasp-desktop/issues/107)
+- make apps resizable ([f8bd12c](https://github.com/graasp/graasp-desktop/commit/f8bd12c)), closes [#139](https://github.com/graasp/graasp-desktop/issues/139)
+
+## [0.10.1](https://github.com/graasp/graasp-desktop/compare/v0.10.0...v0.10.1) (2019-07-16)
+
+### Bug Fixes
+
+- automatically write env.json with contents from env ([128b276](https://github.com/graasp/graasp-desktop/commit/128b276)), closes [#116](https://github.com/graasp/graasp-desktop/issues/116)
+- fix order of commands in dockerfile ([e1176fc](https://github.com/graasp/graasp-desktop/commit/e1176fc)), closes [#123](https://github.com/graasp/graasp-desktop/issues/123)
+- setup before testing ([93c360c](https://github.com/graasp/graasp-desktop/commit/93c360c)), closes [#122](https://github.com/graasp/graasp-desktop/issues/122)
+- show quicktime videos using mp4 ([1c59c04](https://github.com/graasp/graasp-desktop/commit/1c59c04)), closes [#133](https://github.com/graasp/graasp-desktop/issues/133)
+- support editing video and images locally ([4f0e960](https://github.com/graasp/graasp-desktop/commit/4f0e960)), closes [#121](https://github.com/graasp/graasp-desktop/issues/121)
+
 # [0.10.0](https://github.com/graasp/graasp-desktop/compare/v0.9.0...v0.10.0) (2019-07-02)
 
 ### Bug Fixes

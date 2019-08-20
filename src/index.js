@@ -7,6 +7,7 @@ import { I18nextProvider } from 'react-i18next';
 import i18nConfig from './config/i18n';
 import { WHITELISTED_ERRORS } from './config/errors';
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
+import 'react-resizable/css/styles.css';
 import App from './App';
 import configureStore from './store/configure';
 

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
+import { withTranslation } from 'react-i18next';
 import Button from '@material-ui/core//Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -24,6 +25,7 @@ class SpaceNotFound extends Component {
   };
 
   static propTypes = {
+    t: PropTypes.func.isRequired,
     classes: PropTypes.shape({}).isRequired,
     theme: PropTypes.shape({}).isRequired,
     history: PropTypes.shape({ length: PropTypes.number.isRequired })
@@ -44,6 +46,7 @@ class SpaceNotFound extends Component {
       history: { replace },
       classes,
       theme,
+      t,
     } = this.props;
     return (
       <div className={classes.root}>
@@ -94,7 +97,7 @@ class SpaceNotFound extends Component {
           <div className={classes.drawerHeader} />
           <div>
             <Typography variant="h5" color="inherit" style={{ margin: '2rem' }}>
-              Space Not Found
+              {t('Space Not Found')}
             </Typography>
             <Button
               variant="contained"
@@ -102,7 +105,7 @@ class SpaceNotFound extends Component {
               className={classes.button}
               onClick={() => replace(HOME_PATH)}
             >
-              Home
+              {t('Home')}
             </Button>
             <Button
               variant="contained"
@@ -110,7 +113,7 @@ class SpaceNotFound extends Component {
               className={classes.button}
               onClick={() => replace(VISIT_PATH)}
             >
-              Visit Another Space
+              {t('Visit Another Space')}
             </Button>
           </div>
         </main>
@@ -121,4 +124,6 @@ class SpaceNotFound extends Component {
 
 const StyledComponent = withStyles(Styles, { withTheme: true })(SpaceNotFound);
 
-export default withRouter(StyledComponent);
+const TranslatedComponent = withTranslation()(StyledComponent);
+
+export default withRouter(TranslatedComponent);
