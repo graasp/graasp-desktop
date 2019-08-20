@@ -5,7 +5,7 @@ const download = require('download');
 const providers = require('./config/providers');
 const logger = require('./logger');
 const mapping = require('./config/mapping');
-const { DEFAULT_PROTOCOL } = require('./config/config');
+const { DEFAULT_PROTOCOL, DEFAULT_LANG } = require('./config/config');
 const {
   getExtension,
   isDownloadable,
@@ -25,11 +25,20 @@ const getDownloadUrl = async ({ url, lang }) => {
   }
   const res = await request(url);
   const $ = cheerio.load(res);
-  const elem = $(`meta[name="download"][language="${lang}"]`);
-  if (elem) {
-    return elem.attr('value');
+
+  const proxyUrl = $(`meta[name="download"][language="${lang}"]`).attr('value');
+  if (proxyUrl) {
+    logger.debug(`proxying from ${proxyUrl}`);
+    return proxyUrl;
   }
-  // todo: fall back on another language if requested is not available?
+  // fall back on default language if requested is not available
+  const defaultProxyUrl = $(
+    `meta[name="download"][language="${DEFAULT_LANG}"]`
+  ).attr('value');
+  if (defaultProxyUrl) {
+    logger.debug(`defaulting to proxying from ${defaultProxyUrl}`);
+    return defaultProxyUrl;
+  }
   return false;
 };
 
