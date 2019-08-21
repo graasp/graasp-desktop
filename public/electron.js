@@ -4,7 +4,6 @@ const {
   shell,
   ipcMain,
   Menu,
-  dialog,
   // eslint-disable-next-line import/no-extraneous-dependencies
 } = require('electron');
 const path = require('path');
@@ -32,12 +31,9 @@ const {
   DELETE_SPACE_CHANNEL,
   GET_SPACE_CHANNEL,
   GET_SPACES_CHANNEL,
-  RESPOND_EXPORT_SPACE_PROMPT_CHANNEL,
-  RESPOND_DELETE_SPACE_PROMPT_CHANNEL,
   SHOW_DELETE_SPACE_PROMPT_CHANNEL,
   SHOW_EXPORT_SPACE_PROMPT_CHANNEL,
   SHOW_LOAD_SPACE_PROMPT_CHANNEL,
-  RESPOND_LOAD_SPACE_PROMPT_CHANNEL,
   SAVE_SPACE_CHANNEL,
   GET_USER_FOLDER_CHANNEL,
   GET_LANGUAGE_CHANNEL,
@@ -66,6 +62,9 @@ const {
   getSpace,
   deleteSpace,
   exportSpace,
+  showLoadSpacePrompt,
+  showExportSpacePrompt,
+  showDeleteSpacePrompt,
   getGeolocationEnabled,
   setGeolocationEnabled,
 } = require('./app/listeners');
@@ -308,39 +307,19 @@ app.on('ready', async () => {
   ipcMain.on(EXPORT_SPACE_CHANNEL, exportSpace(mainWindow, db));
 
   // prompt when loading a space
-  ipcMain.on(SHOW_LOAD_SPACE_PROMPT_CHANNEL, (event, options) => {
-    dialog.showOpenDialog(null, options, filePaths => {
-      mainWindow.webContents.send(RESPOND_LOAD_SPACE_PROMPT_CHANNEL, filePaths);
-    });
-  });
+  ipcMain.on(SHOW_LOAD_SPACE_PROMPT_CHANNEL, showLoadSpacePrompt(mainWindow));
 
   // prompt when exporting a space
-  ipcMain.on(SHOW_EXPORT_SPACE_PROMPT_CHANNEL, (event, spaceTitle) => {
-    const options = {
-      title: 'Save As',
-      defaultPath: `${spaceTitle}.zip`,
-    };
-    dialog.showSaveDialog(null, options, filePath => {
-      mainWindow.webContents.send(
-        RESPOND_EXPORT_SPACE_PROMPT_CHANNEL,
-        filePath
-      );
-    });
-  });
+  ipcMain.on(
+    SHOW_EXPORT_SPACE_PROMPT_CHANNEL,
+    showExportSpacePrompt(mainWindow)
+  );
 
   // prompt when deleting a space
-  ipcMain.on(SHOW_DELETE_SPACE_PROMPT_CHANNEL, () => {
-    const options = {
-      type: 'warning',
-      buttons: ['Cancel', 'Delete'],
-      defaultId: 0,
-      cancelId: 0,
-      message: 'Are you sure you want to delete this space?',
-    };
-    dialog.showMessageBox(null, options, respond => {
-      mainWindow.webContents.send(RESPOND_DELETE_SPACE_PROMPT_CHANNEL, respond);
-    });
-  });
+  ipcMain.on(
+    SHOW_DELETE_SPACE_PROMPT_CHANNEL,
+    showDeleteSpacePrompt(mainWindow)
+  );
 
   // called when getting user folder
   ipcMain.on(GET_USER_FOLDER_CHANNEL, () => {
