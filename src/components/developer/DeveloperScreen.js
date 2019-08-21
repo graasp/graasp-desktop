@@ -95,17 +95,19 @@ class DeveloperScreen extends Component {
           })}
         >
           <div className={classes.drawerHeader} />
-          <Typography variant="h4" className={classes.screenTitle}>
-            {t('Developer')}
-          </Typography>
-          <br />
-          <Banner
-            text={t(
-              'Danger Zone! Proceed with caution as changes to this section might lead to data loss.'
-            )}
-            type="error"
-          />
-          <DatabaseEditor />
+          <div className={classes.developer}>
+            <Typography variant="h4" className={classes.screenTitle}>
+              {t('Developer')}
+            </Typography>
+            <br />
+            <Banner
+              text={t(
+                'Danger Zone! Proceed with caution as changes to this section might lead to data loss.'
+              )}
+              type="error"
+            />
+            <DatabaseEditor />
+          </div>
         </main>
       </div>
     );

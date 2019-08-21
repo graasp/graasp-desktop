@@ -69,6 +69,7 @@ const {
   getGeolocationEnabled,
   setGeolocationEnabled,
 } = require('./app/listeners');
+const isMac = require('./app/utils/isMac');
 
 // add keys to process
 Object.keys(env).forEach(key => {
@@ -180,6 +181,10 @@ const standardFileSubmenu = [
         // automatically show info from package.json
         package_json_dir: path.join(__dirname, '../'),
         bug_link_text: 'Report a Bug/Issue',
+
+        // we cannot use homepage from package.json as
+        // create-react-app uses it to build the frontend
+        homepage: 'https://graasp.eu/',
       });
     },
   },
@@ -191,12 +196,11 @@ const learnMoreLink =
 const fileIssueLink = 'https://github.com/react-epfl/graasp-desktop/issues';
 
 const generateMenu = () => {
-  const isMac = process.platform === 'darwin';
   const template = [
-    ...(isMac ? macAppMenu : standardAppMenu),
+    ...(isMac() ? macAppMenu : standardAppMenu),
     {
       label: 'File',
-      submenu: [...(isMac ? macFileSubmenu : standardFileSubmenu)],
+      submenu: [...(isMac() ? macFileSubmenu : standardFileSubmenu)],
     },
     { type: 'separator' },
     {
@@ -230,7 +234,7 @@ const generateMenu = () => {
       submenu: [
         { role: 'minimize' },
         { role: 'zoom' },
-        ...(isMac
+        ...(isMac()
           ? [
               { type: 'separator' },
               { role: 'front' },
@@ -261,8 +265,14 @@ const generateMenu = () => {
     },
   ];
 
-  Menu.setApplicationMenu(null);
-  mainWindow.setMenu(Menu.buildFromTemplate(template));
+  if (isMac()) {
+    Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+  } else {
+    // this causes the menu to change on mac after first use
+    // and it's no longer possible to use the mac defaults
+    Menu.setApplicationMenu(null);
+    mainWindow.setMenu(Menu.buildFromTemplate(template));
+  }
 };
 
 app.on('ready', async () => {
@@ -401,16 +411,33 @@ app.on('ready', async () => {
     const defaultResponse = [];
     const { userId, appInstanceId, spaceId, subSpaceId, type } = data;
     try {
-      const appInstanceResourcesHandle = db
-        .get('spaces')
-        .find({ id: spaceId })
-        .get('phases')
-        .find({ id: subSpaceId })
-        .get('items')
-        .filter(item => item.appInstance)
-        .map(item => item.appInstance)
-        .find({ id: appInstanceId })
-        .get('resources');
+      // tools live on the parent
+      const tool = spaceId === subSpaceId;
+
+      let appInstanceResourcesHandle;
+
+      // if not a tool, we need to go one step further into the phase
+      if (!tool) {
+        appInstanceResourcesHandle = db
+          .get('spaces')
+          .find({ id: spaceId })
+          .get('phases')
+          .find({ id: subSpaceId })
+          .get('items')
+          .filter(item => item.appInstance)
+          .map(item => item.appInstance)
+          .find({ id: appInstanceId })
+          .get('resources');
+      } else {
+        appInstanceResourcesHandle = db
+          .get('spaces')
+          .find({ id: spaceId })
+          .get('items')
+          .filter(item => item.appInstance)
+          .map(item => item.appInstance)
+          .find({ id: appInstanceId })
+          .get('resources');
+      }
 
       // only filter by type if provided
       if (type) {
@@ -477,18 +504,34 @@ app.on('ready', async () => {
         id: ObjectId().str,
       };
 
+      // tools live on the parent
+      const tool = spaceId === subSpaceId;
+
       // write the resource to the database
-      db.get('spaces')
-        .find({ id: spaceId })
-        .get('phases')
-        .find({ id: subSpaceId })
-        .get('items')
-        .filter(item => item.appInstance)
-        .map(item => item.appInstance)
-        .find({ id: appInstanceId })
-        .get('resources')
-        .push(resourceToWrite)
-        .write();
+      // if not a tool, we need to go one step further into the phase
+      if (!tool) {
+        db.get('spaces')
+          .find({ id: spaceId })
+          .get('phases')
+          .find({ id: subSpaceId })
+          .get('items')
+          .filter(item => item.appInstance)
+          .map(item => item.appInstance)
+          .find({ id: appInstanceId })
+          .get('resources')
+          .push(resourceToWrite)
+          .write();
+      } else {
+        db.get('spaces')
+          .find({ id: spaceId })
+          .get('items')
+          .filter(item => item.appInstance)
+          .map(item => item.appInstance)
+          .find({ id: appInstanceId })
+          .get('resources')
+          .push(resourceToWrite)
+          .write();
+      }
 
       // send back the resource
       mainWindow.webContents.send(
@@ -510,19 +553,41 @@ app.on('ready', async () => {
         updatedAt: now,
         data,
       };
-      const resource = db
-        .get('spaces')
-        .find({ id: spaceId })
-        .get('phases')
-        .find({ id: subSpaceId })
-        .get('items')
-        .filter(item => item.appInstance)
-        .map(item => item.appInstance)
-        .find({ id: appInstanceId })
-        .get('resources')
-        .find({ id })
-        .assign(fieldsToUpdate)
-        .value();
+
+      let resource;
+
+      // tools live on the parent
+      const tool = spaceId === subSpaceId;
+
+      // if not a tool, we need to go one step further into the phase
+      if (!tool) {
+        resource = db
+          .get('spaces')
+          .find({ id: spaceId })
+          .get('phases')
+          .find({ id: subSpaceId })
+          .get('items')
+          .filter(item => item.appInstance)
+          .map(item => item.appInstance)
+          .find({ id: appInstanceId })
+          .get('resources')
+          .find({ id })
+          .assign(fieldsToUpdate)
+          .value();
+      } else {
+        resource = db
+          .get('spaces')
+          .find({ id: spaceId })
+          .get('items')
+          .filter(item => item.appInstance)
+          .map(item => item.appInstance)
+          .find({ id: appInstanceId })
+          .get('resources')
+          .find({ id })
+          .assign(fieldsToUpdate)
+          .value();
+      }
+
       db.write();
       mainWindow.webContents.send(
         PATCH_APP_INSTANCE_RESOURCE_CHANNEL,
@@ -538,16 +603,34 @@ app.on('ready', async () => {
   ipcMain.on(GET_APP_INSTANCE_CHANNEL, (event, payload = {}) => {
     try {
       const { spaceId, subSpaceId, id } = payload;
-      const appInstance = db
-        .get('spaces')
-        .find({ id: spaceId })
-        .get('phases')
-        .find({ id: subSpaceId })
-        .get('items')
-        .filter(item => item.appInstance)
-        .map(item => item.appInstance)
-        .find({ id })
-        .value();
+
+      let appInstance;
+
+      // tools live on the parent
+      const tool = spaceId === subSpaceId;
+
+      // if not a tool, we need to go one step further into the phase
+      if (!tool) {
+        appInstance = db
+          .get('spaces')
+          .find({ id: spaceId })
+          .get('phases')
+          .find({ id: subSpaceId })
+          .get('items')
+          .filter(item => item.appInstance)
+          .map(item => item.appInstance)
+          .find({ id })
+          .value();
+      } else {
+        appInstance = db
+          .get('spaces')
+          .find({ id: spaceId })
+          .get('items')
+          .filter(item => item.appInstance)
+          .map(item => item.appInstance)
+          .find({ id })
+          .value();
+      }
 
       mainWindow.webContents.send(GET_APP_INSTANCE_CHANNEL, appInstance);
     } catch (e) {

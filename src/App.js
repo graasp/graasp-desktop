@@ -102,7 +102,7 @@ export class App extends Component {
   }
 
   updateWindowDimensions = () => {
-    this.setState({ height: window.innerHeight - 100 });
+    this.setState({ height: window.innerHeight });
   };
 
   render() {

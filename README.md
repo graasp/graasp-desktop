@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://babeljs.io/">
-    <img alt="Graasp" src="https://avatars3.githubusercontent.com/u/43075056" width="300">
+  <a href="https://graasp.eu">
+    <img alt="Graasp" src="https://avatars3.githubusercontent.com/u/43075056" width="300" />
   </a>
 </p>
 
@@ -10,9 +10,38 @@
   Cross-platform desktop client for the Graasp ecosystem.
 </p>
 
-[![CodeShip](https://app.codeship.com/projects/e0ef44e0-cff2-0136-9889-2aa8b2e23b88/status?branch=master)](https://app.codeship.com/projects/315997)
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b46362710a304906bb6ce858408e59a2)](https://www.codacy.com/app/graasp/graasp-desktop)
+<p align="center">
+  <a href="https://app.codeship.com/projects/315997">
+    <img
+      alt="CodeShip"
+      src="https://app.codeship.com/projects/e0ef44e0-cff2-0136-9889-2aa8b2e23b88/status?branch=master"
+    />
+  </a>
+  <a href="https://www.codacy.com/app/graasp/graasp-desktop">
+    <img
+      alt="Codacy Badge"
+      src="https://api.codacy.com/project/badge/Grade/b46362710a304906bb6ce858408e59a2"
+    />
+  </a>
+  <a href="https://conventionalcommits.org">
+    <img
+      alt="Conventional Commits"
+      src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg"
+    />
+  </a>
+  <a href="https://github.com/prettier/prettier">
+    <img
+      alt="Prettier"
+      src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg"
+    />
+  </a>
+  <a href="https://github.com/graasp/graasp-desktop/blob/master/LICENSE">
+    <img
+      alt="License"
+      src="https://img.shields.io/badge/license-AGPLv3.0-blue.svg"
+    />
+  </a>
+</p>
 
 ## Official Distributions
 
@@ -109,3 +138,11 @@ see the issue for details on the typos fixed
 
 fixes #12
 ```
+
+## Logs
+
+Following the `electron-log` defaults, logs are written to the following locations:
+
+- Linux: `~/.config/<app name>/log.log`
+- macOS: `~/Library/Logs/<app name>/log.log`
+- Windows: `%USERPROFILE%\AppData\Roaming\<app name>\log.log`

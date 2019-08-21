@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import Qs from 'qs';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { ResizableBox } from 'react-resizable';
+import { Resizable } from 're-resizable';
+import SwapVerticalCircleIcon from '@material-ui/icons/SwapVerticalCircle';
+import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import './PhaseApp.css';
 import {
   GET_APP_INSTANCE_RESOURCES,
@@ -22,6 +24,19 @@ import {
   SMART_GATEWAY_QUERY_STRING_DIVIDER,
 } from '../../config/constants';
 import { isSmartGatewayUrl } from '../../utils/url';
+import { getHeight, setHeight } from '../../actions/layout';
+import {
+  DEFAULT_APP_HEIGHT,
+  MAX_APP_HEIGHT,
+  MIN_APP_HEIGHT,
+} from '../../config/layout';
+
+const style = {
+  marginTop: '2rem',
+  marginBottom: '2rem',
+};
+
+const iconStyle = { background: 'white', borderRadius: '12px' };
 
 class PhaseApp extends Component {
   static propTypes = {
@@ -46,6 +61,16 @@ class PhaseApp extends Component {
     name: 'Image',
     lang: DEFAULT_LANGUAGE,
   };
+
+  state = {
+    height: DEFAULT_APP_HEIGHT,
+  };
+
+  constructor(props) {
+    super(props);
+    const { id } = props;
+    this.state.height = getHeight(id) || DEFAULT_APP_HEIGHT;
+  }
 
   componentDidMount() {
     window.addEventListener('message', this.handleReceiveMessage);
@@ -108,6 +133,33 @@ class PhaseApp extends Component {
     }
   };
 
+  renderHandleIcon = () => {
+    const { height } = this.state;
+    if (height >= MAX_APP_HEIGHT) {
+      return (
+        <PlayCircleFilledIcon
+          color="primary"
+          style={{
+            ...iconStyle,
+            transform: 'rotate(-90deg)',
+          }}
+        />
+      );
+    }
+    if (height <= MIN_APP_HEIGHT) {
+      return (
+        <PlayCircleFilledIcon
+          color="primary"
+          style={{
+            ...iconStyle,
+            transform: 'rotate(90deg)',
+          }}
+        />
+      );
+    }
+    return <SwapVerticalCircleIcon color="primary" style={iconStyle} />;
+  };
+
   render() {
     const {
       url,
@@ -160,22 +212,60 @@ class PhaseApp extends Component {
 
     const queryString = Qs.stringify(params);
 
+    // get style
+    const { height } = this.state;
     return (
-      <ResizableBox
-        minConstraints={[0, 200]}
-        maxConstraints={[0, 600]}
-        height={300}
-        axis="y"
+      <Resizable
+        style={style}
+        defaultSize={{
+          height,
+          width: 'auto',
+        }}
+        minHeight={MIN_APP_HEIGHT}
+        maxHeight={MAX_APP_HEIGHT}
+        enable={{
+          top: false,
+          right: false,
+          bottom: true,
+          left: false,
+          topRight: false,
+          bottomRight: false,
+          bottomLeft: false,
+          topLeft: false,
+        }}
+        onResizeStop={(e, direction, ref, d) => {
+          const { height: oldHeight } = this.state;
+          const newHeight = oldHeight + d.height;
+          this.setState({
+            height: newHeight,
+          });
+          setHeight(id, newHeight);
+        }}
+        handleComponent={{
+          bottom: (
+            <div
+              style={{
+                width: '100%',
+                textAlign: 'center',
+                marginTop: '-8px',
+              }}
+            >
+              {this.renderHandleIcon()}
+            </div>
+          ),
+        }}
       >
-        <iframe
-          title={name}
-          className="App"
-          src={uri + divider + queryString}
-          ref={c => {
-            this.iframe = c;
-          }}
-        />
-      </ResizableBox>
+        <div style={{ height: '100%', overflowY: 'hidden' }}>
+          <iframe
+            title={name}
+            className="App"
+            src={uri + divider + queryString}
+            ref={c => {
+              this.iframe = c;
+            }}
+          />
+        </div>
+      </Resizable>
     );
   }
 }

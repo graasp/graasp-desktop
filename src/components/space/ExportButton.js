@@ -36,7 +36,7 @@ class ExportButton extends Component {
           onClick={this.handleExport}
           className={classes.button}
         >
-          <UnarchiveIcon className={classes.rightIcon} />
+          <UnarchiveIcon />
         </IconButton>
       </Tooltip>
     );
