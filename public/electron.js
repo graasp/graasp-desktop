@@ -20,7 +20,6 @@ const {
   DATABASE_PATH,
   ICON_PATH,
   PRODUCT_NAME,
-  DEFAULT_LANG,
   DEFAULT_DEVELOPER_MODE,
   escapeEscapeCharacter,
 } = require('./app/config/config');
@@ -66,7 +65,8 @@ const {
   showDeleteSpacePrompt,
   getGeolocationEnabled,
   setGeolocationEnabled,
-  getUserFolder
+  getUserFolder,
+  getLanguage,
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
 
@@ -325,15 +325,7 @@ app.on('ready', async () => {
   ipcMain.on(GET_USER_FOLDER_CHANNEL, getUserFolder(mainWindow));
 
   // called when getting language
-  ipcMain.on(GET_LANGUAGE_CHANNEL, () => {
-    try {
-      const lang = db.get('user.lang').value() || DEFAULT_LANG;
-      mainWindow.webContents.send(GET_LANGUAGE_CHANNEL, lang);
-    } catch (e) {
-      logger.error(e);
-      mainWindow.webContents.send(GET_LANGUAGE_CHANNEL, ERROR_GENERAL);
-    }
-  });
+  ipcMain.on(GET_LANGUAGE_CHANNEL, getLanguage(mainWindow, db));
 
   // called when setting language
   ipcMain.on(SET_LANGUAGE_CHANNEL, (event, lang) => {
