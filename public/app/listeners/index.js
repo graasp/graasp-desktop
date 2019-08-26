@@ -11,6 +11,7 @@ const setGeolocationEnabled = require('./setGeolocationEnabled');
 const showLoadSpacePrompt = require('./showLoadSpacePrompt');
 const showExportSpacePrompt = require('./showExportSpacePrompt');
 const showDeleteSpacePrompt = require('./showDeleteSpacePrompt');
+const getUserFolder = require('./getUserFolder');
 
 module.exports = {
   loadSpace,
@@ -26,4 +27,5 @@ module.exports = {
   showLoadSpacePrompt,
   showExportSpacePrompt,
   showDeleteSpacePrompt,
+  getUserFolder
 };

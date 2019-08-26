@@ -17,7 +17,6 @@ const openAboutWindow = require('about-window').default;
 const logger = require('./app/logger');
 const { ensureDatabaseExists, bootstrapDatabase } = require('./app/db');
 const {
-  VAR_FOLDER,
   DATABASE_PATH,
   ICON_PATH,
   PRODUCT_NAME,
@@ -67,6 +66,7 @@ const {
   showDeleteSpacePrompt,
   getGeolocationEnabled,
   setGeolocationEnabled,
+  getUserFolder
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
 
@@ -322,14 +322,7 @@ app.on('ready', async () => {
   );
 
   // called when getting user folder
-  ipcMain.on(GET_USER_FOLDER_CHANNEL, () => {
-    try {
-      mainWindow.webContents.send(GET_USER_FOLDER_CHANNEL, VAR_FOLDER);
-    } catch (e) {
-      logger.error(e);
-      mainWindow.webContents.send(GET_USER_FOLDER_CHANNEL, ERROR_GENERAL);
-    }
-  });
+  ipcMain.on(GET_USER_FOLDER_CHANNEL, getUserFolder(mainWindow));
 
   // called when getting language
   ipcMain.on(GET_LANGUAGE_CHANNEL, () => {
