@@ -13,6 +13,7 @@ const showExportSpacePrompt = require('./showExportSpacePrompt');
 const showDeleteSpacePrompt = require('./showDeleteSpacePrompt');
 const getUserFolder = require('./getUserFolder');
 const setLanguage = require('./setLanguage');
+const getLanguage = require('./getLanguage');
 
 module.exports = {
   loadSpace,
@@ -30,4 +31,5 @@ module.exports = {
   showDeleteSpacePrompt,
   getUserFolder,
   setLanguage,
+  getLanguage,
 };
