@@ -12,6 +12,7 @@ const showLoadSpacePrompt = require('./showLoadSpacePrompt');
 const showExportSpacePrompt = require('./showExportSpacePrompt');
 const showDeleteSpacePrompt = require('./showDeleteSpacePrompt');
 const getUserFolder = require('./getUserFolder');
+const setDeveloperMode = require('./setDeveloperMode');
 
 module.exports = {
   loadSpace,
@@ -27,5 +28,6 @@ module.exports = {
   showLoadSpacePrompt,
   showExportSpacePrompt,
   showDeleteSpacePrompt,
-  getUserFolder
+  getUserFolder,
+  setDeveloperMode,
 };

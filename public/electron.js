@@ -66,7 +66,8 @@ const {
   showDeleteSpacePrompt,
   getGeolocationEnabled,
   setGeolocationEnabled,
-  getUserFolder
+  getUserFolder,
+  setDeveloperMode,
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
 
@@ -359,15 +360,7 @@ app.on('ready', async () => {
   });
 
   // called when setting developer mode
-  ipcMain.on(SET_DEVELOPER_MODE_CHANNEL, (event, developerMode) => {
-    try {
-      db.set('user.developerMode', developerMode).write();
-      mainWindow.webContents.send(SET_DEVELOPER_MODE_CHANNEL, developerMode);
-    } catch (e) {
-      logger.error(e);
-      mainWindow.webContents.send(SET_DEVELOPER_MODE_CHANNEL, ERROR_GENERAL);
-    }
-  });
+  ipcMain.on(SET_DEVELOPER_MODE_CHANNEL, setDeveloperMode(mainWindow, db));
 
   // called when getting geolocation enabled
   ipcMain.on(
