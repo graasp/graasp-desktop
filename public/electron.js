@@ -21,7 +21,6 @@ const {
   ICON_PATH,
   PRODUCT_NAME,
   DEFAULT_LANG,
-  DEFAULT_DEVELOPER_MODE,
   escapeEscapeCharacter,
 } = require('./app/config/config');
 const {
@@ -66,7 +65,8 @@ const {
   showDeleteSpacePrompt,
   getGeolocationEnabled,
   setGeolocationEnabled,
-  getUserFolder
+  getUserFolder,
+  getDeveloperMode,
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
 
@@ -347,16 +347,7 @@ app.on('ready', async () => {
   });
 
   // called when getting developer mode
-  ipcMain.on(GET_DEVELOPER_MODE_CHANNEL, () => {
-    try {
-      const developerMode =
-        db.get('user.developerMode').value() || DEFAULT_DEVELOPER_MODE;
-      mainWindow.webContents.send(GET_DEVELOPER_MODE_CHANNEL, developerMode);
-    } catch (e) {
-      logger.error(e);
-      mainWindow.webContents.send(GET_DEVELOPER_MODE_CHANNEL, ERROR_GENERAL);
-    }
-  });
+  ipcMain.on(GET_DEVELOPER_MODE_CHANNEL, getDeveloperMode(mainWindow, db));
 
   // called when setting developer mode
   ipcMain.on(SET_DEVELOPER_MODE_CHANNEL, (event, developerMode) => {
