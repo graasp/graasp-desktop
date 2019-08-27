@@ -66,7 +66,8 @@ const {
   showDeleteSpacePrompt,
   getGeolocationEnabled,
   setGeolocationEnabled,
-  getUserFolder
+  getUserFolder,
+  setLanguage,
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
 
@@ -336,15 +337,7 @@ app.on('ready', async () => {
   });
 
   // called when setting language
-  ipcMain.on(SET_LANGUAGE_CHANNEL, (event, lang) => {
-    try {
-      db.set('user.lang', lang).write();
-      mainWindow.webContents.send(SET_LANGUAGE_CHANNEL, lang);
-    } catch (e) {
-      logger.error(e);
-      mainWindow.webContents.send(SET_LANGUAGE_CHANNEL, ERROR_GENERAL);
-    }
-  });
+  ipcMain.on(SET_LANGUAGE_CHANNEL, setLanguage(mainWindow));
 
   // called when getting developer mode
   ipcMain.on(GET_DEVELOPER_MODE_CHANNEL, () => {
