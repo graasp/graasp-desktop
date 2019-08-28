@@ -13,7 +13,7 @@ const showSyncSpacePrompt = mainWindow => () => {
     message:
       'Are you sure you want to sync this space? All user input will be deleted.',
   };
-  dialog.showMessageBox(null, options, respond => {
+  dialog.showMessageBox(mainWindow, options, respond => {
     mainWindow.webContents.send(RESPOND_SYNC_SPACE_PROMPT_CHANNEL, respond);
   });
 };

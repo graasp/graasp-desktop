@@ -7,7 +7,7 @@ const showExportSpacePrompt = mainWindow => (event, spaceTitle) => {
     title: 'Save As',
     defaultPath: `${spaceTitle}.zip`,
   };
-  dialog.showSaveDialog(null, options, filePath => {
+  dialog.showSaveDialog(mainWindow, options, filePath => {
     mainWindow.webContents.send(RESPOND_EXPORT_SPACE_PROMPT_CHANNEL, filePath);
   });
 };

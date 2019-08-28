@@ -10,7 +10,7 @@ const showDeleteSpacePrompt = mainWindow => () => {
     cancelId: 0,
     message: 'Are you sure you want to delete this space?',
   };
-  dialog.showMessageBox(null, options, respond => {
+  dialog.showMessageBox(mainWindow, options, respond => {
     mainWindow.webContents.send(RESPOND_DELETE_SPACE_PROMPT_CHANNEL, respond);
   });
 };
