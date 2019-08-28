@@ -1,11 +1,15 @@
 .SpaceDescription {
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  height: calc(100% - 64px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .SpaceDescriptionDiv {
-    justify-content: center;
-    align-items: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.SpaceDescriptionText p {
+  font-size: xx-large;
 }

@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const { app } = require('electron');
+const isWindows = require('../utils/isWindows');
 
 // types that we support downloading
 const DOWNLOADABLE_MIME_TYPES = [
@@ -26,20 +27,27 @@ const DOWNLOADABLE_MIME_TYPES = [
   'application/pdf',
 ];
 
+// resolve path for windows '\'
+const escapeEscapeCharacter = str => {
+  return isWindows() ? str.replace(/\\/g, '\\\\') : str;
+};
+
 // categories
 const RESOURCE = 'Resource';
 const APPLICATION = 'Application';
 
-const VAR_FOLDER = `${app.getPath('userData')}/var`;
+const VAR_FOLDER = `${escapeEscapeCharacter(app.getPath('userData'))}/var`;
 const DATABASE_PATH = `${VAR_FOLDER}/db.json`;
-const ICON_PATH = `${app.getAppPath()}/assets/icon.png`;
+const ICON_PATH = 'app/assets/icon.png';
 const PRODUCT_NAME = 'Graasp';
 const TMP_FOLDER = 'tmp';
 const DEFAULT_LANG = 'en';
 const DEFAULT_DEVELOPER_MODE = false;
 const DEFAULT_GEOLOCATION_ENABLED = false;
+const DEFAULT_PROTOCOL = 'https';
 
 module.exports = {
+  DEFAULT_PROTOCOL,
   DEFAULT_DEVELOPER_MODE,
   DEFAULT_GEOLOCATION_ENABLED,
   DOWNLOADABLE_MIME_TYPES,
@@ -51,4 +59,5 @@ module.exports = {
   DEFAULT_LANG,
   ICON_PATH,
   PRODUCT_NAME,
+  escapeEscapeCharacter,
 };

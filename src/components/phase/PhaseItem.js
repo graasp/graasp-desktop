@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import {
   TEXT,
@@ -7,14 +8,16 @@ import {
   RESOURCE,
   APPLICATION,
   IFRAME,
+  DEFAULT_PROTOCOL,
 } from '../../config/constants';
 import PhaseText from './PhaseText';
 import PhaseImage from './PhaseImage';
 import PhaseVideo from './PhaseVideo';
 import PhaseApp from './PhaseApp';
 
-const renderResource = item => {
-  const { id, mimeType, content, asset, url, name } = item;
+// prop types gets confused when dealing with helper renderers
+// eslint-disable-next-line react/prop-types
+const renderResource = ({ id, mimeType, content, asset, url, name }) => {
   if (mimeType === TEXT) {
     return <PhaseText key={id} id={id} content={content} />;
   }
@@ -44,10 +47,19 @@ const renderResource = item => {
 };
 
 const PhaseItem = ({ item, spaceId, phaseId }) => {
-  const { id, category, asset, url, name, appInstance } = item;
+  const { id, category, asset, name, appInstance, mimeType, content } = item;
+
+  // we might need to fiddle with the url's protocol
+  let { url } = item;
+
+  // default to https urls for items to avoid electron using file:// by default
+  if (_.isString(url) && url.startsWith('//')) {
+    url = `${DEFAULT_PROTOCOL}:${url}`;
+  }
+
   switch (category) {
     case RESOURCE:
-      return renderResource(item);
+      return renderResource({ id, mimeType, content, asset, url, name });
 
     case APPLICATION:
       return (

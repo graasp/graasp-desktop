@@ -1,4 +1,4 @@
-import { Set, Map } from 'immutable';
+import { Set, Map, List } from 'immutable';
 import {
   TOGGLE_SPACE_MENU,
   GET_SPACES,
@@ -17,11 +17,12 @@ import {
   FLAG_SYNCING_SPACE,
   SYNC_SPACE_SUCCEEDED,
 } from '../types';
+import { updateActivityList } from './common';
 
 const INITIAL_STATE = Map({
   current: Map({
     content: Map(),
-    activity: false,
+    activity: List(),
     error: null,
     menu: Map({
       open: false,
@@ -49,7 +50,10 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case FLAG_EXPORTING_SPACE:
     case FLAG_DELETING_SPACE:
     case FLAG_SYNCING_SPACE:
-      return state.setIn(['current', 'activity'], payload);
+      return state.updateIn(
+        ['current', 'activity'],
+        updateActivityList(payload)
+      );
     case DELETE_SPACE_SUCCESS:
       return state.setIn(['current', 'deleted'], payload);
     case GET_SPACES:

@@ -97,14 +97,16 @@ class Settings extends Component {
           })}
         >
           <div className={classes.drawerHeader} />
-          <Typography variant="h5" color="inherit">
-            {t('Settings')}
-          </Typography>
-          <FormGroup>
-            <LanguageSelect />
-            <DeveloperSwitch />
-            <GeolocationControl />
-          </FormGroup>
+          <div className={classes.settings}>
+            <Typography variant="h5" color="inherit">
+              {t('Settings')}
+            </Typography>
+            <FormGroup>
+              <LanguageSelect />
+              <DeveloperSwitch />
+              <GeolocationControl />
+            </FormGroup>
+          </div>
         </main>
       </div>
     );

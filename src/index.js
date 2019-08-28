@@ -4,12 +4,17 @@ import './index.css';
 import { Provider } from 'react-redux';
 import * as Sentry from '@sentry/browser';
 import { I18nextProvider } from 'react-i18next';
+import katex from 'katex';
 import i18nConfig from './config/i18n';
 import { WHITELISTED_ERRORS } from './config/errors';
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
-import 'react-resizable/css/styles.css';
+import 'katex/dist/katex.min.css';
+import 'react-quill/dist/quill.core.css';
 import App from './App';
 import configureStore from './store/configure';
+
+// bind katex to the window object
+window.katex = katex;
 
 const { REACT_APP_SENTRY_DSN } = process.env;
 

@@ -1,11 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
-import { Typography, withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import Styles from '../../Styles';
 import './SpaceDescription.css';
 import Banner from '../common/Banner';
+import Text from '../common/Text';
+
+const style = {
+  fontSize: 'large',
+};
 
 const renderPreviewWarning = t => {
   return (
@@ -25,9 +30,13 @@ const SpaceDescription = ({ description, classes, start, saved }) => {
     <div className="SpaceDescription">
       <div>
         {saved ? null : renderPreviewWarning(t)}
-        <Typography variant="h4" className={classes.spaceDescription}>
-          <div dangerouslySetInnerHTML={{ __html: description }} />
-        </Typography>
+        <div className={classes.spaceDescription}>
+          <Text
+            content={description}
+            style={style}
+            className="SpaceDescriptionText"
+          />
+        </div>
         <Button
           variant="contained"
           className={classes.button}

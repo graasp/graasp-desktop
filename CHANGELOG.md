@@ -2,6 +2,58 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.13.1](https://github.com/graasp/graasp-desktop/compare/v0.13.0...v0.13.1) (2019-08-20)
+
+### Bug Fixes
+
+- fall back on default language for proxied labs ([a7007b2](https://github.com/graasp/graasp-desktop/commit/a7007b2)), closes [#173](https://github.com/graasp/graasp-desktop/issues/173)
+
+# [0.13.0](https://github.com/graasp/graasp-desktop/compare/v0.12.0...v0.13.0) (2019-08-20)
+
+### Features
+
+- support tools in sidebar ([de3e0b8](https://github.com/graasp/graasp-desktop/commit/de3e0b8)), closes [#174](https://github.com/graasp/graasp-desktop/issues/174)
+
+# [0.12.0](https://github.com/graasp/graasp-desktop/compare/v0.11.6...v0.12.0) (2019-08-16)
+
+### Bug Fixes
+
+- add vertical margin between apps/labs ([da3253d](https://github.com/graasp/graasp-desktop/commit/da3253d)), closes [#167](https://github.com/graasp/graasp-desktop/issues/167)
+- fix space between apps/labs ([01c0e28](https://github.com/graasp/graasp-desktop/commit/01c0e28)), closes [#167](https://github.com/graasp/graasp-desktop/issues/167)
+- hide app content that is below resize div ([9bac761](https://github.com/graasp/graasp-desktop/commit/9bac761)), closes [#172](https://github.com/graasp/graasp-desktop/issues/172)
+- show item descriptions ([31d6427](https://github.com/graasp/graasp-desktop/commit/31d6427)), closes [#170](https://github.com/graasp/graasp-desktop/issues/170)
+
+### Features
+
+- remember the height of the apps/labs ([9fa527d](https://github.com/graasp/graasp-desktop/commit/9fa527d)), closes [#165](https://github.com/graasp/graasp-desktop/issues/165)
+- support math equations ([1140667](https://github.com/graasp/graasp-desktop/commit/1140667)), closes [#164](https://github.com/graasp/graasp-desktop/issues/164)
+
+## [0.11.6](https://github.com/graasp/graasp-desktop/compare/v0.11.5...v0.11.6) (2019-08-08)
+
+### Bug Fixes
+
+- default to using https if url has no protocol ([3b6441e](https://github.com/graasp/graasp-desktop/commit/3b6441e)), closes [#161](https://github.com/graasp/graasp-desktop/issues/161)
+- fix windows exceptions on loading and deleting spaces ([77afd33](https://github.com/graasp/graasp-desktop/commit/77afd33)), closes [#159](https://github.com/graasp/graasp-desktop/issues/159)
+
+## [0.11.5](https://github.com/graasp/graasp-desktop/compare/v0.11.4...v0.11.5) (2019-08-06)
+
+### Bug Fixes
+
+- define homepage in openAboutWindow not package.json ([9b81fc5](https://github.com/graasp/graasp-desktop/commit/9b81fc5)), closes [#156](https://github.com/graasp/graasp-desktop/issues/156)
+
+## [0.11.4](https://github.com/graasp/graasp-desktop/compare/v0.11.3...v0.11.4) (2019-08-06)
+
+### Bug Fixes
+
+- about menu working for Windows and Linux ([27b8826](https://github.com/graasp/graasp-desktop/commit/27b8826)), closes [#134](https://github.com/graasp/graasp-desktop/issues/134)
+- display icon image in about menu for pack ([cb45bab](https://github.com/graasp/graasp-desktop/commit/cb45bab)), closes [#134](https://github.com/graasp/graasp-desktop/issues/134)
+- do not fail if extension is missing ([b3bf56a](https://github.com/graasp/graasp-desktop/commit/b3bf56a)), closes [#155](https://github.com/graasp/graasp-desktop/issues/155)
+- implement translate function correctly ([3816c2d](https://github.com/graasp/graasp-desktop/commit/3816c2d)), closes [#150](https://github.com/graasp/graasp-desktop/issues/150)
+- open openAboutWindow after pack ([a7f1b62](https://github.com/graasp/graasp-desktop/commit/a7f1b62))
+- remove menu bar from about window (and others) ([13d63ad](https://github.com/graasp/graasp-desktop/commit/13d63ad))
+- resolve path for app.getPath for Windows ([714cd5d](https://github.com/graasp/graasp-desktop/commit/714cd5d)), closes [#144](https://github.com/graasp/graasp-desktop/issues/144)
+- set bug report link and pull info from package.json in about window ([787b19e](https://github.com/graasp/graasp-desktop/commit/787b19e)), closes [#142](https://github.com/graasp/graasp-desktop/issues/142)
+
 ## [0.11.3](https://github.com/graasp/graasp-desktop/compare/v0.11.2...v0.11.3) (2019-07-22)
 
 ### Bug Fixes

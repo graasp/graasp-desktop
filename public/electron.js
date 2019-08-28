@@ -4,7 +4,6 @@ const {
   shell,
   ipcMain,
   Menu,
-  dialog,
   // eslint-disable-next-line import/no-extraneous-dependencies
 } = require('electron');
 const path = require('path');
@@ -18,12 +17,11 @@ const openAboutWindow = require('about-window').default;
 const logger = require('./app/logger');
 const { ensureDatabaseExists, bootstrapDatabase } = require('./app/db');
 const {
-  VAR_FOLDER,
   DATABASE_PATH,
   ICON_PATH,
   PRODUCT_NAME,
-  DEFAULT_LANG,
   DEFAULT_DEVELOPER_MODE,
+  escapeEscapeCharacter,
 } = require('./app/config/config');
 const {
   LOAD_SPACE_CHANNEL,
@@ -31,12 +29,9 @@ const {
   DELETE_SPACE_CHANNEL,
   GET_SPACE_CHANNEL,
   GET_SPACES_CHANNEL,
-  RESPOND_EXPORT_SPACE_PROMPT_CHANNEL,
-  RESPOND_DELETE_SPACE_PROMPT_CHANNEL,
   SHOW_DELETE_SPACE_PROMPT_CHANNEL,
   SHOW_EXPORT_SPACE_PROMPT_CHANNEL,
   SHOW_LOAD_SPACE_PROMPT_CHANNEL,
-  RESPOND_LOAD_SPACE_PROMPT_CHANNEL,
   SAVE_SPACE_CHANNEL,
   GET_USER_FOLDER_CHANNEL,
   GET_LANGUAGE_CHANNEL,
@@ -65,9 +60,17 @@ const {
   getSpace,
   deleteSpace,
   exportSpace,
+  showLoadSpacePrompt,
+  showExportSpacePrompt,
+  showDeleteSpacePrompt,
   getGeolocationEnabled,
   setGeolocationEnabled,
+  getUserFolder,
+  setLanguage,
+  getLanguage,
+  setDeveloperMode
 } = require('./app/listeners');
+const isMac = require('./app/utils/isMac');
 
 // add keys to process
 Object.keys(env).forEach(key => {
@@ -138,51 +141,66 @@ const createWindow = () => {
   });
 };
 
-// const handleLoad = () => {
-//   logger.info('load');
-// };
+const macAppMenu = [
+  {
+    label: app.getName(),
+    submenu: [
+      { role: 'about' },
+      { type: 'separator' },
+      { role: 'services' },
+      { type: 'separator' },
+      { role: 'hide' },
+      { role: 'hideothers' },
+      { role: 'unhide' },
+      { type: 'separator' },
+      { role: 'quit' },
+    ],
+  },
+];
+const standardAppMenu = [];
+const macFileSubmenu = [{ role: 'close' }];
+const standardFileSubmenu = [
+  {
+    label: 'About',
+    click: () => {
+      openAboutWindow({
+        // asset for icon is in the public/assets folder
+        base_path: escapeEscapeCharacter(app.getAppPath()),
+        icon_path: path.join(__dirname, ICON_PATH),
+        copyright: 'Copyright © 2019 React',
+        product_name: PRODUCT_NAME,
+        use_version_info: false,
+        adjust_window_size: true,
+        win_options: {
+          parent: mainWindow,
+          resizable: false,
+          minimizable: false,
+          maximizable: false,
+          movable: true,
+          frame: true,
+        },
+        // automatically show info from package.json
+        package_json_dir: path.join(__dirname, '../'),
+        bug_link_text: 'Report a Bug/Issue',
+        // we cannot use homepage from package.json as
+        // create-react-app uses it to build the frontend
+        homepage: 'https://graasp.eu/',
+      });
+    },
+  },
+  { role: 'quit' },
+];
+
+const learnMoreLink =
+  'https://github.com/react-epfl/graasp-desktop/blob/master/README.md';
+const fileIssueLink = 'https://github.com/react-epfl/graasp-desktop/issues';
 
 const generateMenu = () => {
   const template = [
+    ...(isMac() ? macAppMenu : standardAppMenu),
     {
       label: 'File',
-      submenu: [
-        // {
-        //   label: 'Load Space',
-        //   click() {
-        //     handleLoad();
-        //   },
-        // },
-        {
-          label: 'About',
-          click: () => {
-            openAboutWindow({
-              icon_path: ICON_PATH,
-              copyright: 'Copyright © 2019 React',
-              product_name: PRODUCT_NAME,
-              use_version_info: false,
-              adjust_window_size: true,
-              win_options: {
-                parent: mainWindow,
-                resizable: false,
-                minimizable: false,
-                maximizable: false,
-                movable: true,
-                frame: true,
-              },
-              // ? automatically showing info from package.json is nice but not translated into different languages
-              package_json_dir: path.join(__dirname, '../'),
-              bug_link_text: 'Report a Bug/Issue',
-              // ? nor is a close button
-              // show_close_button: 'Close',
-            });
-          },
-        },
-        {
-          label: 'Quit',
-          role: 'quit',
-        },
-      ],
+      submenu: [...(isMac() ? macFileSubmenu : standardFileSubmenu)],
     },
     { type: 'separator' },
     {
@@ -194,9 +212,7 @@ const generateMenu = () => {
         { role: 'cut' },
         { role: 'copy' },
         { role: 'paste' },
-        { role: 'pasteandmatchstyle' },
-        { role: 'delete' },
-        { role: 'selectall' },
+        { role: 'selectAll' },
       ],
     },
     {
@@ -207,7 +223,6 @@ const generateMenu = () => {
         { role: 'toggledevtools' },
         { type: 'separator' },
         { role: 'resetzoom' },
-        { role: 'resetzoom' },
         { role: 'zoomin' },
         { role: 'zoomout' },
         { type: 'separator' },
@@ -216,7 +231,18 @@ const generateMenu = () => {
     },
     {
       role: 'window',
-      submenu: [{ role: 'minimize' }, { role: 'close' }],
+      submenu: [
+        { role: 'minimize' },
+        { role: 'zoom' },
+        ...(isMac()
+          ? [
+              { type: 'separator' },
+              { role: 'front' },
+              { type: 'separator' },
+              { role: 'window' },
+            ]
+          : [{ role: 'close' }]),
+      ],
     },
     {
       role: 'help',
@@ -224,18 +250,14 @@ const generateMenu = () => {
         {
           click() {
             // eslint-disable-next-line
-            require('electron').shell.openExternal(
-              'https://github.com/react-epfl/graasp-desktop/blob/master/README.md'
-            );
+            require('electron').shell.openExternal(learnMoreLink);
           },
           label: 'Learn More',
         },
         {
           click() {
             // eslint-disable-next-line
-            require('electron').shell.openExternal(
-              'https://github.com/react-epfl/graasp-desktop/issues'
-            );
+            require('electron').shell.openExternal(fileIssueLink);
           },
           label: 'File Issue on GitHub',
         },
@@ -243,8 +265,14 @@ const generateMenu = () => {
     },
   ];
 
-  Menu.setApplicationMenu(null);
-  mainWindow.setMenu(Menu.buildFromTemplate(template));
+  if (isMac()) {
+    Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+  } else {
+    // this causes the menu to change on mac after first use
+    // and it's no longer possible to use the mac defaults
+    Menu.setApplicationMenu(null);
+    mainWindow.setMenu(Menu.buildFromTemplate(template));
+  }
 };
 
 app.on('ready', async () => {
@@ -281,71 +309,28 @@ app.on('ready', async () => {
   ipcMain.on(EXPORT_SPACE_CHANNEL, exportSpace(mainWindow, db));
 
   // prompt when loading a space
-  ipcMain.on(SHOW_LOAD_SPACE_PROMPT_CHANNEL, (event, options) => {
-    dialog.showOpenDialog(mainWindow, options, filePaths => {
-      mainWindow.webContents.send(RESPOND_LOAD_SPACE_PROMPT_CHANNEL, filePaths);
-    });
-  });
+  ipcMain.on(SHOW_LOAD_SPACE_PROMPT_CHANNEL, showLoadSpacePrompt(mainWindow));
 
   // prompt when exporting a space
-  ipcMain.on(SHOW_EXPORT_SPACE_PROMPT_CHANNEL, (event, spaceTitle) => {
-    const options = {
-      title: 'Save As',
-      defaultPath: `${spaceTitle}.zip`,
-    };
-    dialog.showSaveDialog(mainWindow, options, filePath => {
-      mainWindow.webContents.send(
-        RESPOND_EXPORT_SPACE_PROMPT_CHANNEL,
-        filePath
-      );
-    });
-  });
+  ipcMain.on(
+    SHOW_EXPORT_SPACE_PROMPT_CHANNEL,
+    showExportSpacePrompt(mainWindow)
+  );
 
   // prompt when deleting a space
-  ipcMain.on(SHOW_DELETE_SPACE_PROMPT_CHANNEL, () => {
-    const options = {
-      type: 'warning',
-      buttons: ['Cancel', 'Delete'],
-      defaultId: 0,
-      cancelId: 0,
-      message: 'Are you sure you want to delete this space?',
-    };
-    dialog.showMessageBox(mainWindow, options, respond => {
-      mainWindow.webContents.send(RESPOND_DELETE_SPACE_PROMPT_CHANNEL, respond);
-    });
-  });
+  ipcMain.on(
+    SHOW_DELETE_SPACE_PROMPT_CHANNEL,
+    showDeleteSpacePrompt(mainWindow)
+  );
 
   // called when getting user folder
-  ipcMain.on(GET_USER_FOLDER_CHANNEL, () => {
-    try {
-      mainWindow.webContents.send(GET_USER_FOLDER_CHANNEL, VAR_FOLDER);
-    } catch (e) {
-      logger.error(e);
-      mainWindow.webContents.send(GET_USER_FOLDER_CHANNEL, ERROR_GENERAL);
-    }
-  });
+  ipcMain.on(GET_USER_FOLDER_CHANNEL, getUserFolder(mainWindow));
 
   // called when getting language
-  ipcMain.on(GET_LANGUAGE_CHANNEL, () => {
-    try {
-      const lang = db.get('user.lang').value() || DEFAULT_LANG;
-      mainWindow.webContents.send(GET_LANGUAGE_CHANNEL, lang);
-    } catch (e) {
-      logger.error(e);
-      mainWindow.webContents.send(GET_LANGUAGE_CHANNEL, ERROR_GENERAL);
-    }
-  });
+  ipcMain.on(GET_LANGUAGE_CHANNEL, getLanguage(mainWindow, db));
 
   // called when setting language
-  ipcMain.on(SET_LANGUAGE_CHANNEL, (event, lang) => {
-    try {
-      db.set('user.lang', lang).write();
-      mainWindow.webContents.send(SET_LANGUAGE_CHANNEL, lang);
-    } catch (e) {
-      logger.error(e);
-      mainWindow.webContents.send(SET_LANGUAGE_CHANNEL, ERROR_GENERAL);
-    }
-  });
+  ipcMain.on(SET_LANGUAGE_CHANNEL, setLanguage(mainWindow));
 
   // called when getting developer mode
   ipcMain.on(GET_DEVELOPER_MODE_CHANNEL, () => {
@@ -360,15 +345,7 @@ app.on('ready', async () => {
   });
 
   // called when setting developer mode
-  ipcMain.on(SET_DEVELOPER_MODE_CHANNEL, (event, developerMode) => {
-    try {
-      db.set('user.developerMode', developerMode).write();
-      mainWindow.webContents.send(SET_DEVELOPER_MODE_CHANNEL, developerMode);
-    } catch (e) {
-      logger.error(e);
-      mainWindow.webContents.send(SET_DEVELOPER_MODE_CHANNEL, ERROR_GENERAL);
-    }
-  });
+  ipcMain.on(SET_DEVELOPER_MODE_CHANNEL, setDeveloperMode(mainWindow, db));
 
   // called when getting geolocation enabled
   ipcMain.on(
@@ -387,16 +364,33 @@ app.on('ready', async () => {
     const defaultResponse = [];
     const { userId, appInstanceId, spaceId, subSpaceId, type } = data;
     try {
-      const appInstanceResourcesHandle = db
-        .get('spaces')
-        .find({ id: spaceId })
-        .get('phases')
-        .find({ id: subSpaceId })
-        .get('items')
-        .filter(item => item.appInstance)
-        .map(item => item.appInstance)
-        .find({ id: appInstanceId })
-        .get('resources');
+      // tools live on the parent
+      const tool = spaceId === subSpaceId;
+
+      let appInstanceResourcesHandle;
+
+      // if not a tool, we need to go one step further into the phase
+      if (!tool) {
+        appInstanceResourcesHandle = db
+          .get('spaces')
+          .find({ id: spaceId })
+          .get('phases')
+          .find({ id: subSpaceId })
+          .get('items')
+          .filter(item => item.appInstance)
+          .map(item => item.appInstance)
+          .find({ id: appInstanceId })
+          .get('resources');
+      } else {
+        appInstanceResourcesHandle = db
+          .get('spaces')
+          .find({ id: spaceId })
+          .get('items')
+          .filter(item => item.appInstance)
+          .map(item => item.appInstance)
+          .find({ id: appInstanceId })
+          .get('resources');
+      }
 
       // only filter by type if provided
       if (type) {
@@ -463,18 +457,34 @@ app.on('ready', async () => {
         id: ObjectId().str,
       };
 
+      // tools live on the parent
+      const tool = spaceId === subSpaceId;
+
       // write the resource to the database
-      db.get('spaces')
-        .find({ id: spaceId })
-        .get('phases')
-        .find({ id: subSpaceId })
-        .get('items')
-        .filter(item => item.appInstance)
-        .map(item => item.appInstance)
-        .find({ id: appInstanceId })
-        .get('resources')
-        .push(resourceToWrite)
-        .write();
+      // if not a tool, we need to go one step further into the phase
+      if (!tool) {
+        db.get('spaces')
+          .find({ id: spaceId })
+          .get('phases')
+          .find({ id: subSpaceId })
+          .get('items')
+          .filter(item => item.appInstance)
+          .map(item => item.appInstance)
+          .find({ id: appInstanceId })
+          .get('resources')
+          .push(resourceToWrite)
+          .write();
+      } else {
+        db.get('spaces')
+          .find({ id: spaceId })
+          .get('items')
+          .filter(item => item.appInstance)
+          .map(item => item.appInstance)
+          .find({ id: appInstanceId })
+          .get('resources')
+          .push(resourceToWrite)
+          .write();
+      }
 
       // send back the resource
       mainWindow.webContents.send(
@@ -496,19 +506,41 @@ app.on('ready', async () => {
         updatedAt: now,
         data,
       };
-      const resource = db
-        .get('spaces')
-        .find({ id: spaceId })
-        .get('phases')
-        .find({ id: subSpaceId })
-        .get('items')
-        .filter(item => item.appInstance)
-        .map(item => item.appInstance)
-        .find({ id: appInstanceId })
-        .get('resources')
-        .find({ id })
-        .assign(fieldsToUpdate)
-        .value();
+
+      let resource;
+
+      // tools live on the parent
+      const tool = spaceId === subSpaceId;
+
+      // if not a tool, we need to go one step further into the phase
+      if (!tool) {
+        resource = db
+          .get('spaces')
+          .find({ id: spaceId })
+          .get('phases')
+          .find({ id: subSpaceId })
+          .get('items')
+          .filter(item => item.appInstance)
+          .map(item => item.appInstance)
+          .find({ id: appInstanceId })
+          .get('resources')
+          .find({ id })
+          .assign(fieldsToUpdate)
+          .value();
+      } else {
+        resource = db
+          .get('spaces')
+          .find({ id: spaceId })
+          .get('items')
+          .filter(item => item.appInstance)
+          .map(item => item.appInstance)
+          .find({ id: appInstanceId })
+          .get('resources')
+          .find({ id })
+          .assign(fieldsToUpdate)
+          .value();
+      }
+
       db.write();
       mainWindow.webContents.send(
         PATCH_APP_INSTANCE_RESOURCE_CHANNEL,
@@ -524,16 +556,34 @@ app.on('ready', async () => {
   ipcMain.on(GET_APP_INSTANCE_CHANNEL, (event, payload = {}) => {
     try {
       const { spaceId, subSpaceId, id } = payload;
-      const appInstance = db
-        .get('spaces')
-        .find({ id: spaceId })
-        .get('phases')
-        .find({ id: subSpaceId })
-        .get('items')
-        .filter(item => item.appInstance)
-        .map(item => item.appInstance)
-        .find({ id })
-        .value();
+
+      let appInstance;
+
+      // tools live on the parent
+      const tool = spaceId === subSpaceId;
+
+      // if not a tool, we need to go one step further into the phase
+      if (!tool) {
+        appInstance = db
+          .get('spaces')
+          .find({ id: spaceId })
+          .get('phases')
+          .find({ id: subSpaceId })
+          .get('items')
+          .filter(item => item.appInstance)
+          .map(item => item.appInstance)
+          .find({ id })
+          .value();
+      } else {
+        appInstance = db
+          .get('spaces')
+          .find({ id: spaceId })
+          .get('items')
+          .filter(item => item.appInstance)
+          .map(item => item.appInstance)
+          .find({ id })
+          .value();
+      }
 
       mainWindow.webContents.send(GET_APP_INSTANCE_CHANNEL, appInstance);
     } catch (e) {
