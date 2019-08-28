@@ -20,7 +20,6 @@ const {
   DATABASE_PATH,
   ICON_PATH,
   PRODUCT_NAME,
-  DEFAULT_LANG,
   escapeEscapeCharacter,
 } = require('./app/config/config');
 const {
@@ -67,8 +66,9 @@ const {
   setGeolocationEnabled,
   getUserFolder,
   setLanguage,
-  getLanguage,
+  getLanguage
   getDeveloperMode,
+  setDeveloperMode
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
 
@@ -336,15 +336,7 @@ app.on('ready', async () => {
   ipcMain.on(GET_DEVELOPER_MODE_CHANNEL, getDeveloperMode(mainWindow, db));
 
   // called when setting developer mode
-  ipcMain.on(SET_DEVELOPER_MODE_CHANNEL, (event, developerMode) => {
-    try {
-      db.set('user.developerMode', developerMode).write();
-      mainWindow.webContents.send(SET_DEVELOPER_MODE_CHANNEL, developerMode);
-    } catch (e) {
-      logger.error(e);
-      mainWindow.webContents.send(SET_DEVELOPER_MODE_CHANNEL, ERROR_GENERAL);
-    }
-  });
+  ipcMain.on(SET_DEVELOPER_MODE_CHANNEL, setDeveloperMode(mainWindow, db));
 
   // called when getting geolocation enabled
   ipcMain.on(
