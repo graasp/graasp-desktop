@@ -14,6 +14,8 @@ const showDeleteSpacePrompt = require('./showDeleteSpacePrompt');
 const getUserFolder = require('./getUserFolder');
 const setLanguage = require('./setLanguage');
 const getLanguage = require('./getLanguage');
+const setDeveloperMode = require('./setDeveloperMode');
+
 
 module.exports = {
   loadSpace,
@@ -32,4 +34,5 @@ module.exports = {
   getUserFolder,
   setLanguage,
   getLanguage,
+  setDeveloperMode
 };
