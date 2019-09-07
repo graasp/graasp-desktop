@@ -17,6 +17,7 @@ import { saveSpace } from '../../actions/space';
 import DeleteButton from './DeleteButton';
 import ExportButton from './ExportButton';
 import SyncButton from './SyncButton';
+import ClearButton from './ClearButton';
 
 class SpaceHeader extends Component {
   static propTypes = {
@@ -111,6 +112,15 @@ class SpaceHeader extends Component {
     return null;
   }
 
+  renderClearButton() {
+    const { space } = this.props;
+    const { saved, id } = space;
+    if (saved) {
+      return <ClearButton id={id} />;
+    }
+    return null;
+  }
+
   render() {
     const {
       openDrawer,
@@ -139,6 +149,7 @@ class SpaceHeader extends Component {
           </IconButton>
           {name}
           <span style={{ position: 'absolute', right: 20 }}>
+            {this.renderClearButton()}
             {this.renderSyncButton()}
             {this.renderPreviewIcon()}
             {this.renderDeleteButton()}

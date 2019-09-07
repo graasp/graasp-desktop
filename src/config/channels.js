@@ -37,4 +37,8 @@ module.exports = {
   RESPOND_SYNC_SPACE_PROMPT_CHANNEL: 'prompt:space:sync:respond',
   SYNC_SPACE_CHANNEL: 'space:sync',
   SYNCED_SPACE_CHANNEL: 'space:synced',
+  CLEAR_USER_INPUT_CHANNEL: 'space:clear',
+  CLEARED_USER_INPUT_CHANNEL: 'space:cleared',
+  SHOW_CLEAR_USER_INPUT_PROMPT_CHANNEL: 'prompt:space:clear:show',
+  RESPOND_CLEAR_USER_INPUT_PROMPT_CHANNEL: 'prompt:space:clear:respond',
 };

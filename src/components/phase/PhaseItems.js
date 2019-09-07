@@ -10,15 +10,10 @@ const PhaseItems = ({ items, phaseId, spaceId }) => {
   return items.map(item => {
     const { description } = item;
     return (
-      <>
+      <div key={item.id}>
         <PhaseItemDescription description={description} />
-        <PhaseItem
-          key={item.id}
-          phaseId={phaseId}
-          spaceId={spaceId}
-          item={item}
-        />
-      </>
+        <PhaseItem phaseId={phaseId} spaceId={spaceId} item={item} />
+      </div>
     );
   });
 };

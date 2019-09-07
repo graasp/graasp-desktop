@@ -16,6 +16,8 @@ import {
   GET_SPACES_NEARBY_SUCCEEDED,
   FLAG_SYNCING_SPACE,
   SYNC_SPACE_SUCCEEDED,
+  FLAG_CLEARING_USER_INPUT,
+  CLEAR_USER_INPUT_SUCCEEDED,
 } from '../types';
 import { updateActivityList } from './common';
 
@@ -50,6 +52,7 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case FLAG_EXPORTING_SPACE:
     case FLAG_DELETING_SPACE:
     case FLAG_SYNCING_SPACE:
+    case FLAG_CLEARING_USER_INPUT:
       return state.updateIn(
         ['current', 'activity'],
         updateActivityList(payload)
@@ -63,6 +66,7 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case GET_SPACE_SUCCEEDED:
     case SAVE_SPACE_SUCCEEDED:
     case SYNC_SPACE_SUCCEEDED:
+    case CLEAR_USER_INPUT_SUCCEEDED:
       return state.setIn(['current', 'content'], Map(payload));
     case FLAG_GETTING_SPACES_NEARBY:
       return state.setIn(['nearby', 'activity'], payload);

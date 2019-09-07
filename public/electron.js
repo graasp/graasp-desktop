@@ -47,8 +47,9 @@ const {
   SET_DATABASE_CHANNEL,
   SHOW_SYNC_SPACE_PROMPT_CHANNEL,
   SYNC_SPACE_CHANNEL,
+  CLEAR_USER_INPUT_CHANNEL,
+  SHOW_CLEAR_USER_INPUT_PROMPT_CHANNEL,
 } = require('./app/config/channels');
-const { ERROR_GENERAL } = require('./app/config/errors');
 const env = require('./env.json');
 const {
   loadSpace,
@@ -66,9 +67,11 @@ const {
   setGeolocationEnabled,
   getUserFolder,
   setLanguage,
-  getLanguage
+  getLanguage,
   getDeveloperMode,
-  setDeveloperMode
+  setDeveloperMode,
+  clearUserInput,
+  showClearUserInputPrompt,
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
 
@@ -322,6 +325,14 @@ app.on('ready', async () => {
     SHOW_DELETE_SPACE_PROMPT_CHANNEL,
     showDeleteSpacePrompt(mainWindow)
   );
+
+  // prompt when clearing the user input in a space
+  ipcMain.on(
+    SHOW_CLEAR_USER_INPUT_PROMPT_CHANNEL,
+    showClearUserInputPrompt(mainWindow)
+  );
+
+  ipcMain.on(CLEAR_USER_INPUT_CHANNEL, clearUserInput(mainWindow, db));
 
   // called when getting user folder
   ipcMain.on(GET_USER_FOLDER_CHANNEL, getUserFolder(mainWindow));

@@ -16,6 +16,8 @@ const setLanguage = require('./setLanguage');
 const getLanguage = require('./getLanguage');
 const getDeveloperMode = require('./getDeveloperMode');
 const setDeveloperMode = require('./setDeveloperMode');
+const clearUserInput = require('./clearUserInput');
+const showClearUserInputPrompt = require('./showClearUserInputPrompt');
 
 module.exports = {
   loadSpace,
@@ -35,5 +37,7 @@ module.exports = {
   setLanguage,
   getLanguage,
   getDeveloperMode,
-  setDeveloperMode
+  setDeveloperMode,
+  clearUserInput,
+  showClearUserInputPrompt,
 };

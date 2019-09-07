@@ -15,6 +15,7 @@ import {
   GET_SPACES_NEARBY_SUCCEEDED,
   FLAG_SYNCING_SPACE,
   SYNC_SPACE_SUCCEEDED,
+  FLAG_CLEARING_USER_INPUT,
 } from '../types';
 import {
   ERROR_ZIP_CORRUPTED,
@@ -42,6 +43,10 @@ import {
   RESPOND_SYNC_SPACE_PROMPT_CHANNEL,
   SYNC_SPACE_CHANNEL,
   SYNCED_SPACE_CHANNEL,
+  CLEAR_USER_INPUT_CHANNEL,
+  CLEARED_USER_INPUT_CHANNEL,
+  RESPOND_CLEAR_USER_INPUT_PROMPT_CHANNEL,
+  SHOW_CLEAR_USER_INPUT_PROMPT_CHANNEL,
 } from '../config/channels';
 import {
   // ERROR_DOWNLOADING_MESSAGE,
@@ -63,6 +68,8 @@ import {
   SUCCESS_SPACE_LOADED_MESSAGE,
   SUCCESS_SYNCING_MESSAGE,
   ERROR_SYNCING_MESSAGE,
+  ERROR_CLEARING_USER_INPUT_MESSAGE,
+  SUCCESS_CLEARING_USER_INPUT_MESSAGE,
 } from '../config/messages';
 import { createFlag, isErrorResponse } from './common';
 import {
@@ -80,6 +87,7 @@ const flagExportingSpace = createFlag(FLAG_EXPORTING_SPACE);
 const flagSavingSpace = createFlag(FLAG_SAVING_SPACE);
 const flagGettingSpacesNearby = createFlag(FLAG_GETTING_SPACES_NEARBY);
 const flagSyncingSpace = createFlag(FLAG_SYNCING_SPACE);
+const flagClearingUserInput = createFlag(FLAG_CLEARING_USER_INPUT);
 
 /**
  * helper function to wrap a listener to the get space channel around a promise
@@ -285,6 +293,43 @@ const deleteSpace = ({ id }) => dispatch => {
   });
 };
 
+const clearUserInput = async ({ id }) => async dispatch => {
+  try {
+    // show confirmation prompt
+    window.ipcRenderer.send(SHOW_CLEAR_USER_INPUT_PROMPT_CHANNEL);
+
+    // listen for response from prompt
+    window.ipcRenderer.once(
+      RESPOND_CLEAR_USER_INPUT_PROMPT_CHANNEL,
+      (event, response) => {
+        if (response === 1) {
+          dispatch(flagClearingUserInput(true));
+          window.ipcRenderer.send(CLEAR_USER_INPUT_CHANNEL, { id });
+        }
+      }
+    );
+
+    // listen for response from backend
+    window.ipcRenderer.once(CLEARED_USER_INPUT_CHANNEL, (event, response) => {
+      if (response === ERROR_GENERAL) {
+        toastr.error(ERROR_MESSAGE_HEADER, ERROR_CLEARING_USER_INPUT_MESSAGE);
+      } else {
+        toastr.success(
+          SUCCESS_MESSAGE_HEADER,
+          SUCCESS_CLEARING_USER_INPUT_MESSAGE
+        );
+        dispatch({
+          type: GET_SPACE_SUCCEEDED,
+          payload: response,
+        });
+      }
+      dispatch(flagClearingUserInput(false));
+    });
+  } catch (err) {
+    dispatch(flagClearingUserInput(false));
+  }
+};
+
 const syncSpace = async ({ id }) => async dispatch => {
   try {
     const url = generateGetSpaceEndpoint(id);
@@ -402,4 +447,5 @@ export {
   saveSpace,
   getSpacesNearby,
   syncSpace,
+  clearUserInput,
 };
