@@ -80,13 +80,18 @@ class SpaceScreen extends Component {
   }
 
   componentDidUpdate() {
+    const { selected } = this.state;
     const {
       deleted,
+      phase,
       history: { replace },
     } = this.props;
     // redirect to home if space is deleted
     if (deleted) {
       replace(HOME_PATH);
+    } else if (selected !== -1 && (!phase || phase.isEmpty())) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ selected: -1 });
     }
   }
 
