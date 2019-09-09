@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [0.14.0](https://github.com/graasp/graasp-desktop/compare/v0.13.1...v0.14.0) (2019-09-09)
+
+### Bug Fixes
+
+- correctly import google analytics id ([7391bf5](https://github.com/graasp/graasp-desktop/commit/7391bf5)), closes [#188](https://github.com/graasp/graasp-desktop/issues/188)
+- make dialogs modal ([6f1efee](https://github.com/graasp/graasp-desktop/commit/6f1efee)), closes [#152](https://github.com/graasp/graasp-desktop/issues/152)
+- reset side menu selection when space is updated ([ceb5983](https://github.com/graasp/graasp-desktop/commit/ceb5983)), closes [#187](https://github.com/graasp/graasp-desktop/issues/187)
+
+### Features
+
+- allow user to delete all user input in a space ([f5ac61d](https://github.com/graasp/graasp-desktop/commit/f5ac61d)), closes [#184](https://github.com/graasp/graasp-desktop/issues/184)
+
 ## [0.13.1](https://github.com/graasp/graasp-desktop/compare/v0.13.0...v0.13.1) (2019-08-20)
 
 ### Bug Fixes
