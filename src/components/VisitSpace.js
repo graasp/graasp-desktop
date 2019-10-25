@@ -23,11 +23,12 @@ import Styles from '../Styles';
 import Loader from './LoadSpace';
 import {
   ERROR_MESSAGE_HEADER,
-  INVALID_SPACE_ID,
+  INVALID_SPACE_ID_OR_URL,
   OFFLINE_ERROR_MESSAGE,
 } from '../config/messages';
 import MainMenu from './common/MainMenu';
 import { isValidSpaceId } from '../utils/validators';
+import extractSpaceId from '../utils/extractSpaceId';
 
 class VisitSpace extends Component {
   state = {
@@ -64,12 +65,13 @@ class VisitSpace extends Component {
 
   handleClick = () => {
     const { history } = this.props;
-    const { spaceId: id } = this.state;
+    const { spaceId } = this.state;
+    const id = extractSpaceId(spaceId) || spaceId;
     if (!window.navigator.onLine) {
       return toastr.error(ERROR_MESSAGE_HEADER, OFFLINE_ERROR_MESSAGE);
     }
     if (!isValidSpaceId(id)) {
-      return toastr.error(ERROR_MESSAGE_HEADER, INVALID_SPACE_ID);
+      return toastr.error(ERROR_MESSAGE_HEADER, INVALID_SPACE_ID_OR_URL);
     }
     if (id && id !== '') {
       const { replace } = history;

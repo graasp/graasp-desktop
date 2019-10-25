@@ -30,6 +30,7 @@ const ERROR_GETTING_USER_FOLDER =
 const ERROR_GETTING_LANGUAGE = 'There was an error getting the language.';
 const ERROR_SETTING_LANGUAGE = 'There was an error setting the language.';
 const INVALID_SPACE_ID = 'Invalid space ID.';
+const INVALID_SPACE_ID_OR_URL = 'Invalid space ID or URL.';
 const ERROR_GETTING_DEVELOPER_MODE =
   'There was an error getting the developer mode';
 const ERROR_SETTING_DEVELOPER_MODE =
@@ -42,6 +43,10 @@ const ERROR_GETTING_DATABASE = 'There was an error getting the database.';
 const ERROR_SETTING_DATABASE = 'There was an error updating the database.';
 const SUCCESS_SYNCING_MESSAGE = 'Space was successfully synced';
 const ERROR_SYNCING_MESSAGE = 'There was an error syncing the space.';
+const ERROR_CLEARING_USER_INPUT_MESSAGE =
+  'There was an error clearing the user input.';
+const SUCCESS_CLEARING_USER_INPUT_MESSAGE =
+  'User input was successfully cleared.';
 
 module.exports = {
   ERROR_GETTING_DEVELOPER_MODE,
@@ -71,8 +76,11 @@ module.exports = {
   ERROR_GETTING_SPACES_NEARBY,
   ERROR_GETTING_USER_FOLDER,
   INVALID_SPACE_ID,
+  INVALID_SPACE_ID_OR_URL,
   ERROR_GETTING_DATABASE,
   ERROR_SETTING_DATABASE,
   SUCCESS_SYNCING_MESSAGE,
   ERROR_SYNCING_MESSAGE,
+  ERROR_CLEARING_USER_INPUT_MESSAGE,
+  SUCCESS_CLEARING_USER_INPUT_MESSAGE,
 };
