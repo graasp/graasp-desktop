@@ -89,6 +89,10 @@ Sentry.init({ dsn: SENTRY_DSN });
 // get unique identifier for this machine
 const machineId = machineIdSync();
 
+// disable web security
+// see: https://github.com/electron/electron/issues/20710
+app.commandLine.appendSwitch('disable-web-security');
+
 const createWindow = () => {
   mainWindow = new BrowserWindow({
     backgroundColor: '#F7F7F7',
@@ -98,7 +102,7 @@ const createWindow = () => {
     webPreferences: {
       nodeIntegration: false,
       preload: `${__dirname}/app/preload.js`,
-      webSecurity: false,
+      // webSecurity: false,
     },
     height: 860,
     width: 1280,
