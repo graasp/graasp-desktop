@@ -285,7 +285,12 @@ const generateMenu = () => {
 app.on('ready', async () => {
   // updater
   autoUpdater.logger = logger;
-  autoUpdater.checkForUpdatesAndNotify();
+
+  // noinspection ES6MissingAwait
+  autoUpdater
+    .checkForUpdatesAndNotify()
+    .then()
+    .catch(err => logger.error(err));
 
   await ensureDatabaseExists(DATABASE_PATH);
   const db = bootstrapDatabase(DATABASE_PATH);
