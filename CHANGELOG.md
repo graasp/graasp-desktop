@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [0.15.0](https://github.com/graasp/graasp-desktop/compare/v0.14.0...v0.15.0) (2019-10-28)
+
+### Bug Fixes
+
+- allow building in macos catalina ([69aff4e](https://github.com/graasp/graasp-desktop/commit/69aff4ec2a73d7b7d2282972f0c138fd5b2c613e)), closes [#194](https://github.com/graasp/graasp-desktop/issues/194)
+- fix electron version ([e4b3725](https://github.com/graasp/graasp-desktop/commit/e4b3725a65d9de480b8863f80d671877b6a24e78))
+- silently catch update error ([cae98e0](https://github.com/graasp/graasp-desktop/commit/cae98e0c49491b74e0852147966b8340aae35a38)), closes [#196](https://github.com/graasp/graasp-desktop/issues/196)
+
+### Features
+
+- allow users to visit a space using a url ([af20a10](https://github.com/graasp/graasp-desktop/commit/af20a1041ce28bab92f495f6c5837706acf0ac7f)), closes [#193](https://github.com/graasp/graasp-desktop/issues/193)
+
 # [0.14.0](https://github.com/graasp/graasp-desktop/compare/v0.13.1...v0.14.0) (2019-09-09)
 
 ### Bug Fixes
