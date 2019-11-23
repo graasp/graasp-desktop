@@ -155,7 +155,8 @@
       "type": "distribution",
       "target": [
         "dmg",
-        "mas"
+        "mas",
+        "zip"
       ],
       "category": "public.app-category.education",
       "publish": [
