@@ -35,11 +35,13 @@ class SpaceGrid extends Component {
     dispatchClearSpace: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
     saved: PropTypes.bool,
+    showActions: PropTypes.bool,
   };
 
   static defaultProps = {
     folder: null,
     saved: false,
+    showActions: false,
   };
 
   componentDidMount() {
@@ -95,7 +97,7 @@ class SpaceGrid extends Component {
   };
 
   render() {
-    const { spaces, history, saved, t } = this.props;
+    const { spaces, history, saved, t, showActions } = this.props;
     const { columnNb } = this.state;
 
     const cardMargin = 15;
@@ -130,6 +132,7 @@ class SpaceGrid extends Component {
             image={this.generateThumbnail({ image })}
             text={description}
             viewLink={viewLink}
+            showActions={showActions}
           />
         </Grid>
       );

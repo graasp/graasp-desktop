@@ -116,7 +116,7 @@ class Home extends Component {
           })}
         >
           <div className={classes.drawerHeader} />
-          <SpaceGrid spaces={spaces} saved />
+          <SpaceGrid spaces={spaces} showActions saved />
         </main>
       </div>
     );

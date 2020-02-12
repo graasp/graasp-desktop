@@ -43,7 +43,7 @@ const styles = theme => ({
 });
 
 const MediaCard = props => {
-  const { classes, image, text, viewLink, space } = props;
+  const { classes, image, text, viewLink, space, showActions } = props;
   const { id, name } = space;
   const [expanded, setExpanded] = React.useState(false);
   const handleExpandClick = () => {
@@ -71,24 +71,26 @@ const MediaCard = props => {
         </CardContent>
       </Collapse>
 
-      <CardActions disableSpacing>
-        <DeleteButton id={id} />
-        <ExportButton space={space} />
-        <SyncButton id={id} />
+      {showActions && (
+        <CardActions disableSpacing>
+          <DeleteButton id={id} />
+          <ExportButton space={space} />
+          <SyncButton id={id} />
 
-        {text && (
-          <IconButton
-            className={clsx(classes.expand, {
-              [classes.expandOpen]: expanded,
-            })}
-            onClick={handleExpandClick}
-            aria-expanded={expanded}
-            aria-label="Show more"
-          >
-            <ExpandMoreIcon />
-          </IconButton>
-        )}
-      </CardActions>
+          {text && (
+            <IconButton
+              className={clsx(classes.expand, {
+                [classes.expandOpen]: expanded,
+              })}
+              onClick={handleExpandClick}
+              aria-expanded={expanded}
+              aria-label="Show more"
+            >
+              <ExpandMoreIcon />
+            </IconButton>
+          )}
+        </CardActions>
+      )}
     </Card>
   );
 };
@@ -102,10 +104,12 @@ MediaCard.propTypes = {
   image: PropTypes.string.isRequired,
   text: PropTypes.string,
   viewLink: PropTypes.func.isRequired,
+  showActions: PropTypes.bool,
 };
 
 MediaCard.defaultProps = {
   text: '',
+  showActions: false,
 };
 
 export default withStyles(styles)(MediaCard);
