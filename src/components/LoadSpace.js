@@ -75,6 +75,7 @@ class LoadSpace extends Component {
       RESPOND_LOAD_SPACE_PROMPT_CHANNEL,
       (event, filePaths) => {
         if (filePaths && filePaths.length) {
+          // currently we select only one file
           this.handleFileLocation(filePaths[0]);
         }
       }

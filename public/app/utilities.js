@@ -23,16 +23,20 @@ const isFileAvailable = filePath =>
   );
 
 const getExtension = ({ url, mimeType }) => {
+  logger.debug('getting extension');
   // default to mime type
   if (mimeType) {
     return mime.extension(mimeType);
   }
-  logger.debug(url, mimeType);
+  logger.debug(`url is: ${url}`);
+  logger.debug(`mime type is: ${mimeType}`);
   const matchExtension = url.match(/[^\\]*\.(\w+)$/);
-  logger.debug(matchExtension);
+  logger.debug('result of getting extension from url is:', matchExtension);
   if (matchExtension && matchExtension.length) {
     // extension is in index 1
-    return matchExtension[1];
+    const extension = matchExtension[1];
+    logger.debug(`extension is: ${extension}`);
+    return extension;
   }
   return null;
 };
