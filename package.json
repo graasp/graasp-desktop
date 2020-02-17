@@ -157,13 +157,13 @@
       "type": "distribution",
       "target": [
         "dmg",
-        "mas",
         "zip"
       ],
       "category": "public.app-category.education",
       "publish": [
         "github"
-      ]
+      ],
+      "gatekeeperAssess": true
     },
     "mas": {
       "entitlements": "assets/entitlements.mas.plist",
