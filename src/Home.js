@@ -26,8 +26,18 @@ class Home extends Component {
   };
 
   static propTypes = {
-    classes: PropTypes.shape({ appBar: PropTypes.string.isRequired })
-      .isRequired,
+    classes: PropTypes.shape({
+      root: PropTypes.string.isRequired,
+      appBar: PropTypes.string.isRequired,
+      appBarShift: PropTypes.string.isRequired,
+      menuButton: PropTypes.string.isRequired,
+      hide: PropTypes.string.isRequired,
+      drawer: PropTypes.string.isRequired,
+      drawerPaper: PropTypes.string.isRequired,
+      drawerHeader: PropTypes.string.isRequired,
+      content: PropTypes.string.isRequired,
+      contentShift: PropTypes.string.isRequired,
+    }).isRequired,
     theme: PropTypes.shape({ direction: PropTypes.string }).isRequired,
     dispatchGetSpaces: PropTypes.func.isRequired,
     spaces: ImmutablePropTypes.setOf(
@@ -134,9 +144,6 @@ const mapDispatchToProps = {
 
 export default withRouter(
   withStyles(Styles, { withTheme: true })(
-    connect(
-      mapStateToProps,
-      mapDispatchToProps
-    )(Home)
+    connect(mapStateToProps, mapDispatchToProps)(Home)
   )
 );

@@ -26,8 +26,23 @@ class DeveloperScreen extends Component {
 
   static propTypes = {
     t: PropTypes.func.isRequired,
-    classes: PropTypes.shape({}).isRequired,
-    theme: PropTypes.shape({}).isRequired,
+    classes: PropTypes.shape({
+      root: PropTypes.string.isRequired,
+      appBar: PropTypes.string.isRequired,
+      appBarShift: PropTypes.string.isRequired,
+      menuButton: PropTypes.string.isRequired,
+      hide: PropTypes.string.isRequired,
+      drawer: PropTypes.string.isRequired,
+      drawerPaper: PropTypes.string.isRequired,
+      drawerHeader: PropTypes.string.isRequired,
+      content: PropTypes.string.isRequired,
+      contentShift: PropTypes.string.isRequired,
+      developer: PropTypes.string.isRequired,
+      screenTitle: PropTypes.string.isRequired,
+    }).isRequired,
+    theme: PropTypes.shape({
+      direction: PropTypes.string.isRequired,
+    }).isRequired,
     history: PropTypes.shape({
       replace: PropTypes.func.isRequired,
     }).isRequired,

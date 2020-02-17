@@ -49,8 +49,15 @@ class SpaceScreen extends Component {
     dispatchClearSpace: PropTypes.func.isRequired,
     activity: PropTypes.bool.isRequired,
     deleted: PropTypes.bool.isRequired,
-    classes: PropTypes.shape({ appBar: PropTypes.string.isRequired })
-      .isRequired,
+    classes: PropTypes.shape({
+      root: PropTypes.string.isRequired,
+      appBar: PropTypes.string.isRequired,
+      drawer: PropTypes.string.isRequired,
+      drawerPaper: PropTypes.string.isRequired,
+      drawerHeader: PropTypes.string.isRequired,
+      content: PropTypes.string.isRequired,
+      contentShift: PropTypes.string.isRequired,
+    }).isRequired,
     theme: PropTypes.shape({ direction: PropTypes.string.isRequired })
       .isRequired,
     match: PropTypes.shape({
@@ -61,8 +68,10 @@ class SpaceScreen extends Component {
     location: PropTypes.shape({
       search: PropTypes.string.isRequired,
     }).isRequired,
-    history: PropTypes.shape({ length: PropTypes.number.isRequired })
-      .isRequired,
+    history: PropTypes.shape({
+      length: PropTypes.number.isRequired,
+      replace: PropTypes.func.isRequired,
+    }).isRequired,
   };
 
   componentDidMount() {

@@ -42,8 +42,21 @@ class LoadSpace extends Component {
     activity: PropTypes.bool.isRequired,
     history: PropTypes.shape({ length: PropTypes.number.isRequired })
       .isRequired,
-    classes: PropTypes.shape({ appBar: PropTypes.string.isRequired })
-      .isRequired,
+    classes: PropTypes.shape({
+      appBar: PropTypes.string.isRequired,
+      root: PropTypes.string.isRequired,
+      appBarShift: PropTypes.string.isRequired,
+      menuButton: PropTypes.string.isRequired,
+      hide: PropTypes.string.isRequired,
+      drawer: PropTypes.string.isRequired,
+      drawerPaper: PropTypes.string.isRequired,
+      drawerHeader: PropTypes.string.isRequired,
+      content: PropTypes.string.isRequired,
+      contentShift: PropTypes.string.isRequired,
+      input: PropTypes.string.isRequired,
+      button: PropTypes.string.isRequired,
+      formControl: PropTypes.string.isRequired,
+    }).isRequired,
   };
 
   handleDrawerOpen = () => {
@@ -104,7 +117,7 @@ class LoadSpace extends Component {
         <CssBaseline />
         <AppBar
           position="fixed"
-          className={classNames(classes.appBsar, {
+          className={classNames(classes.appBar, {
             [classes.appBarShift]: open,
           })}
         >

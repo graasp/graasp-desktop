@@ -13,12 +13,6 @@ import DefaultThumbnail from '../../data/graasp.jpg';
 import { MIN_CARD_WIDTH } from '../../config/constants';
 
 class SpaceGrid extends Component {
-  static styles = {
-    leftIcon: {
-      marginRight: '0.5rem',
-    },
-  };
-
   state = {
     columnNb: 4,
   };
@@ -30,8 +24,10 @@ class SpaceGrid extends Component {
         id: PropTypes.string.isRequired,
       })
     ).isRequired,
-    history: PropTypes.shape({ length: PropTypes.number.isRequired })
-      .isRequired,
+    history: PropTypes.shape({
+      length: PropTypes.number.isRequired,
+      replace: PropTypes.func.isRequired,
+    }).isRequired,
     dispatchClearSpace: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
     saved: PropTypes.bool,
@@ -94,6 +90,12 @@ class SpaceGrid extends Component {
 
     // if nothing present return default image
     return DefaultThumbnail;
+  };
+
+  static styles = {
+    leftIcon: {
+      marginRight: '0.5rem',
+    },
   };
 
   render() {

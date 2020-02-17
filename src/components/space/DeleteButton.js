@@ -12,8 +12,10 @@ import { deleteSpace } from '../../actions/space';
 class DeleteButton extends Component {
   static propTypes = {
     id: PropTypes.string.isRequired,
-    classes: PropTypes.shape({ appBar: PropTypes.string.isRequired })
-      .isRequired,
+    classes: PropTypes.shape({
+      appBar: PropTypes.string.isRequired,
+      button: PropTypes.string.isRequired,
+    }).isRequired,
     dispatchDeleteSpace: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
   };
@@ -43,10 +45,7 @@ const mapDispatchToProps = {
   dispatchDeleteSpace: deleteSpace,
 };
 
-const ConnectedComponent = connect(
-  null,
-  mapDispatchToProps
-)(DeleteButton);
+const ConnectedComponent = connect(null, mapDispatchToProps)(DeleteButton);
 
 const StyledComponent = withStyles(Styles, { withTheme: true })(
   ConnectedComponent

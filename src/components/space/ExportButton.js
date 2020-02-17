@@ -15,8 +15,10 @@ class ExportButton extends Component {
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
     }).isRequired,
-    classes: PropTypes.shape({ appBar: PropTypes.string.isRequired })
-      .isRequired,
+    classes: PropTypes.shape({
+      appBar: PropTypes.string.isRequired,
+      button: PropTypes.string.isRequired,
+    }).isRequired,
     dispatchExportSpace: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
   };
@@ -46,10 +48,7 @@ const mapDispatchToProps = {
   dispatchExportSpace: exportSpace,
 };
 
-const ConnectedComponent = connect(
-  null,
-  mapDispatchToProps
-)(ExportButton);
+const ConnectedComponent = connect(null, mapDispatchToProps)(ExportButton);
 
 const StyledComponent = withStyles(Styles, { withTheme: true })(
   ConnectedComponent

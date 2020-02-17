@@ -13,8 +13,10 @@ import { syncSpace } from '../../actions/space';
 class SyncButton extends Component {
   static propTypes = {
     id: PropTypes.string.isRequired,
-    classes: PropTypes.shape({ appBar: PropTypes.string.isRequired })
-      .isRequired,
+    classes: PropTypes.shape({
+      appBar: PropTypes.string.isRequired,
+      button: PropTypes.string.isRequired,
+    }).isRequired,
     dispatchSyncSpace: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
   };
@@ -49,10 +51,7 @@ const mapDispatchToProps = {
   dispatchSyncSpace: syncSpace,
 };
 
-const ConnectedComponent = connect(
-  null,
-  mapDispatchToProps
-)(SyncButton);
+const ConnectedComponent = connect(null, mapDispatchToProps)(SyncButton);
 
 const StyledComponent = withStyles(Styles, { withTheme: true })(
   ConnectedComponent

@@ -38,8 +38,24 @@ class VisitSpace extends Component {
 
   static propTypes = {
     t: PropTypes.func.isRequired,
-    classes: PropTypes.shape({}).isRequired,
-    theme: PropTypes.shape({}).isRequired,
+    classes: PropTypes.shape({
+      appBar: PropTypes.string.isRequired,
+      root: PropTypes.string.isRequired,
+      appBarShift: PropTypes.string.isRequired,
+      menuButton: PropTypes.string.isRequired,
+      hide: PropTypes.string.isRequired,
+      drawer: PropTypes.string.isRequired,
+      drawerPaper: PropTypes.string.isRequired,
+      drawerHeader: PropTypes.string.isRequired,
+      content: PropTypes.string.isRequired,
+      contentShift: PropTypes.string.isRequired,
+      formControl: PropTypes.string.isRequired,
+      input: PropTypes.string.isRequired,
+      button: PropTypes.string.isRequired,
+    }).isRequired,
+    theme: PropTypes.shape({
+      direction: PropTypes.string.isRequired,
+    }).isRequired,
     activity: PropTypes.bool,
     history: PropTypes.shape({
       replace: PropTypes.func.isRequired,

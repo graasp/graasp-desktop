@@ -96,7 +96,13 @@ const MediaCard = props => {
 };
 
 MediaCard.propTypes = {
-  classes: PropTypes.shape({ media: PropTypes.string.isRequired }).isRequired,
+  classes: PropTypes.shape({
+    media: PropTypes.string.isRequired,
+    card: PropTypes.string.isRequired,
+    cardDescription: PropTypes.string.isRequired,
+    expand: PropTypes.string.isRequired,
+    expandOpen: PropTypes.string.isRequired,
+  }).isRequired,
   space: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,

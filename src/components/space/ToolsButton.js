@@ -9,6 +9,15 @@ import CloseIcon from '@material-ui/icons/Close';
 import { closeTools, openTools } from '../../actions';
 
 class ToolsButton extends Component {
+  static styles = theme => ({
+    fab: {
+      margin: theme.spacing(),
+      position: 'fixed',
+      bottom: theme.spacing(2),
+      right: theme.spacing(2),
+    },
+  });
+
   static propTypes = {
     classes: PropTypes.shape({
       root: PropTypes.string,
@@ -20,15 +29,6 @@ class ToolsButton extends Component {
     dispatchCloseTools: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
   };
-
-  static styles = theme => ({
-    fab: {
-      margin: theme.spacing(),
-      position: 'fixed',
-      bottom: theme.spacing(2),
-      right: theme.spacing(2),
-    },
-  });
 
   render() {
     const {

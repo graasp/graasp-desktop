@@ -65,7 +65,10 @@ Banner.propTypes = {
   type: PropTypes.oneOf(['warning', 'error', 'info']),
   text: PropTypes.string,
   buttonText: PropTypes.string,
-  classes: PropTypes.shape({ banner: PropTypes.string.isRequired }).isRequired,
+  classes: PropTypes.shape({
+    banner: PropTypes.string.isRequired,
+    paper: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 Banner.defaultProps = {

@@ -54,7 +54,11 @@ const SpaceDescription = ({ description, classes, start, saved }) => {
 
 SpaceDescription.propTypes = {
   description: PropTypes.string.isRequired,
-  classes: PropTypes.shape({ appBar: PropTypes.string.isRequired }).isRequired,
+  classes: PropTypes.shape({
+    appBar: PropTypes.string.isRequired,
+    button: PropTypes.string.isRequired,
+    spaceDescription: PropTypes.string.isRequired,
+  }).isRequired,
   start: PropTypes.func.isRequired,
   saved: PropTypes.bool,
 };

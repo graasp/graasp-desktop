@@ -26,10 +26,26 @@ class SpaceNotFound extends Component {
 
   static propTypes = {
     t: PropTypes.func.isRequired,
-    classes: PropTypes.shape({}).isRequired,
-    theme: PropTypes.shape({}).isRequired,
-    history: PropTypes.shape({ length: PropTypes.number.isRequired })
-      .isRequired,
+    classes: PropTypes.shape({
+      root: PropTypes.string.isRequired,
+      appBar: PropTypes.string.isRequired,
+      appBarShift: PropTypes.string.isRequired,
+      menuButton: PropTypes.string.isRequired,
+      hide: PropTypes.string.isRequired,
+      drawer: PropTypes.string.isRequired,
+      drawerPaper: PropTypes.string.isRequired,
+      drawerHeader: PropTypes.string.isRequired,
+      content: PropTypes.string.isRequired,
+      contentShift: PropTypes.string.isRequired,
+      button: PropTypes.string.isRequired,
+    }).isRequired,
+    theme: PropTypes.shape({
+      direction: PropTypes.string.isRequired,
+    }).isRequired,
+    history: PropTypes.shape({
+      length: PropTypes.number.isRequired,
+      replace: PropTypes.func.isRequired,
+    }).isRequired,
   };
 
   handleDrawerOpen = () => {

@@ -15,7 +15,9 @@ import SampleDatabase from '../../data/sample.json';
 class DatabaseEditor extends Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
-    classes: PropTypes.shape({}).isRequired,
+    classes: PropTypes.shape({
+      button: PropTypes.string.isRequired,
+    }).isRequired,
     dispatchGetDatabase: PropTypes.func.isRequired,
     dispatchSetDatabase: PropTypes.func.isRequired,
     database: PropTypes.shape({

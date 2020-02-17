@@ -24,9 +24,16 @@ class SpaceHeader extends Component {
     space: PropTypes.shape({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
+      saved: PropTypes.bool.isRequired,
+      offlineSupport: PropTypes.bool.isRequired,
     }).isRequired,
-    classes: PropTypes.shape({ appBar: PropTypes.string.isRequired })
-      .isRequired,
+    classes: PropTypes.shape({
+      appBar: PropTypes.string.isRequired,
+      button: PropTypes.string.isRequired,
+      appBarShift: PropTypes.string.isRequired,
+      menuButton: PropTypes.string.isRequired,
+      hide: PropTypes.string.isRequired,
+    }).isRequired,
     openDrawer: PropTypes.bool.isRequired,
     handleDrawerOpen: PropTypes.func.isRequired,
     dispatchSaveSpace: PropTypes.func.isRequired,
