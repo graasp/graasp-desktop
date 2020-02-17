@@ -143,6 +143,6 @@ fixes #12
 
 Following the `electron-log` defaults, logs are written to the following locations:
 
-- Linux: `~/.config/<app name>/log.log`
-- macOS: `~/Library/Logs/<app name>/log.log`
-- Windows: `%USERPROFILE%\AppData\Roaming\<app name>\log.log`
+- Linux: `~/.config/{app name}/logs/{process type}.log`
+- macOS: `~/Library/Logs/{app name}/{process type}.log`
+- Windows: `%USERPROFILE%\AppData\Roaming\{app name}\logs\{process type}.log`

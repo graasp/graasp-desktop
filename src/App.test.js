@@ -16,6 +16,8 @@ describe('<App />', () => {
     dispatchGetGeolocationEnabled: jest.fn(),
     geolocationEnabled: false,
   };
+
+  // eslint-disable-next-line react/jsx-props-no-spreading
   const component = shallow(<App {...props} />);
   it('renders correctly', () => {
     expect(component).toMatchSnapshot();

@@ -82,9 +82,11 @@ Object.keys(env).forEach(key => {
 
 let mainWindow;
 
-// set up sentry
+// only set up sentry if dsn is provided
 const { SENTRY_DSN, GOOGLE_ANALYTICS_ID } = process.env;
-Sentry.init({ dsn: SENTRY_DSN });
+if (SENTRY_DSN) {
+  Sentry.init({ dsn: SENTRY_DSN });
+}
 
 // get unique identifier for this machine
 const machineId = machineIdSync();

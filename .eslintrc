@@ -43,6 +43,14 @@
         "extensions": [".js", ".jsx"]
       }
     ],
-    "import/no-named-as-default": 0
+    "import/no-named-as-default": 0,
+    "react/static-property-placement": [
+      "error",
+      "static public field"
+    ],
+    "react/state-in-constructor": [
+      "error",
+      "never"
+    ]
   }
 }
