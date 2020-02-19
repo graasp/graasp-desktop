@@ -1,6 +1,8 @@
 module.exports = {
   'https://utwente.graasp.eu/preproduction/calculator/build/calculator.html':
     'https://utwente.graasp.eu/preproduction/calculator/build/calculator.one.html',
+  'https://utwente.graasp.eu/preproduction/entry/build/entry.html':
+    'https://utwente.graasp.eu/preproduction/entry/build/entry.one.html',
   'https://utwente.graasp.eu/preproduction/hypothesis/build/hypothesis.html':
     'https://utwente.graasp.eu/preproduction/hypothesis/build/hypothesis.one.html',
   'https://utwente.graasp.eu/preproduction/observationTool/build/observationTool.html':
@@ -12,6 +14,8 @@ module.exports = {
 
   'https://utwente.graasp.eu/production/calculator/build/calculator.html':
     'https://utwente.graasp.eu/production/calculator/build/calculator.one.html',
+  'https://utwente.graasp.eu/production/entry/build/entry.html':
+    'https://utwente.graasp.eu/production/entry/build/entry.one.html',
   'https://utwente.graasp.eu/production/hypothesis/build/hypothesis.html':
     'https://utwente.graasp.eu/production/hypothesis/build/hypothesis.one.html',
   'https://utwente.graasp.eu/production/observationTool/build/observationTool.html':
