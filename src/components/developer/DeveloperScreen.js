@@ -19,7 +19,7 @@ import DatabaseEditor from './DatabaseEditor';
 import Styles from '../../Styles';
 import Banner from '../common/Banner';
 
-class DeveloperScreen extends Component {
+export class DeveloperScreen extends Component {
   state = {
     open: false,
   };

@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<GeolocationControl /> <GeolocationControl /> as button renders correctly 1`] = `ShallowWrapper {}`;
+
+exports[`<GeolocationControl /> <GeolocationControl /> as button renders correctly 2`] = `ShallowWrapper {}`;
+
+exports[`<GeolocationControl /> <GeolocationControl /> as switch renders correctly 1`] = `ShallowWrapper {}`;
+
+exports[`<GeolocationControl /> <GeolocationControl /> as switch renders correctly 2`] = `ShallowWrapper {}`;

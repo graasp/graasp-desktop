@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Phase /> with tools <Phase /> with toolsVisible = false renders correctly 1`] = `ShallowWrapper {}`;
+
+exports[`<Phase /> with tools <Phase /> with toolsVisible = true renders correctly 1`] = `ShallowWrapper {}`;
+
+exports[`<Phase /> without tools renders correctly 1`] = `ShallowWrapper {}`;

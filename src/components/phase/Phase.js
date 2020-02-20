@@ -34,7 +34,7 @@ const styles = {
 
 const { containerStyle, mainContentStyle, toolContentStyle } = styles;
 
-class Phase extends Component {
+export class Phase extends Component {
   static propTypes = {
     space: ImmutablePropTypes.contains({
       id: PropTypes.string.isRequired,
@@ -171,7 +171,4 @@ const mapDispatchToProps = {
   dispatchSetToolsWidth: setToolsWidth,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Phase);
+export default connect(mapStateToProps, mapDispatchToProps)(Phase);

@@ -18,7 +18,7 @@ const styles = theme => ({
   },
 });
 
-class GeolocationControl extends Component {
+export class GeolocationControl extends Component {
   static propTypes = {
     geolocationEnabled: PropTypes.bool.isRequired,
     activity: PropTypes.bool.isRequired,

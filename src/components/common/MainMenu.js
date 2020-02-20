@@ -23,7 +23,7 @@ import {
   DEVELOPER_PATH,
 } from '../../config/paths';
 
-class MainMenu extends Component {
+export class MainMenu extends Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     developerMode: PropTypes.bool.isRequired,

@@ -16,7 +16,7 @@ const styles = theme => ({
   },
 });
 
-class DeveloperSwitch extends Component {
+export class DeveloperSwitch extends Component {
   static propTypes = {
     developerMode: PropTypes.bool.isRequired,
     activity: PropTypes.bool.isRequired,

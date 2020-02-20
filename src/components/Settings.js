@@ -21,7 +21,7 @@ import LanguageSelect from './common/LanguageSelect';
 import DeveloperSwitch from './common/DeveloperSwitch';
 import GeolocationControl from './common/GeolocationControl';
 
-class Settings extends Component {
+export class Settings extends Component {
   state = {
     open: false,
   };
