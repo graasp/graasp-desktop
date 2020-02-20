@@ -15,6 +15,8 @@ import DeleteButton from '../space/DeleteButton';
 import ExportButton from '../space/ExportButton';
 import SyncButton from '../space/SyncButton';
 import { MIN_CARD_WIDTH } from '../../config/constants';
+import Text from './Text';
+import './MediaCard.css';
 
 const styles = theme => ({
   card: {
@@ -64,10 +66,7 @@ const MediaCard = props => {
 
       <Collapse disableSpacing in={expanded} timeout="auto" unmountOnExit>
         <CardContent className={classes.cardDescription}>
-          <Typography
-            component="p"
-            dangerouslySetInnerHTML={{ __html: text }}
-          />
+          <Text content={text} className="MediaCardDescriptionText" />
         </CardContent>
       </Collapse>
 
