@@ -20,6 +20,6 @@ describe('<App />', () => {
   // eslint-disable-next-line react/jsx-props-no-spreading
   const component = shallow(<App {...props} />);
   it('renders correctly', () => {
-    expect(component.debug()).toMatchSnapshot();
+    expect(component).toMatchSnapshot();
   });
 });
