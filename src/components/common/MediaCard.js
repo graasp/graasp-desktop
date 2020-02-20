@@ -16,8 +16,6 @@ import ExportButton from '../space/ExportButton';
 import SyncButton from '../space/SyncButton';
 import Text from './Text';
 import { MIN_CARD_WIDTH } from '../../config/constants';
-import Text from './Text';
-import './MediaCard.css';
 
 const styles = theme => ({
   card: {
