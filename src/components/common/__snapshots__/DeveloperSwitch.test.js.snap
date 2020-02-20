@@ -1,5 +1,37 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<DeveloperSwitch /> <DeveloperSwitch /> renders renders correctly 1`] = `ShallowWrapper {}`;
+exports[`<DeveloperSwitch /> <DeveloperSwitch /> renders renders correctly 1`] = `
+<WithStyles(ForwardRef(FormControl))
+  className=""
+>
+  <WithStyles(ForwardRef(FormControlLabel))
+    control={
+      <ForwardRef(WithStyles)
+        checked={false}
+        color="primary"
+        onChange={[Function]}
+        value={false}
+      />
+    }
+    label="Developer Mode"
+  />
+</WithStyles(ForwardRef(FormControl))>
+`;
 
-exports[`<DeveloperSwitch /> <DeveloperSwitch /> renders renders correctly 2`] = `ShallowWrapper {}`;
+exports[`<DeveloperSwitch /> <DeveloperSwitch /> renders renders correctly 2`] = `
+<WithStyles(ForwardRef(FormControl))
+  className=""
+>
+  <WithStyles(ForwardRef(FormControlLabel))
+    control={
+      <ForwardRef(WithStyles)
+        checked={true}
+        color="primary"
+        onChange={[Function]}
+        value={true}
+      />
+    }
+    label="Developer Mode"
+  />
+</WithStyles(ForwardRef(FormControl))>
+`;

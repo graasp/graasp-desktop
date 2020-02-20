@@ -12,14 +12,10 @@ import { MAX_TOOLS_WIDTH, MIN_TOOLS_WIDTH } from '../../config/layout';
 const samplePhase = Map({
   id: 'phaseId',
   description: 'phaseDescription',
-  items: {
-    content: 'value',
-  },
+  items: [{ id: 'phaseItemId' }],
 });
 
-const sampleTools = {
-  items: 'tools',
-};
+const sampleTools = [{ id: 'spaceItempsId' }];
 
 const createPhaseProps = (phase, items, toolsVisible) => {
   return {
