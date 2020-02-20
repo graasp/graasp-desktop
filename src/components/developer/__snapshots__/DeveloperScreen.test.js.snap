@@ -1,3 +1,73 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<DeveloperScreen /> renders correctly 1`] = `ShallowWrapper {}`;
+exports[`<DeveloperScreen /> renders correctly 1`] = `
+<div
+  className=""
+>
+  <WithStyles(CssBaseline) />
+  <WithStyles(ForwardRef(AppBar))
+    className=""
+    position="fixed"
+  >
+    <WithStyles(ForwardRef(Toolbar))
+      disableGutters={true}
+    >
+      <WithStyles(ForwardRef(IconButton))
+        aria-label="Open drawer"
+        className=""
+        color="inherit"
+        onClick={[Function]}
+      >
+        <MenuIcon />
+      </WithStyles(ForwardRef(IconButton))>
+    </WithStyles(ForwardRef(Toolbar))>
+  </WithStyles(ForwardRef(AppBar))>
+  <WithStyles(ForwardRef(Drawer))
+    anchor="left"
+    className=""
+    classes={
+      Object {
+        "paper": "",
+      }
+    }
+    open={false}
+    variant="persistent"
+  >
+    <div
+      className=""
+    >
+      <WithStyles(ForwardRef(IconButton))
+        onClick={[Function]}
+      >
+        <ChevronLeftIcon />
+      </WithStyles(ForwardRef(IconButton))>
+    </div>
+    <WithStyles(ForwardRef(Divider)) />
+    <withRouter(withI18nextTranslation(Connect(MainMenu))) />
+  </WithStyles(ForwardRef(Drawer))>
+  <main
+    className=""
+  >
+    <div
+      className=""
+    />
+    <div
+      className="developer"
+    >
+      <WithStyles(ForwardRef(Typography))
+        className="screenTitle"
+        variant="h4"
+      >
+        Developer
+      </WithStyles(ForwardRef(Typography))>
+      <br />
+      <WithStyles(Banner)
+        buttonText={null}
+        text="Danger Zone! Proceed with caution as changes to this section might lead to data loss."
+        type="error"
+      />
+      <Connect(withI18nextTranslation(WithStyles(DatabaseEditor))) />
+    </div>
+  </main>
+</div>
+`;

@@ -1,3 +1,51 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<DatabaseEditor /> <DatabaseEditor /> renders renders correctly 1`] = `ShallowWrapper {}`;
+exports[`<DatabaseEditor /> <DatabaseEditor /> renders renders correctly 1`] = `
+<div>
+  <WithStyles(ForwardRef(Typography))
+    variant="h6"
+  >
+    Manually Edit the Database
+  </WithStyles(ForwardRef(Typography))>
+  <t
+    collapseStringsAfterLength={false}
+    collapsed={true}
+    defaultValue={null}
+    displayDataTypes={true}
+    displayObjectSize={true}
+    enableClipboard={true}
+    groupArraysAfterLength={100}
+    iconStyle="triangle"
+    indentWidth={4}
+    name="root"
+    onAdd={[Function]}
+    onDelete={[Function]}
+    onEdit={[Function]}
+    onSelect={false}
+    shouldCollapse={false}
+    sortKeys={false}
+    src={
+      Object {
+        "spaces": Array [
+          Object {},
+        ],
+        "user": Object {
+          "name": "name",
+        },
+      }
+    }
+    style={Object {}}
+    theme="rjv-default"
+    validationMessage="Validation Error"
+  />
+  <br />
+  <WithStyles(ForwardRef(Button))
+    className=""
+    color="primary"
+    onClick={[Function]}
+    variant="contained"
+  >
+    Use Sample Database
+  </WithStyles(ForwardRef(Button))>
+</div>
+`;

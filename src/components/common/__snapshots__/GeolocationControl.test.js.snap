@@ -1,9 +1,67 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<GeolocationControl /> <GeolocationControl /> as button renders correctly 1`] = `ShallowWrapper {}`;
+exports[`<GeolocationControl /> <GeolocationControl /> as button renders correctly 1`] = `
+<WithStyles(ForwardRef(FormControl))
+  className=""
+>
+  <WithStyles(ForwardRef(Button))
+    className=""
+    color="primary"
+    onClick={[Function]}
+    variant="contained"
+  >
+    Enable Geolocation
+  </WithStyles(ForwardRef(Button))>
+</WithStyles(ForwardRef(FormControl))>
+`;
 
-exports[`<GeolocationControl /> <GeolocationControl /> as button renders correctly 2`] = `ShallowWrapper {}`;
+exports[`<GeolocationControl /> <GeolocationControl /> as button renders correctly 2`] = `
+<WithStyles(ForwardRef(FormControl))
+  className=""
+>
+  <WithStyles(ForwardRef(Button))
+    className=""
+    color="primary"
+    onClick={[Function]}
+    variant="contained"
+  >
+    Enable Geolocation
+  </WithStyles(ForwardRef(Button))>
+</WithStyles(ForwardRef(FormControl))>
+`;
 
-exports[`<GeolocationControl /> <GeolocationControl /> as switch renders correctly 1`] = `ShallowWrapper {}`;
+exports[`<GeolocationControl /> <GeolocationControl /> as switch renders correctly 1`] = `
+<WithStyles(ForwardRef(FormControl))
+  className=""
+>
+  <WithStyles(ForwardRef(FormControlLabel))
+    control={
+      <ForwardRef(WithStyles)
+        checked={false}
+        color="primary"
+        onChange={[Function]}
+        value={false}
+      />
+    }
+    label="Geolocation Enabled"
+  />
+</WithStyles(ForwardRef(FormControl))>
+`;
 
-exports[`<GeolocationControl /> <GeolocationControl /> as switch renders correctly 2`] = `ShallowWrapper {}`;
+exports[`<GeolocationControl /> <GeolocationControl /> as switch renders correctly 2`] = `
+<WithStyles(ForwardRef(FormControl))
+  className=""
+>
+  <WithStyles(ForwardRef(FormControlLabel))
+    control={
+      <ForwardRef(WithStyles)
+        checked={true}
+        color="primary"
+        onChange={[Function]}
+        value={true}
+      />
+    }
+    label="Geolocation Enabled"
+  />
+</WithStyles(ForwardRef(FormControl))>
+`;

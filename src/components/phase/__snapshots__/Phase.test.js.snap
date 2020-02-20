@@ -1,7 +1,149 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Phase /> with tools <Phase /> with toolsVisible = false renders correctly 1`] = `ShallowWrapper {}`;
+exports[`<Phase /> with tools <Phase /> with toolsVisible = false renders correctly 1`] = `
+<div
+  style={
+    Object {
+      "height": "calc(100% - 64px)",
+      "position": "static",
+    }
+  }
+>
+  <div
+    style={
+      Object {
+        "height": "100%",
+        "overflowY": "scroll",
+        "padding": "2rem",
+        "paddingBottom": "100px",
+      }
+    }
+  >
+    <PhaseDescription
+      description="phaseDescription"
+    />
+    <PhaseItems
+      items={
+        Array [
+          Object {
+            "id": "phaseItemId",
+          },
+        ]
+      }
+      phaseId="phaseId"
+      spaceId="spaceId"
+    />
+  </div>
+  <withI18nextTranslation(WithStyles(undefined)) />
+</div>
+`;
 
-exports[`<Phase /> with tools <Phase /> with toolsVisible = true renders correctly 1`] = `ShallowWrapper {}`;
+exports[`<Phase /> with tools <Phase /> with toolsVisible = true renders correctly 1`] = `
+<Fragment>
+  <SplitPane
+    allowResize={true}
+    defaultSize={3}
+    maxSize={1200}
+    minSize={100}
+    onDragFinished={[Function]}
+    pane1ClassName=""
+    pane2ClassName=""
+    paneClassName=""
+    primary="second"
+    split="vertical"
+    style={
+      Object {
+        "height": "calc(100% - 64px)",
+        "position": "static",
+      }
+    }
+  >
+    <div
+      style={
+        Object {
+          "height": "100%",
+          "overflowY": "scroll",
+          "padding": "2rem",
+          "paddingBottom": "100px",
+        }
+      }
+    >
+      <PhaseDescription
+        description="phaseDescription"
+      />
+      <PhaseItems
+        items={
+          Array [
+            Object {
+              "id": "phaseItemId",
+            },
+          ]
+        }
+        phaseId="phaseId"
+        spaceId="spaceId"
+      />
+    </div>
+    <div
+      style={
+        Object {
+          "backgroundColor": "white",
+          "height": "100%",
+          "overflowY": "scroll",
+          "padding": "2rem",
+          "paddingBottom": "100px",
+        }
+      }
+    >
+      <PhaseItems
+        items={
+          Array [
+            Object {
+              "id": "spaceItempsId",
+            },
+          ]
+        }
+        phaseId="spaceId"
+        spaceId="spaceId"
+      />
+    </div>
+  </SplitPane>
+  <withI18nextTranslation(WithStyles(undefined)) />
+</Fragment>
+`;
 
-exports[`<Phase /> without tools renders correctly 1`] = `ShallowWrapper {}`;
+exports[`<Phase /> without tools renders correctly 1`] = `
+<div
+  style={
+    Object {
+      "height": "calc(100% - 64px)",
+      "position": "static",
+    }
+  }
+>
+  <div
+    style={
+      Object {
+        "height": "100%",
+        "overflowY": "scroll",
+        "padding": "2rem",
+        "paddingBottom": "100px",
+      }
+    }
+  >
+    <PhaseDescription
+      description="phaseDescription"
+    />
+    <PhaseItems
+      items={
+        Array [
+          Object {
+            "id": "phaseItemId",
+          },
+        ]
+      }
+      phaseId="phaseId"
+      spaceId="spaceId"
+    />
+  </div>
+</div>
+`;
