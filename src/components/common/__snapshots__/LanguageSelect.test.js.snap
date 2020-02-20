@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LanguageSelect /> <LanguageSelect /> renders renders correctly 1`] = `ShallowWrapper {}`;
+
+exports[`<LanguageSelect /> <LanguageSelect /> renders renders correctly 2`] = `ShallowWrapper {}`;
+
+exports[`<LanguageSelect /> <LanguageSelect /> renders renders correctly 3`] = `ShallowWrapper {}`;
