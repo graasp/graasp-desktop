@@ -5,31 +5,20 @@ import { Map, Set } from 'immutable';
 import { withRouter } from 'react-router';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Styles from '../Styles';
-import MainMenu from './common/MainMenu';
 import { getSpacesNearby } from '../actions';
 import SpaceGrid from './space/SpaceGrid';
 import Loader from './common/Loader';
 import GeolocationControl from './common/GeolocationControl';
 import { CONTROL_TYPES } from '../config/constants';
+import Main from './common/Main';
 
 class SpacesNearby extends Component {
-  state = {
-    open: false,
-  };
-
   static propTypes = {
     classes: PropTypes.shape({
-      appBar: PropTypes.string.isRequired,
       root: PropTypes.string.isRequired,
       appBarShift: PropTypes.string.isRequired,
       menuButton: PropTypes.string.isRequired,
@@ -84,17 +73,8 @@ class SpacesNearby extends Component {
     }
   };
 
-  handleDrawerOpen = () => {
-    this.setState({ open: true });
-  };
-
-  handleDrawerClose = () => {
-    this.setState({ open: false });
-  };
-
   render() {
-    const { classes, theme, spaces, activity, geolocationEnabled } = this.props;
-    const { open } = this.state;
+    const { classes, spaces, activity, geolocationEnabled } = this.props;
 
     if (activity) {
       return (
@@ -118,57 +98,7 @@ class SpacesNearby extends Component {
       </div>
     );
 
-    return (
-      <div className={classes.root}>
-        <CssBaseline />
-        <AppBar
-          position="fixed"
-          className={classNames(classes.appBar, {
-            [classes.appBarShift]: open,
-          })}
-        >
-          <Toolbar disableGutters={!open}>
-            <IconButton
-              color="inherit"
-              aria-label="Open Drawer"
-              onClick={this.handleDrawerOpen}
-              className={classNames(classes.menuButton, open && classes.hide)}
-            >
-              <MenuIcon />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-        <Drawer
-          className={classes.drawer}
-          variant="persistent"
-          anchor="left"
-          open={open}
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-        >
-          <div className={classes.drawerHeader}>
-            <IconButton onClick={this.handleDrawerClose}>
-              {theme.direction === 'ltr' ? (
-                <ChevronLeftIcon />
-              ) : (
-                <ChevronRightIcon />
-              )}
-            </IconButton>
-          </div>
-          <Divider />
-          <MainMenu />
-        </Drawer>
-        <main
-          className={classNames(classes.content, {
-            [classes.contentShift]: open,
-          })}
-        >
-          <div className={classes.drawerHeader} />
-          {geolocationContent}
-        </main>
-      </div>
-    );
+    return <Main>{geolocationContent}</Main>;
   }
 }
 

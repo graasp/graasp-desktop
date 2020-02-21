@@ -6,33 +6,26 @@ import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
-import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import Styles from '../Styles';
 import Loader from './LoadSpace';
+import Main from './common/Main';
 import {
   ERROR_MESSAGE_HEADER,
   INVALID_SPACE_ID_OR_URL,
   OFFLINE_ERROR_MESSAGE,
 } from '../config/messages';
-import MainMenu from './common/MainMenu';
 import { isValidSpaceId } from '../utils/validators';
 import extractSpaceId from '../utils/extractSpaceId';
 
 class VisitSpace extends Component {
   state = {
-    open: false,
     spaceId: '',
   };
 
@@ -66,14 +59,6 @@ class VisitSpace extends Component {
     activity: false,
   };
 
-  handleDrawerOpen = () => {
-    this.setState({ open: true });
-  };
-
-  handleDrawerClose = () => {
-    this.setState({ open: false });
-  };
-
   handleChangeSpaceId = event => {
     const spaceId = event.target.value;
     this.setState({ spaceId });
@@ -103,8 +88,8 @@ class VisitSpace extends Component {
   };
 
   render() {
-    const { classes, theme, activity, t } = this.props;
-    const { open, spaceId } = this.state;
+    const { classes, activity, t } = this.props;
+    const { spaceId } = this.state;
 
     if (activity) {
       return (
@@ -121,80 +106,34 @@ class VisitSpace extends Component {
     }
 
     return (
-      <div className={classes.root}>
-        <CssBaseline />
-        <AppBar
-          position="fixed"
-          className={classNames(classes.appBar, {
-            [classes.appBarShift]: open,
-          })}
-        >
-          <Toolbar disableGutters={!open}>
-            <IconButton
-              color="inherit"
-              aria-label="Open drawer"
-              onClick={this.handleDrawerOpen}
-              className={classNames(classes.menuButton, open && classes.hide)}
-            >
-              <MenuIcon />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-        <Drawer
-          className={classes.drawer}
-          variant="persistent"
-          anchor="left"
-          open={open}
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-        >
-          <div className={classes.drawerHeader}>
-            <IconButton onClick={this.handleDrawerClose}>
-              {theme.direction === 'ltr' ? (
-                <ChevronLeftIcon />
-              ) : (
-                <ChevronRightIcon />
-              )}
-            </IconButton>
-          </div>
-          <Divider />
-          <MainMenu />
-        </Drawer>
-        <main
-          className={classNames('Main', classes.content, {
-            [classes.contentShift]: open,
-          })}
-        >
-          <div className={classes.drawerHeader} />
-          <FormControl className={classes.formControl}>
-            <Typography variant="h4" color="inherit" style={{ margin: '2rem' }}>
-              {t('Visit a Space')}
-            </Typography>
-            <Input
-              className={classes.input}
-              required
-              onChange={this.handleChangeSpaceId}
-              inputProps={{
-                'aria-label': 'Space ID',
-              }}
-              onKeyPress={this.handleKeyPress}
-              autoFocus
-              value={spaceId}
-              type="text"
-            />
-            <Button
-              variant="contained"
-              onClick={this.handleClick}
-              color="primary"
-              className={classes.button}
-              disabled={!window.navigator.onLine || !spaceId || spaceId === ''}
-            >
-              {t('Visit')}
-            </Button>
-          </FormControl>
-        </main>
-      </div>
+      <Main fullScreen>
+        <FormControl className={classes.formControl}>
+          <Typography variant="h4" color="inherit" style={{ margin: '2rem' }}>
+            {t('Visit a Space')}
+          </Typography>
+          <Input
+            className={classes.input}
+            required
+            onChange={this.handleChangeSpaceId}
+            inputProps={{
+              'aria-label': 'Space ID',
+            }}
+            onKeyPress={this.handleKeyPress}
+            autoFocus
+            value={spaceId}
+            type="text"
+          />
+          <Button
+            variant="contained"
+            onClick={this.handleClick}
+            color="primary"
+            className={classes.button}
+            disabled={!window.navigator.onLine || !spaceId || spaceId === ''}
+          >
+            {t('Visit')}
+          </Button>
+        </FormControl>
+      </Main>
     );
   }
 }
