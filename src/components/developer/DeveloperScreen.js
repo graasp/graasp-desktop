@@ -9,8 +9,8 @@ import Styles from '../../Styles';
 import Main from '../common/Main';
 import Banner from '../common/Banner';
 
+// eslint-disable-next-line react/prefer-stateless-function
 export class DeveloperScreen extends Component {
-  
   static propTypes = {
     t: PropTypes.func.isRequired,
     classes: PropTypes.shape({

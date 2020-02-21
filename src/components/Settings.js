@@ -11,8 +11,8 @@ import DeveloperSwitch from './common/DeveloperSwitch';
 import GeolocationControl from './common/GeolocationControl';
 import Main from './common/Main';
 
+// eslint-disable-next-line react/prefer-stateless-function
 export class Settings extends Component {
-
   static propTypes = {
     t: PropTypes.func.isRequired,
     classes: PropTypes.shape({
