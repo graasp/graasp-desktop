@@ -1,0 +1,205 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MediaCard /> <MediaCard /> with showActions = false renders correctly 1`] = `
+<WithStyles(ForwardRef(Card))
+  className=""
+>
+  <WithStyles(ForwardRef(CardActionArea))
+    onClick={[MockFunction]}
+  >
+    <WithStyles(ForwardRef(CardMedia))
+      className=""
+      image="image"
+      title="name"
+    />
+    <WithStyles(ForwardRef(CardContent))>
+      <WithStyles(ForwardRef(Typography))
+        component="h2"
+        variant="h5"
+      >
+        name
+      </WithStyles(ForwardRef(Typography))>
+    </WithStyles(ForwardRef(CardContent))>
+  </WithStyles(ForwardRef(CardActionArea))>
+  <WithStyles(ForwardRef(Collapse))
+    disableSpacing={true}
+    in={false}
+    timeout="auto"
+    unmountOnExit={true}
+  >
+    <WithStyles(ForwardRef(CardContent))
+      className=""
+    >
+      <Text
+        className=""
+        content="text"
+        style={Object {}}
+      />
+    </WithStyles(ForwardRef(CardContent))>
+  </WithStyles(ForwardRef(Collapse))>
+</WithStyles(ForwardRef(Card))>
+`;
+
+exports[`<MediaCard /> <MediaCard /> with showActions = true with text defined renders correctly 1`] = `
+<WithStyles(ForwardRef(Card))
+  className=""
+>
+  <WithStyles(ForwardRef(CardActionArea))
+    onClick={[MockFunction]}
+  >
+    <WithStyles(ForwardRef(CardMedia))
+      className=""
+      image="image"
+      title="name"
+    />
+    <WithStyles(ForwardRef(CardContent))>
+      <WithStyles(ForwardRef(Typography))
+        component="h2"
+        variant="h5"
+      >
+        name
+      </WithStyles(ForwardRef(Typography))>
+    </WithStyles(ForwardRef(CardContent))>
+  </WithStyles(ForwardRef(CardActionArea))>
+  <WithStyles(ForwardRef(Collapse))
+    disableSpacing={true}
+    in={false}
+    timeout="auto"
+    unmountOnExit={true}
+  >
+    <WithStyles(ForwardRef(CardContent))
+      className=""
+    >
+      <Text
+        className=""
+        content="text"
+        style={Object {}}
+      />
+    </WithStyles(ForwardRef(CardContent))>
+  </WithStyles(ForwardRef(Collapse))>
+  <WithStyles(ForwardRef(CardActions))
+    disableSpacing={true}
+  >
+    <withI18nextTranslation(WithStyles(undefined))
+      id="id"
+    />
+    <withI18nextTranslation(WithStyles(undefined))
+      space={
+        Object {
+          "id": "id",
+          "name": "name",
+        }
+      }
+    />
+    <withI18nextTranslation(WithStyles(undefined))
+      id="id"
+    />
+    <WithStyles(ForwardRef(IconButton))
+      aria-expanded={false}
+      aria-label="Show more"
+      className=""
+      onClick={[Function]}
+    >
+      <ExpandMoreIcon />
+    </WithStyles(ForwardRef(IconButton))>
+  </WithStyles(ForwardRef(CardActions))>
+</WithStyles(ForwardRef(Card))>
+`;
+
+exports[`<MediaCard /> <MediaCard /> with showActions = true with text undefined renders correctly 1`] = `
+<WithStyles(ForwardRef(Card))
+  className=""
+>
+  <WithStyles(ForwardRef(CardActionArea))
+    onClick={[MockFunction]}
+  >
+    <WithStyles(ForwardRef(CardMedia))
+      className=""
+      image="image"
+      title="name"
+    />
+    <WithStyles(ForwardRef(CardContent))>
+      <WithStyles(ForwardRef(Typography))
+        component="h2"
+        variant="h5"
+      >
+        name
+      </WithStyles(ForwardRef(Typography))>
+    </WithStyles(ForwardRef(CardContent))>
+  </WithStyles(ForwardRef(CardActionArea))>
+  <WithStyles(ForwardRef(Collapse))
+    disableSpacing={true}
+    in={false}
+    timeout="auto"
+    unmountOnExit={true}
+  >
+    <WithStyles(ForwardRef(CardContent))
+      className=""
+    >
+      <Text
+        className=""
+        content=""
+        style={Object {}}
+      />
+    </WithStyles(ForwardRef(CardContent))>
+  </WithStyles(ForwardRef(Collapse))>
+  <WithStyles(ForwardRef(CardActions))
+    disableSpacing={true}
+  >
+    <withI18nextTranslation(WithStyles(undefined))
+      id="id"
+    />
+    <withI18nextTranslation(WithStyles(undefined))
+      space={
+        Object {
+          "id": "id",
+          "name": "name",
+        }
+      }
+    />
+    <withI18nextTranslation(WithStyles(undefined))
+      id="id"
+    />
+  </WithStyles(ForwardRef(CardActions))>
+</WithStyles(ForwardRef(Card))>
+`;
+
+exports[`<MediaCard /> <MediaCard /> with showActions = undefined renders correctly 1`] = `
+<WithStyles(ForwardRef(Card))
+  className=""
+>
+  <WithStyles(ForwardRef(CardActionArea))
+    onClick={[MockFunction]}
+  >
+    <WithStyles(ForwardRef(CardMedia))
+      className=""
+      image="image"
+      title="name"
+    />
+    <WithStyles(ForwardRef(CardContent))>
+      <WithStyles(ForwardRef(Typography))
+        component="h2"
+        variant="h5"
+      >
+        name
+      </WithStyles(ForwardRef(Typography))>
+    </WithStyles(ForwardRef(CardContent))>
+  </WithStyles(ForwardRef(CardActionArea))>
+  <WithStyles(ForwardRef(Collapse))
+    disableSpacing={true}
+    in={false}
+    timeout="auto"
+    unmountOnExit={true}
+  >
+    <WithStyles(ForwardRef(CardContent))
+      className=""
+    >
+      <Text
+        className=""
+        content="text"
+        style={Object {}}
+      />
+    </WithStyles(ForwardRef(CardContent))>
+  </WithStyles(ForwardRef(Collapse))>
+</WithStyles(ForwardRef(Card))>
+`;
