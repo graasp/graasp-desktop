@@ -98,7 +98,7 @@ exports[`<Phase /> with tools <Phase /> with toolsVisible = true renders correct
         items={
           Array [
             Object {
-              "id": "spaceItempsId",
+              "id": "spaceItemsId",
             },
           ]
         }
