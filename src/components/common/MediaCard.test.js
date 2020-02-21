@@ -309,5 +309,27 @@ describe('<MediaCard />', () => {
         expect(wrapper.find(IconButton)).toHaveLength(0);
       });
     });
+
+    describe('with math', () => {
+      let wrapper;
+      let props;
+
+      beforeAll(() => {
+        props = createMediaCardProps(true, 'textt\\[x^2\\]gdh');
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        wrapper = shallow(<MediaCard {...props} />);
+      });
+
+      it('renders math', () => {
+        const parsedContent = wrapper
+          .find(Collapse)
+          .find(Text)
+          .dive()
+          .debug();
+        expect(parsedContent).toEqual(expect.stringMatching('class="katex"'));
+        // const parsedContent = wrapper.find(Collapse).find(Text).dive().find(ReactQuill).prop('value');
+        // expect(parsedContent).toEqual(expect.stringMatching('class="katex"'));
+      });
+    });
   });
 });
