@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Settings /> renders correctly 1`] = `
+<div
+  className=""
+>
+  <WithStyles(CssBaseline) />
+  <WithStyles(ForwardRef(AppBar))
+    className=""
+    position="fixed"
+  >
+    <WithStyles(ForwardRef(Toolbar))
+      disableGutters={true}
+    >
+      <WithStyles(ForwardRef(IconButton))
+        aria-label="Open drawer"
+        className=""
+        color="inherit"
+        onClick={[Function]}
+      >
+        <MenuIcon />
+      </WithStyles(ForwardRef(IconButton))>
+    </WithStyles(ForwardRef(Toolbar))>
+  </WithStyles(ForwardRef(AppBar))>
+  <WithStyles(ForwardRef(Drawer))
+    anchor="left"
+    className=""
+    classes={
+      Object {
+        "paper": "",
+      }
+    }
+    open={false}
+    variant="persistent"
+  >
+    <div
+      className=""
+    >
+      <WithStyles(ForwardRef(IconButton))
+        onClick={[Function]}
+      >
+        <ChevronLeftIcon />
+      </WithStyles(ForwardRef(IconButton))>
+    </div>
+    <WithStyles(ForwardRef(Divider)) />
+    <withRouter(withI18nextTranslation(Connect(MainMenu))) />
+  </WithStyles(ForwardRef(Drawer))>
+  <main
+    className=""
+  >
+    <div
+      className=""
+    />
+    <div
+      className=""
+    >
+      <WithStyles(ForwardRef(Typography))
+        color="inherit"
+        variant="h5"
+      >
+        Settings
+      </WithStyles(ForwardRef(Typography))>
+      <WithStyles(ForwardRef(FormGroup))>
+        <withI18nextTranslation(WithStyles(undefined)) />
+        <withI18nextTranslation(WithStyles(undefined)) />
+        <withI18nextTranslation(WithStyles(undefined)) />
+      </WithStyles(ForwardRef(FormGroup))>
+    </div>
+  </main>
+</div>
+`;

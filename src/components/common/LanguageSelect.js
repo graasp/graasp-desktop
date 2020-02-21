@@ -18,7 +18,7 @@ const styles = theme => ({
   },
 });
 
-class LanguageSelect extends Component {
+export class LanguageSelect extends Component {
   static propTypes = {
     activity: PropTypes.bool.isRequired,
     i18n: PropTypes.shape({

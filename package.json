@@ -133,6 +133,7 @@
     "electron": "8.0.1",
     "electron-builder": "22.3.2",
     "env-cmd": "10.1.0",
+    "enzyme-to-json": "3.4.4",
     "eslint-config-airbnb": "18.0.1",
     "eslint-config-prettier": "6.10.0",
     "husky": "4.2.3",
@@ -198,5 +199,10 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "jest": {
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ]
+  }
 }
