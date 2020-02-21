@@ -48,7 +48,7 @@ const styles = theme => ({
   },
 });
 
-const MediaCard = props => {
+export const MediaCard = props => {
   const { classes, image, text, viewLink, space, showActions } = props;
   const { id, name } = space;
   const [expanded, setExpanded] = React.useState(false);
