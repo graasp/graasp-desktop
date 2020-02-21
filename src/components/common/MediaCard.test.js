@@ -309,25 +309,5 @@ describe('<MediaCard />', () => {
         expect(wrapper.find(IconButton)).toHaveLength(0);
       });
     });
-
-    describe('with math', () => {
-      let wrapper;
-      let props;
-
-      beforeAll(() => {
-        props = createMediaCardProps(true, 'text with math \\[x^2\\] inside');
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        wrapper = shallow(<MediaCard {...props} />);
-      });
-
-      it('renders math in description', () => {
-        const parsedContent = wrapper
-          .find(Collapse)
-          .find(Text)
-          .dive()
-          .debug();
-        expect(parsedContent).toEqual(expect.stringMatching('class="katex"'));
-      });
-    });
   });
 });
