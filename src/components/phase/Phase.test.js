@@ -15,7 +15,7 @@ const samplePhase = Map({
   items: [{ id: 'phaseItemId' }],
 });
 
-const sampleTools = [{ id: 'spaceItempsId' }];
+const sampleTools = [{ id: 'spaceItemsId' }];
 
 const createPhaseProps = (phase, items, toolsVisible) => {
   return {
