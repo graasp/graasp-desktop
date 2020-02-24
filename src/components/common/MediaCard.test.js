@@ -315,7 +315,10 @@ describe('<MediaCard />', () => {
       let props;
 
       beforeAll(() => {
-        props = createMediaCardProps(true, 'text with math \\[x^2\\] inside');
+        props = createMediaCardProps(
+          true,
+          'text with a math \\[x^2\\] formula'
+        );
         // eslint-disable-next-line react/jsx-props-no-spreading
         wrapper = shallow(<MediaCard {...props} />);
       });
