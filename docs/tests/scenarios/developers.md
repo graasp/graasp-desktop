@@ -2,7 +2,7 @@
 
 ### General usage of Graasp Desktop and opening Dev tools
 
-**Summary**: A new developer integrates the team and need to understand the app and how he can use it to further develop new features. He first checks whether the Developer Tools are available in the app. He opens Graasp Desktop and visits the software menu. He finds **Toggle Dev Tools** in the menu and enables it. The Dev Tools panel is opened and allows the developer to have a better understanding of the app for debugging. He also visits the **Settings** tab and turn the **Developer Mode** on. He then visits the **Developer** tab. He discovers the JSON database, and eventually checks the mapping of the data to the spaces by going back-and-forth to the spaces and the developer tab.
+**Summary**: A new developer integrates the team and needs to understand the app and how he can use it to further develop new features. He first checks whether the Developer Tools are available in the app. He opens Graasp Desktop and visits the software menu. He finds **Toggle Dev Tools** in the menu and enables it. The Dev Tools panel is opened and allows the developer to have a better understanding of the app for debugging. He also visits the **Settings** tab and turn the **Developer Mode** on. He then visits the **Developer** tab. He discovers the JSON database, and eventually checks the mapping of the data to the spaces by going back-and-forth to the spaces and the developer tab.
 
 **Steps:**
 
