@@ -315,7 +315,7 @@ describe('<MediaCard />', () => {
       let props;
 
       beforeAll(() => {
-        props = createMediaCardProps(true, 'textt\\[x^2\\]gdh');
+        props = createMediaCardProps(true, 'text with math \\[x^2\\] inside');
         // eslint-disable-next-line react/jsx-props-no-spreading
         wrapper = shallow(<MediaCard {...props} />);
       });
@@ -327,8 +327,6 @@ describe('<MediaCard />', () => {
           .dive()
           .debug();
         expect(parsedContent).toEqual(expect.stringMatching('class="katex"'));
-        // const parsedContent = wrapper.find(Collapse).find(Text).dive().find(ReactQuill).prop('value');
-        // expect(parsedContent).toEqual(expect.stringMatching('class="katex"'));
       });
     });
   });
