@@ -14,6 +14,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DeleteButton from '../space/DeleteButton';
 import ExportButton from '../space/ExportButton';
 import SyncButton from '../space/SyncButton';
+import Text from './Text';
 import { MIN_CARD_WIDTH } from '../../config/constants';
 
 const styles = theme => ({
@@ -24,6 +25,11 @@ const styles = theme => ({
     marginBottom: 15,
   },
   cardDescription: { margin: 0, paddingTop: 0, paddingBottom: 0 },
+  cardDescriptionText: {
+    '& p': {
+      fontSize: 'large',
+    },
+  },
   media: {
     height: 300,
   },
@@ -42,7 +48,7 @@ const styles = theme => ({
   },
 });
 
-const MediaCard = props => {
+export const MediaCard = props => {
   const { classes, image, text, viewLink, space, showActions } = props;
   const { id, name } = space;
   const [expanded, setExpanded] = React.useState(false);
@@ -64,10 +70,7 @@ const MediaCard = props => {
 
       <Collapse disableSpacing in={expanded} timeout="auto" unmountOnExit>
         <CardContent className={classes.cardDescription}>
-          <Typography
-            component="p"
-            dangerouslySetInnerHTML={{ __html: text }}
-          />
+          <Text content={text} className={classes.cardDescriptionText} />
         </CardContent>
       </Collapse>
 
@@ -100,6 +103,7 @@ MediaCard.propTypes = {
     media: PropTypes.string.isRequired,
     card: PropTypes.string.isRequired,
     cardDescription: PropTypes.string.isRequired,
+    cardDescriptionText: PropTypes.string.isRequired,
     expand: PropTypes.string.isRequired,
     expandOpen: PropTypes.string.isRequired,
   }).isRequired,
