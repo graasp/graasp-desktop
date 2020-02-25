@@ -8,17 +8,37 @@
 
 1. Open Graasp Desktop
 2. Click on **Load**
-3. Enter [XX]
-4. [check space]
-5. Change the space on the authoring platform (not tested)
-6. Click on the **Synchronization** button
-7. [check space]
-8. Click on the **Clear User Input** button
-9. Click on the **Export ** button
-   <br/><br/>
-10. Delete space
-11. Click on **Load**
-12. Import space
+3. Enter https://graasp.eu/spaces/5e53bc759bdb29152a00b6e4
+4. Click on the **Load** button
+5. Click on **Saved Spaces**
+6. Click on space _Air Pollution_
+7. Click on the **Preview** button
+8. Click on phase _Air Polluants_
+9. Click on phase _Investigation_
+10. Click on phase _Conclusion_
+11. Click on phase _Discussion_
+12. Change the space on the authoring platform (not tested)
+13. Return on Graasp Desktop (not tested)
+14. Click on the **Synchronization** button
+15. Click on the **Preview** button
+16. Click on phase _Air Polluants_
+17. Click on phase _Investigation_
+18. Click on phase _Conclusion_
+19. Click on phase _Discussion_
+20. Click on the **Clear User Input** button
+21. Click on the **Export** button
+    <br/><br/>
+22. Open Graasp Desktop
+23. Click on the **Delete** button of space **Air Polluants**
+24. Click on **Load**
+25. Click on the **Browse** button and choose the given zip file.
+26. Click on the **Load** button
+27. Click on **Saved Spaces**
+28. Click on space _Air Pollution_
+29. Click on the **Preview** button
+30. Click on phase _Air Polluants_
+31. Click on phase _Conclusion_
+32. Close Graasp Desktop
 
 ---
 
@@ -30,14 +50,28 @@
 
 1. Open Graasp Desktop
 2. Click on **Load**
-3. Choose Aline space
+3. Click on the **Browse** button and choose Aline space
 4. Click on the **Load** button
-5. Review Aline space
-6. Click on the **Delete** button
-7. Click on **Load**
-8. Choose Bob space
-9. Click on the **Load** button
-10. Review Bob space
+5. Click on **Saved Spaces**
+6. Click on Aline space
+7. Click on phase _Investigation_
+8. Note the input content on a separated sheet (not tested)
+9. Click on phase _Investigation_
+10. Note the input content on a separated sheet (not tested)
+11. Click on the **Delete** button
+12. Click on **Load**
+13. Click on the **Browse** button and choose Bob space
+14. Click on the **Load** button
+15. Click on **Saved Spaces**
+16. Click on Aline space
+17. Click on phase _Investigation_
+18. Note the input content on a separated sheet (not tested)
+19. Click on phase _Investigation_
+20. Note the input content on a separated sheet (not tested)
+21. Click on the **Delete** button
+22. Close Graasp Desktop
+
+_Note_: This process does not take into account any dedicated feature for providing feedback to students. This is the general case where students provide their spaces and the professor gives a feedback in person (without the application).
 
 ---
 
@@ -48,11 +82,17 @@
 **Steps:**
 
 1. Open Graasp Desktop
-2. Click on space XX
-3. [Answer to her space]
-4. Click on the **Export** button
-5. Save on her computer
+2. Click on space _Air Pollution_
+3. Click on phase _Investigation_
+4. Fill in the input with _Transportation (cars, planes, ...) and industry (factories)_
+5. Click on the **Export** button and save the space on her computer
+6. Close Graasp Desktop
    <br/><br/>
-6. Open Graasp Desktop
-7. Click on **Load**
-8. Visit Teacher’s space to review her solutions
+7. Open Graasp Desktop
+8. Click on **Load**
+9. Click on the **Browse** button and choose the teacher's space
+10. Click on the **Load** button
+11. Click on **Saved Spaces**
+12. Click on space _Air Pollution_
+13. Click on phase _Investigation_
+14. Close Graasp Desktop

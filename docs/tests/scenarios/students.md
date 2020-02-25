@@ -2,7 +2,7 @@
 
 ### General discovering of Graasp Desktop while online
 
-**Summary**: A new student discovers Graasp Desktop for the first time. He starts the application which is brand new and empty. He opens the menu and clicks on all tabs to discover their content. He finally changes the settings to use the application in his mother tongue (french). He also enables the geolocation in the settings and visits the Spaces Nearby tab, and chooses to open one of the courses the application displays. Once he finishes reading the space's content, he closes the app.
+**Summary**: A new student discovers Graasp Desktop for the first time. He starts the application which is brand new and empty. He opens the menu and clicks on all tabs to discover their content. He finally changes the settings to use the application in his mother tongue (french). He also enables the geolocation in the settings and visits the Spaces Nearby tab, where spaces are now displayed. He visits a space, once he finishes reading the space's content, he closes the app.
 
 **Steps:**
 
@@ -13,9 +13,10 @@
 5. Click on **Settings**
 6. Change language to French
 7. Turn on the geolocation
-8. Click to **Spaces Nearby**
-9. Click on a space X
-10. ...
+8. Click on **Spaces Nearby**. There should be spaces.
+9. Click on a the first space.
+
+_Note_: since this scenario depends on the location, the steps are imprecise on purpose.
 
 ---
 
@@ -27,9 +28,13 @@
 
 1. Open Graasp Desktop
 2. Click on **Saved Spaces**
-3. Click on a space X
-4. Click on phase X
-5. ...
+3. Click on space _Light Color_
+4. Click on phase _White Light_
+5. Click on phase _Colour of Objects_
+6. Resize the first app
+7. Click on phase _Colour detection_
+8. Click on phase _Mixing Colours_
+9. Close Graasp Desktop
 
 ---
 
@@ -40,11 +45,18 @@
 **Steps:**
 
 1. Open Graasp Desktop
-2. Click on **Visit Space**
-3. Write XXX
-4. [see the space]
-5. Click on the **Export** button
-6. Save on his USB stick
+2. Click on **Visit a Space**
+3. Enter **027psa**
+4. Click on **Saved Spaces**
+5. Click on space **Light Color**
+6. Click on phase _Visible Light_
+7. Click on phase _White Light_
+8. Click on phase _Colour Detection_
+9. Click on phase _Conclusion_
+10. Fill the input with _Thank you for this course!_
+11. Click on the **Export** button
+12. Save on his USB stick
+13. Close Graasp Desktop
 
 ---
 
@@ -57,7 +69,10 @@
 1. Open Graasp Desktop
 2. Click on **Spaces Nearby**
 3. Click on the **Enable Geolocation** button
-4. [see one space]
+4. Click on one space and explore it
+5. Close Graasp Desktop
+
+_Note_: since this scenario depends on the location, the steps are imprecise on purpose.
 
 ---
 
@@ -69,16 +84,21 @@
 
 1. Open Graasp Desktop
 2. Click on **Visit a Space**
-3. Submit a space url
-4. [discover space]
-5. Click on the **Save Space** button
-6. Close the desktop app
+3. Enter _https://graasp.eu/spaces/5e53bc759bdb29152a00b6e4_ and click on the **Visit a Space** button
+4. Click on phase _Investigation_
+5. Fill in the input with _Cars_, then **save** the answer
+6. Click on the **Save** button
+7. Close the desktop app
    <br/><br/>
-7. Open Graasp Desktop app again
-8. Click on space [XX]
-9. [answers]
-10. Click on the **Export Space** button
-11. Save on USB stick (not tested)
+8. Open Graasp Desktop app
+9. Click on space **Air Pollution**
+10. Click on phase _Mixing Colours_
+11. Click on phase _Useful Links_
+12. Click on phase _Conclusion_
+13. Fill in the input with _Very interesting_, then **save** the answer
+14. Click on the **Export** button
+15. Save on USB stick (not tested)
+16. Close Graasp Desktop
 
 ---
 
@@ -89,15 +109,26 @@
 **Steps:**
 
 1. Open Graasp Desktop
-2. Export Space X and Y
+2. Click on the **Export** button of space _Air Pollution_
+3. Click on the **Export** button of space _Light Color_
+4. Close Graasp Desktop
    <br/><br/>
-3. Click on **Load**
-4. Choose a space on his USB stick
-5. Click on [Load]
-6. [check the space]
-7. Click on the **Load** button
-8. Choose another space from the USB stick
-9. [check the space]
+5. Open Graasp Desktop
+6. Click on **Load**
+7. Choose the space _Light Color_ on his USB stick
+8. Click on the **Load** button
+9. Click on **Saved Spaces**
+10. Click on space _Light Color_
+11. Click on the **Preview** button
+12. Click on phase _Conclusion_. User input should be present.
+13. Click on **Load**
+14. Choose the space _Air Pollution_ on his USB stick
+15. Click on the **Load** button
+16. Click on **Saved Spaces**
+17. Click on space _Air Pollution_
+18. Click on the **Preview** button
+19. Click on phase _Conclusion_. User input should be present.
+20. Close Graasp Desktop
 
 ### Synchronizing after the professor uploaded the next chapter of the course
 
@@ -106,8 +137,11 @@
 **Steps:**
 
 1. Open Graasp Desktop
-2. Click on space [XX]
-3. Click on export space XX
-4. Click on the **Clear user input** button
-5. Click on the **Synchronization** button
-6. [check space]
+2. Click on space _Air Pollution_
+3. Click on the **Export** button and save on the space on the computer
+4. Click on the **Synchronization** button
+5. Click on phase _Air Polluants_
+6. Click on phase _Investigation_
+7. Click on phase _Discussion_
+8. Fill in the input with _Thank you for the course_
+9. Close Graasp Desktop
