@@ -12,12 +12,14 @@ import {
   GET_APP_INSTANCE,
   POST_APP_INSTANCE_RESOURCE,
   APP_INSTANCE_RESOURCE_TYPES,
+  POST_ACTION,
 } from '../../types';
 import {
   getAppInstanceResources,
   patchAppInstanceResource,
   postAppInstanceResource,
   getAppInstance,
+  postAction,
 } from '../../actions';
 import {
   DEFAULT_LANGUAGE,
@@ -45,6 +47,7 @@ class PhaseApp extends Component {
     name: PropTypes.string,
     folder: PropTypes.string.isRequired,
     dispatchGetAppInstance: PropTypes.func.isRequired,
+    dispatchPostAction: PropTypes.func.isRequired,
     id: PropTypes.string.isRequired,
     phaseId: PropTypes.string.isRequired,
     spaceId: PropTypes.string.isRequired,
@@ -101,7 +104,11 @@ class PhaseApp extends Component {
 
   handleReceiveMessage = event => {
     try {
-      const { dispatchGetAppInstance, appInstance } = this.props;
+      const {
+        dispatchGetAppInstance,
+        appInstance,
+        dispatchPostAction,
+      } = this.props;
 
       // get app instance id in message
       const { id: componentAppInstanceId } = appInstance || {};
@@ -122,6 +129,8 @@ class PhaseApp extends Component {
             return patchAppInstanceResource(payload, this.postMessage);
           case GET_APP_INSTANCE:
             return dispatchGetAppInstance(payload, this.postMessage);
+          case POST_ACTION:
+            return dispatchPostAction(payload, this.postMessage);
           default:
             return false;
         }
@@ -280,6 +289,7 @@ const mapStateToProps = ({ User, Space }) => ({
 
 const mapDispatchToProps = {
   dispatchGetAppInstance: getAppInstance,
+  dispatchPostAction: postAction,
 };
 
 const ConnectedComponent = connect(

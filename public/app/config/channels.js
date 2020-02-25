@@ -41,4 +41,5 @@ module.exports = {
   CLEARED_USER_INPUT_CHANNEL: 'space:cleared',
   SHOW_CLEAR_USER_INPUT_PROMPT_CHANNEL: 'prompt:space:clear:show',
   RESPOND_CLEAR_USER_INPUT_PROMPT_CHANNEL: 'prompt:space:clear:respond',
+  POST_ACTION_CHANNEL: 'action:post',
 };

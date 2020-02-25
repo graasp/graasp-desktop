@@ -18,6 +18,7 @@ const getDeveloperMode = require('./getDeveloperMode');
 const setDeveloperMode = require('./setDeveloperMode');
 const clearUserInput = require('./clearUserInput');
 const showClearUserInputPrompt = require('./showClearUserInputPrompt');
+const postAction = require('./postAction');
 
 module.exports = {
   loadSpace,
@@ -40,4 +41,5 @@ module.exports = {
   setDeveloperMode,
   clearUserInput,
   showClearUserInputPrompt,
+  postAction,
 };
