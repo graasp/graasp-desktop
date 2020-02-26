@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Text /> trivial cases renders correctly 1`] = `
+<div
+  style={
+    Object {
+      "color": "red",
+    }
+  }
+>
+  <Quill
+    className="textClass"
+    formats={
+      Array [
+        "header",
+        "bold",
+        "italic",
+        "underline",
+        "strike",
+        "blockquote",
+        "list",
+        "bullet",
+        "indent",
+        "link",
+        "image",
+        "formula",
+      ]
+    }
+    modules={
+      Object {
+        "toolbar": false,
+      }
+    }
+    readOnly={true}
+    style={
+      Object {
+        "border": "0",
+      }
+    }
+    theme="snow"
+    value="content"
+  />
+</div>
+`;
