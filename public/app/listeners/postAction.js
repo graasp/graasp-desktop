@@ -19,7 +19,9 @@ const postAction = (mainWindow, db) => (event, payload = {}) => {
 
     // prepare the resource that we will create
     const actionToWrite = {
-      appInstance: appInstanceId,
+      spaceId,
+      subSpaceId,
+      appInstanceId,
       createdAt: now,
       updatedAt: now,
       data,
@@ -30,27 +32,10 @@ const postAction = (mainWindow, db) => (event, payload = {}) => {
       id: ObjectId().str,
     };
 
-    // write the resource to the database
-    const appInstanceElement = db
-      .get('spaces')
-      .find({ id: spaceId })
-      .get('phases')
-      .find({ id: subSpaceId })
-      .get('items')
-      .filter(item => item.appInstance)
-      .map(item => item.appInstance)
-      .find({ id: appInstanceId });
-
-    // add the actions key if it does not exist
-    const hasActions = appInstanceElement.has('actions').value();
-    if (!hasActions) {
-      appInstanceElement.set('actions', [actionToWrite]).write();
-    } else {
-      appInstanceElement
-        .get('actions')
-        .push(actionToWrite)
-        .write();
-    }
+    // write the action to the database
+    db.get('actions')
+      .push(actionToWrite)
+      .write();
 
     // send back the resource
     mainWindow.webContents.send(POST_ACTION_CHANNEL, actionToWrite);
