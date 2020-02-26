@@ -55,6 +55,8 @@ class PhaseApp extends Component {
     appInstance: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }),
+    geolocation: PropTypes.instanceOf(Map),
+    geolocationEnabled: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -63,6 +65,7 @@ class PhaseApp extends Component {
     appInstance: null,
     name: 'Image',
     lang: DEFAULT_LANGUAGE,
+    geolocation: undefined,
   };
 
   state = {
@@ -108,6 +111,8 @@ class PhaseApp extends Component {
         dispatchGetAppInstance,
         appInstance,
         dispatchPostAction,
+        geolocation,
+        geolocationEnabled,
       } = this.props;
 
       // get app instance id in message
@@ -129,8 +134,16 @@ class PhaseApp extends Component {
             return patchAppInstanceResource(payload, this.postMessage);
           case GET_APP_INSTANCE:
             return dispatchGetAppInstance(payload, this.postMessage);
-          case POST_ACTION:
+          case POST_ACTION: {
+            // add geolocation to action if enabled
+            if (geolocationEnabled) {
+              const {
+                coords: { latitude, longitude },
+              } = geolocation.toJS();
+              payload.geolocation = { ll: [latitude, longitude] };
+            }
             return dispatchPostAction(payload, this.postMessage);
+          }
           default:
             return false;
         }
@@ -285,6 +298,9 @@ const mapStateToProps = ({ User, Space }) => ({
   lang:
     Space.getIn(['current', 'content', 'language']) ||
     User.getIn(['current', 'lang']),
+
+  geolocation: User.getIn(['current', 'geolocation']),
+  geolocationEnabled: User.getIn(['current', 'geolocationEnabled']),
 });
 
 const mapDispatchToProps = {

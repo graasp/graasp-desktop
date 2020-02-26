@@ -11,6 +11,7 @@ const postAction = (mainWindow, db) => (event, payload = {}) => {
       format,
       verb,
       data,
+      geolocation,
       visibility = 'private',
     } = payload;
 
@@ -27,6 +28,7 @@ const postAction = (mainWindow, db) => (event, payload = {}) => {
       data,
       format,
       verb,
+      geolocation,
       visibility,
       user: userId,
       id: ObjectId().str,

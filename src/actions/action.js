@@ -1,8 +1,8 @@
 import { POST_ACTION_SUCCEEDED } from '../types';
 import { POST_ACTION_CHANNEL } from '../config/channels';
 
-const postAction = async (ddd = {}, callback) => () => {
-  const {
+const postAction = async (
+  {
     userId,
     id: appInstanceId,
     spaceId,
@@ -10,8 +10,11 @@ const postAction = async (ddd = {}, callback) => () => {
     format,
     data,
     verb,
+    geolocation,
     visibility,
-  } = ddd;
+  } = {},
+  callback
+) => () => {
   try {
     window.ipcRenderer.send(POST_ACTION_CHANNEL, {
       userId,
@@ -21,6 +24,7 @@ const postAction = async (ddd = {}, callback) => () => {
       format,
       data,
       verb,
+      geolocation,
       visibility,
     });
 
