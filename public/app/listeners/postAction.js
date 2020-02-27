@@ -1,5 +1,6 @@
 const ObjectId = require('bson-objectid');
 const { POST_ACTION_CHANNEL } = require('../config/channels');
+const logger = require('../logger');
 
 const postAction = (mainWindow, db) => (event, payload = {}) => {
   try {
@@ -18,7 +19,7 @@ const postAction = (mainWindow, db) => (event, payload = {}) => {
     // prepare the timestamp
     const now = new Date();
 
-    // prepare the resource that we will create
+    // prepare the action that we will create
     const actionToWrite = {
       spaceId,
       subSpaceId,
@@ -42,7 +43,7 @@ const postAction = (mainWindow, db) => (event, payload = {}) => {
     // send back the resource
     mainWindow.webContents.send(POST_ACTION_CHANNEL, actionToWrite);
   } catch (e) {
-    console.error(e);
+    logger.error(e);
     mainWindow.webContents.send(POST_ACTION_CHANNEL, null);
   }
 };

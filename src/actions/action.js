@@ -37,7 +37,7 @@ const postAction = async (
       });
     });
   } catch (err) {
-    console.error(err);
+    // do nothing
   }
 };
 

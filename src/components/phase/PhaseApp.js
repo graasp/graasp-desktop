@@ -65,7 +65,7 @@ class PhaseApp extends Component {
     appInstance: null,
     name: 'Image',
     lang: DEFAULT_LANGUAGE,
-    geolocation: undefined,
+    geolocation: null,
   };
 
   state = {
@@ -136,10 +136,9 @@ class PhaseApp extends Component {
             return dispatchGetAppInstance(payload, this.postMessage);
           case POST_ACTION: {
             // add geolocation to action if enabled
+            payload.geolocation = null;
             if (geolocationEnabled) {
-              const {
-                coords: { latitude, longitude },
-              } = geolocation.toJS();
+              const { latitude, longitude } = geolocation.getIn(['coords']);
               payload.geolocation = { ll: [latitude, longitude] };
             }
             return dispatchPostAction(payload, this.postMessage);
