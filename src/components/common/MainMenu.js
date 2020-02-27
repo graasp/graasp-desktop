@@ -22,6 +22,7 @@ import {
   SPACES_NEARBY_PATH,
   VISIT_PATH,
   DEVELOPER_PATH,
+  ACTION_DASHBOARD_PATH,
 } from '../../config/paths';
 
 export class MainMenu extends Component {
@@ -146,6 +147,16 @@ export class MainMenu extends Component {
             <SettingsIcon />
           </ListItemIcon>
           <ListItemText primary={t('Settings')} />
+        </MenuItem>
+        <MenuItem
+          onClick={() => this.handleClick(ACTION_DASHBOARD_PATH)}
+          button
+          selected={path === ACTION_DASHBOARD_PATH}
+        >
+          <ListItemIcon>
+            <SettingsIcon />
+          </ListItemIcon>
+          <ListItemText primary={t('Action Dashboard')} />
         </MenuItem>
         {this.renderDeveloperMode()}
       </List>

@@ -17,6 +17,7 @@ import LoadSpace from './components/LoadSpace';
 import SpaceScreen from './components/space/SpaceScreen';
 import DeveloperScreen from './components/developer/DeveloperScreen';
 import { OnlineTheme, OfflineTheme } from './themes';
+import ActionDashboard from './components/actionDashboard/ActionDashboard';
 import {
   SETTINGS_PATH,
   SPACE_PATH,
@@ -25,6 +26,7 @@ import {
   VISIT_PATH,
   LOAD_SPACE_PATH,
   DEVELOPER_PATH,
+  ACTION_DASHBOARD_PATH,
 } from './config/paths';
 import {
   getGeolocation,
@@ -158,6 +160,11 @@ export class App extends Component {
                     exact
                     path={DEVELOPER_PATH}
                     component={DeveloperScreen}
+                  />
+                  <Route
+                    exact
+                    path={ACTION_DASHBOARD_PATH}
+                    component={ActionDashboard}
                   />
                 </Switch>
               </div>
