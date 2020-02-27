@@ -10,6 +10,7 @@ import CodeIcon from '@material-ui/icons/Code';
 import ListItemText from '@material-ui/core/ListItemText';
 import List from '@material-ui/core/List';
 import SearchIcon from '@material-ui/icons/Search';
+import ShowChartIcon from '@material-ui/icons/ShowChart';
 import Language from '@material-ui/icons/Language';
 import PublishIcon from '@material-ui/icons/Publish';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -22,7 +23,7 @@ import {
   SPACES_NEARBY_PATH,
   VISIT_PATH,
   DEVELOPER_PATH,
-  ACTION_DASHBOARD_PATH,
+  DASHBOARD_PATH,
 } from '../../config/paths';
 
 export class MainMenu extends Component {
@@ -149,14 +150,14 @@ export class MainMenu extends Component {
           <ListItemText primary={t('Settings')} />
         </MenuItem>
         <MenuItem
-          onClick={() => this.handleClick(ACTION_DASHBOARD_PATH)}
+          onClick={() => this.handleClick(DASHBOARD_PATH)}
           button
-          selected={path === ACTION_DASHBOARD_PATH}
+          selected={path === DASHBOARD_PATH}
         >
           <ListItemIcon>
-            <SettingsIcon />
+            <ShowChartIcon />
           </ListItemIcon>
-          <ListItemText primary={t('Action Dashboard')} />
+          <ListItemText primary={t('Dashboard')} />
         </MenuItem>
         {this.renderDeveloperMode()}
       </List>

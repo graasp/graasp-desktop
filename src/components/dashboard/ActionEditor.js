@@ -3,7 +3,6 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import ReactJson from 'react-json-view';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
@@ -47,7 +46,7 @@ export class ActionEditor extends Component {
   };
 
   render() {
-    const { database, t, classes } = this.props;
+    const { database, t } = this.props;
 
     if (!database || _.isEmpty(database)) {
       return <Loader />;
@@ -55,24 +54,8 @@ export class ActionEditor extends Component {
 
     return (
       <div>
-        <Typography variant="h6">{t('Manually Edit the Database')}</Typography>
-        <ReactJson
-          name="actions"
-          collapsed
-          src={database.actions}
-          onEdit={this.handleEdit}
-          onAdd={this.handleEdit}
-          onDelete={this.handleEdit}
-        />
-        <br />
-        <Button
-          variant="contained"
-          className={classes.button}
-          onClick={this.handleUseSampleDatabase}
-          color="primary"
-        >
-          {t('Use Sample Database')}
-        </Button>
+        <Typography variant="h6">{t('View Action Database')}</Typography>
+        <ReactJson name="actions" collapsed src={database.actions} />
       </div>
     );
   }

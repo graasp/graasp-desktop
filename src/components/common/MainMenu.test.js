@@ -12,7 +12,7 @@ import {
   LOAD_SPACE_PATH,
   SETTINGS_PATH,
   DEVELOPER_PATH,
-  ACTION_DASHBOARD_PATH,
+  DASHBOARD_PATH,
 } from '../../config/paths';
 
 // offline: 2, online: 5
@@ -106,7 +106,7 @@ describe('<MainMenu />', () => {
     [true, LOAD_SPACE_PATH, 'Load'],
     [true, SETTINGS_PATH, 'Settings'],
     [true, DEVELOPER_PATH, 'Developer'],
-    [true, ACTION_DASHBOARD_PATH, 'Action Dashboard'],
+    [true, DASHBOARD_PATH, 'Dashboard'],
   ])('<MainMenu /> selects one MenuItem', (developerMode, path, text) => {
     it(`select path=${path} (developerMode = ${developerMode})`, () => {
       const props = createMainMenuProps(developerMode, path);

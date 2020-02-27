@@ -128,10 +128,10 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
     selected={false}
   >
     <WithStyles(ForwardRef(ListItemIcon))>
-      <SettingsIcon />
+      <ShowChartIcon />
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
-      primary="Action Dashboard"
+      primary="Dashboard"
     />
   </WithStyles(ForwardRef(MenuItem))>
 </WithStyles(ForwardRef(List))>
@@ -265,10 +265,10 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
     selected={false}
   >
     <WithStyles(ForwardRef(ListItemIcon))>
-      <SettingsIcon />
+      <ShowChartIcon />
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
-      primary="Action Dashboard"
+      primary="Dashboard"
     />
   </WithStyles(ForwardRef(MenuItem))>
   <WithStyles(ForwardRef(MenuItem))

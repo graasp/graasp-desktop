@@ -13,13 +13,21 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
+import ActionBarChart from './ActionBarChart';
+import ActionLineChart from './ActionLineChart';
+import ActionTotalCount from './ActionTotalCount';
+import ActionPieChart from './ActionPieChart';
 import MainMenu from '../common/MainMenu';
 import ActionEditor from './ActionEditor';
-import Styles from '../../Styles';
-import Banner from '../common/Banner';
 
-export class ActionDashboard extends Component {
+const styles = theme => ({
+  dashboard: { padding: theme.spacing(3) },
+  dashboardGridItem: { height: '350px' },
+});
+
+export class Dashboard extends Component {
   state = {
     open: false,
   };
@@ -27,6 +35,8 @@ export class ActionDashboard extends Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     classes: PropTypes.shape({
+      dashboard: PropTypes.string.isRequired,
+      dashboardGridItem: PropTypes.string.isRequired,
       root: PropTypes.string.isRequired,
       appBar: PropTypes.string.isRequired,
       appBarShift: PropTypes.string.isRequired,
@@ -110,17 +120,33 @@ export class ActionDashboard extends Component {
           })}
         >
           <div className={classes.drawerHeader} />
-          <div className={classes.developer}>
+          <div className={classes.dashboard}>
             <Typography variant="h4" className={classes.screenTitle}>
               {t('Action Dashboard')}
             </Typography>
             <br />
-            <Banner
-              text={t(
-                'Danger Zone! Proceed with caution as changes to this section might lead to data loss.'
-              )}
-              type="error"
-            />
+            <Grid
+              style={{ display: 'flex' }}
+              spacing={5}
+              container
+              direction="row"
+              justify="center"
+              alignItems="center"
+            >
+              <Grid item xs={12} sm={6} className={classes.dashboardGridItem}>
+                <ActionBarChart />
+              </Grid>
+              <Grid item xs={12} sm={6} className={classes.dashboardGridItem}>
+                <ActionLineChart />
+              </Grid>
+              <Grid item xs={12} sm={6} className={classes.dashboardGridItem}>
+                <ActionPieChart />
+              </Grid>
+              <Grid item xs={12} sm={6} className={classes.dashboardGridItem}>
+                <ActionTotalCount speed={1234} />
+              </Grid>
+            </Grid>
+
             <ActionEditor />
           </div>
         </main>
@@ -129,9 +155,7 @@ export class ActionDashboard extends Component {
   }
 }
 
-const StyledComponent = withStyles(Styles, { withTheme: true })(
-  ActionDashboard
-);
+const StyledComponent = withStyles(styles, { withTheme: true })(Dashboard);
 
 const TranslatedComponent = withTranslation()(StyledComponent);
 
