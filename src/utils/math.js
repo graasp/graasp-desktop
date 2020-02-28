@@ -30,7 +30,7 @@ const renderToString = (input = '', indicator, regex, div) => {
               throwOnError: false,
             })}
           </span>
-        <${div}>`;
+        </${div}>`;
       output = output.replace(matched, parsed);
     });
   }
