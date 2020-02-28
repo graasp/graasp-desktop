@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.15.3](https://github.com/graasp/graasp-desktop/compare/v0.15.2...v0.15.3) (2020-02-28)
+
+### Features
+
+- support math in MediaCard description ([d557400](https://github.com/graasp/graasp-desktop/commit/d5574009ed861de2dd293168cbbb9730eed4b327))
+- update mapping.js to include the entry box ([171467a](https://github.com/graasp/graasp-desktop/commit/171467acbc52208dcebf2873af37e37ca0fe28ed))
+
+### Bug Fixes
+
+- Changed name entry to inputBox. ([9836df7](https://github.com/graasp/graasp-desktop/commit/9836df7eb3c80cb3a9577a2b82d0856504133355))
+- close div when parsing math ([c6e1931](https://github.com/graasp/graasp-desktop/commit/c6e19310d143e37fdf8c99fa298e4f45f668d316))
+
 ### [0.15.2](https://github.com/graasp/graasp-desktop/compare/v0.15.1...v0.15.2) (2020-02-17)
 
 ### [0.15.1](https://github.com/graasp/graasp-desktop/compare/v0.15.0...v0.15.1) (2020-02-17)
