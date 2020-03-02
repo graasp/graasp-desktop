@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core';
@@ -13,7 +14,7 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 const RADIAN = Math.PI / 180;
 
 const styles = theme => ({
-  CustomTooltip: {
+  customTooltip: {
     backgroundColor: 'white',
     padding: '0.05rem 0.5rem',
   },
@@ -25,7 +26,7 @@ const styles = theme => ({
 const CustomTooltip = ({ classes, active, payload }) => {
   if (active) {
     return (
-      <div className={classes.CustomTooltip}>
+      <div className={classes.customTooltip}>
         <p className="label">{`${payload[0].payload.verb} : ${payload[0].value}`}</p>
       </div>
     );
@@ -48,7 +49,7 @@ CustomTooltip.propTypes = {
     contentShift: PropTypes.string.isRequired,
     developer: PropTypes.string.isRequired,
     screenTitle: PropTypes.string.isRequired,
-    CustomTooltip: PropTypes.string.isRequired,
+    customTooltip: PropTypes.string.isRequired,
   }).isRequired,
   active: PropTypes.bool.isRequired,
   payload: PropTypes.arrayOf(
@@ -56,7 +57,7 @@ CustomTooltip.propTypes = {
       payload: PropTypes.shape({
         verb: PropTypes.string.isRequired,
       }).isRequired,
-      value: PropTypes.string.isRequired,
+      value: PropTypes.number.isRequired,
     })
   ).isRequired,
 };
@@ -91,6 +92,7 @@ class ActionPieChart extends PureComponent {
       spaces: PropTypes.array,
       actions: PropTypes.array,
     }),
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -123,7 +125,7 @@ class ActionPieChart extends PureComponent {
   };
 
   render() {
-    const { database, classes } = this.props;
+    const { database, classes, t } = this.props;
 
     if (!database || _.isEmpty(database)) {
       return <Loader />;
@@ -142,7 +144,7 @@ class ActionPieChart extends PureComponent {
 
     return (
       <>
-        <Typography variant="h5">Action Type Chart</Typography>
+        <Typography variant="h5">{t('Action Type Chart')}</Typography>
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
@@ -186,4 +188,7 @@ const ConnectedComponent = connect(
 const StyledComponent = withStyles(styles, { withTheme: true })(
   ConnectedComponent
 );
-export default StyledComponent;
+
+const TranslatedComponent = withTranslation()(StyledComponent);
+
+export default TranslatedComponent;

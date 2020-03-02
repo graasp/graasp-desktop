@@ -122,7 +122,7 @@ export class Dashboard extends Component {
           <div className={classes.drawerHeader} />
           <div className={classes.dashboard}>
             <Typography variant="h4" className={classes.screenTitle}>
-              {t('Action Dashboard')}
+              {t('Dashboard')}
             </Typography>
             <br />
             <Grid
@@ -143,7 +143,7 @@ export class Dashboard extends Component {
                 <ActionPieChart />
               </Grid>
               <Grid item xs={12} sm={6} className={classes.dashboardGridItem}>
-                <ActionTotalCount speed={1234} />
+                <ActionTotalCount />
               </Grid>
             </Grid>
 

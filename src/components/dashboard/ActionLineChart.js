@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import {
   LineChart,
@@ -50,6 +51,7 @@ class ActionLineChart extends PureComponent {
       spaces: PropTypes.array,
       actions: PropTypes.array,
     }),
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -62,7 +64,7 @@ class ActionLineChart extends PureComponent {
   };
 
   render() {
-    const { database, theme } = this.props;
+    const { database, theme, t } = this.props;
     const {
       palette: { primary, type },
     } = theme;
@@ -88,7 +90,7 @@ class ActionLineChart extends PureComponent {
 
     return (
       <>
-        <Typography variant="h5">Action Count Per Space</Typography>
+        <Typography variant="h5">{t('Action Count Per Space')}</Typography>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
             data={data}
@@ -140,5 +142,6 @@ const ConnectedComponent = connect(
 const StyledComponent = withStyles(Styles, { withTheme: true })(
   ConnectedComponent
 );
+const TranslatedComponent = withTranslation()(StyledComponent);
 
-export default StyledComponent;
+export default TranslatedComponent;

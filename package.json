@@ -103,6 +103,7 @@
     "qs": "6.9.1",
     "re-resizable": "6.2.0",
     "react": "16.13.0",
+    "react-countup": "4.3.3",
     "react-detect-offline": "2.4.0",
     "react-dev-utils": "10.2.0",
     "react-dom": "16.13.0",

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import {
@@ -51,6 +52,7 @@ class ActionBarChart extends PureComponent {
       spaces: PropTypes.array,
       actions: PropTypes.array,
     }),
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -58,7 +60,7 @@ class ActionBarChart extends PureComponent {
   };
 
   render() {
-    const { database, theme } = this.props;
+    const { database, theme, t } = this.props;
     const {
       palette: { primary, type },
     } = theme;
@@ -80,7 +82,7 @@ class ActionBarChart extends PureComponent {
 
     return (
       <>
-        <Typography variant="h5">Action Count Per Space</Typography>
+        <Typography variant="h5">{t('Action Count Per Space')}</Typography>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             width="100%"
@@ -129,4 +131,7 @@ const ConnectedComponent = connect(
 const StyledComponent = withStyles(Styles, { withTheme: true })(
   ConnectedComponent
 );
-export default StyledComponent;
+
+const TranslatedComponent = withTranslation()(StyledComponent);
+
+export default TranslatedComponent;
