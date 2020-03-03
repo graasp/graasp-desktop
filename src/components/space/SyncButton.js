@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import IconButton from '@material-ui/core/IconButton/IconButton';
 import SyncIcon from '@material-ui/icons/Sync';
-import { Online } from 'react-detect-offline';
+import { Online, Offline } from 'react-detect-offline';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core';
 import Styles from '../../Styles';
@@ -29,21 +29,32 @@ class SyncButton extends Component {
   render() {
     const { classes, t } = this.props;
     return (
-      <Online>
-        <Tooltip
-          title={t(
-            'Synchronize this space with its online version. All user input will be deleted.'
-          )}
-        >
-          <IconButton
-            color="inherit"
-            className={classes.button}
-            onClick={this.handleSync}
+      <>
+        <Online>
+          <Tooltip
+            title={t(
+              'Synchronize this space with its online version. All user input will be deleted.'
+            )}
           >
-            <SyncIcon />
-          </IconButton>
-        </Tooltip>
-      </Online>
+            <IconButton
+              color="inherit"
+              className={classes.button}
+              onClick={this.handleSync}
+            >
+              <SyncIcon />
+            </IconButton>
+          </Tooltip>
+        </Online>
+        <Offline>
+          <Tooltip title={t('You need an internet connection')}>
+            <div>
+              <IconButton color="inherit" className={classes.button} disabled>
+                <SyncIcon />
+              </IconButton>
+            </div>
+          </Tooltip>
+        </Offline>
+      </>
     );
   }
 }

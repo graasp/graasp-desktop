@@ -4,6 +4,7 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import Tooltip from '@material-ui/core/Tooltip';
 import SaveIcon from '@material-ui/icons/Save';
 import CodeIcon from '@material-ui/icons/Code';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -12,7 +13,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import Language from '@material-ui/icons/Language';
 import PublishIcon from '@material-ui/icons/Publish';
 import SettingsIcon from '@material-ui/icons/Settings';
-import { Online } from 'react-detect-offline';
+import { Online, Offline } from 'react-detect-offline';
 import { withTranslation } from 'react-i18next';
 import {
   HOME_PATH,
@@ -67,6 +68,24 @@ export class MainMenu extends Component {
     return null;
   }
 
+  renderOfflineMenuItem = children => {
+    const { t } = this.props;
+
+    return (
+      <>
+        <Offline>
+          <Tooltip
+            placement="right"
+            title={t('You need an internet connection')}
+          >
+            <div>{React.cloneElement(children, { disabled: true })}</div>
+          </Tooltip>
+        </Offline>
+        <Online>{children}</Online>
+      </>
+    );
+  };
+
   render() {
     const {
       match: { path },
@@ -84,7 +103,7 @@ export class MainMenu extends Component {
           </ListItemIcon>
           <ListItemText primary={t('Saved Spaces')} />
         </MenuItem>
-        <Online>
+        {this.renderOfflineMenuItem(
           <MenuItem
             onClick={() => this.handleClick(SPACES_NEARBY_PATH)}
             button
@@ -95,6 +114,8 @@ export class MainMenu extends Component {
             </ListItemIcon>
             <ListItemText primary={t('Spaces Nearby')} />
           </MenuItem>
+        )}
+        {this.renderOfflineMenuItem(
           <MenuItem
             onClick={() => this.handleClick(VISIT_PATH)}
             button
@@ -105,7 +126,7 @@ export class MainMenu extends Component {
             </ListItemIcon>
             <ListItemText primary={t('Visit a Space')} />
           </MenuItem>
-        </Online>
+        )}
         <MenuItem
           onClick={() => this.handleClick(LOAD_SPACE_PATH)}
           button
