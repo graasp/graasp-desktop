@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
@@ -15,7 +14,6 @@ import {
 } from 'recharts';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core';
-import { getDatabase, setDatabase } from '../../actions';
 import Loader from '../common/Loader';
 import Styles from '../../Styles';
 
@@ -47,29 +45,26 @@ class ActionBarChart extends PureComponent {
     i18n: PropTypes.shape({
       changeLanguage: PropTypes.func.isRequired,
     }).isRequired,
-    database: PropTypes.shape({
-      user: PropTypes.object,
-      spaces: PropTypes.array,
-      actions: PropTypes.array,
-    }),
     t: PropTypes.func.isRequired,
+    actions: PropTypes.arrayOf(PropTypes.object),
+    spaces: PropTypes.arrayOf(PropTypes.object),
   };
 
   static defaultProps = {
-    database: {},
+    actions: [],
+    spaces: [],
   };
 
   render() {
-    const { database, theme, t } = this.props;
+    const { spaces, theme, t, actions } = this.props;
     const {
       palette: { primary, type },
     } = theme;
 
-    if (!database || _.isEmpty(database)) {
+    if (!actions || _.isEmpty(actions) || !spaces || _.isEmpty(spaces)) {
       return <Loader />;
     }
 
-    const { spaces, actions } = database;
     const data =
       // group actions by space id
       Object.entries(_.groupBy(actions, 'spaceId'))
@@ -114,23 +109,7 @@ class ActionBarChart extends PureComponent {
   }
 }
 
-const mapStateToProps = ({ Developer }) => ({
-  database: Developer.get('database'),
-});
-
-const mapDispatchToProps = {
-  dispatchGetDatabase: getDatabase,
-  dispatchSetDatabase: setDatabase,
-};
-
-const ConnectedComponent = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ActionBarChart);
-
-const StyledComponent = withStyles(Styles, { withTheme: true })(
-  ConnectedComponent
-);
+const StyledComponent = withStyles(Styles, { withTheme: true })(ActionBarChart);
 
 const TranslatedComponent = withTranslation()(StyledComponent);
 

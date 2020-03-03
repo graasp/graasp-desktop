@@ -1,12 +1,10 @@
 import React, { PureComponent } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
-import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import { getDatabase, setDatabase } from '../../actions';
 import Loader from '../common/Loader';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
@@ -87,16 +85,12 @@ class ActionPieChart extends PureComponent {
     i18n: PropTypes.shape({
       changeLanguage: PropTypes.func.isRequired,
     }).isRequired,
-    database: PropTypes.shape({
-      user: PropTypes.object,
-      spaces: PropTypes.array,
-      actions: PropTypes.array,
-    }),
     t: PropTypes.func.isRequired,
+    actions: PropTypes.arrayOf(PropTypes.object),
   };
 
   static defaultProps = {
-    database: {},
+    actions: [],
   };
 
   renderCustomizedLabel = ({
@@ -125,13 +119,12 @@ class ActionPieChart extends PureComponent {
   };
 
   render() {
-    const { database, classes, t } = this.props;
+    const { actions, classes, t } = this.props;
 
-    if (!database || _.isEmpty(database)) {
+    if (!actions || _.isEmpty(actions)) {
       return <Loader />;
     }
 
-    const { actions } = database;
     const data =
       // group actions by space id
       Object.entries(_.groupBy(actions, 'verb'))
@@ -171,23 +164,7 @@ class ActionPieChart extends PureComponent {
   }
 }
 
-const mapStateToProps = ({ Developer }) => ({
-  database: Developer.get('database'),
-});
-
-const mapDispatchToProps = {
-  dispatchGetDatabase: getDatabase,
-  dispatchSetDatabase: setDatabase,
-};
-
-const ConnectedComponent = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ActionPieChart);
-
-const StyledComponent = withStyles(styles, { withTheme: true })(
-  ConnectedComponent
-);
+const StyledComponent = withStyles(styles, { withTheme: true })(ActionPieChart);
 
 const TranslatedComponent = withTranslation()(StyledComponent);
 

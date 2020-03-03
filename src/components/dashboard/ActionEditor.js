@@ -6,10 +6,10 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
-import { getDatabase, setDatabase } from '../../actions';
+import { getDatabase } from '../../actions';
 import Loader from '../common/Loader';
 import Styles from '../../Styles';
-import SampleDatabase from '../../data/sample.json';
+import { FILTER_ALL_SPACE_ID } from '../../config/constants';
 
 export class ActionEditor extends Component {
   static propTypes = {
@@ -18,16 +18,17 @@ export class ActionEditor extends Component {
       button: PropTypes.string.isRequired,
     }).isRequired,
     dispatchGetDatabase: PropTypes.func.isRequired,
-    dispatchSetDatabase: PropTypes.func.isRequired,
     database: PropTypes.shape({
       user: PropTypes.object,
-      spaces: PropTypes.array,
-      actions: PropTypes.array,
+      spaces: PropTypes.arrayOf(PropTypes.object),
+      actions: PropTypes.arrayOf(PropTypes.object),
     }),
+    spaceId: PropTypes.string,
   };
 
   static defaultProps = {
     database: {},
+    spaceId: FILTER_ALL_SPACE_ID,
   };
 
   componentDidMount() {
@@ -35,27 +36,22 @@ export class ActionEditor extends Component {
     dispatchGetDatabase();
   }
 
-  handleEdit = ({ updated_src: updatedSrc }) => {
-    const { dispatchSetDatabase } = this.props;
-    dispatchSetDatabase(updatedSrc);
-  };
-
-  handleUseSampleDatabase = () => {
-    const { dispatchSetDatabase } = this.props;
-    dispatchSetDatabase(SampleDatabase);
-  };
-
   render() {
-    const { database, t } = this.props;
+    const { database, t, spaceId } = this.props;
 
     if (!database || _.isEmpty(database)) {
       return <Loader />;
     }
 
+    let { actions } = database;
+    if (spaceId !== FILTER_ALL_SPACE_ID) {
+      actions = actions.filter(({ spaceId: id }) => id === spaceId);
+    }
+
     return (
       <div>
         <Typography variant="h6">{t('View Action Database')}</Typography>
-        <ReactJson name="actions" collapsed src={database.actions} />
+        <ReactJson name="actions" collapsed src={actions} />
       </div>
     );
   }
@@ -67,7 +63,6 @@ const mapStateToProps = ({ Developer }) => ({
 
 const mapDispatchToProps = {
   dispatchGetDatabase: getDatabase,
-  dispatchSetDatabase: setDatabase,
 };
 
 const StyledComponent = withStyles(Styles, { withTheme: true })(ActionEditor);

@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import {
@@ -14,7 +13,6 @@ import {
 import _ from 'lodash';
 import { withStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import { getDatabase, setDatabase } from '../../actions';
 import Loader from '../common/Loader';
 import Styles from '../../Styles';
 
@@ -46,16 +44,12 @@ class ActionLineChart extends PureComponent {
     i18n: PropTypes.shape({
       changeLanguage: PropTypes.func.isRequired,
     }).isRequired,
-    database: PropTypes.shape({
-      user: PropTypes.object,
-      spaces: PropTypes.array,
-      actions: PropTypes.array,
-    }),
     t: PropTypes.func.isRequired,
+    actions: PropTypes.arrayOf(PropTypes.object),
   };
 
   static defaultProps = {
-    database: {},
+    actions: [],
   };
 
   formatDate = date => {
@@ -64,16 +58,15 @@ class ActionLineChart extends PureComponent {
   };
 
   render() {
-    const { database, theme, t } = this.props;
+    const { theme, t, actions } = this.props;
     const {
       palette: { primary, type },
     } = theme;
 
-    if (!database || _.isEmpty(database)) {
+    if (!actions || _.isEmpty(actions)) {
       return <Loader />;
     }
 
-    const { actions } = database;
     const dataWithDateFormatted = actions.map(action => ({
       date: [this.formatDate(action.createdAt)],
       data: action.data,
@@ -125,22 +118,8 @@ class ActionLineChart extends PureComponent {
   }
 }
 
-const mapStateToProps = ({ Developer }) => ({
-  database: Developer.get('database'),
-});
-
-const mapDispatchToProps = {
-  dispatchGetDatabase: getDatabase,
-  dispatchSetDatabase: setDatabase,
-};
-
-const ConnectedComponent = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ActionLineChart);
-
 const StyledComponent = withStyles(Styles, { withTheme: true })(
-  ConnectedComponent
+  ActionLineChart
 );
 const TranslatedComponent = withTranslation()(StyledComponent);
 
