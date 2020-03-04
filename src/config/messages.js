@@ -47,6 +47,9 @@ const ERROR_CLEARING_USER_INPUT_MESSAGE =
   'There was an error clearing the user input.';
 const SUCCESS_CLEARING_USER_INPUT_MESSAGE =
   'User input was successfully cleared.';
+const CONNECTION_MESSAGE_HEADER = 'Connection Status';
+const CONNECTION_OFFLINE_MESSAGE = 'You are offline';
+const CONNECTION_ONLINE_MESSAGE = 'You are online';
 
 module.exports = {
   ERROR_GETTING_DEVELOPER_MODE,
@@ -83,4 +86,7 @@ module.exports = {
   ERROR_SYNCING_MESSAGE,
   ERROR_CLEARING_USER_INPUT_MESSAGE,
   SUCCESS_CLEARING_USER_INPUT_MESSAGE,
+  CONNECTION_MESSAGE_HEADER,
+  CONNECTION_OFFLINE_MESSAGE,
+  CONNECTION_ONLINE_MESSAGE,
 };
