@@ -22,7 +22,7 @@ const formats = [
   'formula',
 ];
 
-const Text = ({ content, style, className }) => {
+export const Text = ({ content, style, className }) => {
   let parsedContent = content;
   if (hasMath(content)) {
     parsedContent = renderMath(parsedContent);
