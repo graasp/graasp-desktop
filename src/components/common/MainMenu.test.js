@@ -15,18 +15,19 @@ import {
   DASHBOARD_PATH,
 } from '../../config/paths';
 
-// offline: 2, online: 5
 const MENUITEM_OFFLINE_NUMBER = 2;
-const MENUITEM_OFFLINE_ONLINE_COUNT = 8;
+const MENUITEM_OFFLINE_ONLINE_COUNT = 9;
 
-const createMainMenuProps = (developerMode, path) => {
+const createMainMenuProps = (developerMode, path, authenticated = true) => {
   return {
     t: text => text,
     developerMode,
     history: { replace: jest.fn() },
     match: { path },
+    authenticated,
   };
 };
+
 describe('<MainMenu />', () => {
   describe('<MainMenu /> with developerMode = false', () => {
     let wrapper;

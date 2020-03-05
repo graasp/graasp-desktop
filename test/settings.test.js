@@ -36,6 +36,8 @@ import {
   DEFAULT_GEOLOCATION_ENABLED,
   DEFAULT_DEVELOPER_MODE,
 } from '../src/config/constants';
+import { userLogin } from './userLogin.test';
+import { USER_GRAASP } from './fixtures/credentials';
 
 describe('Settings Scenarios', function() {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
@@ -44,6 +46,7 @@ describe('Settings Scenarios', function() {
   beforeEach(
     mochaAsync(async () => {
       app = await createApplication();
+      await userLogin(app.client, USER_GRAASP);
     })
   );
 

@@ -142,6 +142,18 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
       primary="Dashboard"
     />
   </WithStyles(ForwardRef(MenuItem))>
+  <WithStyles(ForwardRef(MenuItem))
+    button={true}
+    onClick={[Function]}
+    selected={false}
+  >
+    <WithStyles(ForwardRef(ListItemIcon))>
+      <AccountCircleIcon />
+    </WithStyles(ForwardRef(ListItemIcon))>
+    <WithStyles(ForwardRef(ListItemText))
+      primary="Log Out"
+    />
+  </WithStyles(ForwardRef(MenuItem))>
 </WithStyles(ForwardRef(List))>
 `;
 
@@ -298,6 +310,18 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
       primary="Developer"
+    />
+  </WithStyles(ForwardRef(MenuItem))>
+  <WithStyles(ForwardRef(MenuItem))
+    button={true}
+    onClick={[Function]}
+    selected={false}
+  >
+    <WithStyles(ForwardRef(ListItemIcon))>
+      <AccountCircleIcon />
+    </WithStyles(ForwardRef(ListItemIcon))>
+    <WithStyles(ForwardRef(ListItemText))
+      primary="Log Out"
     />
   </WithStyles(ForwardRef(MenuItem))>
 </WithStyles(ForwardRef(List))>

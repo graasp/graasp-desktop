@@ -5,6 +5,7 @@ const {
   ipcMain,
   Menu,
   dialog,
+  session,
   // eslint-disable-next-line import/no-extraneous-dependencies
 } = require('electron');
 const path = require('path');
@@ -51,6 +52,9 @@ const {
   CLEAR_USER_INPUT_CHANNEL,
   SHOW_CLEAR_USER_INPUT_PROMPT_CHANNEL,
   POST_ACTION_CHANNEL,
+  SIGN_IN_CHANNEL,
+  SIGN_OUT_CHANNEL,
+  IS_AUTHENTICATED_CHANNEL,
 } = require('./app/config/channels');
 const env = require('./env.json');
 const {
@@ -75,6 +79,9 @@ const {
   clearUserInput,
   showClearUserInputPrompt,
   postAction,
+  signIn,
+  signOut,
+  isAuthenticated,
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
 
@@ -397,6 +404,14 @@ app.on('ready', async () => {
 
   // called when creating an action
   ipcMain.on(POST_ACTION_CHANNEL, postAction(mainWindow, db));
+  // called when logging in a user
+  ipcMain.on(SIGN_IN_CHANNEL, signIn(mainWindow, db));
+
+  // called when logging out a user
+  ipcMain.on(SIGN_OUT_CHANNEL, signOut(mainWindow, session));
+
+  // called when getting authenticated
+  ipcMain.on(IS_AUTHENTICATED_CHANNEL, isAuthenticated(mainWindow, db));
 
   // called when getting AppInstanceResources
   ipcMain.on(GET_APP_INSTANCE_RESOURCES_CHANNEL, (event, data = {}) => {

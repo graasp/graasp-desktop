@@ -19,6 +19,9 @@ const setDeveloperMode = require('./setDeveloperMode');
 const clearUserInput = require('./clearUserInput');
 const showClearUserInputPrompt = require('./showClearUserInputPrompt');
 const postAction = require('./postAction');
+const signIn = require('./signIn');
+const signOut = require('./signOut');
+const isAuthenticated = require('./isAuthenticated');
 
 module.exports = {
   loadSpace,
@@ -42,4 +45,7 @@ module.exports = {
   clearUserInput,
   showClearUserInputPrompt,
   postAction,
+  signIn,
+  signOut,
+  isAuthenticated,
 };

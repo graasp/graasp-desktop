@@ -49,3 +49,6 @@ export const DEVELOPER_SWITCH_ID = 'settingsDeveloperSwitch';
 export const GEOLOCATION_CONTROL_ID = 'settingsGeolocationControl';
 
 export const buildPhaseAppName = id => `phaseApp-${id}`;
+
+export const LOGIN_USERNAME_INPUT_ID = 'loginUsernameInput';
+export const LOGIN_BUTTON_ID = 'loginButton';

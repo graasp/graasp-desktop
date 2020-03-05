@@ -21,6 +21,8 @@ import {
   TOOLTIP_FADE_OUT_PAUSE,
   OPEN_SAVED_SPACE_PAUSE,
 } from '../constants';
+import { userLogin } from '../userLogin.test';
+import { USER_GRAASP, buildResource } from '../fixtures/credentials';
 
 describe('Clear User Input in a space', function() {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
@@ -34,6 +36,7 @@ describe('Clear User Input in a space', function() {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication({ showMessageDialogResponse: 1 });
+        await userLogin(app.client, USER_GRAASP);
       })
     );
 
@@ -52,7 +55,9 @@ describe('Clear User Input in a space', function() {
         await client.click(`.${SPACE_CLEAR_BUTTON_CLASS}`);
         await client.pause(TOOLTIP_FADE_OUT_PAUSE);
 
-        await hasSavedSpaceLayout(client, SPACE_ATOMIC_STRUCTURE);
+        const resources = buildResource('user input', USER_GRAASP);
+
+        await hasSavedSpaceLayout(client, SPACE_ATOMIC_STRUCTURE, resources);
       })
     );
 
@@ -89,6 +94,7 @@ describe('Clear User Input in a space', function() {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication({ showMessageDialogResponse: 0 });
+        await userLogin(app.client, USER_GRAASP);
       })
     );
 

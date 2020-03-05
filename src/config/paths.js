@@ -6,3 +6,4 @@ export const SETTINGS_PATH = '/settings';
 export const SPACE_PATH = '/space/:id';
 export const DEVELOPER_PATH = '/developer';
 export const DASHBOARD_PATH = '/dashboard';
+export const LOGIN_PATH = '/login';

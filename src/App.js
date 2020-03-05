@@ -18,6 +18,8 @@ import SpaceScreen from './components/space/SpaceScreen';
 import DeveloperScreen from './components/developer/DeveloperScreen';
 import { OnlineTheme, OfflineTheme } from './themes';
 import Dashboard from './components/dashboard/Dashboard';
+import LoginScreen from './components/login/LoginScreen';
+import Authorization from './components/Authorization';
 import {
   SETTINGS_PATH,
   SPACE_PATH,
@@ -27,6 +29,7 @@ import {
   LOAD_SPACE_PATH,
   DEVELOPER_PATH,
   DASHBOARD_PATH,
+  LOGIN_PATH,
 } from './config/paths';
 import {
   getGeolocation,
@@ -34,7 +37,7 @@ import {
   getLanguage,
   getDeveloperMode,
   getGeolocationEnabled,
-} from './actions/user';
+} from './actions';
 import { DEFAULT_LANGUAGE } from './config/constants';
 import {
   CONNECTION_MESSAGE_HEADER,
@@ -146,22 +149,40 @@ export class App extends Component {
             <Router>
               <div className="app" style={{ height }}>
                 <Switch>
-                  <Route exact path={HOME_PATH} component={Home} />
+                  <Route exact path={LOGIN_PATH} component={LoginScreen} />
+                  <Route
+                    exact
+                    path={HOME_PATH}
+                    component={Authorization()(Home)}
+                  />
                   <Route
                     exact
                     path={SPACES_NEARBY_PATH}
-                    component={SpacesNearby}
+                    component={Authorization()(SpacesNearby)}
                   />
-                  <Route exact path={VISIT_PATH} component={VisitSpace} />
-                  <Route exact path={LOAD_SPACE_PATH} component={LoadSpace} />
+                  <Route
+                    exact
+                    path={VISIT_PATH}
+                    component={Authorization()(VisitSpace)}
+                  />
+                  <Route
+                    exact
+                    path={LOAD_SPACE_PATH}
+                    component={Authorization()(LoadSpace)}
+                  />
                   <Route exact path={SETTINGS_PATH} component={Settings} />
-                  <Route exact path={SPACE_PATH} component={SpaceScreen} />
+                  <Route
+                    exact
+                    path={SPACE_PATH}
+                    component={Authorization()(SpaceScreen)}
+                  />
+                  <Route exact path={DASHBOARD_PATH} component={Dashboard} />
                   <Route
                     exact
                     path={DEVELOPER_PATH}
                     component={DeveloperScreen}
                   />
-                  <Route exact path={DASHBOARD_PATH} component={Dashboard} />
+                  <Route exact path={LOGIN_PATH} component={LoginScreen} />
                 </Switch>
               </div>
             </Router>

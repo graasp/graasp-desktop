@@ -26,6 +26,8 @@ import {
   DEFAULT_GLOBAL_TIMEOUT,
   OPEN_DRAWER_PAUSE,
 } from './constants';
+import { userLogin } from './userLogin.test';
+import { USER_GRAASP } from './fixtures/credentials';
 
 export const openDrawer = async client => {
   if (await client.isVisible(`#${DRAWER_BUTTON_ID}`)) {
@@ -75,10 +77,10 @@ export const menuGoToHome = async client => {
 describe('Menu Scenarios', function() {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
-
   before(
     mochaAsync(async () => {
       app = await createApplication();
+      await userLogin(app.client, USER_GRAASP);
     })
   );
 
@@ -90,7 +92,6 @@ describe('Menu Scenarios', function() {
     'MainMenu redirects to correct path',
     mochaAsync(async () => {
       const { client } = app;
-
       await menuGoToSpacesNearby(client);
       await menuGoToVisitSpace(client);
       await menuGoToLoadSpace(client);

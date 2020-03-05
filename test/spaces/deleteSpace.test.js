@@ -12,6 +12,8 @@ import {
 import { SPACE_ATOMIC_STRUCTURE } from '../fixtures/spaces';
 import { visitAndSaveSpaceById } from './visitSpace.test';
 import { DELETE_SPACE_PAUSE, DEFAULT_GLOBAL_TIMEOUT } from '../constants';
+import { userLogin } from '../userLogin.test';
+import { USER_GRAASP } from '../fixtures/credentials';
 
 describe('Delete a space', function() {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
@@ -29,6 +31,8 @@ describe('Delete a space', function() {
       app = await createApplication({ showMessageDialogResponse: 1 });
 
       const { client } = app;
+
+      await userLogin(client, USER_GRAASP);
 
       await visitAndSaveSpaceById(client, id);
 
@@ -54,6 +58,8 @@ describe('Delete a space', function() {
 
       const { client } = app;
 
+      await userLogin(client, USER_GRAASP);
+
       await visitAndSaveSpaceById(client, id);
 
       await client.click(`.${SPACE_DELETE_BUTTON_CLASS}`);
@@ -73,6 +79,8 @@ describe('Delete a space', function() {
       app = await createApplication({ showMessageDialogResponse: 0 });
 
       const { client } = app;
+
+      await userLogin(client, USER_GRAASP);
 
       await visitAndSaveSpaceById(client, id);
 

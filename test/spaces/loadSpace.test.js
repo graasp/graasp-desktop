@@ -34,6 +34,8 @@ import {
   OPEN_SAVED_SPACE_PAUSE,
   DEFAULT_GLOBAL_TIMEOUT,
 } from '../constants';
+import { userLogin } from '../userLogin.test';
+import { USER_GRAASP } from '../fixtures/credentials';
 
 /* eslint-disable-next-line import/prefer-default-export */
 export const loadSpaceById = async (client, space, filepath) => {
@@ -71,6 +73,7 @@ describe('Load Space Scenarios', function() {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication();
+        await userLogin(app.client, USER_GRAASP);
       })
     );
 
@@ -169,6 +172,8 @@ describe('Load Space Scenarios', function() {
       });
 
       const { client } = app;
+
+      await userLogin(client, USER_GRAASP);
 
       // get space
       await visitAndSaveSpaceById(client, id);

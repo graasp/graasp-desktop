@@ -42,4 +42,7 @@ module.exports = {
   SHOW_CLEAR_USER_INPUT_PROMPT_CHANNEL: 'prompt:space:clear:show',
   RESPOND_CLEAR_USER_INPUT_PROMPT_CHANNEL: 'prompt:space:clear:respond',
   POST_ACTION_CHANNEL: 'action:post',
+  SIGN_IN_CHANNEL: 'auth:signin',
+  SIGN_OUT_CHANNEL: 'auth:signout',
+  IS_AUTHENTICATED_CHANNEL: 'auth:authenticated:get',
 };

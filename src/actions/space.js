@@ -116,12 +116,12 @@ const waitForSpace = ({ online }) =>
     });
   });
 
-const getLocalSpace = async ({ id }) => async dispatch => {
+const getLocalSpace = async ({ id, user }) => async dispatch => {
   try {
     dispatch(flagGettingSpace(true));
 
     // tell electron to get space
-    window.ipcRenderer.send(GET_SPACE_CHANNEL, { id });
+    window.ipcRenderer.send(GET_SPACE_CHANNEL, { id, user });
 
     const space = await waitForSpace({ online: false });
 
@@ -399,12 +399,12 @@ const loadSpace = ({ fileLocation }) => dispatch => {
   });
 };
 
-const getSpace = ({ id, saved = false }) => dispatch => {
+const getSpace = ({ id, saved = false, user }) => dispatch => {
   // only get the space from the api if not saved
   if (!saved) {
     dispatch(getRemoteSpace({ id }));
   } else {
-    dispatch(getLocalSpace({ id }));
+    dispatch(getLocalSpace({ id, user }));
   }
 };
 

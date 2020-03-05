@@ -47,6 +47,11 @@
     "The database is empty.": "La base de données est vide.",
     "Filter by Space": "Filtrer par Espace",
     "All Spaces": "Tous les Espaces",
-    "Time": "Ligne du temps"
+    "Time": "Ligne du temps",
+    "Login": "Se connecter",
+    "Logout": "Se déconnecter",
+    "Login with Graasp": "Se connecter avec Graasp",
+    "Username": "Entre ton nom d'utilisateur",
+    "Password": "Entre ton mot de passe"
   }
 }

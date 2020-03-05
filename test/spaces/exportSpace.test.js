@@ -17,6 +17,8 @@ import {
   EXPORT_FILEPATH,
   DEFAULT_GLOBAL_TIMEOUT,
 } from '../constants';
+import { userLogin } from '../userLogin.test';
+import { USER_GRAASP } from '../fixtures/credentials';
 
 describe('Export a space', function() {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
@@ -37,6 +39,8 @@ describe('Export a space', function() {
 
       const { client } = app;
 
+      await userLogin(client, USER_GRAASP);
+
       await visitAndSaveSpaceById(client, id);
 
       await client.click(`.${SPACE_EXPORT_BUTTON_CLASS}`);
@@ -55,6 +59,8 @@ describe('Export a space', function() {
       app = await createApplication({ showSaveDialogResponse: filepath });
 
       const { client } = app;
+
+      await userLogin(client, USER_GRAASP);
 
       await visitAndSaveSpaceById(client, id);
 

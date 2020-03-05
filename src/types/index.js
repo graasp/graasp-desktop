@@ -6,3 +6,4 @@ export * from './appInstanceResource';
 export * from './developer';
 export * from './layout';
 export * from './action';
+export * from './authentication';

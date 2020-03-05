@@ -46,6 +46,7 @@ const DEFAULT_DEVELOPER_MODE = false;
 const DEFAULT_GEOLOCATION_ENABLED = false;
 const DEFAULT_PROTOCOL = 'https';
 const DEFAULT_LOGGING_LEVEL = 'info';
+const DEFAULT_AUTHENTICATED = false;
 
 module.exports = {
   DEFAULT_LOGGING_LEVEL,
@@ -62,4 +63,5 @@ module.exports = {
   ICON_PATH,
   PRODUCT_NAME,
   escapeEscapeCharacter,
+  DEFAULT_AUTHENTICATED,
 };

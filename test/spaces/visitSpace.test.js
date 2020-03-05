@@ -24,7 +24,6 @@ import {
   buildSpaceCardId,
   SPACE_DESCRIPTION_EXPAND_BUTTON_CLASS,
   buildSpaceCardDescriptionId,
-  buildPhaseAppName,
 } from '../../src/config/selectors';
 import { hasMath } from '../../src/utils/math';
 import { SPACE_ATOMIC_STRUCTURE, SPACE_APOLLO_11 } from '../fixtures/spaces';
@@ -35,6 +34,8 @@ import {
   TOOLTIP_FADE_OUT_PAUSE,
   DEFAULT_GLOBAL_TIMEOUT,
 } from '../constants';
+import { userLogin } from '../userLogin.test';
+import { USER_GRAASP } from '../fixtures/credentials';
 
 const PREVIEW = 'preview';
 const SAVED = 'saved';
@@ -160,31 +161,31 @@ const hasSavedSpaceHomeLayout = async (
   expect(previewButton.toLowerCase()).to.equal('start');
 };
 
-const checkUserInputInApp = async (client, { id, url, resources }) => {
-  // @TODO differentiate apps with an appId
-  let data = '';
-  if (resources && resources.length) {
-    /* eslint-disable-next-line prefer-destructuring */
-    ({ data } = resources[0]);
-  }
+// const checkUserInputInApp = async (client, { id, url }, resources = []) => {
+//   // @TODO differentiate apps with an appId
+//   let data = '';
+//   if (resources.length) {
+//     /* eslint-disable-next-line prefer-destructuring */
+//     ({ data } = resources[0]);
+//   }
 
-  switch (url) {
-    // text input app
-    case 'https://apps.graasp.eu/5acb589d0d5d9464081c2d46/5cde9891226a7d20a8a16697/latest/index.html': {
-      await client.frame(buildPhaseAppName(id));
-      const text = await client.getText('#inputTextField');
+//   switch (url) {
+//     // text input app
+//     case 'https://apps.graasp.eu/5acb589d0d5d9464081c2d46/5cde9891226a7d20a8a16697/latest/index.html': {
+//       await client.frame(buildPhaseAppName(id));
+//       const text = await client.getText('#inputTextField');
 
-      expect(text).to.equal(data);
-      break;
-    }
-    default: {
-      console.log(`app with url : ${url} is not handled`);
-    }
-  }
+//       expect(text).to.equal(data);
+//       break;
+//     }
+//     default: {
+//       console.log(`app with url : ${url} is not handled`);
+//     }
+//   }
 
-  // reset client on parent frame
-  await client.frame(null);
-};
+//   // reset client on parent frame
+//   await client.frame(null);
+// };
 
 // check layout of a given phase
 // @TODO check user input - have access to iframe
@@ -197,15 +198,7 @@ const hasPhaseLayout = async (client, { description, items }, mode) => {
   }
 
   // eslint-disable-block no-await-in-loop
-  for (const {
-    id,
-    content,
-    mimeType,
-    category,
-    url,
-    asset,
-    appInstance = {},
-  } of items) {
+  for (const { id, content, mimeType, category, url, asset } of items) {
     const itemSelector = `[data-id="${id}"]`;
 
     // check item exists
@@ -243,15 +236,13 @@ const hasPhaseLayout = async (client, { description, items }, mode) => {
           case PREVIEW: {
             const iframe = await client.getHTML(`${itemSelector} iframe`);
             expect(iframe).to.include(url);
-            const { resources } = appInstance;
-            await checkUserInputInApp(client, { id, resources, url });
+            // await checkUserInputInApp(client, { id, url }, resources);
             break;
           }
           case SAVED: {
             const iframe = await client.getHTML(`${itemSelector} iframe`);
             expect(iframe).to.include(asset);
-            const { resources } = appInstance;
-            await checkUserInputInApp(client, { id, resources, url });
+            // await checkUserInputInApp(client, { id, url }, resources);
             break;
           }
           default:
@@ -269,7 +260,7 @@ const hasPhaseLayout = async (client, { description, items }, mode) => {
 };
 
 // check phases layout
-const checkPhasesLayout = async (client, phases, mode) => {
+const checkPhasesLayout = async (client, phases, mode, resources = []) => {
   // check each phase layout
   const liTextArray = await client.getText(`#${PHASE_MENU_LIST_ID} li`);
   liTextArray.shift();
@@ -286,20 +277,28 @@ const checkPhasesLayout = async (client, phases, mode) => {
     await client.pause(2000);
 
     // check phase content
-    await hasPhaseLayout(client, phases[idx], mode);
+    await hasPhaseLayout(client, phases[idx], mode, resources);
   }
 };
 
 // check space layout when saved
-const hasSavedSpaceLayout = async (client, { phases, description, name }) => {
+const hasSavedSpaceLayout = async (
+  client,
+  { phases, description, name },
+  resources = []
+) => {
   await hasSavedSpaceHomeLayout(client, { description, name });
-  await checkPhasesLayout(client, phases, SAVED);
+  await checkPhasesLayout(client, phases, SAVED, resources);
 };
 
 // check space layout when preview
-const hasPreviewSpaceLayout = async (client, { phases, description, name }) => {
+const hasPreviewSpaceLayout = async (
+  client,
+  { phases, description, name },
+  resources = []
+) => {
   await hasPreviewSpaceHomeLayout(client, { description, name });
-  await checkPhasesLayout(client, phases, PREVIEW);
+  await checkPhasesLayout(client, phases, PREVIEW, resources);
 };
 
 // check a space card layout
@@ -359,6 +358,7 @@ describe('Visit Space Scenarios', function() {
   beforeEach(
     mochaAsync(async () => {
       app = await createApplication();
+      await userLogin(app.client, USER_GRAASP);
     })
   );
 
