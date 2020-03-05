@@ -348,7 +348,7 @@ app.on('ready', async () => {
   ipcMain.on(GET_LANGUAGE_CHANNEL, getLanguage(mainWindow, db));
 
   // called when setting language
-  ipcMain.on(SET_LANGUAGE_CHANNEL, setLanguage(mainWindow));
+  ipcMain.on(SET_LANGUAGE_CHANNEL, setLanguage(mainWindow, db));
 
   // called when getting developer mode
   ipcMain.on(GET_DEVELOPER_MODE_CHANNEL, getDeveloperMode(mainWindow, db));
