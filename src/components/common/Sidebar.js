@@ -7,7 +7,6 @@ import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { withTranslation } from 'react-i18next';
-import { connect } from 'react-redux';
 import MainMenu from './MainMenu';
 import Styles from '../../Styles';
 
@@ -61,20 +60,7 @@ Sidebar.propTypes = {
   handleDrawerClose: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({ User }) => ({
-  activity: Boolean(User.getIn(['current', 'activity']).size),
-});
-
-const mapDispatchToProps = {};
-
-const ConnectedComponent = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Sidebar);
-
-const StyledComponent = withStyles(Styles, { withTheme: true })(
-  ConnectedComponent
-);
+const StyledComponent = withStyles(Styles, { withTheme: true })(Sidebar);
 
 const TranslatedComponent = withTranslation()(StyledComponent);
 
