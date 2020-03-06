@@ -68,7 +68,7 @@ export class MainMenu extends Component {
     return null;
   }
 
-  renderOfflineMenuItem = children => {
+  renderOfflineMenuItem = child => {
     const { t } = this.props;
 
     return (
@@ -78,10 +78,10 @@ export class MainMenu extends Component {
             placement="right"
             title={t('You need an internet connection.')}
           >
-            <div>{React.cloneElement(children, { disabled: true })}</div>
+            <div>{React.cloneElement(child, { disabled: true })}</div>
           </Tooltip>
         </Offline>
-        <Online>{children}</Online>
+        <Online>{child}</Online>
       </>
     );
   };
