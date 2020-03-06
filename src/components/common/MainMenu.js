@@ -76,7 +76,7 @@ export class MainMenu extends Component {
         <Offline>
           <Tooltip
             placement="right"
-            title={t('You need an internet connection')}
+            title={t('You need an internet connection.')}
           >
             <div>{React.cloneElement(children, { disabled: true })}</div>
           </Tooltip>

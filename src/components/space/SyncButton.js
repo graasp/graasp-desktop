@@ -46,7 +46,7 @@ class SyncButton extends Component {
           </Tooltip>
         </Online>
         <Offline>
-          <Tooltip title={t('You need an internet connection')}>
+          <Tooltip title={t('You need an internet connection.')}>
             <div>
               <IconButton color="inherit" className={classes.button} disabled>
                 <SyncIcon />

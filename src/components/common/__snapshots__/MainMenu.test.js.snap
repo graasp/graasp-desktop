@@ -20,7 +20,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
   >
     <WithStyles(ForwardRef(Tooltip))
       placement="right"
-      title="You need an internet connection"
+      title="You need an internet connection."
     >
       <div>
         <WithStyles(ForwardRef(MenuItem))
@@ -62,7 +62,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
   >
     <WithStyles(ForwardRef(Tooltip))
       placement="right"
-      title="You need an internet connection"
+      title="You need an internet connection."
     >
       <div>
         <WithStyles(ForwardRef(MenuItem))
@@ -145,7 +145,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
   >
     <WithStyles(ForwardRef(Tooltip))
       placement="right"
-      title="You need an internet connection"
+      title="You need an internet connection."
     >
       <div>
         <WithStyles(ForwardRef(MenuItem))
@@ -187,7 +187,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
   >
     <WithStyles(ForwardRef(Tooltip))
       placement="right"
-      title="You need an internet connection"
+      title="You need an internet connection."
     >
       <div>
         <WithStyles(ForwardRef(MenuItem))
