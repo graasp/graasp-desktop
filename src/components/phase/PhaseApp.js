@@ -13,6 +13,7 @@ import {
   POST_APP_INSTANCE_RESOURCE,
   APP_INSTANCE_RESOURCE_TYPES,
   POST_ACTION,
+  ACTION_TYPES,
 } from '../../types';
 import {
   getAppInstanceResources,
@@ -119,7 +120,7 @@ class PhaseApp extends Component {
       const { id: componentAppInstanceId } = appInstance || {};
       const { type, payload } = JSON.parse(event.data);
       let { id: messageAppInstanceId } = payload;
-      if (APP_INSTANCE_RESOURCE_TYPES.includes(type)) {
+      if ([...APP_INSTANCE_RESOURCE_TYPES, ...ACTION_TYPES].includes(type)) {
         ({ appInstanceId: messageAppInstanceId } = payload);
       }
 

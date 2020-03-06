@@ -4,7 +4,7 @@ import { POST_ACTION_CHANNEL } from '../config/channels';
 const postAction = async (
   {
     userId,
-    id: appInstanceId,
+    appInstanceId,
     spaceId,
     subSpaceId,
     format,
@@ -28,14 +28,17 @@ const postAction = async (
       visibility,
     });
 
-    window.ipcRenderer.once(POST_ACTION_CHANNEL, async (event, response) => {
-      callback({
-        // have to include the appInstanceId to avoid broadcasting
-        appInstanceId,
-        type: POST_ACTION_SUCCEEDED,
-        payload: response,
-      });
-    });
+    window.ipcRenderer.once(
+      `${POST_ACTION_CHANNEL}_${appInstanceId}`,
+      async (event, response) => {
+        callback({
+          // have to include the appInstanceId to avoid broadcasting
+          appInstanceId,
+          type: POST_ACTION_SUCCEEDED,
+          payload: response,
+        });
+      }
+    );
   } catch (err) {
     // do nothing
   }

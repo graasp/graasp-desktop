@@ -41,7 +41,10 @@ const postAction = (mainWindow, db) => (event, payload = {}) => {
       .write();
 
     // send back the resource
-    mainWindow.webContents.send(POST_ACTION_CHANNEL, actionToWrite);
+    mainWindow.webContents.send(
+      `${POST_ACTION_CHANNEL}_${appInstanceId}`,
+      actionToWrite
+    );
   } catch (e) {
     logger.error(e);
     mainWindow.webContents.send(POST_ACTION_CHANNEL, null);
