@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.15.4](https://github.com/graasp/graasp-desktop/compare/v0.15.3...v0.15.4) (2020-03-06)
+
+### Features
+
+- add offline version of the name the frame ([2d62ce6](https://github.com/graasp/graasp-desktop/commit/2d62ce6f2327d8f2c4dccdffd2f8c55012ae341d))
+
+### Bug Fixes
+
+- close p tag after fix in commit c6e1931 ([f81343d](https://github.com/graasp/graasp-desktop/commit/f81343d29eec2a96e4b5c196e1340a6b0ba3256d))
+- pass database in setLanguage argument ([a9f9ee6](https://github.com/graasp/graasp-desktop/commit/a9f9ee6dfd22ec5ed972d4c51f8def4d7f0a280a)), closes [#231](https://github.com/graasp/graasp-desktop/issues/231)
+
 ### [0.15.3](https://github.com/graasp/graasp-desktop/compare/v0.15.2...v0.15.3) (2020-02-28)
 
 ### Features
