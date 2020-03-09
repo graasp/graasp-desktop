@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 import { toastr } from 'react-redux-toastr';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import { withStyles } from '@material-ui/core';
+import AppBar from '@material-ui/core/AppBar';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Toolbar from '@material-ui/core/Toolbar';
 import { withTranslation } from 'react-i18next';
 import WifiIcon from '@material-ui/icons/Wifi';
 import WifiOffIcon from '@material-ui/icons/WifiOff';
@@ -24,6 +27,7 @@ import Authorization from './components/Authorization';
 import Classrooms from './components/classrooms/Classrooms';
 import ImportDataScreen from './components/classrooms/ImportDataScreen';
 import { OnlineTheme, OfflineTheme } from './themes';
+import logo from './data/icon.png';
 import {
   SETTINGS_PATH,
   SYNC_SPACE_PATH,
@@ -55,18 +59,35 @@ import {
   CONNECTION_MESSAGE_HEADER,
   CONNECTION_OFFLINE_MESSAGE,
   CONNECTION_ONLINE_MESSAGE,
+  ERROR_INSTALL_APP_UPGRADE_MESSAGE,
+  ERROR_MESSAGE_HEADER,
+  UPDATE_AVAILABLE_MESSAGE,
 } from './config/messages';
 import './App.css';
 import SavedSpaces from './components/SavedSpaces';
 import ClassroomScreen from './components/classrooms/ClassroomScreen';
 import Tour from './components/common/Tour';
+import {
+  INSTALL_APP_UPGRADE_CHANNEL,
+  GET_APP_UPGRADE_CHANNEL,
+} from './config/channels';
+import Loader from './components/common/Loader';
+import { ERROR_GENERAL } from './config/errors';
+import { PRODUCT_NAME } from '../public/app/config/config';
 
 const styles = () => ({
   toastrIcon: { marginBottom: '-20px', fontSize: '45px' },
+  fullScreen: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 export class App extends Component {
-  state = { height: 0 };
+  state = { height: 0, isDownloadingUpdate: false };
 
   static propTypes = {
     dispatchGetGeolocation: PropTypes.func.isRequired,
@@ -82,6 +103,7 @@ export class App extends Component {
     geolocationEnabled: PropTypes.bool.isRequired,
     classes: PropTypes.shape({
       toastrIcon: PropTypes.string.isRequired,
+      fullScreen: PropTypes.string.isRequired,
     }).isRequired,
     connexionStatus: PropTypes.bool.isRequired,
     userMode: PropTypes.oneOf(USER_MODES).isRequired,
@@ -100,6 +122,7 @@ export class App extends Component {
       dispatchGetDeveloperMode,
       dispatchGetGeolocationEnabled,
       dispatchIsAuthenticated,
+      userMode,
     } = this.props;
 
     dispatchIsAuthenticated();
@@ -107,6 +130,10 @@ export class App extends Component {
     dispatchGetDeveloperMode();
     dispatchGetUserFolder();
     dispatchGetGeolocationEnabled();
+
+    if (userMode === USER_MODES.TEACHER) {
+      this.checkAppUpgrade();
+    }
   }
 
   componentDidMount() {
@@ -119,8 +146,15 @@ export class App extends Component {
     geolocationEnabled: prevGeolocationEnabled,
     dispatchGetGeolocation,
     connexionStatus: prevConnexionStatus,
+    userMode: prevUserMode,
   }) {
-    const { lang, i18n, geolocationEnabled, connexionStatus } = this.props;
+    const {
+      lang,
+      i18n,
+      geolocationEnabled,
+      connexionStatus,
+      userMode,
+    } = this.props;
     if (lang !== prevLang) {
       i18n.changeLanguage(lang);
     }
@@ -134,11 +168,62 @@ export class App extends Component {
     if (connexionStatus !== prevConnexionStatus) {
       this.triggerConnectionToastr();
     }
+
+    if (userMode === USER_MODES.TEACHER && userMode !== prevUserMode) {
+      this.checkAppUpgrade();
+    }
   }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateWindowDimensions);
   }
+
+  checkAppUpgrade = () => {
+    const { t } = this.props;
+
+    // look for app upgrade
+    window.ipcRenderer.send(GET_APP_UPGRADE_CHANNEL);
+
+    window.ipcRenderer.once(
+      GET_APP_UPGRADE_CHANNEL,
+      (event, isUpgradeAvailable) => {
+        // if available, ask for download and install
+        if (isUpgradeAvailable) {
+          // eslint-disable-next-line no-new
+          new Notification(PRODUCT_NAME, {
+            body: t('A new version is available'),
+            icon: logo,
+          });
+
+          const toastrConfirmOptions = {
+            icon: <img src={logo} alt={t('graasp logo')} />,
+            okText: t('Accept'),
+            cancelText: t('Ask next time'),
+            onOk: () => {
+              window.ipcRenderer.send(INSTALL_APP_UPGRADE_CHANNEL, true);
+              window.ipcRenderer.on(
+                INSTALL_APP_UPGRADE_CHANNEL,
+                (e, payload) => {
+                  if (payload === ERROR_GENERAL) {
+                    toastr.error(
+                      ERROR_MESSAGE_HEADER,
+                      t(ERROR_INSTALL_APP_UPGRADE_MESSAGE)
+                    );
+                    this.setState({ isDownloadingUpdate: false });
+                  } else {
+                    this.setState({ isDownloadingUpdate: true });
+                  }
+                }
+              );
+            },
+            onCancel: () =>
+              window.ipcRenderer.send(INSTALL_APP_UPGRADE_CHANNEL, false),
+          };
+          toastr.confirm(t(UPDATE_AVAILABLE_MESSAGE), toastrConfirmOptions);
+        }
+      }
+    );
+  };
 
   updateWindowDimensions = () => {
     this.setState({ height: window.innerHeight });
@@ -163,9 +248,96 @@ export class App extends Component {
   };
 
   render() {
-    const { height } = this.state;
-    const { userMode, connexionStatus } = this.props;
+    const { height, isDownloadingUpdate } = this.state;
+    const { userMode, connexionStatus, classes } = this.props;
 
+    let content = null;
+    if (isDownloadingUpdate) {
+      content = (
+        <>
+          <CssBaseline />
+          <AppBar>
+            <Toolbar />
+          </AppBar>
+          <main className={classes.fullScreen}>
+            <Loader />
+          </main>
+        </>
+      );
+    } else {
+      content = (
+        <Switch>
+          <Route exact path={SIGN_IN_PATH} component={SignInScreen} />
+          <Route exact path={HOME_PATH} component={Authorization()(Home)} />
+          <Route
+            exact
+            path={SAVED_SPACES_PATH}
+            component={Authorization()(SavedSpaces)}
+          />
+          <Route
+            exact
+            path={SPACES_NEARBY_PATH}
+            component={Authorization()(SpacesNearby)}
+          />
+          <Route
+            exact
+            path={VISIT_PATH}
+            component={Authorization()(VisitSpace)}
+          />
+          <Route
+            exact
+            path={LOAD_SPACE_PATH}
+            component={Authorization()(LoadSpace)}
+          />
+          <Route
+            exact
+            path={LOAD_SELECTION_SPACE_PATH}
+            component={Authorization()(LoadSelectionScreen)}
+          />
+          <Route exact path={SETTINGS_PATH} component={Settings} />
+          <Route
+            exact
+            path={SYNC_SPACE_PATH}
+            component={Authorization()(SyncScreen)}
+          />
+          <Route
+            exact
+            path={buildExportSelectionPathForSpaceId()}
+            component={Authorization()(ExportSelectionScreen)}
+          />
+          <Route
+            exact
+            path={SPACE_PATH}
+            component={Authorization()(SpaceScreen)}
+          />
+          <Route
+            exact
+            path={DASHBOARD_PATH}
+            component={Authorization()(Dashboard)}
+          />
+          <Route
+            exact
+            path={buildClassroomPath()}
+            component={Authorization([USER_MODES.TEACHER])(ClassroomScreen)}
+          />
+          <Route
+            exact
+            path={CLASSROOMS_PATH}
+            component={Authorization([USER_MODES.TEACHER])(Classrooms)}
+          />
+          <Route
+            exact
+            path={buildImportDataInClassroomPath()}
+            component={Authorization([USER_MODES.TEACHER])(ImportDataScreen)}
+          />
+          <Route
+            exact
+            path={DEVELOPER_PATH}
+            component={Authorization()(DeveloperScreen)}
+          />
+        </Switch>
+      );
+    }
     return (
       <MuiThemeProvider
         theme={connexionStatus ? OnlineTheme(userMode) : OfflineTheme}
@@ -173,78 +345,7 @@ export class App extends Component {
         <Router>
           <Tour />
           <div className="app" style={{ height }}>
-            <Switch>
-              <Route exact path={SIGN_IN_PATH} component={SignInScreen} />
-              <Route exact path={HOME_PATH} component={Authorization()(Home)} />
-              <Route
-                exact
-                path={SAVED_SPACES_PATH}
-                component={Authorization()(SavedSpaces)}
-              />
-              <Route
-                exact
-                path={SPACES_NEARBY_PATH}
-                component={Authorization()(SpacesNearby)}
-              />
-              <Route
-                exact
-                path={VISIT_PATH}
-                component={Authorization()(VisitSpace)}
-              />
-              <Route
-                exact
-                path={LOAD_SPACE_PATH}
-                component={Authorization()(LoadSpace)}
-              />
-              <Route
-                exact
-                path={LOAD_SELECTION_SPACE_PATH}
-                component={Authorization()(LoadSelectionScreen)}
-              />
-              <Route exact path={SETTINGS_PATH} component={Settings} />
-              <Route
-                exact
-                path={SYNC_SPACE_PATH}
-                component={Authorization()(SyncScreen)}
-              />
-              <Route
-                exact
-                path={buildExportSelectionPathForSpaceId()}
-                component={Authorization()(ExportSelectionScreen)}
-              />
-              <Route
-                exact
-                path={SPACE_PATH}
-                component={Authorization()(SpaceScreen)}
-              />
-              <Route
-                exact
-                path={DASHBOARD_PATH}
-                component={Authorization()(Dashboard)}
-              />
-              <Route
-                exact
-                path={buildClassroomPath()}
-                component={Authorization([USER_MODES.TEACHER])(ClassroomScreen)}
-              />
-              <Route
-                exact
-                path={CLASSROOMS_PATH}
-                component={Authorization([USER_MODES.TEACHER])(Classrooms)}
-              />
-              <Route
-                exact
-                path={buildImportDataInClassroomPath()}
-                component={Authorization([USER_MODES.TEACHER])(
-                  ImportDataScreen
-                )}
-              />
-              <Route
-                exact
-                path={DEVELOPER_PATH}
-                component={Authorization()(DeveloperScreen)}
-              />
-            </Switch>
+            {content}
           </div>
         </Router>
       </MuiThemeProvider>

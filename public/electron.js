@@ -10,7 +10,6 @@ const {
 } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
-const { autoUpdater } = require('electron-updater');
 const Sentry = require('@sentry/electron');
 const ua = require('universal-analytics');
 const { machineIdSync } = require('node-machine-id');
@@ -79,6 +78,8 @@ const {
   COMPLETE_TOUR_CHANNEL,
   POST_FILE_CHANNEL,
   DELETE_FILE_CHANNEL,
+  GET_APP_UPGRADE_CHANNEL,
+  INSTALL_APP_UPGRADE_CHANNEL,
 } = require('./app/config/channels');
 const env = require('./env.json');
 const {
@@ -136,6 +137,8 @@ const {
   completeTour,
   postFile,
   deleteFile,
+  installAppUpgrade,
+  getAppUpgrade,
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
 
@@ -369,15 +372,6 @@ const generateMenu = () => {
 };
 
 app.on('ready', async () => {
-  // updater
-  autoUpdater.logger = logger;
-
-  // noinspection ES6MissingAwait
-  autoUpdater
-    .checkForUpdatesAndNotify()
-    .then()
-    .catch((err) => logger.error(err));
-
   await ensureDatabaseExists(DATABASE_PATH);
   const db = bootstrapDatabase(DATABASE_PATH);
 
@@ -387,6 +381,12 @@ app.on('ready', async () => {
   // record page view
   const visitor = ua(GOOGLE_ANALYTICS_ID, machineId);
   visitor.pageview('/').send();
+
+  // called when getting upgrade availability
+  ipcMain.on(GET_APP_UPGRADE_CHANNEL, getAppUpgrade(mainWindow));
+
+  // called when getting upgrade availability
+  ipcMain.on(INSTALL_APP_UPGRADE_CHANNEL, installAppUpgrade(mainWindow));
 
   // called when saving a space
   ipcMain.on(SAVE_SPACE_CHANNEL, saveSpace(mainWindow, db));

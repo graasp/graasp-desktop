@@ -64,3 +64,6 @@ build/*
 
 # excluse test outputs
 test/tmp
+
+# excluse app update file
+dev-app-update.yml
