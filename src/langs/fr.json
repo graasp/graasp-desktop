@@ -51,7 +51,6 @@
     "Login": "Se connecter",
     "Logout": "Se déconnecter",
     "Login with Graasp": "Se connecter avec Graasp",
-    "Username": "Entre ton nom d'utilisateur",
-    "Password": "Entre ton mot de passe"
+    "Username": "Entre ton nom d'utilisateur"
   }
 }

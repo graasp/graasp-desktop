@@ -408,7 +408,7 @@ app.on('ready', async () => {
   ipcMain.on(SIGN_IN_CHANNEL, signIn(mainWindow, db));
 
   // called when logging out a user
-  ipcMain.on(SIGN_OUT_CHANNEL, signOut(mainWindow, session));
+  ipcMain.on(SIGN_OUT_CHANNEL, signOut(mainWindow, db));
 
   // called when getting authenticated
   ipcMain.on(IS_AUTHENTICATED_CHANNEL, isAuthenticated(mainWindow, db));

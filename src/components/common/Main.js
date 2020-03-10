@@ -81,8 +81,8 @@ class Main extends Component {
   }
 }
 
-const mapStateToProps = ({ User }) => ({
-  activity: Boolean(User.getIn(['current', 'activity']).size),
+const mapStateToProps = ({ Authentication }) => ({
+  activity: Boolean(Authentication.getIn(['current', 'activity']).size),
 });
 
 const mapDispatchToProps = {};

@@ -6,7 +6,7 @@ const { ERROR_GENERAL } = require('../config/errors');
 const getDeveloperMode = (mainWindow, db) => async () => {
   try {
     const developerMode =
-      db.get('user.developerMode').value() || DEFAULT_DEVELOPER_MODE;
+      db.get('user.settings.developerMode').value() || DEFAULT_DEVELOPER_MODE;
     mainWindow.webContents.send(GET_DEVELOPER_MODE_CHANNEL, developerMode);
   } catch (e) {
     logger.error(e);

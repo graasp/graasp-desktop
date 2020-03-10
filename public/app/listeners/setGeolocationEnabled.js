@@ -7,7 +7,7 @@ const setGeolocationEnabled = (mainWindow, db) => async (
   geolocationEnabled
 ) => {
   try {
-    db.set('user.geolocationEnabled', geolocationEnabled).write();
+    db.set('user.settings.geolocationEnabled', geolocationEnabled).write();
     mainWindow.webContents.send(
       SET_GEOLOCATION_ENABLED_CHANNEL,
       geolocationEnabled

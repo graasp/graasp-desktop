@@ -35,6 +35,8 @@ const postAction = (mainWindow, db) => (event, payload = {}) => {
       id: ObjectId().str,
     };
 
+    console.log(actionToWrite);
+
     // write the action to the database
     db.get('actions')
       .push(actionToWrite)

@@ -25,25 +25,14 @@ const flagSigningInUser = createFlag(FLAG_SIGNING_IN);
 const flagSigningOutUser = createFlag(FLAG_SIGNING_OUT);
 const flagGettingAuthenticated = createFlag(FLAG_GETTING_AUTHENTICATED);
 
-const signIn = async ({ username, password }) => async dispatch => {
+const signIn = async ({ username }) => async dispatch => {
   try {
     dispatch(flagSigningInUser(true));
-    window.ipcRenderer.send(SIGN_IN_CHANNEL, { username, password });
+    window.ipcRenderer.send(SIGN_IN_CHANNEL, { username });
     window.ipcRenderer.once(SIGN_IN_CHANNEL, async (event, user) => {
       if (user === ERROR_GENERAL) {
         toastr.error(ERROR_MESSAGE_HEADER, ERROR_SIGNING_IN);
       } else {
-        // obtain user cookie
-        // await fetch(REACT_APP_GRAASP_LOGIN, {
-        //   body: `email=${encodeURIComponent(
-        //     user.username
-        //   )}&password=${encodeURIComponent(user.password)}`,
-        //   headers: {
-        //     'Content-Type': 'application/x-www-form-urlencoded',
-        //   },
-        //   method: 'post',
-        // });
-
         dispatch({
           type: SIGN_IN_SUCCEEDED,
           payload: user,
@@ -57,7 +46,7 @@ const signIn = async ({ username, password }) => async dispatch => {
   }
 };
 
-const signOutUser = () => dispatch => {
+const signOut = () => dispatch => {
   try {
     dispatch(flagSigningOutUser(true));
     window.ipcRenderer.send(SIGN_OUT_CHANNEL);
@@ -104,4 +93,4 @@ const isAuthenticated = async () => dispatch => {
   }
 };
 
-export { signIn, signOutUser, isAuthenticated };
+export { signIn, signOut, isAuthenticated };

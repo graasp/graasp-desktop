@@ -36,7 +36,7 @@ import {
   DASHBOARD_MENU_ITEM_ID,
   DEVELOPER_MENU_ITEM_ID,
 } from '../../config/selectors';
-import { signOutUser } from '../../actions/authentication';
+import { signOut } from '../../actions/authentication';
 import { AUTHENTICATED } from '../../config/constants';
 
 export class MainMenu extends Component {
@@ -256,13 +256,13 @@ export class MainMenu extends Component {
   }
 }
 
-const mapStateToProps = ({ User, Authentication }) => ({
+const mapStateToProps = ({ Authentication }) => ({
   authenticated: Authentication.getIn(['authenticated']) === AUTHENTICATED,
-  developerMode: User.getIn(['current', 'developerMode']),
-  activity: Boolean(User.getIn(['current', 'activity']).size),
+  developerMode: Authentication.getIn(['user', 'settings', 'developerMode']),
+  activity: Boolean(Authentication.getIn(['current', 'activity']).size),
 });
 const mapDispatchToProps = {
-  dispatchSignOut: signOutUser,
+  dispatchSignOut: signOut,
 };
 
 const ConnectedComponent = connect(

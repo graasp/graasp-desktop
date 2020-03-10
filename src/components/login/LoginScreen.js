@@ -20,7 +20,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import logo from '../../assets/icon.png';
 import MainMenu from '../common/MainMenu';
 import Styles from '../../Styles';
-import { signIn, signOutUser } from '../../actions/authentication';
+import { signIn, signOut } from '../../actions/authentication';
 import { AUTHENTICATED } from '../../config/constants';
 import { HOME_PATH } from '../../config/paths';
 import {
@@ -56,8 +56,7 @@ const CssTextField = withStyles({
 class LoginScreen extends Component {
   state = {
     open: false,
-    username: null,
-    password: null,
+    username: '',
   };
 
   styles = {
@@ -81,7 +80,6 @@ class LoginScreen extends Component {
       contentShift: PropTypes.string.isRequired,
       input: PropTypes.string.isRequired,
       button: PropTypes.string.isRequired,
-      formControl: PropTypes.string.isRequired,
     }).isRequired,
     theme: PropTypes.shape({
       direction: PropTypes.string.isRequired,
@@ -134,9 +132,9 @@ class LoginScreen extends Component {
   };
 
   handleSignIn = () => {
-    const { username, password } = this.state;
+    const { username } = this.state;
     const { dispatchSignIn } = this.props;
-    dispatchSignIn({ username, password });
+    dispatchSignIn({ username });
   };
 
   handleSignOut = () => {
@@ -149,11 +147,6 @@ class LoginScreen extends Component {
     this.setState({ username });
   };
 
-  handlePassword = event => {
-    const password = event.target ? event.target.value : event;
-    this.setState({ password });
-  };
-
   handleKeyPressed = event => {
     if (event.key === 'Enter') {
       this.handleSignIn();
@@ -162,7 +155,7 @@ class LoginScreen extends Component {
 
   render() {
     const { classes, theme, t } = this.props;
-    const { open, username, password } = this.state;
+    const { open, username } = this.state;
 
     return (
       <div className={classes.root} style={this.styles.root}>
@@ -211,7 +204,7 @@ class LoginScreen extends Component {
           })}
         >
           <div className={classes.drawerHeader} />
-          <FormControl className={classes.formControl}>
+          <FormControl>
             <img src={logo} alt="graasp logo" />
             <CssTextField
               id={LOGIN_USERNAME_INPUT_ID}
@@ -220,15 +213,6 @@ class LoginScreen extends Component {
               onChange={this.handleUsername}
               onKeyPress={this.handleKeyPressed}
               value={username}
-            />
-            <br />
-            <CssTextField
-              label={t('Password')}
-              variant="outlined"
-              onChange={this.handlePassword}
-              onKeyPress={this.handleKeyPressed}
-              value={password}
-              type="password"
             />
             <br />
             <Button
@@ -254,7 +238,7 @@ const mapStateToProps = ({ Authentication }) => ({
 
 const mapDispatchToProps = {
   dispatchSignIn: signIn,
-  dispatchSignOut: signOutUser,
+  dispatchSignOut: signOut,
 };
 
 const StyledComponent = withStyles(Styles, { withTheme: true })(LoginScreen);

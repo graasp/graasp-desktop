@@ -4,7 +4,7 @@ const { ERROR_GENERAL } = require('../config/errors');
 
 const setLanguage = (mainWindow, db) => async (event, lang) => {
   try {
-    db.set('user.lang', lang).write();
+    db.set('user.settings.lang', lang).write();
     mainWindow.webContents.send(SET_LANGUAGE_CHANNEL, lang);
   } catch (e) {
     logger.error(e);

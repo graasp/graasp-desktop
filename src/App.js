@@ -170,7 +170,11 @@ export class App extends Component {
                     path={LOAD_SPACE_PATH}
                     component={Authorization()(LoadSpace)}
                   />
-                  <Route exact path={SETTINGS_PATH} component={Settings} />
+                  <Route
+                    exact
+                    path={SETTINGS_PATH}
+                    component={Authorization()(Settings)}
+                  />
                   <Route
                     exact
                     path={SPACE_PATH}
@@ -193,9 +197,13 @@ export class App extends Component {
   }
 }
 
-const mapStateToProps = ({ User }) => ({
-  lang: User.getIn(['current', 'lang']),
-  geolocationEnabled: User.getIn(['current', 'geolocationEnabled']),
+const mapStateToProps = ({ Authentication }) => ({
+  lang: Authentication.getIn(['user', 'settings', 'lang']),
+  geolocationEnabled: Authentication.getIn([
+    'user',
+    'settings',
+    'geolocationEnabled',
+  ]),
 });
 
 const mapDispatchToProps = {

@@ -30,4 +30,5 @@ export const INLINE_MATH_REGEX = /(\\\((.*?)\\\))/g;
 export const RADIX = 10;
 
 export const FILTER_ALL_SPACE_ID = 'defaultid';
+export const DEFAULT_AUTHENTICATION = false;
 export const AUTHENTICATED = 'authenticated';

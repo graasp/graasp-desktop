@@ -66,7 +66,7 @@ const Authorization = roles => ChildComponent => {
   const mapStateToProps = ({ Authentication }) => ({
     user: Authentication.get('user'),
     authenticated: Authentication.get('authenticated') === AUTHENTICATED,
-    activity: Authentication.get('activity'),
+    activity: Authentication.getIn(['current', 'activity']),
   });
 
   return connect(mapStateToProps)(ComposedComponent);
