@@ -18,7 +18,7 @@ import SpaceScreen from './components/space/SpaceScreen';
 import DeveloperScreen from './components/developer/DeveloperScreen';
 import { OnlineTheme, OfflineTheme } from './themes';
 import Dashboard from './components/dashboard/Dashboard';
-import LoginScreen from './components/login/LoginScreen';
+import SignInScreen from './components/signin/SignInScreen';
 import Authorization from './components/Authorization';
 import {
   SETTINGS_PATH,
@@ -29,7 +29,7 @@ import {
   LOAD_SPACE_PATH,
   DEVELOPER_PATH,
   DASHBOARD_PATH,
-  LOGIN_PATH,
+  SIGN_IN_PATH,
 } from './config/paths';
 import {
   getGeolocation,
@@ -37,6 +37,7 @@ import {
   getLanguage,
   getDeveloperMode,
   getGeolocationEnabled,
+  isAuthenticated,
 } from './actions';
 import { DEFAULT_LANGUAGE } from './config/constants';
 import {
@@ -59,6 +60,7 @@ export class App extends Component {
     dispatchGetLanguage: PropTypes.func.isRequired,
     dispatchGetDeveloperMode: PropTypes.func.isRequired,
     dispatchGetGeolocationEnabled: PropTypes.func.isRequired,
+    dispatchIsAuthenticated: PropTypes.func.isRequired,
     lang: PropTypes.string,
     i18n: PropTypes.shape({
       changeLanguage: PropTypes.func.isRequired,
@@ -80,8 +82,10 @@ export class App extends Component {
       dispatchGetLanguage,
       dispatchGetDeveloperMode,
       dispatchGetGeolocationEnabled,
+      dispatchIsAuthenticated,
     } = this.props;
 
+    dispatchIsAuthenticated();
     dispatchGetLanguage();
     dispatchGetDeveloperMode();
     dispatchGetUserFolder();
@@ -149,7 +153,7 @@ export class App extends Component {
             <Router>
               <div className="app" style={{ height }}>
                 <Switch>
-                  <Route exact path={LOGIN_PATH} component={LoginScreen} />
+                  <Route exact path={SIGN_IN_PATH} component={SignInScreen} />
                   <Route
                     exact
                     path={HOME_PATH}
@@ -180,13 +184,16 @@ export class App extends Component {
                     path={SPACE_PATH}
                     component={Authorization()(SpaceScreen)}
                   />
-                  <Route exact path={DASHBOARD_PATH} component={Dashboard} />
+                  <Route
+                    exact
+                    path={DASHBOARD_PATH}
+                    component={Authorization()(Dashboard)}
+                  />
                   <Route
                     exact
                     path={DEVELOPER_PATH}
-                    component={DeveloperScreen}
+                    component={Authorization()(DeveloperScreen)}
                   />
-                  <Route exact path={LOGIN_PATH} component={LoginScreen} />
                 </Switch>
               </div>
             </Router>
@@ -212,6 +219,7 @@ const mapDispatchToProps = {
   dispatchGetLanguage: getLanguage,
   dispatchGetDeveloperMode: getDeveloperMode,
   dispatchGetGeolocationEnabled: getGeolocationEnabled,
+  dispatchIsAuthenticated: isAuthenticated,
 };
 
 const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App);

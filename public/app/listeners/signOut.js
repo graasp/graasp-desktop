@@ -4,6 +4,8 @@ const logger = require('../logger');
 
 const signOut = (mainWindow, db) => async () => {
   try {
+    db.set('user.authenticated', false).write();
+
     // update user in users collection
     const user = db.get('user').value();
     db.get('users')

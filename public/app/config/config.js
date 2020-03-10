@@ -46,6 +46,7 @@ const DEFAULT_DEVELOPER_MODE = false;
 const DEFAULT_GEOLOCATION_ENABLED = false;
 const DEFAULT_PROTOCOL = 'https';
 const DEFAULT_LOGGING_LEVEL = 'info';
+const AUTHENTICATED = 'authenticated';
 const DEFAULT_AUTHENTICATION = false;
 
 const DEFAULT_USER = {
@@ -56,6 +57,8 @@ const DEFAULT_USER = {
     geolocationEnabled: DEFAULT_GEOLOCATION_ENABLED,
   },
 };
+
+const ANONYMOUS_USERNAME = 'Anonymous';
 
 module.exports = {
   DEFAULT_LOGGING_LEVEL,
@@ -74,4 +77,6 @@ module.exports = {
   escapeEscapeCharacter,
   DEFAULT_AUTHENTICATION,
   DEFAULT_USER,
+  AUTHENTICATED,
+  ANONYMOUS_USERNAME,
 };

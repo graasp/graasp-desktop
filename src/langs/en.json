@@ -48,9 +48,9 @@
     "Filter by Space": "Filter by Space",
     "All Spaces": "All Spaces",
     "Time": "Time",
-    "Login": "Login",
-    "Logout": "Logout",
-    "Login with Graasp": "Login with Graasp",
-    "Username": "Enter your Username"
+    "Sign In": "Sign In",
+    "Sign Out": "Sign Out",
+    "Username": "Enter your Username",
+    "Sign in as Guest": "Sign in as Guest"
   }
 }

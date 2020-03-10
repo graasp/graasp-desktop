@@ -14,6 +14,7 @@ describe('<App />', () => {
     dispatchGetLanguage: jest.fn(),
     dispatchGetDeveloperMode: jest.fn(),
     dispatchGetGeolocationEnabled: jest.fn(),
+    dispatchIsAuthenticated: jest.fn(),
     geolocationEnabled: false,
   };
 

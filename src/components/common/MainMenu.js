@@ -25,7 +25,7 @@ import {
   VISIT_PATH,
   DEVELOPER_PATH,
   DASHBOARD_PATH,
-  LOGIN_PATH,
+  SIGN_IN_PATH,
 } from '../../config/paths';
 import {
   SETTINGS_MENU_ITEM_ID,
@@ -73,7 +73,7 @@ export class MainMenu extends Component {
     dispatchSignOut();
   }
 
-  renderLogOut() {
+  renderSignOut() {
     const {
       authenticated,
       t,
@@ -86,13 +86,13 @@ export class MainMenu extends Component {
           onClick={() => {
             this.handleSignOut();
           }}
-          selected={path === LOGIN_PATH}
+          selected={path === SIGN_IN_PATH}
           button
         >
           <ListItemIcon>
             <AccountCircle />
           </ListItemIcon>
-          <ListItemText primary={t('Log Out')} />
+          <ListItemText primary={t('Sign Out')} />
         </MenuItem>
       );
     }
@@ -206,15 +206,15 @@ export class MainMenu extends Component {
     return (
       <MenuItem
         onClick={() => {
-          this.handleClick(LOGIN_PATH);
+          this.handleClick(SIGN_IN_PATH);
         }}
-        selected={path === LOGIN_PATH}
+        selected={path === SIGN_IN_PATH}
         button
       >
         <ListItemIcon>
           <AccountCircle />
         </ListItemIcon>
-        <ListItemText primary={t('Login')} />
+        <ListItemText primary={t('Sign In')} />
       </MenuItem>
     );
   }
@@ -250,7 +250,7 @@ export class MainMenu extends Component {
           <ListItemText primary={t('Dashboard')} />
         </MenuItem>
         {this.renderDeveloperMode()}
-        {this.renderLogOut()}
+        {this.renderSignOut()}
       </List>
     );
   }

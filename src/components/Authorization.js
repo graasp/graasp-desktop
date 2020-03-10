@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import { replace } from 'connected-react-router';
-import { LOGIN_PATH } from '../config/paths';
+import { SIGN_IN_PATH, HOME_PATH } from '../config/paths';
 import { AUTHENTICATED } from '../config/constants';
 
 // todo: remove eslint disable when parameter is used
 // eslint-disable-next-line no-unused-vars
-const Authorization = roles => ChildComponent => {
+const Authorization = ({ requireDeveloperMode } = {}) => ChildComponent => {
   class ComposedComponent extends Component {
     static redirectToSignIn(props) {
       // pathname inside location matches the path in url
@@ -18,7 +17,19 @@ const Authorization = roles => ChildComponent => {
       const {
         history: { replace },
       } = props;
-      replace(LOGIN_PATH);
+      replace(SIGN_IN_PATH);
+    }
+
+    static redirectToHome(props) {
+      // pathname inside location matches the path in url
+      const { location: { pathname } = {} } = props;
+      if (pathname) {
+        sessionStorage.setItem('redirect', pathname);
+      }
+      const {
+        history: { replace },
+      } = props;
+      replace(HOME_PATH);
     }
 
     static propTypes = {
@@ -26,6 +37,7 @@ const Authorization = roles => ChildComponent => {
         username: PropTypes.string,
       }),
       authenticated: PropTypes.bool,
+      developerMode: PropTypes.bool,
       dispatch: PropTypes.func.isRequired,
       match: PropTypes.shape({
         path: PropTypes.string,
@@ -37,6 +49,7 @@ const Authorization = roles => ChildComponent => {
       user: null,
       authenticated: false,
       activity: false,
+      developerMode: false,
     };
 
     componentDidMount() {
@@ -50,9 +63,12 @@ const Authorization = roles => ChildComponent => {
     }
 
     componentDidUpdate() {
-      const { authenticated } = this.props;
+      const { authenticated, developerMode } = this.props;
       if (!authenticated) {
         ComposedComponent.redirectToSignIn(this.props);
+      }
+      if (requireDeveloperMode && !developerMode) {
+        ComposedComponent.redirectToHome(this.props);
       }
       // todo: check if user has access to current view
     }
@@ -65,8 +81,13 @@ const Authorization = roles => ChildComponent => {
 
   const mapStateToProps = ({ Authentication }) => ({
     user: Authentication.get('user'),
+    userDeveloperMode: Authentication.getIn([
+      'user',
+      'settings',
+      'developerMode',
+    ]),
     authenticated: Authentication.get('authenticated') === AUTHENTICATED,
-    activity: Authentication.getIn(['current', 'activity']),
+    activity: Boolean(Authentication.getIn(['current', 'activity']).size),
   });
 
   return connect(mapStateToProps)(ComposedComponent);

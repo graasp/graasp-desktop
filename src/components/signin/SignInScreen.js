@@ -53,10 +53,11 @@ const CssTextField = withStyles({
   },
 })(TextField);
 
-class LoginScreen extends Component {
+class SignInScreen extends Component {
   state = {
     open: false,
     username: '',
+    usernameIsEmpty: true,
   };
 
   styles = {
@@ -80,6 +81,7 @@ class LoginScreen extends Component {
       contentShift: PropTypes.string.isRequired,
       input: PropTypes.string.isRequired,
       button: PropTypes.string.isRequired,
+      dividerColor: PropTypes.string.isRequired,
     }).isRequired,
     theme: PropTypes.shape({
       direction: PropTypes.string.isRequired,
@@ -134,7 +136,14 @@ class LoginScreen extends Component {
   handleSignIn = () => {
     const { username } = this.state;
     const { dispatchSignIn } = this.props;
-    dispatchSignIn({ username });
+    if (username.length) {
+      dispatchSignIn({ username });
+    }
+  };
+
+  handleAnonymousSignIn = () => {
+    const { dispatchSignIn } = this.props;
+    dispatchSignIn({ anonymous: true });
   };
 
   handleSignOut = () => {
@@ -144,7 +153,8 @@ class LoginScreen extends Component {
 
   handleUsername = event => {
     const username = event.target ? event.target.value : event;
-    this.setState({ username });
+    const usernameIsEmpty = !username.length;
+    this.setState({ username, usernameIsEmpty });
   };
 
   handleKeyPressed = event => {
@@ -155,7 +165,7 @@ class LoginScreen extends Component {
 
   render() {
     const { classes, theme, t } = this.props;
-    const { open, username } = this.state;
+    const { open, username, usernameIsEmpty } = this.state;
 
     return (
       <div className={classes.root} style={this.styles.root}>
@@ -205,7 +215,12 @@ class LoginScreen extends Component {
         >
           <div className={classes.drawerHeader} />
           <FormControl>
-            <img src={logo} alt="graasp logo" />
+            <img
+              src={logo}
+              alt="graasp logo"
+              width="70%"
+              style={{ margin: 'auto' }}
+            />
             <CssTextField
               id={LOGIN_USERNAME_INPUT_ID}
               label={t('Username')}
@@ -221,8 +236,23 @@ class LoginScreen extends Component {
               onClick={this.handleSignIn}
               color="secondary"
               className={classes.button}
+              disabled={usernameIsEmpty}
             >
-              {t('Login')}
+              {t('Sign In')}
+            </Button>
+
+            <Divider
+              variant="middle"
+              classes={{ root: classes.dividerColor }}
+            />
+
+            <Button
+              variant="contained"
+              onClick={() => this.handleAnonymousSignIn(true)}
+              color="secondary"
+              className={classes.button}
+            >
+              {t('Sign In as Guest')}
             </Button>
           </FormControl>
         </main>
@@ -241,7 +271,7 @@ const mapDispatchToProps = {
   dispatchSignOut: signOut,
 };
 
-const StyledComponent = withStyles(Styles, { withTheme: true })(LoginScreen);
+const StyledComponent = withStyles(Styles, { withTheme: true })(SignInScreen);
 
 const TranslatedComponent = withTranslation()(StyledComponent);
 

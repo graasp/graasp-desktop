@@ -74,7 +74,9 @@ export default (state = INITIAL_STATE, { type, payload }) => {
         .setIn(['user'], Map(DEFAULT_USER))
         .setIn(['authenticated'], false);
     case IS_AUTHENTICATED_SUCCEEDED:
-      return state.setIn(['authenticated'], payload);
+      return state
+        .setIn(['user'], payload.user)
+        .setIn(['authenticated'], payload.authenticated);
     case GET_USER_FOLDER_SUCCEEDED:
       return state.setIn(['current', 'folder'], payload);
     case GET_GEOLOCATION_SUCCEEDED:

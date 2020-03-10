@@ -48,9 +48,9 @@
     "Filter by Space": "Filtrer par Espace",
     "All Spaces": "Tous les Espaces",
     "Time": "Ligne du temps",
-    "Login": "Se connecter",
-    "Logout": "Se déconnecter",
-    "Login with Graasp": "Se connecter avec Graasp",
-    "Username": "Entre ton nom d'utilisateur"
+    "Sign In": "Se connecter",
+    "Sign Out": "Se déconnecter",
+    "Username": "Entre ton nom d'utilisateur",
+    "Sign in as Guest": "Se connecter en tant qu'invité"
   }
 }

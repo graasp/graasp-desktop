@@ -21,14 +21,14 @@ import {
 import { createFlag } from './common';
 import { ERROR_GENERAL } from '../config/errors';
 
-const flagSigningInUser = createFlag(FLAG_SIGNING_IN);
-const flagSigningOutUser = createFlag(FLAG_SIGNING_OUT);
+const flagSigningIn = createFlag(FLAG_SIGNING_IN);
+const flagSigningOut = createFlag(FLAG_SIGNING_OUT);
 const flagGettingAuthenticated = createFlag(FLAG_GETTING_AUTHENTICATED);
 
-const signIn = async ({ username }) => async dispatch => {
+const signIn = async ({ username, anonymous }) => async dispatch => {
   try {
-    dispatch(flagSigningInUser(true));
-    window.ipcRenderer.send(SIGN_IN_CHANNEL, { username });
+    dispatch(flagSigningIn(true));
+    window.ipcRenderer.send(SIGN_IN_CHANNEL, { username, anonymous });
     window.ipcRenderer.once(SIGN_IN_CHANNEL, async (event, user) => {
       if (user === ERROR_GENERAL) {
         toastr.error(ERROR_MESSAGE_HEADER, ERROR_SIGNING_IN);
@@ -38,17 +38,17 @@ const signIn = async ({ username }) => async dispatch => {
           payload: user,
         });
       }
-      dispatch(flagSigningInUser(false));
+      dispatch(flagSigningIn(false));
     });
   } catch (e) {
     toastr.error(ERROR_MESSAGE_HEADER, ERROR_SIGNING_IN);
-    dispatch(flagSigningInUser(false));
+    dispatch(flagSigningIn(false));
   }
 };
 
 const signOut = () => dispatch => {
   try {
-    dispatch(flagSigningOutUser(true));
+    dispatch(flagSigningOut(true));
     window.ipcRenderer.send(SIGN_OUT_CHANNEL);
     window.ipcRenderer.once(SIGN_OUT_CHANNEL, (event, response) => {
       if (response === ERROR_GENERAL) {
@@ -59,12 +59,12 @@ const signOut = () => dispatch => {
           payload: response,
         });
       }
-      dispatch(flagSigningOutUser(false));
+      dispatch(flagSigningOut(false));
     });
   } catch (e) {
     console.error(e);
     toastr.error(ERROR_MESSAGE_HEADER, ERROR_SIGNING_OUT);
-    dispatch(flagSigningOutUser(false));
+    dispatch(flagSigningOut(false));
   }
 };
 
