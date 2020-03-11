@@ -109,12 +109,7 @@ class SignInScreen extends Component {
     const {
       history: { replace },
     } = this.props;
-    const path = sessionStorage.getItem('redirect') || HOME_PATH;
-    if (path) {
-      replace(path);
-    } else {
-      replace(HOME_PATH);
-    }
+    replace(HOME_PATH);
   };
 
   componentDidUpdate = () => {

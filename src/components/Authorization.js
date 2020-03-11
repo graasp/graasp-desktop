@@ -6,7 +6,7 @@ import { AUTHENTICATED } from '../config/constants';
 
 // todo: remove eslint disable when parameter is used
 // eslint-disable-next-line no-unused-vars
-const Authorization = ({ requireDeveloperMode } = {}) => ChildComponent => {
+const Authorization = () => ChildComponent => {
   class ComposedComponent extends Component {
     static redirectToSignIn(props) {
       // pathname inside location matches the path in url
@@ -37,7 +37,6 @@ const Authorization = ({ requireDeveloperMode } = {}) => ChildComponent => {
         username: PropTypes.string,
       }),
       authenticated: PropTypes.bool,
-      developerMode: PropTypes.bool,
       dispatch: PropTypes.func.isRequired,
       match: PropTypes.shape({
         path: PropTypes.string,
@@ -49,7 +48,6 @@ const Authorization = ({ requireDeveloperMode } = {}) => ChildComponent => {
       user: null,
       authenticated: false,
       activity: false,
-      developerMode: false,
     };
 
     componentDidMount() {
@@ -63,12 +61,9 @@ const Authorization = ({ requireDeveloperMode } = {}) => ChildComponent => {
     }
 
     componentDidUpdate() {
-      const { authenticated, developerMode } = this.props;
+      const { authenticated } = this.props;
       if (!authenticated) {
         ComposedComponent.redirectToSignIn(this.props);
-      }
-      if (requireDeveloperMode && !developerMode) {
-        ComposedComponent.redirectToHome(this.props);
       }
       // todo: check if user has access to current view
     }
@@ -81,11 +76,6 @@ const Authorization = ({ requireDeveloperMode } = {}) => ChildComponent => {
 
   const mapStateToProps = ({ Authentication }) => ({
     user: Authentication.get('user'),
-    userDeveloperMode: Authentication.getIn([
-      'user',
-      'settings',
-      'developerMode',
-    ]),
     authenticated: Authentication.get('authenticated') === AUTHENTICATED,
     activity: Boolean(Authentication.getIn(['current', 'activity']).size),
   });
