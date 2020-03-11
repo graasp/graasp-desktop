@@ -5,6 +5,13 @@ const Styles = theme => ({
     display: 'flex',
     height: '100%',
   },
+  fullScreen: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   appBar: {
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
@@ -72,6 +79,10 @@ const Styles = theme => ({
   },
   developer: {
     padding: theme.spacing(3),
+  },
+  formControl: {
+    margin: theme.spacing(),
+    minWidth: 120,
   },
 });
 
