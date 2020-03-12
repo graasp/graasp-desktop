@@ -62,19 +62,7 @@
                 "settings": {
                   "headerVisible": false
                 },
-                "resources": [
-                  {
-                    "appInstance": "5ce2c2e23a209c1877b3dc80",
-                    "createdAt": "2019-05-21T17:06:29.683Z",
-                    "updatedAt": "2019-05-24T13:24:05.073Z",
-                    "data": "Sample text.",
-                    "format": "v1",
-                    "type": "input",
-                    "visibility": "private",
-                    "user": "5ce422795fe28eeca1001e0a",
-                    "id": "5ce430152f6f6672b16fca57"
-                  }
-                ],
+                "resources": [],
                 "createdAt": "2019-05-21T17:06:29.683Z",
                 "updatedAt": "2019-05-24T13:24:05.073Z"
               }
@@ -180,18 +168,21 @@
       "geolocationEnabled": false
     }
   },
-  "actions": [   {
-    "appInstance": "5ce2c2323a209c1877b3dc80",
-    "createdAt": "2019-05-21T17:06:29.683Z",
-    "updatedAt": "2019-05-24T13:24:05.073Z",
-    "data": "Sample text.",
-    "format": "v1",
-    "type": "input",
-    "visibility": "private",
-    "user": "5ce422795fe28eeca1001e0a",
-    "id": "5ce430152f6f6672b16fca57",
-    "verb": "saved",
-    "spaceId": "6ccb068bbb18b80359966631"}],
+  "actions": [
+    {
+      "appInstance": "5ce2c2323a209c1877b3dc80",
+      "createdAt": "2019-05-21T17:06:29.683Z",
+      "updatedAt": "2019-05-24T13:24:05.073Z",
+      "data": "Sample text.",
+      "format": "v1",
+      "type": "input",
+      "visibility": "private",
+      "user": "5ce422795fe28eeca1001e0a",
+      "id": "5ce430152f6f6672b16fca57",
+      "verb": "saved",
+      "spaceId": "6ccb068bbb18b80359966631"
+    }
+  ],
   "users": [
     {
       "userId": 1,
@@ -202,5 +193,6 @@
         "geolocationEnabled": false
       }
     }
-  ]
+  ],
+  "resources": []
 }

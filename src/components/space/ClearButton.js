@@ -17,13 +17,14 @@ class ClearButton extends Component {
       button: PropTypes.string,
     }).isRequired,
     t: PropTypes.func.isRequired,
-    id: PropTypes.string.isRequired,
+    spaceId: PropTypes.string.isRequired,
+    userId: PropTypes.string.isRequired,
     dispatchClearUserInput: PropTypes.func.isRequired,
   };
 
   handleClearUserInput = () => {
-    const { id, dispatchClearUserInput } = this.props;
-    dispatchClearUserInput({ id });
+    const { spaceId, userId, dispatchClearUserInput } = this.props;
+    dispatchClearUserInput({ spaceId, userId });
   };
 
   render() {
@@ -42,6 +43,10 @@ class ClearButton extends Component {
   }
 }
 
+const mapStateToProps = ({ authentication }) => ({
+  userId: authentication.getIn(['user', 'userId']),
+});
+
 const mapDispatchToProps = {
   dispatchClearUserInput: clearUserInput,
 };
@@ -51,7 +56,7 @@ const StyledComponent = withStyles(Styles)(ClearButton);
 const TranslatedComponent = withTranslation()(StyledComponent);
 
 const ConnectedComponent = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(TranslatedComponent);
 

@@ -25,6 +25,7 @@ const isAuthenticated = require('./isAuthenticated');
 const getAppInstanceResources = require('./getAppInstanceResources');
 const postAppInstanceResource = require('./postAppInstanceResource');
 const patchAppInstanceResource = require('./patchAppInstanceResource');
+const getAppInstance = require('./getAppInstance');
 
 module.exports = {
   loadSpace,
@@ -54,4 +55,5 @@ module.exports = {
   getAppInstanceResources,
   postAppInstanceResource,
   patchAppInstanceResource,
+  getAppInstance,
 };

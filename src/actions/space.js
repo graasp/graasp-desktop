@@ -293,7 +293,7 @@ const deleteSpace = ({ id }) => dispatch => {
   });
 };
 
-const clearUserInput = async ({ id }) => async dispatch => {
+const clearUserInput = async ({ spaceId, userId }) => async dispatch => {
   try {
     // show confirmation prompt
     window.ipcRenderer.send(SHOW_CLEAR_USER_INPUT_PROMPT_CHANNEL);
@@ -304,13 +304,17 @@ const clearUserInput = async ({ id }) => async dispatch => {
       (event, response) => {
         if (response === 1) {
           dispatch(flagClearingUserInput(true));
-          window.ipcRenderer.send(CLEAR_USER_INPUT_CHANNEL, { id });
+          window.ipcRenderer.send(CLEAR_USER_INPUT_CHANNEL, {
+            spaceId,
+            userId,
+          });
         }
       }
     );
 
     // listen for response from backend
     window.ipcRenderer.once(CLEARED_USER_INPUT_CHANNEL, (event, response) => {
+      console.log('response', response);
       if (response === ERROR_GENERAL) {
         toastr.error(ERROR_MESSAGE_HEADER, ERROR_CLEARING_USER_INPUT_MESSAGE);
       } else {

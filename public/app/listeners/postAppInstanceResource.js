@@ -1,16 +1,13 @@
 const ObjectId = require('bson-objectid');
 const { POST_APP_INSTANCE_RESOURCE_CHANNEL } = require('../config/channels');
+const { APP_INSTANCE_RESOURCES_COLLECTION } = require('../db');
 
-const postAppInstanceResource = (mainWindow, db) => async (
-  event,
-  payload = {}
-) => {
+const postAppInstanceResource = (mainWindow, db) => (event, payload = {}) => {
   try {
     const {
       userId,
       appInstanceId,
       spaceId,
-      subSpaceId,
       format,
       type,
       data,
@@ -23,6 +20,7 @@ const postAppInstanceResource = (mainWindow, db) => async (
     // prepare the resource that we will create
     const resourceToWrite = {
       appInstance: appInstanceId,
+      spaceId,
       createdAt: now,
       updatedAt: now,
       data,
@@ -33,34 +31,10 @@ const postAppInstanceResource = (mainWindow, db) => async (
       id: ObjectId().str,
     };
 
-    // tools live on the parent
-    const tool = spaceId === subSpaceId;
-
     // write the resource to the database
-    // if not a tool, we need to go one step further into the phase
-    if (!tool) {
-      db.get('spaces')
-        .find({ id: spaceId })
-        .get('phases')
-        .find({ id: subSpaceId })
-        .get('items')
-        .filter(item => item.appInstance)
-        .map(item => item.appInstance)
-        .find({ id: appInstanceId })
-        .get('resources')
-        .push(resourceToWrite)
-        .write();
-    } else {
-      db.get('spaces')
-        .find({ id: spaceId })
-        .get('items')
-        .filter(item => item.appInstance)
-        .map(item => item.appInstance)
-        .find({ id: appInstanceId })
-        .get('resources')
-        .push(resourceToWrite)
-        .write();
-    }
+    db.get(APP_INSTANCE_RESOURCES_COLLECTION)
+      .push(resourceToWrite)
+      .write();
 
     // send back the resource
     mainWindow.webContents.send(

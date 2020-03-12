@@ -1,39 +1,13 @@
 const { GET_APP_INSTANCE_RESOURCES_CHANNEL } = require('../config/channels');
+const { APP_INSTANCE_RESOURCES_COLLECTION } = require('../db');
 
-const getAppInstanceResources = (mainWindow, db) => async (
-  event,
-  data = {}
-) => {
+const getAppInstanceResources = (mainWindow, db) => (event, data = {}) => {
   const defaultResponse = [];
-  const { userId, appInstanceId, spaceId, subSpaceId, type } = data;
+  const { userId, appInstanceId, type } = data;
   try {
-    // tools live on the parent
-    const tool = spaceId === subSpaceId;
-
-    let appInstanceResourcesHandle;
-
-    // if not a tool, we need to go one step further into the phase
-    if (!tool) {
-      appInstanceResourcesHandle = db
-        .get('spaces')
-        .find({ id: spaceId })
-        .get('phases')
-        .find({ id: subSpaceId })
-        .get('items')
-        .filter(item => item.appInstance)
-        .map(item => item.appInstance)
-        .find({ id: appInstanceId })
-        .get('resources');
-    } else {
-      appInstanceResourcesHandle = db
-        .get('spaces')
-        .find({ id: spaceId })
-        .get('items')
-        .filter(item => item.appInstance)
-        .map(item => item.appInstance)
-        .find({ id: appInstanceId })
-        .get('resources');
-    }
+    const appInstanceResourcesHandle = db
+      .get(APP_INSTANCE_RESOURCES_COLLECTION)
+      .filter({ appInstance: appInstanceId });
 
     // only filter by type if provided
     if (type) {

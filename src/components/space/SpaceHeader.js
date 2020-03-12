@@ -132,7 +132,7 @@ class SpaceHeader extends Component {
     const { space } = this.props;
     const { saved, id } = space;
     if (saved) {
-      return <ClearButton id={id} />;
+      return <ClearButton spaceId={id} />;
     }
     return null;
   }
