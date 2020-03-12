@@ -22,6 +22,9 @@ const postAction = require('./postAction');
 const signIn = require('./signIn');
 const signOut = require('./signOut');
 const isAuthenticated = require('./isAuthenticated');
+const getAppInstanceResources = require('./getAppInstanceResources');
+const postAppInstanceResource = require('./postAppInstanceResource');
+const patchAppInstanceResource = require('./patchAppInstanceResource');
 
 module.exports = {
   loadSpace,
@@ -48,4 +51,7 @@ module.exports = {
   signIn,
   signOut,
   isAuthenticated,
+  getAppInstanceResources,
+  postAppInstanceResource,
+  patchAppInstanceResource,
 };
