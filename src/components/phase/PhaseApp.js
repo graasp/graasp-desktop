@@ -294,20 +294,20 @@ class PhaseApp extends Component {
   }
 }
 
-const mapStateToProps = ({ Authentication, Space }) => ({
-  folder: Authentication.getIn(['current', 'folder']),
+const mapStateToProps = ({ authentication, Space }) => ({
+  folder: authentication.getIn(['current', 'folder']),
   // get language from space, otherwise fall back on user language
   lang:
     Space.getIn(['current', 'content', 'language']) ||
-    Authentication.getIn(['user', 'settings', 'lang']),
+    authentication.getIn(['user', 'settings', 'lang']),
 
-  geolocation: Authentication.getIn(['user', 'settings', 'geolocation']),
-  geolocationEnabled: Authentication.getIn([
+  geolocation: authentication.getIn(['user', 'settings', 'geolocation']),
+  geolocationEnabled: authentication.getIn([
     'user',
     'settings',
     'geolocationEnabled',
   ]),
-  userId: Authentication.getIn(['user', 'userId']),
+  userId: authentication.getIn(['user', 'userId']),
 });
 
 const mapDispatchToProps = {

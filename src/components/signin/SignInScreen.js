@@ -256,9 +256,9 @@ class SignInScreen extends Component {
   }
 }
 
-const mapStateToProps = ({ Authentication }) => ({
-  user: Authentication.getIn(['user']),
-  authenticated: Authentication.getIn(['authenticated']) === AUTHENTICATED,
+const mapStateToProps = ({ authentication }) => ({
+  user: authentication.getIn(['user']),
+  authenticated: authentication.getIn(['authenticated']) === AUTHENTICATED,
 });
 
 const mapDispatchToProps = {

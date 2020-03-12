@@ -60,8 +60,8 @@ Header.propTypes = {
   handleDrawerOpen: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({ Authentication }) => ({
-  activity: Boolean(Authentication.getIn(['current', 'activity']).size),
+const mapStateToProps = ({ authentication }) => ({
+  activity: Boolean(authentication.getIn(['current', 'activity']).size),
 });
 
 const mapDispatchToProps = {};

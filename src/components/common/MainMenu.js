@@ -256,10 +256,10 @@ export class MainMenu extends Component {
   }
 }
 
-const mapStateToProps = ({ Authentication }) => ({
-  authenticated: Authentication.getIn(['authenticated']) === AUTHENTICATED,
-  developerMode: Authentication.getIn(['user', 'settings', 'developerMode']),
-  activity: Boolean(Authentication.getIn(['current', 'activity']).size),
+const mapStateToProps = ({ authentication }) => ({
+  authenticated: authentication.getIn(['authenticated']) === AUTHENTICATED,
+  developerMode: authentication.getIn(['user', 'settings', 'developerMode']),
+  activity: Boolean(authentication.getIn(['current', 'activity']).size),
 });
 const mapDispatchToProps = {
   dispatchSignOut: signOut,

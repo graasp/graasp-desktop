@@ -5,7 +5,6 @@ const {
   ipcMain,
   Menu,
   dialog,
-  session,
   // eslint-disable-next-line import/no-extraneous-dependencies
 } = require('electron');
 const path = require('path');

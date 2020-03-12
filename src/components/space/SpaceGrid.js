@@ -187,8 +187,8 @@ class SpaceGrid extends Component {
   }
 }
 
-const mapStateToProps = ({ Authentication, Space }) => ({
-  folder: Authentication.getIn(['current', 'folder']),
+const mapStateToProps = ({ authentication, Space }) => ({
+  folder: authentication.getIn(['current', 'folder']),
   deleted: Space.getIn(['current', 'deleted']),
 });
 

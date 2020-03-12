@@ -204,9 +204,9 @@ export class App extends Component {
   }
 }
 
-const mapStateToProps = ({ Authentication }) => ({
-  lang: Authentication.getIn(['user', 'settings', 'lang']),
-  geolocationEnabled: Authentication.getIn([
+const mapStateToProps = ({ authentication }) => ({
+  lang: authentication.getIn(['user', 'settings', 'lang']),
+  geolocationEnabled: authentication.getIn([
     'user',
     'settings',
     'geolocationEnabled',

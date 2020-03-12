@@ -74,10 +74,10 @@ const Authorization = () => ChildComponent => {
     }
   }
 
-  const mapStateToProps = ({ Authentication }) => ({
-    user: Authentication.get('user'),
-    authenticated: Authentication.get('authenticated') === AUTHENTICATED,
-    activity: Boolean(Authentication.getIn(['current', 'activity']).size),
+  const mapStateToProps = ({ authentication }) => ({
+    user: authentication.get('user'),
+    authenticated: authentication.get('authenticated') === AUTHENTICATED,
+    activity: Boolean(authentication.getIn(['current', 'activity']).size),
   });
 
   return connect(mapStateToProps)(ComposedComponent);

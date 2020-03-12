@@ -103,11 +103,11 @@ class SpacesNearby extends Component {
   }
 }
 
-const mapStateToProps = ({ Authentication, Space }) => ({
-  geolocation: Authentication.getIn(['user', 'settings', 'geolocation']),
+const mapStateToProps = ({ authentication, Space }) => ({
+  geolocation: authentication.getIn(['user', 'settings', 'geolocation']),
   spaces: Space.getIn(['nearby', 'content']),
   activity: Boolean(Space.getIn(['nearby', 'activity']).size),
-  geolocationEnabled: Authentication.getIn([
+  geolocationEnabled: authentication.getIn([
     'user',
     'settings',
     'geolocationEnabled',

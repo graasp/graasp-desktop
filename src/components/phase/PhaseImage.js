@@ -34,8 +34,8 @@ PhaseImage.defaultProps = {
   name: 'Image',
 };
 
-const mapStateToProps = ({ Authentication }) => ({
-  folder: Authentication.getIn(['current', 'folder']),
+const mapStateToProps = ({ authentication }) => ({
+  folder: authentication.getIn(['current', 'folder']),
 });
 
 const ConnectedComponent = connect(mapStateToProps)(PhaseImage);
