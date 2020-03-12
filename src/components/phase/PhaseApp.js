@@ -12,12 +12,15 @@ import {
   GET_APP_INSTANCE,
   POST_APP_INSTANCE_RESOURCE,
   APP_INSTANCE_RESOURCE_TYPES,
+  POST_ACTION,
+  ACTION_TYPES,
 } from '../../types';
 import {
   getAppInstanceResources,
   patchAppInstanceResource,
   postAppInstanceResource,
   getAppInstance,
+  postAction,
 } from '../../actions';
 import {
   DEFAULT_LANGUAGE,
@@ -45,6 +48,7 @@ class PhaseApp extends Component {
     name: PropTypes.string,
     folder: PropTypes.string.isRequired,
     dispatchGetAppInstance: PropTypes.func.isRequired,
+    dispatchPostAction: PropTypes.func.isRequired,
     id: PropTypes.string.isRequired,
     phaseId: PropTypes.string.isRequired,
     spaceId: PropTypes.string.isRequired,
@@ -52,6 +56,8 @@ class PhaseApp extends Component {
     appInstance: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }),
+    geolocation: PropTypes.instanceOf(Map),
+    geolocationEnabled: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -60,6 +66,7 @@ class PhaseApp extends Component {
     appInstance: null,
     name: 'Image',
     lang: DEFAULT_LANGUAGE,
+    geolocation: null,
   };
 
   state = {
@@ -101,13 +108,19 @@ class PhaseApp extends Component {
 
   handleReceiveMessage = event => {
     try {
-      const { dispatchGetAppInstance, appInstance } = this.props;
+      const {
+        dispatchGetAppInstance,
+        appInstance,
+        dispatchPostAction,
+        geolocation,
+        geolocationEnabled,
+      } = this.props;
 
       // get app instance id in message
       const { id: componentAppInstanceId } = appInstance || {};
       const { type, payload } = JSON.parse(event.data);
       let { id: messageAppInstanceId } = payload;
-      if (APP_INSTANCE_RESOURCE_TYPES.includes(type)) {
+      if ([...APP_INSTANCE_RESOURCE_TYPES, ...ACTION_TYPES].includes(type)) {
         ({ appInstanceId: messageAppInstanceId } = payload);
       }
 
@@ -122,6 +135,15 @@ class PhaseApp extends Component {
             return patchAppInstanceResource(payload, this.postMessage);
           case GET_APP_INSTANCE:
             return dispatchGetAppInstance(payload, this.postMessage);
+          case POST_ACTION: {
+            // add geolocation to action if enabled
+            payload.geolocation = null;
+            if (geolocationEnabled) {
+              const { latitude, longitude } = geolocation.getIn(['coords']);
+              payload.geolocation = { ll: [latitude, longitude] };
+            }
+            return dispatchPostAction(payload, this.postMessage);
+          }
           default:
             return false;
         }
@@ -276,10 +298,14 @@ const mapStateToProps = ({ User, Space }) => ({
   lang:
     Space.getIn(['current', 'content', 'language']) ||
     User.getIn(['current', 'lang']),
+
+  geolocation: User.getIn(['current', 'geolocation']),
+  geolocationEnabled: User.getIn(['current', 'geolocationEnabled']),
 });
 
 const mapDispatchToProps = {
   dispatchGetAppInstance: getAppInstance,
+  dispatchPostAction: postAction,
 };
 
 const ConnectedComponent = connect(

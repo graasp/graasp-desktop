@@ -49,6 +49,7 @@ const {
   SYNC_SPACE_CHANNEL,
   CLEAR_USER_INPUT_CHANNEL,
   SHOW_CLEAR_USER_INPUT_PROMPT_CHANNEL,
+  POST_ACTION_CHANNEL,
 } = require('./app/config/channels');
 const env = require('./env.json');
 const {
@@ -72,6 +73,7 @@ const {
   setDeveloperMode,
   clearUserInput,
   showClearUserInputPrompt,
+  postAction,
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
 
@@ -367,6 +369,9 @@ app.on('ready', async () => {
     SET_GEOLOCATION_ENABLED_CHANNEL,
     setGeolocationEnabled(mainWindow, db)
   );
+
+  // called when creating an action
+  ipcMain.on(POST_ACTION_CHANNEL, postAction(mainWindow, db));
 
   // called when getting AppInstanceResources
   ipcMain.on(GET_APP_INSTANCE_RESOURCES_CHANNEL, (event, data = {}) => {
