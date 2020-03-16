@@ -132,19 +132,51 @@ export class Dashboard extends Component {
     );
   };
 
-  render() {
-    const { classes, theme, t, database } = this.props;
-    const { open, spaceId } = this.state;
-
-    if (!database || _.isEmpty(database)) {
-      return <Loader />;
-    }
+  renderActionWidgets = () => {
+    const { database, t, classes } = this.props;
+    const { spaceId } = this.state;
 
     let filteredActions = database.actions;
     if (spaceId !== FILTER_ALL_SPACE_ID) {
       filteredActions = filteredActions.filter(
         ({ spaceId: id }) => id === spaceId
       );
+    }
+
+    if (_.isEmpty(filteredActions)) {
+      return <p>{t('No action to display')}</p>;
+    }
+
+    return (
+      <Grid
+        style={{ display: 'flex' }}
+        spacing={5}
+        container
+        justify="center"
+        alignItems="center"
+      >
+        <Grid item xs={12} sm={6} className={classes.dashboardGridItem}>
+          <ActionBarChart spaces={database.spaces} actions={filteredActions} />
+        </Grid>
+        <Grid item xs={12} sm={6} className={classes.dashboardGridItem}>
+          <ActionLineChart actions={filteredActions} />
+        </Grid>
+        <Grid item xs={12} sm={6} className={classes.dashboardGridItem}>
+          <ActionPieChart actions={filteredActions} />
+        </Grid>
+        <Grid item xs={12} sm={6} className={classes.dashboardGridItem}>
+          <ActionTotalCount actions={filteredActions} />
+        </Grid>
+      </Grid>
+    );
+  };
+
+  render() {
+    const { classes, theme, t, database } = this.props;
+    const { open, spaceId } = this.state;
+
+    if (!database || _.isEmpty(database)) {
+      return <Loader />;
     }
 
     return (
@@ -212,29 +244,7 @@ export class Dashboard extends Component {
               </Grid>
             </Grid>
 
-            <Grid
-              style={{ display: 'flex' }}
-              spacing={5}
-              container
-              justify="center"
-              alignItems="center"
-            >
-              <Grid item xs={12} sm={6} className={classes.dashboardGridItem}>
-                <ActionBarChart
-                  spaces={database.spaces}
-                  actions={filteredActions}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} className={classes.dashboardGridItem}>
-                <ActionLineChart actions={filteredActions} />
-              </Grid>
-              <Grid item xs={12} sm={6} className={classes.dashboardGridItem}>
-                <ActionPieChart actions={filteredActions} />
-              </Grid>
-              <Grid item xs={12} sm={6} className={classes.dashboardGridItem}>
-                <ActionTotalCount actions={filteredActions} />
-              </Grid>
-            </Grid>
+            {this.renderActionWidgets()}
 
             <ActionEditor spaceId={spaceId} />
           </div>
