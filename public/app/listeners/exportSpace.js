@@ -2,7 +2,7 @@
 const { app } = require('electron');
 const archiver = require('archiver');
 const fs = require('fs');
-const logger = require('../../app/logger');
+const logger = require('../logger');
 
 const { VAR_FOLDER } = require('../config/config');
 const { ERROR_GENERAL } = require('../config/errors');
