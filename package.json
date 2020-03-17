@@ -129,6 +129,7 @@
   "devDependencies": {
     "@commitlint/cli": "8.3.5",
     "@commitlint/config-conventional": "8.3.4",
+    "chai": "4.2.0",
     "codacy-coverage": "3.4.0",
     "concurrently": "5.1.0",
     "cross-env": "7.0.0",
@@ -144,6 +145,7 @@
     "pretty-quick": "2.0.1",
     "react-scripts": "3.4.0",
     "redux-mock-store": "1.5.4",
+    "spectron": "10.0.1",
     "standard-version": "7.1.0",
     "wait-on": "4.0.1"
   },
