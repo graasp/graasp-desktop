@@ -22,13 +22,13 @@ const formats = [
   'formula',
 ];
 
-export const Text = ({ content, style, className }) => {
+export const Text = ({ content, style, className, id }) => {
   let parsedContent = content;
   if (hasMath(content)) {
     parsedContent = renderMath(parsedContent);
   }
   return (
-    <div style={style}>
+    <div style={style} id={id}>
       <ReactQuill
         className={className}
         value={parsedContent}
@@ -45,12 +45,14 @@ Text.propTypes = {
   content: PropTypes.string,
   className: PropTypes.string,
   style: PropTypes.shape({}),
+  id: PropTypes.string,
 };
 
 Text.defaultProps = {
   content: '',
   className: '',
   style: {},
+  id: null,
 };
 
 export default Text;

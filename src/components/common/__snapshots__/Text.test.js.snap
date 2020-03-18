@@ -2,6 +2,7 @@
 
 exports[`<Text /> trivial cases renders correctly 1`] = `
 <div
+  id={null}
   style={
     Object {
       "color": "red",

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import clsx from 'clsx';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { withTranslation } from 'react-i18next';
 import IconButton from '@material-ui/core/IconButton/IconButton';
@@ -8,6 +9,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core';
 import Styles from '../../Styles';
 import { deleteSpace } from '../../actions/space';
+import { SPACE_DELETE_BUTTON_CLASS } from '../../config/selectors';
 
 class DeleteButton extends Component {
   static propTypes = {
@@ -32,7 +34,7 @@ class DeleteButton extends Component {
         <IconButton
           color="inherit"
           onClick={this.handleDelete}
-          className={classes.button}
+          className={clsx(classes.button, SPACE_DELETE_BUTTON_CLASS)}
         >
           <DeleteIcon />
         </IconButton>

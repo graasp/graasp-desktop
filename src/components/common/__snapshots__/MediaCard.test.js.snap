@@ -3,8 +3,10 @@
 exports[`<MediaCard /> <MediaCard /> with showActions = false renders correctly 1`] = `
 <WithStyles(ForwardRef(Card))
   className=""
+  id="space-card-id"
 >
   <WithStyles(ForwardRef(CardActionArea))
+    className="spaceCardLink"
     onClick={[MockFunction]}
   >
     <WithStyles(ForwardRef(CardMedia))
@@ -33,6 +35,7 @@ exports[`<MediaCard /> <MediaCard /> with showActions = false renders correctly 
       <Text
         className=""
         content="text"
+        id="spaceCardDescription-id"
         style={Object {}}
       />
     </WithStyles(ForwardRef(CardContent))>
@@ -43,8 +46,10 @@ exports[`<MediaCard /> <MediaCard /> with showActions = false renders correctly 
 exports[`<MediaCard /> <MediaCard /> with showActions = true with text defined renders correctly 1`] = `
 <WithStyles(ForwardRef(Card))
   className=""
+  id="space-card-id"
 >
   <WithStyles(ForwardRef(CardActionArea))
+    className="spaceCardLink"
     onClick={[MockFunction]}
   >
     <WithStyles(ForwardRef(CardMedia))
@@ -73,6 +78,7 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text defined r
       <Text
         className=""
         content="text"
+        id="spaceCardDescription-id"
         style={Object {}}
       />
     </WithStyles(ForwardRef(CardContent))>
@@ -97,7 +103,7 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text defined r
     <WithStyles(ForwardRef(IconButton))
       aria-expanded={false}
       aria-label="Show more"
-      className=""
+      className="spaceDescriptionExpandButton"
       onClick={[Function]}
     >
       <ExpandMoreIcon />
@@ -109,8 +115,10 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text defined r
 exports[`<MediaCard /> <MediaCard /> with showActions = true with text undefined renders correctly 1`] = `
 <WithStyles(ForwardRef(Card))
   className=""
+  id="space-card-id"
 >
   <WithStyles(ForwardRef(CardActionArea))
+    className="spaceCardLink"
     onClick={[MockFunction]}
   >
     <WithStyles(ForwardRef(CardMedia))
@@ -139,6 +147,7 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text undefined
       <Text
         className=""
         content=""
+        id="spaceCardDescription-id"
         style={Object {}}
       />
     </WithStyles(ForwardRef(CardContent))>
@@ -167,8 +176,10 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text undefined
 exports[`<MediaCard /> <MediaCard /> with showActions = undefined renders correctly 1`] = `
 <WithStyles(ForwardRef(Card))
   className=""
+  id="space-card-id"
 >
   <WithStyles(ForwardRef(CardActionArea))
+    className="spaceCardLink"
     onClick={[MockFunction]}
   >
     <WithStyles(ForwardRef(CardMedia))
@@ -197,6 +208,7 @@ exports[`<MediaCard /> <MediaCard /> with showActions = undefined renders correc
       <Text
         className=""
         content="text"
+        id="spaceCardDescription-id"
         style={Object {}}
       />
     </WithStyles(ForwardRef(CardContent))>

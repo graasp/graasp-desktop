@@ -4,6 +4,7 @@ const {
   shell,
   ipcMain,
   Menu,
+  dialog,
   // eslint-disable-next-line import/no-extraneous-dependencies
 } = require('electron');
 const path = require('path');
@@ -82,6 +83,14 @@ Object.keys(env).forEach(key => {
   process.env[key] = env[key];
 });
 
+// mock of electron dialog for tests
+if (process.env.NODE_ENV === 'test' && process.env.DIALOG_RESPONSE) {
+  const response = JSON.parse(process.env.DIALOG_RESPONSE);
+  dialog.showMessageBox = () => {
+    return Promise.resolve({ response });
+  };
+}
+
 let mainWindow;
 
 // only set up sentry if dsn is provided
@@ -109,7 +118,7 @@ const createWindow = () => {
   });
 
   mainWindow.loadURL(
-    isDev
+    isDev || process.env.NODE_ENV === 'test'
       ? 'http://localhost:3000'
       : `file://${path.join(__dirname, './index.html')}`
   );

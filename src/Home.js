@@ -13,6 +13,7 @@ import SpaceGrid from './components/space/SpaceGrid';
 import Styles from './Styles';
 import Loader from './components/common/Loader';
 import Main from './components/common/Main';
+import { HOME_MAIN_ID } from './config/selectors';
 
 class Home extends Component {
   static propTypes = {
@@ -62,7 +63,7 @@ class Home extends Component {
       );
     }
     return (
-      <Main>
+      <Main id={HOME_MAIN_ID}>
         <div className={classes.drawerHeader} />
         <SpaceGrid spaces={spaces} showActions saved />
       </Main>

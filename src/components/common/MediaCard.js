@@ -16,6 +16,12 @@ import ExportButton from '../space/ExportButton';
 import SyncButton from '../space/SyncButton';
 import Text from './Text';
 import { MIN_CARD_WIDTH } from '../../config/constants';
+import {
+  SPACE_CARD_ID_BUILDER,
+  SPACE_DESCRIPTION_EXPAND_BUTTON_CLASS,
+  SPACE_CARD_DESCRIPTION_ID_BUILDER,
+  SPACE_CARD_LINK_CLASS,
+} from '../../config/selectors';
 
 const styles = theme => ({
   card: {
@@ -57,8 +63,8 @@ export const MediaCard = props => {
   };
 
   return (
-    <Card className={classes.card}>
-      <CardActionArea onClick={viewLink}>
+    <Card id={SPACE_CARD_ID_BUILDER(id)} className={classes.card}>
+      <CardActionArea className={SPACE_CARD_LINK_CLASS} onClick={viewLink}>
         <CardMedia className={classes.media} image={image} title={name} />
 
         <CardContent>
@@ -70,7 +76,11 @@ export const MediaCard = props => {
 
       <Collapse disableSpacing in={expanded} timeout="auto" unmountOnExit>
         <CardContent className={classes.cardDescription}>
-          <Text content={text} className={classes.cardDescriptionText} />
+          <Text
+            id={SPACE_CARD_DESCRIPTION_ID_BUILDER(id)}
+            content={text}
+            className={classes.cardDescriptionText}
+          />
         </CardContent>
       </Collapse>
 
@@ -82,9 +92,13 @@ export const MediaCard = props => {
 
           {text && (
             <IconButton
-              className={clsx(classes.expand, {
-                [classes.expandOpen]: expanded,
-              })}
+              className={clsx(
+                classes.expand,
+                {
+                  [classes.expandOpen]: expanded,
+                },
+                SPACE_DESCRIPTION_EXPAND_BUTTON_CLASS
+              )}
               onClick={handleExpandClick}
               aria-expanded={expanded}
               aria-label="Show more"

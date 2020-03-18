@@ -10,6 +10,7 @@ import LanguageSelect from './common/LanguageSelect';
 import DeveloperSwitch from './common/DeveloperSwitch';
 import GeolocationControl from './common/GeolocationControl';
 import Main from './common/Main';
+import { SETTINGS_MAIN_ID } from '../config/selectors';
 
 // eslint-disable-next-line react/prefer-stateless-function
 export class Settings extends Component {
@@ -32,7 +33,7 @@ export class Settings extends Component {
     const { classes, t } = this.props;
 
     return (
-      <Main>
+      <Main id={SETTINGS_MAIN_ID}>
         <div className={classes.settings}>
           <Typography variant="h5" color="inherit">
             {t('Settings')}

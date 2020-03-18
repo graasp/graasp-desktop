@@ -25,6 +25,13 @@ import {
   DEVELOPER_PATH,
   DASHBOARD_PATH,
 } from '../../config/paths';
+import {
+  SETTINGS_MENU_ITEM_ID,
+  LOAD_MENU_ITEM_ID,
+  HOME_MENU_ITEM_ID,
+  VISIT_MENU_ITEM_ID,
+  SPACE_NEARBY_MENU_ITEM_ID,
+} from '../../config/selectors';
 
 export class MainMenu extends Component {
   static propTypes = {
@@ -96,6 +103,7 @@ export class MainMenu extends Component {
     return (
       <List>
         <MenuItem
+          id={HOME_MENU_ITEM_ID}
           onClick={() => this.handleClick(HOME_PATH)}
           button
           selected={path === HOME_PATH}
@@ -107,6 +115,7 @@ export class MainMenu extends Component {
         </MenuItem>
         {this.renderOfflineMenuItem(
           <MenuItem
+            id={SPACE_NEARBY_MENU_ITEM_ID}
             onClick={() => this.handleClick(SPACES_NEARBY_PATH)}
             button
             selected={path === SPACES_NEARBY_PATH}
@@ -119,6 +128,7 @@ export class MainMenu extends Component {
         )}
         {this.renderOfflineMenuItem(
           <MenuItem
+            id={VISIT_MENU_ITEM_ID}
             onClick={() => this.handleClick(VISIT_PATH)}
             button
             selected={path === VISIT_PATH}
@@ -130,6 +140,7 @@ export class MainMenu extends Component {
           </MenuItem>
         )}
         <MenuItem
+          id={LOAD_MENU_ITEM_ID}
           onClick={() => this.handleClick(LOAD_SPACE_PATH)}
           button
           selected={path === LOAD_SPACE_PATH}
@@ -140,6 +151,7 @@ export class MainMenu extends Component {
           <ListItemText primary={t('Load')} />
         </MenuItem>
         <MenuItem
+          id={SETTINGS_MENU_ITEM_ID}
           onClick={() => this.handleClick(SETTINGS_PATH)}
           button
           selected={path === SETTINGS_PATH}

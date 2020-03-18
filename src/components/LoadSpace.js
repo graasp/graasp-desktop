@@ -21,6 +21,7 @@ import {
   RESPOND_LOAD_SPACE_PROMPT_CHANNEL,
   SHOW_LOAD_SPACE_PROMPT_CHANNEL,
 } from '../config/channels';
+import { LOAD_MAIN_ID } from '../config/selectors';
 
 class LoadSpace extends Component {
   state = {
@@ -96,7 +97,7 @@ class LoadSpace extends Component {
       );
     }
     return (
-      <Main fullScreen>
+      <Main id={LOAD_MAIN_ID} fullScreen>
         <FormControl className={classes.formControl}>
           <Typography variant="h4" color="inherit" style={{ margin: '2rem' }}>
             {t('Load a Space')}

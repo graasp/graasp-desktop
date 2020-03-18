@@ -23,6 +23,11 @@ import {
 } from '../config/messages';
 import { isValidSpaceId } from '../utils/validators';
 import extractSpaceId from '../utils/extractSpaceId';
+import {
+  VISIT_BUTTON_ID,
+  VISIT_INPUT_ID,
+  VISIT_MAIN_ID,
+} from '../config/selectors';
 
 class VisitSpace extends Component {
   state = {
@@ -106,12 +111,13 @@ class VisitSpace extends Component {
     }
 
     return (
-      <Main fullScreen>
+      <Main id={VISIT_MAIN_ID} fullScreen>
         <FormControl className={classes.formControl}>
           <Typography variant="h4" color="inherit" style={{ margin: '2rem' }}>
             {t('Visit a Space')}
           </Typography>
           <Input
+            id={VISIT_INPUT_ID}
             className={classes.input}
             required
             onChange={this.handleChangeSpaceId}
@@ -124,6 +130,7 @@ class VisitSpace extends Component {
             type="text"
           />
           <Button
+            id={VISIT_BUTTON_ID}
             variant="contained"
             onClick={this.handleClick}
             color="primary"
