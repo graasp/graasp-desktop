@@ -61,3 +61,6 @@ build/*
 
 # exclude tarballs
 *.tgz
+
+# excluse test outputs
+test/tmp

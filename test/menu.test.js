@@ -34,10 +34,11 @@ describe('Menu Scenarios', function() {
   this.timeout(20000);
   let app;
 
-  before(function lauchApp() {
-    app = createApplication();
-    return app.start();
-  });
+  before(
+    mochaAsync(async () => {
+      app = await createApplication();
+    })
+  );
 
   afterEach(function() {
     return closeApplication(app);

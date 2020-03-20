@@ -43,7 +43,7 @@ const hasPreviewSpaceHomeLayout = async (
 
   // space preview banner
   await client.pause(2000);
-  const previewBanner = await client.getText(`#${BANNER_WARNING_PREVIEW_ID}`);
+  const previewBanner = await client.element(`#${BANNER_WARNING_PREVIEW_ID}`);
   expect(previewBanner.value).to.exist;
 
   // space preview button
@@ -236,12 +236,6 @@ const checkSpaceCardLayout = async (
     `${spaceSelector} .${SPACE_DELETE_BUTTON_CLASS}`
   );
   expect(deleteIcon.value).to.exist;
-
-  // space preview icon
-  const clearIcon = await client.element(
-    `${spaceSelector} .${SPACE_CLEAR_BUTTON_CLASS}`
-  );
-  expect(clearIcon.value).to.exist;
 
   // space preview icon
   const syncIcon = await client.element(

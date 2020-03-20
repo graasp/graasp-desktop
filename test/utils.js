@@ -14,4 +14,10 @@ const removeTags = html => {
   return html.replace(/<\/?[^>]+(>|$)/g, '');
 };
 
-module.exports = { mochaAsync, removeSpace, removeTags };
+const createRandomString = () => {
+  return Math.random()
+    .toString(36)
+    .substring(7);
+};
+
+module.exports = { mochaAsync, removeSpace, removeTags, createRandomString };

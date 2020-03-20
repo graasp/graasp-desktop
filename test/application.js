@@ -2,14 +2,32 @@ const { Application } = require('spectron');
 const electronPath = require('electron'); // Require Electron from the binaries included in node_modules.
 const path = require('path');
 
-const createApplication = (dialogResponse = undefined) => {
+const createApplication = async (
+  {
+    showMessageDialogResponse,
+    showSaveDialogResponse,
+    showOpenDialogResponse,
+  } = {
+    showMessageDialogResponse: undefined,
+    showSaveDialogResponse: undefined,
+    showOpenDialogResponse: undefined,
+  }
+) => {
   const env = { NODE_ENV: 'test', ELECTRON_IS_DEV: 0 };
 
-  if (dialogResponse !== undefined) {
-    env.DIALOG_RESPONSE = dialogResponse;
+  if (showMessageDialogResponse !== undefined) {
+    env.SHOW_MESSAGE_DIALOG_RESPONSE = showMessageDialogResponse;
   }
 
-  return new Application({
+  if (showSaveDialogResponse !== undefined) {
+    env.SHOW_SAVE_DIALOG_RESPONSE = showSaveDialogResponse;
+  }
+
+  if (showOpenDialogResponse !== undefined) {
+    env.SHOW_OPEN_DIALOG_RESPONSE = showOpenDialogResponse;
+  }
+
+  const app = new Application({
     // Your electron path can be any binary
     // i.e for OSX an example path could be '/Applications/MyApp.app/Contents/MacOS/MyApp'
     // But for the sake of the example we fetch it from our node_modules.
@@ -31,6 +49,9 @@ const createApplication = (dialogResponse = undefined) => {
     args: [path.join(__dirname, '../public/electron.js')],
     env,
   });
+
+  await app.start();
+  return app;
 };
 
 const closeApplication = app => {
