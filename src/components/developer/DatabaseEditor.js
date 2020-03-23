@@ -48,8 +48,12 @@ export class DatabaseEditor extends Component {
   render() {
     const { database, t, classes } = this.props;
 
-    if (!database || _.isEmpty(database)) {
+    if (!database) {
       return <Loader />;
+    }
+
+    if (_.isEmpty(database)) {
+      return <p>{t('The database is empty.')}</p>;
     }
 
     return (

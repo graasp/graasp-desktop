@@ -115,14 +115,14 @@ export class Dashboard extends Component {
 
     return (
       <FormControl variant="outlined" fullWidth>
-        <InputLabel>{t('Filter by space')}</InputLabel>
+        <InputLabel>{t('Filter by Space')}</InputLabel>
         <Select
-          label="Filter by space"
+          label="Filter by Space"
           value={spaceId}
           onChange={this.handleSpaceChange}
         >
           <MenuItem value={FILTER_ALL_SPACE_ID}>
-            <em>All Spaces</em>
+            <em>{t('All Spaces')}</em>
           </MenuItem>
           {database.spaces.map(space => (
             <MenuItem value={space.id}>{space.name}</MenuItem>
@@ -144,7 +144,7 @@ export class Dashboard extends Component {
     }
 
     if (_.isEmpty(filteredActions)) {
-      return <p>{t('No action to display')}</p>;
+      return <p>{t('No action have been recorded.')}</p>;
     }
 
     return (
@@ -175,8 +175,12 @@ export class Dashboard extends Component {
     const { classes, theme, t, database } = this.props;
     const { open, spaceId } = this.state;
 
-    if (!database || _.isEmpty(database)) {
+    if (!database) {
       return <Loader />;
+    }
+
+    if (_.isEmpty(database)) {
+      return <p>{t('The database is empty.')}</p>;
     }
 
     return (

@@ -63,8 +63,12 @@ class ActionLineChart extends PureComponent {
       palette: { primary, type },
     } = theme;
 
-    if (!actions || _.isEmpty(actions)) {
+    if (!actions) {
       return <Loader />;
+    }
+
+    if (_.isEmpty(actions)) {
+      return <p>{t('No action have been recorded.')}</p>;
     }
 
     const dataWithDateFormatted = actions.map(action => ({
@@ -95,10 +99,10 @@ class ActionLineChart extends PureComponent {
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" label={{ value: 'Time', dy: 15 }} />
+            <XAxis dataKey="date" label={{ value: t('Time'), dy: 15 }} />
             <YAxis
               label={{
-                value: 'Action count',
+                value: t('Action count'),
                 angle: -90,
                 position: 'insideLeft',
               }}

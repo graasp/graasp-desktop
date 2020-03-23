@@ -121,8 +121,12 @@ class ActionPieChart extends PureComponent {
   render() {
     const { actions, classes, t } = this.props;
 
-    if (!actions || _.isEmpty(actions)) {
+    if (!actions) {
       return <Loader />;
+    }
+
+    if (_.isEmpty(actions)) {
+      return <p>{t('No action have been recorded.')}</p>;
     }
 
     const data =

@@ -41,6 +41,12 @@
     "Action Type Chart": "Action Type Chart",
     "Total Action Count": "Total Action Count",
     "Action Count Per Space": "Action Count Per Space",
-    "View Action Database": "View Action Database"
+    "Action Database": "Action Database",
+    "No action have been recorded.": "No action have been recorded.",
+    "Action count": "Action count",
+    "The database is empty.": "The database is empty.",
+    "Filter by Space": "Filter by Space",
+    "All Spaces": "All Spaces",
+    "Time": "Time"
   }
 }

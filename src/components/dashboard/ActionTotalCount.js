@@ -5,7 +5,6 @@ import { withTranslation } from 'react-i18next';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import CountUp from 'react-countup';
-import _ from 'lodash';
 import Loader from '../common/Loader';
 
 const styles = () => ({
@@ -32,7 +31,7 @@ class ActionTotalCount extends PureComponent {
   render() {
     const { classes, t, actions } = this.props;
 
-    if (!actions || _.isEmpty(actions)) {
+    if (!actions) {
       return <Loader />;
     }
 

@@ -61,8 +61,12 @@ class ActionBarChart extends PureComponent {
       palette: { primary, type },
     } = theme;
 
-    if (!actions || _.isEmpty(actions) || !spaces || _.isEmpty(spaces)) {
+    if (!spaces || !actions) {
       return <Loader />;
+    }
+
+    if (_.isEmpty(spaces) || _.isEmpty(actions)) {
+      return <p>{t('No action have been recorded.')}</p>;
     }
 
     const data =
@@ -70,10 +74,14 @@ class ActionBarChart extends PureComponent {
       Object.entries(_.groupBy(actions, 'spaceId'))
         // map space id to corresponding space name
         // reduce actions by count number
-        .map(([id, actionElements]) => ({
-          space: _.find(spaces, ['id', id]).name,
-          count: actionElements.length,
-        }));
+        .map(([id, actionElements]) => {
+          const space = _.find(spaces, ['id', id]);
+          const name = space ? space.name : id;
+          return {
+            space: name,
+            count: actionElements.length,
+          };
+        });
 
     return (
       <>
@@ -94,14 +102,18 @@ class ActionBarChart extends PureComponent {
             <XAxis dataKey="space" />
             <YAxis
               label={{
-                value: 'Action count',
+                value: t('Action count'),
                 angle: -90,
                 position: 'insideLeft',
               }}
             />
             <Tooltip />
             <Legend />
-            <Bar name="action count" dataKey="count" fill={primary[type]} />
+            <Bar
+              name={t('Action count')}
+              dataKey="count"
+              fill={primary[type]}
+            />
           </BarChart>
         </ResponsiveContainer>
       </>

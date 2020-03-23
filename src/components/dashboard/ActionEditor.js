@@ -39,8 +39,12 @@ export class ActionEditor extends Component {
   render() {
     const { database, t, spaceId } = this.props;
 
-    if (!database || _.isEmpty(database)) {
+    if (!database) {
       return <Loader />;
+    }
+
+    if (_.isEmpty(database)) {
+      return <p>{t('The database is empty.')}</p>;
     }
 
     let { actions } = database;
@@ -50,7 +54,7 @@ export class ActionEditor extends Component {
 
     return (
       <div>
-        <Typography variant="h6">{t('View Action Database')}</Typography>
+        <Typography variant="h6">{t('Action Database')}</Typography>
         <ReactJson name="actions" collapsed src={actions} />
       </div>
     );
