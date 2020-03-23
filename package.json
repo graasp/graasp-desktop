@@ -66,7 +66,7 @@
     "report": "cat ./coverage/lcov.info | env-cmd -f ./.env.test codacy-coverage",
     "report:ci": "cat ./coverage/lcov.info | codacy-coverage",
     "version": "git add CHANGELOG.md && standard-version -a",
-    "mocha": "concurrently \"env-cmd -f ./.env.test react-scripts start\" \"wait-on http://localhost:3000 && mocha"
+    "mocha": "mkdirp test/tmp && concurrently \"env-cmd -f ./.env.test react-scripts start\" \"wait-on http://localhost:3000 && mocha \"test/**/*.test.js\"\""
   },
   "dependencies": {
     "@material-ui/core": "4.9.4",

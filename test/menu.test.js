@@ -28,6 +28,7 @@ const menuGoTo = async (client, menuItemId, elementToExpectId = null) => {
   if (elementToExpectId) {
     expect(await client.element(`#${elementToExpectId}`)).to.exist;
   }
+  await client.pause(2000);
 };
 
 describe('Menu Scenarios', function() {

@@ -32,6 +32,9 @@ const SPACE_CARD_ID_BUILDER = id => `space-card-${id}`;
 const SPACE_DESCRIPTION_EXPAND_BUTTON_CLASS = 'spaceDescriptionExpandButton';
 const SPACE_CARD_DESCRIPTION_ID_BUILDER = id => `spaceCardDescription-${id}`;
 const SPACE_CARD_LINK_CLASS = 'spaceCardLink';
+const LOAD_BROWSE_BUTTON_ID = 'loadBrowseButton';
+const LOAD_INPUT_ID = 'loadInput';
+const LOAD_LOAD_BUTTON_ID = 'loadLoadButton';
 
 module.exports = {
   SPACE_NEARBY_MENU_ITEM_ID,
@@ -64,4 +67,7 @@ module.exports = {
   SPACE_DESCRIPTION_EXPAND_BUTTON_CLASS,
   SPACE_CARD_DESCRIPTION_ID_BUILDER,
   SPACE_CARD_LINK_CLASS,
+  LOAD_BROWSE_BUTTON_ID,
+  LOAD_INPUT_ID,
+  LOAD_LOAD_BUTTON_ID,
 };

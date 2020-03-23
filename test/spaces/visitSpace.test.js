@@ -2,14 +2,20 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
 const { expect } = require('chai');
-const { removeSpace, removeTags } = require('../utils');
+const { removeSpace, removeTags, mochaAsync } = require('../utils');
+const { closeApplication, createApplication } = require('../application');
+const { menuGoTo } = require('../menu.test');
 const {
   SPACE_TOOLBAR_ID,
   PHASE_MENU_LIST_ID,
+  VISIT_MAIN_ID,
+  VISIT_MENU_ITEM_ID,
   SPACE_START_PREVIEW_BUTTON,
   SPACE_DESCRIPTION_ID,
   SPACE_SAVE_ICON_CLASS,
   SPACE_PREVIEW_ICON_CLASS,
+  VISIT_INPUT_ID,
+  VISIT_BUTTON_ID,
   PHASE_DESCRIPTION_ID,
   PHASE_MENU_ITEM,
   BANNER_WARNING_PREVIEW_ID,
@@ -21,9 +27,39 @@ const {
   SPACE_DESCRIPTION_EXPAND_BUTTON_CLASS,
   SPACE_CARD_DESCRIPTION_ID_BUILDER,
 } = require('../../src/config/selectors');
+const { SPACE_ATOMIC_STRUCTURE } = require('../fixtures/spaces');
+const {
+  INPUT_TYPE_PAUSE,
+  VISIT_SPACE_PAUSE,
+  SAVE_SPACE_PAUSE,
+  TOOLTIP_FADE_OUT_PAUSE,
+} = require('../constants');
 
 const PREVIEW = 'preview';
 const SAVED = 'saved';
+
+const visitSpaceById = async (client, id) => {
+  await menuGoTo(client, VISIT_MENU_ITEM_ID, VISIT_MAIN_ID);
+
+  // input space id
+  await client.setValue(`#${VISIT_INPUT_ID}`, id);
+  await client.pause(INPUT_TYPE_PAUSE);
+  const value = await client.getValue(`#${VISIT_INPUT_ID}`);
+  expect(value).to.equal(id);
+
+  await client.click(`#${VISIT_BUTTON_ID}`);
+  await client.pause(VISIT_SPACE_PAUSE);
+};
+
+const visitAndSaveSpaceById = async (client, id) => {
+  await visitSpaceById(client, id);
+
+  // save space
+  await client.click(`.${SPACE_SAVE_ICON_CLASS}`);
+
+  await client.pause(SAVE_SPACE_PAUSE);
+  await client.pause(TOOLTIP_FADE_OUT_PAUSE);
+};
 
 // check home phase of given space when preview
 const hasPreviewSpaceHomeLayout = async (
@@ -42,7 +78,6 @@ const hasPreviewSpaceHomeLayout = async (
   }
 
   // space preview banner
-  await client.pause(2000);
   const previewBanner = await client.element(`#${BANNER_WARNING_PREVIEW_ID}`);
   expect(previewBanner.value).to.exist;
 
@@ -107,6 +142,7 @@ const hasSavedSpaceHomeLayout = async (
 };
 
 // check layout of a given phase
+// @TODO check user input - have access to iframe
 const hasPhaseLayout = async (client, { description, items }, mode) => {
   // space description if not empty
   // get innerHTML to retrieve html tags as well
@@ -244,10 +280,38 @@ const checkSpaceCardLayout = async (
   expect(syncIcon.value).to.exist;
 };
 
+describe('Visit Space Scenarios', function() {
+  this.timeout(270000);
+  let app;
+
+  afterEach(function() {
+    return closeApplication(app);
+  });
+
+  beforeEach(
+    mochaAsync(async () => {
+      app = await createApplication();
+    })
+  );
+
+  it(
+    `Visit space ${SPACE_ATOMIC_STRUCTURE.name} (${SPACE_ATOMIC_STRUCTURE.id})`,
+    mochaAsync(async () => {
+      const { client } = app;
+
+      await visitSpaceById(client, SPACE_ATOMIC_STRUCTURE.id);
+
+      await hasPreviewSpaceLayout(client, SPACE_ATOMIC_STRUCTURE);
+    })
+  );
+});
+
 module.exports = {
   hasPreviewSpaceHomeLayout,
   checkSpaceCardLayout,
   hasPreviewSpaceLayout,
   hasSavedSpaceLayout,
   hasSavedSpaceHomeLayout,
+  visitSpaceById,
+  visitAndSaveSpaceById,
 };

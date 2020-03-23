@@ -51,6 +51,7 @@ const createApplication = async (
   });
 
   await app.start();
+  await app.client.pause(1000);
   return app;
 };
 
