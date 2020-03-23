@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Settings /> renders correctly 1`] = `
-<withI18nextTranslation(WithStyles(undefined))>
+<withI18nextTranslation(WithStyles(Connect(Main)))>
   <div
     className=""
   >
@@ -12,10 +12,10 @@ exports[`<Settings /> renders correctly 1`] = `
       Settings
     </WithStyles(ForwardRef(Typography))>
     <WithStyles(ForwardRef(FormGroup))>
-      <withI18nextTranslation(WithStyles(undefined)) />
-      <withI18nextTranslation(WithStyles(undefined)) />
-      <withI18nextTranslation(WithStyles(undefined)) />
+      <withI18nextTranslation(WithStyles(Connect(LanguageSelect))) />
+      <withI18nextTranslation(WithStyles(Connect(DeveloperSwitch))) />
+      <withI18nextTranslation(WithStyles(Connect(GeolocationControl))) />
     </WithStyles(ForwardRef(FormGroup))>
   </div>
-</withI18nextTranslation(WithStyles(undefined))>
+</withI18nextTranslation(WithStyles(Connect(Main)))>
 `;

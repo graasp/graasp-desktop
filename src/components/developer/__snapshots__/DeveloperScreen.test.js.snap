@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<DeveloperScreen /> renders correctly 1`] = `
-<withI18nextTranslation(WithStyles(undefined))>
+<withI18nextTranslation(WithStyles(Connect(Main)))>
   <div
     className="developer"
   >
@@ -13,11 +13,10 @@ exports[`<DeveloperScreen /> renders correctly 1`] = `
     </WithStyles(ForwardRef(Typography))>
     <br />
     <WithStyles(Banner)
-      buttonText={null}
       text="Danger Zone! Proceed with caution as changes to this section might lead to data loss."
       type="error"
     />
     <Connect(withI18nextTranslation(WithStyles(DatabaseEditor))) />
   </div>
-</withI18nextTranslation(WithStyles(undefined))>
+</withI18nextTranslation(WithStyles(Connect(Main)))>
 `;

@@ -34,7 +34,7 @@ exports[`<Phase /> with tools <Phase /> with toolsVisible = false renders correc
       spaceId="spaceId"
     />
   </div>
-  <withI18nextTranslation(WithStyles(undefined)) />
+  <withI18nextTranslation(WithStyles(Connect(ToolsButton))) />
 </div>
 `;
 
@@ -107,7 +107,7 @@ exports[`<Phase /> with tools <Phase /> with toolsVisible = true renders correct
       />
     </div>
   </SplitPane>
-  <withI18nextTranslation(WithStyles(undefined)) />
+  <withI18nextTranslation(WithStyles(Connect(ToolsButton))) />
 </Fragment>
 `;
 
