@@ -144,7 +144,7 @@ export class Dashboard extends Component {
     }
 
     if (_.isEmpty(filteredActions)) {
-      return <p>{t('No action have been recorded.')}</p>;
+      return <p>{t('No action has been recorded.')}</p>;
     }
 
     return (

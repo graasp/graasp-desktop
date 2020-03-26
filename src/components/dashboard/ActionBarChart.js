@@ -66,7 +66,7 @@ class ActionBarChart extends PureComponent {
     }
 
     if (_.isEmpty(spaces) || _.isEmpty(actions)) {
-      return <p>{t('No action have been recorded.')}</p>;
+      return <p>{t('No action has been recorded.')}</p>;
     }
 
     const data =
@@ -102,7 +102,7 @@ class ActionBarChart extends PureComponent {
             <XAxis dataKey="space" />
             <YAxis
               label={{
-                value: t('Action count'),
+                value: t('Action Count'),
                 angle: -90,
                 position: 'insideLeft',
               }}
@@ -110,7 +110,7 @@ class ActionBarChart extends PureComponent {
             <Tooltip />
             <Legend />
             <Bar
-              name={t('Action count')}
+              name={t('Action Count')}
               dataKey="count"
               fill={primary[type]}
             />

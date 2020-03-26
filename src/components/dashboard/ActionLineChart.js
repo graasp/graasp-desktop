@@ -68,7 +68,7 @@ class ActionLineChart extends PureComponent {
     }
 
     if (_.isEmpty(actions)) {
-      return <p>{t('No action have been recorded.')}</p>;
+      return <p>{t('No action has been recorded.')}</p>;
     }
 
     const dataWithDateFormatted = actions.map(action => ({
@@ -102,7 +102,7 @@ class ActionLineChart extends PureComponent {
             <XAxis dataKey="date" label={{ value: t('Time'), dy: 15 }} />
             <YAxis
               label={{
-                value: t('Action count'),
+                value: t('Action Count'),
                 angle: -90,
                 position: 'insideLeft',
               }}
