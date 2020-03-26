@@ -4,7 +4,6 @@ import ReactJson from 'react-json-view';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { DatabaseEditor } from './DatabaseEditor';
-import Loader from '../common/Loader';
 
 const sampleDatabase = {
   user: { name: 'name' },
@@ -62,11 +61,11 @@ describe('<DatabaseEditor />', () => {
     database => {
       let wrapper;
 
-      it('renders <Loader />', () => {
+      it('renders empty text ', () => {
         const props = createDatabaseEditorProps(database);
         // eslint-disable-next-line react/jsx-props-no-spreading
         wrapper = shallow(<DatabaseEditor {...props} />);
-        expect(wrapper.find(Loader)).toHaveLength(1);
+        expect(wrapper.find('p').text()).toEqual('The database is empty.');
       });
     }
   );

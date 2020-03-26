@@ -1,6 +1,6 @@
 const { DEFAULT_DEVELOPER_MODE } = require('../config/config');
 const { GET_DEVELOPER_MODE_CHANNEL } = require('../config/channels');
-const logger = require('../../app/logger');
+const logger = require('../logger');
 const { ERROR_GENERAL } = require('../config/errors');
 
 const getDeveloperMode = (mainWindow, db) => async () => {

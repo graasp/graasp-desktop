@@ -36,6 +36,17 @@
     "Save As": "Enregistrer Sous",
     "Cancel": "Annuler",
     "Are you sure you want to sync this space? All user input will be deleted.": "Êtes-vous sûr de vouloir synchroniser cet espace? Toute entrée utilisateur sera supprimée.",
-    "You need an internet connection.": "Une connexion internet est requise."
+    "You need an internet connection.": "Une connexion internet est requise.",
+    "Dashboard": "Dashboard",
+    "Action Type Chart": "Graphique des types d'actions",
+    "Total Action Count": "Nombre total d'actions",
+    "Action Count Per Space": "Nombre d'actions par Espace",
+    "Action Database": "Base de données des actions",
+    "No action has been recorded.": "Aucune action enregistrée.",
+    "Action Count": "Nombre d'actions",
+    "The database is empty.": "La base de données est vide.",
+    "Filter by Space": "Filtrer par Espace",
+    "All Spaces": "Tous les Espaces",
+    "Time": "Ligne du temps"
   }
 }

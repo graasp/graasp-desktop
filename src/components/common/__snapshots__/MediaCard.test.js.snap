@@ -80,10 +80,10 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text defined r
   <WithStyles(ForwardRef(CardActions))
     disableSpacing={true}
   >
-    <withI18nextTranslation(WithStyles(undefined))
+    <withI18nextTranslation(WithStyles(Connect(DeleteButton)))
       id="id"
     />
-    <withI18nextTranslation(WithStyles(undefined))
+    <withI18nextTranslation(WithStyles(Connect(ExportButton)))
       space={
         Object {
           "id": "id",
@@ -91,7 +91,7 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text defined r
         }
       }
     />
-    <withI18nextTranslation(WithStyles(undefined))
+    <withI18nextTranslation(WithStyles(Connect(SyncButton)))
       id="id"
     />
     <WithStyles(ForwardRef(IconButton))
@@ -146,10 +146,10 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text undefined
   <WithStyles(ForwardRef(CardActions))
     disableSpacing={true}
   >
-    <withI18nextTranslation(WithStyles(undefined))
+    <withI18nextTranslation(WithStyles(Connect(DeleteButton)))
       id="id"
     />
-    <withI18nextTranslation(WithStyles(undefined))
+    <withI18nextTranslation(WithStyles(Connect(ExportButton)))
       space={
         Object {
           "id": "id",
@@ -157,7 +157,7 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text undefined
         }
       }
     />
-    <withI18nextTranslation(WithStyles(undefined))
+    <withI18nextTranslation(WithStyles(Connect(SyncButton)))
       id="id"
     />
   </WithStyles(ForwardRef(CardActions))>

@@ -122,6 +122,18 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
       primary="Settings"
     />
   </WithStyles(ForwardRef(MenuItem))>
+  <WithStyles(ForwardRef(MenuItem))
+    button={true}
+    onClick={[Function]}
+    selected={false}
+  >
+    <WithStyles(ForwardRef(ListItemIcon))>
+      <ShowChartIcon />
+    </WithStyles(ForwardRef(ListItemIcon))>
+    <WithStyles(ForwardRef(ListItemText))
+      primary="Dashboard"
+    />
+  </WithStyles(ForwardRef(MenuItem))>
 </WithStyles(ForwardRef(List))>
 `;
 
@@ -245,6 +257,18 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
       primary="Settings"
+    />
+  </WithStyles(ForwardRef(MenuItem))>
+  <WithStyles(ForwardRef(MenuItem))
+    button={true}
+    onClick={[Function]}
+    selected={false}
+  >
+    <WithStyles(ForwardRef(ListItemIcon))>
+      <ShowChartIcon />
+    </WithStyles(ForwardRef(ListItemIcon))>
+    <WithStyles(ForwardRef(ListItemText))
+      primary="Dashboard"
     />
   </WithStyles(ForwardRef(MenuItem))>
   <WithStyles(ForwardRef(MenuItem))
