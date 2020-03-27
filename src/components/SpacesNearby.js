@@ -15,7 +15,7 @@ import Loader from './common/Loader';
 import GeolocationControl from './common/GeolocationControl';
 import { CONTROL_TYPES } from '../config/constants';
 import Main from './common/Main';
-import { SPACE_NEARBY_SPACE_GRID_ID } from '../config/selectors';
+import { SPACES_NEARBY_SPACE_GRID_ID } from '../config/selectors';
 
 class SpacesNearby extends Component {
   static propTypes = {
@@ -92,7 +92,7 @@ class SpacesNearby extends Component {
     }
 
     const geolocationContent = geolocationEnabled ? (
-      <SpaceGrid id={SPACE_NEARBY_SPACE_GRID_ID} spaces={spaces} />
+      <SpaceGrid id={SPACES_NEARBY_SPACE_GRID_ID} spaces={spaces} />
     ) : (
       <div className="Main">
         <GeolocationControl controlType={CONTROL_TYPES.BUTTON} />

@@ -5,7 +5,7 @@
 const DRAWER_BUTTON_ID = 'drawerButton';
 
 const SPACE_NEARBY_MENU_ITEM_ID = 'spacesNearbyMenuItem';
-const SPACE_NEARBY_SPACE_GRID_ID = 'spacesNearbySpaceGrid';
+const SPACES_NEARBY_SPACE_GRID_ID = 'spacesNearbySpaceGrid';
 const VISIT_MENU_ITEM_ID = 'visitMenuItem';
 const VISIT_MAIN_ID = 'visit';
 const LOAD_MENU_ITEM_ID = 'loadMenuItem';
@@ -46,7 +46,7 @@ const LOAD_LOAD_BUTTON_ID = 'loadLoadButton';
 module.exports = {
   SPACE_NEARBY_MENU_ITEM_ID,
   DRAWER_BUTTON_ID,
-  SPACE_NEARBY_SPACE_GRID_ID,
+  SPACES_NEARBY_SPACE_GRID_ID,
   LOAD_MENU_ITEM_ID,
   LOAD_MAIN_ID,
   VISIT_BUTTON_ID,
