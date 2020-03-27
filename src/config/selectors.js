@@ -3,6 +3,7 @@
 // since mocha + node 12 don't support es6
 
 const DRAWER_BUTTON_ID = 'drawerButton';
+
 const SPACE_NEARBY_MENU_ITEM_ID = 'spacesNearbyMenuItem';
 const SPACE_NEARBY_SPACE_GRID_ID = 'spacesNearbySpaceGrid';
 const VISIT_MENU_ITEM_ID = 'visitMenuItem';
@@ -15,7 +16,12 @@ const VISIT_INPUT_ID = 'visitInput';
 const VISIT_BUTTON_ID = 'visitButton';
 const SPACE_TOOLBAR_ID = 'spaceToolbar';
 const HOME_MENU_ITEM_ID = 'homeMenuItem';
+const HOME_MAIN_ID = 'homeMain';
+const DASHBOARD_MENU_ITEM_ID = 'dashboardMenuItem';
+const DASHBOARD_MAIN_ID = 'dashboardMain';
+
 const PHASE_MENU_LIST_ID = 'phaseMenuList';
+
 const SPACE_START_PREVIEW_BUTTON = 'spaceStartPreviewButton';
 const SPACE_DESCRIPTION_ID = 'spaceDescription';
 const SPACE_SAVE_ICON_CLASS = 'spaceSaveIcon';
@@ -27,11 +33,12 @@ const SPACE_EXPORT_BUTTON_CLASS = 'spaceExportButton';
 const SPACE_DELETE_BUTTON_CLASS = 'spaceDeleteButton';
 const SPACE_CLEAR_BUTTON_CLASS = 'spaceClearButton';
 const SPACE_SYNC_BUTTON_CLASS = 'spaceSyncButton';
-const HOME_MAIN_ID = 'homeMain';
-const SPACE_CARD_ID_BUILDER = id => `space-card-${id}`;
+
+const buildSpaceCardId = id => `space-card-${id}`;
 const SPACE_DESCRIPTION_EXPAND_BUTTON_CLASS = 'spaceDescriptionExpandButton';
-const SPACE_CARD_DESCRIPTION_ID_BUILDER = id => `spaceCardDescription-${id}`;
+const buildSpaceCardDescriptionId = id => `spaceCardDescription-${id}`;
 const SPACE_CARD_LINK_CLASS = 'spaceCardLink';
+
 const LOAD_BROWSE_BUTTON_ID = 'loadBrowseButton';
 const LOAD_INPUT_ID = 'loadInput';
 const LOAD_LOAD_BUTTON_ID = 'loadLoadButton';
@@ -63,11 +70,13 @@ module.exports = {
   SPACE_CLEAR_BUTTON_CLASS,
   SPACE_SYNC_BUTTON_CLASS,
   HOME_MAIN_ID,
-  SPACE_CARD_ID_BUILDER,
+  buildSpaceCardId,
   SPACE_DESCRIPTION_EXPAND_BUTTON_CLASS,
-  SPACE_CARD_DESCRIPTION_ID_BUILDER,
+  buildSpaceCardDescriptionId,
   SPACE_CARD_LINK_CLASS,
   LOAD_BROWSE_BUTTON_ID,
   LOAD_INPUT_ID,
   LOAD_LOAD_BUTTON_ID,
+  DASHBOARD_MENU_ITEM_ID,
+  DASHBOARD_MAIN_ID,
 };

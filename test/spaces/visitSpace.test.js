@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
-const { expect } = require('chai');
-const { removeSpace, removeTags, mochaAsync } = require('../utils');
-const { closeApplication, createApplication } = require('../application');
-const { menuGoTo } = require('../menu.test');
-const {
+import { expect } from 'chai';
+import { removeSpace, removeTags, mochaAsync } from '../utils';
+import { closeApplication, createApplication } from '../application';
+import { menuGoTo } from '../menu.test';
+import {
   SPACE_TOOLBAR_ID,
   PHASE_MENU_LIST_ID,
   VISIT_MAIN_ID,
@@ -23,20 +23,34 @@ const {
   SPACE_CLEAR_BUTTON_CLASS,
   SPACE_DELETE_BUTTON_CLASS,
   SPACE_SYNC_BUTTON_CLASS,
-  SPACE_CARD_ID_BUILDER,
+  buildSpaceCardId,
   SPACE_DESCRIPTION_EXPAND_BUTTON_CLASS,
-  SPACE_CARD_DESCRIPTION_ID_BUILDER,
-} = require('../../src/config/selectors');
-const { SPACE_ATOMIC_STRUCTURE } = require('../fixtures/spaces');
-const {
+  buildSpaceCardDescriptionId,
+} from '../../src/config/selectors';
+import { hasMath } from '../../src/utils/math';
+import { SPACE_ATOMIC_STRUCTURE, SPACE_APOLLO_11 } from '../fixtures/spaces';
+import {
   INPUT_TYPE_PAUSE,
   VISIT_SPACE_PAUSE,
   SAVE_SPACE_PAUSE,
   TOOLTIP_FADE_OUT_PAUSE,
-} = require('../constants');
+  DEFAULT_GLOBAL_TIMEOUT,
+} from '../constants';
 
 const PREVIEW = 'preview';
 const SAVED = 'saved';
+
+const testTextOfElement = async (client, selector, text) => {
+  if (hasMath(text)) {
+    const html = await client.getHTML(selector);
+    expect(html).to.include('<span class="katex">');
+  } else {
+    const elementText = await client.getHTML(selector);
+    expect(removeSpace(removeTags(elementText))).to.include(
+      removeSpace(removeTags(text))
+    );
+  }
+};
 
 const visitSpaceById = async (client, id) => {
   await menuGoTo(client, VISIT_MENU_ITEM_ID, VISIT_MAIN_ID);
@@ -73,8 +87,11 @@ const hasPreviewSpaceHomeLayout = async (
 
   // space description
   if (spaceDescription && spaceDescription !== '') {
-    const description = await client.getText(`#${SPACE_DESCRIPTION_ID}`);
-    expect(removeSpace(description)).to.include(removeSpace(spaceDescription));
+    await testTextOfElement(
+      client,
+      `#${SPACE_DESCRIPTION_ID}`,
+      spaceDescription
+    );
   }
 
   // space preview banner
@@ -132,8 +149,11 @@ const hasSavedSpaceHomeLayout = async (
 
   // space description
   if (spaceDescription && spaceDescription !== '') {
-    const description = await client.getText(`#${SPACE_DESCRIPTION_ID}`);
-    expect(removeSpace(description)).to.include(removeSpace(spaceDescription));
+    await testTextOfElement(
+      client,
+      `#${SPACE_DESCRIPTION_ID}`,
+      spaceDescription
+    );
   }
 
   // space start button
@@ -148,10 +168,7 @@ const hasPhaseLayout = async (client, { description, items }, mode) => {
   // get innerHTML to retrieve html tags as well
   // remove space to handle trimmed spaces
   if (description && description !== '') {
-    const descriptionHtml = await client.getHTML(`#${PHASE_DESCRIPTION_ID}`);
-    expect(removeSpace(removeTags(descriptionHtml))).to.include(
-      removeSpace(removeTags(description))
-    );
+    await testTextOfElement(client, `#${PHASE_DESCRIPTION_ID}`, description);
   }
 
   // eslint-disable-block no-await-in-loop
@@ -166,12 +183,25 @@ const hasPhaseLayout = async (client, { description, items }, mode) => {
     // to reuse constants, use es6 for tests
     switch (category) {
       case 'Resource': {
-        if (mimeType === 'text/html') {
-          const text = await client.getHTML(itemSelector);
-          // remove space and tags since they are trimmed
-          expect(removeSpace(removeTags(text))).to.include(
-            removeSpace(removeTags(content))
-          );
+        switch (mimeType) {
+          case 'text/html': {
+            await testTextOfElement(client, itemSelector, content);
+            break;
+          }
+          case 'video/quicktime': {
+            const html = await client.getHTML(`${itemSelector} video`);
+            expect(html).to.include(url);
+            break;
+          }
+          case 'image/png':
+          case 'image/jpeg': {
+            const html = await client.getHTML(`${itemSelector} img`);
+            expect(html).to.include(url);
+            break;
+          }
+          default: {
+            console.log('Unhandled mimeType: ', mimeType);
+          }
         }
         break;
       }
@@ -239,7 +269,7 @@ const checkSpaceCardLayout = async (
   client,
   { id, name: spaceName, description: spaceDescription }
 ) => {
-  const spaceSelector = `#${SPACE_CARD_ID_BUILDER(id)}`;
+  const spaceSelector = `#${buildSpaceCardId(id)}`;
   const spaceCard = await client.element(spaceSelector);
   expect(spaceCard.value).to.exist;
 
@@ -254,7 +284,7 @@ const checkSpaceCardLayout = async (
     expect(expandIcon.value).to.exist;
 
     const descriptionHtml = await client.getHTML(
-      `#${SPACE_CARD_DESCRIPTION_ID_BUILDER(id)}`
+      `#${buildSpaceCardDescriptionId(id)}`
     );
     expect(removeSpace(descriptionHtml)).to.include(
       removeSpace(spaceDescription)
@@ -281,7 +311,7 @@ const checkSpaceCardLayout = async (
 };
 
 describe('Visit Space Scenarios', function() {
-  this.timeout(270000);
+  this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
   afterEach(function() {
@@ -294,19 +324,23 @@ describe('Visit Space Scenarios', function() {
     })
   );
 
-  it(
-    `Visit space ${SPACE_ATOMIC_STRUCTURE.name} (${SPACE_ATOMIC_STRUCTURE.id})`,
-    mochaAsync(async () => {
-      const { client } = app;
+  const spaces = [SPACE_APOLLO_11, SPACE_ATOMIC_STRUCTURE];
 
-      await visitSpaceById(client, SPACE_ATOMIC_STRUCTURE.id);
+  spaces.forEach(function(space) {
+    it(
+      `Visit space ${space.name} (${space.id})`,
+      mochaAsync(async () => {
+        const { client } = app;
 
-      await hasPreviewSpaceLayout(client, SPACE_ATOMIC_STRUCTURE);
-    })
-  );
+        await visitSpaceById(client, space.id);
+
+        await hasPreviewSpaceLayout(client, space);
+      })
+    );
+  });
 });
 
-module.exports = {
+export {
   hasPreviewSpaceHomeLayout,
   checkSpaceCardLayout,
   hasPreviewSpaceLayout,

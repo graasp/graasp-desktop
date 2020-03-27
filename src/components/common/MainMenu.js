@@ -31,6 +31,7 @@ import {
   HOME_MENU_ITEM_ID,
   VISIT_MENU_ITEM_ID,
   SPACE_NEARBY_MENU_ITEM_ID,
+  DASHBOARD_MENU_ITEM_ID,
 } from '../../config/selectors';
 
 export class MainMenu extends Component {
@@ -162,6 +163,7 @@ export class MainMenu extends Component {
           <ListItemText primary={t('Settings')} />
         </MenuItem>
         <MenuItem
+          id={DASHBOARD_MENU_ITEM_ID}
           onClick={() => this.handleClick(DASHBOARD_PATH)}
           button
           selected={path === DASHBOARD_PATH}

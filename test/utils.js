@@ -20,4 +20,4 @@ const createRandomString = () => {
     .substring(7);
 };
 
-module.exports = { mochaAsync, removeSpace, removeTags, createRandomString };
+export { mochaAsync, removeSpace, removeTags, createRandomString };

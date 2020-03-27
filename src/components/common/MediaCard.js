@@ -17,9 +17,9 @@ import SyncButton from '../space/SyncButton';
 import Text from './Text';
 import { MIN_CARD_WIDTH } from '../../config/constants';
 import {
-  SPACE_CARD_ID_BUILDER,
+  buildSpaceCardId,
   SPACE_DESCRIPTION_EXPAND_BUTTON_CLASS,
-  SPACE_CARD_DESCRIPTION_ID_BUILDER,
+  buildSpaceCardDescriptionId,
   SPACE_CARD_LINK_CLASS,
 } from '../../config/selectors';
 
@@ -63,7 +63,7 @@ export const MediaCard = props => {
   };
 
   return (
-    <Card id={SPACE_CARD_ID_BUILDER(id)} className={classes.card}>
+    <Card id={buildSpaceCardId(id)} className={classes.card}>
       <CardActionArea className={SPACE_CARD_LINK_CLASS} onClick={viewLink}>
         <CardMedia className={classes.media} image={image} title={name} />
 
@@ -77,7 +77,7 @@ export const MediaCard = props => {
       <Collapse disableSpacing in={expanded} timeout="auto" unmountOnExit>
         <CardContent className={classes.cardDescription}>
           <Text
-            id={SPACE_CARD_DESCRIPTION_ID_BUILDER(id)}
+            id={buildSpaceCardDescriptionId(id)}
             content={text}
             className={classes.cardDescriptionText}
           />

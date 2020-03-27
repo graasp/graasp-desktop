@@ -1,23 +1,27 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
-const { expect } = require('chai');
-const fs = require('fs');
-const { mochaAsync, createRandomString } = require('../utils');
-const { createApplication, closeApplication } = require('../application');
-const { menuGoTo } = require('../menu.test');
-const {
+import { expect } from 'chai';
+import fs from 'fs';
+import { mochaAsync, createRandomString } from '../utils';
+import { createApplication, closeApplication } from '../application';
+import { menuGoTo } from '../menu.test';
+import {
   HOME_MENU_ITEM_ID,
   HOME_MAIN_ID,
-  SPACE_CARD_ID_BUILDER,
+  buildSpaceCardId,
   SPACE_EXPORT_BUTTON_CLASS,
-} = require('../../src/config/selectors');
-const { SPACE_ATOMIC_STRUCTURE } = require('../fixtures/spaces');
-const { visitAndSaveSpaceById } = require('./visitSpace.test');
-const { EXPORT_SPACE_PAUSE, EXPORT_FILEPATH } = require('../constants');
+} from '../../src/config/selectors';
+import { SPACE_ATOMIC_STRUCTURE } from '../fixtures/spaces';
+import { visitAndSaveSpaceById } from './visitSpace.test';
+import {
+  EXPORT_SPACE_PAUSE,
+  EXPORT_FILEPATH,
+  DEFAULT_GLOBAL_TIMEOUT,
+} from '../constants';
 
 describe('Export a space', function() {
-  this.timeout(270000);
+  this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
   afterEach(function() {
@@ -59,7 +63,7 @@ describe('Export a space', function() {
       await menuGoTo(client, HOME_MENU_ITEM_ID, HOME_MAIN_ID);
 
       await client.click(
-        `#${SPACE_CARD_ID_BUILDER(id)} .${SPACE_EXPORT_BUTTON_CLASS}`
+        `#${buildSpaceCardId(id)} .${SPACE_EXPORT_BUTTON_CLASS}`
       );
       await client.pause(EXPORT_SPACE_PAUSE);
 

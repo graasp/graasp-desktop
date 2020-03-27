@@ -1,26 +1,26 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
-const { mochaAsync } = require('../utils');
-const { createApplication, closeApplication } = require('../application');
-const { menuGoTo } = require('../menu.test');
-const {
+import { mochaAsync } from '../utils';
+import { createApplication, closeApplication } from '../application';
+import { menuGoTo } from '../menu.test';
+import {
   HOME_MENU_ITEM_ID,
   HOME_MAIN_ID,
-  SPACE_CARD_ID_BUILDER,
+  buildSpaceCardId,
   SPACE_CARD_LINK_CLASS,
-} = require('../../src/config/selectors');
-const { SPACE_ATOMIC_STRUCTURE } = require('../fixtures/spaces');
-const {
+} from '../../src/config/selectors';
+import { SPACE_ATOMIC_STRUCTURE } from '../fixtures/spaces';
+import {
   checkSpaceCardLayout,
   hasSavedSpaceLayout,
   hasSavedSpaceHomeLayout,
   visitAndSaveSpaceById,
-} = require('./visitSpace.test');
-const { OPEN_SAVED_SPACE_PAUSE } = require('../constants');
+} from './visitSpace.test';
+import { OPEN_SAVED_SPACE_PAUSE, DEFAULT_GLOBAL_TIMEOUT } from '../constants';
 
 describe('Save a space', function() {
-  this.timeout(270000);
+  this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
   afterEach(function() {
@@ -48,9 +48,7 @@ describe('Save a space', function() {
       await checkSpaceCardLayout(client, SPACE_ATOMIC_STRUCTURE);
 
       // go to space
-      await client.click(
-        `#${SPACE_CARD_ID_BUILDER(id)} .${SPACE_CARD_LINK_CLASS}`
-      );
+      await client.click(`#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`);
       await client.pause(OPEN_SAVED_SPACE_PAUSE);
 
       await hasSavedSpaceHomeLayout(client, { name, description });

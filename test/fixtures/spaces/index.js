@@ -1,21 +1,23 @@
-const {
+import {
   SPACE_ATOMIC_STRUCTURE,
   SPACE_ATOMIC_STRUCTURE_PATH,
-} = require('./atomicStructure');
-const {
+} from './atomicStructure';
+import {
   SPACE_ATOMIC_STRUCTURE_WITH_USER_INPUT,
   SPACE_ATOMIC_STRUCTURE_WITH_USER_INPUT_PATH,
-} = require('./atomicStructureWithUserInput');
-const {
+} from './atomicStructureWithUserInput';
+import {
   SPACE_ATOMIC_STRUCTURE_WITH_CHANGES,
   SPACE_ATOMIC_STRUCTURE_WITH_CHANGES_PATH,
-} = require('./atomicStructureWithChanges');
+} from './atomicStructureWithChanges';
+import { SPACE_APOLLO_11 } from './apollo11';
 
-module.exports = {
+export {
   SPACE_ATOMIC_STRUCTURE,
   SPACE_ATOMIC_STRUCTURE_PATH,
   SPACE_ATOMIC_STRUCTURE_WITH_USER_INPUT,
   SPACE_ATOMIC_STRUCTURE_WITH_USER_INPUT_PATH,
   SPACE_ATOMIC_STRUCTURE_WITH_CHANGES,
   SPACE_ATOMIC_STRUCTURE_WITH_CHANGES_PATH,
+  SPACE_APOLLO_11,
 };

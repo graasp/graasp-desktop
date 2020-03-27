@@ -1,6 +1,6 @@
-const { Application } = require('spectron');
-const electronPath = require('electron'); // Require Electron from the binaries included in node_modules.
-const path = require('path');
+import { Application } from 'spectron';
+import electronPath from 'electron'; // Require Electron from the binaries included in node_modules.
+import path from 'path';
 
 const createApplication = async (
   {
@@ -62,4 +62,4 @@ const closeApplication = app => {
   return true;
 };
 
-module.exports = { createApplication, closeApplication };
+export { createApplication, closeApplication };

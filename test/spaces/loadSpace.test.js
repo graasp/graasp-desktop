@@ -1,14 +1,14 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
-const { expect } = require('chai');
-const path = require('path');
-const { mochaAsync, createRandomString } = require('../utils');
-const { createApplication, closeApplication } = require('../application');
-const { menuGoTo } = require('../menu.test');
-const {
+import { expect } from 'chai';
+import path from 'path';
+import { mochaAsync, createRandomString } from '../utils';
+import { createApplication, closeApplication } from '../application';
+import { menuGoTo } from '../menu.test';
+import {
   HOME_MENU_ITEM_ID,
-  SPACE_CARD_ID_BUILDER,
+  buildSpaceCardId,
   SPACE_CARD_LINK_CLASS,
   LOAD_MENU_ITEM_ID,
   LOAD_MAIN_ID,
@@ -17,20 +17,17 @@ const {
   LOAD_INPUT_ID,
   SPACE_DELETE_BUTTON_CLASS,
   HOME_MAIN_ID,
-} = require('../../src/config/selectors');
-const {
+} from '../../src/config/selectors';
+import {
   SPACE_ATOMIC_STRUCTURE,
   SPACE_ATOMIC_STRUCTURE_PATH,
   SPACE_ATOMIC_STRUCTURE_WITH_CHANGES,
   SPACE_ATOMIC_STRUCTURE_WITH_CHANGES_PATH,
   SPACE_ATOMIC_STRUCTURE_WITH_USER_INPUT,
   SPACE_ATOMIC_STRUCTURE_WITH_USER_INPUT_PATH,
-} = require('../fixtures/spaces');
-const {
-  hasSavedSpaceLayout,
-  visitAndSaveSpaceById,
-} = require('./visitSpace.test');
-const {
+} from '../fixtures/spaces';
+import { hasSavedSpaceLayout, visitAndSaveSpaceById } from './visitSpace.test';
+import {
   TOOLTIP_FADE_OUT_PAUSE,
   INPUT_TYPE_PAUSE,
   LOAD_SPACE_PAUSE,
@@ -38,7 +35,8 @@ const {
   EXPORT_FILEPATH,
   DELETE_SPACE_PAUSE,
   OPEN_SAVED_SPACE_PAUSE,
-} = require('../constants');
+  DEFAULT_GLOBAL_TIMEOUT,
+} from '../constants';
 
 const loadSpaceById = async (client, space, filepath) => {
   const { id } = space;
@@ -57,14 +55,14 @@ const loadSpaceById = async (client, space, filepath) => {
   // go to space
   await menuGoTo(client, HOME_MENU_ITEM_ID);
 
-  await client.click(`#${SPACE_CARD_ID_BUILDER(id)} .${SPACE_CARD_LINK_CLASS}`);
+  await client.click(`#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`);
 
   // this waiting time is longer to wait for tooltip to fade out
   await client.pause(OPEN_SAVED_SPACE_PAUSE);
 };
 
 describe('Load Space Scenarios', function() {
-  this.timeout(270000);
+  this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
   afterEach(function() {
@@ -153,7 +151,7 @@ describe('Load Space Scenarios', function() {
         await client.pause(OPEN_SAVED_SPACE_PAUSE);
 
         await client.click(
-          `#${SPACE_CARD_ID_BUILDER(id)} .${SPACE_CARD_LINK_CLASS}`
+          `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
         );
         // check content hasn't changed
         await hasSavedSpaceLayout(client, SPACE_ATOMIC_STRUCTURE);
