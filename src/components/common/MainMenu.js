@@ -30,7 +30,7 @@ import {
   LOAD_MENU_ITEM_ID,
   HOME_MENU_ITEM_ID,
   VISIT_MENU_ITEM_ID,
-  SPACE_NEARBY_MENU_ITEM_ID,
+  SPACES_NEARBY_MENU_ITEM_ID,
   DASHBOARD_MENU_ITEM_ID,
 } from '../../config/selectors';
 
@@ -116,7 +116,7 @@ export class MainMenu extends Component {
         </MenuItem>
         {this.renderOfflineMenuItem(
           <MenuItem
-            id={SPACE_NEARBY_MENU_ITEM_ID}
+            id={SPACES_NEARBY_MENU_ITEM_ID}
             onClick={() => this.handleClick(SPACES_NEARBY_PATH)}
             button
             selected={path === SPACES_NEARBY_PATH}

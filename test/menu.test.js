@@ -12,7 +12,7 @@ import {
   VISIT_MENU_ITEM_ID,
   SETTINGS_MAIN_ID,
   SETTINGS_MENU_ITEM_ID,
-  SPACE_NEARBY_MENU_ITEM_ID,
+  SPACES_NEARBY_MENU_ITEM_ID,
   SPACES_NEARBY_SPACE_GRID_ID,
   HOME_MENU_ITEM_ID,
   HOME_MAIN_ID,
@@ -59,7 +59,7 @@ describe('Menu Scenarios', function() {
 
       await menuGoTo(
         client,
-        SPACE_NEARBY_MENU_ITEM_ID,
+        SPACES_NEARBY_MENU_ITEM_ID,
         SPACES_NEARBY_SPACE_GRID_ID
       );
       await menuGoTo(client, VISIT_MENU_ITEM_ID, VISIT_MAIN_ID);
