@@ -13,11 +13,13 @@ import {
   SETTINGS_MAIN_ID,
   SETTINGS_MENU_ITEM_ID,
   SPACES_NEARBY_MENU_ITEM_ID,
-  SPACES_NEARBY_SPACE_GRID_ID,
+  SPACES_NEARBY_MAIN_ID,
   HOME_MENU_ITEM_ID,
   HOME_MAIN_ID,
   DASHBOARD_MAIN_ID,
   DASHBOARD_MENU_ITEM_ID,
+  DEVELOPER_MENU_ITEM_ID,
+  DEVELOPER_MAIN_ID,
 } from '../src/config/selectors';
 import {
   LOAD_TAB_PAUSE,
@@ -25,17 +27,49 @@ import {
   OPEN_DRAWER_PAUSE,
 } from './constants';
 
-const menuGoTo = async (client, menuItemId, elementToExpectId = null) => {
-  // open menu if it is closed
-  if (await client.isExisting(`#${DRAWER_BUTTON_ID}`)) {
+export const openDrawer = async client => {
+  if (await client.isVisible(`#${DRAWER_BUTTON_ID}`)) {
     await client.click(`#${DRAWER_BUTTON_ID}`);
   }
   await client.pause(OPEN_DRAWER_PAUSE);
+};
+
+const menuGoTo = async (client, menuItemId, elementToExpectId = null) => {
+  // open menu if it is closed
+  await openDrawer(client);
   await client.click(`#${menuItemId}`);
   if (elementToExpectId) {
-    expect(await client.element(`#${elementToExpectId}`)).to.exist;
+    expect(await client.isExisting(`#${elementToExpectId}`)).to.be.true;
   }
   await client.pause(LOAD_TAB_PAUSE);
+};
+
+export const menuGoToSettings = async client => {
+  await menuGoTo(client, SETTINGS_MENU_ITEM_ID, SETTINGS_MAIN_ID);
+};
+
+export const menuGoToDeveloper = async client => {
+  await menuGoTo(client, DEVELOPER_MENU_ITEM_ID, DEVELOPER_MAIN_ID);
+};
+
+export const menuGoToSpacesNearby = async client => {
+  await menuGoTo(client, SPACES_NEARBY_MENU_ITEM_ID, SPACES_NEARBY_MAIN_ID);
+};
+
+export const menuGoToVisitSpace = async client => {
+  await menuGoTo(client, VISIT_MENU_ITEM_ID, VISIT_MAIN_ID);
+};
+
+export const menuGoToLoadSpace = async client => {
+  await menuGoTo(client, LOAD_MENU_ITEM_ID, LOAD_MAIN_ID);
+};
+
+export const menuGoToDashboard = async client => {
+  await menuGoTo(client, DASHBOARD_MENU_ITEM_ID, DASHBOARD_MAIN_ID);
+};
+
+export const menuGoToHome = async client => {
+  await menuGoTo(client, HOME_MENU_ITEM_ID, HOME_MAIN_ID);
 };
 
 describe('Menu Scenarios', function() {
@@ -57,19 +91,12 @@ describe('Menu Scenarios', function() {
     mochaAsync(async () => {
       const { client } = app;
 
-      await menuGoTo(
-        client,
-        SPACES_NEARBY_MENU_ITEM_ID,
-        SPACES_NEARBY_SPACE_GRID_ID
-      );
-      await menuGoTo(client, VISIT_MENU_ITEM_ID, VISIT_MAIN_ID);
-      await menuGoTo(client, LOAD_MENU_ITEM_ID, LOAD_MAIN_ID);
-      await menuGoTo(client, SETTINGS_MENU_ITEM_ID, SETTINGS_MAIN_ID);
-      await menuGoTo(client, DASHBOARD_MENU_ITEM_ID, DASHBOARD_MAIN_ID);
-      await menuGoTo(client, HOME_MENU_ITEM_ID, HOME_MAIN_ID);
+      await menuGoToSpacesNearby(client);
+      await menuGoToVisitSpace(client);
+      await menuGoToLoadSpace(client);
+      await menuGoToSettings(client);
+      await menuGoToDashboard(client);
+      await menuGoToHome(client);
     })
   );
 });
-
-/* eslint-disable-next-line import/prefer-default-export */
-export { menuGoTo };

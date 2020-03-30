@@ -3,10 +3,8 @@
 /* eslint-disable no-restricted-syntax */
 import { mochaAsync } from '../utils';
 import { createApplication, closeApplication } from '../application';
-import { menuGoTo } from '../menu.test';
+import { menuGoToHome } from '../menu.test';
 import {
-  HOME_MENU_ITEM_ID,
-  HOME_MAIN_ID,
   buildSpaceCardId,
   SPACE_CARD_LINK_CLASS,
 } from '../../src/config/selectors';
@@ -43,7 +41,7 @@ describe('Save a space', function() {
       await hasSavedSpaceLayout(client, SPACE_ATOMIC_STRUCTURE);
 
       // check space is referenced in saved spaces
-      await menuGoTo(client, HOME_MENU_ITEM_ID, HOME_MAIN_ID);
+      await menuGoToHome(client);
 
       await checkSpaceCardLayout(client, SPACE_ATOMIC_STRUCTURE);
 

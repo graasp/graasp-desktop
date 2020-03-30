@@ -4,10 +4,8 @@
 import { expect } from 'chai';
 import { mochaAsync } from '../utils';
 import { createApplication, closeApplication } from '../application';
-import { menuGoTo } from '../menu.test';
+import { menuGoToHome } from '../menu.test';
 import {
-  HOME_MENU_ITEM_ID,
-  HOME_MAIN_ID,
   buildSpaceCardId,
   SPACE_DELETE_BUTTON_CLASS,
 } from '../../src/config/selectors';
@@ -34,7 +32,7 @@ describe('Delete a space', function() {
 
       await visitAndSaveSpaceById(client, id);
 
-      await menuGoTo(client, HOME_MENU_ITEM_ID, HOME_MAIN_ID);
+      await menuGoToHome(client);
 
       await client.click(
         `#${buildSpaceCardId(id)} .${SPACE_DELETE_BUTTON_CLASS}`
@@ -81,7 +79,7 @@ describe('Delete a space', function() {
       await client.click(`.${SPACE_DELETE_BUTTON_CLASS}`);
       await client.pause(DELETE_SPACE_PAUSE);
 
-      await menuGoTo(client, HOME_MENU_ITEM_ID, HOME_MAIN_ID);
+      await menuGoToHome(client);
 
       // card not in saved spaces
       const card = await client.element(`#${buildSpaceCardId(id)}`);

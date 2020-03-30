@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import { langs } from '../../config/i18n';
 import { getLanguage, setLanguage } from '../../actions';
 import Loader from './Loader';
+import { LANGUAGE_SELECT_ID } from '../../config/selectors';
 
 const styles = theme => ({
   formControl: {
@@ -61,7 +62,7 @@ export class LanguageSelect extends Component {
     }
 
     return (
-      <FormControl className={classes.formControl}>
+      <FormControl id={LANGUAGE_SELECT_ID} className={classes.formControl}>
         <InputLabel htmlFor="lang">{t('Language')}</InputLabel>
         <Select
           value={lang}

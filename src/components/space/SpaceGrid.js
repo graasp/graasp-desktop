@@ -11,6 +11,10 @@ import MediaCard from '../common/MediaCard';
 import { clearSpace } from '../../actions';
 import DefaultThumbnail from '../../data/graasp.jpg';
 import { MIN_CARD_WIDTH } from '../../config/constants';
+import {
+  SPACE_CARD_CLASS,
+  SPACE_NOT_AVAILABLE_TEXT_CLASS,
+} from '../../config/selectors';
 
 class SpaceGrid extends Component {
   state = {
@@ -127,7 +131,12 @@ class SpaceGrid extends Component {
       };
 
       const card = (
-        <Grid key={id} item style={{ margin: cardMargin }}>
+        <Grid
+          className={SPACE_CARD_CLASS}
+          key={id}
+          item
+          style={{ margin: cardMargin }}
+        >
           <MediaCard
             key={id}
             space={space}
@@ -160,7 +169,11 @@ class SpaceGrid extends Component {
     if (!MediaCards.length) {
       return (
         <div className="Main">
-          <Typography variant="h5" color="inherit">
+          <Typography
+            id={SPACE_NOT_AVAILABLE_TEXT_CLASS}
+            variant="h5"
+            color="inherit"
+          >
             {t('No Spaces Available')}
           </Typography>
         </div>

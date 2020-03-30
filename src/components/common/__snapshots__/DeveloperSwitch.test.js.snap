@@ -3,6 +3,7 @@
 exports[`<DeveloperSwitch /> <DeveloperSwitch /> renders renders correctly 1`] = `
 <WithStyles(ForwardRef(FormControl))
   className=""
+  id="settingsDeveloperSwitch"
 >
   <WithStyles(ForwardRef(FormControlLabel))
     control={
@@ -21,6 +22,7 @@ exports[`<DeveloperSwitch /> <DeveloperSwitch /> renders renders correctly 1`] =
 exports[`<DeveloperSwitch /> <DeveloperSwitch /> renders renders correctly 2`] = `
 <WithStyles(ForwardRef(FormControl))
   className=""
+  id="settingsDeveloperSwitch"
 >
   <WithStyles(ForwardRef(FormControlLabel))
     control={

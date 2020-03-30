@@ -8,6 +8,7 @@ import DatabaseEditor from './DatabaseEditor';
 import Styles from '../../Styles';
 import Main from '../common/Main';
 import Banner from '../common/Banner';
+import { DEVELOPER_MAIN_ID } from '../../config/selectors';
 
 // eslint-disable-next-line react/prefer-stateless-function
 export class DeveloperScreen extends Component {
@@ -39,7 +40,7 @@ export class DeveloperScreen extends Component {
     const { classes, t } = this.props;
 
     return (
-      <Main>
+      <Main id={DEVELOPER_MAIN_ID}>
         <div className={classes.developer}>
           <Typography variant="h4" className={classes.screenTitle}>
             {t('Developer')}

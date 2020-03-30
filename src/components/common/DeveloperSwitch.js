@@ -8,6 +8,7 @@ import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { getDeveloperMode, setDeveloperMode } from '../../actions';
 import Loader from './Loader';
+import { DEVELOPER_SWITCH_ID } from '../../config/selectors';
 
 const styles = theme => ({
   formControl: {
@@ -57,7 +58,7 @@ export class DeveloperSwitch extends Component {
     );
 
     return (
-      <FormControl className={classes.formControl}>
+      <FormControl id={DEVELOPER_SWITCH_ID} className={classes.formControl}>
         <FormControlLabel control={control} label={t('Developer Mode')} />
       </FormControl>
     );

@@ -5,10 +5,8 @@ import { expect } from 'chai';
 import fs from 'fs';
 import { mochaAsync, createRandomString } from '../utils';
 import { createApplication, closeApplication } from '../application';
-import { menuGoTo } from '../menu.test';
+import { menuGoToHome } from '../menu.test';
 import {
-  HOME_MENU_ITEM_ID,
-  HOME_MAIN_ID,
   buildSpaceCardId,
   SPACE_EXPORT_BUTTON_CLASS,
 } from '../../src/config/selectors';
@@ -60,7 +58,7 @@ describe('Export a space', function() {
 
       await visitAndSaveSpaceById(client, id);
 
-      await menuGoTo(client, HOME_MENU_ITEM_ID, HOME_MAIN_ID);
+      await menuGoToHome(client);
 
       await client.click(
         `#${buildSpaceCardId(id)} .${SPACE_EXPORT_BUTTON_CLASS}`

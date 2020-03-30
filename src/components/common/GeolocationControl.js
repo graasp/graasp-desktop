@@ -10,6 +10,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { getGeolocationEnabled, setGeolocationEnabled } from '../../actions';
 import Loader from './Loader';
 import { CONTROL_TYPES } from '../../config/constants';
+import { GEOLOCATION_CONTROL_ID } from '../../config/selectors';
 
 const styles = theme => ({
   formControl: {
@@ -76,7 +77,7 @@ export class GeolocationControl extends Component {
     );
 
     return (
-      <FormControl className={classes.formControl}>
+      <FormControl id={GEOLOCATION_CONTROL_ID} className={classes.formControl}>
         {(() => {
           switch (controlType) {
             case CONTROL_TYPES.BUTTON:
