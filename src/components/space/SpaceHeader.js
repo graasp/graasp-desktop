@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import clsx from 'clsx';
 import MenuIcon from '@material-ui/icons/Menu';
 import AppBar from '@material-ui/core/AppBar/AppBar';
 import SaveIcon from '@material-ui/icons/Save';
@@ -18,6 +19,11 @@ import DeleteButton from './DeleteButton';
 import ExportButton from './ExportButton';
 import SyncButton from './SyncButton';
 import ClearButton from './ClearButton';
+import {
+  SPACE_TOOLBAR_ID,
+  SPACE_SAVE_ICON_CLASS,
+  SPACE_PREVIEW_ICON_CLASS,
+} from '../../config/selectors';
 
 class SpaceHeader extends Component {
   static propTypes = {
@@ -53,7 +59,7 @@ class SpaceHeader extends Component {
         return (
           <Tooltip title={t('Save this space for offline use.')}>
             <IconButton
-              className={classes.button}
+              className={clsx(classes.button, SPACE_SAVE_ICON_CLASS)}
               color="inherit"
               onClick={this.handleSave}
             >
@@ -101,7 +107,10 @@ class SpaceHeader extends Component {
             'You are previewing this space. Any input or changes will not be saved.'
           )}
         >
-          <IconButton color="inherit" className={classes.button}>
+          <IconButton
+            color="inherit"
+            className={clsx(classes.button, SPACE_PREVIEW_ICON_CLASS)}
+          >
             <WarningIcon />
           </IconButton>
         </Tooltip>
@@ -142,7 +151,7 @@ class SpaceHeader extends Component {
           [classes.appBarShift]: openDrawer,
         })}
       >
-        <Toolbar disableGutters={!openDrawer}>
+        <Toolbar id={SPACE_TOOLBAR_ID} disableGutters={!openDrawer}>
           <IconButton
             color="inherit"
             aria-label="Open Drawer"

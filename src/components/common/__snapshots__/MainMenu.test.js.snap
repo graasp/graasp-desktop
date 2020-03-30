@@ -4,6 +4,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
 <WithStyles(ForwardRef(List))>
   <WithStyles(ForwardRef(MenuItem))
     button={true}
+    id="homeMenuItem"
     onClick={[Function]}
     selected={true}
   >
@@ -26,6 +27,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
         <WithStyles(ForwardRef(MenuItem))
           button={true}
           disabled={true}
+          id="spacesNearbyMenuItem"
           onClick={[Function]}
           selected={false}
         >
@@ -45,6 +47,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
   >
     <WithStyles(ForwardRef(MenuItem))
       button={true}
+      id="spacesNearbyMenuItem"
       onClick={[Function]}
       selected={false}
     >
@@ -68,6 +71,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
         <WithStyles(ForwardRef(MenuItem))
           button={true}
           disabled={true}
+          id="visitMenuItem"
           onClick={[Function]}
           selected={false}
         >
@@ -87,6 +91,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
   >
     <WithStyles(ForwardRef(MenuItem))
       button={true}
+      id="visitMenuItem"
       onClick={[Function]}
       selected={false}
     >
@@ -100,6 +105,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
   </Online>
   <WithStyles(ForwardRef(MenuItem))
     button={true}
+    id="loadMenuItem"
     onClick={[Function]}
     selected={false}
   >
@@ -112,6 +118,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
   </WithStyles(ForwardRef(MenuItem))>
   <WithStyles(ForwardRef(MenuItem))
     button={true}
+    id="settingsMenuItem"
     onClick={[Function]}
     selected={false}
   >
@@ -124,6 +131,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
   </WithStyles(ForwardRef(MenuItem))>
   <WithStyles(ForwardRef(MenuItem))
     button={true}
+    id="dashboardMenuItem"
     onClick={[Function]}
     selected={false}
   >
@@ -141,6 +149,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
 <WithStyles(ForwardRef(List))>
   <WithStyles(ForwardRef(MenuItem))
     button={true}
+    id="homeMenuItem"
     onClick={[Function]}
     selected={true}
   >
@@ -163,6 +172,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
         <WithStyles(ForwardRef(MenuItem))
           button={true}
           disabled={true}
+          id="spacesNearbyMenuItem"
           onClick={[Function]}
           selected={false}
         >
@@ -182,6 +192,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
   >
     <WithStyles(ForwardRef(MenuItem))
       button={true}
+      id="spacesNearbyMenuItem"
       onClick={[Function]}
       selected={false}
     >
@@ -205,6 +216,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
         <WithStyles(ForwardRef(MenuItem))
           button={true}
           disabled={true}
+          id="visitMenuItem"
           onClick={[Function]}
           selected={false}
         >
@@ -224,6 +236,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
   >
     <WithStyles(ForwardRef(MenuItem))
       button={true}
+      id="visitMenuItem"
       onClick={[Function]}
       selected={false}
     >
@@ -237,6 +250,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
   </Online>
   <WithStyles(ForwardRef(MenuItem))
     button={true}
+    id="loadMenuItem"
     onClick={[Function]}
     selected={false}
   >
@@ -249,6 +263,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
   </WithStyles(ForwardRef(MenuItem))>
   <WithStyles(ForwardRef(MenuItem))
     button={true}
+    id="settingsMenuItem"
     onClick={[Function]}
     selected={false}
   >
@@ -261,6 +276,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
   </WithStyles(ForwardRef(MenuItem))>
   <WithStyles(ForwardRef(MenuItem))
     button={true}
+    id="dashboardMenuItem"
     onClick={[Function]}
     selected={false}
   >

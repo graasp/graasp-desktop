@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import clsx from 'clsx';
 import { withTranslation } from 'react-i18next';
 import IconButton from '@material-ui/core/IconButton/IconButton';
 import SyncIcon from '@material-ui/icons/Sync';
@@ -9,6 +10,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core';
 import Styles from '../../Styles';
 import { syncSpace } from '../../actions/space';
+import { SPACE_SYNC_BUTTON_CLASS } from '../../config/selectors';
 
 class SyncButton extends Component {
   static propTypes = {
@@ -38,7 +40,7 @@ class SyncButton extends Component {
           >
             <IconButton
               color="inherit"
-              className={classes.button}
+              className={clsx(classes.button, SPACE_SYNC_BUTTON_CLASS)}
               onClick={this.handleSync}
             >
               <SyncIcon />

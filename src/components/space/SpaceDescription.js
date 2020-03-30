@@ -7,6 +7,11 @@ import Styles from '../../Styles';
 import './SpaceDescription.css';
 import Banner from '../common/Banner';
 import Text from '../common/Text';
+import {
+  SPACE_START_PREVIEW_BUTTON,
+  BANNER_WARNING_PREVIEW_ID,
+  SPACE_DESCRIPTION_ID,
+} from '../../config/selectors';
 
 const style = {
   fontSize: 'large',
@@ -15,6 +20,7 @@ const style = {
 const renderPreviewWarning = t => {
   return (
     <Banner
+      id={BANNER_WARNING_PREVIEW_ID}
       type="warning"
       text={t(
         'You are previewing this space. Any input or changes will not be saved.'
@@ -30,7 +36,7 @@ const SpaceDescription = ({ description, classes, start, saved }) => {
     <div className="SpaceDescription">
       <div>
         {saved ? null : renderPreviewWarning(t)}
-        <div className={classes.spaceDescription}>
+        <div className={classes.spaceDescription} id={SPACE_DESCRIPTION_ID}>
           <Text
             content={description}
             style={style}
@@ -38,6 +44,7 @@ const SpaceDescription = ({ description, classes, start, saved }) => {
           />
         </div>
         <Button
+          id={SPACE_START_PREVIEW_BUTTON}
           variant="contained"
           className={classes.button}
           onClick={start}

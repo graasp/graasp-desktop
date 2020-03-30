@@ -9,6 +9,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import Styles from '../../Styles';
+import { DRAWER_BUTTON_ID } from '../../config/selectors';
 
 const Header = ({ classes, handleDrawerOpen, isSidebarOpen }) => {
   return (
@@ -20,6 +21,7 @@ const Header = ({ classes, handleDrawerOpen, isSidebarOpen }) => {
     >
       <Toolbar disableGutters={!isSidebarOpen}>
         <IconButton
+          id={DRAWER_BUTTON_ID}
           color="inherit"
           aria-label="Open drawer"
           onClick={handleDrawerOpen}

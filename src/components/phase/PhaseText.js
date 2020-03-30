@@ -7,14 +7,18 @@ const style = {
   marginBottom: '2rem',
 };
 
-const PhaseText = ({ content }) => <Text content={content} style={style} />;
+const PhaseText = ({ content, id }) => (
+  <Text id={id} content={content} style={style} />
+);
 
 PhaseText.propTypes = {
   content: PropTypes.string,
+  id: PropTypes.string,
 };
 
 PhaseText.defaultProps = {
   content: '',
+  id: null,
 };
 
 export default PhaseText;

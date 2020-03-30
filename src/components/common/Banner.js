@@ -41,11 +41,11 @@ const renderIcon = type => {
   }
 };
 
-const Banner = ({ text, buttonText, classes, type }) => {
+const Banner = ({ text, buttonText, classes, type, id }) => {
   return (
     <div className={classes.banner}>
       <CssBaseline />
-      <Paper elevation={0} className={classes.paper}>
+      <Paper id={id} elevation={0} className={classes.paper}>
         <Box pt={2} pr={1} pb={1} pl={2}>
           <Grid container spacing={6} alignItems="center" wrap="nowrap">
             <Grid item>{renderIcon(type)}</Grid>
@@ -69,12 +69,14 @@ Banner.propTypes = {
     banner: PropTypes.string.isRequired,
     paper: PropTypes.string.isRequired,
   }).isRequired,
+  id: PropTypes.string,
 };
 
 Banner.defaultProps = {
   type: 'info',
   text: null,
   buttonText: null,
+  id: null,
 };
 
 export default withStyles(styles)(Banner);

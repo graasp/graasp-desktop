@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
+import clsx from 'clsx';
 import Tooltip from '@material-ui/core/Tooltip';
 import { connect } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton/IconButton';
@@ -8,6 +9,7 @@ import { withStyles } from '@material-ui/core';
 import ClearAllIcon from '@material-ui/icons/ClearAll';
 import Styles from '../../Styles';
 import { clearUserInput } from '../../actions';
+import { SPACE_CLEAR_BUTTON_CLASS } from '../../config/selectors';
 
 class ClearButton extends Component {
   static propTypes = {
@@ -30,7 +32,7 @@ class ClearButton extends Component {
       <Tooltip title={t('Clear all of the user input in this space.')}>
         <IconButton
           color="inherit"
-          className={classes.button}
+          className={clsx(classes.button, SPACE_CLEAR_BUTTON_CLASS)}
           onClick={this.handleClearUserInput}
         >
           <ClearAllIcon />

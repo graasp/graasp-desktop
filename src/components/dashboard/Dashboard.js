@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import classNames from 'classnames';
 import { withStyles } from '@material-ui/core';
 import _ from 'lodash';
 import { connect } from 'react-redux';
@@ -8,15 +7,6 @@ import { withRouter } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import Drawer from '@material-ui/core/Drawer';
-import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -25,11 +15,12 @@ import ActionBarChart from './ActionBarChart';
 import ActionLineChart from './ActionLineChart';
 import ActionTotalCount from './ActionTotalCount';
 import ActionPieChart from './ActionPieChart';
-import MainMenu from '../common/MainMenu';
 import ActionEditor from './ActionEditor';
 import Loader from '../common/Loader';
+import Main from '../common/Main';
 import { getDatabase } from '../../actions';
 import { FILTER_ALL_SPACE_ID } from '../../config/constants';
+import { DASHBOARD_MAIN_ID } from '../../config/selectors';
 
 const styles = theme => ({
   dashboard: { padding: theme.spacing(3) },
@@ -45,7 +36,6 @@ const styles = theme => ({
 
 export class Dashboard extends Component {
   state = {
-    open: false,
     spaceId: FILTER_ALL_SPACE_ID,
   };
 
@@ -92,14 +82,6 @@ export class Dashboard extends Component {
     const { dispatchGetDatabase } = this.props;
     dispatchGetDatabase();
   }
-
-  handleDrawerOpen = () => {
-    this.setState({ open: true });
-  };
-
-  handleDrawerClose = () => {
-    this.setState({ open: false });
-  };
 
   handleSpaceChange = event => {
     this.setState({ spaceId: event.target.value });
@@ -172,8 +154,8 @@ export class Dashboard extends Component {
   };
 
   render() {
-    const { classes, theme, t, database } = this.props;
-    const { open, spaceId } = this.state;
+    const { classes, t, database } = this.props;
+    const { spaceId } = this.state;
 
     if (!database) {
       return <Loader />;
@@ -184,76 +166,30 @@ export class Dashboard extends Component {
     }
 
     return (
-      <div className={classes.root}>
-        <CssBaseline />
-        <AppBar
-          position="fixed"
-          className={classNames(classes.appBar, {
-            [classes.appBarShift]: open,
-          })}
-        >
-          <Toolbar disableGutters={!open}>
-            <IconButton
-              color="inherit"
-              aria-label="Open drawer"
-              onClick={this.handleDrawerOpen}
-              className={classNames(classes.menuButton, open && classes.hide)}
-            >
-              <MenuIcon />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-        <Drawer
-          className={classes.drawer}
-          variant="persistent"
-          anchor="left"
-          open={open}
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-        >
-          <div className={classes.drawerHeader}>
-            <IconButton onClick={this.handleDrawerClose}>
-              {theme.direction === 'ltr' ? (
-                <ChevronLeftIcon />
-              ) : (
-                <ChevronRightIcon />
-              )}
-            </IconButton>
-          </div>
-          <Divider />
-          <MainMenu />
-        </Drawer>
-        <main
-          className={classNames(classes.content, {
-            [classes.contentShift]: open,
-          })}
-        >
-          <div className={classes.drawerHeader} />
-          <div className={classes.dashboard}>
-            <Grid
-              style={{ display: 'flex' }}
-              container
-              justify="center"
-              alignItems="center"
-              spacing={3}
-            >
-              <Grid item xs={12} sm={9}>
-                <Typography variant="h4" className={classes.screenTitle}>
-                  {t('Dashboard')}
-                </Typography>
-              </Grid>
-              <Grid item xs={12} sm={3}>
-                {this.renderSpaceFilter()}
-              </Grid>
+      <Main id={DASHBOARD_MAIN_ID}>
+        <div className={classes.dashboard}>
+          <Grid
+            style={{ display: 'flex' }}
+            container
+            justify="center"
+            alignItems="center"
+            spacing={3}
+          >
+            <Grid item xs={12} sm={9}>
+              <Typography variant="h4" className={classes.screenTitle}>
+                {t('Dashboard')}
+              </Typography>
             </Grid>
+            <Grid item xs={12} sm={3}>
+              {this.renderSpaceFilter()}
+            </Grid>
+          </Grid>
 
-            {this.renderActionWidgets()}
+          {this.renderActionWidgets()}
 
-            <ActionEditor spaceId={spaceId} />
-          </div>
-        </main>
-      </div>
+          <ActionEditor spaceId={spaceId} />
+        </div>
+      </Main>
     );
   }
 }
