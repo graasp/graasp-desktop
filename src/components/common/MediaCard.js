@@ -12,6 +12,7 @@ import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DeleteButton from '../space/DeleteButton';
+import ClearButton from '../space/ClearButton';
 import ExportButton from '../space/ExportButton';
 import SyncButton from '../space/SyncButton';
 import Text from './Text';
@@ -86,6 +87,7 @@ export const MediaCard = props => {
 
       {showActions && (
         <CardActions disableSpacing>
+          <ClearButton id={id} />
           <DeleteButton id={id} />
           <ExportButton space={space} />
           <SyncButton id={id} />

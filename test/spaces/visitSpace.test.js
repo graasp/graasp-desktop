@@ -162,24 +162,28 @@ const hasSavedSpaceHomeLayout = async (
 
 const checkUserInputInApp = async (client, { id, url, resources }) => {
   // @TODO differentiate apps with an appId
+  let data = '';
   if (resources && resources.length) {
-    switch (url) {
-      // text input app
-      case 'https://apps.graasp.eu/5acb589d0d5d9464081c2d46/5cde9891226a7d20a8a16697/latest/index.html': {
-        await client.frame(buildPhaseAppName(id));
-
-        const text = await client.getText('#inputTextField');
-        expect(text).to.include(resources[0].data);
-        break;
-      }
-      default: {
-        console.log(`app with url : ${url} is not handled`);
-      }
-    }
-
-    // reset client on parent frame
-    await client.frame(null);
+    /* eslint-disable-next-line prefer-destructuring */
+    ({ data } = resources[0]);
   }
+
+  switch (url) {
+    // text input app
+    case 'https://apps.graasp.eu/5acb589d0d5d9464081c2d46/5cde9891226a7d20a8a16697/latest/index.html': {
+      await client.frame(buildPhaseAppName(id));
+      const text = await client.getText('#inputTextField');
+
+      expect(text).to.equal(data);
+      break;
+    }
+    default: {
+      console.log(`app with url : ${url} is not handled`);
+    }
+  }
+
+  // reset client on parent frame
+  await client.frame(null);
 };
 
 // check layout of a given phase
