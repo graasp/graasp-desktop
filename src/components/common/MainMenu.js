@@ -35,6 +35,7 @@ import {
   SPACES_NEARBY_MENU_ITEM_ID,
   DASHBOARD_MENU_ITEM_ID,
   DEVELOPER_MENU_ITEM_ID,
+  SIGN_OUT_MENU_ITEM_ID,
 } from '../../config/selectors';
 import { signOut } from '../../actions/authentication';
 import { AUTHENTICATED } from '../../config/constants';
@@ -83,6 +84,7 @@ export class MainMenu extends Component {
     if (authenticated) {
       return (
         <MenuItem
+          id={SIGN_OUT_MENU_ITEM_ID}
           onClick={() => {
             this.handleSignOut();
           }}

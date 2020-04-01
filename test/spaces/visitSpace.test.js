@@ -33,9 +33,10 @@ import {
   SAVE_SPACE_PAUSE,
   TOOLTIP_FADE_OUT_PAUSE,
   DEFAULT_GLOBAL_TIMEOUT,
+  LOAD_PHASE_PAUSE,
 } from '../constants';
 import { userLogin } from '../userLogin.test';
-import { USER_GRAASP } from '../fixtures/credentials';
+import { USER_GRAASP } from '../fixtures/users';
 
 const PREVIEW = 'preview';
 const SAVED = 'saved';
@@ -274,7 +275,7 @@ const checkPhasesLayout = async (client, phases, mode, resources = []) => {
 
     // go to phase
     await client.click(liSelector);
-    await client.pause(2000);
+    await client.pause(LOAD_PHASE_PAUSE);
 
     // check phase content
     await hasPhaseLayout(client, phases[idx], mode, resources);

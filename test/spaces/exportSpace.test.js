@@ -18,7 +18,7 @@ import {
   DEFAULT_GLOBAL_TIMEOUT,
 } from '../constants';
 import { userLogin } from '../userLogin.test';
-import { USER_GRAASP } from '../fixtures/credentials';
+import { USER_GRAASP } from '../fixtures/users';
 
 describe('Export a space', function() {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);

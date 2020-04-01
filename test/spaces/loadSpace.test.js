@@ -20,8 +20,6 @@ import {
   SPACE_ATOMIC_STRUCTURE_PATH,
   SPACE_ATOMIC_STRUCTURE_WITH_CHANGES,
   SPACE_ATOMIC_STRUCTURE_WITH_CHANGES_PATH,
-  SPACE_ATOMIC_STRUCTURE_WITH_USER_INPUT,
-  SPACE_ATOMIC_STRUCTURE_WITH_USER_INPUT_PATH,
 } from '../fixtures/spaces';
 import { hasSavedSpaceLayout, visitAndSaveSpaceById } from './visitSpace.test';
 import {
@@ -35,7 +33,7 @@ import {
   DEFAULT_GLOBAL_TIMEOUT,
 } from '../constants';
 import { userLogin } from '../userLogin.test';
-import { USER_GRAASP } from '../fixtures/credentials';
+import { USER_GRAASP } from '../fixtures/users';
 
 /* eslint-disable-next-line import/prefer-default-export */
 export const loadSpaceById = async (client, space, filepath) => {
@@ -108,23 +106,24 @@ describe('Load Space Scenarios', function() {
       })
     );
 
-    it(
-      `Load space ${SPACE_ATOMIC_STRUCTURE_WITH_USER_INPUT.name} with user input`,
-      mochaAsync(async () => {
-        const { client } = app;
+    // @TODO this should work once actions are exported as well
+    // it(
+    //   `Load space ${SPACE_ATOMIC_STRUCTURE_WITH_USER_INPUT.name} with user input`,
+    //   mochaAsync(async () => {
+    //     const { client } = app;
 
-        await loadSpaceById(
-          client,
-          SPACE_ATOMIC_STRUCTURE_WITH_USER_INPUT,
-          SPACE_ATOMIC_STRUCTURE_WITH_USER_INPUT_PATH
-        );
+    //     await loadSpaceById(
+    //       client,
+    //       SPACE_ATOMIC_STRUCTURE_WITH_USER_INPUT,
+    //       SPACE_ATOMIC_STRUCTURE_WITH_USER_INPUT_PATH
+    //     );
 
-        await hasSavedSpaceLayout(
-          client,
-          SPACE_ATOMIC_STRUCTURE_WITH_USER_INPUT
-        );
-      })
-    );
+    //     await hasSavedSpaceLayout(
+    //       client,
+    //       SPACE_ATOMIC_STRUCTURE_WITH_USER_INPUT
+    //     );
+    //   })
+    // );
 
     it(
       `Cannot load already saved space of ${SPACE_ATOMIC_STRUCTURE.name}`,

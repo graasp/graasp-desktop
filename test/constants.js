@@ -15,3 +15,5 @@ export const LOAD_TAB_PAUSE = 2000;
 export const OPEN_DRAWER_PAUSE = 1000;
 export const SETTINGS_LOAD_PAUSE = 2000;
 export const LOGIN_PAUSE = 2000;
+export const SAVE_USER_INPUT_PAUSE = 2000;
+export const LOAD_PHASE_PAUSE = 2000;

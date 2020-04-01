@@ -20,6 +20,7 @@ import {
   DASHBOARD_MENU_ITEM_ID,
   DEVELOPER_MENU_ITEM_ID,
   DEVELOPER_MAIN_ID,
+  SIGN_OUT_MENU_ITEM_ID,
 } from '../src/config/selectors';
 import {
   LOAD_TAB_PAUSE,
@@ -27,7 +28,7 @@ import {
   OPEN_DRAWER_PAUSE,
 } from './constants';
 import { userLogin } from './userLogin.test';
-import { USER_GRAASP } from './fixtures/credentials';
+import { USER_GRAASP } from './fixtures/users';
 
 export const openDrawer = async client => {
   if (await client.isVisible(`#${DRAWER_BUTTON_ID}`)) {
@@ -68,6 +69,10 @@ export const menuGoToLoadSpace = async client => {
 
 export const menuGoToDashboard = async client => {
   await menuGoTo(client, DASHBOARD_MENU_ITEM_ID, DASHBOARD_MAIN_ID);
+};
+
+export const menuGoToSignOut = async client => {
+  await menuGoTo(client, SIGN_OUT_MENU_ITEM_ID);
 };
 
 export const menuGoToHome = async client => {

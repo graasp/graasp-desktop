@@ -28,8 +28,10 @@ import {
 import {
   openDrawer,
   menuGoToSettings,
+  menuGoToHome,
   menuGoToDeveloper,
   menuGoToSpacesNearby,
+  menuGoToSignOut,
 } from './menu.test';
 import {
   DEFAULT_LANGUAGE,
@@ -37,153 +39,252 @@ import {
   DEFAULT_DEVELOPER_MODE,
 } from '../src/config/constants';
 import { userLogin } from './userLogin.test';
-import { USER_GRAASP } from './fixtures/credentials';
+import { USER_GRAASP, USER_ALICE, USER_BOB } from './fixtures/users';
+import { settingsPerUser } from './fixtures/settings';
+
+const changeLanguage = async (client, value) => {
+  const lang = await client.getAttribute(
+    `#${LANGUAGE_SELECT_ID} input`,
+    'value'
+  );
+  if (lang !== value) {
+    await client.click(`#${LANGUAGE_SELECT_ID}`);
+    await client.pause(1000);
+    await client.click(`[data-value='${value}']`);
+    await client.pause(LOAD_TAB_PAUSE);
+  }
+};
+
+const toggleGeolocationEnabled = async (client, value) => {
+  const geolocationEnabledSelector = `#${GEOLOCATION_CONTROL_ID} input`;
+  const geolocationEnabled = await client.getAttribute(
+    geolocationEnabledSelector,
+    'value'
+  );
+  if (JSON.parse(geolocationEnabled) !== value) {
+    await client.click(geolocationEnabledSelector);
+    await client.pause(SETTINGS_LOAD_PAUSE);
+  }
+};
+
+const toggleDeveloperMode = async (client, value) => {
+  const developerSwitchSelector = `#${DEVELOPER_SWITCH_ID} input`;
+  const developerMode = await client.getAttribute(
+    developerSwitchSelector,
+    'value'
+  );
+  if (JSON.parse(developerMode) !== value) {
+    await client.click(developerSwitchSelector);
+    await client.pause(SETTINGS_LOAD_PAUSE);
+  }
+};
+
+const isLanguageSetTo = async (client, value) => {
+  const lang = await client.getAttribute(
+    `#${LANGUAGE_SELECT_ID} input`,
+    'value'
+  );
+  expect(lang).to.equal(value);
+};
+
+const isGeolocationEnabledSetTo = async (client, value) => {
+  const geolocationEnabled = await client.getAttribute(
+    `#${GEOLOCATION_CONTROL_ID} input`,
+    'value'
+  );
+  expect(JSON.parse(geolocationEnabled)).to.equal(value);
+};
+
+const isDeveloperModeSetTo = async (client, value) => {
+  const developer = await client.getAttribute(
+    `#${DEVELOPER_SWITCH_ID} input`,
+    'value'
+  );
+  expect(JSON.parse(developer)).to.equal(value);
+};
 
 describe('Settings Scenarios', function() {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  beforeEach(
-    mochaAsync(async () => {
-      app = await createApplication();
-      await userLogin(app.client, USER_GRAASP);
-    })
-  );
-
   afterEach(function() {
     return closeApplication(app);
   });
 
-  it(
-    'Settings default layout',
-    mochaAsync(async () => {
-      const { client } = app;
+  describe('Use graasp user', function() {
+    beforeEach(
+      mochaAsync(async () => {
+        app = await createApplication();
+        await userLogin(app.client, USER_GRAASP);
+      })
+    );
 
-      await menuGoToSettings(client);
+    it(
+      'Settings default layout',
+      mochaAsync(async () => {
+        const { client } = app;
 
-      const lang = await client.getAttribute(
-        `#${LANGUAGE_SELECT_ID} input`,
-        'value'
-      );
-      expect(lang).to.equal(DEFAULT_LANGUAGE);
+        await menuGoToSettings(client);
 
-      const geolocationEnabled = await client.getAttribute(
-        `#${GEOLOCATION_CONTROL_ID} input`,
-        'value'
-      );
-      expect(JSON.parse(geolocationEnabled)).to.equal(
-        DEFAULT_GEOLOCATION_ENABLED
-      );
+        await isLanguageSetTo(client, DEFAULT_LANGUAGE);
 
-      const developer = await client.getAttribute(
-        `#${DEVELOPER_SWITCH_ID} input`,
-        'value'
-      );
-      expect(JSON.parse(developer)).to.equal(DEFAULT_DEVELOPER_MODE);
-    })
-  );
+        await isGeolocationEnabledSetTo(client, DEFAULT_GEOLOCATION_ENABLED);
 
-  it(
-    'Enable Developer Mode activates corresponding menu item',
-    mochaAsync(async () => {
-      const { client } = app;
-      const developerSwitchSelector = `#${DEVELOPER_SWITCH_ID} input`;
+        await isDeveloperModeSetTo(client, DEFAULT_DEVELOPER_MODE);
+      })
+    );
 
-      // check developer mode tab doesn't exist
-      await openDrawer(client);
-      await expectElementToNotExist(client, `#${DEVELOPER_MENU_ITEM_ID}`);
+    it(
+      'Enable Developer Mode activates corresponding menu item',
+      mochaAsync(async () => {
+        const { client } = app;
 
-      // enable developer mode, check tab exist
-      await menuGoToSettings(client);
-      await client.click(developerSwitchSelector);
-      await client.pause(SETTINGS_LOAD_PAUSE);
+        // check developer mode tab doesn't exist
+        await openDrawer(client);
+        await expectElementToNotExist(client, `#${DEVELOPER_MENU_ITEM_ID}`);
 
-      await menuGoToDeveloper(client);
-    })
-  );
+        // enable developer mode, check tab exist
+        await menuGoToSettings(client);
+        await toggleDeveloperMode(client, true);
 
-  it(
-    'Enable Geolocation displays Spaces Nearby',
-    mochaAsync(async () => {
-      const { client } = app;
-      const geolocationEnabledSelector = `#${GEOLOCATION_CONTROL_ID} input`;
+        await menuGoToDeveloper(client);
+      })
+    );
 
-      // check geolocation button shows in Spaces Nearby
-      await menuGoToSpacesNearby(client);
-      await expectElementToExist(client, `#${GEOLOCATION_CONTROL_ID}`);
+    it(
+      'Enable Geolocation displays Spaces Nearby',
+      mochaAsync(async () => {
+        const { client } = app;
 
-      // enable spaces nearby
-      await menuGoToSettings(client);
-      await client.click(geolocationEnabledSelector);
-      await client.pause(SETTINGS_LOAD_PAUSE);
+        // check geolocation button shows in Spaces Nearby
+        await menuGoToSpacesNearby(client);
+        await expectElementToExist(client, `#${GEOLOCATION_CONTROL_ID}`);
 
-      await menuGoToSpacesNearby(client);
+        // enable spaces nearby
+        await menuGoToSettings(client);
+        await toggleGeolocationEnabled(client, true);
 
-      // make sure spaces are loaded
-      await client.pause(LOAD_SPACE_PAUSE);
+        await menuGoToSpacesNearby(client);
 
-      // geolocation button should not exist
-      await expectElementToNotExist(client, `#${GEOLOCATION_CONTROL_ID}`);
+        // make sure spaces are loaded
+        await client.pause(LOAD_SPACE_PAUSE);
 
-      // spaces should be displayed
-      await expectAnyElementToExist(client, [
-        `.${SPACE_CARD_CLASS}`,
-        `#${SPACE_NOT_AVAILABLE_TEXT_CLASS}`,
-      ]);
-    })
-  );
+        // geolocation button should not exist
+        await expectElementToNotExist(client, `#${GEOLOCATION_CONTROL_ID}`);
 
-  it(
-    'Change Language updates application with translations (settings only)',
-    mochaAsync(async () => {
-      const { client } = app;
+        // spaces should be displayed
+        await expectAnyElementToExist(client, [
+          `.${SPACE_CARD_CLASS}`,
+          `#${SPACE_NOT_AVAILABLE_TEXT_CLASS}`,
+        ]);
+      })
+    );
 
-      // check false setting
-      await menuGoToSettings(client);
+    it(
+      'Change Language updates application with translations (settings only)',
+      mochaAsync(async () => {
+        const { client } = app;
 
-      // check settings screen displays in english
-      const settingsTitle = await client.getText(`#${SETTINGS_MAIN_ID} h5`);
-      expect(settingsTitle).to.equal(i18n.t('Settings'));
-      const languageSelectTitle = await client.getText(
-        `#${LANGUAGE_SELECT_ID} label`
-      );
-      expect(languageSelectTitle).to.equal(i18n.t('Language'));
-      const developerSwitchTitle = await client.getText(
-        `#${DEVELOPER_SWITCH_ID}`
-      );
-      expect(developerSwitchTitle).to.equal(i18n.t('Developer Mode'));
-      const geolocationEnabledControlTitle = await client.getText(
-        `#${GEOLOCATION_CONTROL_ID}`
-      );
-      expect(geolocationEnabledControlTitle).to.equal(
-        i18n.t('Geolocation Enabled')
-      );
+        // check false setting
+        await menuGoToSettings(client);
 
-      await client.click(`#${LANGUAGE_SELECT_ID}`);
-      await client.pause(1000);
-      await client.click(`[data-value='fr']`);
-      await client.pause(LOAD_TAB_PAUSE);
+        // check settings screen displays in english
+        const settingsTitle = await client.getText(`#${SETTINGS_MAIN_ID} h5`);
+        expect(settingsTitle).to.equal(i18n.t('Settings'));
+        const languageSelectTitle = await client.getText(
+          `#${LANGUAGE_SELECT_ID} label`
+        );
+        expect(languageSelectTitle).to.equal(i18n.t('Language'));
+        const developerSwitchTitle = await client.getText(
+          `#${DEVELOPER_SWITCH_ID}`
+        );
+        expect(developerSwitchTitle).to.equal(i18n.t('Developer Mode'));
+        const geolocationEnabledControlTitle = await client.getText(
+          `#${GEOLOCATION_CONTROL_ID}`
+        );
+        expect(geolocationEnabledControlTitle).to.equal(
+          i18n.t('Geolocation Enabled')
+        );
 
-      // update i18n locally
-      await i18n.changeLanguage('fr');
+        await changeLanguage(client, 'fr');
+        // update i18n locally
+        await i18n.changeLanguage('fr');
 
-      // check settings screen displays in english
-      const settingsTitleFr = await client.getText(`#${SETTINGS_MAIN_ID} h5`);
-      expect(settingsTitleFr).to.equal(i18n.t('Settings'));
-      const languageSelectTitleFr = await client.getText(
-        `#${LANGUAGE_SELECT_ID} label`
-      );
-      expect(languageSelectTitleFr).to.equal(i18n.t('Language'));
-      const developerSwitchTitleFr = await client.getText(
-        `#${DEVELOPER_SWITCH_ID}`
-      );
-      expect(developerSwitchTitleFr).to.equal(i18n.t('Developer Mode'));
-      const geolocationEnabledControlTitleFr = await client.getText(
-        `#${GEOLOCATION_CONTROL_ID}`
-      );
-      expect(geolocationEnabledControlTitleFr).to.equal(
-        i18n.t('Geolocation Enabled')
-      );
-    })
-  );
+        // check settings screen displays in english
+        const settingsTitleFr = await client.getText(`#${SETTINGS_MAIN_ID} h5`);
+        expect(settingsTitleFr).to.equal(i18n.t('Settings'));
+        const languageSelectTitleFr = await client.getText(
+          `#${LANGUAGE_SELECT_ID} label`
+        );
+        expect(languageSelectTitleFr).to.equal(i18n.t('Language'));
+        const developerSwitchTitleFr = await client.getText(
+          `#${DEVELOPER_SWITCH_ID}`
+        );
+        expect(developerSwitchTitleFr).to.equal(i18n.t('Developer Mode'));
+        const geolocationEnabledControlTitleFr = await client.getText(
+          `#${GEOLOCATION_CONTROL_ID}`
+        );
+        expect(geolocationEnabledControlTitleFr).to.equal(
+          i18n.t('Geolocation Enabled')
+        );
+      })
+    );
+  });
+
+  describe('Use multiple users', function() {
+    beforeEach(
+      mochaAsync(async () => {
+        app = await createApplication();
+      })
+    );
+
+    it(
+      'Settings are saved for each user',
+      mochaAsync(async () => {
+        const { client } = app;
+        const users = [USER_GRAASP, USER_ALICE, USER_BOB];
+        for (const user of users) {
+          const { lang, developerMode, geolocationEnabled } = settingsPerUser[
+            user.name
+          ];
+
+          await userLogin(client, user);
+
+          await menuGoToSettings(client);
+
+          // change settings to user's preferences
+          await changeLanguage(client, lang);
+          await toggleDeveloperMode(client, developerMode);
+          await toggleGeolocationEnabled(client, geolocationEnabled);
+
+          await menuGoToHome(client);
+
+          // check settings are saved
+          await menuGoToSettings(client);
+          await isLanguageSetTo(client, lang);
+          await isDeveloperModeSetTo(client, developerMode);
+          await isGeolocationEnabledSetTo(client, geolocationEnabled);
+
+          await menuGoToSignOut(client);
+        }
+
+        // check settings are saved after logout
+        for (const user of users) {
+          const { lang, developerMode, geolocationEnabled } = settingsPerUser[
+            user.name
+          ];
+
+          await userLogin(client, user);
+
+          await menuGoToSettings(client);
+
+          await isLanguageSetTo(client, lang);
+          await isDeveloperModeSetTo(client, developerMode);
+          await isGeolocationEnabledSetTo(client, geolocationEnabled);
+
+          await menuGoToSignOut(client);
+        }
+      })
+    );
+  });
 });

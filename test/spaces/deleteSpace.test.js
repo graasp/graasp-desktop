@@ -13,7 +13,7 @@ import { SPACE_ATOMIC_STRUCTURE } from '../fixtures/spaces';
 import { visitAndSaveSpaceById } from './visitSpace.test';
 import { DELETE_SPACE_PAUSE, DEFAULT_GLOBAL_TIMEOUT } from '../constants';
 import { userLogin } from '../userLogin.test';
-import { USER_GRAASP } from '../fixtures/credentials';
+import { USER_GRAASP } from '../fixtures/users';
 
 describe('Delete a space', function() {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);

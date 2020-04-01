@@ -17,7 +17,7 @@ import {
 } from './visitSpace.test';
 import { OPEN_SAVED_SPACE_PAUSE, DEFAULT_GLOBAL_TIMEOUT } from '../constants';
 import { userLogin } from '../userLogin.test';
-import { USER_GRAASP } from '../fixtures/credentials';
+import { USER_GRAASP } from '../fixtures/users';
 
 describe('Save a space', function() {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
