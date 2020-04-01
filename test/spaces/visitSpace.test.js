@@ -24,6 +24,7 @@ import {
   buildSpaceCardId,
   SPACE_DESCRIPTION_EXPAND_BUTTON_CLASS,
   buildSpaceCardDescriptionId,
+  buildPhaseAppName,
 } from '../../src/config/selectors';
 import { hasMath } from '../../src/utils/math';
 import { SPACE_ATOMIC_STRUCTURE, SPACE_APOLLO_11 } from '../fixtures/spaces';
@@ -53,7 +54,7 @@ const testTextOfElement = async (client, selector, text) => {
   }
 };
 
-const visitSpaceById = async (client, id) => {
+export const visitSpaceById = async (client, id) => {
   await menuGoToVisitSpace(client);
 
   // input space id
@@ -66,7 +67,7 @@ const visitSpaceById = async (client, id) => {
   await client.pause(VISIT_SPACE_PAUSE);
 };
 
-const visitAndSaveSpaceById = async (client, id) => {
+export const visitAndSaveSpaceById = async (client, id) => {
   await visitSpaceById(client, id);
 
   // save space
@@ -77,7 +78,7 @@ const visitAndSaveSpaceById = async (client, id) => {
 };
 
 // check home phase of given space when preview
-const hasPreviewSpaceHomeLayout = async (
+export const hasPreviewSpaceHomeLayout = async (
   client,
   { name: spaceName, description: spaceDescription }
 ) => {
@@ -115,7 +116,7 @@ const hasPreviewSpaceHomeLayout = async (
 };
 
 // check home phase of given space when saved
-const hasSavedSpaceHomeLayout = async (
+export const hasSavedSpaceHomeLayout = async (
   client,
   { name: spaceName, description: spaceDescription }
 ) => {
@@ -162,35 +163,40 @@ const hasSavedSpaceHomeLayout = async (
   expect(previewButton.toLowerCase()).to.equal('start');
 };
 
-// const checkUserInputInApp = async (client, { id, url }, resources = []) => {
-//   // @TODO differentiate apps with an appId
-//   let data = '';
-//   if (resources.length) {
-//     /* eslint-disable-next-line prefer-destructuring */
-//     ({ data } = resources[0]);
-//   }
+const checkUserInputInApp = async (client, { id, url }, resources = []) => {
+  // @TODO differentiate apps with an appId
+  let data = '';
+  if (resources.length) {
+    /* eslint-disable-next-line prefer-destructuring */
+    ({ data } = resources[0]);
+  }
 
-//   switch (url) {
-//     // text input app
-//     case 'https://apps.graasp.eu/5acb589d0d5d9464081c2d46/5cde9891226a7d20a8a16697/latest/index.html': {
-//       await client.frame(buildPhaseAppName(id));
-//       const text = await client.getText('#inputTextField');
+  switch (url) {
+    // text input app
+    case 'https://apps.graasp.eu/5acb589d0d5d9464081c2d46/5cde9891226a7d20a8a16697/latest/index.html': {
+      await client.frame(buildPhaseAppName(id));
+      const text = await client.getText('#inputTextField');
 
-//       expect(text).to.equal(data);
-//       break;
-//     }
-//     default: {
-//       console.log(`app with url : ${url} is not handled`);
-//     }
-//   }
+      expect(text).to.equal(data);
+      break;
+    }
+    default: {
+      console.log(`app with url : ${url} is not handled`);
+    }
+  }
 
-//   // reset client on parent frame
-//   await client.frame(null);
-// };
+  // reset client on parent frame
+  await client.frame(null);
+};
 
 // check layout of a given phase
 // @TODO check user input - have access to iframe
-const hasPhaseLayout = async (client, { description, items }, mode) => {
+const hasPhaseLayout = async (
+  client,
+  { description, items },
+  mode,
+  resources = []
+) => {
   // space description if not empty
   // get innerHTML to retrieve html tags as well
   // remove space to handle trimmed spaces
@@ -199,7 +205,15 @@ const hasPhaseLayout = async (client, { description, items }, mode) => {
   }
 
   // eslint-disable-block no-await-in-loop
-  for (const { id, content, mimeType, category, url, asset } of items) {
+  for (const {
+    id,
+    content,
+    mimeType,
+    category,
+    url,
+    asset,
+    appInstance,
+  } of items) {
     const itemSelector = `[data-id="${id}"]`;
 
     // check item exists
@@ -237,13 +251,20 @@ const hasPhaseLayout = async (client, { description, items }, mode) => {
           case PREVIEW: {
             const iframe = await client.getHTML(`${itemSelector} iframe`);
             expect(iframe).to.include(url);
-            // await checkUserInputInApp(client, { id, url }, resources);
+            await checkUserInputInApp(client, { id, url });
             break;
           }
           case SAVED: {
             const iframe = await client.getHTML(`${itemSelector} iframe`);
             expect(iframe).to.include(asset);
-            // await checkUserInputInApp(client, { id, url }, resources);
+            if (appInstance) {
+              const { id: appInstanceId } = appInstance;
+              const filteredResources = resources.filter(
+                ({ appInstance: resourcesAppInstanceId }) =>
+                  resourcesAppInstanceId === appInstanceId
+              );
+              await checkUserInputInApp(client, { id, url }, filteredResources);
+            }
             break;
           }
           default:
@@ -283,9 +304,9 @@ const checkPhasesLayout = async (client, phases, mode, resources = []) => {
 };
 
 // check space layout when saved
-const hasSavedSpaceLayout = async (
+export const hasSavedSpaceLayout = async (
   client,
-  { phases, description, name },
+  { space: { phases, description, name } },
   resources = []
 ) => {
   await hasSavedSpaceHomeLayout(client, { description, name });
@@ -293,19 +314,18 @@ const hasSavedSpaceLayout = async (
 };
 
 // check space layout when preview
-const hasPreviewSpaceLayout = async (
+export const hasPreviewSpaceLayout = async (
   client,
-  { phases, description, name },
-  resources = []
+  { space: { phases, description, name }, resources = [] }
 ) => {
   await hasPreviewSpaceHomeLayout(client, { description, name });
   await checkPhasesLayout(client, phases, PREVIEW, resources);
 };
 
 // check a space card layout
-const checkSpaceCardLayout = async (
+export const checkSpaceCardLayout = async (
   client,
-  { id, name: spaceName, description: spaceDescription }
+  { space: { id, name: spaceName, description: spaceDescription } }
 ) => {
   const spaceSelector = `#${buildSpaceCardId(id)}`;
   const spaceCard = await client.element(spaceSelector);
@@ -366,25 +386,18 @@ describe('Visit Space Scenarios', function() {
   const spaces = [SPACE_APOLLO_11, SPACE_ATOMIC_STRUCTURE];
 
   spaces.forEach(function(space) {
+    const {
+      space: { id, name },
+    } = space;
     it(
-      `Visit space ${space.name} (${space.id})`,
+      `Visit space ${name} (${id})`,
       mochaAsync(async () => {
         const { client } = app;
 
-        await visitSpaceById(client, space.id);
+        await visitSpaceById(client, id);
 
         await hasPreviewSpaceLayout(client, space);
       })
     );
   });
 });
-
-export {
-  hasPreviewSpaceHomeLayout,
-  checkSpaceCardLayout,
-  hasPreviewSpaceLayout,
-  hasSavedSpaceLayout,
-  hasSavedSpaceHomeLayout,
-  visitSpaceById,
-  visitAndSaveSpaceById,
-};

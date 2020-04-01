@@ -52,7 +52,9 @@ describe('Save User Input in a space', function() {
       mochaAsync(async () => {
         const { client } = app;
         const text = 'user input';
-        const { id, phases } = SPACE_ATOMIC_STRUCTURE;
+        const {
+          space: { id, phases },
+        } = SPACE_ATOMIC_STRUCTURE;
         const { id: textInputAppId } = phases[0].items[1];
 
         // load space with user input
@@ -97,7 +99,9 @@ describe('Save User Input in a space', function() {
         const { client } = app;
         const users = [USER_GRAASP, USER_ALICE, USER_BOB];
 
-        const { id, phases } = SPACE_ATOMIC_STRUCTURE;
+        const {
+          space: { id, phases },
+        } = SPACE_ATOMIC_STRUCTURE;
         const { id: textInputAppId } = phases[0].items[1];
 
         for (const [index, user] of users.entries()) {

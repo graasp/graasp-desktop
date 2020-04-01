@@ -26,7 +26,9 @@ describe('Delete a space', function() {
   it(
     'Deleting from card removes space from Saved Spaces',
     mochaAsync(async () => {
-      const { id } = SPACE_ATOMIC_STRUCTURE;
+      const {
+        space: { id },
+      } = SPACE_ATOMIC_STRUCTURE;
 
       app = await createApplication({ showMessageDialogResponse: 1 });
 
@@ -52,7 +54,9 @@ describe('Delete a space', function() {
   it(
     'Deleting from toolbar removes space from Saved Spaces',
     mochaAsync(async () => {
-      const { id } = SPACE_ATOMIC_STRUCTURE;
+      const {
+        space: { id },
+      } = SPACE_ATOMIC_STRUCTURE;
 
       app = await createApplication({ showMessageDialogResponse: 1 });
 
@@ -74,7 +78,9 @@ describe('Delete a space', function() {
   it(
     'Cancel deleting keeps space in Saved Spaces',
     mochaAsync(async () => {
-      const { id } = SPACE_ATOMIC_STRUCTURE;
+      const {
+        space: { id },
+      } = SPACE_ATOMIC_STRUCTURE;
 
       app = await createApplication({ showMessageDialogResponse: 0 });
 

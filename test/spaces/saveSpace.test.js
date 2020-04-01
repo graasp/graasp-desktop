@@ -37,7 +37,9 @@ describe('Save a space', function() {
     'Saving a space adds it to Saved Spaces',
     mochaAsync(async () => {
       const { client } = app;
-      const { id, description, name } = SPACE_ATOMIC_STRUCTURE;
+      const {
+        space: { id, description, name },
+      } = SPACE_ATOMIC_STRUCTURE;
 
       await visitAndSaveSpaceById(client, id);
 

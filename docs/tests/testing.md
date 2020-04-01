@@ -52,6 +52,11 @@ When you test an online space against test data, make sure local data are correc
 
 Any space data (JSON data, .zip file, etc) are saved in `test/fixtures/spaces`.
 
+To test spaces containing user-related data you need to either:
+
+- build the space during the test so that it contain the same generated id for your user
+- mock users in the database at the beginning of the app
+
 ## Write tests
 
 **Data existance:** Since the application launched by spectron doesn't save any data, each time an application is started, it is based on a fresh and default database.

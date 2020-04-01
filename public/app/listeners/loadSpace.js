@@ -15,7 +15,11 @@ const {
   isFileAvailable,
   clean,
 } = require('../utilities');
-const { SPACES_COLLECTION } = require('../db');
+const {
+  SPACES_COLLECTION,
+  APP_INSTANCE_RESOURCES_COLLECTION,
+  ACTIONS_COLLECTION,
+} = require('../db');
 
 // use promisified fs
 const fsPromises = fs.promises;
@@ -62,7 +66,7 @@ const loadSpace = (mainWindow, db) => async (event, { fileLocation }) => {
     }
 
     const spaceString = await fsPromises.readFile(spacePath);
-    const space = JSON.parse(spaceString);
+    const { space, resources = [], actions = [] } = JSON.parse(spaceString);
     const finalPath = `${VAR_FOLDER}/${id}`;
 
     // we need to wrap this operation to avoid errors in windows
@@ -76,8 +80,19 @@ const loadSpace = (mainWindow, db) => async (event, { fileLocation }) => {
       return clean(extractPath);
     }
 
-    // write to database
+    // write space to database
     spaces.push(space).write();
+
+    // write resources to database
+    db.get(APP_INSTANCE_RESOURCES_COLLECTION)
+      .push(...resources)
+      .write();
+
+    // write actions to database
+    // @TODO remove duplicate actions?
+    db.get(ACTIONS_COLLECTION)
+      .push(...actions)
+      .write();
 
     return mainWindow.webContents.send(LOADED_SPACE_CHANNEL);
   } catch (err) {

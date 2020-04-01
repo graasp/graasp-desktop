@@ -23,12 +23,13 @@ class ExportButton extends Component {
     }).isRequired,
     dispatchExportSpace: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
+    userId: PropTypes.string.isRequired,
   };
 
   handleExport = () => {
-    const { space, dispatchExportSpace } = this.props;
+    const { space, dispatchExportSpace, userId } = this.props;
     const { id, name } = space;
-    dispatchExportSpace(id, name);
+    dispatchExportSpace(id, name, userId);
   };
 
   render() {
@@ -46,11 +47,19 @@ class ExportButton extends Component {
     );
   }
 }
+
+const mapStateToProps = ({ authentication }) => ({
+  userId: authentication.getIn(['user', 'userId']),
+});
+
 const mapDispatchToProps = {
   dispatchExportSpace: exportSpace,
 };
 
-const ConnectedComponent = connect(null, mapDispatchToProps)(ExportButton);
+const ConnectedComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ExportButton);
 
 const StyledComponent = withStyles(Styles, { withTheme: true })(
   ConnectedComponent

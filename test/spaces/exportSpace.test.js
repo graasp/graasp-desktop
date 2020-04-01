@@ -31,7 +31,9 @@ describe('Export a space', function() {
   it(
     'Exporting from toolbar saves space in local computer',
     mochaAsync(async () => {
-      const { id } = SPACE_ATOMIC_STRUCTURE;
+      const {
+        space: { id },
+      } = SPACE_ATOMIC_STRUCTURE;
 
       const filepath = `${EXPORT_FILEPATH}_${createRandomString()}`;
 
@@ -53,7 +55,9 @@ describe('Export a space', function() {
   it(
     'Exporting from card saves space in local computer',
     mochaAsync(async () => {
-      const { id } = SPACE_ATOMIC_STRUCTURE;
+      const {
+        space: { id },
+      } = SPACE_ATOMIC_STRUCTURE;
 
       const filepath = `${EXPORT_FILEPATH}_${createRandomString()}`;
       app = await createApplication({ showSaveDialogResponse: filepath });
