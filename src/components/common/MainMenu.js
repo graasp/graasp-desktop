@@ -144,6 +144,30 @@ export class MainMenu extends Component {
     );
   };
 
+  renderDashboard = () => {
+    const {
+      authenticated,
+      match: { path },
+      t,
+    } = this.props;
+    if (authenticated) {
+      return (
+        <MenuItem
+          id={DASHBOARD_MENU_ITEM_ID}
+          onClick={() => this.handleClick(DASHBOARD_PATH)}
+          button
+          selected={path === DASHBOARD_PATH}
+        >
+          <ListItemIcon>
+            <ShowChartIcon />
+          </ListItemIcon>
+          <ListItemText primary={t('Dashboard')} />
+        </MenuItem>
+      );
+    }
+    return null;
+  };
+
   renderAuthenticatedMenu() {
     const {
       authenticated,
@@ -240,17 +264,7 @@ export class MainMenu extends Component {
           </ListItemIcon>
           <ListItemText primary={t('Settings')} />
         </MenuItem>
-        <MenuItem
-          id={DASHBOARD_MENU_ITEM_ID}
-          onClick={() => this.handleClick(DASHBOARD_PATH)}
-          button
-          selected={path === DASHBOARD_PATH}
-        >
-          <ListItemIcon>
-            <ShowChartIcon />
-          </ListItemIcon>
-          <ListItemText primary={t('Dashboard')} />
-        </MenuItem>
+        {this.renderDashboard()}
         {this.renderDeveloperMode()}
         {this.renderSignOut()}
       </List>

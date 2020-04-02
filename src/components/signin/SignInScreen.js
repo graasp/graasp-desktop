@@ -1,31 +1,23 @@
 import React, { Component } from 'react';
-import classNames from 'classnames';
 import { withStyles } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import IconButton from '@material-ui/core/IconButton';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
-import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
 import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import MenuIcon from '@material-ui/icons/Menu';
-import logo from '../../assets/icon.png';
-import MainMenu from '../common/MainMenu';
+import logo from '../../logo.svg';
 import Styles from '../../Styles';
 import { signIn, signOut } from '../../actions/authentication';
 import { AUTHENTICATED } from '../../config/constants';
 import { HOME_PATH } from '../../config/paths';
+import Main from '../common/Main';
 import {
   LOGIN_USERNAME_INPUT_ID,
   LOGIN_BUTTON_ID,
+  SIGN_IN_MAIN_ID,
 } from '../../config/selectors';
 
 const CssTextField = withStyles({
@@ -55,15 +47,8 @@ const CssTextField = withStyles({
 
 class SignInScreen extends Component {
   state = {
-    open: false,
     username: '',
     usernameIsEmpty: true,
-  };
-
-  styles = {
-    root: {
-      background: '#504FD2',
-    },
   };
 
   static propTypes = {
@@ -82,9 +67,15 @@ class SignInScreen extends Component {
       input: PropTypes.string.isRequired,
       button: PropTypes.string.isRequired,
       dividerColor: PropTypes.string.isRequired,
+      fullScreen: PropTypes.string.isRequired,
     }).isRequired,
     theme: PropTypes.shape({
       direction: PropTypes.string.isRequired,
+      palette: PropTypes.shape({
+        primary: PropTypes.shape({
+          main: PropTypes.string.isRequired,
+        }).isRequired,
+      }).isRequired,
     }).isRequired,
     history: PropTypes.shape({
       replace: PropTypes.func.isRequired,
@@ -120,14 +111,6 @@ class SignInScreen extends Component {
     }
   };
 
-  handleDrawerOpen = () => {
-    this.setState({ open: true });
-  };
-
-  handleDrawerClose = () => {
-    this.setState({ open: false });
-  };
-
   handleSignIn = () => {
     const { username } = this.state;
     const { dispatchSignIn } = this.props;
@@ -159,99 +142,58 @@ class SignInScreen extends Component {
   };
 
   render() {
-    const { classes, theme, t } = this.props;
-    const { open, username, usernameIsEmpty } = this.state;
+    const {
+      classes,
+      t,
+      theme: {
+        palette: {
+          primary: { main },
+        },
+      },
+    } = this.props;
+    const { username, usernameIsEmpty } = this.state;
 
     return (
-      <div className={classes.root} style={this.styles.root}>
-        <CssBaseline />
-        <AppBar
-          position="fixed"
-          className={classNames(classes.appBar, {
-            [classes.appBarShift]: open,
-          })}
-        >
-          <Toolbar disableGutters={!open}>
-            <IconButton
-              color="inherit"
-              aria-label="Open drawer"
-              onClick={this.handleDrawerOpen}
-              className={classNames(classes.menuButton, open && classes.hide)}
-            >
-              <MenuIcon />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-        <Drawer
-          className={classes.drawer}
-          variant="persistent"
-          anchor="left"
-          open={open}
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-        >
-          <div className={classes.drawerHeader}>
-            <IconButton onClick={this.handleDrawerClose}>
-              {theme.direction === 'ltr' ? (
-                <ChevronLeftIcon />
-              ) : (
-                <ChevronRightIcon />
-              )}
-            </IconButton>
-          </div>
-          <Divider />
-          <MainMenu />
-        </Drawer>
-        <main
-          className={classNames('Main', classes.content, {
-            [classes.contentShift]: open,
-          })}
-        >
-          <div className={classes.drawerHeader} />
-          <FormControl>
-            <img
-              src={logo}
-              alt="graasp logo"
-              width="70%"
-              style={{ margin: 'auto' }}
-            />
-            <CssTextField
-              id={LOGIN_USERNAME_INPUT_ID}
-              label={t('Username')}
-              variant="outlined"
-              onChange={this.handleUsername}
-              onKeyPress={this.handleKeyPressed}
-              value={username}
-            />
-            <br />
-            <Button
-              id={LOGIN_BUTTON_ID}
-              variant="contained"
-              onClick={this.handleSignIn}
-              color="secondary"
-              className={classes.button}
-              disabled={usernameIsEmpty}
-            >
-              {t('Sign In')}
-            </Button>
+      <Main id={SIGN_IN_MAIN_ID} style={{ background: main }} fullScreen>
+        <FormControl>
+          <img
+            src={logo}
+            alt="graasp logo"
+            width="95%"
+            style={{ padding: '0px 45px' }}
+          />
+          <CssTextField
+            id={LOGIN_USERNAME_INPUT_ID}
+            label={t('Username')}
+            variant="outlined"
+            onChange={this.handleUsername}
+            onKeyPress={this.handleKeyPressed}
+            value={username}
+          />
+          <br />
+          <Button
+            id={LOGIN_BUTTON_ID}
+            variant="contained"
+            onClick={this.handleSignIn}
+            color="secondary"
+            className={classes.button}
+            disabled={usernameIsEmpty}
+          >
+            {t('Sign In')}
+          </Button>
 
-            <Divider
-              variant="middle"
-              classes={{ root: classes.dividerColor }}
-            />
+          <Divider variant="middle" classes={{ root: classes.dividerColor }} />
 
-            <Button
-              variant="contained"
-              onClick={() => this.handleAnonymousSignIn(true)}
-              color="secondary"
-              className={classes.button}
-            >
-              {t('Sign In as Guest')}
-            </Button>
-          </FormControl>
-        </main>
-      </div>
+          <Button
+            variant="contained"
+            onClick={() => this.handleAnonymousSignIn(true)}
+            color="secondary"
+            className={classes.button}
+          >
+            {t('Sign In as Guest')}
+          </Button>
+        </FormControl>
+      </Main>
     );
   }
 }

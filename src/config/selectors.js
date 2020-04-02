@@ -18,6 +18,7 @@ export const DASHBOARD_MAIN_ID = 'dashboardMain';
 export const DEVELOPER_MENU_ITEM_ID = 'developerMenuItem';
 export const DEVELOPER_MAIN_ID = 'developerMain';
 export const SIGN_OUT_MENU_ITEM_ID = 'signOutMenuItem';
+export const SIGN_IN_MAIN_ID = 'signInMain';
 
 export const PHASE_MENU_LIST_ID = 'phaseMenuList';
 
