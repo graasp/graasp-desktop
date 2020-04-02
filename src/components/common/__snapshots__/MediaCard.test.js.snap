@@ -87,7 +87,7 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text defined r
     disableSpacing={true}
   >
     <Connect(withI18nextTranslation(WithStyles(ClearButton)))
-      id="id"
+      spaceId="id"
     />
     <withI18nextTranslation(WithStyles(Connect(DeleteButton)))
       id="id"
@@ -159,7 +159,7 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text undefined
     disableSpacing={true}
   >
     <Connect(withI18nextTranslation(WithStyles(ClearButton)))
-      id="id"
+      spaceId="id"
     />
     <withI18nextTranslation(WithStyles(Connect(DeleteButton)))
       id="id"

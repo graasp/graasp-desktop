@@ -18,7 +18,7 @@ export const typeInTextInputApp = async (client, id, text) => {
   await client.frame(null);
 };
 
-export const checkUserInputInTextInputApp = async (client, id, text) => {
+export const checkTextInputAppContainsText = async (client, id, text) => {
   await client.frame(buildPhaseAppName(id));
   const inputText = await client.getText(INPUT_TEXT_FIELD_SELECTOR);
 

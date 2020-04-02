@@ -21,11 +21,14 @@ import {
   DEVELOPER_MENU_ITEM_ID,
   DEVELOPER_MAIN_ID,
   SIGN_OUT_MENU_ITEM_ID,
+  PHASE_MENU_LIST_ID,
+  PHASE_MENU_ITEM,
 } from '../src/config/selectors';
 import {
   LOAD_TAB_PAUSE,
   DEFAULT_GLOBAL_TIMEOUT,
   OPEN_DRAWER_PAUSE,
+  LOAD_PHASE_PAUSE,
 } from './constants';
 import { userLogin } from './userLogin.test';
 import { USER_GRAASP } from './fixtures/users';
@@ -45,6 +48,12 @@ const menuGoTo = async (client, menuItemId, elementToExpectId = null) => {
     expect(await client.isExisting(`#${elementToExpectId}`)).to.be.true;
   }
   await client.pause(LOAD_TAB_PAUSE);
+};
+
+export const menuGoToPhase = async (client, nb) => {
+  await openDrawer(client);
+  await client.click(`#${PHASE_MENU_LIST_ID} li#${PHASE_MENU_ITEM}-${nb}`);
+  await client.pause(LOAD_PHASE_PAUSE);
 };
 
 export const menuGoToSettings = async client => {

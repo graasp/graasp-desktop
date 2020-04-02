@@ -87,7 +87,7 @@ export const MediaCard = props => {
 
       {showActions && (
         <CardActions disableSpacing>
-          <ClearButton id={id} />
+          <ClearButton spaceId={id} />
           <DeleteButton id={id} />
           <ExportButton space={space} />
           <SyncButton id={id} />

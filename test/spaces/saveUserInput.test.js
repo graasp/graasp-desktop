@@ -3,28 +3,22 @@
 /* eslint-disable no-restricted-syntax */
 import { mochaAsync } from '../utils';
 import { createApplication, closeApplication } from '../application';
-import { menuGoToHome, menuGoToSignOut } from '../menu.test';
+import { menuGoToHome, menuGoToSignOut, menuGoToPhase } from '../menu.test';
 import {
   buildSpaceCardId,
   SPACE_CARD_LINK_CLASS,
-  PHASE_MENU_LIST_ID,
-  PHASE_MENU_ITEM,
 } from '../../src/config/selectors';
 import {
   SPACE_ATOMIC_STRUCTURE,
   SPACE_ATOMIC_STRUCTURE_PATH,
 } from '../fixtures/spaces';
 import { loadSpaceById } from './loadSpace.test';
-import {
-  DEFAULT_GLOBAL_TIMEOUT,
-  OPEN_SAVED_SPACE_PAUSE,
-  LOAD_PHASE_PAUSE,
-} from '../constants';
+import { DEFAULT_GLOBAL_TIMEOUT, OPEN_SAVED_SPACE_PAUSE } from '../constants';
 import { userLogin } from '../userLogin.test';
 import { USER_GRAASP, USER_BOB, USER_ALICE } from '../fixtures/users';
 import {
   typeInTextInputApp,
-  checkUserInputInTextInputApp,
+  checkTextInputAppContainsText,
 } from '../apps/textInputApp';
 
 const userInputTextForUser = name => {
@@ -65,8 +59,7 @@ describe('Save User Input in a space', function() {
         );
 
         // go to orientation tab
-        await client.click(`#${PHASE_MENU_LIST_ID} li#${PHASE_MENU_ITEM}-${0}`);
-        await client.pause(LOAD_PHASE_PAUSE);
+        await menuGoToPhase(client, 0);
 
         // type in text input app
         await typeInTextInputApp(client, textInputAppId, text);
@@ -80,8 +73,8 @@ describe('Save User Input in a space', function() {
         );
         await client.pause(OPEN_SAVED_SPACE_PAUSE);
 
-        await client.click(`#${PHASE_MENU_LIST_ID} li#${PHASE_MENU_ITEM}-${0}`);
-        await checkUserInputInTextInputApp(client, textInputAppId, text);
+        await menuGoToPhase(client, 0);
+        await checkTextInputAppContainsText(client, textInputAppId, text);
       })
     );
   });
@@ -127,10 +120,7 @@ describe('Save User Input in a space', function() {
           }
 
           // go to orientation tab
-          await client.click(
-            `#${PHASE_MENU_LIST_ID} li#${PHASE_MENU_ITEM}-${0}`
-          );
-          await client.pause(LOAD_PHASE_PAUSE);
+          await menuGoToPhase(client, 0);
 
           // type in text input app
           await typeInTextInputApp(client, textInputAppId, text);
@@ -144,10 +134,8 @@ describe('Save User Input in a space', function() {
           );
           await client.pause(OPEN_SAVED_SPACE_PAUSE);
 
-          await client.click(
-            `#${PHASE_MENU_LIST_ID} li#${PHASE_MENU_ITEM}-${0}`
-          );
-          await checkUserInputInTextInputApp(client, textInputAppId, text);
+          await menuGoToPhase(client, 0);
+          await checkTextInputAppContainsText(client, textInputAppId, text);
 
           await menuGoToSignOut(client);
         }
@@ -162,10 +150,8 @@ describe('Save User Input in a space', function() {
           );
           await client.pause(OPEN_SAVED_SPACE_PAUSE);
 
-          await client.click(
-            `#${PHASE_MENU_LIST_ID} li#${PHASE_MENU_ITEM}-${0}`
-          );
-          await checkUserInputInTextInputApp(client, textInputAppId, text);
+          await menuGoToPhase(client, 0);
+          await checkTextInputAppContainsText(client, textInputAppId, text);
 
           await menuGoToSignOut(client);
         }
