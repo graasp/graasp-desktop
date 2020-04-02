@@ -16,7 +16,7 @@ import {
   visitAndSaveSpaceById,
 } from './visitSpace.test';
 import { OPEN_SAVED_SPACE_PAUSE, DEFAULT_GLOBAL_TIMEOUT } from '../constants';
-import { userLogin } from '../userLogin.test';
+import { userSignIn } from '../userSignIn.test';
 import { USER_GRAASP } from '../fixtures/users';
 
 describe('Save a space', function() {
@@ -30,7 +30,7 @@ describe('Save a space', function() {
   beforeEach(
     mochaAsync(async () => {
       app = await createApplication();
-      await userLogin(app.client, USER_GRAASP);
+      await userSignIn(app.client, USER_GRAASP);
     })
   );
   it(

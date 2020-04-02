@@ -36,7 +36,7 @@ import {
   DEFAULT_GLOBAL_TIMEOUT,
   LOAD_PHASE_PAUSE,
 } from '../constants';
-import { userLogin } from '../userLogin.test';
+import { userSignIn } from '../userSignIn.test';
 import { USER_GRAASP } from '../fixtures/users';
 
 const PREVIEW = 'preview';
@@ -379,7 +379,7 @@ describe('Visit Space Scenarios', function() {
   beforeEach(
     mochaAsync(async () => {
       app = await createApplication();
-      await userLogin(app.client, USER_GRAASP);
+      await userSignIn(app.client, USER_GRAASP);
     })
   );
 

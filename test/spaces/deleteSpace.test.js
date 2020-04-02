@@ -12,7 +12,7 @@ import {
 import { SPACE_ATOMIC_STRUCTURE } from '../fixtures/spaces';
 import { visitAndSaveSpaceById } from './visitSpace.test';
 import { DELETE_SPACE_PAUSE, DEFAULT_GLOBAL_TIMEOUT } from '../constants';
-import { userLogin } from '../userLogin.test';
+import { userSignIn } from '../userSignIn.test';
 import { USER_GRAASP } from '../fixtures/users';
 
 describe('Delete a space', function() {
@@ -34,7 +34,7 @@ describe('Delete a space', function() {
 
       const { client } = app;
 
-      await userLogin(client, USER_GRAASP);
+      await userSignIn(client, USER_GRAASP);
 
       await visitAndSaveSpaceById(client, id);
 
@@ -62,7 +62,7 @@ describe('Delete a space', function() {
 
       const { client } = app;
 
-      await userLogin(client, USER_GRAASP);
+      await userSignIn(client, USER_GRAASP);
 
       await visitAndSaveSpaceById(client, id);
 
@@ -86,7 +86,7 @@ describe('Delete a space', function() {
 
       const { client } = app;
 
-      await userLogin(client, USER_GRAASP);
+      await userSignIn(client, USER_GRAASP);
 
       await visitAndSaveSpaceById(client, id);
 

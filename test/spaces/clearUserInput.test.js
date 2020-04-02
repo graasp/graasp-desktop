@@ -19,7 +19,7 @@ import {
   TOOLTIP_FADE_OUT_PAUSE,
   OPEN_SAVED_SPACE_PAUSE,
 } from '../constants';
-import { userLogin } from '../userLogin.test';
+import { userSignIn } from '../userSignIn.test';
 import { USER_GRAASP, USER_BOB, USER_ALICE } from '../fixtures/users';
 import {
   typeInTextInputApp,
@@ -40,7 +40,7 @@ describe('Clear User Input in a space', function() {
       beforeEach(
         mochaAsync(async () => {
           app = await createApplication({ showMessageDialogResponse: 1 });
-          await userLogin(app.client, USER_GRAASP);
+          await userSignIn(app.client, USER_GRAASP);
         })
       );
 
@@ -143,7 +143,7 @@ describe('Clear User Input in a space', function() {
       beforeEach(
         mochaAsync(async () => {
           app = await createApplication({ showMessageDialogResponse: 0 });
-          await userLogin(app.client, USER_GRAASP);
+          await userSignIn(app.client, USER_GRAASP);
         })
       );
 
@@ -207,7 +207,7 @@ describe('Clear User Input in a space', function() {
         const textBob1 = 'some user input conceptualisation bob';
 
         // login as Alice, save user input
-        await userLogin(client, USER_ALICE);
+        await userSignIn(client, USER_ALICE);
 
         // load space with user input
         await loadSpaceById(
@@ -224,7 +224,7 @@ describe('Clear User Input in a space', function() {
         await menuGoToSignOut(client);
 
         // login as bob, save user input
-        await userLogin(client, USER_BOB);
+        await userSignIn(client, USER_BOB);
         await client.click(
           `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
         );
@@ -235,7 +235,7 @@ describe('Clear User Input in a space', function() {
         await menuGoToSignOut(client);
 
         // login as Alice, clear user input
-        await userLogin(client, USER_ALICE);
+        await userSignIn(client, USER_ALICE);
         await client.click(
           `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
         );
@@ -255,7 +255,7 @@ describe('Clear User Input in a space', function() {
         await menuGoToSignOut(client);
 
         // login as Bob, check user input are still saved
-        await userLogin(client, USER_BOB);
+        await userSignIn(client, USER_BOB);
         await client.click(
           `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
         );

@@ -17,7 +17,7 @@ import {
   EXPORT_FILEPATH,
   DEFAULT_GLOBAL_TIMEOUT,
 } from '../constants';
-import { userLogin } from '../userLogin.test';
+import { userSignIn } from '../userSignIn.test';
 import { USER_GRAASP } from '../fixtures/users';
 
 describe('Export a space', function() {
@@ -41,7 +41,7 @@ describe('Export a space', function() {
 
       const { client } = app;
 
-      await userLogin(client, USER_GRAASP);
+      await userSignIn(client, USER_GRAASP);
 
       await visitAndSaveSpaceById(client, id);
 
@@ -64,7 +64,7 @@ describe('Export a space', function() {
 
       const { client } = app;
 
-      await userLogin(client, USER_GRAASP);
+      await userSignIn(client, USER_GRAASP);
 
       await visitAndSaveSpaceById(client, id);
 

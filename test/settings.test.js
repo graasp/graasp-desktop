@@ -38,7 +38,7 @@ import {
   DEFAULT_GEOLOCATION_ENABLED,
   DEFAULT_DEVELOPER_MODE,
 } from '../src/config/constants';
-import { userLogin } from './userLogin.test';
+import { userSignIn } from './userSignIn.test';
 import { USER_GRAASP, USER_ALICE, USER_BOB } from './fixtures/users';
 import { settingsPerUser } from './fixtures/settings';
 
@@ -115,7 +115,7 @@ describe('Settings Scenarios', function() {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication();
-        await userLogin(app.client, USER_GRAASP);
+        await userSignIn(app.client, USER_GRAASP);
       })
     );
 
@@ -248,7 +248,7 @@ describe('Settings Scenarios', function() {
             user.name
           ];
 
-          await userLogin(client, user);
+          await userSignIn(client, user);
 
           await menuGoToSettings(client);
 
@@ -274,7 +274,7 @@ describe('Settings Scenarios', function() {
             user.name
           ];
 
-          await userLogin(client, user);
+          await userSignIn(client, user);
 
           await menuGoToSettings(client);
 

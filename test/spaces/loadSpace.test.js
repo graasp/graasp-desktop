@@ -35,7 +35,7 @@ import {
   LOAD_PHASE_PAUSE,
   DEFAULT_GLOBAL_TIMEOUT,
 } from '../constants';
-import { userLogin } from '../userLogin.test';
+import { userSignIn } from '../userSignIn.test';
 import { USER_GRAASP } from '../fixtures/users';
 import { typeInTextInputApp } from '../apps/textInputApp';
 
@@ -75,7 +75,7 @@ describe('Load Space Scenarios', function() {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication();
-        await userLogin(app.client, USER_GRAASP);
+        await userSignIn(app.client, USER_GRAASP);
       })
     );
 
@@ -161,7 +161,7 @@ describe('Load Space Scenarios', function() {
 
       const { client } = app;
 
-      await userLogin(client, USER_GRAASP);
+      await userSignIn(client, USER_GRAASP);
 
       // get space
       await visitAndSaveSpaceById(client, id);
@@ -198,7 +198,7 @@ describe('Load Space Scenarios', function() {
 
       const { client } = app;
 
-      await userLogin(client, USER_GRAASP);
+      await userSignIn(client, USER_GRAASP);
 
       // get space
       await visitAndSaveSpaceById(client, id);

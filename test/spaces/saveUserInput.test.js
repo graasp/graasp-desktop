@@ -14,7 +14,7 @@ import {
 } from '../fixtures/spaces';
 import { loadSpaceById } from './loadSpace.test';
 import { DEFAULT_GLOBAL_TIMEOUT, OPEN_SAVED_SPACE_PAUSE } from '../constants';
-import { userLogin } from '../userLogin.test';
+import { userSignIn } from '../userSignIn.test';
 import { USER_GRAASP, USER_BOB, USER_ALICE } from '../fixtures/users';
 import {
   typeInTextInputApp,
@@ -37,7 +37,7 @@ describe('Save User Input in a space', function() {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication({ showMessageDialogResponse: 1 });
-        await userLogin(app.client, USER_GRAASP);
+        await userSignIn(app.client, USER_GRAASP);
       })
     );
 
@@ -98,7 +98,7 @@ describe('Save User Input in a space', function() {
         const { id: textInputAppId } = phases[0].items[1];
 
         for (const [index, user] of users.entries()) {
-          await userLogin(app.client, user);
+          await userSignIn(app.client, user);
           const text = userInputTextForUser(user.name);
 
           // first user load space
@@ -142,7 +142,7 @@ describe('Save User Input in a space', function() {
 
         // check user input still exist after logout
         for (const user of users) {
-          await userLogin(client, user);
+          await userSignIn(client, user);
           const text = userInputTextForUser(user.name);
 
           await client.click(
