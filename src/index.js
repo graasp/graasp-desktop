@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import { Provider } from 'react-redux';
 import * as Sentry from '@sentry/browser';
+import ReduxToastr from 'react-redux-toastr';
+import { Detector } from 'react-detect-offline';
+import { MuiThemeProvider } from '@material-ui/core/styles';
 import { I18nextProvider } from 'react-i18next';
 import katex from 'katex';
 import i18nConfig from './config/i18n';
@@ -11,6 +14,7 @@ import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 import 'katex/dist/katex.min.css';
 import 'react-quill/dist/quill.core.css';
 import App from './App';
+import { OnlineTheme, OfflineTheme } from './themes';
 import configureStore from './store/configure';
 
 // bind katex to the window object
@@ -36,7 +40,18 @@ const { store } = configureStore();
 ReactDOM.render(
   <Provider store={store}>
     <I18nextProvider i18n={i18nConfig}>
-      <App />
+      <Detector
+        render={({ online }) => (
+          <MuiThemeProvider theme={online ? OnlineTheme : OfflineTheme}>
+            <ReduxToastr
+              transitionIn="fadeIn"
+              preventDuplicates
+              transitionOut="fadeOut"
+            />
+            <App connexionStatus={online} />
+          </MuiThemeProvider>
+        )}
+      />
     </I18nextProvider>
   </Provider>,
   document.getElementById('root')
