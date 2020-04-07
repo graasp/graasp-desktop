@@ -28,7 +28,7 @@ export const expectElementToNotExist = async (client, elementSelector) => {
   expect(found).to.be.false;
 };
 
-export const expectEitherElementsToExist = async (client, elementSelectors) => {
+export const expectAnyElementToExist = async (client, elementSelectors) => {
   const foundElements = [];
   /* eslint-disable-next-line no-restricted-syntax */
   for (const selector of elementSelectors) {

@@ -7,7 +7,7 @@ import {
   mochaAsync,
   expectElementToNotExist,
   expectElementToExist,
-  expectEitherElementsToExist,
+  expectAnyElementToExist,
 } from './utils';
 import { createApplication, closeApplication } from './application';
 import {
@@ -123,7 +123,7 @@ describe('Settings Scenarios', function() {
       await expectElementToNotExist(client, `#${GEOLOCATION_CONTROL_ID}`);
 
       // spaces should be displayed
-      await expectEitherElementsToExist(client, [
+      await expectAnyElementToExist(client, [
         `.${SPACE_CARD_CLASS}`,
         `#${SPACE_NOT_AVAILABLE_TEXT_CLASS}`,
       ]);
