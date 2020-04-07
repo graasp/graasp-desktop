@@ -15,6 +15,7 @@ import SpacesNearby from './components/SpacesNearby';
 import Settings from './components/Settings';
 import LoadSpace from './components/LoadSpace';
 import SpaceScreen from './components/space/SpaceScreen';
+import SyncScreen from './components/space/SyncScreen';
 import DeveloperScreen from './components/developer/DeveloperScreen';
 import { OnlineTheme, OfflineTheme } from './themes';
 import Dashboard from './components/dashboard/Dashboard';
@@ -22,6 +23,7 @@ import SignInScreen from './components/signin/SignInScreen';
 import Authorization from './components/Authorization';
 import {
   SETTINGS_PATH,
+  SYNC_SPACE_PATH,
   SPACE_PATH,
   HOME_PATH,
   SPACES_NEARBY_PATH,
@@ -178,6 +180,11 @@ export class App extends Component {
                     exact
                     path={SETTINGS_PATH}
                     component={Authorization()(Settings)}
+                  />
+                  <Route
+                    exact
+                    path={SYNC_SPACE_PATH}
+                    component={Authorization()(SyncScreen)}
                   />
                   <Route
                     exact

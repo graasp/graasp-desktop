@@ -100,7 +100,7 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text defined r
         }
       }
     />
-    <withI18nextTranslation(WithStyles(Connect(SyncButton)))
+    <withRouter(withI18nextTranslation(WithStyles(SyncButton)))
       spaceId="id"
     />
     <WithStyles(ForwardRef(IconButton))
@@ -172,7 +172,7 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text undefined
         }
       }
     />
-    <withI18nextTranslation(WithStyles(Connect(SyncButton)))
+    <withRouter(withI18nextTranslation(WithStyles(SyncButton)))
       spaceId="id"
     />
   </WithStyles(ForwardRef(CardActions))>

@@ -39,8 +39,6 @@ import {
   SHOW_EXPORT_SPACE_PROMPT_CHANNEL,
   RESPOND_EXPORT_SPACE_PROMPT_CHANNEL,
   SAVE_SPACE_CHANNEL,
-  SHOW_SYNC_SPACE_PROMPT_CHANNEL,
-  RESPOND_SYNC_SPACE_PROMPT_CHANNEL,
   SYNC_SPACE_CHANNEL,
   SYNCED_SPACE_CHANNEL,
   CLEAR_USER_INPUT_CHANNEL,
@@ -147,25 +145,25 @@ const getRemoteSpace = async ({ id }) => async dispatch => {
     await isErrorResponse(response);
 
     const remoteSpace = await response.json();
-    let localSpace = {};
+    // let localSpace = {};
 
-    // try to merge with local space if available
-    try {
-      window.ipcRenderer.send(GET_SPACE_CHANNEL, { id });
-      localSpace = await waitForSpace({ online: true });
-    } catch (localError) {
-      // ignore error
-    }
+    // // try to merge with local space if available
+    // try {
+    //   window.ipcRenderer.send(GET_SPACE_CHANNEL, { id });
+    //   localSpace = await waitForSpace({ online: true });
+    // } catch (localError) {
+    //   // ignore error
+    // }
 
     // in the future we could probably try to deep merge
-    const space = {
-      ...remoteSpace,
-      ...localSpace,
-    };
+    // const space = {
+    //   ...remoteSpace,
+    //   ...localSpace,
+    // };
 
     dispatch({
       type: GET_SPACE_SUCCEEDED,
-      payload: space,
+      payload: remoteSpace,
     });
   } catch (err) {
     toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_SPACE_MESSAGE);
@@ -342,17 +340,8 @@ const syncSpace = async ({ id }) => async dispatch => {
     await isErrorResponse(response);
     const remoteSpace = await response.json();
 
-    // show confirmation prompt
-    window.ipcRenderer.send(SHOW_SYNC_SPACE_PROMPT_CHANNEL);
-
-    // this runs when the user has responded to the sync dialog
-    window.ipcRenderer.once(RESPOND_SYNC_SPACE_PROMPT_CHANNEL, (event, res) => {
-      // only sync the space if the response is positive
-      if (res === 1) {
-        dispatch(flagSyncingSpace(true));
-        window.ipcRenderer.send(SYNC_SPACE_CHANNEL, { remoteSpace });
-      }
-    });
+    dispatch(flagSyncingSpace(true));
+    window.ipcRenderer.send(SYNC_SPACE_CHANNEL, { remoteSpace });
 
     // this runs once the space has been synced
     window.ipcRenderer.once(SYNCED_SPACE_CHANNEL, (event, res) => {
