@@ -33,6 +33,7 @@ import {
   MAX_APP_HEIGHT,
   MIN_APP_HEIGHT,
 } from '../../config/layout';
+import { buildPhaseAppName } from '../../config/selectors';
 
 const style = {
   marginTop: '2rem',
@@ -281,6 +282,7 @@ class PhaseApp extends Component {
           <iframe
             title={name}
             className="App"
+            name={buildPhaseAppName(id)}
             src={uri + divider + queryString}
             ref={c => {
               this.iframe = c;

@@ -35,7 +35,8 @@ import {
   DEFAULT_GLOBAL_TIMEOUT,
 } from '../constants';
 
-const loadSpaceById = async (client, space, filepath) => {
+/* eslint-disable-next-line import/prefer-default-export */
+export const loadSpaceById = async (client, space, filepath) => {
   const { id } = space;
   await menuGoToLoadSpace(client);
 

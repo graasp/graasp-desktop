@@ -24,6 +24,7 @@ import {
   buildSpaceCardId,
   SPACE_DESCRIPTION_EXPAND_BUTTON_CLASS,
   buildSpaceCardDescriptionId,
+  buildPhaseAppName,
 } from '../../src/config/selectors';
 import { hasMath } from '../../src/utils/math';
 import { SPACE_ATOMIC_STRUCTURE, SPACE_APOLLO_11 } from '../fixtures/spaces';
@@ -159,6 +160,32 @@ const hasSavedSpaceHomeLayout = async (
   expect(previewButton.toLowerCase()).to.equal('start');
 };
 
+const checkUserInputInApp = async (client, { id, url, resources }) => {
+  // @TODO differentiate apps with an appId
+  let data = '';
+  if (resources && resources.length) {
+    /* eslint-disable-next-line prefer-destructuring */
+    ({ data } = resources[0]);
+  }
+
+  switch (url) {
+    // text input app
+    case 'https://apps.graasp.eu/5acb589d0d5d9464081c2d46/5cde9891226a7d20a8a16697/latest/index.html': {
+      await client.frame(buildPhaseAppName(id));
+      const text = await client.getText('#inputTextField');
+
+      expect(text).to.equal(data);
+      break;
+    }
+    default: {
+      console.log(`app with url : ${url} is not handled`);
+    }
+  }
+
+  // reset client on parent frame
+  await client.frame(null);
+};
+
 // check layout of a given phase
 // @TODO check user input - have access to iframe
 const hasPhaseLayout = async (client, { description, items }, mode) => {
@@ -170,7 +197,15 @@ const hasPhaseLayout = async (client, { description, items }, mode) => {
   }
 
   // eslint-disable-block no-await-in-loop
-  for (const { id, content, mimeType, category, url, asset } of items) {
+  for (const {
+    id,
+    content,
+    mimeType,
+    category,
+    url,
+    asset,
+    appInstance = {},
+  } of items) {
     const itemSelector = `[data-id="${id}"]`;
 
     // check item exists
@@ -208,11 +243,15 @@ const hasPhaseLayout = async (client, { description, items }, mode) => {
           case PREVIEW: {
             const iframe = await client.getHTML(`${itemSelector} iframe`);
             expect(iframe).to.include(url);
+            const { resources } = appInstance;
+            await checkUserInputInApp(client, { id, resources, url });
             break;
           }
           case SAVED: {
             const iframe = await client.getHTML(`${itemSelector} iframe`);
             expect(iframe).to.include(asset);
+            const { resources } = appInstance;
+            await checkUserInputInApp(client, { id, resources, url });
             break;
           }
           default:
@@ -222,6 +261,7 @@ const hasPhaseLayout = async (client, { description, items }, mode) => {
         break;
       }
       default: {
+        console.log(`category: ${category} is not handled`);
         expect(false).to.equal(true);
       }
     }
