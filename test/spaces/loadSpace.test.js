@@ -5,13 +5,10 @@ import { expect } from 'chai';
 import path from 'path';
 import { mochaAsync, createRandomString } from '../utils';
 import { createApplication, closeApplication } from '../application';
-import { menuGoTo } from '../menu.test';
+import { menuGoToLoadSpace, menuGoToHome } from '../menu.test';
 import {
-  HOME_MENU_ITEM_ID,
   buildSpaceCardId,
   SPACE_CARD_LINK_CLASS,
-  LOAD_MENU_ITEM_ID,
-  LOAD_MAIN_ID,
   LOAD_LOAD_BUTTON_ID,
   SPACE_EXPORT_BUTTON_CLASS,
   LOAD_INPUT_ID,
@@ -40,7 +37,7 @@ import {
 
 const loadSpaceById = async (client, space, filepath) => {
   const { id } = space;
-  await menuGoTo(client, LOAD_MENU_ITEM_ID, LOAD_MAIN_ID);
+  await menuGoToLoadSpace(client);
 
   // input space id
   const absolutePath = path.resolve(__dirname, '../fixtures/spaces', filepath);
@@ -53,7 +50,7 @@ const loadSpaceById = async (client, space, filepath) => {
   await client.pause(LOAD_SPACE_PAUSE);
 
   // go to space
-  await menuGoTo(client, HOME_MENU_ITEM_ID);
+  await menuGoToHome(client);
 
   await client.click(`#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`);
 
@@ -82,7 +79,7 @@ describe('Load Space Scenarios', function() {
         const { client } = app;
 
         // load space
-        await menuGoTo(client, LOAD_MENU_ITEM_ID, LOAD_MAIN_ID);
+        await menuGoToLoadSpace(client);
 
         await client.setValue(`#${LOAD_INPUT_ID}`, 'somefilepath');
         await client.pause(INPUT_TYPE_PAUSE);
@@ -142,7 +139,7 @@ describe('Load Space Scenarios', function() {
         );
 
         // go to space
-        await menuGoTo(client, HOME_MENU_ITEM_ID);
+        await menuGoToHome(client);
 
         const savedSpacesHtml = await client.getHTML(`#${HOME_MAIN_ID}`);
         expect(savedSpacesHtml).to.not.include(

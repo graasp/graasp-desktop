@@ -3,6 +3,7 @@
 exports[`<GeolocationControl /> <GeolocationControl /> as button renders correctly 1`] = `
 <WithStyles(ForwardRef(FormControl))
   className=""
+  id="settingsGeolocationControl"
 >
   <WithStyles(ForwardRef(Button))
     className=""
@@ -18,6 +19,7 @@ exports[`<GeolocationControl /> <GeolocationControl /> as button renders correct
 exports[`<GeolocationControl /> <GeolocationControl /> as button renders correctly 2`] = `
 <WithStyles(ForwardRef(FormControl))
   className=""
+  id="settingsGeolocationControl"
 >
   <WithStyles(ForwardRef(Button))
     className=""
@@ -33,6 +35,7 @@ exports[`<GeolocationControl /> <GeolocationControl /> as button renders correct
 exports[`<GeolocationControl /> <GeolocationControl /> as switch renders correctly 1`] = `
 <WithStyles(ForwardRef(FormControl))
   className=""
+  id="settingsGeolocationControl"
 >
   <WithStyles(ForwardRef(FormControlLabel))
     control={
@@ -51,6 +54,7 @@ exports[`<GeolocationControl /> <GeolocationControl /> as switch renders correct
 exports[`<GeolocationControl /> <GeolocationControl /> as switch renders correctly 2`] = `
 <WithStyles(ForwardRef(FormControl))
   className=""
+  id="settingsGeolocationControl"
 >
   <WithStyles(ForwardRef(FormControlLabel))
     control={

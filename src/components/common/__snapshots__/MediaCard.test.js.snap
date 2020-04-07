@@ -3,7 +3,7 @@
 exports[`<MediaCard /> <MediaCard /> with showActions = false renders correctly 1`] = `
 <WithStyles(ForwardRef(Card))
   className=""
-  id="space-card-id"
+  id="spaceCard-id"
 >
   <WithStyles(ForwardRef(CardActionArea))
     className="spaceCardLink"
@@ -46,7 +46,7 @@ exports[`<MediaCard /> <MediaCard /> with showActions = false renders correctly 
 exports[`<MediaCard /> <MediaCard /> with showActions = true with text defined renders correctly 1`] = `
 <WithStyles(ForwardRef(Card))
   className=""
-  id="space-card-id"
+  id="spaceCard-id"
 >
   <WithStyles(ForwardRef(CardActionArea))
     className="spaceCardLink"
@@ -115,7 +115,7 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text defined r
 exports[`<MediaCard /> <MediaCard /> with showActions = true with text undefined renders correctly 1`] = `
 <WithStyles(ForwardRef(Card))
   className=""
-  id="space-card-id"
+  id="spaceCard-id"
 >
   <WithStyles(ForwardRef(CardActionArea))
     className="spaceCardLink"
@@ -176,7 +176,7 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text undefined
 exports[`<MediaCard /> <MediaCard /> with showActions = undefined renders correctly 1`] = `
 <WithStyles(ForwardRef(Card))
   className=""
-  id="space-card-id"
+  id="spaceCard-id"
 >
   <WithStyles(ForwardRef(CardActionArea))
     className="spaceCardLink"

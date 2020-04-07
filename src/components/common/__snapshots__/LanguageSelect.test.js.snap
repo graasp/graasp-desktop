@@ -3,6 +3,7 @@
 exports[`<LanguageSelect /> <LanguageSelect /> renders renders correctly 1`] = `
 <WithStyles(ForwardRef(FormControl))
   className=""
+  id="settingsLanguageSelect"
 >
   <WithStyles(ForwardRef(InputLabel))
     htmlFor="lang"
@@ -58,6 +59,7 @@ exports[`<LanguageSelect /> <LanguageSelect /> renders renders correctly 1`] = `
 exports[`<LanguageSelect /> <LanguageSelect /> renders renders correctly 2`] = `
 <WithStyles(ForwardRef(FormControl))
   className=""
+  id="settingsLanguageSelect"
 >
   <WithStyles(ForwardRef(InputLabel))
     htmlFor="lang"
@@ -113,6 +115,7 @@ exports[`<LanguageSelect /> <LanguageSelect /> renders renders correctly 2`] = `
 exports[`<LanguageSelect /> <LanguageSelect /> renders renders correctly 3`] = `
 <WithStyles(ForwardRef(FormControl))
   className=""
+  id="settingsLanguageSelect"
 >
   <WithStyles(ForwardRef(InputLabel))
     htmlFor="lang"

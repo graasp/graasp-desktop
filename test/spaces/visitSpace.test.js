@@ -4,12 +4,10 @@
 import { expect } from 'chai';
 import { removeSpace, removeTags, mochaAsync } from '../utils';
 import { closeApplication, createApplication } from '../application';
-import { menuGoTo } from '../menu.test';
+import { menuGoToVisitSpace } from '../menu.test';
 import {
   SPACE_TOOLBAR_ID,
   PHASE_MENU_LIST_ID,
-  VISIT_MAIN_ID,
-  VISIT_MENU_ITEM_ID,
   SPACE_START_PREVIEW_BUTTON,
   SPACE_DESCRIPTION_ID,
   SPACE_SAVE_ICON_CLASS,
@@ -53,7 +51,7 @@ const testTextOfElement = async (client, selector, text) => {
 };
 
 const visitSpaceById = async (client, id) => {
-  await menuGoTo(client, VISIT_MENU_ITEM_ID, VISIT_MAIN_ID);
+  await menuGoToVisitSpace(client);
 
   // input space id
   await client.setValue(`#${VISIT_INPUT_ID}`, id);

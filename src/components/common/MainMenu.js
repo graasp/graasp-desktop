@@ -32,6 +32,7 @@ import {
   VISIT_MENU_ITEM_ID,
   SPACES_NEARBY_MENU_ITEM_ID,
   DASHBOARD_MENU_ITEM_ID,
+  DEVELOPER_MENU_ITEM_ID,
 } from '../../config/selectors';
 
 export class MainMenu extends Component {
@@ -64,6 +65,7 @@ export class MainMenu extends Component {
     if (developerMode) {
       return (
         <MenuItem
+          id={DEVELOPER_MENU_ITEM_ID}
           onClick={() => this.handleClick(DEVELOPER_PATH)}
           selected={path === DEVELOPER_PATH}
           button
