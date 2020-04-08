@@ -17,6 +17,8 @@ export const DASHBOARD_MENU_ITEM_ID = 'dashboardMenuItem';
 export const DASHBOARD_MAIN_ID = 'dashboardMain';
 export const DEVELOPER_MENU_ITEM_ID = 'developerMenuItem';
 export const DEVELOPER_MAIN_ID = 'developerMain';
+export const SIGN_OUT_MENU_ITEM_ID = 'signOutMenuItem';
+export const SIGN_IN_MAIN_ID = 'signInMain';
 
 export const PHASE_MENU_LIST_ID = 'phaseMenuList';
 
@@ -49,3 +51,6 @@ export const DEVELOPER_SWITCH_ID = 'settingsDeveloperSwitch';
 export const GEOLOCATION_CONTROL_ID = 'settingsGeolocationControl';
 
 export const buildPhaseAppName = id => `phaseApp-${id}`;
+
+export const LOGIN_USERNAME_INPUT_ID = 'loginUsernameInput';
+export const LOGIN_BUTTON_ID = 'loginButton';

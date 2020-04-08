@@ -50,6 +50,9 @@ const SUCCESS_CLEARING_USER_INPUT_MESSAGE =
 const CONNECTION_MESSAGE_HEADER = 'Connection Status';
 const CONNECTION_OFFLINE_MESSAGE = 'You are offline.';
 const CONNECTION_ONLINE_MESSAGE = 'You are online.';
+const ERROR_SIGNING_IN = 'There was an error signing in.';
+const ERROR_SIGNING_OUT = 'There was an error signing out.';
+const ERROR_GETTING_AUTHENTICATED = 'There was an error during authentication.';
 
 module.exports = {
   ERROR_GETTING_DEVELOPER_MODE,
@@ -89,4 +92,7 @@ module.exports = {
   CONNECTION_MESSAGE_HEADER,
   CONNECTION_OFFLINE_MESSAGE,
   CONNECTION_ONLINE_MESSAGE,
+  ERROR_SIGNING_IN,
+  ERROR_SIGNING_OUT,
+  ERROR_GETTING_AUTHENTICATED,
 };

@@ -17,6 +17,8 @@ import {
   EXPORT_FILEPATH,
   DEFAULT_GLOBAL_TIMEOUT,
 } from '../constants';
+import { userSignIn } from '../userSignIn.test';
+import { USER_GRAASP } from '../fixtures/users';
 
 describe('Export a space', function() {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
@@ -29,13 +31,17 @@ describe('Export a space', function() {
   it(
     'Exporting from toolbar saves space in local computer',
     mochaAsync(async () => {
-      const { id } = SPACE_ATOMIC_STRUCTURE;
+      const {
+        space: { id },
+      } = SPACE_ATOMIC_STRUCTURE;
 
       const filepath = `${EXPORT_FILEPATH}_${createRandomString()}`;
 
       app = await createApplication({ showSaveDialogResponse: filepath });
 
       const { client } = app;
+
+      await userSignIn(client, USER_GRAASP);
 
       await visitAndSaveSpaceById(client, id);
 
@@ -49,12 +55,16 @@ describe('Export a space', function() {
   it(
     'Exporting from card saves space in local computer',
     mochaAsync(async () => {
-      const { id } = SPACE_ATOMIC_STRUCTURE;
+      const {
+        space: { id },
+      } = SPACE_ATOMIC_STRUCTURE;
 
       const filepath = `${EXPORT_FILEPATH}_${createRandomString()}`;
       app = await createApplication({ showSaveDialogResponse: filepath });
 
       const { client } = app;
+
+      await userSignIn(client, USER_GRAASP);
 
       await visitAndSaveSpaceById(client, id);
 

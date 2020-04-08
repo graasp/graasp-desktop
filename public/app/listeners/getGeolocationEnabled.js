@@ -6,7 +6,8 @@ const logger = require('../logger');
 const getGeolocationEnabled = (mainWindow, db) => async () => {
   try {
     const geolocationEnabled =
-      db.get('user.geolocationEnabled').value() || DEFAULT_GEOLOCATION_ENABLED;
+      db.get('user.settings.geolocationEnabled').value() ||
+      DEFAULT_GEOLOCATION_ENABLED;
     mainWindow.webContents.send(
       GET_GEOLOCATION_ENABLED_CHANNEL,
       geolocationEnabled

@@ -54,6 +54,7 @@ class PhaseApp extends Component {
     phaseId: PropTypes.string.isRequired,
     spaceId: PropTypes.string.isRequired,
     lang: PropTypes.string,
+    userId: PropTypes.string,
     appInstance: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }),
@@ -68,6 +69,7 @@ class PhaseApp extends Component {
     name: 'Image',
     lang: DEFAULT_LANGUAGE,
     geolocation: null,
+    userId: null,
   };
 
   state = {
@@ -194,6 +196,7 @@ class PhaseApp extends Component {
       spaceId,
       phaseId,
       appInstance,
+      userId,
     } = this.props;
     let uri = url;
     if (asset) {
@@ -204,9 +207,6 @@ class PhaseApp extends Component {
         uri = `file://${folder}/${asset}`;
       }
     }
-
-    // todo: get user dynamically, currently we are just using a fake one
-    const userId = '5ce422795fe28eeca1001e0a';
 
     // for some reason, smart gateway urls use `#` instead of `?` as a query string indicator
     const divider = isSmartGatewayUrl(url)
@@ -294,15 +294,20 @@ class PhaseApp extends Component {
   }
 }
 
-const mapStateToProps = ({ User, Space }) => ({
-  folder: User.getIn(['current', 'folder']),
+const mapStateToProps = ({ authentication, Space }) => ({
+  folder: authentication.getIn(['current', 'folder']),
   // get language from space, otherwise fall back on user language
   lang:
     Space.getIn(['current', 'content', 'language']) ||
-    User.getIn(['current', 'lang']),
+    authentication.getIn(['user', 'settings', 'lang']),
 
-  geolocation: User.getIn(['current', 'geolocation']),
-  geolocationEnabled: User.getIn(['current', 'geolocationEnabled']),
+  geolocation: authentication.getIn(['user', 'settings', 'geolocation']),
+  geolocationEnabled: authentication.getIn([
+    'user',
+    'settings',
+    'geolocationEnabled',
+  ]),
+  userId: authentication.getIn(['user', 'id']),
 });
 
 const mapDispatchToProps = {

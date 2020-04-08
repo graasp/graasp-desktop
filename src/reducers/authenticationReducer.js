@@ -1,5 +1,10 @@
 import { Map, List } from 'immutable';
 import {
+  FLAG_SIGNING_IN,
+  SIGN_IN_SUCCEEDED,
+  IS_AUTHENTICATED_SUCCEEDED,
+  SIGN_OUT_SUCCEEDED,
+  FLAG_SIGNING_OUT,
   FLAG_GETTING_USER_FOLDER,
   FLAG_SETTING_LANGUAGE,
   FLAG_GETTING_LANGUAGE,
@@ -16,22 +21,32 @@ import {
   FLAG_SETTING_GEOLOCATION_ENABLED,
   FLAG_GETTING_GEOLOCATION_ENABLED,
 } from '../types';
+import { updateActivityList } from './common';
 import {
+  AUTHENTICATED,
   DEFAULT_DEVELOPER_MODE,
   DEFAULT_LANGUAGE,
   DEFAULT_GEOLOCATION_ENABLED,
 } from '../config/constants';
-import { updateActivityList } from './common';
 
-const INITIAL_STATE = Map({
-  current: Map({
-    geolocation: Map(),
-    folder: null,
+export const DEFAULT_USER_SETTINGS = {
+  lang: DEFAULT_LANGUAGE,
+  developerMode: DEFAULT_DEVELOPER_MODE,
+  geolocationEnabled: DEFAULT_GEOLOCATION_ENABLED,
+};
+
+export const DEFAULT_USER = {
+  geolocation: Map(),
+  settings: { ...DEFAULT_USER_SETTINGS },
+};
+
+export const INITIAL_STATE = Map({
+  current: {
     activity: List(),
-    lang: DEFAULT_LANGUAGE,
-    developerMode: DEFAULT_DEVELOPER_MODE,
-    geolocationEnabled: DEFAULT_GEOLOCATION_ENABLED,
-  }),
+    folder: null,
+  },
+  authenticated: false,
+  user: Map(DEFAULT_USER),
 });
 
 export default (state = INITIAL_STATE, { type, payload }) => {
@@ -43,23 +58,38 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case FLAG_GETTING_DEVELOPER_MODE:
     case FLAG_SETTING_GEOLOCATION_ENABLED:
     case FLAG_GETTING_GEOLOCATION_ENABLED:
+    case FLAG_SIGNING_IN:
+    case FLAG_SIGNING_OUT:
       return state.updateIn(
         ['current', 'activity'],
         updateActivityList(payload)
       );
+    case SIGN_IN_SUCCEEDED: {
+      return state
+        .setIn(['user'], { ...DEFAULT_USER, ...payload })
+        .setIn(['authenticated'], AUTHENTICATED);
+    }
+    case SIGN_OUT_SUCCEEDED:
+      return state
+        .setIn(['user'], Map(DEFAULT_USER))
+        .setIn(['authenticated'], false);
+    case IS_AUTHENTICATED_SUCCEEDED:
+      return state
+        .setIn(['user'], payload.user)
+        .setIn(['authenticated'], payload.authenticated);
     case GET_USER_FOLDER_SUCCEEDED:
       return state.setIn(['current', 'folder'], payload);
     case GET_GEOLOCATION_SUCCEEDED:
-      return state.setIn(['current', 'geolocation'], Map(payload));
+      return state.setIn(['user', 'geolocation'], Map(payload));
     case GET_LANGUAGE_SUCCEEDED:
     case SET_LANGUAGE_SUCCEEDED:
-      return state.setIn(['current', 'lang'], payload);
+      return state.setIn(['user', 'settings', 'lang'], payload);
     case GET_DEVELOPER_MODE_SUCCEEDED:
     case SET_DEVELOPER_MODE_SUCCEEDED:
-      return state.setIn(['current', 'developerMode'], payload);
+      return state.setIn(['user', 'settings', 'developerMode'], payload);
     case GET_GEOLOCATION_ENABLED_SUCCEEDED:
     case SET_GEOLOCATION_ENABLED_SUCCEEDED:
-      return state.setIn(['current', 'geolocationEnabled'], payload);
+      return state.setIn(['user', 'settings', 'geolocationEnabled'], payload);
     default:
       return state;
   }

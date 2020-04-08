@@ -116,12 +116,12 @@ const waitForSpace = ({ online }) =>
     });
   });
 
-const getLocalSpace = async ({ id }) => async dispatch => {
+const getLocalSpace = async ({ id, user }) => async dispatch => {
   try {
     dispatch(flagGettingSpace(true));
 
     // tell electron to get space
-    window.ipcRenderer.send(GET_SPACE_CHANNEL, { id });
+    window.ipcRenderer.send(GET_SPACE_CHANNEL, { id, user });
 
     const space = await waitForSpace({ online: false });
 
@@ -238,7 +238,7 @@ const clearSpace = () => dispatch => {
   });
 };
 
-const exportSpace = (id, spaceName) => dispatch => {
+const exportSpace = (id, spaceName, userId) => dispatch => {
   window.ipcRenderer.send(SHOW_EXPORT_SPACE_PROMPT_CHANNEL, spaceName);
   window.ipcRenderer.once(
     RESPOND_EXPORT_SPACE_PROMPT_CHANNEL,
@@ -248,6 +248,7 @@ const exportSpace = (id, spaceName) => dispatch => {
         window.ipcRenderer.send(EXPORT_SPACE_CHANNEL, {
           archivePath,
           id,
+          userId,
         });
       } else {
         dispatch(flagExportingSpace(false));
@@ -293,7 +294,7 @@ const deleteSpace = ({ id }) => dispatch => {
   });
 };
 
-const clearUserInput = async ({ id }) => async dispatch => {
+const clearUserInput = async ({ spaceId, userId }) => async dispatch => {
   try {
     // show confirmation prompt
     window.ipcRenderer.send(SHOW_CLEAR_USER_INPUT_PROMPT_CHANNEL);
@@ -304,7 +305,10 @@ const clearUserInput = async ({ id }) => async dispatch => {
       (event, response) => {
         if (response === 1) {
           dispatch(flagClearingUserInput(true));
-          window.ipcRenderer.send(CLEAR_USER_INPUT_CHANNEL, { id });
+          window.ipcRenderer.send(CLEAR_USER_INPUT_CHANNEL, {
+            spaceId,
+            userId,
+          });
         }
       }
     );
@@ -399,12 +403,12 @@ const loadSpace = ({ fileLocation }) => dispatch => {
   });
 };
 
-const getSpace = ({ id, saved = false }) => dispatch => {
+const getSpace = ({ id, saved = false, user }) => dispatch => {
   // only get the space from the api if not saved
   if (!saved) {
     dispatch(getRemoteSpace({ id }));
   } else {
-    dispatch(getLocalSpace({ id }));
+    dispatch(getLocalSpace({ id, user }));
   }
 };
 

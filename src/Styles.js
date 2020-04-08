@@ -84,6 +84,11 @@ const Styles = theme => ({
     margin: theme.spacing(),
     minWidth: 120,
   },
+  dividerColor: {
+    color: 'white',
+    backgroundColor: 'white',
+    margin: theme.spacing(2),
+  },
 });
 
 export default Styles;

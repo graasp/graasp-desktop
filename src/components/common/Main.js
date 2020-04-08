@@ -37,11 +37,15 @@ class Main extends Component {
     children: PropTypes.node.isRequired,
     fullScreen: PropTypes.bool,
     id: PropTypes.string,
+    style: PropTypes.shape({
+      background: PropTypes.string,
+    }),
   };
 
   static defaultProps = {
     fullScreen: false,
     id: null,
+    style: {},
   };
 
   handleDrawerOpen = () => {
@@ -53,11 +57,11 @@ class Main extends Component {
   };
 
   render() {
-    const { classes, children, fullScreen, id } = this.props;
+    const { classes, children, fullScreen, id, style } = this.props;
     const { open } = this.state;
 
     return (
-      <div className={classes.root}>
+      <div className={classes.root} style={style}>
         <CssBaseline />
         <Header isSidebarOpen={open} handleDrawerOpen={this.handleDrawerOpen} />
 
@@ -81,8 +85,8 @@ class Main extends Component {
   }
 }
 
-const mapStateToProps = ({ User }) => ({
-  activity: Boolean(User.getIn(['current', 'activity']).size),
+const mapStateToProps = ({ authentication }) => ({
+  activity: Boolean(authentication.getIn(['current', 'activity']).size),
 });
 
 const mapDispatchToProps = {};

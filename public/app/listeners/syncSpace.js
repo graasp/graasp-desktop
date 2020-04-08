@@ -34,7 +34,7 @@ const syncSpace = (mainWindow, db) => async (event, { remoteSpace }) => {
 
     // use language defined in space otherwise fall back on
     // user language, otherwise fall back on the global default
-    const userLang = db.get('user.lang').value();
+    const userLang = db.get('user.settings.lang').value();
     const lang = language || userLang || DEFAULT_LANG;
 
     const spaceToSave = await downloadSpaceResources({

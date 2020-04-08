@@ -13,6 +13,7 @@ import { MediaCard } from './MediaCard';
 import DeleteButton from '../space/DeleteButton';
 import ExportButton from '../space/ExportButton';
 import SyncButton from '../space/SyncButton';
+import ClearButton from '../space/ClearButton';
 import Text from './Text';
 
 const createMediaCardProps = (showActions, text) => {
@@ -210,9 +211,13 @@ describe('<MediaCard />', () => {
         const cardActions = wrapper.find(CardActions);
         expect(cardActions).toHaveLength(1);
 
+        const clearButton = cardActions.find(ClearButton);
+        expect(clearButton).toHaveLength(1);
+        expect(clearButton.prop('spaceId')).toEqual(space.id);
+
         const deleteButton = cardActions.find(DeleteButton);
         expect(deleteButton).toHaveLength(1);
-        expect(deleteButton.prop('id')).toEqual(space.id);
+        expect(deleteButton.prop('spaceId')).toEqual(space.id);
 
         const exportButton = cardActions.find(ExportButton);
         expect(exportButton).toHaveLength(1);
@@ -220,7 +225,7 @@ describe('<MediaCard />', () => {
 
         const syncButton = cardActions.find(SyncButton);
         expect(syncButton).toHaveLength(1);
-        expect(syncButton.prop('id')).toEqual(space.id);
+        expect(syncButton.prop('spaceId')).toEqual(space.id);
       });
 
       it('renders <IconButton /> component with <ExpandMoreIcon />', () => {
@@ -292,9 +297,13 @@ describe('<MediaCard />', () => {
         const cardActions = wrapper.find(CardActions);
         expect(cardActions).toHaveLength(1);
 
+        const clearButton = cardActions.find(ClearButton);
+        expect(clearButton).toHaveLength(1);
+        expect(clearButton.prop('spaceId')).toEqual(space.id);
+
         const deleteButton = cardActions.find(DeleteButton);
         expect(deleteButton).toHaveLength(1);
-        expect(deleteButton.prop('id')).toEqual(space.id);
+        expect(deleteButton.prop('spaceId')).toEqual(space.id);
 
         const exportButton = cardActions.find(ExportButton);
         expect(exportButton).toHaveLength(1);
@@ -302,7 +311,7 @@ describe('<MediaCard />', () => {
 
         const syncButton = cardActions.find(SyncButton);
         expect(syncButton).toHaveLength(1);
-        expect(syncButton.prop('id')).toEqual(space.id);
+        expect(syncButton.prop('spaceId')).toEqual(space.id);
       });
 
       it('does not rendes <IconButton /> component', () => {

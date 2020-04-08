@@ -20,12 +20,18 @@ import {
   DASHBOARD_MENU_ITEM_ID,
   DEVELOPER_MENU_ITEM_ID,
   DEVELOPER_MAIN_ID,
+  SIGN_OUT_MENU_ITEM_ID,
+  PHASE_MENU_LIST_ID,
+  PHASE_MENU_ITEM,
 } from '../src/config/selectors';
 import {
   LOAD_TAB_PAUSE,
   DEFAULT_GLOBAL_TIMEOUT,
   OPEN_DRAWER_PAUSE,
+  LOAD_PHASE_PAUSE,
 } from './constants';
+import { userSignIn } from './userSignIn.test';
+import { USER_GRAASP } from './fixtures/users';
 
 export const openDrawer = async client => {
   if (await client.isVisible(`#${DRAWER_BUTTON_ID}`)) {
@@ -42,6 +48,12 @@ const menuGoTo = async (client, menuItemId, elementToExpectId = null) => {
     expect(await client.isExisting(`#${elementToExpectId}`)).to.be.true;
   }
   await client.pause(LOAD_TAB_PAUSE);
+};
+
+export const menuGoToPhase = async (client, nb) => {
+  await openDrawer(client);
+  await client.click(`#${PHASE_MENU_LIST_ID} li#${PHASE_MENU_ITEM}-${nb}`);
+  await client.pause(LOAD_PHASE_PAUSE);
 };
 
 export const menuGoToSettings = async client => {
@@ -68,6 +80,10 @@ export const menuGoToDashboard = async client => {
   await menuGoTo(client, DASHBOARD_MENU_ITEM_ID, DASHBOARD_MAIN_ID);
 };
 
+export const menuGoToSignOut = async client => {
+  await menuGoTo(client, SIGN_OUT_MENU_ITEM_ID);
+};
+
 export const menuGoToHome = async client => {
   await menuGoTo(client, HOME_MENU_ITEM_ID, HOME_MAIN_ID);
 };
@@ -75,10 +91,10 @@ export const menuGoToHome = async client => {
 describe('Menu Scenarios', function() {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
-
   before(
     mochaAsync(async () => {
       app = await createApplication();
+      await userSignIn(app.client, USER_GRAASP);
     })
   );
 
@@ -90,7 +106,6 @@ describe('Menu Scenarios', function() {
     'MainMenu redirects to correct path',
     mochaAsync(async () => {
       const { client } = app;
-
       await menuGoToSpacesNearby(client);
       await menuGoToVisitSpace(client);
       await menuGoToLoadSpace(client);

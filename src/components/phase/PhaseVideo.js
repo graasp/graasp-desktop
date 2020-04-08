@@ -43,8 +43,8 @@ PhaseVideo.defaultProps = {
   mimeType: 'video/mp4',
 };
 
-const mapStateToProps = ({ User }) => ({
-  folder: User.getIn(['current', 'folder']),
+const mapStateToProps = ({ authentication }) => ({
+  folder: authentication.getIn(['current', 'folder']),
 });
 
 const ConnectedComponent = connect(mapStateToProps)(PhaseVideo);

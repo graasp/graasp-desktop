@@ -19,6 +19,13 @@ const setDeveloperMode = require('./setDeveloperMode');
 const clearUserInput = require('./clearUserInput');
 const showClearUserInputPrompt = require('./showClearUserInputPrompt');
 const postAction = require('./postAction');
+const signIn = require('./signIn');
+const signOut = require('./signOut');
+const isAuthenticated = require('./isAuthenticated');
+const getAppInstanceResources = require('./getAppInstanceResources');
+const postAppInstanceResource = require('./postAppInstanceResource');
+const patchAppInstanceResource = require('./patchAppInstanceResource');
+const getAppInstance = require('./getAppInstance');
 
 module.exports = {
   loadSpace,
@@ -42,4 +49,11 @@ module.exports = {
   clearUserInput,
   showClearUserInputPrompt,
   postAction,
+  signIn,
+  signOut,
+  isAuthenticated,
+  getAppInstanceResources,
+  postAppInstanceResource,
+  patchAppInstanceResource,
+  getAppInstance,
 };

@@ -6,12 +6,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Tooltip from '@material-ui/core/Tooltip';
 import SaveIcon from '@material-ui/icons/Save';
+import SearchIcon from '@material-ui/icons/Search';
+import Language from '@material-ui/icons/Language';
 import CodeIcon from '@material-ui/icons/Code';
 import ListItemText from '@material-ui/core/ListItemText';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 import List from '@material-ui/core/List';
-import SearchIcon from '@material-ui/icons/Search';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
-import Language from '@material-ui/icons/Language';
 import PublishIcon from '@material-ui/icons/Publish';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { Online, Offline } from 'react-detect-offline';
@@ -24,6 +25,7 @@ import {
   VISIT_PATH,
   DEVELOPER_PATH,
   DASHBOARD_PATH,
+  SIGN_IN_PATH,
 } from '../../config/paths';
 import {
   SETTINGS_MENU_ITEM_ID,
@@ -33,7 +35,10 @@ import {
   SPACES_NEARBY_MENU_ITEM_ID,
   DASHBOARD_MENU_ITEM_ID,
   DEVELOPER_MENU_ITEM_ID,
+  SIGN_OUT_MENU_ITEM_ID,
 } from '../../config/selectors';
+import { signOut } from '../../actions/authentication';
+import { AUTHENTICATED } from '../../config/constants';
 
 export class MainMenu extends Component {
   static propTypes = {
@@ -41,6 +46,10 @@ export class MainMenu extends Component {
     developerMode: PropTypes.bool.isRequired,
     history: PropTypes.shape({ replace: PropTypes.func.isRequired }).isRequired,
     match: PropTypes.shape({ path: PropTypes.string.isRequired }).isRequired,
+    dispatchSignOut: PropTypes.func.isRequired,
+    authenticated: PropTypes.bool.isRequired,
+    location: PropTypes.shape({ pathname: PropTypes.string.isRequired })
+      .isRequired,
   };
 
   handleClick = path => {
@@ -54,6 +63,43 @@ export class MainMenu extends Component {
       replace(HOME_PATH);
     }
   };
+
+  handleSignOut() {
+    // pathname inside location matches the path in url
+    const { location: { pathname } = {}, dispatchSignOut } = this.props;
+    if (pathname) {
+      sessionStorage.setItem('redirect', pathname);
+    }
+
+    dispatchSignOut();
+  }
+
+  renderSignOut() {
+    const {
+      authenticated,
+      t,
+      match: { path },
+    } = this.props;
+
+    if (authenticated) {
+      return (
+        <MenuItem
+          id={SIGN_OUT_MENU_ITEM_ID}
+          onClick={() => {
+            this.handleSignOut();
+          }}
+          selected={path === SIGN_IN_PATH}
+          button
+        >
+          <ListItemIcon>
+            <AccountCircle />
+          </ListItemIcon>
+          <ListItemText primary={t('Sign Out')} />
+        </MenuItem>
+      );
+    }
+    return null;
+  }
 
   renderDeveloperMode() {
     const {
@@ -98,72 +144,14 @@ export class MainMenu extends Component {
     );
   };
 
-  render() {
+  renderDashboard = () => {
     const {
+      authenticated,
       match: { path },
       t,
     } = this.props;
-    return (
-      <List>
-        <MenuItem
-          id={HOME_MENU_ITEM_ID}
-          onClick={() => this.handleClick(HOME_PATH)}
-          button
-          selected={path === HOME_PATH}
-        >
-          <ListItemIcon>
-            <SaveIcon />
-          </ListItemIcon>
-          <ListItemText primary={t('Saved Spaces')} />
-        </MenuItem>
-        {this.renderOfflineMenuItem(
-          <MenuItem
-            id={SPACES_NEARBY_MENU_ITEM_ID}
-            onClick={() => this.handleClick(SPACES_NEARBY_PATH)}
-            button
-            selected={path === SPACES_NEARBY_PATH}
-          >
-            <ListItemIcon>
-              <SearchIcon />
-            </ListItemIcon>
-            <ListItemText primary={t('Spaces Nearby')} />
-          </MenuItem>
-        )}
-        {this.renderOfflineMenuItem(
-          <MenuItem
-            id={VISIT_MENU_ITEM_ID}
-            onClick={() => this.handleClick(VISIT_PATH)}
-            button
-            selected={path === VISIT_PATH}
-          >
-            <ListItemIcon>
-              <Language />
-            </ListItemIcon>
-            <ListItemText primary={t('Visit a Space')} />
-          </MenuItem>
-        )}
-        <MenuItem
-          id={LOAD_MENU_ITEM_ID}
-          onClick={() => this.handleClick(LOAD_SPACE_PATH)}
-          button
-          selected={path === LOAD_SPACE_PATH}
-        >
-          <ListItemIcon>
-            <PublishIcon />
-          </ListItemIcon>
-          <ListItemText primary={t('Load')} />
-        </MenuItem>
-        <MenuItem
-          id={SETTINGS_MENU_ITEM_ID}
-          onClick={() => this.handleClick(SETTINGS_PATH)}
-          button
-          selected={path === SETTINGS_PATH}
-        >
-          <ListItemIcon>
-            <SettingsIcon />
-          </ListItemIcon>
-          <ListItemText primary={t('Settings')} />
-        </MenuItem>
+    if (authenticated) {
+      return (
         <MenuItem
           id={DASHBOARD_MENU_ITEM_ID}
           onClick={() => this.handleClick(DASHBOARD_PATH)}
@@ -175,18 +163,128 @@ export class MainMenu extends Component {
           </ListItemIcon>
           <ListItemText primary={t('Dashboard')} />
         </MenuItem>
+      );
+    }
+    return null;
+  };
+
+  renderAuthenticatedMenu() {
+    const {
+      authenticated,
+      t,
+      match: { path },
+    } = this.props;
+
+    if (authenticated) {
+      return (
+        <>
+          <MenuItem
+            id={HOME_MENU_ITEM_ID}
+            onClick={() => this.handleClick(HOME_PATH)}
+            button
+            selected={path === HOME_PATH}
+          >
+            <ListItemIcon>
+              <SaveIcon />
+            </ListItemIcon>
+            <ListItemText primary={t('Saved Spaces')} />
+          </MenuItem>
+          {this.renderOfflineMenuItem(
+            <MenuItem
+              id={SPACES_NEARBY_MENU_ITEM_ID}
+              onClick={() => this.handleClick(SPACES_NEARBY_PATH)}
+              button
+              selected={path === SPACES_NEARBY_PATH}
+            >
+              <ListItemIcon>
+                <SearchIcon />
+              </ListItemIcon>
+              <ListItemText primary={t('Spaces Nearby')} />
+            </MenuItem>
+          )}
+          {this.renderOfflineMenuItem(
+            <MenuItem
+              id={VISIT_MENU_ITEM_ID}
+              onClick={() => this.handleClick(VISIT_PATH)}
+              button
+              selected={path === VISIT_PATH}
+            >
+              <ListItemIcon>
+                <Language />
+              </ListItemIcon>
+              <ListItemText primary={t('Visit a Space')} />
+            </MenuItem>
+          )}
+          <MenuItem
+            id={LOAD_MENU_ITEM_ID}
+            onClick={() => this.handleClick(LOAD_SPACE_PATH)}
+            button
+            selected={path === LOAD_SPACE_PATH}
+          >
+            <ListItemIcon>
+              <PublishIcon />
+            </ListItemIcon>
+            <ListItemText primary={t('Load')} />
+          </MenuItem>
+        </>
+      );
+    }
+    return (
+      <MenuItem
+        onClick={() => {
+          this.handleClick(SIGN_IN_PATH);
+        }}
+        selected={path === SIGN_IN_PATH}
+        button
+      >
+        <ListItemIcon>
+          <AccountCircle />
+        </ListItemIcon>
+        <ListItemText primary={t('Sign In')} />
+      </MenuItem>
+    );
+  }
+
+  render() {
+    const {
+      match: { path },
+      t,
+    } = this.props;
+    return (
+      <List>
+        {this.renderAuthenticatedMenu()}
+        <MenuItem
+          id={SETTINGS_MENU_ITEM_ID}
+          onClick={() => this.handleClick(SETTINGS_PATH)}
+          button
+          selected={path === SETTINGS_PATH}
+        >
+          <ListItemIcon>
+            <SettingsIcon />
+          </ListItemIcon>
+          <ListItemText primary={t('Settings')} />
+        </MenuItem>
+        {this.renderDashboard()}
         {this.renderDeveloperMode()}
+        {this.renderSignOut()}
       </List>
     );
   }
 }
 
-const mapStateToProps = ({ User }) => ({
-  developerMode: User.getIn(['current', 'developerMode']),
-  activity: Boolean(User.getIn(['current', 'activity']).size),
+const mapStateToProps = ({ authentication }) => ({
+  authenticated: authentication.getIn(['authenticated']) === AUTHENTICATED,
+  developerMode: authentication.getIn(['user', 'settings', 'developerMode']),
+  activity: Boolean(authentication.getIn(['current', 'activity']).size),
 });
+const mapDispatchToProps = {
+  dispatchSignOut: signOut,
+};
 
-const ConnectedComponent = connect(mapStateToProps)(MainMenu);
+const ConnectedComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MainMenu);
 
 const TranslatedComponent = withTranslation()(ConnectedComponent);
 

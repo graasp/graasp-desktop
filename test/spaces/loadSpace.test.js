@@ -14,14 +14,14 @@ import {
   LOAD_INPUT_ID,
   SPACE_DELETE_BUTTON_CLASS,
   HOME_MAIN_ID,
+  PHASE_MENU_LIST_ID,
+  PHASE_MENU_ITEM,
 } from '../../src/config/selectors';
 import {
   SPACE_ATOMIC_STRUCTURE,
   SPACE_ATOMIC_STRUCTURE_PATH,
   SPACE_ATOMIC_STRUCTURE_WITH_CHANGES,
   SPACE_ATOMIC_STRUCTURE_WITH_CHANGES_PATH,
-  SPACE_ATOMIC_STRUCTURE_WITH_USER_INPUT,
-  SPACE_ATOMIC_STRUCTURE_WITH_USER_INPUT_PATH,
 } from '../fixtures/spaces';
 import { hasSavedSpaceLayout, visitAndSaveSpaceById } from './visitSpace.test';
 import {
@@ -32,18 +32,22 @@ import {
   EXPORT_FILEPATH,
   DELETE_SPACE_PAUSE,
   OPEN_SAVED_SPACE_PAUSE,
+  LOAD_PHASE_PAUSE,
   DEFAULT_GLOBAL_TIMEOUT,
 } from '../constants';
+import { userSignIn } from '../userSignIn.test';
+import { USER_GRAASP } from '../fixtures/users';
+import { typeInTextInputApp } from '../apps/textInputApp';
 
 /* eslint-disable-next-line import/prefer-default-export */
-export const loadSpaceById = async (client, space, filepath) => {
-  const { id } = space;
+export const loadSpaceById = async (client, { space: { id } }, filepath) => {
   await menuGoToLoadSpace(client);
 
   // input space id
   const absolutePath = path.resolve(__dirname, '../fixtures/spaces', filepath);
   await client.setValue(`#${LOAD_INPUT_ID}`, absolutePath);
   await client.pause(INPUT_TYPE_PAUSE);
+
   const value = await client.getValue(`#${LOAD_INPUT_ID}`);
   expect(value).to.equal(absolutePath);
 
@@ -71,6 +75,7 @@ describe('Load Space Scenarios', function() {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication();
+        await userSignIn(app.client, USER_GRAASP);
       })
     );
 
@@ -91,7 +96,7 @@ describe('Load Space Scenarios', function() {
     );
 
     it(
-      `Load space ${SPACE_ATOMIC_STRUCTURE.name}`,
+      `Load space ${SPACE_ATOMIC_STRUCTURE.space.name}`,
       mochaAsync(async () => {
         const { client } = app;
 
@@ -106,27 +111,11 @@ describe('Load Space Scenarios', function() {
     );
 
     it(
-      `Load space ${SPACE_ATOMIC_STRUCTURE_WITH_USER_INPUT.name} with user input`,
+      `Cannot load already saved space of ${SPACE_ATOMIC_STRUCTURE.space.name}`,
       mochaAsync(async () => {
-        const { client } = app;
-
-        await loadSpaceById(
-          client,
-          SPACE_ATOMIC_STRUCTURE_WITH_USER_INPUT,
-          SPACE_ATOMIC_STRUCTURE_WITH_USER_INPUT_PATH
-        );
-
-        await hasSavedSpaceLayout(
-          client,
-          SPACE_ATOMIC_STRUCTURE_WITH_USER_INPUT
-        );
-      })
-    );
-
-    it(
-      `Cannot load already saved space of ${SPACE_ATOMIC_STRUCTURE.name}`,
-      mochaAsync(async () => {
-        const { id } = SPACE_ATOMIC_STRUCTURE;
+        const {
+          space: { id },
+        } = SPACE_ATOMIC_STRUCTURE;
         const { client } = app;
 
         // get space
@@ -144,7 +133,7 @@ describe('Load Space Scenarios', function() {
 
         const savedSpacesHtml = await client.getHTML(`#${HOME_MAIN_ID}`);
         expect(savedSpacesHtml).to.not.include(
-          SPACE_ATOMIC_STRUCTURE_WITH_CHANGES_PATH.name
+          SPACE_ATOMIC_STRUCTURE_WITH_CHANGES.space.name
         );
         await client.pause(OPEN_SAVED_SPACE_PAUSE);
 
@@ -158,9 +147,11 @@ describe('Load Space Scenarios', function() {
   });
 
   it(
-    `Load exported space of ${SPACE_ATOMIC_STRUCTURE.name}`,
+    `Load exported space of ${SPACE_ATOMIC_STRUCTURE.space.name}`,
     mochaAsync(async () => {
-      const { id } = SPACE_ATOMIC_STRUCTURE;
+      const {
+        space: { id },
+      } = SPACE_ATOMIC_STRUCTURE;
 
       const filepath = `${EXPORT_FILEPATH}_${createRandomString()}.zip`;
       app = await createApplication({
@@ -169,6 +160,8 @@ describe('Load Space Scenarios', function() {
       });
 
       const { client } = app;
+
+      await userSignIn(client, USER_GRAASP);
 
       // get space
       await visitAndSaveSpaceById(client, id);
@@ -187,6 +180,57 @@ describe('Load Space Scenarios', function() {
 
       // check content
       await hasSavedSpaceLayout(client, SPACE_ATOMIC_STRUCTURE);
+    })
+  );
+
+  it(
+    `Load exported space of ${SPACE_ATOMIC_STRUCTURE.space.name} with added user input`,
+    mochaAsync(async () => {
+      const {
+        space: { id, phases },
+      } = SPACE_ATOMIC_STRUCTURE;
+
+      const filepath = `${EXPORT_FILEPATH}_${createRandomString()}.zip`;
+      app = await createApplication({
+        showSaveDialogResponse: filepath,
+        showMessageDialogResponse: 1,
+      });
+
+      const { client } = app;
+
+      await userSignIn(client, USER_GRAASP);
+
+      // get space
+      await visitAndSaveSpaceById(client, id);
+
+      // add user input
+      await client.click(`#${PHASE_MENU_LIST_ID} li#${PHASE_MENU_ITEM}-${0}`);
+      await client.pause(LOAD_PHASE_PAUSE);
+
+      // type in text input app
+      const { id: appId, appInstance } = phases[0].items[1];
+      const resources = [
+        {
+          data: 'user input in space with graasp account',
+          appInstance: appInstance.id,
+        },
+      ];
+      await typeInTextInputApp(client, appId, resources[0].data);
+
+      // export space
+      await client.click(`.${SPACE_EXPORT_BUTTON_CLASS}`);
+      await client.pause(EXPORT_SPACE_PAUSE);
+      await client.pause(TOOLTIP_FADE_OUT_PAUSE);
+
+      // delete space
+      await client.click(`.${SPACE_DELETE_BUTTON_CLASS}`);
+      await client.pause(DELETE_SPACE_PAUSE);
+
+      // load space
+      await loadSpaceById(client, SPACE_ATOMIC_STRUCTURE, filepath);
+
+      // check content
+      await hasSavedSpaceLayout(client, SPACE_ATOMIC_STRUCTURE, resources);
     })
   );
 });

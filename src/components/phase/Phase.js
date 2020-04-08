@@ -160,7 +160,7 @@ export class Phase extends Component {
 }
 
 const mapStateToProps = ({ Space, layout }) => ({
-  space: Space.get('current').get('content'),
+  space: Space.getIn(['current', 'content']),
   toolsVisible: layout.getIn(['tools', 'open']),
   toolsWidth: layout.getIn(['tools', 'width']),
 });

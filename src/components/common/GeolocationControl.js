@@ -106,9 +106,13 @@ export class GeolocationControl extends Component {
   }
 }
 
-const mapStateToProps = ({ User }) => ({
-  geolocationEnabled: User.getIn(['current', 'geolocationEnabled']),
-  activity: Boolean(User.getIn(['current', 'activity']).size),
+const mapStateToProps = ({ authentication }) => ({
+  geolocationEnabled: authentication.getIn([
+    'user',
+    'settings',
+    'geolocationEnabled',
+  ]),
+  activity: Boolean(authentication.getIn(['current', 'activity']).size),
 });
 
 const mapDispatchToProps = {

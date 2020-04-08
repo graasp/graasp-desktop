@@ -10,6 +10,8 @@ const fsPromises = fs.promises;
 
 const SPACES_COLLECTION = 'spaces';
 const ACTIONS_COLLECTION = 'actions';
+const USERS_COLLECTION = 'users';
+const APP_INSTANCE_RESOURCES_COLLECTION = 'appInstanceResources';
 
 // bootstrap database
 const ensureDatabaseExists = async (dbPath = DATABASE_PATH) => {
@@ -33,14 +35,19 @@ const bootstrapDatabase = (dbPath = DATABASE_PATH) => {
   // set some defaults (required if json file is empty)
   db.defaults({
     [SPACES_COLLECTION]: [],
+    [USERS_COLLECTION]: [],
     user: { lang: DEFAULT_LANG },
     [ACTIONS_COLLECTION]: [],
+    [APP_INSTANCE_RESOURCES_COLLECTION]: [],
   }).write();
   return db;
 };
 
 module.exports = {
   SPACES_COLLECTION,
+  USERS_COLLECTION,
+  APP_INSTANCE_RESOURCES_COLLECTION,
+  ACTIONS_COLLECTION,
   ensureDatabaseExists,
   bootstrapDatabase,
 };

@@ -16,6 +16,8 @@ import {
   visitAndSaveSpaceById,
 } from './visitSpace.test';
 import { OPEN_SAVED_SPACE_PAUSE, DEFAULT_GLOBAL_TIMEOUT } from '../constants';
+import { userSignIn } from '../userSignIn.test';
+import { USER_GRAASP } from '../fixtures/users';
 
 describe('Save a space', function() {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
@@ -28,13 +30,16 @@ describe('Save a space', function() {
   beforeEach(
     mochaAsync(async () => {
       app = await createApplication();
+      await userSignIn(app.client, USER_GRAASP);
     })
   );
   it(
     'Saving a space adds it to Saved Spaces',
     mochaAsync(async () => {
       const { client } = app;
-      const { id, description, name } = SPACE_ATOMIC_STRUCTURE;
+      const {
+        space: { id, description, name },
+      } = SPACE_ATOMIC_STRUCTURE;
 
       await visitAndSaveSpaceById(client, id);
 

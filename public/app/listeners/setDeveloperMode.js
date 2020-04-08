@@ -4,7 +4,7 @@ const logger = require('../logger');
 
 const setDeveloperMode = (mainWindow, db) => async (event, developerMode) => {
   try {
-    db.set('user.developerMode', developerMode).write();
+    db.set('user.settings.developerMode', developerMode).write();
     mainWindow.webContents.send(SET_DEVELOPER_MODE_CHANNEL, developerMode);
   } catch (e) {
     logger.error(e);

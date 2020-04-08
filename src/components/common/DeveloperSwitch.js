@@ -65,9 +65,9 @@ export class DeveloperSwitch extends Component {
   }
 }
 
-const mapStateToProps = ({ User }) => ({
-  developerMode: User.getIn(['current', 'developerMode']),
-  activity: Boolean(User.getIn(['current', 'activity']).size),
+const mapStateToProps = ({ authentication }) => ({
+  developerMode: authentication.getIn(['user', 'settings', 'developerMode']),
+  activity: Boolean(authentication.getIn(['current', 'activity']).size),
 });
 
 const mapDispatchToProps = {

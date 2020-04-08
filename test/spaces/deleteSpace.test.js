@@ -12,6 +12,8 @@ import {
 import { SPACE_ATOMIC_STRUCTURE } from '../fixtures/spaces';
 import { visitAndSaveSpaceById } from './visitSpace.test';
 import { DELETE_SPACE_PAUSE, DEFAULT_GLOBAL_TIMEOUT } from '../constants';
+import { userSignIn } from '../userSignIn.test';
+import { USER_GRAASP } from '../fixtures/users';
 
 describe('Delete a space', function() {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
@@ -24,11 +26,15 @@ describe('Delete a space', function() {
   it(
     'Deleting from card removes space from Saved Spaces',
     mochaAsync(async () => {
-      const { id } = SPACE_ATOMIC_STRUCTURE;
+      const {
+        space: { id },
+      } = SPACE_ATOMIC_STRUCTURE;
 
       app = await createApplication({ showMessageDialogResponse: 1 });
 
       const { client } = app;
+
+      await userSignIn(client, USER_GRAASP);
 
       await visitAndSaveSpaceById(client, id);
 
@@ -48,11 +54,15 @@ describe('Delete a space', function() {
   it(
     'Deleting from toolbar removes space from Saved Spaces',
     mochaAsync(async () => {
-      const { id } = SPACE_ATOMIC_STRUCTURE;
+      const {
+        space: { id },
+      } = SPACE_ATOMIC_STRUCTURE;
 
       app = await createApplication({ showMessageDialogResponse: 1 });
 
       const { client } = app;
+
+      await userSignIn(client, USER_GRAASP);
 
       await visitAndSaveSpaceById(client, id);
 
@@ -68,11 +78,15 @@ describe('Delete a space', function() {
   it(
     'Cancel deleting keeps space in Saved Spaces',
     mochaAsync(async () => {
-      const { id } = SPACE_ATOMIC_STRUCTURE;
+      const {
+        space: { id },
+      } = SPACE_ATOMIC_STRUCTURE;
 
       app = await createApplication({ showMessageDialogResponse: 0 });
 
       const { client } = app;
+
+      await userSignIn(client, USER_GRAASP);
 
       await visitAndSaveSpaceById(client, id);
 

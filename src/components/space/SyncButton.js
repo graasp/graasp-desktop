@@ -14,7 +14,7 @@ import { SPACE_SYNC_BUTTON_CLASS } from '../../config/selectors';
 
 class SyncButton extends Component {
   static propTypes = {
-    id: PropTypes.string.isRequired,
+    spaceId: PropTypes.string.isRequired,
     classes: PropTypes.shape({
       appBar: PropTypes.string.isRequired,
       button: PropTypes.string.isRequired,
@@ -24,7 +24,7 @@ class SyncButton extends Component {
   };
 
   handleSync = () => {
-    const { id, dispatchSyncSpace } = this.props;
+    const { spaceId: id, dispatchSyncSpace } = this.props;
     dispatchSyncSpace({ id });
   };
 

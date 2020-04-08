@@ -34,7 +34,10 @@ import {
   SAVE_SPACE_PAUSE,
   TOOLTIP_FADE_OUT_PAUSE,
   DEFAULT_GLOBAL_TIMEOUT,
+  LOAD_PHASE_PAUSE,
 } from '../constants';
+import { userSignIn } from '../userSignIn.test';
+import { USER_GRAASP } from '../fixtures/users';
 
 const PREVIEW = 'preview';
 const SAVED = 'saved';
@@ -51,7 +54,7 @@ const testTextOfElement = async (client, selector, text) => {
   }
 };
 
-const visitSpaceById = async (client, id) => {
+export const visitSpaceById = async (client, id) => {
   await menuGoToVisitSpace(client);
 
   // input space id
@@ -64,7 +67,7 @@ const visitSpaceById = async (client, id) => {
   await client.pause(VISIT_SPACE_PAUSE);
 };
 
-const visitAndSaveSpaceById = async (client, id) => {
+export const visitAndSaveSpaceById = async (client, id) => {
   await visitSpaceById(client, id);
 
   // save space
@@ -75,7 +78,7 @@ const visitAndSaveSpaceById = async (client, id) => {
 };
 
 // check home phase of given space when preview
-const hasPreviewSpaceHomeLayout = async (
+export const hasPreviewSpaceHomeLayout = async (
   client,
   { name: spaceName, description: spaceDescription }
 ) => {
@@ -113,7 +116,7 @@ const hasPreviewSpaceHomeLayout = async (
 };
 
 // check home phase of given space when saved
-const hasSavedSpaceHomeLayout = async (
+export const hasSavedSpaceHomeLayout = async (
   client,
   { name: spaceName, description: spaceDescription }
 ) => {
@@ -160,10 +163,10 @@ const hasSavedSpaceHomeLayout = async (
   expect(previewButton.toLowerCase()).to.equal('start');
 };
 
-const checkUserInputInApp = async (client, { id, url, resources }) => {
+const checkUserInputInApp = async (client, { id, url }, resources = []) => {
   // @TODO differentiate apps with an appId
   let data = '';
-  if (resources && resources.length) {
+  if (resources.length) {
     /* eslint-disable-next-line prefer-destructuring */
     ({ data } = resources[0]);
   }
@@ -188,7 +191,12 @@ const checkUserInputInApp = async (client, { id, url, resources }) => {
 
 // check layout of a given phase
 // @TODO check user input - have access to iframe
-const hasPhaseLayout = async (client, { description, items }, mode) => {
+const hasPhaseLayout = async (
+  client,
+  { description, items },
+  mode,
+  resources = []
+) => {
   // space description if not empty
   // get innerHTML to retrieve html tags as well
   // remove space to handle trimmed spaces
@@ -204,7 +212,7 @@ const hasPhaseLayout = async (client, { description, items }, mode) => {
     category,
     url,
     asset,
-    appInstance = {},
+    appInstance,
   } of items) {
     const itemSelector = `[data-id="${id}"]`;
 
@@ -243,15 +251,20 @@ const hasPhaseLayout = async (client, { description, items }, mode) => {
           case PREVIEW: {
             const iframe = await client.getHTML(`${itemSelector} iframe`);
             expect(iframe).to.include(url);
-            const { resources } = appInstance;
-            await checkUserInputInApp(client, { id, resources, url });
+            await checkUserInputInApp(client, { id, url });
             break;
           }
           case SAVED: {
             const iframe = await client.getHTML(`${itemSelector} iframe`);
             expect(iframe).to.include(asset);
-            const { resources } = appInstance;
-            await checkUserInputInApp(client, { id, resources, url });
+            if (appInstance) {
+              const { id: appInstanceId } = appInstance;
+              const filteredResources = resources.filter(
+                ({ appInstance: resourcesAppInstanceId }) =>
+                  resourcesAppInstanceId === appInstanceId
+              );
+              await checkUserInputInApp(client, { id, url }, filteredResources);
+            }
             break;
           }
           default:
@@ -269,7 +282,7 @@ const hasPhaseLayout = async (client, { description, items }, mode) => {
 };
 
 // check phases layout
-const checkPhasesLayout = async (client, phases, mode) => {
+const checkPhasesLayout = async (client, phases, mode, resources = []) => {
   // check each phase layout
   const liTextArray = await client.getText(`#${PHASE_MENU_LIST_ID} li`);
   liTextArray.shift();
@@ -283,29 +296,36 @@ const checkPhasesLayout = async (client, phases, mode) => {
 
     // go to phase
     await client.click(liSelector);
-    await client.pause(2000);
+    await client.pause(LOAD_PHASE_PAUSE);
 
     // check phase content
-    await hasPhaseLayout(client, phases[idx], mode);
+    await hasPhaseLayout(client, phases[idx], mode, resources);
   }
 };
 
 // check space layout when saved
-const hasSavedSpaceLayout = async (client, { phases, description, name }) => {
+export const hasSavedSpaceLayout = async (
+  client,
+  { space: { phases, description, name } },
+  resources = []
+) => {
   await hasSavedSpaceHomeLayout(client, { description, name });
-  await checkPhasesLayout(client, phases, SAVED);
+  await checkPhasesLayout(client, phases, SAVED, resources);
 };
 
 // check space layout when preview
-const hasPreviewSpaceLayout = async (client, { phases, description, name }) => {
+export const hasPreviewSpaceLayout = async (
+  client,
+  { space: { phases, description, name }, resources = [] }
+) => {
   await hasPreviewSpaceHomeLayout(client, { description, name });
-  await checkPhasesLayout(client, phases, PREVIEW);
+  await checkPhasesLayout(client, phases, PREVIEW, resources);
 };
 
 // check a space card layout
-const checkSpaceCardLayout = async (
+export const checkSpaceCardLayout = async (
   client,
-  { id, name: spaceName, description: spaceDescription }
+  { space: { id, name: spaceName, description: spaceDescription } }
 ) => {
   const spaceSelector = `#${buildSpaceCardId(id)}`;
   const spaceCard = await client.element(spaceSelector);
@@ -359,31 +379,25 @@ describe('Visit Space Scenarios', function() {
   beforeEach(
     mochaAsync(async () => {
       app = await createApplication();
+      await userSignIn(app.client, USER_GRAASP);
     })
   );
 
   const spaces = [SPACE_APOLLO_11, SPACE_ATOMIC_STRUCTURE];
 
   spaces.forEach(function(space) {
+    const {
+      space: { id, name },
+    } = space;
     it(
-      `Visit space ${space.name} (${space.id})`,
+      `Visit space ${name} (${id})`,
       mochaAsync(async () => {
         const { client } = app;
 
-        await visitSpaceById(client, space.id);
+        await visitSpaceById(client, id);
 
         await hasPreviewSpaceLayout(client, space);
       })
     );
   });
 });
-
-export {
-  hasPreviewSpaceHomeLayout,
-  checkSpaceCardLayout,
-  hasPreviewSpaceLayout,
-  hasSavedSpaceLayout,
-  hasSavedSpaceHomeLayout,
-  visitSpaceById,
-  visitAndSaveSpaceById,
-};

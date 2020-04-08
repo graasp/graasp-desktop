@@ -79,9 +79,9 @@ export class LanguageSelect extends Component {
   }
 }
 
-const mapStateToProps = ({ User }) => ({
-  lang: User.getIn(['current', 'lang']),
-  activity: Boolean(User.getIn(['current', 'activity']).size),
+const mapStateToProps = ({ authentication }) => ({
+  lang: authentication.getIn(['user', 'settings', 'lang']),
+  activity: Boolean(authentication.getIn(['current', 'activity']).size),
 });
 
 const mapDispatchToProps = {

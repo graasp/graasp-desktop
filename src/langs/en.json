@@ -47,6 +47,11 @@
     "The database is empty.": "The database is empty.",
     "Filter by Space": "Filter by Space",
     "All Spaces": "All Spaces",
-    "Time": "Time"
+    "Time": "Time",
+    "Sign In": "Sign In",
+    "Sign Out": "Sign Out",
+    "Username": "Enter your Username",
+    "Sign in as Guest": "Sign in as Guest",
+    "Graasp logo": "Graasp logo"
   }
 }

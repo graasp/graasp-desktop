@@ -5,7 +5,7 @@ const logger = require('../logger');
 
 const getLanguage = (mainWindow, db) => async () => {
   try {
-    const lang = db.get('user.lang').value() || DEFAULT_LANG;
+    const lang = db.get('user.settings.lang').value() || DEFAULT_LANG;
     mainWindow.webContents.send(GET_LANGUAGE_CHANNEL, lang);
   } catch (e) {
     logger.error(e);

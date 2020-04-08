@@ -64,7 +64,6 @@ class Home extends Component {
     }
     return (
       <Main id={HOME_MAIN_ID}>
-        <div className={classes.drawerHeader} />
         <SpaceGrid spaces={spaces} showActions saved />
       </Main>
     );
