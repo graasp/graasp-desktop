@@ -2,6 +2,7 @@ const rimraf = require('rimraf');
 
 const {
   SPACES_COLLECTION,
+  ACTIONS_COLLECTION,
   APP_INSTANCE_RESOURCES_COLLECTION,
 } = require('../db');
 const { DELETED_SPACE_CHANNEL } = require('../config/channels');
@@ -19,6 +20,11 @@ const deleteSpace = (mainWindow, db) => async (event, { id }) => {
 
     // remove related resources
     db.get(APP_INSTANCE_RESOURCES_COLLECTION)
+      .remove({ spaceId: id })
+      .write();
+
+    // remove related actions
+    db.get(ACTIONS_COLLECTION)
       .remove({ spaceId: id })
       .write();
 

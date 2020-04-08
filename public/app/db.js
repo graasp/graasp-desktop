@@ -11,7 +11,7 @@ const fsPromises = fs.promises;
 const SPACES_COLLECTION = 'spaces';
 const ACTIONS_COLLECTION = 'actions';
 const USERS_COLLECTION = 'users';
-const APP_INSTANCE_RESOURCES_COLLECTION = 'resources';
+const APP_INSTANCE_RESOURCES_COLLECTION = 'appInstanceResources';
 
 // bootstrap database
 const ensureDatabaseExists = async (dbPath = DATABASE_PATH) => {
@@ -47,6 +47,7 @@ module.exports = {
   SPACES_COLLECTION,
   USERS_COLLECTION,
   APP_INSTANCE_RESOURCES_COLLECTION,
+  ACTIONS_COLLECTION,
   ensureDatabaseExists,
   bootstrapDatabase,
 };

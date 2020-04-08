@@ -9,12 +9,14 @@ const signOut = (mainWindow, db) => async () => {
     // update user in users collection
     const user = db.get('user').value();
     db.get('users')
-      .find({ userId: user.userId })
+      .find({ id: user.id })
       .assign(user)
       .write();
 
     // clear user in db
     db.set('user', {}).write();
+
+    // @TODO: save length of the session for analytics
 
     mainWindow.webContents.send(SIGN_OUT_CHANNEL);
   } catch (e) {

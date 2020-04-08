@@ -315,7 +315,6 @@ const clearUserInput = async ({ spaceId, userId }) => async dispatch => {
 
     // listen for response from backend
     window.ipcRenderer.once(CLEARED_USER_INPUT_CHANNEL, (event, response) => {
-      console.log('response', response);
       if (response === ERROR_GENERAL) {
         toastr.error(ERROR_MESSAGE_HEADER, ERROR_CLEARING_USER_INPUT_MESSAGE);
       } else {

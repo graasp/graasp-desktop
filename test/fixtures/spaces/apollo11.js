@@ -204,7 +204,7 @@ const SPACE_APOLLO_11 = {
     saved: true,
   },
   actions: [],
-  resources: [],
+  appInstanceResources: [],
 };
 
 /* eslint-disable-next-line import/prefer-default-export */

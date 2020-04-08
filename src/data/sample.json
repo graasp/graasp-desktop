@@ -147,7 +147,7 @@
     }
   ],
   "user": {
-    "userId": 1,
+    "id": 1,
     "createdAt": "2019-05-21T17:06:29.683Z",
     "settings:": {
       "lang": "en",
@@ -172,7 +172,7 @@
   ],
   "users": [
     {
-      "userId": 1,
+      "id": 1,
       "createdAt": "2019-05-21T17:06:29.683Z",
       "settings:": {
         "lang": "en",
@@ -181,7 +181,7 @@
       }
     }
   ],
-  "resources": [
+  "appInstanceResources": [
     {
       "appInstance": "5ce2c2323a209c1877b3dc80",
       "createdAt": "2019-05-21T17:06:29.683Z",

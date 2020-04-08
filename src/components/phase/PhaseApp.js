@@ -307,7 +307,7 @@ const mapStateToProps = ({ authentication, Space }) => ({
     'settings',
     'geolocationEnabled',
   ]),
-  userId: authentication.getIn(['user', 'userId']),
+  userId: authentication.getIn(['user', 'id']),
 });
 
 const mapDispatchToProps = {

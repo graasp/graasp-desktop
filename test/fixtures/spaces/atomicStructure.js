@@ -1818,7 +1818,7 @@ const SPACE_ATOMIC_STRUCTURE = {
     language: 'en',
     saved: true,
   },
-  resources: [],
+  appInstanceResources: [],
   actions: [],
 };
 

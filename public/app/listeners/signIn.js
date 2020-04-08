@@ -9,10 +9,10 @@ const {
 } = require('../config/config');
 
 const createNewUser = (username, createdAt, anonymous = false) => {
-  const userId = ObjectId().str;
+  const id = ObjectId().str;
 
   return {
-    userId,
+    id,
     username,
     createdAt,
     anonymous,

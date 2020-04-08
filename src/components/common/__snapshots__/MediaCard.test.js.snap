@@ -90,7 +90,7 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text defined r
       spaceId="id"
     />
     <withI18nextTranslation(WithStyles(Connect(DeleteButton)))
-      id="id"
+      spaceId="id"
     />
     <withI18nextTranslation(WithStyles(Connect(ExportButton)))
       space={
@@ -101,7 +101,7 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text defined r
       }
     />
     <withI18nextTranslation(WithStyles(Connect(SyncButton)))
-      id="id"
+      spaceId="id"
     />
     <WithStyles(ForwardRef(IconButton))
       aria-expanded={false}
@@ -162,7 +162,7 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text undefined
       spaceId="id"
     />
     <withI18nextTranslation(WithStyles(Connect(DeleteButton)))
-      id="id"
+      spaceId="id"
     />
     <withI18nextTranslation(WithStyles(Connect(ExportButton)))
       space={
@@ -173,7 +173,7 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text undefined
       }
     />
     <withI18nextTranslation(WithStyles(Connect(SyncButton)))
-      id="id"
+      spaceId="id"
     />
   </WithStyles(ForwardRef(CardActions))>
 </WithStyles(ForwardRef(Card))>

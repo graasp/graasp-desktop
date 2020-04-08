@@ -1288,7 +1288,7 @@ const SPACE_ATOMIC_STRUCTURE_WITH_CHANGES = {
     language: 'en',
     saved: true,
   },
-  resources: [],
+  appInstanceResources: [],
   actions: [],
 };
 

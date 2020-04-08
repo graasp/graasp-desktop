@@ -66,7 +66,11 @@ const loadSpace = (mainWindow, db) => async (event, { fileLocation }) => {
     }
 
     const spaceString = await fsPromises.readFile(spacePath);
-    const { space, resources = [], actions = [] } = JSON.parse(spaceString);
+    const {
+      space,
+      appInstanceResources: resources = [],
+      actions = [],
+    } = JSON.parse(spaceString);
     const finalPath = `${VAR_FOLDER}/${id}`;
 
     // we need to wrap this operation to avoid errors in windows
@@ -89,7 +93,6 @@ const loadSpace = (mainWindow, db) => async (event, { fileLocation }) => {
       .write();
 
     // write actions to database
-    // @TODO remove duplicate actions?
     db.get(ACTIONS_COLLECTION)
       .push(...actions)
       .write();

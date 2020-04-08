@@ -44,7 +44,7 @@ class ClearButton extends Component {
 }
 
 const mapStateToProps = ({ authentication }) => ({
-  userId: authentication.getIn(['user', 'userId']),
+  userId: authentication.getIn(['user', 'id']),
 });
 
 const mapDispatchToProps = {

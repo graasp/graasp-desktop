@@ -45,6 +45,11 @@ const CssTextField = withStyles({
   },
 })(TextField);
 
+const styles = theme => ({
+  ...Styles(theme),
+  graaspLogo: { padding: '0px 45px', width: '95%' },
+});
+
 class SignInScreen extends Component {
   state = {
     username: '',
@@ -68,6 +73,7 @@ class SignInScreen extends Component {
       button: PropTypes.string.isRequired,
       dividerColor: PropTypes.string.isRequired,
       fullScreen: PropTypes.string.isRequired,
+      graaspLogo: PropTypes.string.isRequired,
     }).isRequired,
     theme: PropTypes.shape({
       direction: PropTypes.string.isRequired,
@@ -158,9 +164,8 @@ class SignInScreen extends Component {
         <FormControl>
           <img
             src={logo}
-            alt="graasp logo"
-            width="95%"
-            style={{ padding: '0px 45px' }}
+            alt={t('Graasp logo')}
+            className={classes.graaspLogo}
           />
           <CssTextField
             id={LOGIN_USERNAME_INPUT_ID}
@@ -208,7 +213,7 @@ const mapDispatchToProps = {
   dispatchSignOut: signOut,
 };
 
-const StyledComponent = withStyles(Styles, { withTheme: true })(SignInScreen);
+const StyledComponent = withStyles(styles, { withTheme: true })(SignInScreen);
 
 const TranslatedComponent = withTranslation()(StyledComponent);
 

@@ -16,6 +16,8 @@ const { EXPORTED_SPACE_CHANNEL } = require('../config/channels');
 // use promisified fs
 const fsPromises = fs.promises;
 
+// we export the space and the current user's resources and actions
+// In the future we can add options so that the behaviour can be slightly modified
 const exportSpace = (mainWindow, db) => async (
   event,
   { archivePath, id, userId: user }
@@ -27,9 +29,10 @@ const exportSpace = (mainWindow, db) => async (
       .find({ id })
       .value();
 
+    // export the user's resources, private and public
     const resources = db
       .get(APP_INSTANCE_RESOURCES_COLLECTION)
-      .filter({ user })
+      .filter({ user, spaceId: id })
       .value();
 
     const actions = db
@@ -41,7 +44,11 @@ const exportSpace = (mainWindow, db) => async (
     if (!space) {
       mainWindow.webContents.send(EXPORTED_SPACE_CHANNEL, ERROR_GENERAL);
     } else {
-      const data = { space, resources, actions };
+      const data = {
+        space,
+        [APP_INSTANCE_RESOURCES_COLLECTION]: resources,
+        [ACTIONS_COLLECTION]: actions,
+      };
       // stringify space
       const spaceString = JSON.stringify(data);
       const spaceDirectory = `${VAR_FOLDER}/${id}`;

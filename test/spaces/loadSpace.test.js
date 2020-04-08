@@ -184,7 +184,7 @@ describe('Load Space Scenarios', function() {
   );
 
   it(
-    `Load exported space of ${SPACE_ATOMIC_STRUCTURE.space.name}`,
+    `Load exported space of ${SPACE_ATOMIC_STRUCTURE.space.name} with added user input`,
     mochaAsync(async () => {
       const {
         space: { id, phases },

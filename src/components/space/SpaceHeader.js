@@ -92,7 +92,7 @@ class SpaceHeader extends Component {
     const { space } = this.props;
     const { saved, id } = space;
     if (saved) {
-      return <DeleteButton id={id} />;
+      return <DeleteButton spaceId={id} />;
     }
     return null;
   }
@@ -123,7 +123,7 @@ class SpaceHeader extends Component {
     const { space } = this.props;
     const { saved, id } = space;
     if (saved) {
-      return <SyncButton id={id} />;
+      return <SyncButton spaceId={id} />;
     }
     return null;
   }

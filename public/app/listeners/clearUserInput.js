@@ -13,6 +13,7 @@ const clearUserInput = (mainWindow, db) => async (
   try {
     logger.debug(`clearing user input for space ${spaceId} of user ${userId}`);
 
+    // delete only private resources
     db.get(APP_INSTANCE_RESOURCES_COLLECTION)
       .remove({ visibility: 'private', spaceId, user: userId })
       .write();
