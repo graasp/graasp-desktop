@@ -32,3 +32,38 @@ export const RADIX = 10;
 export const FILTER_ALL_SPACE_ID = 'defaultid';
 export const DEFAULT_AUTHENTICATION = false;
 export const AUTHENTICATED = 'authenticated';
+
+export const SYNC_ADDED = 'added';
+export const SYNC_REMOVED = 'removed';
+export const SYNC_MOVED = 'moved';
+export const SYNC_BEFORE_MOVED = 'beforeMoved';
+export const SYNC_UPDATED = 'updated';
+
+const DIFF_COLORS = {
+  [SYNC_ADDED]: '#ddffde',
+  [SYNC_REMOVED]: '#fddedb',
+  [SYNC_UPDATED]: '#f9edc5',
+  [SYNC_MOVED]: 'lightgrey',
+};
+
+export const DIFF_STYLES = {
+  [SYNC_REMOVED]: {
+    background: DIFF_COLORS[SYNC_REMOVED],
+  },
+  [SYNC_ADDED]: {
+    background: DIFF_COLORS[SYNC_ADDED],
+  },
+  [SYNC_MOVED]: {
+    background: DIFF_COLORS[SYNC_MOVED],
+  },
+  [SYNC_BEFORE_MOVED]: {
+    background: DIFF_COLORS[SYNC_MOVED],
+    opacity: 0.5,
+  },
+  [SYNC_UPDATED]: {
+    background: DIFF_COLORS[SYNC_UPDATED],
+  },
+};
+
+export const SYNC_PHASE_PROPERTIES = ['name', 'image', 'description', 'phases'];
+export const SYNC_ITEM_PROPERTIES = ['name', 'description', 'content'];

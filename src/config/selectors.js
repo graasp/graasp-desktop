@@ -54,3 +54,6 @@ export const buildPhaseAppName = id => `phaseApp-${id}`;
 
 export const LOGIN_USERNAME_INPUT_ID = 'loginUsernameInput';
 export const LOGIN_BUTTON_ID = 'loginButton';
+
+export const SYNC_ITEM_CLASS = 'syncItem';
+export const SPACE_DESCRIPTION_TEXT_CLASS = 'SpaceDescriptionText';
