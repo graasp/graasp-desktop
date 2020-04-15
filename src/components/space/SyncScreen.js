@@ -9,7 +9,6 @@ import SyncIcon from '@material-ui/icons/Sync';
 import Tooltip from '@material-ui/core/Tooltip';
 import ClearIcon from '@material-ui/icons/Clear';
 import DoneIcon from '@material-ui/icons/Done';
-import { toastr } from 'react-redux-toastr';
 import clsx from 'clsx';
 import { withTranslation } from 'react-i18next';
 import CssBaseline from '@material-ui/core/CssBaseline/CssBaseline';
@@ -21,17 +20,16 @@ import { withStyles } from '@material-ui/core';
 import { withRouter } from 'react-router';
 import Banner from '../common/Banner';
 import Loader from '../common/Loader';
-import { clearSpace, getSpace, syncSpace } from '../../actions';
+import {
+  clearSpacesForSync,
+  getLocalSpaceForSync,
+  getRemoteSpaceForSync,
+  syncSpace,
+} from '../../actions';
 import './SpaceScreen.css';
 import Styles from '../../Styles';
 import { HOME_PATH } from '../../config/paths';
 import SpaceNotFound from './SpaceNotFound';
-import { generateGetSpaceEndpoint } from '../../config/endpoints';
-import { DEFAULT_GET_REQUEST } from '../../config/rest';
-import {
-  ERROR_MESSAGE_HEADER,
-  ERROR_SYNCING_MESSAGE,
-} from '../../config/messages';
 
 const SELECTED_SPACE_PROPERTIES = ['name', 'image', 'description', 'phases'];
 
@@ -58,17 +56,23 @@ const diffEditorStyles = {
 
 class SyncScreen extends Component {
   state = {
-    remoteSpace: null,
     openDrawer: false,
   };
 
   static propTypes = {
-    space: ImmutablePropTypes.contains({
-      id: PropTypes.string,
+    localSpace: ImmutablePropTypes.contains({
+      id: PropTypes.string.isRequired,
       description: PropTypes.string,
+      name: PropTypes.string.isRequired,
     }).isRequired,
-    dispatchGetSpace: PropTypes.func.isRequired,
-    dispatchClearSpace: PropTypes.func.isRequired,
+    remoteSpace: ImmutablePropTypes.contains({
+      id: PropTypes.string,
+      description: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+    }).isRequired,
+    dispatchGetLocalSpace: PropTypes.func.isRequired,
+    dispatchGetRemoteSpace: PropTypes.func.isRequired,
+    dispatchClearSpaces: PropTypes.func.isRequired,
     dispatchSync: PropTypes.func.isRequired,
     activity: PropTypes.bool.isRequired,
     deleted: PropTypes.bool.isRequired,
@@ -108,26 +112,17 @@ class SyncScreen extends Component {
       match: {
         params: { id },
       },
-      history: { goBack },
       location: { search },
-      dispatchGetSpace,
+      dispatchGetLocalSpace,
+      dispatchGetRemoteSpace,
     } = this.props;
 
     // tell action creator if this space has already been saved
     const { saved } = Qs.parse(search, { ignoreQueryPrefix: true });
-    dispatchGetSpace({ id, saved: saved === 'true' });
+    dispatchGetLocalSpace({ id, saved: saved === 'true' });
 
     // get remote space
-    const url = generateGetSpaceEndpoint(id);
-    const response = await fetch(url, DEFAULT_GET_REQUEST);
-    if (response.status === 200) {
-      this.setState({ remoteSpace: await response.json() });
-    } else {
-      // online space is not found
-      // return to previous screen with error pop up
-      toastr.error(ERROR_MESSAGE_HEADER, ERROR_SYNCING_MESSAGE);
-      goBack();
-    }
+    dispatchGetRemoteSpace({ id });
   }
 
   componentDidUpdate() {
@@ -142,8 +137,8 @@ class SyncScreen extends Component {
   }
 
   componentWillUnmount() {
-    const { dispatchClearSpace } = this.props;
-    dispatchClearSpace();
+    const { dispatchClearSpaces } = this.props;
+    dispatchClearSpaces();
   }
 
   handleCancel = () => {
@@ -157,7 +152,7 @@ class SyncScreen extends Component {
 
   handleSync = () => {
     const {
-      space: { id },
+      localSpace: { id },
       dispatchSync,
       history: { push },
     } = this.props;
@@ -185,7 +180,7 @@ class SyncScreen extends Component {
   renderDoneButton = () => {
     const { t, classes } = this.props;
     return (
-      <Tooltip title={t('Accept synchronization')}>
+      <Tooltip title={t('Accept Synchronization')}>
         <IconButton
           color="inherit"
           className={clsx(classes.button)}
@@ -198,14 +193,14 @@ class SyncScreen extends Component {
   };
 
   render() {
-    const { space, activity, classes, t } = this.props;
-    const { name } = space;
-    const { openDrawer, remoteSpace } = this.state;
+    const { localSpace, remoteSpace, activity, classes, t } = this.props;
+    const { name } = localSpace;
+    const { openDrawer } = this.state;
 
-    const filteredSpace = _.pick(space, SELECTED_SPACE_PROPERTIES);
+    const filteredSpace = _.pick(localSpace, SELECTED_SPACE_PROPERTIES);
     const filteredRemoteSpace = _.pick(remoteSpace, SELECTED_SPACE_PROPERTIES);
 
-    if (activity || _.isEmpty(remoteSpace)) {
+    if (activity) {
       return (
         <div className={classNames(classes.root, 'SpaceScreen')}>
           <CssBaseline />
@@ -219,11 +214,15 @@ class SyncScreen extends Component {
       );
     }
 
-    if (!space || _.isEmpty(space) || remoteSpace === null) {
+    if (
+      !localSpace ||
+      _.isEmpty(localSpace) ||
+      !remoteSpace ||
+      _.isEmpty(remoteSpace)
+    ) {
       return <SpaceNotFound />;
     }
 
-    //  const description = space.get('description');
     return (
       <>
         <AppBar
@@ -242,7 +241,7 @@ class SyncScreen extends Component {
             >
               <SyncIcon />
             </div>
-            {`${t('Synchronization')} : ${name}`}
+            {`${t('Synchronization')}: ${name}`}
             <span style={{ position: 'absolute', right: 20 }}>
               {this.renderDoneButton()}
               {this.renderCancelButton()}
@@ -266,24 +265,24 @@ class SyncScreen extends Component {
           oldValue={JSON.stringify(filteredSpace, null, '  ')}
           newValue={JSON.stringify(filteredRemoteSpace, null, '  ')}
           splitView
-          leftTitle={t('Current version')}
-          rightTitle={t('Most recent online version')}
+          leftTitle={t('Current Version')}
+          rightTitle={t('Most Recent Online Version')}
         />
       </>
     );
   }
 }
 
-const mapStateToProps = ({ Space }) => ({
-  space: Space.get('current')
-    .get('content')
-    .toJS(),
-  activity: Boolean(Space.getIn(['current', 'activity']).size),
+const mapStateToProps = ({ syncSpace: syncSpaceReducer }) => ({
+  localSpace: syncSpaceReducer.get('localSpace').toJS(),
+  remoteSpace: syncSpaceReducer.get('remoteSpace').toJS(),
+  activity: Boolean(syncSpaceReducer.getIn(['activity']).size),
 });
 
 const mapDispatchToProps = {
-  dispatchGetSpace: getSpace,
-  dispatchClearSpace: clearSpace,
+  dispatchGetLocalSpace: getLocalSpaceForSync,
+  dispatchGetRemoteSpace: getRemoteSpaceForSync,
+  dispatchClearSpaces: clearSpacesForSync,
   dispatchSync: syncSpace,
 };
 

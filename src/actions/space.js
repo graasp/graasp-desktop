@@ -114,7 +114,7 @@ const waitForSpace = ({ online }) =>
     });
   });
 
-const getLocalSpace = async ({ id, user }) => async dispatch => {
+const createGetLocalSpace = async ({ id, user }, type) => async dispatch => {
   try {
     dispatch(flagGettingSpace(true));
 
@@ -124,7 +124,7 @@ const getLocalSpace = async ({ id, user }) => async dispatch => {
     const space = await waitForSpace({ online: false });
 
     dispatch({
-      type: GET_SPACE_SUCCEEDED,
+      type,
       payload: space,
     });
   } catch (err) {
@@ -134,7 +134,10 @@ const getLocalSpace = async ({ id, user }) => async dispatch => {
   }
 };
 
-const getRemoteSpace = async ({ id }) => async dispatch => {
+const getLocalSpace = payload =>
+  createGetLocalSpace(payload, GET_SPACE_SUCCEEDED);
+
+const createGetRemoteSpace = async ({ id }, type) => async dispatch => {
   try {
     dispatch(flagGettingSpace(true));
 
@@ -145,6 +148,8 @@ const getRemoteSpace = async ({ id }) => async dispatch => {
     await isErrorResponse(response);
 
     const remoteSpace = await response.json();
+
+    // in the future we might want to merge local and remote spaces
     // let localSpace = {};
 
     // // try to merge with local space if available
@@ -162,7 +167,7 @@ const getRemoteSpace = async ({ id }) => async dispatch => {
     // };
 
     dispatch({
-      type: GET_SPACE_SUCCEEDED,
+      type,
       payload: remoteSpace,
     });
   } catch (err) {
@@ -171,6 +176,9 @@ const getRemoteSpace = async ({ id }) => async dispatch => {
     dispatch(flagGettingSpace(false));
   }
 };
+
+const getRemoteSpace = payload =>
+  createGetRemoteSpace(payload, GET_SPACE_SUCCEEDED);
 
 const getSpaces = () => dispatch => {
   dispatch(flagGettingSpaces(true));
@@ -441,4 +449,6 @@ export {
   getSpacesNearby,
   syncSpace,
   clearUserInput,
+  createGetLocalSpace,
+  createGetRemoteSpace,
 };
