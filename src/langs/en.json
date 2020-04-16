@@ -52,6 +52,10 @@
     "Sign Out": "Sign Out",
     "Username": "Enter your Username",
     "Sign in as Guest": "Sign in as Guest",
-    "Graasp logo": "Graasp logo"
+    "Graasp logo": "Graasp logo",
+    "Accept Synchronization": "Accept Synchronization",
+    "Current Version": "Current Version",
+    "Most Recent Online Version": "Most Recent Online Version",
+    "You are currently synchronizing a space. Either accept or cancel the synchronization. The synchronization is definitive and all user input will be deleted.": "You are currently synchronizing a space. Either accept or cancel the synchronization. The synchronization is definitive and all user input will be deleted."
   }
 }

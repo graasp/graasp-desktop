@@ -7,3 +7,4 @@ export const SPACE_PATH = '/space/:id';
 export const DEVELOPER_PATH = '/developer';
 export const DASHBOARD_PATH = '/dashboard';
 export const SIGN_IN_PATH = '/signin';
+export const SYNC_SPACE_PATH = '/space/sync/:id';

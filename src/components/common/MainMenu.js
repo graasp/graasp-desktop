@@ -44,7 +44,7 @@ export class MainMenu extends Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     developerMode: PropTypes.bool.isRequired,
-    history: PropTypes.shape({ replace: PropTypes.func.isRequired }).isRequired,
+    history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
     match: PropTypes.shape({ path: PropTypes.string.isRequired }).isRequired,
     dispatchSignOut: PropTypes.func.isRequired,
     authenticated: PropTypes.bool.isRequired,
@@ -54,13 +54,13 @@ export class MainMenu extends Component {
 
   handleClick = path => {
     const {
-      history: { replace },
+      history: { push },
     } = this.props;
     if (path) {
-      replace(path);
+      push(path);
     } else {
       // default to home
-      replace(HOME_PATH);
+      push(HOME_PATH);
     }
   };
 

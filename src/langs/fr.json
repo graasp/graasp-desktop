@@ -52,6 +52,10 @@
     "Sign Out": "Se déconnecter",
     "Username": "Entre ton nom d'utilisateur",
     "Sign in as Guest": "Se connecter en tant qu'invité",
-    "Graasp logo": "Logo de Graasp"
+    "Graasp logo": "Logo de Graasp",
+    "Accept Synchronization": "Accepter la synchronisation",
+    "Current Version": "Version actuelle",
+    "Most Recent Online Version": "Version la plus récente",
+    "You are currently synchronizing a space. Either accept or cancel the synchronization. The synchronization is definitive and all user input will be deleted.": "Synchronisation d'un Espace en cours. La synchronisation peut être acceptée ou annulée. Si acceptée, la synchronisation est définitive et toute entrée utilisateur sera supprimée."
   }
 }

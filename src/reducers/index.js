@@ -5,6 +5,7 @@ import Phase from './PhaseReducer';
 import Developer from './DeveloperReducer';
 import layout from './layout';
 import authentication from './authenticationReducer';
+import syncSpace from './syncSpaceReducer';
 
 export default combineReducers({
   // todo: keys should always be camelCase
@@ -14,4 +15,5 @@ export default combineReducers({
   layout,
   toastr,
   authentication,
+  syncSpace,
 });

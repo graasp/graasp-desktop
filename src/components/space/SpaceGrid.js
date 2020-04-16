@@ -30,7 +30,7 @@ class SpaceGrid extends Component {
     ).isRequired,
     history: PropTypes.shape({
       length: PropTypes.number.isRequired,
-      replace: PropTypes.func.isRequired,
+      push: PropTypes.func.isRequired,
     }).isRequired,
     dispatchClearSpace: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
@@ -124,10 +124,10 @@ class SpaceGrid extends Component {
 
     [...spaces].forEach((space, index) => {
       const { id, image = {}, description } = space;
-      const { replace } = history;
+      const { push } = history;
 
       const viewLink = () => {
-        replace(`/space/${id}?saved=${saved}`);
+        push(`/space/${id}?saved=${saved}`);
       };
 
       const card = (

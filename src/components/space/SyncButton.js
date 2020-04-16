@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import clsx from 'clsx';
+import { withRouter } from 'react-router';
 import { withTranslation } from 'react-i18next';
 import IconButton from '@material-ui/core/IconButton/IconButton';
 import SyncIcon from '@material-ui/icons/Sync';
@@ -9,7 +9,6 @@ import { Online, Offline } from 'react-detect-offline';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core';
 import Styles from '../../Styles';
-import { syncSpace } from '../../actions/space';
 import { SPACE_SYNC_BUTTON_CLASS } from '../../config/selectors';
 
 class SyncButton extends Component {
@@ -19,13 +18,18 @@ class SyncButton extends Component {
       appBar: PropTypes.string.isRequired,
       button: PropTypes.string.isRequired,
     }).isRequired,
-    dispatchSyncSpace: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
   };
 
   handleSync = () => {
-    const { spaceId: id, dispatchSyncSpace } = this.props;
-    dispatchSyncSpace({ id });
+    const {
+      spaceId,
+      history: { push },
+    } = this.props;
+    return push(`/space/sync/${spaceId}?saved=true`);
   };
 
   render() {
@@ -60,16 +64,9 @@ class SyncButton extends Component {
     );
   }
 }
-const mapDispatchToProps = {
-  dispatchSyncSpace: syncSpace,
-};
 
-const ConnectedComponent = connect(null, mapDispatchToProps)(SyncButton);
-
-const StyledComponent = withStyles(Styles, { withTheme: true })(
-  ConnectedComponent
-);
+const StyledComponent = withStyles(Styles, { withTheme: true })(SyncButton);
 
 const TranslatedComponent = withTranslation()(StyledComponent);
 
-export default TranslatedComponent;
+export default withRouter(TranslatedComponent);
