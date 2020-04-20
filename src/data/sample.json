@@ -152,7 +152,8 @@
     "settings:": {
       "lang": "en",
       "developerMode": true,
-      "geolocationEnabled": false
+      "geolocationEnabled": false,
+      "syncAdvancedMode": false
     }
   },
   "actions": [
@@ -177,7 +178,8 @@
       "settings:": {
         "lang": "en",
         "developerMode": true,
-        "geolocationEnabled": false
+        "geolocationEnabled": false,
+        "syncAdvancedMode": false
       }
     }
   ],

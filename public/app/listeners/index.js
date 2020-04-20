@@ -16,6 +16,8 @@ const setLanguage = require('./setLanguage');
 const getLanguage = require('./getLanguage');
 const getDeveloperMode = require('./getDeveloperMode');
 const setDeveloperMode = require('./setDeveloperMode');
+const getSyncAdvancedMode = require('./getSyncAdvancedMode');
+const setSyncAdvancedMode = require('./setSyncAdvancedMode');
 const clearUserInput = require('./clearUserInput');
 const showClearUserInputPrompt = require('./showClearUserInputPrompt');
 const postAction = require('./postAction');
@@ -46,6 +48,8 @@ module.exports = {
   getLanguage,
   getDeveloperMode,
   setDeveloperMode,
+  getSyncAdvancedMode,
+  setSyncAdvancedMode,
   clearUserInput,
   showClearUserInputPrompt,
   postAction,

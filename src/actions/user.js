@@ -14,8 +14,12 @@ import {
   SET_DEVELOPER_MODE_SUCCEEDED,
   FLAG_GETTING_GEOLOCATION_ENABLED,
   FLAG_SETTING_GEOLOCATION_ENABLED,
+  FLAG_GETTING_SYNC_ADVANCED_MODE,
+  FLAG_SETTING_SYNC_ADVANCED_MODE,
   GET_GEOLOCATION_ENABLED_SUCCEEDED,
   SET_GEOLOCATION_ENABLED_SUCCEEDED,
+  SET_SYNC_ADVANCED_MODE_SUCCEEDED,
+  GET_SYNC_ADVANCED_MODE_SUCCEEDED,
 } from '../types';
 import {
   ERROR_GETTING_GEOLOCATION,
@@ -27,6 +31,8 @@ import {
   ERROR_GETTING_DEVELOPER_MODE,
   ERROR_SETTING_GEOLOCATION_ENABLED,
   ERROR_GETTING_GEOLOCATION_ENABLED,
+  ERROR_GETTING_SYNC_ADVANCED_MODE,
+  ERROR_SETTING_SYNC_ADVANCED_MODE,
 } from '../config/messages';
 import {
   GET_USER_FOLDER_CHANNEL,
@@ -36,6 +42,8 @@ import {
   SET_DEVELOPER_MODE_CHANNEL,
   GET_GEOLOCATION_ENABLED_CHANNEL,
   SET_GEOLOCATION_ENABLED_CHANNEL,
+  GET_SYNC_ADVANCED_MODE_CHANNEL,
+  SET_SYNC_ADVANCED_MODE_CHANNEL,
 } from '../config/channels';
 import { createFlag } from './common';
 import { ERROR_GENERAL } from '../config/errors';
@@ -51,6 +59,8 @@ const flagGettingGeolocationEnabled = createFlag(
 const flagSettingGeolocationEnabled = createFlag(
   FLAG_SETTING_GEOLOCATION_ENABLED
 );
+const flagGettingSyncAdvancedMode = createFlag(FLAG_GETTING_SYNC_ADVANCED_MODE);
+const flagSettingSyncAdvancedMode = createFlag(FLAG_SETTING_SYNC_ADVANCED_MODE);
 
 const getGeolocation = async () => async dispatch => {
   // only fetch location if online
@@ -240,6 +250,51 @@ const setGeolocationEnabled = async geolocationEnabled => dispatch => {
   }
 };
 
+const getSyncAdvancedMode = async () => dispatch => {
+  try {
+    dispatch(flagGettingSyncAdvancedMode(true));
+    window.ipcRenderer.send(GET_SYNC_ADVANCED_MODE_CHANNEL);
+    window.ipcRenderer.once(
+      GET_SYNC_ADVANCED_MODE_CHANNEL,
+      (event, syncAdvancedMode) => {
+        if (syncAdvancedMode === ERROR_GENERAL) {
+          toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_SYNC_ADVANCED_MODE);
+        } else {
+          dispatch({
+            type: GET_SYNC_ADVANCED_MODE_SUCCEEDED,
+            payload: syncAdvancedMode,
+          });
+        }
+        dispatch(flagGettingSyncAdvancedMode(false));
+      }
+    );
+  } catch (e) {
+    console.error(e);
+    toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_SYNC_ADVANCED_MODE);
+  }
+};
+
+const setSyncAdvancedMode = async syncAdvancedMode => dispatch => {
+  try {
+    dispatch(flagSettingSyncAdvancedMode(true));
+    window.ipcRenderer.send(SET_SYNC_ADVANCED_MODE_CHANNEL, syncAdvancedMode);
+    window.ipcRenderer.once(SET_SYNC_ADVANCED_MODE_CHANNEL, (event, mode) => {
+      if (mode === ERROR_GENERAL) {
+        toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_SYNC_ADVANCED_MODE);
+      } else {
+        dispatch({
+          type: SET_SYNC_ADVANCED_MODE_SUCCEEDED,
+          payload: mode,
+        });
+      }
+      dispatch(flagSettingSyncAdvancedMode(false));
+    });
+  } catch (e) {
+    console.error(e);
+    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_SYNC_ADVANCED_MODE);
+  }
+};
+
 export {
   getUserFolder,
   getGeolocation,
@@ -249,4 +304,6 @@ export {
   setDeveloperMode,
   getGeolocationEnabled,
   setGeolocationEnabled,
+  getSyncAdvancedMode,
+  setSyncAdvancedMode,
 };
