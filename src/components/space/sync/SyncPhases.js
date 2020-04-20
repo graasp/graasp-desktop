@@ -6,13 +6,11 @@ import { withStyles } from '@material-ui/core';
 import { withRouter } from 'react-router';
 import SyncPhaseItems from './SyncPhaseItems';
 import PhaseDescription from '../../phase/PhaseDescription';
-import { createDiffElements, diffString } from '../../../utils/syncSpace';
 import {
   DIFF_STYLES,
   SYNC_UPDATED,
   SYNC_REMOVED,
   SYNC_ADDED,
-  SYNC_ITEM_PROPERTIES,
 } from '../../../config/constants';
 import { SYNC_ITEM_CLASS } from '../../../config/selectors';
 
@@ -20,6 +18,8 @@ class SyncPhases extends Component {
   static propTypes = {
     localPhase: PropTypes.instanceOf(Map),
     remotePhase: PropTypes.instanceOf(Map),
+    diff: PropTypes.instanceOf(Map),
+    spaceId: PropTypes.string.isRequired,
     classes: PropTypes.shape({
       root: PropTypes.string.isRequired,
       appBar: PropTypes.string.isRequired,
@@ -38,9 +38,18 @@ class SyncPhases extends Component {
   static defaultProps = {
     localPhase: [],
     remotePhase: [],
+    diff: {
+      items: [],
+      description: {},
+      name: {},
+    },
   };
 
-  renderPhaseDescriptionDiff = (localDescription, remoteDescription) => {
+  renderPhaseDescriptionDiff = (
+    localDescription,
+    remoteDescription,
+    diffDescription
+  ) => {
     const { classes } = this.props;
 
     // display nothing if both elements are undefined
@@ -48,13 +57,12 @@ class SyncPhases extends Component {
       return null;
     }
 
-    const change = diffString(localDescription, remoteDescription);
     return (
       <>
         <Grid
           item
           className={clsx(SYNC_ITEM_CLASS, {
-            [classes[SYNC_REMOVED]]: change[SYNC_REMOVED],
+            [classes[SYNC_REMOVED]]: diffDescription[SYNC_REMOVED],
           })}
           xs={6}
         >
@@ -63,8 +71,8 @@ class SyncPhases extends Component {
         <Grid
           item
           className={clsx(SYNC_ITEM_CLASS, {
-            [classes[SYNC_ADDED]]: change[SYNC_ADDED],
-            [classes[SYNC_UPDATED]]: change[SYNC_UPDATED],
+            [classes[SYNC_ADDED]]: diffDescription[SYNC_ADDED],
+            [classes[SYNC_UPDATED]]: diffDescription[SYNC_UPDATED],
           })}
           xs={6}
         >
@@ -74,35 +82,34 @@ class SyncPhases extends Component {
     );
   };
 
-  renderDiffPhases(localPhase, remotePhase) {
-    const { classes } = this.props;
-    const {
-      items: localItems = [],
-      description: localDescription = null,
-    } = localPhase;
-    const {
-      items: remoteItems = [],
-      description: remoteDescription = null,
-    } = remotePhase;
+  renderDiffPhases() {
+    const { localPhase, remotePhase, diff, spaceId } = this.props;
 
-    const finalItems = createDiffElements(
-      localItems,
-      remoteItems,
-      classes,
-      SYNC_ITEM_PROPERTIES
-    );
+    const {
+      description: localDescription = null,
+      id: localPhaseId,
+    } = localPhase.toJS();
+    const {
+      description: remoteDescription = null,
+      id: remotePhaseId,
+    } = remotePhase.toJS();
+    const { items: diffItems, description: diffDescription } = diff.toJS();
+    const phaseId = localPhaseId || remotePhaseId;
+
     return (
       <>
-        {this.renderPhaseDescriptionDiff(localDescription, remoteDescription)}
-        <SyncPhaseItems items={finalItems} />
+        {this.renderPhaseDescriptionDiff(
+          localDescription,
+          remoteDescription,
+          diffDescription
+        )}
+        <SyncPhaseItems items={diffItems} spaceId={spaceId} phaseId={phaseId} />
       </>
     );
   }
 
   render() {
-    const { localPhase, remotePhase } = this.props;
-
-    return this.renderDiffPhases(localPhase.toJS(), remotePhase.toJS());
+    return this.renderDiffPhases();
   }
 }
 

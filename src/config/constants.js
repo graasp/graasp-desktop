@@ -47,6 +47,9 @@ const DIFF_COLORS = {
 };
 
 export const DIFF_STYLES = {
+  [SYNC_UPDATED]: {
+    background: DIFF_COLORS[SYNC_UPDATED],
+  },
   [SYNC_REMOVED]: {
     background: DIFF_COLORS[SYNC_REMOVED],
   },
@@ -59,9 +62,6 @@ export const DIFF_STYLES = {
   [SYNC_BEFORE_MOVED]: {
     background: DIFF_COLORS[SYNC_MOVED],
     opacity: 0.5,
-  },
-  [SYNC_UPDATED]: {
-    background: DIFF_COLORS[SYNC_UPDATED],
   },
 };
 

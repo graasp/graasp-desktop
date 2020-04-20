@@ -8,7 +8,7 @@ import SyncPhaseItem from './SyncPhaseItem';
 import PhaseItemDescription from '../../phase/PhaseItemDescription';
 import { SYNC_ITEM_CLASS } from '../../../config/selectors';
 
-const PhaseItem = ({ item }) => {
+const PhaseItem = ({ item, spaceId, phaseId }) => {
   if (item === null) {
     return (
       <Grid xs={6} item className={SYNC_ITEM_CLASS}>
@@ -22,7 +22,7 @@ const PhaseItem = ({ item }) => {
   return (
     <Grid xs={6} item className={clsx(SYNC_ITEM_CLASS, className)} data-id={id}>
       <PhaseItemDescription description={description} />
-      <SyncPhaseItem idx={id} item={item} />
+      <SyncPhaseItem idx={id} item={item} spaceId={spaceId} phaseId={phaseId} />
     </Grid>
   );
 };
@@ -33,9 +33,16 @@ PhaseItem.propTypes = {
     id: PropTypes.string.isRequired,
     className: PropTypes.string,
   }).isRequired,
+  phaseId: PropTypes.string,
+  spaceId: PropTypes.string,
 };
 
-const SyncPhaseItems = ({ items, t }) => {
+PhaseItem.defaultProps = {
+  phaseId: null,
+  spaceId: null,
+};
+
+const SyncPhaseItems = ({ items, spaceId, phaseId, t }) => {
   // happens for empty phase in both local and remote phases
   // happens especially for tools
   if (!items || items.length === 0) {
@@ -43,8 +50,8 @@ const SyncPhaseItems = ({ items, t }) => {
   }
   return items.map(([localItem, remoteItem]) => (
     <>
-      <PhaseItem item={localItem} />
-      <PhaseItem item={remoteItem} />
+      <PhaseItem item={localItem} spaceId={spaceId} phaseId={phaseId} />
+      <PhaseItem item={remoteItem} spaceId={spaceId} phaseId={phaseId} />
     </>
   ));
 };

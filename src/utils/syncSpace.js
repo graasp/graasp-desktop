@@ -7,6 +7,15 @@ import {
   SYNC_BEFORE_MOVED,
 } from '../config/constants';
 
+const createChangeObj = (id, status, localIdx = null, remoteIdx = null) => ({
+  id,
+  status,
+  localIdx,
+  remoteIdx,
+});
+
+// compute diff for strings
+// return map where keys are the change status with boolean values
 export const diffString = (localStr, remoteStr) => {
   return {
     [SYNC_ADDED]: !localStr && remoteStr,
@@ -15,6 +24,8 @@ export const diffString = (localStr, remoteStr) => {
   };
 };
 
+// create a phase using tools
+// utility to process tools as a phase
 export const createToolsPhase = tools => {
   return {
     id: 'tools-id',
@@ -39,7 +50,9 @@ const countConditions = (changes, { id }) => {
   );
 };
 
-const addDiffToObject = (obj, diff, classes) => {
+// add diff information in corresponding objects
+// compute corresponding classes from changes status
+const applyDiffToObject = (obj, diff, classes) => {
   const objDiff = diff.filter(({ id }) => id === obj.id);
   return {
     ...obj,
@@ -48,11 +61,15 @@ const addDiffToObject = (obj, diff, classes) => {
   };
 };
 
+// get relative index in object array
+// utility to detect moved changes and report it on further changes
+// ex: an added element does not move next elements
 const getRelativeIdx = (arr, originalIdx, changes) => {
   return arr.slice(0, originalIdx).filter(el => countConditions(changes, el))
     .length;
 };
 
+// return array of differences between given objects for given properties
 const findDiffInElementArray = (localObj, remoteObj, properties) => {
   const uniqueItemIds = _.union(
     localObj.map(({ id }) => id),
@@ -70,21 +87,11 @@ const findDiffInElementArray = (localObj, remoteObj, properties) => {
 
     // the element was added
     if (_.isEmpty(localEl)) {
-      changes.push({
-        id,
-        status: SYNC_ADDED,
-        localIdx: null,
-        remoteIdx: remoteOriginalIdx,
-      });
+      changes.push(createChangeObj(id, SYNC_ADDED, null, remoteOriginalIdx));
     }
     // the element was removed
     else if (_.isEmpty(remoteEl)) {
-      changes.push({
-        id,
-        status: SYNC_REMOVED,
-        localIdx: localOriginalIdx,
-        remoteIdx: null,
-      });
+      changes.push(createChangeObj(id, SYNC_REMOVED, localOriginalIdx, null));
     }
     // exist in both obj
     else if (localEl && remoteEl) {
@@ -94,12 +101,9 @@ const findDiffInElementArray = (localObj, remoteObj, properties) => {
       const filteredremoteEl = _.pick(remoteEl, properties);
 
       if (!_.isEqual(filteredlocalEl, filteredremoteEl)) {
-        changes.push({
-          id,
-          status: SYNC_UPDATED,
-          localIdx: localOriginalIdx,
-          remoteIdx: remoteOriginalIdx,
-        });
+        changes.push(
+          createChangeObj(id, SYNC_UPDATED, localOriginalIdx, remoteOriginalIdx)
+        );
       }
 
       // check moved
@@ -109,18 +113,15 @@ const findDiffInElementArray = (localObj, remoteObj, properties) => {
     }
   });
 
-  // item is moved if index is different independently of added / removed els
+  // item is moved if index is different independently of added / removed elements
   Object.entries(movedEls).forEach(
     ([id, [localOriginalIdx, remoteOriginalIdx]]) => {
       const localIdx = getRelativeIdx(localObj, localOriginalIdx, changes);
       const remoteIdx = getRelativeIdx(remoteObj, remoteOriginalIdx, changes);
       if (localIdx !== remoteIdx) {
-        changes.push({
-          id,
-          status: SYNC_MOVED,
-          localIdx: localOriginalIdx,
-          remoteIdx: remoteOriginalIdx,
-        });
+        changes.push(
+          createChangeObj(id, SYNC_MOVED, localOriginalIdx, remoteOriginalIdx)
+        );
       }
     }
   );
@@ -128,6 +129,9 @@ const findDiffInElementArray = (localObj, remoteObj, properties) => {
   return changes;
 };
 
+// find diff between local and remote elements
+// return a zipped array with [localElement, remoteElement]
+// where we append blank elements
 export const createDiffElements = (
   lElements,
   rElements,
@@ -145,21 +149,22 @@ export const createDiffElements = (
     [SYNC_UPDATED, SYNC_MOVED, SYNC_ADDED].includes(status)
   );
   const localObjects = lElements.map(obj =>
-    addDiffToObject(obj, localDiff, classes)
+    applyDiffToObject(obj, localDiff, classes)
   );
   const remoteObjects = rElements.map(obj =>
-    addDiffToObject(obj, remoteDiff, classes)
+    applyDiffToObject(obj, remoteDiff, classes)
   );
 
   const finalObjects = [];
   const blankObj = {};
 
-  let tmp = 0;
+  let securityLoopNb = 0;
 
   let localObj = localObjects.shift();
   let remoteObj = remoteObjects.shift();
 
   while (localObj || remoteObj) {
+    // add blank object for moved/removed local elements
     while (
       localObj &&
       localObj.changes.some(({ status }) =>
@@ -169,6 +174,8 @@ export const createDiffElements = (
       finalObjects.push([localObj, blankObj]);
       localObj = localObjects.shift();
     }
+
+    // add blank object for added/moved remote elements
     while (
       remoteObj &&
       remoteObj.changes.some(({ status }) =>
@@ -179,25 +186,16 @@ export const createDiffElements = (
       remoteObj = remoteObjects.shift();
     }
 
-    // updated or no change
+    // when local and remote ids matched, it is either updated or not changed
     if (localObj && remoteObj && localObj.id === remoteObj.id) {
-      if (remoteObj.changes.some(({ status }) => status === SYNC_UPDATED)) {
-        finalObjects.push([localObj, remoteObj]);
-        localObj = localObjects.shift();
-        remoteObj = remoteObjects.shift();
-      }
-      // no change
-      else {
-        finalObjects.push([localObj, remoteObj]);
-        localObj = localObjects.shift();
-        remoteObj = remoteObjects.shift();
-      }
+      finalObjects.push([localObj, remoteObj]);
+      localObj = localObjects.shift();
+      remoteObj = remoteObjects.shift();
     }
 
-    tmp += 1;
-    if (tmp > 20) {
-      console.log('p I breaaaak');
-      break;
+    securityLoopNb += 1;
+    if (securityLoopNb > 50) {
+      throw new Error('An error occurred');
     }
   }
 

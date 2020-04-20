@@ -11,6 +11,7 @@ import {
   DEFAULT_PROTOCOL,
 } from '../../../config/constants';
 import PhaseText from '../../phase/PhaseText';
+import PhaseApp from '../../phase/PhaseApp';
 import PhaseImage from '../../phase/PhaseImage';
 import PhaseVideo from '../../phase/PhaseVideo';
 
@@ -57,8 +58,17 @@ const renderResource = item => {
   return <div key={id} id={id} />;
 };
 
-const SyncPhaseItem = ({ item }) => {
-  const { id, category, asset, name, mimeType, content, classNames } = item;
+const SyncPhaseItem = ({ item, phaseId, spaceId }) => {
+  const {
+    id,
+    category,
+    asset,
+    name,
+    mimeType,
+    content,
+    classNames,
+    appInstance,
+  } = item;
 
   // we might need to fiddle with the url's protocol
   let { url } = item;
@@ -77,11 +87,23 @@ const SyncPhaseItem = ({ item }) => {
         asset,
         url,
         name,
+        appInstance,
         classNames,
       });
 
     case APPLICATION:
-      return <div className={classNames}>{`I AM THE APP ${name}`}</div>;
+      return (
+        <PhaseApp
+          key={id}
+          id={id}
+          url={url}
+          asset={asset}
+          name={name}
+          spaceId={spaceId}
+          phaseId={phaseId}
+          appInstance={appInstance}
+        />
+      );
 
     default:
       return <div key={id} id={id} />;
@@ -98,7 +120,12 @@ SyncPhaseItem.propTypes = {
     mimeType: PropTypes.string,
     content: PropTypes.string,
     classNames: PropTypes.string,
+    appInstance: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }),
   }).isRequired,
+  spaceId: PropTypes.string.isRequired,
+  phaseId: PropTypes.string.isRequired,
 };
 
 export default SyncPhaseItem;

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { toastr } from 'react-redux-toastr';
 import Qs from 'qs';
 import { connect } from 'react-redux';
 import _ from 'lodash';
@@ -18,6 +19,7 @@ import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core';
 import { withRouter } from 'react-router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import NewReleaseIcon from '@material-ui/icons/NewReleases';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import HomeIcon from '@material-ui/icons/Home';
 import Drawer from '@material-ui/core/Drawer/Drawer';
@@ -53,12 +55,17 @@ import {
   SYNC_UPDATED,
   DIFF_STYLES,
   SYNC_PHASE_PROPERTIES,
+  SYNC_ITEM_PROPERTIES,
 } from '../../config/constants';
 import {
   diffString,
   createDiffElements,
   createToolsPhase,
 } from '../../utils/syncSpace';
+import {
+  ERROR_SYNCING_MESSAGE,
+  ERROR_MESSAGE_HEADER,
+} from '../../config/messages';
 
 const styles = theme => ({
   ...Styles(theme),
@@ -88,6 +95,7 @@ class SyncScreen extends Component {
     remoteSpace: PropTypes.instanceOf(Map).isRequired,
     remotePhase: PropTypes.instanceOf(Map).isRequired,
     localPhase: PropTypes.instanceOf(Map).isRequired,
+    diff: PropTypes.instanceOf(Map).isRequired,
     dispatchGetLocalSpace: PropTypes.func.isRequired,
     dispatchGetRemoteSpace: PropTypes.func.isRequired,
     dispatchClearSpaces: PropTypes.func.isRequired,
@@ -172,20 +180,59 @@ class SyncScreen extends Component {
       // detect diff and return sync phases to display
       // detect moved phases, but for simplicity it will be
       // rendered as added / moved phases
-      const syncPhases = createDiffElements(
-        [createToolsPhase(localSpace.items), ...localSpace.phases],
-        [createToolsPhase(remoteSpace.items), ...remoteSpace.phases],
-        classes,
-        SYNC_PHASE_PROPERTIES
-      );
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ syncPhases });
+      try {
+        const syncPhases = createDiffElements(
+          [createToolsPhase(localSpace.items), ...localSpace.phases],
+          [createToolsPhase(remoteSpace.items), ...remoteSpace.phases],
+          classes,
+          SYNC_PHASE_PROPERTIES
+        )
+          // compute differences here
+          // to have detect updates when rendering phase menu items
+          .map(([lPhase, rPhase]) => {
+            const { items: localItems = [] } = lPhase;
+            const { items: remoteItems = [] } = rPhase;
+
+            // items diff
+            const diffItems = createDiffElements(
+              localItems,
+              remoteItems,
+              classes,
+              SYNC_ITEM_PROPERTIES
+            );
+
+            // description diff
+            const diffDescription = diffString(
+              lPhase.description,
+              rPhase.description
+            );
+
+            // name diff
+            const diffName = diffString(lPhase.name, rPhase.name);
+
+            return {
+              localPhase: lPhase,
+              remotePhase: rPhase,
+              diff: {
+                items: diffItems,
+                description: diffDescription,
+                name: diffName,
+              },
+            };
+          });
+        // eslint-disable-next-line react/no-did-update-set-state
+        this.setState({ syncPhases });
+      } catch (e) {
+        toastr.error(ERROR_MESSAGE_HEADER, ERROR_SYNCING_MESSAGE);
+        this.handleCancel();
+      }
     }
   }
 
   componentWillUnmount() {
-    const { dispatchClearSpaces } = this.props;
+    const { dispatchClearSpaces, dispatchClearPhases } = this.props;
     dispatchClearSpaces();
+    dispatchClearPhases();
   }
 
   handleCancel = () => {
@@ -266,8 +313,10 @@ class SyncScreen extends Component {
     );
   };
 
-  renderDiffImage = (localImage, remoteImage) => {
-    const { classes, folder, t } = this.props;
+  renderDiffImage = () => {
+    const { classes, folder, t, localSpace, remoteSpace } = this.props;
+    const { image: localImage } = localSpace;
+    const { image: remoteImage } = remoteSpace;
 
     // display nothing if both elements are undefined
     if (!localImage && !remoteImage) {
@@ -357,20 +406,34 @@ class SyncScreen extends Component {
     );
   };
 
-  generatePhaseMenuItem(localPhase, remotePhase, index) {
+  renderPhaseMenuItem(
+    {
+      localPhase,
+      remotePhase,
+      diff: { items: diffItems, description: diffDescription, name: diffName },
+    },
+    index
+  ) {
     const { name: localName, id: localId } = localPhase;
     const { name: remoteName, id: remoteId } = remotePhase;
     const { classes } = this.props;
     const { selected } = this.state;
 
-    const diff = diffString(localName, remoteName);
+    const hasUpdate =
+      Object.values(diffDescription).includes(true) ||
+      diffItems
+        .map(
+          ([{ changes: lChanges = [] }, { changes: rChanges = [] }]) =>
+            lChanges.length + rChanges.length
+        )
+        .some(nbChange => nbChange > 0);
 
     return (
       <MenuItem
         className={clsx({
-          [classes[SYNC_REMOVED]]: diff[SYNC_REMOVED],
-          [classes[SYNC_UPDATED]]: diff[SYNC_UPDATED],
-          [classes[SYNC_ADDED]]: diff[SYNC_ADDED],
+          [classes[SYNC_REMOVED]]: diffName[SYNC_REMOVED],
+          [classes[SYNC_UPDATED]]: hasUpdate,
+          [classes[SYNC_ADDED]]: diffName[SYNC_ADDED],
         })}
         onClick={() => this.handlePhaseClicked(index)}
         key={localId || remoteId}
@@ -378,11 +441,11 @@ class SyncScreen extends Component {
         id={`${PHASE_MENU_ITEM}-${index}`}
       >
         <ListItemIcon>
-          <ChevronRightIcon />
+          {hasUpdate ? <NewReleaseIcon /> : <ChevronRightIcon />}
         </ListItemIcon>
 
         <ListItemText>
-          {(diff[SYNC_REMOVED] || diff[SYNC_UPDATED]) && (
+          {(diffName[SYNC_REMOVED] || diffName[SYNC_UPDATED]) && (
             <Typography className={classes.removedText}>{localName}</Typography>
           )}
           <Typography>{remoteName}</Typography>
@@ -401,9 +464,11 @@ class SyncScreen extends Component {
       remotePhase,
       localPhase,
       theme,
+      diff,
     } = this.props;
     const { name } = localSpace;
     const { openDrawer, syncPhases, selected } = this.state;
+    const spaceId = localSpace.id || remoteSpace.id;
 
     if (activity) {
       return (
@@ -484,8 +549,8 @@ class SyncScreen extends Component {
               </ListItemIcon>
               <ListItemText primary="Home" />
             </MenuItem>
-            {syncPhases.map(([lPhase, rPhase], i) =>
-              this.generatePhaseMenuItem(lPhase, rPhase, i)
+            {syncPhases.map((syncPhase, i) =>
+              this.renderPhaseMenuItem(syncPhase, i)
             )}
           </List>
         </Drawer>
@@ -517,11 +582,16 @@ class SyncScreen extends Component {
             </Grid>
 
             {!localPhase.isEmpty() || !remotePhase.isEmpty() ? (
-              <SyncPhases localPhase={localPhase} remotePhase={remotePhase} />
+              <SyncPhases
+                spaceId={spaceId}
+                localPhase={localPhase}
+                remotePhase={remotePhase}
+                diff={diff}
+              />
             ) : (
               <>
-                {this.renderDiffImage(localSpace.image, remoteSpace.image)}
-                {this.renderDiffDescription(localSpace, remoteSpace)}
+                {this.renderDiffImage()}
+                {this.renderDiffDescription()}
               </>
             )}
           </Grid>
@@ -538,6 +608,7 @@ const mapStateToProps = ({ syncSpace: syncSpaceReducer, authentication }) => ({
   folder: authentication.getIn(['current', 'folder']),
   localPhase: syncSpaceReducer.getIn(['current', 'localPhase']),
   remotePhase: syncSpaceReducer.getIn(['current', 'remotePhase']),
+  diff: syncSpaceReducer.getIn(['current', 'diff']),
 });
 
 const mapDispatchToProps = {
