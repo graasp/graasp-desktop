@@ -49,7 +49,7 @@ describe('Clear User Input in a space', function() {
         mochaAsync(async () => {
           const { client } = app;
           const {
-            space: { phases },
+            space: { phases, id: spaceId },
           } = SPACE_ATOMIC_STRUCTURE;
           const { id: textInputAppId0 } = phases[0].items[1];
           const { id: textInputAppId1 } = phases[1].items[1];
@@ -57,11 +57,7 @@ describe('Clear User Input in a space', function() {
           const text1 = 'some user input conceptualisation';
 
           // load space with user input
-          await loadSpaceById(
-            client,
-            SPACE_ATOMIC_STRUCTURE,
-            SPACE_ATOMIC_STRUCTURE_PATH
-          );
+          await loadSpaceById(client, SPACE_ATOMIC_STRUCTURE_PATH, spaceId);
 
           // add user input
           await menuGoToPhase(client, 0);
@@ -100,11 +96,7 @@ describe('Clear User Input in a space', function() {
           const text1 = 'some user input conceptualisation';
 
           // load space with user input
-          await loadSpaceById(
-            client,
-            SPACE_ATOMIC_STRUCTURE,
-            SPACE_ATOMIC_STRUCTURE_PATH
-          );
+          await loadSpaceById(client, SPACE_ATOMIC_STRUCTURE_PATH, id);
 
           // add user input
           await menuGoToPhase(client, 0);
@@ -152,7 +144,7 @@ describe('Clear User Input in a space', function() {
         mochaAsync(async () => {
           const { client } = app;
           const {
-            space: { phases },
+            space: { phases, id: spaceId },
           } = SPACE_ATOMIC_STRUCTURE;
           const { id: textInputAppId0 } = phases[0].items[1];
           const { id: textInputAppId1 } = phases[1].items[1];
@@ -162,8 +154,9 @@ describe('Clear User Input in a space', function() {
           // load space with user input
           await loadSpaceById(
             client,
-            SPACE_ATOMIC_STRUCTURE,
-            SPACE_ATOMIC_STRUCTURE_PATH
+
+            SPACE_ATOMIC_STRUCTURE_PATH,
+            spaceId
           );
 
           // add user input
@@ -210,11 +203,7 @@ describe('Clear User Input in a space', function() {
         await userSignIn(client, USER_ALICE);
 
         // load space with user input
-        await loadSpaceById(
-          client,
-          SPACE_ATOMIC_STRUCTURE,
-          SPACE_ATOMIC_STRUCTURE_PATH
-        );
+        await loadSpaceById(client, SPACE_ATOMIC_STRUCTURE_PATH, id);
 
         // add user input
         await menuGoToPhase(client, 0);

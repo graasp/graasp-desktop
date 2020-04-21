@@ -15,7 +15,7 @@ import {
   VISIT_INPUT_ID,
   VISIT_BUTTON_ID,
   PHASE_DESCRIPTION_ID,
-  PHASE_MENU_ITEM,
+  buildPhaseMenuItemId,
   BANNER_WARNING_PREVIEW_ID,
   SPACE_EXPORT_BUTTON_CLASS,
   SPACE_CLEAR_BUTTON_CLASS,
@@ -292,7 +292,7 @@ const checkPhasesLayout = async (client, phases, mode, resources = []) => {
     // phase name
     expect(text).to.equal(phases[idx].name);
 
-    const liSelector = `#${PHASE_MENU_LIST_ID} li#${PHASE_MENU_ITEM}-${idx}`;
+    const liSelector = `#${PHASE_MENU_LIST_ID} li#${buildPhaseMenuItemId(idx)}`;
 
     // go to phase
     await client.click(liSelector);

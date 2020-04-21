@@ -17,3 +17,4 @@ export const SETTINGS_LOAD_PAUSE = 2000;
 export const LOGIN_PAUSE = 2000;
 export const SAVE_USER_INPUT_PAUSE = 2000;
 export const LOAD_PHASE_PAUSE = 2000;
+export const SYNC_SPACE_PAUSE = 2000;

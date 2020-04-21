@@ -43,9 +43,9 @@ const countConditions = (changes, { id }) => {
   return (
     // keep element if it has no change
     correspondingChanges.length === 0 ||
-    // keep if it is not removed or added change status
-    correspondingChanges.filter(({ status }) =>
-      [SYNC_ADDED, SYNC_REMOVED].includes(status)
+    // keep if it is not removed, added or moved
+    correspondingChanges.filter(
+      ({ status }) => [SYNC_ADDED, SYNC_REMOVED, SYNC_MOVED].includes(status) // <- depend on the added order
     ).length === 0
   );
 };
@@ -76,7 +76,7 @@ const findDiffInElementArray = (localObj, remoteObj, properties) => {
     remoteObj.map(({ id }) => id)
   );
 
-  const movedEls = {};
+  const movedEls = [];
   const changes = [];
 
   uniqueItemIds.forEach(id => {
@@ -108,14 +108,16 @@ const findDiffInElementArray = (localObj, remoteObj, properties) => {
 
       // check moved
       if (localOriginalIdx !== remoteOriginalIdx) {
-        movedEls[id] = [localOriginalIdx, remoteOriginalIdx];
+        movedEls.push({ id, localOriginalIdx, remoteOriginalIdx });
       }
     }
   });
 
-  // item is moved if index is different independently of added / removed elements
-  Object.entries(movedEls).forEach(
-    ([id, [localOriginalIdx, remoteOriginalIdx]]) => {
+  // begin from end of local list to compare in order
+  movedEls
+    .sort(({ localOriginalIdx: a }, { localOriginalIdx: b }) => b - a)
+    // item is moved if index is different independently of added / removed elements
+    .forEach(({ id, localOriginalIdx, remoteOriginalIdx }) => {
       const localIdx = getRelativeIdx(localObj, localOriginalIdx, changes);
       const remoteIdx = getRelativeIdx(remoteObj, remoteOriginalIdx, changes);
       if (localIdx !== remoteIdx) {
@@ -123,8 +125,7 @@ const findDiffInElementArray = (localObj, remoteObj, properties) => {
           createChangeObj(id, SYNC_MOVED, localOriginalIdx, remoteOriginalIdx)
         );
       }
-    }
-  );
+    });
 
   return changes;
 };

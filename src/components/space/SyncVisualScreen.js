@@ -30,8 +30,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText/ListItemText';
 import {
   PHASE_MENU_LIST_ID,
-  PHASE_MENU_ITEM,
+  PHASE_MENU_ITEM_HOME_ID,
   SYNC_ITEM_CLASS,
+  buildPhaseMenuItemId,
   SPACE_DESCRIPTION_TEXT_CLASS,
 } from '../../config/selectors';
 import Banner from '../common/Banner';
@@ -54,7 +55,7 @@ import {
   SYNC_REMOVED,
   SYNC_UPDATED,
   DIFF_STYLES,
-  SYNC_PHASE_PROPERTIES,
+  SYNC_SPACE_PROPERTIES,
   SYNC_ITEM_PROPERTIES,
 } from '../../config/constants';
 import {
@@ -185,7 +186,7 @@ class SyncScreen extends Component {
           [createToolsPhase(localSpace.items), ...localSpace.phases],
           [createToolsPhase(remoteSpace.items), ...remoteSpace.phases],
           classes,
-          SYNC_PHASE_PROPERTIES
+          SYNC_SPACE_PROPERTIES
         )
           // compute differences here
           // to have detect updates when rendering phase menu items
@@ -438,7 +439,7 @@ class SyncScreen extends Component {
         onClick={() => this.handlePhaseClicked(index)}
         key={localId || remoteId}
         selected={selected === index}
-        id={`${PHASE_MENU_ITEM}-${index}`}
+        id={buildPhaseMenuItemId(index)}
       >
         <ListItemIcon>
           {hasUpdate ? <NewReleaseIcon /> : <ChevronRightIcon />}
@@ -543,6 +544,7 @@ class SyncScreen extends Component {
               onClick={this.handleClearPhase}
               button
               selected={selected === -1}
+              id={PHASE_MENU_ITEM_HOME_ID}
             >
               <ListItemIcon>
                 <HomeIcon />

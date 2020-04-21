@@ -30,8 +30,7 @@ import './SpaceScreen.css';
 import Styles from '../../Styles';
 import { HOME_PATH } from '../../config/paths';
 import SpaceNotFound from './SpaceNotFound';
-
-const SELECTED_SPACE_PROPERTIES = ['name', 'image', 'description', 'phases'];
+import { SYNC_SPACE_PROPERTIES } from '../../config/constants';
 
 const diffEditorStyles = {
   variables: {
@@ -197,8 +196,8 @@ class SyncAdvancedScreen extends Component {
     const { name } = localSpace;
     const { openDrawer } = this.state;
 
-    const filteredSpace = _.pick(localSpace, SELECTED_SPACE_PROPERTIES);
-    const filteredRemoteSpace = _.pick(remoteSpace, SELECTED_SPACE_PROPERTIES);
+    const filteredSpace = _.pick(localSpace, SYNC_SPACE_PROPERTIES);
+    const filteredRemoteSpace = _.pick(remoteSpace, SYNC_SPACE_PROPERTIES);
 
     if (activity) {
       return (

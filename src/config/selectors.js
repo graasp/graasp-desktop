@@ -21,13 +21,14 @@ export const SIGN_OUT_MENU_ITEM_ID = 'signOutMenuItem';
 export const SIGN_IN_MAIN_ID = 'signInMain';
 
 export const PHASE_MENU_LIST_ID = 'phaseMenuList';
+export const PHASE_MENU_ITEM_HOME_ID = 'phaseMenuItemHome';
 
 export const SPACE_START_PREVIEW_BUTTON = 'spaceStartPreviewButton';
 export const SPACE_DESCRIPTION_ID = 'spaceDescription';
 export const SPACE_SAVE_ICON_CLASS = 'spaceSaveIcon';
 export const SPACE_PREVIEW_ICON_CLASS = 'spacePreviewIcon';
 export const PHASE_DESCRIPTION_ID = 'phaseDescription';
-export const PHASE_MENU_ITEM = 'phase-menu-item';
+export const buildPhaseMenuItemId = id => `phaseMenuItemId-${id}`;
 export const BANNER_WARNING_PREVIEW_ID = 'bannerWarningPreview';
 export const SPACE_EXPORT_BUTTON_CLASS = 'spaceExportButton';
 export const SPACE_DELETE_BUTTON_CLASS = 'spaceDeleteButton';

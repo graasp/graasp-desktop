@@ -28,7 +28,10 @@ import { HOME_PATH } from '../../config/paths';
 import SpaceHeader from './SpaceHeader';
 import SpaceNotFound from './SpaceNotFound';
 import MainMenu from '../common/MainMenu';
-import { PHASE_MENU_LIST_ID, PHASE_MENU_ITEM } from '../../config/selectors';
+import {
+  PHASE_MENU_LIST_ID,
+  buildPhaseMenuItemId,
+} from '../../config/selectors';
 
 class SpaceScreen extends Component {
   state = {
@@ -201,7 +204,7 @@ class SpaceScreen extends Component {
                 onClick={() => this.handlePhaseClicked(i)}
                 key={item.id}
                 selected={selected === i}
-                id={`${PHASE_MENU_ITEM}-${i}`}
+                id={buildPhaseMenuItemId(i)}
               >
                 <ListItemIcon>
                   <ChevronRightIcon />
