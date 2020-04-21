@@ -7,9 +7,6 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import Tooltip from '@material-ui/core/Tooltip';
-import ClearIcon from '@material-ui/icons/Clear';
-import DoneIcon from '@material-ui/icons/Done';
 import clsx from 'clsx';
 import { withTranslation } from 'react-i18next';
 import CssBaseline from '@material-ui/core/CssBaseline/CssBaseline';
@@ -28,6 +25,8 @@ import List from '@material-ui/core/List/List';
 import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText/ListItemText';
+import SyncCancelButton from './sync/SyncCancelButton';
+import SyncAcceptButton from './sync/SyncAcceptButton';
 import {
   PHASE_MENU_LIST_ID,
   PHASE_MENU_ITEM_HOME_ID,
@@ -41,7 +40,6 @@ import {
   clearSpacesForSync,
   getLocalSpaceForSync,
   getRemoteSpaceForSync,
-  syncSpace,
   clearPhasesForSync,
   selectPhaseForSync,
 } from '../../actions';
@@ -102,7 +100,6 @@ class SyncScreen extends Component {
     dispatchClearSpaces: PropTypes.func.isRequired,
     dispatchClearPhases: PropTypes.func.isRequired,
     dispatchSelectPhase: PropTypes.func.isRequired,
-    dispatchSync: PropTypes.func.isRequired,
     activity: PropTypes.bool.isRequired,
     classes: PropTypes.shape({
       root: PropTypes.string.isRequired,
@@ -236,28 +233,6 @@ class SyncScreen extends Component {
     dispatchClearPhases();
   }
 
-  handleCancel = () => {
-    const {
-      history: { goBack },
-    } = this.props;
-
-    // return to previous screen
-    goBack();
-  };
-
-  handleSync = () => {
-    const {
-      localSpace: { id },
-      dispatchSync,
-      history: { push },
-    } = this.props;
-
-    dispatchSync({ id });
-
-    // redirect to space
-    push(`/space/${id}`);
-  };
-
   handleDrawerOpen = () => {
     this.setState({ openDrawer: true });
   };
@@ -282,36 +257,6 @@ class SyncScreen extends Component {
     });
     const { dispatchClearPhases } = this.props;
     dispatchClearPhases();
-  };
-
-  renderCancelButton = () => {
-    const { t, classes } = this.props;
-    return (
-      <Tooltip title={t('Cancel Synchronization')}>
-        <IconButton
-          color="inherit"
-          className={clsx(classes.button)}
-          onClick={this.handleCancel}
-        >
-          <ClearIcon />
-        </IconButton>
-      </Tooltip>
-    );
-  };
-
-  renderDoneButton = () => {
-    const { t, classes } = this.props;
-    return (
-      <Tooltip title={t('Accept Synchronization')}>
-        <IconButton
-          color="inherit"
-          className={clsx(classes.button)}
-          onClick={this.handleSync}
-        >
-          <DoneIcon />
-        </IconButton>
-      </Tooltip>
-    );
   };
 
   renderDiffImage = () => {
@@ -515,8 +460,8 @@ class SyncScreen extends Component {
 
             {`${t('Synchronization')}: ${name}`}
             <span style={{ position: 'absolute', right: 20 }}>
-              {this.renderDoneButton()}
-              {this.renderCancelButton()}
+              <SyncAcceptButton spaceId={localSpace.id} />
+              <SyncCancelButton />
             </span>
           </Toolbar>
         </AppBar>
@@ -617,7 +562,6 @@ const mapDispatchToProps = {
   dispatchGetLocalSpace: getLocalSpaceForSync,
   dispatchGetRemoteSpace: getRemoteSpaceForSync,
   dispatchClearSpaces: clearSpacesForSync,
-  dispatchSync: syncSpace,
   dispatchSelectPhase: selectPhaseForSync,
   dispatchClearPhases: clearPhasesForSync,
 };

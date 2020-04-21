@@ -58,3 +58,5 @@ export const LOGIN_BUTTON_ID = 'loginButton';
 
 export const SYNC_ITEM_CLASS = 'syncItem';
 export const SPACE_DESCRIPTION_TEXT_CLASS = 'SpaceDescriptionText';
+export const SYNC_ACCEPT_BUTTON_ID = 'syncAcceptButton';
+export const SYNC_CANCEL_BUTTON_ID = 'syncCancelButton';

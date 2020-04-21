@@ -4,12 +4,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import IconButton from '@material-ui/core/IconButton/IconButton';
 import SyncIcon from '@material-ui/icons/Sync';
-import Tooltip from '@material-ui/core/Tooltip';
-import ClearIcon from '@material-ui/icons/Clear';
-import DoneIcon from '@material-ui/icons/Done';
-import clsx from 'clsx';
 import { withTranslation } from 'react-i18next';
 import CssBaseline from '@material-ui/core/CssBaseline/CssBaseline';
 import AppBar from '@material-ui/core/AppBar/AppBar';
@@ -24,13 +19,14 @@ import {
   clearSpacesForSync,
   getLocalSpaceForSync,
   getRemoteSpaceForSync,
-  syncSpace,
 } from '../../actions';
 import './SpaceScreen.css';
 import Styles from '../../Styles';
 import { HOME_PATH } from '../../config/paths';
 import SpaceNotFound from './SpaceNotFound';
 import { SYNC_SPACE_PROPERTIES } from '../../config/constants';
+import SyncCancelButton from './sync/SyncCancelButton';
+import SyncAcceptButton from './sync/SyncAcceptButton';
 
 const diffEditorStyles = {
   variables: {
@@ -73,7 +69,6 @@ class SyncAdvancedScreen extends Component {
     dispatchGetLocalSpace: PropTypes.func.isRequired,
     dispatchGetRemoteSpace: PropTypes.func.isRequired,
     dispatchClearSpaces: PropTypes.func.isRequired,
-    dispatchSync: PropTypes.func.isRequired,
     activity: PropTypes.bool.isRequired,
     classes: PropTypes.shape({
       root: PropTypes.string.isRequired,
@@ -140,57 +135,6 @@ class SyncAdvancedScreen extends Component {
     dispatchClearSpaces();
   }
 
-  handleCancel = () => {
-    const {
-      history: { goBack },
-    } = this.props;
-
-    // return to previous screen
-    goBack();
-  };
-
-  handleSync = () => {
-    const {
-      localSpace: { id },
-      dispatchSync,
-      history: { push },
-    } = this.props;
-    dispatchSync({ id });
-
-    // redirect to space
-    push(`/space/${id}`);
-  };
-
-  renderCancelButton = () => {
-    const { t, classes } = this.props;
-    return (
-      <Tooltip title={t('Cancel Synchronization')}>
-        <IconButton
-          color="inherit"
-          className={clsx(classes.button)}
-          onClick={this.handleCancel}
-        >
-          <ClearIcon />
-        </IconButton>
-      </Tooltip>
-    );
-  };
-
-  renderDoneButton = () => {
-    const { t, classes } = this.props;
-    return (
-      <Tooltip title={t('Accept Synchronization')}>
-        <IconButton
-          color="inherit"
-          className={clsx(classes.button)}
-          onClick={this.handleSync}
-        >
-          <DoneIcon />
-        </IconButton>
-      </Tooltip>
-    );
-  };
-
   render() {
     const { localSpace, remoteSpace, activity, classes, t } = this.props;
     const { name } = localSpace;
@@ -242,8 +186,8 @@ class SyncAdvancedScreen extends Component {
             </div>
             {`${t('Synchronization')}: ${name}`}
             <span style={{ position: 'absolute', right: 20 }}>
-              {this.renderDoneButton()}
-              {this.renderCancelButton()}
+              <SyncAcceptButton spaceId={localSpace.id} />
+              <SyncCancelButton />
             </span>
           </Toolbar>
         </AppBar>
@@ -282,7 +226,6 @@ const mapDispatchToProps = {
   dispatchGetLocalSpace: getLocalSpaceForSync,
   dispatchGetRemoteSpace: getRemoteSpaceForSync,
   dispatchClearSpaces: clearSpacesForSync,
-  dispatchSync: syncSpace,
 };
 
 const ConnectedComponent = connect(
