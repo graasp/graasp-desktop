@@ -15,10 +15,10 @@ exports[`<Settings /> renders correctly 1`] = `
     </WithStyles(ForwardRef(Typography))>
     <WithStyles(ForwardRef(FormGroup))>
       <withI18nextTranslation(WithStyles(Connect(LanguageSelect))) />
-      <withI18nextTranslation(WithStyles(Connect(DeveloperSwitch))) />
       <withI18nextTranslation(WithStyles(Connect(GeolocationControl))) />
       <withI18nextTranslation(WithStyles(Connect(SyncAdvancedSwitch))) />
       <withI18nextTranslation(WithStyles(Connect(StudentModeSwitch))) />
+      <withI18nextTranslation(WithStyles(Connect(DeveloperSwitch))) />
     </WithStyles(ForwardRef(FormGroup))>
   </div>
 </withI18nextTranslation(WithStyles(Connect(Main)))>

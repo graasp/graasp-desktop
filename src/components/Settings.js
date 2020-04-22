@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import { connect } from 'react-redux';
 import { FormGroup } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import Styles from '../Styles';
@@ -13,6 +14,7 @@ import Main from './common/Main';
 import { SETTINGS_MAIN_ID } from '../config/selectors';
 import SyncAdvancedSwitch from './space/sync/SyncAdvancedSwitch';
 import StudentModeSwitch from './common/StudentModeSwitch';
+import { DEFAULT_STUDENT_MODE } from '../config/constants';
 
 // eslint-disable-next-line react/prefer-stateless-function
 export class Settings extends Component {
@@ -29,10 +31,15 @@ export class Settings extends Component {
     i18n: PropTypes.shape({
       changeLanguage: PropTypes.func.isRequired,
     }).isRequired,
+    studentMode: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    studentMode: DEFAULT_STUDENT_MODE,
   };
 
   render() {
-    const { classes, t } = this.props;
+    const { classes, t, studentMode } = this.props;
 
     return (
       <Main id={SETTINGS_MAIN_ID}>
@@ -42,10 +49,10 @@ export class Settings extends Component {
           </Typography>
           <FormGroup>
             <LanguageSelect />
-            <DeveloperSwitch />
             <GeolocationControl />
             <SyncAdvancedSwitch />
             <StudentModeSwitch />
+            {studentMode ? null : <DeveloperSwitch />}
           </FormGroup>
         </div>
       </Main>
@@ -53,7 +60,15 @@ export class Settings extends Component {
   }
 }
 
-const StyledComponent = withStyles(Styles, { withTheme: true })(Settings);
+const mapStateToProps = ({ authentication }) => ({
+  studentMode: authentication.getIn(['user', 'settings', 'studentMode']),
+});
+
+const ConnectedComponent = connect(mapStateToProps, null)(Settings);
+
+const StyledComponent = withStyles(Styles, { withTheme: true })(
+  ConnectedComponent
+);
 
 const TranslatedComponent = withTranslation()(StyledComponent);
 

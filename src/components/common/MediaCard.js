@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -16,7 +17,7 @@ import ClearButton from '../space/ClearButton';
 import ExportButton from '../space/ExportButton';
 import SyncButton from '../space/SyncButton';
 import Text from './Text';
-import { MIN_CARD_WIDTH } from '../../config/constants';
+import { MIN_CARD_WIDTH, DEFAULT_STUDENT_MODE } from '../../config/constants';
 import {
   buildSpaceCardId,
   SPACE_DESCRIPTION_EXPAND_BUTTON_CLASS,
@@ -56,11 +57,31 @@ const styles = theme => ({
 });
 
 export const MediaCard = props => {
-  const { classes, image, text, viewLink, space, showActions } = props;
+  const {
+    classes,
+    image,
+    text,
+    viewLink,
+    space,
+    showActions,
+    studentMode,
+  } = props;
   const { id, name } = space;
   const [expanded, setExpanded] = React.useState(false);
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  };
+
+  const renderTeacherActions = () => {
+    if (!studentMode) {
+      return (
+        <>
+          <DeleteButton spaceId={id} />
+          <SyncButton spaceId={id} />
+        </>
+      );
+    }
+    return null;
   };
 
   return (
@@ -88,9 +109,8 @@ export const MediaCard = props => {
       {showActions && (
         <CardActions disableSpacing>
           <ClearButton spaceId={id} />
-          <DeleteButton spaceId={id} />
           <ExportButton space={space} />
-          <SyncButton spaceId={id} />
+          {renderTeacherActions()}
 
           {text && (
             <IconButton
@@ -131,11 +151,19 @@ MediaCard.propTypes = {
   text: PropTypes.string,
   viewLink: PropTypes.func.isRequired,
   showActions: PropTypes.bool,
+  studentMode: PropTypes.bool,
 };
 
 MediaCard.defaultProps = {
   text: '',
   showActions: false,
+  studentMode: DEFAULT_STUDENT_MODE,
 };
 
-export default withStyles(styles)(MediaCard);
+const mapStateToProps = ({ authentication }) => ({
+  studentMode: authentication.getIn(['user', 'settings', 'studentMode']),
+});
+
+const ConnectedComponent = connect(mapStateToProps, null)(MediaCard);
+
+export default withStyles(styles)(ConnectedComponent);

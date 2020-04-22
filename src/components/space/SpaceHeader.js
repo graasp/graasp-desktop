@@ -25,6 +25,7 @@ import {
   SPACE_PREVIEW_ICON_CLASS,
   DRAWER_BUTTON_ID,
 } from '../../config/selectors';
+import { DEFAULT_STUDENT_MODE } from '../../config/constants';
 
 class SpaceHeader extends Component {
   static propTypes = {
@@ -45,6 +46,11 @@ class SpaceHeader extends Component {
     handleDrawerOpen: PropTypes.func.isRequired,
     dispatchSaveSpace: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
+    studentMode: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    studentMode: DEFAULT_STUDENT_MODE,
   };
 
   handleSave = () => {
@@ -138,6 +144,20 @@ class SpaceHeader extends Component {
     return null;
   }
 
+  renderTeacherButtons() {
+    const { studentMode } = this.props;
+    if (!studentMode) {
+      return (
+        <>
+          {this.renderDeleteButton()}
+          {this.renderSyncButton()}
+          {this.renderSaveButton()}
+        </>
+      );
+    }
+    return null;
+  }
+
   render() {
     const {
       openDrawer,
@@ -168,11 +188,9 @@ class SpaceHeader extends Component {
           {name}
           <span style={{ position: 'absolute', right: 20 }}>
             {this.renderClearButton()}
-            {this.renderSyncButton()}
             {this.renderPreviewIcon()}
-            {this.renderDeleteButton()}
             {this.renderExportButton()}
-            {this.renderSaveButton()}
+            {this.renderTeacherButtons()}
           </span>
         </Toolbar>
       </AppBar>
@@ -180,10 +198,11 @@ class SpaceHeader extends Component {
   }
 }
 
-const mapStateToProps = ({ Space }) => ({
+const mapStateToProps = ({ Space, authentication }) => ({
   space: Space.get('current')
     .get('content')
     .toJS(),
+  studentMode: authentication.getIn(['user', 'settings', 'studentMode']),
 });
 
 const mapDispatchToProps = {
