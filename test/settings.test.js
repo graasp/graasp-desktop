@@ -18,6 +18,7 @@ import {
   DEVELOPER_MENU_ITEM_ID,
   SPACE_CARD_CLASS,
   SPACE_NOT_AVAILABLE_TEXT_CLASS,
+  SYNC_ADVANCED_MODE_SWITCH_ID,
 } from '../src/config/selectors';
 import {
   DEFAULT_GLOBAL_TIMEOUT,
@@ -75,6 +76,19 @@ const toggleDeveloperMode = async (client, value) => {
   );
   if (JSON.parse(developerMode) !== value) {
     await client.click(developerSwitchSelector);
+    await client.pause(SETTINGS_LOAD_PAUSE);
+  }
+};
+
+// eslint-disable-next-line import/prefer-default-export
+export const toggleSyncAdvancedMode = async (client, value) => {
+  const syncAdvancedModeSwitchSelector = `#${SYNC_ADVANCED_MODE_SWITCH_ID} input`;
+  const syncAdvancedMode = await client.getAttribute(
+    syncAdvancedModeSwitchSelector,
+    'value'
+  );
+  if (JSON.parse(syncAdvancedMode) !== value) {
+    await client.click(syncAdvancedModeSwitchSelector);
     await client.pause(SETTINGS_LOAD_PAUSE);
   }
 };

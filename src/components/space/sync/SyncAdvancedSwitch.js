@@ -8,6 +8,7 @@ import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { setSyncAdvancedMode, getSyncAdvancedMode } from '../../../actions';
 import Loader from '../../common/Loader';
+import { SYNC_ADVANCED_MODE_SWITCH_ID } from '../../../config/selectors';
 
 const styles = theme => ({
   formControl: {
@@ -57,7 +58,10 @@ export class SyncAdvancedSwitch extends Component {
     );
 
     return (
-      <FormControl className={classes.formControl}>
+      <FormControl
+        id={SYNC_ADVANCED_MODE_SWITCH_ID}
+        className={classes.formControl}
+      >
         <FormControlLabel control={control} label={t('Sync Advanced Mode')} />
       </FormControl>
     );

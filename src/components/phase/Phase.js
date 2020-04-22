@@ -11,6 +11,7 @@ import PhaseItems from './PhaseItems';
 import ToolsButton from '../space/ToolsButton';
 import './Phase.css';
 import { MAX_TOOLS_WIDTH, MIN_TOOLS_WIDTH } from '../../config/layout';
+import { TOOLS_CONTENT_PANE_ID } from '../../config/selectors';
 
 const styles = {
   containerStyle: {
@@ -97,7 +98,7 @@ export class Phase extends Component {
           onDragFinished={this.handleResizeTools}
         >
           {this.renderContent()}
-          <div style={toolContentStyle}>
+          <div id={TOOLS_CONTENT_PANE_ID} style={toolContentStyle}>
             <PhaseItems items={items} spaceId={spaceId} phaseId={phaseId} />
           </div>
         </SplitPane>

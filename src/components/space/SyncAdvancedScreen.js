@@ -27,6 +27,7 @@ import SpaceNotFound from './SpaceNotFound';
 import { SYNC_SPACE_PROPERTIES } from '../../config/constants';
 import SyncCancelButton from './sync/SyncCancelButton';
 import SyncAcceptButton from './sync/SyncAcceptButton';
+import { SYNC_ADVANCED_MAIN_ID } from '../../config/selectors';
 
 const diffEditorStyles = {
   variables: {
@@ -192,25 +193,25 @@ class SyncAdvancedScreen extends Component {
           </Toolbar>
         </AppBar>
 
-        <div className={classes.drawerHeader} />
+        <main id={SYNC_ADVANCED_MAIN_ID} style={{ height: '100%' }}>
+          <div className={classes.drawerHeader} />
 
-        <br />
+          <Banner
+            text={t(
+              'You are currently synchronizing a space. Either accept or cancel the synchronization. The synchronization is definitive and all user input will be deleted.'
+            )}
+            type="error"
+          />
 
-        <Banner
-          text={t(
-            'You are currently synchronizing a space. Either accept or cancel the synchronization. The synchronization is definitive and all user input will be deleted.'
-          )}
-          type="error"
-        />
-
-        <ReactDiffViewer
-          styles={diffEditorStyles}
-          oldValue={JSON.stringify(filteredSpace, null, '  ')}
-          newValue={JSON.stringify(filteredRemoteSpace, null, '  ')}
-          splitView
-          leftTitle={t('Current Version')}
-          rightTitle={t('Most Recent Online Version')}
-        />
+          <ReactDiffViewer
+            styles={diffEditorStyles}
+            oldValue={JSON.stringify(filteredSpace, null, '  ')}
+            newValue={JSON.stringify(filteredRemoteSpace, null, '  ')}
+            splitView
+            leftTitle={t('Current Version')}
+            rightTitle={t('Most Recent Online Version')}
+          />
+        </main>
       </>
     );
   }

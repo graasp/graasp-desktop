@@ -33,6 +33,7 @@ import {
   SYNC_ITEM_CLASS,
   buildPhaseMenuItemId,
   SPACE_DESCRIPTION_TEXT_CLASS,
+  SPACE_THUMBNAIL_IMAGE_CLASS,
 } from '../../config/selectors';
 import Banner from '../common/Banner';
 import Loader from '../common/Loader';
@@ -261,8 +262,8 @@ class SyncScreen extends Component {
 
   renderDiffImage = () => {
     const { classes, folder, t, localSpace, remoteSpace } = this.props;
-    const { image: localImage } = localSpace;
-    const { image: remoteImage } = remoteSpace;
+    const { image: localImage = {} } = localSpace;
+    const { image: remoteImage = {} } = remoteSpace;
 
     // display nothing if both elements are undefined
     if (!localImage && !remoteImage) {
@@ -280,6 +281,7 @@ class SyncScreen extends Component {
           item
           className={clsx(SYNC_ITEM_CLASS, {
             [classes[SYNC_REMOVED]]: change[SYNC_REMOVED],
+            [SPACE_THUMBNAIL_IMAGE_CLASS]: thumbnailAsset,
           })}
           xs={6}
         >
@@ -296,14 +298,17 @@ class SyncScreen extends Component {
           className={clsx(SYNC_ITEM_CLASS, {
             [classes[SYNC_ADDED]]: change[SYNC_ADDED],
             [classes[SYNC_UPDATED]]: change[SYNC_UPDATED],
+            [SPACE_THUMBNAIL_IMAGE_CLASS]: remoteThumbnailUrl.length,
           })}
           xs={6}
         >
-          <img
-            alt={t('Remote Space Image')}
-            className={classes.spaceImage}
-            src={remoteThumbnailUrl}
-          />
+          {remoteThumbnailUrl.length ? (
+            <img
+              alt={t('Remote Space Image')}
+              className={classes.spaceImage}
+              src={remoteThumbnailUrl}
+            />
+          ) : null}
         </Grid>
       </>
     );
@@ -327,26 +332,24 @@ class SyncScreen extends Component {
           item
           className={clsx(SYNC_ITEM_CLASS, {
             [classes[SYNC_REMOVED]]: change[SYNC_REMOVED],
+            [SPACE_DESCRIPTION_TEXT_CLASS]: localDescription.length,
           })}
           xs={6}
         >
-          <Text
-            content={localDescription}
-            className={SPACE_DESCRIPTION_TEXT_CLASS}
-          />
+          {localDescription.length ? <Text content={localDescription} /> : null}
         </Grid>
         <Grid
           item
           className={clsx(SYNC_ITEM_CLASS, {
             [classes[SYNC_ADDED]]: change[SYNC_ADDED],
             [classes[SYNC_UPDATED]]: change[SYNC_UPDATED],
+            [SPACE_DESCRIPTION_TEXT_CLASS]: remoteDescription.length,
           })}
           xs={6}
         >
-          <Text
-            content={remoteDescription}
-            className={SPACE_DESCRIPTION_TEXT_CLASS}
-          />
+          {remoteDescription.length ? (
+            <Text content={remoteDescription} />
+          ) : null}
         </Grid>
       </>
     );
