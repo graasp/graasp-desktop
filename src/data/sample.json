@@ -153,7 +153,8 @@
       "lang": "en",
       "developerMode": true,
       "geolocationEnabled": false,
-      "syncMode": "visual"
+      "syncMode": "visual",
+      "studentMode": true
     }
   },
   "actions": [
@@ -179,7 +180,8 @@
         "lang": "en",
         "developerMode": true,
         "geolocationEnabled": false,
-        "syncMode": "visual"
+        "syncMode": "visual",
+        "studentMode": true
       }
     }
   ],

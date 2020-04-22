@@ -17,6 +17,8 @@ const getDeveloperMode = require('./getDeveloperMode');
 const setDeveloperMode = require('./setDeveloperMode');
 const getSyncMode = require('./getSyncMode');
 const setSyncMode = require('./setSyncMode');
+const getStudentMode = require('./getStudentMode');
+const setStudentMode = require('./setStudentMode');
 const clearUserInput = require('./clearUserInput');
 const showClearUserInputPrompt = require('./showClearUserInputPrompt');
 const postAction = require('./postAction');
@@ -58,4 +60,6 @@ module.exports = {
   postAppInstanceResource,
   patchAppInstanceResource,
   getAppInstance,
+  getStudentMode,
+  setStudentMode,
 };

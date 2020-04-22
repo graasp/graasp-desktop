@@ -57,6 +57,10 @@ const ERROR_GETTING_SYNC_MODE =
   'There was an error getting the sync mode for Space Synchronization';
 const ERROR_SETTING_SYNC_MODE =
   'There was an error setting the sync mode for Space Synchronization';
+const ERROR_GETTING_STUDENT_MODE =
+  'There was an error getting the student mode';
+const ERROR_SETTING_STUDENT_MODE =
+  'There was an error setting the student mode';
 
 module.exports = {
   ERROR_GETTING_DEVELOPER_MODE,
@@ -101,4 +105,6 @@ module.exports = {
   ERROR_GETTING_AUTHENTICATED,
   ERROR_GETTING_SYNC_MODE,
   ERROR_SETTING_SYNC_MODE,
+  ERROR_GETTING_STUDENT_MODE,
+  ERROR_SETTING_STUDENT_MODE,
 };
