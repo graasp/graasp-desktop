@@ -33,7 +33,6 @@ module.exports = {
   PATCH_APP_INSTANCE_CHANNEL: 'app-instance:patch',
   GET_DATABASE_CHANNEL: 'developer:database:get',
   SET_DATABASE_CHANNEL: 'developer:database:set',
-  SHOW_SYNC_SPACE_PROMPT_CHANNEL: 'prompt:space:sync:show',
   RESPOND_SYNC_SPACE_PROMPT_CHANNEL: 'prompt:space:sync:respond',
   SYNC_SPACE_CHANNEL: 'space:sync',
   SYNCED_SPACE_CHANNEL: 'space:synced',

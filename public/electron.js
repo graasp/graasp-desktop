@@ -47,7 +47,6 @@ const {
   SET_GEOLOCATION_ENABLED_CHANNEL,
   GET_DATABASE_CHANNEL,
   SET_DATABASE_CHANNEL,
-  SHOW_SYNC_SPACE_PROMPT_CHANNEL,
   SYNC_SPACE_CHANNEL,
   CLEAR_USER_INPUT_CHANNEL,
   SHOW_CLEAR_USER_INPUT_PROMPT_CHANNEL,
@@ -61,7 +60,6 @@ const {
   loadSpace,
   saveSpace,
   getSpaces,
-  showSyncSpacePrompt,
   syncSpace,
   getSpace,
   deleteSpace,
@@ -477,9 +475,6 @@ app.on('ready', async () => {
       mainWindow.webContents.send(SET_DATABASE_CHANNEL, null);
     }
   });
-
-  // prompt when syncing a space
-  ipcMain.on(SHOW_SYNC_SPACE_PROMPT_CHANNEL, showSyncSpacePrompt(mainWindow));
 
   // called when syncing a space
   ipcMain.on(SYNC_SPACE_CHANNEL, syncSpace(mainWindow, db));
