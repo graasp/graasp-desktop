@@ -19,7 +19,7 @@ import ActionEditor from './ActionEditor';
 import Loader from '../common/Loader';
 import Main from '../common/Main';
 import { getDatabase } from '../../actions';
-import { FILTER_ALL_SPACE_ID } from '../../config/constants';
+import { FILTER_ALL_SPACE_ID, USER_MODES } from '../../config/constants';
 import { DASHBOARD_MAIN_ID } from '../../config/selectors';
 
 const styles = theme => ({
@@ -72,6 +72,8 @@ export class Dashboard extends Component {
       actions: PropTypes.arrayOf(PropTypes.object),
     }),
     dispatchGetDatabase: PropTypes.func.isRequired,
+    userMode: PropTypes.oneOf(Object.values(USER_MODES)).isRequired,
+    userId: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -115,10 +117,17 @@ export class Dashboard extends Component {
   };
 
   renderActionWidgets = () => {
-    const { database, t, classes } = this.props;
+    const { database, t, classes, userMode, userId } = this.props;
     const { spaceId } = this.state;
 
     let filteredActions = database.actions;
+
+    // filter action per user if userMode is student
+    if (userMode === USER_MODES.STUDENT) {
+      filteredActions = filteredActions.filter(({ user }) => user === userId);
+    }
+
+    // filter action per space
     if (spaceId !== FILTER_ALL_SPACE_ID) {
       filteredActions = filteredActions.filter(
         ({ spaceId: id }) => id === spaceId
@@ -194,8 +203,10 @@ export class Dashboard extends Component {
   }
 }
 
-const mapStateToProps = ({ Developer }) => ({
+const mapStateToProps = ({ Developer, authentication }) => ({
   database: Developer.get('database'),
+  userId: authentication.getIn(['user', 'id']),
+  userMode: authentication.getIn(['user', 'settings', 'userMode']),
 });
 
 const mapDispatchToProps = {
