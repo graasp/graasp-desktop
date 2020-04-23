@@ -14,18 +14,17 @@ import Toolbar from '@material-ui/core/Toolbar/Toolbar';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core';
 import { withRouter } from 'react-router';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NewReleaseIcon from '@material-ui/icons/NewReleases';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import HomeIcon from '@material-ui/icons/Home';
 import Drawer from '@material-ui/core/Drawer/Drawer';
-import Divider from '@material-ui/core/Divider/Divider';
 import List from '@material-ui/core/List/List';
 import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText/ListItemText';
 import SyncCancelButton from './sync/SyncCancelButton';
 import SyncAcceptButton from './sync/SyncAcceptButton';
+import DrawerHeader from '../common/DrawerHeader';
 import {
   PHASE_MENU_LIST_ID,
   PHASE_MENU_ITEM_HOME_ID,
@@ -389,7 +388,6 @@ class SyncScreen extends Component {
       t,
       remotePhase,
       localPhase,
-      theme,
       diff,
     } = this.props;
     const { name } = localSpace;
@@ -454,16 +452,7 @@ class SyncScreen extends Component {
             paper: classes.drawerPaper,
           }}
         >
-          <div className={classes.drawerHeader}>
-            <IconButton onClick={this.handleDrawerClose}>
-              {theme.direction === 'ltr' ? (
-                <ChevronLeftIcon />
-              ) : (
-                <ChevronRightIcon />
-              )}
-            </IconButton>
-          </div>
-          <Divider />
+          <DrawerHeader handleDrawerClose={this.handleDrawerClose} />
           <List id={PHASE_MENU_LIST_ID}>
             <MenuItem
               onClick={this.handleClearPhase}
