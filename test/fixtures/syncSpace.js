@@ -11,7 +11,7 @@ import {
 
 export const SPACE_WITH_ADDITION_PATH = './spaceWithAddition.zip';
 export const SPACE_WITH_ADDITION = {
-  space: { id: '5e9edef4dbea5955c7f5bbea' },
+  space: { id: '5e9edef4dbea5955c7f5bbea', name: 'Space with addition' },
 };
 
 export const SPACE_WITH_ADDITION_CHANGES = {
@@ -34,7 +34,7 @@ export const SPACE_WITH_ADDITION_CHANGES = {
 
 export const SPACE_WITH_REMOVAL_PATH = './spaceWithRemoval.zip';
 export const SPACE_WITH_REMOVAL = {
-  space: { id: '5e9efe77f130f510ae709466' },
+  space: { id: '5e9efe77f130f510ae709466', name: 'Space with removal' },
 };
 
 export const SPACE_WITH_REMOVAL_CHANGES = {
@@ -65,7 +65,7 @@ export const SPACE_WITH_REMOVAL_CHANGES = {
 
 export const SPACE_WITH_UPDATE_PATH = './spaceWithUpdate.zip';
 export const SPACE_WITH_UPDATE = {
-  space: { id: '5e9f0ccde272c3572ddf0524' },
+  space: { id: '5e9f0ccde272c3572ddf0524', name: 'Space with update' },
 };
 
 export const SPACE_WITH_UPDATE_CHANGES = {
@@ -91,7 +91,7 @@ export const SPACE_WITH_UPDATE_CHANGES = {
 
 export const SPACE_WITH_MOVE_PATH = './spaceWithMove.zip';
 export const SPACE_WITH_MOVE = {
-  space: { id: '5ea003b2e1540856e519cc3e' },
+  space: { id: '5ea003b2e1540856e519cc3e', name: 'Space with move' },
 };
 
 export const SPACE_WITH_MOVE_CHANGES = {
@@ -140,7 +140,7 @@ export const SPACE_WITH_MOVE_CHANGES = {
 
 export const SPACE_WITH_TOOLS_UPDATE_PATH = './spaceWithToolsUpdate.zip';
 export const SPACE_WITH_TOOLS_UPDATE = {
-  space: { id: '5ea00ac4e1540856e519dfe8' },
+  space: { id: '5ea00ac4e1540856e519dfe8', name: 'Space with tools updated' },
 };
 
 export const SPACE_WITH_TOOLS_UPDATE_CHANGES = {

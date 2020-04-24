@@ -229,7 +229,7 @@ const acceptSync = async client => {
   await client.pause(SYNC_SPACE_PAUSE);
 };
 
-describe('Sync a space', function() {
+describe.only('Sync a space', function() {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
@@ -246,31 +246,35 @@ describe('Sync a space', function() {
       })
     );
 
-    spaces.forEach(([space, changes, spaceFilepath]) => {
-      it(
-        'Syncing from card open Visual Syncing Space Screen',
-        mochaAsync(async () => {
-          const { client } = app;
+    spaces.forEach(
+      ([
+        {
+          space: { id, name },
+        },
+        changes,
+        spaceFilepath,
+      ]) => {
+        it(
+          `Syncing from card open Visual Syncing Space Screen for "${name}"`,
+          mochaAsync(async () => {
+            const { client } = app;
 
-          const {
-            space: { id },
-          } = space;
+            await loadSpaceById(client, spaceFilepath);
 
-          await loadSpaceById(client, spaceFilepath);
+            await client.click(
+              `#${buildSpaceCardId(id)} .${SPACE_SYNC_BUTTON_CLASS}`
+            );
+            await client.pause(SYNC_OPEN_SCREEN_PAUSE);
 
-          await client.click(
-            `#${buildSpaceCardId(id)} .${SPACE_SYNC_BUTTON_CLASS}`
-          );
-          await client.pause(SYNC_OPEN_SCREEN_PAUSE);
+            await hasSyncVisualScreenLayout(client, changes);
 
-          await hasSyncVisualScreenLayout(client, changes);
+            await acceptSync(client);
 
-          await acceptSync(client);
-
-          await checkChangesInSpace(client, changes);
-        })
-      );
-    });
+            await checkChangesInSpace(client, changes);
+          })
+        );
+      }
+    );
 
     it(
       'Syncing from toolbar open Visual Syncing Space Screen',
