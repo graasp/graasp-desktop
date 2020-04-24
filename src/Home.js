@@ -14,6 +14,7 @@ import Styles from './Styles';
 import Loader from './components/common/Loader';
 import Main from './components/common/Main';
 import { HOME_MAIN_ID } from './config/selectors';
+import { searchSpacesByQuery } from './utils/search';
 
 class Home extends Component {
   static propTypes = {
@@ -39,15 +40,35 @@ class Home extends Component {
     activity: PropTypes.bool.isRequired,
     history: PropTypes.shape({ length: PropTypes.number.isRequired })
       .isRequired,
+    searchQuery: PropTypes.string.isRequired,
   };
 
-  componentDidMount() {
+  state = {
+    // eslint-disable-next-line react/destructuring-assignment
+    filteredSpaces: this.props.spaces,
+  };
+
+  async componentDidMount() {
     const { dispatchGetSpaces } = this.props;
-    dispatchGetSpaces();
+    await dispatchGetSpaces();
   }
 
+  componentDidUpdate({ spaces: prevSpaces, searchQuery: prevSearchQuery }) {
+    const { spaces, searchQuery } = this.props;
+    if (!spaces.equals(prevSpaces) || searchQuery !== prevSearchQuery) {
+      this.filterSpacesWithSearchQuery();
+    }
+  }
+
+  filterSpacesWithSearchQuery = () => {
+    const { spaces, searchQuery } = this.props;
+    const filteredSpaces = searchSpacesByQuery(spaces, searchQuery);
+    this.setState({ filteredSpaces });
+  };
+
   render() {
-    const { classes, spaces, activity } = this.props;
+    const { classes, activity } = this.props;
+    const { filteredSpaces } = this.state;
 
     if (activity) {
       return (
@@ -63,8 +84,8 @@ class Home extends Component {
       );
     }
     return (
-      <Main id={HOME_MAIN_ID}>
-        <SpaceGrid spaces={spaces} showActions saved />
+      <Main id={HOME_MAIN_ID} showSearch>
+        <SpaceGrid spaces={filteredSpaces} showActions saved />
       </Main>
     );
   }
@@ -72,6 +93,7 @@ class Home extends Component {
 
 const mapStateToProps = ({ Space }) => ({
   spaces: Space.get('saved'),
+  searchQuery: Space.get('searchQuery'),
   activity: Boolean(Space.getIn(['current', 'activity']).size),
 });
 

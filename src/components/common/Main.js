@@ -40,10 +40,14 @@ class Main extends Component {
     style: PropTypes.shape({
       background: PropTypes.string,
     }),
+    showSearch: PropTypes.bool,
+    handleOnSearch: PropTypes.func,
   };
 
   static defaultProps = {
     fullScreen: false,
+    showSearch: false,
+    handleOnSearch: () => {},
     id: null,
     style: {},
   };
@@ -57,13 +61,26 @@ class Main extends Component {
   };
 
   render() {
-    const { classes, children, fullScreen, id, style } = this.props;
+    const {
+      classes,
+      children,
+      fullScreen,
+      id,
+      style,
+      showSearch,
+      handleOnSearch,
+    } = this.props;
     const { open } = this.state;
 
     return (
       <div className={classes.root} style={style}>
         <CssBaseline />
-        <Header isSidebarOpen={open} handleDrawerOpen={this.handleDrawerOpen} />
+        <Header
+          showSearch={showSearch}
+          isSidebarOpen={open}
+          handleDrawerOpen={this.handleDrawerOpen}
+          handleOnSearch={handleOnSearch}
+        />
 
         <Sidebar
           isSidebarOpen={open}
