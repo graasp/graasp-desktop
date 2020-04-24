@@ -66,5 +66,11 @@ export const DIFF_STYLES = {
 };
 
 export const DEFAULT_SYNC_ADVANCED_MODE = false;
-export const SYNC_SPACE_PROPERTIES = ['name', 'image', 'description', 'phases'];
+export const SYNC_SPACE_PROPERTIES = [
+  'name',
+  'image',
+  'description',
+  'phases',
+  'items',
+];
 export const SYNC_ITEM_PROPERTIES = ['name', 'description', 'content'];

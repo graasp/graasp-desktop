@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { toastr } from 'react-redux-toastr';
-import Qs from 'qs';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
@@ -39,8 +38,6 @@ import Banner from '../common/Banner';
 import Loader from '../common/Loader';
 import {
   clearSpacesForSync,
-  getLocalSpaceForSync,
-  getRemoteSpaceForSync,
   clearPhasesForSync,
   selectPhaseForSync,
 } from '../../actions';
@@ -96,8 +93,6 @@ class SyncScreen extends Component {
     remotePhase: PropTypes.instanceOf(Map).isRequired,
     localPhase: PropTypes.instanceOf(Map).isRequired,
     diff: PropTypes.instanceOf(Map).isRequired,
-    dispatchGetLocalSpace: PropTypes.func.isRequired,
-    dispatchGetRemoteSpace: PropTypes.func.isRequired,
     dispatchClearSpaces: PropTypes.func.isRequired,
     dispatchClearPhases: PropTypes.func.isRequired,
     dispatchSelectPhase: PropTypes.func.isRequired,
@@ -120,14 +115,6 @@ class SyncScreen extends Component {
     }).isRequired,
     theme: PropTypes.shape({ direction: PropTypes.string.isRequired })
       .isRequired,
-    match: PropTypes.shape({
-      params: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-      }),
-    }).isRequired,
-    location: PropTypes.shape({
-      search: PropTypes.string.isRequired,
-    }).isRequired,
     history: PropTypes.shape({
       goBack: PropTypes.func.isRequired,
       push: PropTypes.func.isRequired,
@@ -138,44 +125,10 @@ class SyncScreen extends Component {
     folder: PropTypes.string.isRequired,
   };
 
-  async componentDidMount() {
-    const {
-      match: {
-        params: { id },
-      },
-      location: { search },
-      dispatchGetLocalSpace,
-      dispatchGetRemoteSpace,
-    } = this.props;
+  componentDidMount() {
+    const { localSpace, remoteSpace, classes } = this.props;
 
-    // tell action creator if this space has already been saved
-    const { saved } = Qs.parse(search, { ignoreQueryPrefix: true });
-    dispatchGetLocalSpace({ id, saved: saved === 'true' });
-
-    // get remote space
-    dispatchGetRemoteSpace({ id });
-  }
-
-  componentDidUpdate() {
-    const {
-      deleted,
-      localSpace,
-      remoteSpace,
-      classes,
-      history: { replace },
-    } = this.props;
-    const { syncPhases: currentSyncPhases } = this.state;
-    // redirect to home if space is deleted
-    if (deleted) {
-      replace(HOME_PATH);
-    }
-
-    // compute syncPhases once, when localSpace and remoteSpace are fetched
-    if (
-      !_.isEmpty(localSpace) &&
-      !_.isEmpty(remoteSpace) &&
-      _.isEmpty(currentSyncPhases)
-    ) {
+    if (!_.isEmpty(localSpace) && !_.isEmpty(remoteSpace)) {
       // detect diff and return sync phases to display
       // detect moved phases, but for simplicity it will be
       // rendered as added / moved phases
@@ -228,11 +181,29 @@ class SyncScreen extends Component {
     }
   }
 
+  componentDidUpdate() {
+    const {
+      deleted,
+      history: { replace },
+    } = this.props;
+    // redirect to home if space is deleted
+    if (deleted) {
+      replace(HOME_PATH);
+    }
+  }
+
   componentWillUnmount() {
     const { dispatchClearSpaces, dispatchClearPhases } = this.props;
     dispatchClearSpaces();
     dispatchClearPhases();
   }
+
+  handleCancel = () => {
+    const {
+      history: { goBack },
+    } = this.props;
+    goBack();
+  };
 
   handleDrawerOpen = () => {
     this.setState({ openDrawer: true });
@@ -552,8 +523,6 @@ class SyncScreen extends Component {
 }
 
 const mapStateToProps = ({ syncSpace: syncSpaceReducer, authentication }) => ({
-  localSpace: syncSpaceReducer.get('localSpace').toJS(),
-  remoteSpace: syncSpaceReducer.get('remoteSpace').toJS(),
   activity: Boolean(syncSpaceReducer.getIn(['activity']).size),
   folder: authentication.getIn(['current', 'folder']),
   localPhase: syncSpaceReducer.getIn(['current', 'localPhase']),
@@ -562,8 +531,6 @@ const mapStateToProps = ({ syncSpace: syncSpaceReducer, authentication }) => ({
 });
 
 const mapDispatchToProps = {
-  dispatchGetLocalSpace: getLocalSpaceForSync,
-  dispatchGetRemoteSpace: getRemoteSpaceForSync,
   dispatchClearSpaces: clearSpacesForSync,
   dispatchSelectPhase: selectPhaseForSync,
   dispatchClearPhases: clearPhasesForSync,

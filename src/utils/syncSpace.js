@@ -5,7 +5,34 @@ import {
   SYNC_REMOVED,
   SYNC_UPDATED,
   SYNC_BEFORE_MOVED,
+  SYNC_SPACE_PROPERTIES,
+  SYNC_ITEM_PROPERTIES,
 } from '../config/constants';
+
+const filterSpace = space => {
+  const filteredSpace = _.pick(_.cloneDeep(space), SYNC_SPACE_PROPERTIES);
+
+  // remove local space specific keys
+  if (filteredSpace.image) {
+    delete filteredSpace.image.thumbnailAsset;
+  }
+  // remove properties in items
+  // eslint-disable-next-line no-restricted-syntax
+  for (const phase of filteredSpace.phases) {
+    phase.items = phase.items.map(item => _.pick(item, SYNC_ITEM_PROPERTIES));
+  }
+
+  return filteredSpace;
+};
+
+// return whether a change exist in the space
+// we want to detect changes only in some properties
+export const isSpaceUpToDate = (localSpace, remoteSpace) => {
+  const filteredLocalSpace = filterSpace(localSpace);
+  const filteredRemoteSpace = filterSpace(remoteSpace);
+
+  return _.isEqual(filteredLocalSpace, filteredRemoteSpace);
+};
 
 const createChangeObj = (id, status, localIdx = null, remoteIdx = null) => ({
   id,

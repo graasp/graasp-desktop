@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Qs from 'qs';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
@@ -15,11 +14,7 @@ import { withStyles } from '@material-ui/core';
 import { withRouter } from 'react-router';
 import Banner from '../common/Banner';
 import Loader from '../common/Loader';
-import {
-  clearSpacesForSync,
-  getLocalSpaceForSync,
-  getRemoteSpaceForSync,
-} from '../../actions';
+import { clearSpacesForSync } from '../../actions';
 import './SpaceScreen.css';
 import Styles from '../../Styles';
 import { HOME_PATH } from '../../config/paths';
@@ -67,8 +62,6 @@ class SyncAdvancedScreen extends Component {
       description: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
     }).isRequired,
-    dispatchGetLocalSpace: PropTypes.func.isRequired,
-    dispatchGetRemoteSpace: PropTypes.func.isRequired,
     dispatchClearSpaces: PropTypes.func.isRequired,
     activity: PropTypes.bool.isRequired,
     classes: PropTypes.shape({
@@ -86,14 +79,6 @@ class SyncAdvancedScreen extends Component {
     }).isRequired,
     theme: PropTypes.shape({ direction: PropTypes.string.isRequired })
       .isRequired,
-    match: PropTypes.shape({
-      params: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-      }),
-    }).isRequired,
-    location: PropTypes.shape({
-      search: PropTypes.string.isRequired,
-    }).isRequired,
     history: PropTypes.shape({
       goBack: PropTypes.func.isRequired,
       push: PropTypes.func.isRequired,
@@ -101,24 +86,6 @@ class SyncAdvancedScreen extends Component {
     }).isRequired,
     t: PropTypes.func.isRequired,
   };
-
-  async componentDidMount() {
-    const {
-      match: {
-        params: { id },
-      },
-      location: { search },
-      dispatchGetLocalSpace,
-      dispatchGetRemoteSpace,
-    } = this.props;
-
-    // tell action creator if this space has already been saved
-    const { saved } = Qs.parse(search, { ignoreQueryPrefix: true });
-    dispatchGetLocalSpace({ id, saved: saved === 'true' });
-
-    // get remote space
-    dispatchGetRemoteSpace({ id });
-  }
 
   componentDidUpdate() {
     const {
@@ -218,14 +185,10 @@ class SyncAdvancedScreen extends Component {
 }
 
 const mapStateToProps = ({ syncSpace: syncSpaceReducer }) => ({
-  localSpace: syncSpaceReducer.get('localSpace').toJS(),
-  remoteSpace: syncSpaceReducer.get('remoteSpace').toJS(),
   activity: Boolean(syncSpaceReducer.getIn(['activity']).size),
 });
 
 const mapDispatchToProps = {
-  dispatchGetLocalSpace: getLocalSpaceForSync,
-  dispatchGetRemoteSpace: getRemoteSpaceForSync,
   dispatchClearSpaces: clearSpacesForSync,
 };
 
