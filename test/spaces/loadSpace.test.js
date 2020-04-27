@@ -98,8 +98,11 @@ describe('Load Space Scenarios', function() {
         await client.setValue(`#${LOAD_INPUT_ID}`, 'somefilepath');
         await client.pause(INPUT_TYPE_PAUSE);
 
-        const loadButtonHtml = await client.getHTML(`#${LOAD_LOAD_BUTTON_ID}`);
-        expect(loadButtonHtml).to.include('disabled');
+        const IsLoadButtonDisabled = await client.getAttribute(
+          `#${LOAD_LOAD_BUTTON_ID}`,
+          'disabled'
+        );
+        expect(IsLoadButtonDisabled).to.be.true;
       })
     );
 
@@ -132,7 +135,8 @@ describe('Load Space Scenarios', function() {
         // load space
         await loadSpaceById(client, SPACE_ATOMIC_STRUCTURE_WITH_CHANGES_PATH);
 
-        const savedSpacesHtml = await client.getHTML(`#${HOME_MAIN_ID}`);
+        const savedSpacesHtml = await client.getText(`#${HOME_MAIN_ID}`);
+        console.log('savedSpacesHtml', savedSpacesHtml);
         expect(savedSpacesHtml).to.not.include(
           SPACE_ATOMIC_STRUCTURE_WITH_CHANGES.space.name
         );
