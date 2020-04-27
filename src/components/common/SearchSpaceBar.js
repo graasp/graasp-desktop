@@ -6,6 +6,7 @@ import { fade, withStyles } from '@material-ui/core/styles';
 import { withTranslation } from 'react-i18next';
 import SearchIcon from '@material-ui/icons/Search';
 import { setSearchQuery } from '../../actions';
+import { SPACE_SEARCH_INPUT_ID } from '../../config/selectors';
 
 const styles = theme => ({
   search: {
@@ -76,6 +77,7 @@ class SearchSpaceBar extends Component {
           <SearchIcon />
         </div>
         <InputBase
+          id={SPACE_SEARCH_INPUT_ID}
           placeholder={t('Search…')}
           classes={{
             root: classes.inputRoot,

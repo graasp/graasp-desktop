@@ -39,20 +39,26 @@ import { userSignIn } from '../userSignIn.test';
 import { USER_GRAASP } from '../fixtures/users';
 import { typeInTextInputApp } from '../apps/textInputApp';
 
-/* eslint-disable-next-line import/prefer-default-export */
-export const loadSpaceById = async (client, filepath, id) => {
-  await menuGoToLoadSpace(client);
+export const loadFilepath = async (client, filepath) => {
+  const loadInput = `#${LOAD_INPUT_ID}`;
 
   // input space id
   const absolutePath = path.resolve(__dirname, '../fixtures/spaces', filepath);
-  await client.setValue(`#${LOAD_INPUT_ID}`, absolutePath);
+  await client.setValue(loadInput, absolutePath);
   await client.pause(INPUT_TYPE_PAUSE);
 
-  const value = await client.getValue(`#${LOAD_INPUT_ID}`);
+  const value = await client.getValue(loadInput);
   expect(value).to.equal(absolutePath);
 
   await client.click(`#${LOAD_LOAD_BUTTON_ID}`);
   await client.pause(LOAD_SPACE_PAUSE);
+};
+
+/* eslint-disable-next-line import/prefer-default-export */
+export const loadSpaceById = async (client, filepath, id) => {
+  await menuGoToLoadSpace(client);
+
+  await loadFilepath(client, filepath);
 
   // go to space
   await menuGoToHome(client);
