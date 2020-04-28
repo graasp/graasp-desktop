@@ -6,9 +6,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { setSyncAdvancedMode, getSyncAdvancedMode } from '../../../actions';
+import { setSyncMode, getSyncMode } from '../../../actions';
 import Loader from '../../common/Loader';
-import { SYNC_ADVANCED_MODE_SWITCH_ID } from '../../../config/selectors';
+import { SYNC_MODES_SWITCH_ID } from '../../../config/selectors';
+import { SYNC_MODES, DEFAULT_SYNC_MODES } from '../../../config/constants';
 
 const styles = theme => ({
   formControl: {
@@ -19,30 +20,35 @@ const styles = theme => ({
 
 export class SyncAdvancedSwitch extends Component {
   static propTypes = {
-    advancedMode: PropTypes.bool.isRequired,
+    mode: PropTypes.oneOf(Object.values(SYNC_MODES)),
     activity: PropTypes.bool.isRequired,
     t: PropTypes.func.isRequired,
     classes: PropTypes.shape({
       formControl: PropTypes.string.isRequired,
     }).isRequired,
-    dispatchGetSyncAdvancedMode: PropTypes.func.isRequired,
-    dispatchSetSyncAdvancedMode: PropTypes.func.isRequired,
+    dispatchgetSyncMode: PropTypes.func.isRequired,
+    dispatchsetSyncMode: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    mode: DEFAULT_SYNC_MODES,
   };
 
   constructor(props) {
     super(props);
-    const { dispatchGetSyncAdvancedMode } = this.props;
-    dispatchGetSyncAdvancedMode();
+    const { dispatchgetSyncMode } = this.props;
+    dispatchgetSyncMode();
   }
 
   handleChange = async ({ target }) => {
-    const { dispatchSetSyncAdvancedMode } = this.props;
+    const { dispatchsetSyncMode } = this.props;
     const { checked } = target;
-    dispatchSetSyncAdvancedMode(checked);
+    const mode = checked ? SYNC_MODES.ADVANCED : SYNC_MODES.VISUAL;
+    dispatchsetSyncMode(mode);
   };
 
   render() {
-    const { classes, t, advancedMode, activity } = this.props;
+    const { classes, t, mode, activity } = this.props;
 
     if (activity) {
       return <Loader />;
@@ -50,18 +56,15 @@ export class SyncAdvancedSwitch extends Component {
 
     const control = (
       <Switch
-        checked={advancedMode}
+        checked={mode === SYNC_MODES.ADVANCED}
         onChange={this.handleChange}
-        value={advancedMode}
+        value={mode === SYNC_MODES.ADVANCED}
         color="primary"
       />
     );
 
     return (
-      <FormControl
-        id={SYNC_ADVANCED_MODE_SWITCH_ID}
-        className={classes.formControl}
-      >
+      <FormControl id={SYNC_MODES_SWITCH_ID} className={classes.formControl}>
         <FormControlLabel control={control} label={t('Sync Advanced Mode')} />
       </FormControl>
     );
@@ -69,13 +72,13 @@ export class SyncAdvancedSwitch extends Component {
 }
 
 const mapStateToProps = ({ authentication }) => ({
-  advancedMode: authentication.getIn(['user', 'settings', 'syncAdvancedMode']),
+  mode: authentication.getIn(['user', 'settings', 'syncMode']),
   activity: Boolean(authentication.getIn(['current', 'activity']).size),
 });
 
 const mapDispatchToProps = {
-  dispatchSetSyncAdvancedMode: setSyncAdvancedMode,
-  dispatchGetSyncAdvancedMode: getSyncAdvancedMode,
+  dispatchsetSyncMode: setSyncMode,
+  dispatchgetSyncMode: getSyncMode,
 };
 
 const ConnectedComponent = connect(

@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Map } from 'immutable';
 import PropTypes from 'prop-types';
+import CssBaseline from '@material-ui/core/CssBaseline/CssBaseline';
+import AppBar from '@material-ui/core/AppBar/AppBar';
+import Toolbar from '@material-ui/core/Toolbar/Toolbar';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import _ from 'lodash';
 import Qs from 'qs';
 import { withTranslation } from 'react-i18next';
 import { withRouter } from 'react-router';
@@ -10,7 +13,7 @@ import Button from '@material-ui/core//Button';
 import { withStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import {
-  getSyncAdvancedMode,
+  getSyncMode,
   getLocalSpaceForSync,
   getRemoteSpaceForSync,
 } from '../../actions';
@@ -22,6 +25,7 @@ import Main from '../common/Main';
 import { HOME_PATH, VISIT_PATH } from '../../config/paths';
 import Styles from '../../Styles';
 import Loader from '../common/Loader';
+import { DEFAULT_SYNC_MODES, SYNC_MODES } from '../../config/constants';
 
 const styles = theme => ({
   ...Styles(theme),
@@ -32,9 +36,9 @@ const styles = theme => ({
 
 class SyncScreen extends Component {
   static propTypes = {
-    dispatchGetSyncAdvancedMode: PropTypes.string.isRequired,
+    dispatchGetSyncMode: PropTypes.func.isRequired,
     activity: PropTypes.bool,
-    advancedMode: PropTypes.bool,
+    mode: PropTypes.oneOf(Object.values(SYNC_MODES)),
     dispatchGetLocalSpace: PropTypes.func.isRequired,
     dispatchGetRemoteSpace: PropTypes.func.isRequired,
     match: PropTypes.shape({
@@ -46,16 +50,16 @@ class SyncScreen extends Component {
       search: PropTypes.string.isRequired,
     }).isRequired,
     localSpace: ImmutablePropTypes.contains({
-      id: PropTypes.string.isRequired,
+      id: PropTypes.string,
       description: PropTypes.string,
-      name: PropTypes.string.isRequired,
-      deleted: PropTypes.bool.isRequired,
-    }).isRequired,
+      name: PropTypes.string,
+      deleted: PropTypes.bool,
+    }),
     remoteSpace: ImmutablePropTypes.contains({
       id: PropTypes.string,
-      description: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-    }).isRequired,
+      description: PropTypes.string,
+      name: PropTypes.string,
+    }),
     t: PropTypes.func.isRequired,
     history: PropTypes.shape({
       goBack: PropTypes.func.isRequired,
@@ -79,13 +83,15 @@ class SyncScreen extends Component {
   };
 
   static defaultProps = {
-    advancedMode: false,
+    mode: DEFAULT_SYNC_MODES,
     activity: false,
+    localSpace: Map(),
+    remoteSpace: Map(),
   };
 
   componentDidMount() {
     const {
-      dispatchGetSyncAdvancedMode,
+      dispatchGetSyncMode,
       dispatchGetLocalSpace,
       dispatchGetRemoteSpace,
       match: {
@@ -101,12 +107,12 @@ class SyncScreen extends Component {
     // get remote space
     dispatchGetRemoteSpace({ id });
 
-    dispatchGetSyncAdvancedMode();
+    dispatchGetSyncMode();
   }
 
   render() {
     const {
-      advancedMode,
+      mode,
       activity,
       localSpace,
       remoteSpace,
@@ -116,20 +122,28 @@ class SyncScreen extends Component {
     } = this.props;
 
     if (activity) {
-      return <Loader />;
+      return (
+        <div className={classes.root}>
+          <CssBaseline />
+          <AppBar position="fixed">
+            <Toolbar />
+          </AppBar>
+          <main className="Main">
+            <Loader />
+          </main>
+        </div>
+      );
     }
 
-    if (
-      !localSpace ||
-      _.isEmpty(localSpace) ||
-      !remoteSpace ||
-      _.isEmpty(remoteSpace)
-    ) {
+    if (localSpace.isEmpty() || remoteSpace.isEmpty()) {
       return <SpaceNotFound />;
     }
 
+    const mutableLocalSpace = localSpace.toJS();
+    const mutableRemoteSpace = remoteSpace.toJS();
+
     // if the space contains no change
-    if (isSpaceUpToDate(localSpace, remoteSpace)) {
+    if (isSpaceUpToDate(mutableLocalSpace, mutableRemoteSpace)) {
       return (
         <Main fullScreen>
           <div className={classes.centerText}>
@@ -157,23 +171,35 @@ class SyncScreen extends Component {
       );
     }
 
-    return advancedMode ? (
-      <SyncAdvancedScreen localSpace={localSpace} remoteSpace={remoteSpace} />
-    ) : (
-      <SyncVisualScreen localSpace={localSpace} remoteSpace={remoteSpace} />
-    );
+    switch (mode) {
+      case SYNC_MODES.ADVANCED:
+        return (
+          <SyncAdvancedScreen
+            localSpace={mutableLocalSpace}
+            remoteSpace={mutableRemoteSpace}
+          />
+        );
+      case SYNC_MODES.VISUAL:
+      default:
+        return (
+          <SyncVisualScreen
+            localSpace={mutableLocalSpace}
+            remoteSpace={mutableRemoteSpace}
+          />
+        );
+    }
   }
 }
 
 const mapStateToProps = ({ authentication, syncSpace: syncSpaceReducer }) => ({
-  advancedMode: authentication.getIn(['user', 'settings', 'syncAdvancedMode']),
-  activity: Boolean(authentication.getIn(['current', 'activity']).size),
-  localSpace: syncSpaceReducer.get('localSpace').toJS(),
-  remoteSpace: syncSpaceReducer.get('remoteSpace').toJS(),
+  mode: authentication.getIn(['user', 'settings', 'syncMode']),
+  activity: Boolean(syncSpaceReducer.getIn(['activity']).size),
+  localSpace: syncSpaceReducer.get('localSpace'),
+  remoteSpace: syncSpaceReducer.get('remoteSpace'),
 });
 
 const mapDispatchToProps = {
-  dispatchGetSyncAdvancedMode: getSyncAdvancedMode,
+  dispatchGetSyncMode: getSyncMode,
   dispatchGetLocalSpace: getLocalSpaceForSync,
   dispatchGetRemoteSpace: getRemoteSpaceForSync,
 };

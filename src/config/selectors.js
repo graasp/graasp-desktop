@@ -53,7 +53,7 @@ export const LOAD_LOAD_BUTTON_ID = 'loadLoadButton';
 export const LANGUAGE_SELECT_ID = 'settingsLanguageSelect';
 export const DEVELOPER_SWITCH_ID = 'settingsDeveloperSwitch';
 export const GEOLOCATION_CONTROL_ID = 'settingsGeolocationControl';
-export const SYNC_ADVANCED_MODE_SWITCH_ID = 'syncAdvancedModeSwitch';
+export const SYNC_MODES_SWITCH_ID = 'syncModeSwitch';
 
 export const buildPhaseAppName = id => `phaseApp-${id}`;
 
@@ -65,3 +65,4 @@ export const SPACE_DESCRIPTION_TEXT_CLASS = 'SpaceDescriptionText';
 export const SYNC_ACCEPT_BUTTON_ID = 'syncAcceptButton';
 export const SYNC_CANCEL_BUTTON_ID = 'syncCancelButton';
 export const SYNC_ADVANCED_MAIN_ID = 'syncAdvancedMain';
+export const SYNC_VISUAL_MAIN_ID = 'syncVisualMain';

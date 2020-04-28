@@ -9,15 +9,6 @@ import PhaseItemDescription from '../../phase/PhaseItemDescription';
 import { SYNC_ITEM_CLASS } from '../../../config/selectors';
 
 const PhaseItem = ({ item, spaceId, phaseId }) => {
-  if (item === null) {
-    return (
-      <Grid xs={6} item className={SYNC_ITEM_CLASS}>
-        {/* for debug purpose */}
-        ------------------EMPTY----------------
-      </Grid>
-    );
-  }
-
   const { description, id, className } = item;
   return (
     <Grid xs={6} item className={clsx(SYNC_ITEM_CLASS, className)} data-id={id}>
@@ -46,7 +37,7 @@ const SyncPhaseItems = ({ items, spaceId, phaseId, t }) => {
   // happens for empty phase in both local and remote phases
   // happens especially for tools
   if (!items || items.length === 0) {
-    return <Typography variant="h6">{t('No Item to display')}</Typography>;
+    return <Typography variant="h6">{t('No Item to Display')}</Typography>;
   }
   return items.map(([localItem, remoteItem]) => (
     <>

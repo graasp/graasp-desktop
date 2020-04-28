@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import SyncIcon from '@material-ui/icons/Sync';
 import { withTranslation } from 'react-i18next';
 import CssBaseline from '@material-ui/core/CssBaseline/CssBaseline';
@@ -51,17 +50,8 @@ class SyncAdvancedScreen extends Component {
   };
 
   static propTypes = {
-    localSpace: ImmutablePropTypes.contains({
-      id: PropTypes.string.isRequired,
-      description: PropTypes.string,
-      name: PropTypes.string.isRequired,
-      deleted: PropTypes.bool.isRequired,
-    }).isRequired,
-    remoteSpace: ImmutablePropTypes.contains({
-      id: PropTypes.string,
-      description: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-    }).isRequired,
+    localSpace: PropTypes.instanceOf(Map).isRequired,
+    remoteSpace: PropTypes.instanceOf(Map).isRequired,
     dispatchClearSpaces: PropTypes.func.isRequired,
     activity: PropTypes.bool.isRequired,
     classes: PropTypes.shape({
@@ -108,6 +98,7 @@ class SyncAdvancedScreen extends Component {
     const { name } = localSpace;
     const { openDrawer } = this.state;
 
+    // apply and show only some properties of space
     const filteredSpace = _.pick(localSpace, SYNC_SPACE_PROPERTIES);
     const filteredRemoteSpace = _.pick(remoteSpace, SYNC_SPACE_PROPERTIES);
 

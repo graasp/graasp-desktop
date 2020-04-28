@@ -1,15 +1,14 @@
 import _ from 'lodash';
 import {
-  SYNC_ADDED,
-  SYNC_MOVED,
-  SYNC_REMOVED,
-  SYNC_UPDATED,
-  SYNC_BEFORE_MOVED,
+  SYNC_CHANGES,
   SYNC_SPACE_PROPERTIES,
   SYNC_ITEM_PROPERTIES,
+  SECURITY_LOOP_THRESHOLD,
 } from '../config/constants';
 
-const filterSpace = space => {
+const { ADDED, REMOVED, UPDATED, MOVED } = SYNC_CHANGES;
+
+export const filterSpace = space => {
   const filteredSpace = _.pick(_.cloneDeep(space), SYNC_SPACE_PROPERTIES);
 
   // remove local space specific keys
@@ -34,21 +33,51 @@ export const isSpaceUpToDate = (localSpace, remoteSpace) => {
   return _.isEqual(filteredLocalSpace, filteredRemoteSpace);
 };
 
-const createChangeObj = (id, status, localIdx = null, remoteIdx = null) => ({
+// change object creator
+// @param status : type of change
+// @param localIdx: index position in the local space, interesting for move change
+// @param remoteIdx: index position in the remote space, interesting for move change
+export const createChangeObj = (
+  id,
+  status,
+  localIdx = null,
+  remoteIdx = null
+) => ({
   id,
   status,
   localIdx,
   remoteIdx,
 });
 
+export const createDiffObject = (added, removed, updated) => ({
+  [ADDED]: added,
+  [REMOVED]: removed,
+  [UPDATED]: updated,
+});
+
 // compute diff for strings
 // return map where keys are the change status with boolean values
+// empty string to non-empty string is an added change
+// non-empty string to empty string is a removed change
 export const diffString = (localStr, remoteStr) => {
-  return {
-    [SYNC_ADDED]: !localStr && remoteStr,
-    [SYNC_REMOVED]: localStr && !remoteStr,
-    [SYNC_UPDATED]: localStr && remoteStr && localStr !== remoteStr,
-  };
+  // undefined and null values are changed to empty string
+  let a = localStr;
+  if (!a) {
+    a = '';
+  }
+  let b = remoteStr;
+  if (!b) {
+    b = '';
+  }
+
+  const isLocalStringNotEmpty = a.length > 0;
+  const isRemoteStringNotEmpty = b.length > 0;
+
+  return createDiffObject(
+    !isLocalStringNotEmpty && isRemoteStringNotEmpty,
+    isLocalStringNotEmpty && !isRemoteStringNotEmpty,
+    isLocalStringNotEmpty && isRemoteStringNotEmpty && localStr !== remoteStr
+  );
 };
 
 // create a phase using tools
@@ -61,9 +90,8 @@ export const createToolsPhase = tools => {
   };
 };
 
-// utility function to count ignore elements altering order
-// added and removed element shouldn't be counted
-const countConditions = (changes, { id }) => {
+// return whether the element should be ignored
+export const countConditions = (changes, { id }) => {
   const correspondingChanges = changes.filter(
     ({ id: itemId }) => itemId === id
   );
@@ -72,7 +100,7 @@ const countConditions = (changes, { id }) => {
     correspondingChanges.length === 0 ||
     // keep if it is not removed, added or moved
     correspondingChanges.filter(
-      ({ status }) => [SYNC_ADDED, SYNC_REMOVED, SYNC_MOVED].includes(status) // <- depend on the added order
+      ({ status }) => [ADDED, REMOVED, MOVED].includes(status) // <- depend on the added order
     ).length === 0
   );
 };
@@ -91,13 +119,13 @@ const applyDiffToObject = (obj, diff, classes) => {
 // get relative index in object array
 // utility to detect moved changes and report it on further changes
 // ex: an added element does not move next elements
-const getRelativeIdx = (arr, originalIdx, changes) => {
+export const getRelativeIdx = (arr, originalIdx, changes) => {
   return arr.slice(0, originalIdx).filter(el => countConditions(changes, el))
     .length;
 };
 
 // return array of differences between given objects for given properties
-const findDiffInElementArray = (localObj, remoteObj, properties) => {
+export const findDiffInElementArray = (localObj, remoteObj, properties) => {
   const uniqueItemIds = _.union(
     localObj.map(({ id }) => id),
     remoteObj.map(({ id }) => id)
@@ -107,6 +135,7 @@ const findDiffInElementArray = (localObj, remoteObj, properties) => {
   const changes = [];
 
   uniqueItemIds.forEach(id => {
+    // compare same id elements
     const localEl = localObj.find(({ id: objectId }) => id === objectId);
     const remoteEl = remoteObj.find(({ id: objectId }) => id === objectId);
     const localOriginalIdx = localObj.indexOf(localEl);
@@ -114,11 +143,11 @@ const findDiffInElementArray = (localObj, remoteObj, properties) => {
 
     // the element was added
     if (_.isEmpty(localEl)) {
-      changes.push(createChangeObj(id, SYNC_ADDED, null, remoteOriginalIdx));
+      changes.push(createChangeObj(id, ADDED, null, remoteOriginalIdx));
     }
     // the element was removed
     else if (_.isEmpty(remoteEl)) {
-      changes.push(createChangeObj(id, SYNC_REMOVED, localOriginalIdx, null));
+      changes.push(createChangeObj(id, REMOVED, localOriginalIdx, null));
     }
     // exist in both obj
     else if (localEl && remoteEl) {
@@ -129,7 +158,7 @@ const findDiffInElementArray = (localObj, remoteObj, properties) => {
 
       if (!_.isEqual(filteredlocalEl, filteredremoteEl)) {
         changes.push(
-          createChangeObj(id, SYNC_UPDATED, localOriginalIdx, remoteOriginalIdx)
+          createChangeObj(id, UPDATED, localOriginalIdx, remoteOriginalIdx)
         );
       }
 
@@ -149,7 +178,7 @@ const findDiffInElementArray = (localObj, remoteObj, properties) => {
       const remoteIdx = getRelativeIdx(remoteObj, remoteOriginalIdx, changes);
       if (localIdx !== remoteIdx) {
         changes.push(
-          createChangeObj(id, SYNC_MOVED, localOriginalIdx, remoteOriginalIdx)
+          createChangeObj(id, MOVED, localOriginalIdx, remoteOriginalIdx)
         );
       }
     });
@@ -166,15 +195,16 @@ export const createDiffElements = (
   classes,
   properties
 ) => {
+  // get diff array of both elements
   const diff = findDiffInElementArray(lElements, rElements, properties);
 
   // append changes in elements
   // some statuses are only present in local or remote elements
   const localDiff = diff.filter(({ status }) =>
-    [SYNC_REMOVED, SYNC_MOVED].includes(status)
+    [REMOVED, MOVED].includes(status)
   );
   const remoteDiff = diff.filter(({ status }) =>
-    [SYNC_UPDATED, SYNC_MOVED, SYNC_ADDED].includes(status)
+    [UPDATED, MOVED, ADDED].includes(status)
   );
   const localObjects = lElements.map(obj =>
     applyDiffToObject(obj, localDiff, classes)
@@ -183,6 +213,7 @@ export const createDiffElements = (
     applyDiffToObject(obj, remoteDiff, classes)
   );
 
+  // construct merged diff elements: two columns for before/after
   const finalObjects = [];
   const blankObj = {};
 
@@ -195,9 +226,7 @@ export const createDiffElements = (
     // add blank object for moved/removed local elements
     while (
       localObj &&
-      localObj.changes.some(({ status }) =>
-        [SYNC_MOVED, SYNC_REMOVED, SYNC_BEFORE_MOVED].includes(status)
-      )
+      localObj.changes.some(({ status }) => [MOVED, REMOVED].includes(status))
     ) {
       finalObjects.push([localObj, blankObj]);
       localObj = localObjects.shift();
@@ -206,24 +235,25 @@ export const createDiffElements = (
     // add blank object for added/moved remote elements
     while (
       remoteObj &&
-      remoteObj.changes.some(({ status }) =>
-        [SYNC_MOVED, SYNC_ADDED].includes(status)
-      )
+      remoteObj.changes.some(({ status }) => [MOVED, ADDED].includes(status))
     ) {
       finalObjects.push([blankObj, remoteObj]);
       remoteObj = remoteObjects.shift();
     }
 
-    // when local and remote ids matched, it is either updated or not changed
+    // when local and remote ids match, it is either updated or not changed
     if (localObj && remoteObj && localObj.id === remoteObj.id) {
       finalObjects.push([localObj, remoteObj]);
       localObj = localObjects.shift();
       remoteObj = remoteObjects.shift();
     }
 
+    // security for infinite loop
     securityLoopNb += 1;
-    if (securityLoopNb > 50) {
-      throw new Error('An error occurred');
+    if (securityLoopNb > SECURITY_LOOP_THRESHOLD) {
+      throw new Error(
+        'The syncing diff process stopped because it was in an infinite loop.'
+      );
     }
   }
 

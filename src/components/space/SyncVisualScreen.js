@@ -33,6 +33,7 @@ import {
   buildPhaseMenuItemId,
   SPACE_DESCRIPTION_TEXT_CLASS,
   SPACE_THUMBNAIL_IMAGE_CLASS,
+  SYNC_VISUAL_MAIN_ID,
 } from '../../config/selectors';
 import Banner from '../common/Banner';
 import Loader from '../common/Loader';
@@ -47,11 +48,9 @@ import SpaceNotFound from './SpaceNotFound';
 import Text from '../common/Text';
 import SyncPhases from './sync/SyncPhases';
 import {
-  SYNC_ADDED,
-  SYNC_REMOVED,
-  SYNC_UPDATED,
+  SYNC_CHANGES,
   DIFF_STYLES,
-  SYNC_SPACE_PROPERTIES,
+  SYNC_PHASE_PROPERTIES,
   SYNC_ITEM_PROPERTIES,
 } from '../../config/constants';
 import {
@@ -63,6 +62,8 @@ import {
   ERROR_SYNCING_MESSAGE,
   ERROR_MESSAGE_HEADER,
 } from '../../config/messages';
+
+const { ADDED, REMOVED, UPDATED } = SYNC_CHANGES;
 
 const styles = theme => ({
   ...Styles(theme),
@@ -137,7 +138,7 @@ class SyncScreen extends Component {
           [createToolsPhase(localSpace.items), ...localSpace.phases],
           [createToolsPhase(remoteSpace.items), ...remoteSpace.phases],
           classes,
-          SYNC_SPACE_PROPERTIES
+          SYNC_PHASE_PROPERTIES
         )
           // compute differences here
           // to have detect updates when rendering phase menu items
@@ -251,7 +252,7 @@ class SyncScreen extends Component {
         <Grid
           item
           className={clsx(SYNC_ITEM_CLASS, {
-            [classes[SYNC_REMOVED]]: change[SYNC_REMOVED],
+            [classes[REMOVED]]: change[REMOVED],
             [SPACE_THUMBNAIL_IMAGE_CLASS]: thumbnailAsset,
           })}
           xs={6}
@@ -267,8 +268,8 @@ class SyncScreen extends Component {
         <Grid
           item
           className={clsx(SYNC_ITEM_CLASS, {
-            [classes[SYNC_ADDED]]: change[SYNC_ADDED],
-            [classes[SYNC_UPDATED]]: change[SYNC_UPDATED],
+            [classes[ADDED]]: change[ADDED],
+            [classes[UPDATED]]: change[UPDATED],
             [SPACE_THUMBNAIL_IMAGE_CLASS]: remoteThumbnailUrl.length,
           })}
           xs={6}
@@ -302,7 +303,7 @@ class SyncScreen extends Component {
         <Grid
           item
           className={clsx(SYNC_ITEM_CLASS, {
-            [classes[SYNC_REMOVED]]: change[SYNC_REMOVED],
+            [classes[REMOVED]]: change[REMOVED],
             [SPACE_DESCRIPTION_TEXT_CLASS]: localDescription.length,
           })}
           xs={6}
@@ -312,8 +313,8 @@ class SyncScreen extends Component {
         <Grid
           item
           className={clsx(SYNC_ITEM_CLASS, {
-            [classes[SYNC_ADDED]]: change[SYNC_ADDED],
-            [classes[SYNC_UPDATED]]: change[SYNC_UPDATED],
+            [classes[ADDED]]: change[ADDED],
+            [classes[UPDATED]]: change[UPDATED],
             [SPACE_DESCRIPTION_TEXT_CLASS]: remoteDescription.length,
           })}
           xs={6}
@@ -351,9 +352,9 @@ class SyncScreen extends Component {
     return (
       <MenuItem
         className={clsx({
-          [classes[SYNC_REMOVED]]: diffName[SYNC_REMOVED],
-          [classes[SYNC_UPDATED]]: hasUpdate,
-          [classes[SYNC_ADDED]]: diffName[SYNC_ADDED],
+          [classes[REMOVED]]: diffName[REMOVED],
+          [classes[UPDATED]]: hasUpdate,
+          [classes[ADDED]]: diffName[ADDED],
         })}
         onClick={() => this.handlePhaseClicked(index)}
         key={localId || remoteId}
@@ -365,7 +366,7 @@ class SyncScreen extends Component {
         </ListItemIcon>
 
         <ListItemText>
-          {(diffName[SYNC_REMOVED] || diffName[SYNC_UPDATED]) && (
+          {(diffName[REMOVED] || diffName[UPDATED]) && (
             <Typography className={classes.removedText}>{localName}</Typography>
           )}
           <Typography>{remoteName}</Typography>
@@ -476,6 +477,7 @@ class SyncScreen extends Component {
           </List>
         </Drawer>
         <main
+          id={SYNC_VISUAL_MAIN_ID}
           className={clsx(classes.content, classes.syncWrapper, {
             [classes.contentShift]: openDrawer,
           })}

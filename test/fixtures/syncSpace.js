@@ -2,12 +2,9 @@
 // ids must be respected, so duplication of the remote space might not work
 // with the following fixtures
 
-import {
-  SYNC_ADDED,
-  SYNC_UPDATED,
-  SYNC_REMOVED,
-  SYNC_MOVED,
-} from '../../src/config/constants';
+import { SYNC_CHANGES } from '../../src/config/constants';
+
+const { ADDED, REMOVED, UPDATED, MOVED } = SYNC_CHANGES;
 
 export const SPACE_WITH_ADDITION_PATH = './spaceWithAddition.zip';
 export const SPACE_WITH_ADDITION = {
@@ -18,14 +15,14 @@ export const SPACE_WITH_ADDITION_CHANGES = {
   phases: [
     {
       name: 'addition',
-      change: SYNC_UPDATED,
-      items: [{ id: '5e9ee0f7dbea5955c7f5c0d6', change: SYNC_ADDED }],
+      change: UPDATED,
+      items: [{ id: '5e9ee0f7dbea5955c7f5c0d6', change: ADDED }],
     },
     { name: 'moving' },
     {
       name: 'new phase',
-      change: SYNC_ADDED,
-      items: [{ id: '5e9ee113dbea5955c7f5c101', change: SYNC_ADDED }],
+      change: ADDED,
+      items: [{ id: '5e9ee113dbea5955c7f5c101', change: ADDED }],
     },
     { name: 'moving phase' },
     { name: 'removal' },
@@ -44,20 +41,20 @@ export const SPACE_WITH_REMOVAL_CHANGES = {
     },
     {
       name: 'moving phase',
-      change: SYNC_REMOVED,
+      change: REMOVED,
       items: [
-        { id: '5e9efeadf130f510ae7094b7', change: SYNC_REMOVED },
+        { id: '5e9efeadf130f510ae7094b7', change: REMOVED },
         {
           id: '5e9efeadf130f510ae7094ba',
-          change: SYNC_REMOVED,
+          change: REMOVED,
         },
-        { id: '5e9efeadf130f510ae7094c2', change: SYNC_REMOVED },
+        { id: '5e9efeadf130f510ae7094c2', change: REMOVED },
       ],
     },
     {
       name: 'removal',
-      change: SYNC_UPDATED,
-      items: [{ id: '5e9efeaef130f510ae7094c6', change: SYNC_REMOVED }],
+      change: UPDATED,
+      items: [{ id: '5e9efeaef130f510ae7094c6', change: REMOVED }],
     },
     { name: 'moving' },
   ],
@@ -82,8 +79,8 @@ export const SPACE_WITH_UPDATE_CHANGES = {
     },
     {
       name: 'moving',
-      change: SYNC_UPDATED,
-      items: [{ id: '5e9f0cf6e272c3572ddf05c4', change: SYNC_UPDATED }],
+      change: UPDATED,
+      items: [{ id: '5e9f0cf6e272c3572ddf05c4', change: UPDATED }],
     },
     { name: 'moving phase' },
   ],
@@ -101,15 +98,15 @@ export const SPACE_WITH_MOVE_CHANGES = {
     },
     {
       name: 'moving phase',
-      change: SYNC_ADDED,
+      change: ADDED,
       items: [
         {
           id: '5ea003e2e1540856e519cca4',
-          change: SYNC_ADDED,
+          change: ADDED,
         },
         {
           id: '5ea003e2e1540856e519ccb1',
-          change: SYNC_ADDED,
+          change: ADDED,
         },
       ],
     },
@@ -118,20 +115,20 @@ export const SPACE_WITH_MOVE_CHANGES = {
     },
     {
       name: 'moving',
-      change: SYNC_UPDATED,
-      items: [{ id: '5ea003e2e1540856e519cca1', change: SYNC_MOVED }],
+      change: UPDATED,
+      items: [{ id: '5ea003e2e1540856e519cca1', change: MOVED }],
     },
     {
       name: 'moving phase',
-      change: SYNC_REMOVED,
+      change: REMOVED,
       items: [
         {
           id: '5ea003e2e1540856e519cca4',
-          change: SYNC_REMOVED,
+          change: REMOVED,
         },
         {
           id: '5ea003e2e1540856e519ccb1',
-          change: SYNC_REMOVED,
+          change: REMOVED,
         },
       ],
     },
@@ -147,7 +144,7 @@ export const SPACE_WITH_TOOLS_UPDATE_CHANGES = {
   items: [
     {
       id: '5ea00b38e1540856e519e067',
-      change: SYNC_REMOVED,
+      change: REMOVED,
     },
   ],
   phases: [
@@ -317,59 +314,59 @@ export const SPACE_WITH_MULTIPLE_CHANGES = {
 export const SPACE_WITH_MULTIPLE_CHANGES_CHANGES = {
   image: {
     url: '',
-    change: SYNC_REMOVED,
+    change: REMOVED,
   },
   description: {
-    change: SYNC_UPDATED,
+    change: UPDATED,
   },
   phases: [
     {
       name: 'Orientation',
-      change: SYNC_UPDATED,
+      change: UPDATED,
       items: [
         {
           id: '5ea02a30f851e7716e372354',
-          change: SYNC_UPDATED,
+          change: UPDATED,
         },
       ],
     },
     {
       name: 'Investigation',
-      change: SYNC_ADDED,
+      change: ADDED,
       items: [
         {
           id: '5ea02a48f851e7716e372377',
-          change: SYNC_ADDED,
+          change: ADDED,
         },
       ],
     },
     {
       name: 'Conceptualisation',
-      change: SYNC_UPDATED,
+      change: UPDATED,
       items: [
         {
           id: '5ea02a3df851e7716e37235f',
-          change: SYNC_MOVED,
+          change: MOVED,
         },
       ],
     },
     {
       name: 'Investigation',
-      change: SYNC_REMOVED,
+      change: REMOVED,
       items: [
         {
           id: '5ea02a48f851e7716e372377',
-          change: SYNC_REMOVED,
+          change: REMOVED,
         },
       ],
     },
     {
       name: 'Conclusion',
-      change: SYNC_UPDATED,
+      change: UPDATED,
       items: [
         {
           id: '5ea02a6cf851e7716e372389',
-          change: SYNC_REMOVED,
+          change: REMOVED,
         },
       ],
     },

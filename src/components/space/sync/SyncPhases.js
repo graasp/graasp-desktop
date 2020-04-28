@@ -6,13 +6,10 @@ import { withStyles } from '@material-ui/core';
 import { withRouter } from 'react-router';
 import SyncPhaseItems from './SyncPhaseItems';
 import PhaseDescription from '../../phase/PhaseDescription';
-import {
-  DIFF_STYLES,
-  SYNC_UPDATED,
-  SYNC_REMOVED,
-  SYNC_ADDED,
-} from '../../../config/constants';
+import { DIFF_STYLES, SYNC_CHANGES } from '../../../config/constants';
 import { SYNC_ITEM_CLASS } from '../../../config/selectors';
+
+const { ADDED, REMOVED, UPDATED } = SYNC_CHANGES;
 
 class SyncPhases extends Component {
   static propTypes = {
@@ -62,7 +59,7 @@ class SyncPhases extends Component {
         <Grid
           item
           className={clsx(SYNC_ITEM_CLASS, {
-            [classes[SYNC_REMOVED]]: diffDescription[SYNC_REMOVED],
+            [classes[REMOVED]]: diffDescription[REMOVED],
           })}
           xs={6}
         >
@@ -71,8 +68,8 @@ class SyncPhases extends Component {
         <Grid
           item
           className={clsx(SYNC_ITEM_CLASS, {
-            [classes[SYNC_ADDED]]: diffDescription[SYNC_ADDED],
-            [classes[SYNC_UPDATED]]: diffDescription[SYNC_UPDATED],
+            [classes[ADDED]]: diffDescription[ADDED],
+            [classes[UPDATED]]: diffDescription[UPDATED],
           })}
           xs={6}
         >

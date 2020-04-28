@@ -2,12 +2,17 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
 import { expect } from 'chai';
-import { mochaAsync } from '../utils';
+import {
+  mochaAsync,
+  expectElementToNotExist,
+  expectElementToExist,
+} from '../utils';
 import { createApplication, closeApplication } from '../application';
 import {
   buildSpaceCardId,
   SPACE_SYNC_BUTTON_CLASS,
   PHASE_MENU_ITEM_HOME_ID,
+  PHASE_MENU_LIST_ID,
   buildPhaseMenuItemId,
   SYNC_ACCEPT_BUTTON_ID,
   SPACE_DESCRIPTION_TEXT_CLASS,
@@ -46,14 +51,11 @@ import { userSignIn } from '../userSignIn.test';
 import { USER_GRAASP } from '../fixtures/users';
 import { loadSpaceById } from './loadSpace.test';
 import { openTools, hasSavedSpaceLayout } from './visitSpace.test';
-import {
-  SYNC_ADDED,
-  SYNC_REMOVED,
-  SYNC_MOVED,
-  SYNC_UPDATED,
-} from '../../src/config/constants';
+import { SYNC_CHANGES } from '../../src/config/constants';
 import { toggleSyncAdvancedMode } from '../settings.test';
 import { menuGoToSettings } from '../menu.test';
+
+const { ADDED, REMOVED, UPDATED, MOVED } = SYNC_CHANGES;
 
 const spaces = [
   [SPACE_WITH_ADDITION, SPACE_WITH_ADDITION_CHANGES, SPACE_WITH_ADDITION_PATH],
@@ -75,26 +77,26 @@ const spaces = [
 const constructToolsPhase = items => ({
   name: 'Tools',
   items,
-  change: items.length ? SYNC_UPDATED : null,
+  change: items.length ? UPDATED : null,
 });
 
 const checkItemHasChange = async (client, selector, change) => {
   const itemHtml = await client.getHTML(selector);
   switch (change) {
-    case SYNC_UPDATED:
+    case UPDATED:
       // there exist 2 elements with the same data-id on update
       // only one has the highlight class
       expect(itemHtml[1]).to.include(change);
       break;
-    case SYNC_MOVED:
+    case MOVED:
       // there exist 2 elements with the same data-id on move
       // both have the highlight class
       expect(itemHtml[0]).to.include(change);
       expect(itemHtml[1]).to.include(change);
       break;
     // on added and removed, there is only one element
-    case SYNC_ADDED:
-    case SYNC_REMOVED:
+    case ADDED:
+    case REMOVED:
       expect(itemHtml).to.include(change);
       break;
     default:
@@ -114,8 +116,7 @@ const hasSyncVisualScreenLayout = async (
   { image, description, items: tools = [], phases }
 ) => {
   // check contains all phases in drawer + tools + home
-  const homeMenuItem = await client.element(`#${PHASE_MENU_ITEM_HOME_ID}`);
-  expect(homeMenuItem.value).to.exist;
+  await expectElementToExist(client, `#${PHASE_MENU_ITEM_HOME_ID}`);
 
   // check space thumbnail
   if (image && image.change) {
@@ -166,15 +167,15 @@ const hasSyncVisualScreenLayout = async (
 const checkItemsAfterSync = async (client, items) => {
   for (const { id, change: itemChange } of items) {
     // check item change was applied
-    const item = await client.element(`[data-id='${id}']`);
+    const itemSelector = `[data-id='${id}']`;
     switch (itemChange) {
-      case SYNC_ADDED:
-      case SYNC_UPDATED:
-      case SYNC_MOVED:
-        expect(item.value).to.exist;
+      case ADDED:
+      case UPDATED:
+      case MOVED:
+        await expectElementToExist(client, itemSelector);
         break;
-      case SYNC_REMOVED:
-        expect(item.value).to.not.exist;
+      case REMOVED:
+        await expectElementToNotExist(client, itemSelector);
         break;
       default:
         console.log(`change "${itemChange}" not recognized`);
@@ -185,18 +186,25 @@ const checkItemsAfterSync = async (client, items) => {
 const checkChangesInSpace = async (client, { phases, items: tools = [] }) => {
   let phaseIdx = 0;
   for (const { name, items, change: phaseChange } of phases) {
-    const phaseSelector = `#${buildPhaseMenuItemId(phaseIdx)}`;
-
     switch (phaseChange) {
-      case SYNC_REMOVED:
-        expect(await client.element(phaseSelector).value).to.not.exist;
+      case REMOVED: {
+        // check the removed phase text is not in phase menu
+        let phaseMenuItemsText = await client.getText(
+          `#${PHASE_MENU_LIST_ID} li`
+        );
+        if (Array.isArray(phaseMenuItemsText)) {
+          phaseMenuItemsText = [phaseMenuItemsText];
+        }
+        expect(phaseMenuItemsText).to.not.include(name);
         break;
-      case SYNC_ADDED:
-      case SYNC_UPDATED:
-      case SYNC_MOVED:
+      }
+      case ADDED:
+      case UPDATED:
       default: {
-        // check phase name change
+        const phaseSelector = `#${buildPhaseMenuItemId(phaseIdx)}`;
         const menuItemText = await client.getText(phaseSelector);
+
+        // check phase name change
         expect(menuItemText).to.equal(name);
 
         // go to phase
@@ -220,13 +228,17 @@ const checkChangesInSpace = async (client, { phases, items: tools = [] }) => {
 };
 
 const hasSyncAdvancedScreenLayout = async client => {
-  const mainAdvancedContent = await client.element(`#${SYNC_ADVANCED_MAIN_ID}`);
-  expect(mainAdvancedContent.value).to.exist;
+  await expectElementToExist(client, `#${SYNC_ADVANCED_MAIN_ID}`);
 };
 
 const acceptSync = async client => {
   await client.click(`#${SYNC_ACCEPT_BUTTON_ID}`);
   await client.pause(SYNC_SPACE_PAUSE);
+};
+
+const cancelSync = async client => {
+  await client.click(`#${SYNC_CANCEL_BUTTON_ID}`);
+  await client.pause(LOAD_TAB_PAUSE);
 };
 
 describe.only('Sync a space', function() {
@@ -396,8 +408,7 @@ describe.only('Sync a space', function() {
         await client.pause(SYNC_OPEN_SCREEN_PAUSE);
 
         // cancel sync
-        await client.click(`#${SYNC_CANCEL_BUTTON_ID}`);
-        await client.pause(LOAD_TAB_PAUSE);
+        await cancelSync(client);
 
         // space still has local content
         await hasSavedSpaceLayout(client, space);

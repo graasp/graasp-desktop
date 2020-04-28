@@ -33,39 +33,40 @@ export const FILTER_ALL_SPACE_ID = 'defaultid';
 export const DEFAULT_AUTHENTICATION = false;
 export const AUTHENTICATED = 'authenticated';
 
-export const SYNC_ADDED = 'added';
-export const SYNC_REMOVED = 'removed';
-export const SYNC_MOVED = 'moved';
-export const SYNC_BEFORE_MOVED = 'beforeMoved';
-export const SYNC_UPDATED = 'updated';
+export const SYNC_CHANGES = {
+  ADDED: 'added',
+  REMOVED: 'removed',
+  MOVED: 'moved',
+  UPDATED: 'updated',
+};
 
 const DIFF_COLORS = {
-  [SYNC_ADDED]: '#ddffde',
-  [SYNC_REMOVED]: '#fddedb',
-  [SYNC_UPDATED]: '#f9edc5',
-  [SYNC_MOVED]: 'lightgrey',
+  [SYNC_CHANGES.ADDED]: '#ddffde',
+  [SYNC_CHANGES.REMOVED]: '#fddedb',
+  [SYNC_CHANGES.UPDATED]: '#f9edc5',
+  [SYNC_CHANGES.MOVED]: 'lightgrey',
 };
 
 export const DIFF_STYLES = {
-  [SYNC_UPDATED]: {
-    background: DIFF_COLORS[SYNC_UPDATED],
+  [SYNC_CHANGES.UPDATED]: {
+    background: DIFF_COLORS[SYNC_CHANGES.UPDATED],
   },
-  [SYNC_REMOVED]: {
-    background: DIFF_COLORS[SYNC_REMOVED],
+  [SYNC_CHANGES.REMOVED]: {
+    background: DIFF_COLORS[SYNC_CHANGES.REMOVED],
   },
-  [SYNC_ADDED]: {
-    background: DIFF_COLORS[SYNC_ADDED],
+  [SYNC_CHANGES.ADDED]: {
+    background: DIFF_COLORS[SYNC_CHANGES.ADDED],
   },
-  [SYNC_MOVED]: {
-    background: DIFF_COLORS[SYNC_MOVED],
-  },
-  [SYNC_BEFORE_MOVED]: {
-    background: DIFF_COLORS[SYNC_MOVED],
-    opacity: 0.5,
+  [SYNC_CHANGES.MOVED]: {
+    background: DIFF_COLORS[SYNC_CHANGES.MOVED],
   },
 };
 
-export const DEFAULT_SYNC_ADVANCED_MODE = false;
+export const SYNC_MODES = {
+  ADVANCED: 'advanced',
+  VISUAL: 'visual',
+};
+export const DEFAULT_SYNC_MODES = SYNC_MODES.VISUAL;
 export const SYNC_SPACE_PROPERTIES = [
   'name',
   'image',
@@ -73,4 +74,9 @@ export const SYNC_SPACE_PROPERTIES = [
   'phases',
   'items',
 ];
+export const SYNC_PHASE_PROPERTIES = ['name', 'image', 'description', 'items'];
+
+// item property to keep when comparing them, id is kept during process
 export const SYNC_ITEM_PROPERTIES = ['name', 'description', 'content'];
+
+export const SECURITY_LOOP_THRESHOLD = 50;

@@ -53,10 +53,10 @@ const CONNECTION_ONLINE_MESSAGE = 'You are online.';
 const ERROR_SIGNING_IN = 'There was an error signing in.';
 const ERROR_SIGNING_OUT = 'There was an error signing out.';
 const ERROR_GETTING_AUTHENTICATED = 'There was an error during authentication.';
-const ERROR_GETTING_SYNC_ADVANCED_MODE =
-  'There was an error getting the advanced mode in Space Synchronization';
-const ERROR_SETTING_SYNC_ADVANCED_MODE =
-  'There was an error setting the advanced mode in Space Synchronization';
+const ERROR_GETTING_SYNC_MODES =
+  'There was an error getting the sync mode for Space Synchronization';
+const ERROR_SETTING_SYNC_MODES =
+  'There was an error setting the sync mode for Space Synchronization';
 
 module.exports = {
   ERROR_GETTING_DEVELOPER_MODE,
@@ -99,6 +99,6 @@ module.exports = {
   ERROR_SIGNING_IN,
   ERROR_SIGNING_OUT,
   ERROR_GETTING_AUTHENTICATED,
-  ERROR_GETTING_SYNC_ADVANCED_MODE,
-  ERROR_SETTING_SYNC_ADVANCED_MODE,
+  ERROR_GETTING_SYNC_MODES,
+  ERROR_SETTING_SYNC_MODES,
 };

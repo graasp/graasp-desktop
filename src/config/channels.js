@@ -44,6 +44,6 @@ module.exports = {
   SIGN_IN_CHANNEL: 'auth:signin',
   SIGN_OUT_CHANNEL: 'auth:signout',
   IS_AUTHENTICATED_CHANNEL: 'auth:authenticated:get',
-  GET_SYNC_ADVANCED_MODE_CHANNEL: 'sync:advanced-mode:get',
-  SET_SYNC_ADVANCED_MODE_CHANNEL: 'sync:advanced-mode:set',
+  GET_SYNC_MODES_CHANNEL: 'sync:mode:get',
+  SET_SYNC_MODES_CHANNEL: 'sync:mode:set',
 };

@@ -12,7 +12,7 @@ import Styles from '../../../Styles';
 import { syncSpace } from '../../../actions';
 import { SYNC_ACCEPT_BUTTON_ID } from '../../../config/selectors';
 
-class SyncCancelButton extends Component {
+class SyncAcceptButton extends Component {
   static propTypes = {
     spaceId: PropTypes.string.isRequired,
     classes: PropTypes.shape({
@@ -59,7 +59,7 @@ const mapDispatchToProps = {
   dispatchSync: syncSpace,
 };
 
-const ConnectedComponent = connect(null, mapDispatchToProps)(SyncCancelButton);
+const ConnectedComponent = connect(null, mapDispatchToProps)(SyncAcceptButton);
 
 const StyledComponent = withStyles(Styles, { withTheme: true })(
   ConnectedComponent
