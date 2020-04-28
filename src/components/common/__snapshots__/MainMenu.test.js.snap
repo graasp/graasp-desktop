@@ -15,6 +15,19 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
       primary="Saved Spaces"
     />
   </WithStyles(ForwardRef(MenuItem))>
+  <WithStyles(ForwardRef(MenuItem))
+    button={true}
+    id="favoriteSpacesMenuItem"
+    onClick={[Function]}
+    selected={false}
+  >
+    <WithStyles(ForwardRef(ListItemIcon))>
+      <StarIcon />
+    </WithStyles(ForwardRef(ListItemIcon))>
+    <WithStyles(ForwardRef(ListItemText))
+      primary="Favorite Spaces"
+    />
+  </WithStyles(ForwardRef(MenuItem))>
   <Offline
     polling={true}
     wrapperType="span"
@@ -171,6 +184,19 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
       primary="Saved Spaces"
+    />
+  </WithStyles(ForwardRef(MenuItem))>
+  <WithStyles(ForwardRef(MenuItem))
+    button={true}
+    id="favoriteSpacesMenuItem"
+    onClick={[Function]}
+    selected={false}
+  >
+    <WithStyles(ForwardRef(ListItemIcon))>
+      <StarIcon />
+    </WithStyles(ForwardRef(ListItemIcon))>
+    <WithStyles(ForwardRef(ListItemText))
+      primary="Favorite Spaces"
     />
   </WithStyles(ForwardRef(MenuItem))>
   <Offline

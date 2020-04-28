@@ -29,6 +29,7 @@ const getAppInstanceResources = require('./getAppInstanceResources');
 const postAppInstanceResource = require('./postAppInstanceResource');
 const patchAppInstanceResource = require('./patchAppInstanceResource');
 const getAppInstance = require('./getAppInstance');
+const setSpaceAsFavorite = require('./setSpaceAsFavorite');
 
 module.exports = {
   loadSpace,
@@ -62,4 +63,5 @@ module.exports = {
   getAppInstance,
   getUserMode,
   setUserMode,
+  setSpaceAsFavorite,
 };

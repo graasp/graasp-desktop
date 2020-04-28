@@ -62,6 +62,7 @@ const DEFAULT_USER = {
     syncMode: DEFAULT_SYNC_MODE,
     userMode: DEFAULT_USER_MODE,
   },
+  favoriteSpaces: [],
 };
 
 const ANONYMOUS_USERNAME = 'Anonymous';

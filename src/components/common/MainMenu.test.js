@@ -13,10 +13,11 @@ import {
   SETTINGS_PATH,
   DEVELOPER_PATH,
   DASHBOARD_PATH,
+  FAVORITE_PATH,
 } from '../../config/paths';
 
 const MENUITEM_OFFLINE_NUMBER = 2;
-const MENUITEM_OFFLINE_ONLINE_COUNT = 9;
+const MENUITEM_OFFLINE_ONLINE_COUNT = 10;
 
 const createMainMenuProps = (developerMode, path, authenticated = true) => {
   return {
@@ -108,6 +109,7 @@ describe('<MainMenu />', () => {
     [true, SETTINGS_PATH, 'Settings'],
     [true, DEVELOPER_PATH, 'Developer'],
     [true, DASHBOARD_PATH, 'Dashboard'],
+    [true, FAVORITE_PATH, 'Favorite Spaces'],
   ])('<MainMenu /> selects one MenuItem', (developerMode, path, text) => {
     it(`select path=${path} (developerMode = ${developerMode})`, () => {
       const props = createMainMenuProps(developerMode, path);

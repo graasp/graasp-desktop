@@ -1,5 +1,6 @@
 export const DRAWER_BUTTON_ID = 'drawerButton';
 
+export const FAVORITE_MENU_ITEM_ID = 'favoriteSpacesMenuItem';
 export const SPACES_NEARBY_MENU_ITEM_ID = 'spacesNearbyMenuItem';
 export const SPACES_NEARBY_MAIN_ID = 'spacesNearbyMain';
 export const VISIT_MENU_ITEM_ID = 'visitMenuItem';

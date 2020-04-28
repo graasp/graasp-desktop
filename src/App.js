@@ -15,6 +15,7 @@ import SpacesNearby from './components/SpacesNearby';
 import Settings from './components/Settings';
 import LoadSpace from './components/LoadSpace';
 import SpaceScreen from './components/space/SpaceScreen';
+import FavoriteSpaces from './components/FavoriteSpaces';
 import SyncScreen from './components/space/SyncScreen';
 import DeveloperScreen from './components/developer/DeveloperScreen';
 import { OnlineTheme, OfflineTheme } from './themes';
@@ -32,6 +33,7 @@ import {
   DEVELOPER_PATH,
   DASHBOARD_PATH,
   SIGN_IN_PATH,
+  FAVORITE_PATH,
 } from './config/paths';
 import {
   getGeolocation,
@@ -160,6 +162,11 @@ export class App extends Component {
                     exact
                     path={HOME_PATH}
                     component={Authorization()(Home)}
+                  />
+                  <Route
+                    exact
+                    path={FAVORITE_PATH}
+                    component={Authorization()(FavoriteSpaces)}
                   />
                   <Route
                     exact

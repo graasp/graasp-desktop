@@ -48,4 +48,5 @@ module.exports = {
   SET_SYNC_MODE_CHANNEL: 'sync:mode:set',
   GET_USER_MODE_CHANNEL: 'user:mode:get',
   SET_USER_MODE_CHANNEL: 'user:mode:set',
+  SET_SPACE_AS_FAVORITE_CHANNEL: 'user:set-space-favorite:set',
 };

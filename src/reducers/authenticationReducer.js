@@ -1,4 +1,4 @@
-import { Map, List } from 'immutable';
+import { Map, List, fromJS } from 'immutable';
 import {
   FLAG_SIGNING_IN,
   SIGN_IN_SUCCEEDED,
@@ -28,8 +28,10 @@ import {
   GET_USER_MODE_SUCCEEDED,
   FLAG_GETTING_USER_MODE,
   FLAG_SETTING_USER_MODE,
+  FLAG_SETTING_SPACE_AS_FAVORITE,
+  SET_SPACE_AS_FAVORITE_SUCCEEDED,
 } from '../types';
-import { updateActivityList } from './common';
+import { updateActivityList, updateFavoriteSpaces } from './common';
 import {
   AUTHENTICATED,
   DEFAULT_DEVELOPER_MODE,
@@ -50,6 +52,8 @@ export const DEFAULT_USER_SETTINGS = {
 export const DEFAULT_USER = {
   geolocation: Map(),
   settings: { ...DEFAULT_USER_SETTINGS },
+  // redux doesn't seem to detect updates with sets
+  favoriteSpaces: List(),
 };
 
 export const INITIAL_STATE = Map({
@@ -74,6 +78,7 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case FLAG_GETTING_GEOLOCATION_ENABLED:
     case FLAG_SETTING_USER_MODE:
     case FLAG_GETTING_USER_MODE:
+    case FLAG_SETTING_SPACE_AS_FAVORITE:
     case FLAG_SIGNING_IN:
     case FLAG_SIGNING_OUT:
       return state.updateIn(
@@ -82,16 +87,16 @@ export default (state = INITIAL_STATE, { type, payload }) => {
       );
     case SIGN_IN_SUCCEEDED: {
       return state
-        .setIn(['user'], { ...DEFAULT_USER, ...payload })
+        .setIn(['user'], fromJS({ ...DEFAULT_USER, ...payload }))
         .setIn(['authenticated'], AUTHENTICATED);
     }
     case SIGN_OUT_SUCCEEDED:
       return state
-        .setIn(['user'], Map(DEFAULT_USER))
+        .setIn(['user'], fromJS(DEFAULT_USER))
         .setIn(['authenticated'], false);
     case IS_AUTHENTICATED_SUCCEEDED:
       return state
-        .setIn(['user'], payload.user)
+        .setIn(['user'], fromJS({ ...DEFAULT_USER, ...payload.user }))
         .setIn(['authenticated'], payload.authenticated);
     case GET_USER_FOLDER_SUCCEEDED:
       return state.setIn(['current', 'folder'], payload);
@@ -112,6 +117,11 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case SET_USER_MODE_SUCCEEDED:
     case GET_USER_MODE_SUCCEEDED:
       return state.setIn(['user', 'settings', 'userMode'], payload);
+    case SET_SPACE_AS_FAVORITE_SUCCEEDED:
+      return state.updateIn(
+        ['user', 'favoriteSpaces'],
+        updateFavoriteSpaces(payload)
+      );
     default:
       return state;
   }

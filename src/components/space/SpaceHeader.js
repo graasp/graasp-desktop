@@ -32,7 +32,7 @@ class SpaceHeader extends Component {
     space: PropTypes.shape({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      saved: PropTypes.bool.isRequired,
+      saved: PropTypes.bool,
       offlineSupport: PropTypes.bool.isRequired,
     }).isRequired,
     classes: PropTypes.shape({
