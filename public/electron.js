@@ -41,8 +41,8 @@ const {
   GET_APP_INSTANCE_CHANNEL,
   GET_DEVELOPER_MODE_CHANNEL,
   SET_DEVELOPER_MODE_CHANNEL,
-  GET_SYNC_MODES_CHANNEL,
-  SET_SYNC_MODES_CHANNEL,
+  GET_SYNC_MODE_CHANNEL,
+  SET_SYNC_MODE_CHANNEL,
   GET_GEOLOCATION_ENABLED_CHANNEL,
   SET_GEOLOCATION_ENABLED_CHANNEL,
   GET_DATABASE_CHANNEL,
@@ -395,10 +395,10 @@ app.on('ready', async () => {
   ipcMain.on(SET_DEVELOPER_MODE_CHANNEL, setDeveloperMode(mainWindow, db));
 
   // called when setting sync mode
-  ipcMain.on(SET_SYNC_MODES_CHANNEL, setSyncMode(mainWindow, db));
+  ipcMain.on(SET_SYNC_MODE_CHANNEL, setSyncMode(mainWindow, db));
 
   // called when getting sync mode
-  ipcMain.on(GET_SYNC_MODES_CHANNEL, getSyncMode(mainWindow, db));
+  ipcMain.on(GET_SYNC_MODE_CHANNEL, getSyncMode(mainWindow, db));
 
   // called when getting geolocation enabled
   ipcMain.on(

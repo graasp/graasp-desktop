@@ -3,7 +3,7 @@ import {
   DEFAULT_DEVELOPER_MODE,
   DEFAULT_GEOLOCATION_ENABLED,
   SYNC_MODES,
-  DEFAULT_SYNC_MODES,
+  DEFAULT_SYNC_MODE,
 } from '../../src/config/constants';
 import { USER_ALICE, USER_GRAASP, USER_BOB } from './users';
 
@@ -13,7 +13,7 @@ export const settingsPerUser = {
     lang: DEFAULT_LANGUAGE,
     developerMode: DEFAULT_DEVELOPER_MODE,
     geolocationEnabled: DEFAULT_GEOLOCATION_ENABLED,
-    syncMode: DEFAULT_SYNC_MODES,
+    syncMode: DEFAULT_SYNC_MODE,
   },
   [USER_ALICE.name]: {
     lang: 'fr',

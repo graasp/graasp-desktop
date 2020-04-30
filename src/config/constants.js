@@ -66,7 +66,7 @@ export const SYNC_MODES = {
   ADVANCED: 'advanced',
   VISUAL: 'visual',
 };
-export const DEFAULT_SYNC_MODES = SYNC_MODES.VISUAL;
+export const DEFAULT_SYNC_MODE = SYNC_MODES.VISUAL;
 export const SYNC_SPACE_PROPERTIES = [
   'name',
   'image',

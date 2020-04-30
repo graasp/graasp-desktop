@@ -14,12 +14,12 @@ import {
   SET_DEVELOPER_MODE_SUCCEEDED,
   FLAG_GETTING_GEOLOCATION_ENABLED,
   FLAG_SETTING_GEOLOCATION_ENABLED,
-  FLAG_GETTING_SYNC_MODES,
-  FLAG_SETTING_SYNC_MODES,
+  FLAG_GETTING_SYNC_MODE,
+  FLAG_SETTING_SYNC_MODE,
   GET_GEOLOCATION_ENABLED_SUCCEEDED,
   SET_GEOLOCATION_ENABLED_SUCCEEDED,
-  SET_SYNC_MODES_SUCCEEDED,
-  GET_SYNC_MODES_SUCCEEDED,
+  SET_SYNC_MODE_SUCCEEDED,
+  GET_SYNC_MODE_SUCCEEDED,
 } from '../types';
 import {
   ERROR_GETTING_GEOLOCATION,
@@ -31,8 +31,8 @@ import {
   ERROR_GETTING_DEVELOPER_MODE,
   ERROR_SETTING_GEOLOCATION_ENABLED,
   ERROR_GETTING_GEOLOCATION_ENABLED,
-  ERROR_GETTING_SYNC_MODES,
-  ERROR_SETTING_SYNC_MODES,
+  ERROR_GETTING_SYNC_MODE,
+  ERROR_SETTING_SYNC_MODE,
 } from '../config/messages';
 import {
   GET_USER_FOLDER_CHANNEL,
@@ -42,8 +42,8 @@ import {
   SET_DEVELOPER_MODE_CHANNEL,
   GET_GEOLOCATION_ENABLED_CHANNEL,
   SET_GEOLOCATION_ENABLED_CHANNEL,
-  GET_SYNC_MODES_CHANNEL,
-  SET_SYNC_MODES_CHANNEL,
+  GET_SYNC_MODE_CHANNEL,
+  SET_SYNC_MODE_CHANNEL,
 } from '../config/channels';
 import { createFlag } from './common';
 import { ERROR_GENERAL } from '../config/errors';
@@ -59,8 +59,8 @@ const flagGettingGeolocationEnabled = createFlag(
 const flagSettingGeolocationEnabled = createFlag(
   FLAG_SETTING_GEOLOCATION_ENABLED
 );
-const flagGettingSyncMode = createFlag(FLAG_GETTING_SYNC_MODES);
-const flagSettingSyncMode = createFlag(FLAG_SETTING_SYNC_MODES);
+const flagGettingSyncMode = createFlag(FLAG_GETTING_SYNC_MODE);
+const flagSettingSyncMode = createFlag(FLAG_SETTING_SYNC_MODE);
 
 const getGeolocation = async () => async dispatch => {
   // only fetch location if online
@@ -253,13 +253,13 @@ const setGeolocationEnabled = async geolocationEnabled => dispatch => {
 const getSyncMode = async () => dispatch => {
   try {
     dispatch(flagGettingSyncMode(true));
-    window.ipcRenderer.send(GET_SYNC_MODES_CHANNEL);
-    window.ipcRenderer.once(GET_SYNC_MODES_CHANNEL, (event, mode) => {
+    window.ipcRenderer.send(GET_SYNC_MODE_CHANNEL);
+    window.ipcRenderer.once(GET_SYNC_MODE_CHANNEL, (event, mode) => {
       if (mode === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_SYNC_MODES);
+        toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_SYNC_MODE);
       } else {
         dispatch({
-          type: GET_SYNC_MODES_SUCCEEDED,
+          type: GET_SYNC_MODE_SUCCEEDED,
           payload: mode,
         });
       }
@@ -267,20 +267,20 @@ const getSyncMode = async () => dispatch => {
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_SYNC_MODES);
+    toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_SYNC_MODE);
   }
 };
 
 const setSyncMode = async syncMode => dispatch => {
   try {
     dispatch(flagSettingSyncMode(true));
-    window.ipcRenderer.send(SET_SYNC_MODES_CHANNEL, syncMode);
-    window.ipcRenderer.once(SET_SYNC_MODES_CHANNEL, (event, mode) => {
+    window.ipcRenderer.send(SET_SYNC_MODE_CHANNEL, syncMode);
+    window.ipcRenderer.once(SET_SYNC_MODE_CHANNEL, (event, mode) => {
       if (mode === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_SYNC_MODES);
+        toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_SYNC_MODE);
       } else {
         dispatch({
-          type: SET_SYNC_MODES_SUCCEEDED,
+          type: SET_SYNC_MODE_SUCCEEDED,
           payload: mode,
         });
       }
@@ -288,7 +288,7 @@ const setSyncMode = async syncMode => dispatch => {
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_SYNC_MODES);
+    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_SYNC_MODE);
   }
 };
 

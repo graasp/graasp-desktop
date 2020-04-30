@@ -18,7 +18,7 @@ import {
   DEVELOPER_MENU_ITEM_ID,
   SPACE_CARD_CLASS,
   SPACE_NOT_AVAILABLE_TEXT_CLASS,
-  SYNC_MODES_SWITCH_ID,
+  SYNC_MODE_SWITCH_ID,
   SPACE_SYNC_BUTTON_CLASS,
   buildSpaceCardId,
   SYNC_VISUAL_MAIN_ID,
@@ -44,7 +44,7 @@ import {
   DEFAULT_LANGUAGE,
   DEFAULT_GEOLOCATION_ENABLED,
   DEFAULT_DEVELOPER_MODE,
-  DEFAULT_SYNC_MODES,
+  DEFAULT_SYNC_MODE,
   SYNC_MODES,
 } from '../src/config/constants';
 import { userSignIn } from './userSignIn.test';
@@ -95,7 +95,7 @@ const toggleDeveloperMode = async (client, value) => {
 
 // eslint-disable-next-line import/prefer-default-export
 export const toggleSyncAdvancedMode = async (client, value) => {
-  const syncAdvancedModeSwitchSelector = `#${SYNC_MODES_SWITCH_ID} input`;
+  const syncAdvancedModeSwitchSelector = `#${SYNC_MODE_SWITCH_ID} input`;
   const syncAdvancedMode = await client.getAttribute(
     syncAdvancedModeSwitchSelector,
     'value'
@@ -135,7 +135,7 @@ const isDeveloperModeSetTo = async (client, value) => {
 
 const isSyncAdvancedModeSetTo = async (client, value) => {
   const mode = await client.getAttribute(
-    `#${SYNC_MODES_SWITCH_ID} input`,
+    `#${SYNC_MODE_SWITCH_ID} input`,
     'value'
   );
   const booleanToMode = JSON.parse(mode)
@@ -173,7 +173,7 @@ describe('Settings Scenarios', function() {
 
         await isDeveloperModeSetTo(client, DEFAULT_DEVELOPER_MODE);
 
-        await isSyncAdvancedModeSetTo(client, DEFAULT_SYNC_MODES);
+        await isSyncAdvancedModeSetTo(client, DEFAULT_SYNC_MODE);
       })
     );
 

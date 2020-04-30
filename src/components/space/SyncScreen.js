@@ -25,7 +25,7 @@ import Main from '../common/Main';
 import { HOME_PATH, VISIT_PATH } from '../../config/paths';
 import Styles from '../../Styles';
 import Loader from '../common/Loader';
-import { DEFAULT_SYNC_MODES, SYNC_MODES } from '../../config/constants';
+import { DEFAULT_SYNC_MODE, SYNC_MODES } from '../../config/constants';
 
 const styles = theme => ({
   ...Styles(theme),
@@ -83,7 +83,7 @@ class SyncScreen extends Component {
   };
 
   static defaultProps = {
-    mode: DEFAULT_SYNC_MODES,
+    mode: DEFAULT_SYNC_MODE,
     activity: false,
     localSpace: Map(),
     remoteSpace: Map(),

@@ -53,7 +53,7 @@ export const LOAD_LOAD_BUTTON_ID = 'loadLoadButton';
 export const LANGUAGE_SELECT_ID = 'settingsLanguageSelect';
 export const DEVELOPER_SWITCH_ID = 'settingsDeveloperSwitch';
 export const GEOLOCATION_CONTROL_ID = 'settingsGeolocationControl';
-export const SYNC_MODES_SWITCH_ID = 'syncModeSwitch';
+export const SYNC_MODE_SWITCH_ID = 'syncModeSwitch';
 
 export const buildPhaseAppName = id => `phaseApp-${id}`;
 

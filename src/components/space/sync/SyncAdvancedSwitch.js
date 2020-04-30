@@ -8,8 +8,8 @@ import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { setSyncMode, getSyncMode } from '../../../actions';
 import Loader from '../../common/Loader';
-import { SYNC_MODES_SWITCH_ID } from '../../../config/selectors';
-import { SYNC_MODES, DEFAULT_SYNC_MODES } from '../../../config/constants';
+import { SYNC_MODE_SWITCH_ID } from '../../../config/selectors';
+import { SYNC_MODES, DEFAULT_SYNC_MODE } from '../../../config/constants';
 
 const styles = theme => ({
   formControl: {
@@ -31,7 +31,7 @@ export class SyncAdvancedSwitch extends Component {
   };
 
   static defaultProps = {
-    mode: DEFAULT_SYNC_MODES,
+    mode: DEFAULT_SYNC_MODE,
   };
 
   constructor(props) {
@@ -64,7 +64,7 @@ export class SyncAdvancedSwitch extends Component {
     );
 
     return (
-      <FormControl id={SYNC_MODES_SWITCH_ID} className={classes.formControl}>
+      <FormControl id={SYNC_MODE_SWITCH_ID} className={classes.formControl}>
         <FormControlLabel control={control} label={t('Sync Advanced Mode')} />
       </FormControl>
     );

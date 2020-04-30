@@ -241,7 +241,7 @@ const cancelSync = async client => {
   await client.pause(LOAD_TAB_PAUSE);
 };
 
-describe.only('Sync a space', function() {
+describe('Sync a space', function() {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
