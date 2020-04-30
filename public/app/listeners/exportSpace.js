@@ -20,25 +20,49 @@ const fsPromises = fs.promises;
 // In the future we can add options so that the behaviour can be slightly modified
 const exportSpace = (mainWindow, db) => async (
   event,
-  { archivePath, id, userId: user }
+  {
+    archivePath,
+    id,
+    userId,
+    selection: {
+      space: isSpaceSelected,
+      actions: isActionsSelected,
+      resources: isResourcesSelected,
+    },
+  }
 ) => {
   try {
     // get space from local database
-    const space = db
-      .get(SPACES_COLLECTION)
-      .find({ id })
-      .value();
+    const space = isSpaceSelected
+      ? db
+          .get(SPACES_COLLECTION)
+          .find({ id })
+          .value()
+      : {};
+
+    // build conditions when fetching resources and actions
+    // teachers can fetch every user's data
+    // students can only fetch their own data
+    const isStudent = db.get('user.settings.studentMode').value();
+    const conditions = { spaceId: id };
+    if (isStudent) {
+      conditions.user = userId;
+    }
 
     // export the user's resources, private and public
-    const resources = db
-      .get(APP_INSTANCE_RESOURCES_COLLECTION)
-      .filter({ user, spaceId: id })
-      .value();
+    const resources = isResourcesSelected
+      ? db
+          .get(APP_INSTANCE_RESOURCES_COLLECTION)
+          .filter(conditions)
+          .value()
+      : [];
 
-    const actions = db
-      .get(ACTIONS_COLLECTION)
-      .filter({ user, spaceId: id })
-      .value();
+    const actions = isActionsSelected
+      ? db
+          .get(ACTIONS_COLLECTION)
+          .filter(conditions)
+          .value()
+      : [];
 
     // abort if space does not exist
     if (!space) {

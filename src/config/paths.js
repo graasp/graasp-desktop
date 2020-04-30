@@ -9,3 +9,7 @@ export const DASHBOARD_PATH = '/dashboard';
 export const SIGN_IN_PATH = '/signin';
 export const SYNC_SPACE_PATH = '/space/sync/:id';
 export const SAVED_SPACES_PATH = '/saved-spaces';
+
+export const buildExportSelectionPathForSpaceId = (id = ':id') => {
+  return `/space/export/${id}/selection`;
+};

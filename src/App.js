@@ -16,6 +16,7 @@ import Settings from './components/Settings';
 import LoadSpace from './components/LoadSpace';
 import SpaceScreen from './components/space/SpaceScreen';
 import SyncScreen from './components/space/SyncScreen';
+import ExportSelectionScreen from './components/space/export/ExportSelectionScreen';
 import DeveloperScreen from './components/developer/DeveloperScreen';
 import { OnlineTheme, OfflineTheme } from './themes';
 import Dashboard from './components/dashboard/Dashboard';
@@ -33,6 +34,7 @@ import {
   DASHBOARD_PATH,
   SIGN_IN_PATH,
   SAVED_SPACES_PATH,
+  buildExportSelectionPathForSpaceId,
 } from './config/paths';
 import {
   getGeolocation,
@@ -192,6 +194,11 @@ export class App extends Component {
                     exact
                     path={SYNC_SPACE_PATH}
                     component={Authorization()(SyncScreen)}
+                  />
+                  <Route
+                    exact
+                    path={buildExportSelectionPathForSpaceId()}
+                    component={Authorization()(ExportSelectionScreen)}
                   />
                   <Route
                     exact

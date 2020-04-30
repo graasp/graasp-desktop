@@ -255,7 +255,7 @@ const clearSpace = () => dispatch => {
   });
 };
 
-const exportSpace = (id, spaceName, userId) => dispatch => {
+const exportSpace = (id, spaceName, userId, selection) => dispatch => {
   window.ipcRenderer.send(SHOW_EXPORT_SPACE_PROMPT_CHANNEL, spaceName);
   window.ipcRenderer.once(
     RESPOND_EXPORT_SPACE_PROMPT_CHANNEL,
@@ -266,6 +266,7 @@ const exportSpace = (id, spaceName, userId) => dispatch => {
           archivePath,
           id,
           userId,
+          selection,
         });
       } else {
         dispatch(flagExportingSpace(false));

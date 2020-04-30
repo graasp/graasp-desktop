@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
+import { withRouter } from 'react-router';
 import clsx from 'clsx';
 import IconButton from '@material-ui/core/IconButton/IconButton';
 import UnarchiveIcon from '@material-ui/icons/Unarchive';
@@ -10,6 +11,7 @@ import { withStyles } from '@material-ui/core';
 import Styles from '../../Styles';
 import { exportSpace } from '../../actions/space';
 import { SPACE_EXPORT_BUTTON_CLASS } from '../../config/selectors';
+import { buildExportSelectionPathForSpaceId } from '../../config/paths';
 
 class ExportButton extends Component {
   static propTypes = {
@@ -21,15 +23,21 @@ class ExportButton extends Component {
       appBar: PropTypes.string.isRequired,
       button: PropTypes.string.isRequired,
     }).isRequired,
-    dispatchExportSpace: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
-    userId: PropTypes.string.isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
   };
 
   handleExport = () => {
-    const { space, dispatchExportSpace, userId } = this.props;
-    const { id, name } = space;
-    dispatchExportSpace(id, name, userId);
+    const {
+      history: { push },
+      space,
+    } = this.props;
+    push({
+      pathname: buildExportSelectionPathForSpaceId(space.id),
+      state: { space },
+    });
   };
 
   render() {
@@ -67,4 +75,4 @@ const StyledComponent = withStyles(Styles, { withTheme: true })(
 
 const TranslatedComponent = withTranslation()(StyledComponent);
 
-export default TranslatedComponent;
+export default withRouter(TranslatedComponent);
