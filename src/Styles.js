@@ -1,3 +1,5 @@
+import { FORM_CONTROL_MIN_WIDTH } from './config/constants';
+
 const drawerWidth = 240;
 
 const Styles = theme => ({
@@ -82,7 +84,7 @@ const Styles = theme => ({
   },
   formControl: {
     margin: theme.spacing(),
-    minWidth: 120,
+    minWidth: FORM_CONTROL_MIN_WIDTH,
   },
   dividerColor: {
     color: 'white',

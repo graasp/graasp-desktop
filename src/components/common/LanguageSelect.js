@@ -11,11 +11,12 @@ import { langs } from '../../config/i18n';
 import { getLanguage, setLanguage } from '../../actions';
 import Loader from './Loader';
 import { LANGUAGE_SELECT_ID } from '../../config/selectors';
+import { FORM_CONTROL_MIN_WIDTH } from '../../config/constants';
 
 const styles = theme => ({
   formControl: {
     margin: theme.spacing(),
-    minWidth: 120,
+    minWidth: FORM_CONTROL_MIN_WIDTH,
   },
 });
 

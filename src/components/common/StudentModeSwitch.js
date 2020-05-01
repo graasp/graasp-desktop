@@ -6,23 +6,24 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { getStudentMode, setStudentMode } from '../../actions';
+import { getUserMode, setUserMode } from '../../actions';
 import Loader from './Loader';
+import { USER_MODES, FORM_CONTROL_MIN_WIDTH } from '../../config/constants';
 
 const styles = theme => ({
   formControl: {
     margin: theme.spacing(),
-    minWidth: 120,
+    minWidth: FORM_CONTROL_MIN_WIDTH,
   },
 });
 
 export class StudentModeSwitch extends Component {
   static propTypes = {
-    studentMode: PropTypes.bool.isRequired,
+    userMode: PropTypes.oneOf(Object.values(USER_MODES)).isRequired,
     activity: PropTypes.bool.isRequired,
     t: PropTypes.func.isRequired,
-    dispatchGetStudentMode: PropTypes.func.isRequired,
-    dispatchSetStudentMode: PropTypes.func.isRequired,
+    dispatchGetUserMode: PropTypes.func.isRequired,
+    dispatchSetUserMode: PropTypes.func.isRequired,
     classes: PropTypes.shape({
       formControl: PropTypes.string.isRequired,
       button: PropTypes.string.isRequired,
@@ -31,18 +32,21 @@ export class StudentModeSwitch extends Component {
 
   constructor(props) {
     super(props);
-    const { dispatchGetStudentMode } = this.props;
-    dispatchGetStudentMode();
+    const { dispatchGetUserMode } = this.props;
+    dispatchGetUserMode();
   }
 
   handleChange = async ({ target }) => {
-    const { dispatchSetStudentMode } = this.props;
+    const { dispatchSetUserMode } = this.props;
     const { checked } = target;
-    dispatchSetStudentMode(checked);
+    const mode = checked ? USER_MODES.STUDENT : USER_MODES.TEACHER;
+    dispatchSetUserMode(mode);
   };
 
   render() {
-    const { classes, t, studentMode, activity } = this.props;
+    const { classes, t, userMode, activity } = this.props;
+
+    const isStudent = userMode === USER_MODES.STUDENT;
 
     if (activity) {
       return <Loader />;
@@ -50,9 +54,9 @@ export class StudentModeSwitch extends Component {
 
     const switchControl = (
       <Switch
-        checked={studentMode}
+        checked={isStudent}
         onChange={this.handleChange}
-        value={studentMode}
+        value={isStudent}
         color="primary"
       />
     );
@@ -69,13 +73,13 @@ export class StudentModeSwitch extends Component {
 }
 
 const mapStateToProps = ({ authentication }) => ({
-  studentMode: authentication.getIn(['user', 'settings', 'studentMode']),
+  userMode: authentication.getIn(['user', 'settings', 'userMode']),
   activity: Boolean(authentication.getIn(['current', 'activity']).size),
 });
 
 const mapDispatchToProps = {
-  dispatchGetStudentMode: getStudentMode,
-  dispatchSetStudentMode: setStudentMode,
+  dispatchGetUserMode: getUserMode,
+  dispatchSetUserMode: setUserMode,
 };
 
 const ConnectedComponent = connect(

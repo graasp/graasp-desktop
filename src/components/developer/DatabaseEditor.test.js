@@ -18,6 +18,7 @@ const createDatabaseEditorProps = database => {
     },
     dispatchGetDatabase: jest.fn(),
     dispatchSetDatabase: jest.fn(),
+    dispatchSignOut: jest.fn(),
     database,
   };
 };

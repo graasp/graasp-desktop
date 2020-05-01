@@ -54,8 +54,8 @@ const {
   SIGN_IN_CHANNEL,
   SIGN_OUT_CHANNEL,
   IS_AUTHENTICATED_CHANNEL,
-  GET_STUDENT_MODE_CHANNEL,
-  SET_STUDENT_MODE_CHANNEL,
+  GET_USER_MODE_CHANNEL,
+  SET_USER_MODE_CHANNEL,
 } = require('./app/config/channels');
 const env = require('./env.json');
 const {
@@ -88,8 +88,8 @@ const {
   getAppInstance,
   setSyncMode,
   getSyncMode,
-  setStudentMode,
-  getStudentMode,
+  setUserMode,
+  getUserMode,
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
 
@@ -417,10 +417,10 @@ app.on('ready', async () => {
   );
 
   // called when getting student mode
-  ipcMain.on(GET_STUDENT_MODE_CHANNEL, getStudentMode(mainWindow, db));
+  ipcMain.on(GET_USER_MODE_CHANNEL, getUserMode(mainWindow, db));
 
   // called when setting student mode
-  ipcMain.on(SET_STUDENT_MODE_CHANNEL, setStudentMode(mainWindow, db));
+  ipcMain.on(SET_USER_MODE_CHANNEL, setUserMode(mainWindow, db));
 
   // called when creating an action
   ipcMain.on(POST_ACTION_CHANNEL, postAction(mainWindow, db));

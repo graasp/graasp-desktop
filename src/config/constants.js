@@ -9,7 +9,11 @@ export const DEFAULT_RADIUS = 50;
 export const DEFAULT_LANGUAGE = 'en';
 export const DEFAULT_DEVELOPER_MODE = false;
 export const DEFAULT_GEOLOCATION_ENABLED = false;
-export const DEFAULT_STUDENT_MODE = false;
+export const USER_MODES = {
+  STUDENT: 'student',
+  TEACHER: 'teacher',
+};
+export const DEFAULT_USER_MODE = USER_MODES.TEACHER;
 export const SHORT_ID_LENGTH = 6;
 export const LONG_ID_LENGTH = 24;
 export const SMART_GATEWAY_HOST = 'gateway.golabz.eu';
@@ -81,3 +85,5 @@ export const SYNC_PHASE_PROPERTIES = ['name', 'image', 'description', 'items'];
 export const SYNC_ITEM_PROPERTIES = ['name', 'description', 'content'];
 
 export const SECURITY_LOOP_THRESHOLD = 50;
+
+export const FORM_CONTROL_MIN_WIDTH = 120;

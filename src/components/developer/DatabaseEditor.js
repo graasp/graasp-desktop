@@ -7,10 +7,10 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
-import { getDatabase, setDatabase } from '../../actions';
+import { getDatabase, setDatabase, signOut } from '../../actions';
 import Loader from '../common/Loader';
 import Styles from '../../Styles';
-import SampleDatabase from '../../data/sample.json';
+import SampleDatabase from '../../data/sample';
 
 export class DatabaseEditor extends Component {
   static propTypes = {
@@ -24,6 +24,7 @@ export class DatabaseEditor extends Component {
       user: PropTypes.object,
       spaces: PropTypes.array,
     }),
+    dispatchSignOut: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -41,8 +42,11 @@ export class DatabaseEditor extends Component {
   };
 
   handleUseSampleDatabase = () => {
-    const { dispatchSetDatabase } = this.props;
+    const { dispatchSetDatabase, dispatchSignOut } = this.props;
     dispatchSetDatabase(SampleDatabase);
+
+    // sign out to force authenticate with existing user
+    dispatchSignOut();
   };
 
   render() {
@@ -87,6 +91,7 @@ const mapStateToProps = ({ Developer }) => ({
 const mapDispatchToProps = {
   dispatchGetDatabase: getDatabase,
   dispatchSetDatabase: setDatabase,
+  dispatchSignOut: signOut,
 };
 
 const StyledComponent = withStyles(Styles, { withTheme: true })(DatabaseEditor);

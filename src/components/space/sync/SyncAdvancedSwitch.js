@@ -9,12 +9,16 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { setSyncMode, getSyncMode } from '../../../actions';
 import Loader from '../../common/Loader';
 import { SYNC_MODE_SWITCH_ID } from '../../../config/selectors';
-import { SYNC_MODES, DEFAULT_SYNC_MODE } from '../../../config/constants';
+import {
+  SYNC_MODES,
+  DEFAULT_SYNC_MODE,
+  FORM_CONTROL_MIN_WIDTH,
+} from '../../../config/constants';
 
 const styles = theme => ({
   formControl: {
     margin: theme.spacing(),
-    minWidth: 120,
+    minWidth: FORM_CONTROL_MIN_WIDTH,
   },
 });
 

@@ -17,7 +17,7 @@ import ClearButton from '../space/ClearButton';
 import ExportButton from '../space/ExportButton';
 import SyncButton from '../space/SyncButton';
 import Text from './Text';
-import { MIN_CARD_WIDTH, DEFAULT_STUDENT_MODE } from '../../config/constants';
+import { MIN_CARD_WIDTH, USER_MODES } from '../../config/constants';
 import {
   buildSpaceCardId,
   SPACE_DESCRIPTION_EXPAND_BUTTON_CLASS,
@@ -64,7 +64,7 @@ export const MediaCard = props => {
     viewLink,
     space,
     showActions,
-    studentMode,
+    userMode,
   } = props;
   const { id, name } = space;
   const [expanded, setExpanded] = React.useState(false);
@@ -73,7 +73,7 @@ export const MediaCard = props => {
   };
 
   const renderTeacherActions = () => {
-    if (!studentMode) {
+    if (userMode === USER_MODES.TEACHER) {
       return (
         <>
           <DeleteButton spaceId={id} />
@@ -151,17 +151,16 @@ MediaCard.propTypes = {
   text: PropTypes.string,
   viewLink: PropTypes.func.isRequired,
   showActions: PropTypes.bool,
-  studentMode: PropTypes.bool,
+  userMode: PropTypes.oneOf(Object.values(USER_MODES)).isRequired,
 };
 
 MediaCard.defaultProps = {
   text: '',
   showActions: false,
-  studentMode: DEFAULT_STUDENT_MODE,
 };
 
 const mapStateToProps = ({ authentication }) => ({
-  studentMode: authentication.getIn(['user', 'settings', 'studentMode']),
+  userMode: authentication.getIn(['user', 'settings', 'userMode']),
 });
 
 const ConnectedComponent = connect(mapStateToProps, null)(MediaCard);

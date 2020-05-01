@@ -43,7 +43,7 @@ const PRODUCT_NAME = 'Graasp';
 const TMP_FOLDER = 'tmp';
 const DEFAULT_LANG = 'en';
 const DEFAULT_DEVELOPER_MODE = false;
-const DEFAULT_STUDENT_MODE = false;
+const DEFAULT_USER_MODE = 'teacher';
 const DEFAULT_GEOLOCATION_ENABLED = false;
 const VISUAL_SYNC_MODE = 'visual';
 const DEFAULT_SYNC_MODE = VISUAL_SYNC_MODE;
@@ -58,6 +58,8 @@ const DEFAULT_USER = {
     lang: DEFAULT_LANG,
     developerMode: DEFAULT_DEVELOPER_MODE,
     geolocationEnabled: DEFAULT_GEOLOCATION_ENABLED,
+    syncMode: DEFAULT_SYNC_MODE,
+    userMode: DEFAULT_USER_MODE,
   },
 };
 
@@ -84,5 +86,5 @@ module.exports = {
   ANONYMOUS_USERNAME,
   VISUAL_SYNC_MODE,
   DEFAULT_SYNC_MODE,
-  DEFAULT_STUDENT_MODE,
+  DEFAULT_USER_MODE,
 };

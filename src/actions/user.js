@@ -20,10 +20,10 @@ import {
   SET_GEOLOCATION_ENABLED_SUCCEEDED,
   SET_SYNC_MODE_SUCCEEDED,
   GET_SYNC_MODE_SUCCEEDED,
-  FLAG_GETTING_STUDENT_MODE,
-  FLAG_SETTING_STUDENT_MODE,
-  GET_STUDENT_MODE_SUCCEEDED,
-  SET_STUDENT_MODE_SUCCEEDED,
+  FLAG_GETTING_USER_MODE,
+  FLAG_SETTING_USER_MODE,
+  GET_USER_MODE_SUCCEEDED,
+  SET_USER_MODE_SUCCEEDED,
 } from '../types';
 import {
   ERROR_GETTING_GEOLOCATION,
@@ -37,8 +37,8 @@ import {
   ERROR_GETTING_GEOLOCATION_ENABLED,
   ERROR_GETTING_SYNC_MODE,
   ERROR_SETTING_SYNC_MODE,
-  ERROR_GETTING_STUDENT_MODE,
-  ERROR_SETTING_STUDENT_MODE,
+  ERROR_GETTING_USER_MODE,
+  ERROR_SETTING_USER_MODE,
 } from '../config/messages';
 import {
   GET_USER_FOLDER_CHANNEL,
@@ -50,8 +50,8 @@ import {
   SET_GEOLOCATION_ENABLED_CHANNEL,
   GET_SYNC_MODE_CHANNEL,
   SET_SYNC_MODE_CHANNEL,
-  GET_STUDENT_MODE_CHANNEL,
-  SET_STUDENT_MODE_CHANNEL,
+  GET_USER_MODE_CHANNEL,
+  SET_USER_MODE_CHANNEL,
 } from '../config/channels';
 import { createFlag } from './common';
 import { ERROR_GENERAL } from '../config/errors';
@@ -69,8 +69,8 @@ const flagSettingGeolocationEnabled = createFlag(
 );
 const flagGettingSyncMode = createFlag(FLAG_GETTING_SYNC_MODE);
 const flagSettingSyncMode = createFlag(FLAG_SETTING_SYNC_MODE);
-const flagGettingStudentMode = createFlag(FLAG_GETTING_STUDENT_MODE);
-const flagSettingStudentMode = createFlag(FLAG_SETTING_STUDENT_MODE);
+const flagGettingUserMode = createFlag(FLAG_GETTING_USER_MODE);
+const flagSettingUserMode = createFlag(FLAG_SETTING_USER_MODE);
 
 const getGeolocation = async () => async dispatch => {
   // only fetch location if online
@@ -302,45 +302,45 @@ const setSyncMode = async syncMode => dispatch => {
   }
 };
 
-const getStudentMode = async () => dispatch => {
+const getUserMode = async () => dispatch => {
   try {
-    dispatch(flagGettingStudentMode(true));
-    window.ipcRenderer.send(GET_STUDENT_MODE_CHANNEL);
-    window.ipcRenderer.once(GET_STUDENT_MODE_CHANNEL, (event, studentMode) => {
-      if (studentMode === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_STUDENT_MODE);
+    dispatch(flagGettingUserMode(true));
+    window.ipcRenderer.send(GET_USER_MODE_CHANNEL);
+    window.ipcRenderer.once(GET_USER_MODE_CHANNEL, (event, userMode) => {
+      if (userMode === ERROR_GENERAL) {
+        toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_USER_MODE);
       } else {
         dispatch({
-          type: GET_STUDENT_MODE_SUCCEEDED,
-          payload: studentMode,
+          type: GET_USER_MODE_SUCCEEDED,
+          payload: userMode,
         });
       }
-      dispatch(flagGettingStudentMode(false));
+      dispatch(flagGettingUserMode(false));
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_STUDENT_MODE);
+    toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_USER_MODE);
   }
 };
 
-const setStudentMode = async syncAdvancedMode => dispatch => {
+const setUserMode = async userMode => dispatch => {
   try {
-    dispatch(flagSettingStudentMode(true));
-    window.ipcRenderer.send(SET_STUDENT_MODE_CHANNEL, syncAdvancedMode);
-    window.ipcRenderer.once(SET_STUDENT_MODE_CHANNEL, (event, mode) => {
+    dispatch(flagSettingUserMode(true));
+    window.ipcRenderer.send(SET_USER_MODE_CHANNEL, userMode);
+    window.ipcRenderer.once(SET_USER_MODE_CHANNEL, (event, mode) => {
       if (mode === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_STUDENT_MODE);
+        toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_USER_MODE);
       } else {
         dispatch({
-          type: SET_STUDENT_MODE_SUCCEEDED,
+          type: SET_USER_MODE_SUCCEEDED,
           payload: mode,
         });
       }
-      dispatch(flagSettingStudentMode(false));
+      dispatch(flagSettingUserMode(false));
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_STUDENT_MODE);
+    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_USER_MODE);
   }
 };
 
@@ -355,6 +355,6 @@ export {
   setGeolocationEnabled,
   getSyncMode,
   setSyncMode,
-  getStudentMode,
-  setStudentMode,
+  getUserMode,
+  setUserMode,
 };

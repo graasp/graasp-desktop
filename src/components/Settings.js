@@ -14,7 +14,7 @@ import Main from './common/Main';
 import { SETTINGS_MAIN_ID } from '../config/selectors';
 import SyncAdvancedSwitch from './space/sync/SyncAdvancedSwitch';
 import StudentModeSwitch from './common/StudentModeSwitch';
-import { DEFAULT_STUDENT_MODE } from '../config/constants';
+import { USER_MODES } from '../config/constants';
 
 // eslint-disable-next-line react/prefer-stateless-function
 export class Settings extends Component {
@@ -31,15 +31,11 @@ export class Settings extends Component {
     i18n: PropTypes.shape({
       changeLanguage: PropTypes.func.isRequired,
     }).isRequired,
-    studentMode: PropTypes.bool,
-  };
-
-  static defaultProps = {
-    studentMode: DEFAULT_STUDENT_MODE,
+    userMode: PropTypes.oneOf(Object.values(USER_MODES)).isRequired,
   };
 
   render() {
-    const { classes, t, studentMode } = this.props;
+    const { classes, t, userMode } = this.props;
 
     return (
       <Main id={SETTINGS_MAIN_ID}>
@@ -52,7 +48,7 @@ export class Settings extends Component {
             <GeolocationControl />
             <SyncAdvancedSwitch />
             <StudentModeSwitch />
-            {studentMode ? null : <DeveloperSwitch />}
+            {userMode === USER_MODES.TEACHER ? <DeveloperSwitch /> : null}
           </FormGroup>
         </div>
       </Main>
@@ -61,7 +57,7 @@ export class Settings extends Component {
 }
 
 const mapStateToProps = ({ authentication }) => ({
-  studentMode: authentication.getIn(['user', 'settings', 'studentMode']),
+  userMode: authentication.getIn(['user', 'settings', 'userMode']),
 });
 
 const ConnectedComponent = connect(mapStateToProps, null)(Settings);

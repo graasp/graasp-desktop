@@ -24,10 +24,10 @@ import {
   FLAG_GETTING_SYNC_MODE,
   SET_SYNC_MODE_SUCCEEDED,
   GET_SYNC_MODE_SUCCEEDED,
-  SET_STUDENT_MODE_SUCCEEDED,
-  GET_STUDENT_MODE_SUCCEEDED,
-  FLAG_GETTING_STUDENT_MODE,
-  FLAG_SETTING_STUDENT_MODE,
+  SET_USER_MODE_SUCCEEDED,
+  GET_USER_MODE_SUCCEEDED,
+  FLAG_GETTING_USER_MODE,
+  FLAG_SETTING_USER_MODE,
 } from '../types';
 import { updateActivityList } from './common';
 import {
@@ -36,7 +36,7 @@ import {
   DEFAULT_LANGUAGE,
   DEFAULT_GEOLOCATION_ENABLED,
   DEFAULT_SYNC_MODE,
-  DEFAULT_STUDENT_MODE,
+  DEFAULT_USER_MODE,
 } from '../config/constants';
 
 export const DEFAULT_USER_SETTINGS = {
@@ -44,7 +44,7 @@ export const DEFAULT_USER_SETTINGS = {
   developerMode: DEFAULT_DEVELOPER_MODE,
   geolocationEnabled: DEFAULT_GEOLOCATION_ENABLED,
   syncMode: DEFAULT_SYNC_MODE,
-  studentMode: DEFAULT_STUDENT_MODE,
+  userMode: DEFAULT_USER_MODE,
 };
 
 export const DEFAULT_USER = {
@@ -72,8 +72,8 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case FLAG_GETTING_SYNC_MODE:
     case FLAG_SETTING_GEOLOCATION_ENABLED:
     case FLAG_GETTING_GEOLOCATION_ENABLED:
-    case FLAG_SETTING_STUDENT_MODE:
-    case FLAG_GETTING_STUDENT_MODE:
+    case FLAG_SETTING_USER_MODE:
+    case FLAG_GETTING_USER_MODE:
     case FLAG_SIGNING_IN:
     case FLAG_SIGNING_OUT:
       return state.updateIn(
@@ -109,9 +109,9 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case SET_SYNC_MODE_SUCCEEDED:
     case GET_SYNC_MODE_SUCCEEDED:
       return state.setIn(['user', 'settings', 'syncMode'], payload);
-    case SET_STUDENT_MODE_SUCCEEDED:
-    case GET_STUDENT_MODE_SUCCEEDED:
-      return state.setIn(['user', 'settings', 'studentMode'], payload);
+    case SET_USER_MODE_SUCCEEDED:
+    case GET_USER_MODE_SUCCEEDED:
+      return state.setIn(['user', 'settings', 'userMode'], payload);
     default:
       return state;
   }

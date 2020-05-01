@@ -9,13 +9,13 @@ import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { getGeolocationEnabled, setGeolocationEnabled } from '../../actions';
 import Loader from './Loader';
-import { CONTROL_TYPES } from '../../config/constants';
+import { CONTROL_TYPES, FORM_CONTROL_MIN_WIDTH } from '../../config/constants';
 import { GEOLOCATION_CONTROL_ID } from '../../config/selectors';
 
 const styles = theme => ({
   formControl: {
     margin: theme.spacing(),
-    minWidth: 120,
+    minWidth: FORM_CONTROL_MIN_WIDTH,
   },
 });
 
