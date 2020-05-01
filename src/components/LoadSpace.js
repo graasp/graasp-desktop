@@ -12,7 +12,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
-import { loadSpace } from '../actions/space';
 import './LoadSpace.css';
 import Styles from '../Styles';
 import Loader from './common/Loader';
@@ -27,6 +26,8 @@ import {
   LOAD_LOAD_BUTTON_ID,
   LOAD_INPUT_ID,
 } from '../config/selectors';
+import { LOAD_SELECTION_SPACE_PATH } from '../config/paths';
+import { extractFileToLoadSpace } from '../actions';
 
 class LoadSpace extends Component {
   state = {
@@ -35,12 +36,14 @@ class LoadSpace extends Component {
 
   static propTypes = {
     t: PropTypes.func.isRequired,
-    dispatchLoadSpace: PropTypes.func.isRequired,
+    dispatchExtractFileToLoadSpace: PropTypes.func.isRequired,
     theme: PropTypes.shape({ direction: PropTypes.string.isRequired })
       .isRequired,
     activity: PropTypes.bool.isRequired,
-    history: PropTypes.shape({ length: PropTypes.number.isRequired })
-      .isRequired,
+    history: PropTypes.shape({
+      length: PropTypes.number.isRequired,
+      push: PropTypes.func.isRequired,
+    }).isRequired,
     classes: PropTypes.shape({
       appBar: PropTypes.string.isRequired,
       root: PropTypes.string.isRequired,
@@ -54,7 +57,19 @@ class LoadSpace extends Component {
       button: PropTypes.string.isRequired,
       formControl: PropTypes.string.isRequired,
     }).isRequired,
+    extractPath: PropTypes.string.isRequired,
   };
+
+  componentDidUpdate() {
+    // load space from extractpath if it is set
+    const {
+      extractPath,
+      history: { push },
+    } = this.props;
+    if (extractPath.length) {
+      push(LOAD_SELECTION_SPACE_PATH);
+    }
+  }
 
   handleFileLocation = event => {
     const fileLocation = event.target ? event.target.value : event;
@@ -63,8 +78,8 @@ class LoadSpace extends Component {
 
   handleLoad = () => {
     const { fileLocation } = this.state;
-    const { dispatchLoadSpace } = this.props;
-    dispatchLoadSpace({ fileLocation });
+    const { dispatchExtractFileToLoadSpace } = this.props;
+    dispatchExtractFileToLoadSpace({ fileLocation });
     this.setState({ fileLocation });
   };
 
@@ -145,11 +160,12 @@ class LoadSpace extends Component {
 }
 
 const mapDispatchToProps = {
-  dispatchLoadSpace: loadSpace,
+  dispatchExtractFileToLoadSpace: extractFileToLoadSpace,
 };
 
-const mapStateToProps = ({ Space }) => ({
-  activity: Boolean(Space.getIn(['current', 'activity']).size),
+const mapStateToProps = ({ loadSpace }) => ({
+  extractPath: loadSpace.getIn(['extract', 'extractPath']),
+  activity: Boolean(loadSpace.getIn(['activity']).size),
 });
 
 const ConnectedComponent = connect(

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar/AppBar';
 import Toolbar from '@material-ui/core/Toolbar/Toolbar';
+import Box from '@material-ui/core/Box';
 import { withRouter } from 'react-router';
 import clsx from 'clsx';
 import { withTranslation } from 'react-i18next';
@@ -23,6 +24,20 @@ const styles = theme => ({
   ...Styles(theme),
   buttonGroup: {
     textAlign: 'center',
+  },
+
+  spaceName: {
+    component: 'span',
+    fontStyle: 'italic',
+
+    // following lines ensure long titles are shorten
+    display: 'inline-block',
+    maxWidth: 200,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+
+    marginLeft: 1, // simulate left space
   },
 });
 
@@ -64,7 +79,6 @@ class ExportSelectionScreen extends Component {
   };
 
   state = {
-    space: true,
     actions: true,
     resources: true,
   };
@@ -90,9 +104,24 @@ class ExportSelectionScreen extends Component {
       },
       dispatchExportSpace,
     } = this.props;
-    const { space, actions, resources } = this.state;
-    const selection = { space, actions, resources };
+    const { actions, resources } = this.state;
+
+    // always export space
+    const selection = { space: true, actions, resources };
     dispatchExportSpace(id, name, userId, selection);
+  };
+
+  renderSpaceName = () => {
+    const {
+      theme,
+      location: {
+        state: {
+          space: { name },
+        },
+      },
+    } = this.props;
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    return <Box {...styles(theme).spaceName}>{name}</Box>;
   };
 
   render() {
@@ -103,7 +132,6 @@ class ExportSelectionScreen extends Component {
       activity,
     } = this.props;
     const {
-      space: isSpaceChecked,
       resources: isResourcesChecked,
       actions: isActionsChecked,
     } = this.state;
@@ -126,15 +154,6 @@ class ExportSelectionScreen extends Component {
       );
     }
 
-    const spaceCheckbox = (
-      <Checkbox
-        checked={isSpaceChecked}
-        onChange={this.handleChange}
-        name="space"
-        color="primary"
-      />
-    );
-
     const resourcesCheckbox = (
       <Checkbox
         checked={isResourcesChecked}
@@ -155,13 +174,21 @@ class ExportSelectionScreen extends Component {
     return (
       <Main fullScreen>
         <div>
-          <Typography align="center" variant="h4">
-            {t('What do you want to export?')}
+          <Typography variant="h3" align="center">
+            {t('Export Space ')}
+          </Typography>
+
+          <Typography variant="h5" align="center" style={{ display: 'flex' }}>
+            {t('You are going to export')}
+            {this.renderSpaceName()}
+          </Typography>
+          <Typography variant="h5" align="left">
+            {t('Include')}
+            {':'}
           </Typography>
 
           <br />
           <FormGroup>
-            <FormControlLabel control={spaceCheckbox} label={t('This Space')} />
             <FormControlLabel
               control={resourcesCheckbox}
               label={t("This Space's User Inputs")}

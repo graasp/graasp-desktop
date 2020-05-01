@@ -1,4 +1,8 @@
-const loadSpace = require('./loadSpace');
+const {
+  loadSpace,
+  cancelLoadSpace,
+  extractFileToLoadSpace,
+} = require('./loadSpace');
 const saveSpace = require('./saveSpace');
 const getSpace = require('./getSpace');
 const getSpaces = require('./getSpaces');
@@ -34,6 +38,8 @@ const setSpaceAsRecent = require('./setSpaceAsRecent');
 
 module.exports = {
   loadSpace,
+  cancelLoadSpace,
+  extractFileToLoadSpace,
   saveSpace,
   getSpace,
   getSpaces,
