@@ -11,11 +11,8 @@ import {
   SPACE_START_PREVIEW_BUTTON,
   BANNER_WARNING_PREVIEW_ID,
   SPACE_DESCRIPTION_ID,
+  SPACE_DESCRIPTION_TEXT_CLASS,
 } from '../../config/selectors';
-
-const style = {
-  fontSize: 'large',
-};
 
 const renderPreviewWarning = t => {
   return (
@@ -39,8 +36,7 @@ const SpaceDescription = ({ description, classes, start, saved }) => {
         <div className={classes.spaceDescription} id={SPACE_DESCRIPTION_ID}>
           <Text
             content={description}
-            style={style}
-            className="SpaceDescriptionText"
+            className={SPACE_DESCRIPTION_TEXT_CLASS}
           />
         </div>
         <Button

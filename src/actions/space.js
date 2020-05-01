@@ -77,7 +77,6 @@ import {
 import { DEFAULT_GET_REQUEST } from '../config/rest';
 import { DEFAULT_RADIUS } from '../config/constants';
 
-const flagGettingSpace = createFlag(FLAG_GETTING_SPACE);
 const flagGettingSpaces = createFlag(FLAG_GETTING_SPACES);
 const flagLoadingSpace = createFlag(FLAG_LOADING_SPACE);
 const flagDeletingSpace = createFlag(FLAG_DELETING_SPACE);
@@ -114,7 +113,12 @@ const waitForSpace = ({ online }) =>
     });
   });
 
-const createGetLocalSpace = async ({ id, user }, type) => async dispatch => {
+const createGetLocalSpace = async (
+  { id, user },
+  type,
+  flagType
+) => async dispatch => {
+  const flagGettingSpace = createFlag(flagType);
   try {
     dispatch(flagGettingSpace(true));
 
@@ -135,9 +139,14 @@ const createGetLocalSpace = async ({ id, user }, type) => async dispatch => {
 };
 
 const getLocalSpace = payload =>
-  createGetLocalSpace(payload, GET_SPACE_SUCCEEDED);
+  createGetLocalSpace(payload, GET_SPACE_SUCCEEDED, FLAG_GETTING_SPACE);
 
-const createGetRemoteSpace = async ({ id }, type) => async dispatch => {
+const createGetRemoteSpace = async (
+  { id },
+  type,
+  flagType
+) => async dispatch => {
+  const flagGettingSpace = createFlag(flagType);
   try {
     dispatch(flagGettingSpace(true));
 
@@ -178,7 +187,7 @@ const createGetRemoteSpace = async ({ id }, type) => async dispatch => {
 };
 
 const getRemoteSpace = payload =>
-  createGetRemoteSpace(payload, GET_SPACE_SUCCEEDED);
+  createGetRemoteSpace(payload, GET_SPACE_SUCCEEDED, FLAG_GETTING_SPACE);
 
 const getSpaces = () => dispatch => {
   dispatch(flagGettingSpaces(true));

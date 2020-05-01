@@ -84,6 +84,7 @@ exports[`<Phase /> with tools <Phase /> with toolsVisible = true renders correct
       />
     </div>
     <div
+      id="toolsContentPane"
       style={
         Object {
           "backgroundColor": "white",

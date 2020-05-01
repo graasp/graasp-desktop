@@ -41,11 +41,12 @@ const {
   GET_APP_INSTANCE_CHANNEL,
   GET_DEVELOPER_MODE_CHANNEL,
   SET_DEVELOPER_MODE_CHANNEL,
+  GET_SYNC_MODE_CHANNEL,
+  SET_SYNC_MODE_CHANNEL,
   GET_GEOLOCATION_ENABLED_CHANNEL,
   SET_GEOLOCATION_ENABLED_CHANNEL,
   GET_DATABASE_CHANNEL,
   SET_DATABASE_CHANNEL,
-  SHOW_SYNC_SPACE_PROMPT_CHANNEL,
   SYNC_SPACE_CHANNEL,
   CLEAR_USER_INPUT_CHANNEL,
   SHOW_CLEAR_USER_INPUT_PROMPT_CHANNEL,
@@ -59,7 +60,6 @@ const {
   loadSpace,
   saveSpace,
   getSpaces,
-  showSyncSpacePrompt,
   syncSpace,
   getSpace,
   deleteSpace,
@@ -84,6 +84,8 @@ const {
   postAppInstanceResource,
   patchAppInstanceResource,
   getAppInstance,
+  setSyncMode,
+  getSyncMode,
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
 
@@ -392,6 +394,12 @@ app.on('ready', async () => {
   // called when setting developer mode
   ipcMain.on(SET_DEVELOPER_MODE_CHANNEL, setDeveloperMode(mainWindow, db));
 
+  // called when setting sync mode
+  ipcMain.on(SET_SYNC_MODE_CHANNEL, setSyncMode(mainWindow, db));
+
+  // called when getting sync mode
+  ipcMain.on(GET_SYNC_MODE_CHANNEL, getSyncMode(mainWindow, db));
+
   // called when getting geolocation enabled
   ipcMain.on(
     GET_GEOLOCATION_ENABLED_CHANNEL,
@@ -461,9 +469,6 @@ app.on('ready', async () => {
       mainWindow.webContents.send(SET_DATABASE_CHANNEL, null);
     }
   });
-
-  // prompt when syncing a space
-  ipcMain.on(SHOW_SYNC_SPACE_PROMPT_CHANNEL, showSyncSpacePrompt(mainWindow));
 
   // called when syncing a space
   ipcMain.on(SYNC_SPACE_CHANNEL, syncSpace(mainWindow, db));

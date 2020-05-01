@@ -32,3 +32,51 @@ export const RADIX = 10;
 export const FILTER_ALL_SPACE_ID = 'defaultid';
 export const DEFAULT_AUTHENTICATION = false;
 export const AUTHENTICATED = 'authenticated';
+
+export const SYNC_CHANGES = {
+  ADDED: 'added',
+  REMOVED: 'removed',
+  MOVED: 'moved',
+  UPDATED: 'updated',
+};
+
+const DIFF_COLORS = {
+  [SYNC_CHANGES.ADDED]: '#ddffde',
+  [SYNC_CHANGES.REMOVED]: '#fddedb',
+  [SYNC_CHANGES.UPDATED]: '#f9edc5',
+  [SYNC_CHANGES.MOVED]: 'lightgrey',
+};
+
+export const DIFF_STYLES = {
+  [SYNC_CHANGES.UPDATED]: {
+    background: DIFF_COLORS[SYNC_CHANGES.UPDATED],
+  },
+  [SYNC_CHANGES.REMOVED]: {
+    background: DIFF_COLORS[SYNC_CHANGES.REMOVED],
+  },
+  [SYNC_CHANGES.ADDED]: {
+    background: DIFF_COLORS[SYNC_CHANGES.ADDED],
+  },
+  [SYNC_CHANGES.MOVED]: {
+    background: DIFF_COLORS[SYNC_CHANGES.MOVED],
+  },
+};
+
+export const SYNC_MODES = {
+  ADVANCED: 'advanced',
+  VISUAL: 'visual',
+};
+export const DEFAULT_SYNC_MODE = SYNC_MODES.VISUAL;
+export const SYNC_SPACE_PROPERTIES = [
+  'name',
+  'image',
+  'description',
+  'phases',
+  'items',
+];
+export const SYNC_PHASE_PROPERTIES = ['name', 'image', 'description', 'items'];
+
+// item property to keep when comparing them, id is kept during process
+export const SYNC_ITEM_PROPERTIES = ['name', 'description', 'content'];
+
+export const SECURITY_LOOP_THRESHOLD = 50;

@@ -56,6 +56,9 @@
     "Accept Synchronization": "Accept Synchronization",
     "Current Version": "Current Version",
     "Most Recent Online Version": "Most Recent Online Version",
-    "You are currently synchronizing a space. Either accept or cancel the synchronization. The synchronization is definitive and all user input will be deleted.": "You are currently synchronizing a space. Either accept or cancel the synchronization. The synchronization is definitive and all user input will be deleted."
+    "You are currently synchronizing a space. Either accept or cancel the synchronization. The synchronization is definitive and all user input will be deleted.": "You are currently synchronizing a space. Either accept or cancel the synchronization. The synchronization is definitive and all user input will be deleted.",
+    "Local Space Image": "Local Space Image",
+    "Remote Space Image": "Remote Space Image",
+    "No Item to Display": "No Item to Display"
   }
 }

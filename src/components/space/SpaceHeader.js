@@ -23,6 +23,7 @@ import {
   SPACE_TOOLBAR_ID,
   SPACE_SAVE_ICON_CLASS,
   SPACE_PREVIEW_ICON_CLASS,
+  DRAWER_BUTTON_ID,
 } from '../../config/selectors';
 
 class SpaceHeader extends Component {
@@ -153,6 +154,7 @@ class SpaceHeader extends Component {
       >
         <Toolbar id={SPACE_TOOLBAR_ID} disableGutters={!openDrawer}>
           <IconButton
+            id={DRAWER_BUTTON_ID}
             color="inherit"
             aria-label="Open Drawer"
             onClick={handleDrawerOpen}

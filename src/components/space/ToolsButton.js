@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Fab from '@material-ui/core/Fab';
 import { connect } from 'react-redux';
+import clsx from 'clsx';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import BuildIcon from '@material-ui/icons/Build';
 import CloseIcon from '@material-ui/icons/Close';
 import { closeTools, openTools } from '../../actions';
+import { TOOLS_BUTTON_CLASS } from '../../config/selectors';
 
 class ToolsButton extends Component {
   static styles = theme => ({
@@ -43,7 +45,7 @@ class ToolsButton extends Component {
       <Fab
         color="primary"
         aria-label={t('Settings')}
-        className={classes.fab}
+        className={clsx(classes.fab, TOOLS_BUTTON_CLASS)}
         onClick={open ? dispatchCloseTools : dispatchOpenTools}
       >
         {open ? <CloseIcon /> : <BuildIcon />}

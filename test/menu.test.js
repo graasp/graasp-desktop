@@ -22,7 +22,7 @@ import {
   DEVELOPER_MAIN_ID,
   SIGN_OUT_MENU_ITEM_ID,
   PHASE_MENU_LIST_ID,
-  PHASE_MENU_ITEM,
+  buildPhaseMenuItemId,
 } from '../src/config/selectors';
 import {
   LOAD_TAB_PAUSE,
@@ -52,7 +52,7 @@ const menuGoTo = async (client, menuItemId, elementToExpectId = null) => {
 
 export const menuGoToPhase = async (client, nb) => {
   await openDrawer(client);
-  await client.click(`#${PHASE_MENU_LIST_ID} li#${PHASE_MENU_ITEM}-${nb}`);
+  await client.click(`#${PHASE_MENU_LIST_ID} li#${buildPhaseMenuItemId(nb)}`);
   await client.pause(LOAD_PHASE_PAUSE);
 };
 

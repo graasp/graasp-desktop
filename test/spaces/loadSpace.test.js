@@ -15,7 +15,7 @@ import {
   SPACE_DELETE_BUTTON_CLASS,
   HOME_MAIN_ID,
   PHASE_MENU_LIST_ID,
-  PHASE_MENU_ITEM,
+  buildPhaseMenuItemId,
 } from '../../src/config/selectors';
 import {
   SPACE_ATOMIC_STRUCTURE,
@@ -40,7 +40,7 @@ import { USER_GRAASP } from '../fixtures/users';
 import { typeInTextInputApp } from '../apps/textInputApp';
 
 /* eslint-disable-next-line import/prefer-default-export */
-export const loadSpaceById = async (client, { space: { id } }, filepath) => {
+export const loadSpaceById = async (client, filepath, id) => {
   await menuGoToLoadSpace(client);
 
   // input space id
@@ -57,10 +57,12 @@ export const loadSpaceById = async (client, { space: { id } }, filepath) => {
   // go to space
   await menuGoToHome(client);
 
-  await client.click(`#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`);
+  if (id) {
+    await client.click(`#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`);
 
-  // this waiting time is longer to wait for tooltip to fade out
-  await client.pause(OPEN_SAVED_SPACE_PAUSE);
+    // this waiting time is longer to wait for tooltip to fade out
+    await client.pause(OPEN_SAVED_SPACE_PAUSE);
+  }
 };
 
 describe('Load Space Scenarios', function() {
@@ -102,8 +104,8 @@ describe('Load Space Scenarios', function() {
 
         await loadSpaceById(
           client,
-          SPACE_ATOMIC_STRUCTURE,
-          SPACE_ATOMIC_STRUCTURE_PATH
+          SPACE_ATOMIC_STRUCTURE_PATH,
+          SPACE_ATOMIC_STRUCTURE.space.id
         );
 
         await hasSavedSpaceLayout(client, SPACE_ATOMIC_STRUCTURE);
@@ -122,14 +124,7 @@ describe('Load Space Scenarios', function() {
         await visitAndSaveSpaceById(client, id);
 
         // load space
-        await loadSpaceById(
-          client,
-          SPACE_ATOMIC_STRUCTURE_WITH_CHANGES,
-          SPACE_ATOMIC_STRUCTURE_WITH_CHANGES_PATH
-        );
-
-        // go to space
-        await menuGoToHome(client);
+        await loadSpaceById(client, SPACE_ATOMIC_STRUCTURE_WITH_CHANGES_PATH);
 
         const savedSpacesHtml = await client.getHTML(`#${HOME_MAIN_ID}`);
         expect(savedSpacesHtml).to.not.include(
@@ -176,7 +171,7 @@ describe('Load Space Scenarios', function() {
       await client.pause(DELETE_SPACE_PAUSE);
 
       // load space
-      await loadSpaceById(client, SPACE_ATOMIC_STRUCTURE, filepath);
+      await loadSpaceById(client, filepath, SPACE_ATOMIC_STRUCTURE.space.id);
 
       // check content
       await hasSavedSpaceLayout(client, SPACE_ATOMIC_STRUCTURE);
@@ -204,7 +199,9 @@ describe('Load Space Scenarios', function() {
       await visitAndSaveSpaceById(client, id);
 
       // add user input
-      await client.click(`#${PHASE_MENU_LIST_ID} li#${PHASE_MENU_ITEM}-${0}`);
+      await client.click(
+        `#${PHASE_MENU_LIST_ID} li#${buildPhaseMenuItemId(0)}`
+      );
       await client.pause(LOAD_PHASE_PAUSE);
 
       // type in text input app
@@ -227,7 +224,7 @@ describe('Load Space Scenarios', function() {
       await client.pause(DELETE_SPACE_PAUSE);
 
       // load space
-      await loadSpaceById(client, SPACE_ATOMIC_STRUCTURE, filepath);
+      await loadSpaceById(client, filepath, SPACE_ATOMIC_STRUCTURE.space.id);
 
       // check content
       await hasSavedSpaceLayout(client, SPACE_ATOMIC_STRUCTURE, resources);

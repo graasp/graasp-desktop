@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
 import InfoIcon from '@material-ui/icons/Info';
 import Text from '../common/Text';
 import './PhaseItemDescription.css';
@@ -13,12 +14,15 @@ const style = {
   alignItems: 'center',
 };
 
-const PhaseItemDescription = ({ description }) => {
+const PhaseItemDescription = ({ description, className }) => {
   if (description && description !== '') {
     return (
       <div style={style}>
         <InfoIcon color="primary" />
-        <Text content={description} className="PhaseItemDescriptionText" />
+        <Text
+          content={description}
+          className={clsx('PhaseItemDescriptionText', className)}
+        />
       </div>
     );
   }
@@ -27,10 +31,12 @@ const PhaseItemDescription = ({ description }) => {
 
 PhaseItemDescription.propTypes = {
   description: PropTypes.string,
+  className: PropTypes.string,
 };
 
 PhaseItemDescription.defaultProps = {
   description: '',
+  className: null,
 };
 
 export default PhaseItemDescription;

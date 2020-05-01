@@ -33,7 +33,6 @@ module.exports = {
   PATCH_APP_INSTANCE_CHANNEL: 'app-instance:patch',
   GET_DATABASE_CHANNEL: 'developer:database:get',
   SET_DATABASE_CHANNEL: 'developer:database:set',
-  SHOW_SYNC_SPACE_PROMPT_CHANNEL: 'prompt:space:sync:show',
   RESPOND_SYNC_SPACE_PROMPT_CHANNEL: 'prompt:space:sync:respond',
   SYNC_SPACE_CHANNEL: 'space:sync',
   SYNCED_SPACE_CHANNEL: 'space:synced',
@@ -45,4 +44,6 @@ module.exports = {
   SIGN_IN_CHANNEL: 'auth:signin',
   SIGN_OUT_CHANNEL: 'auth:signout',
   IS_AUTHENTICATED_CHANNEL: 'auth:authenticated:get',
+  GET_SYNC_MODE_CHANNEL: 'sync:mode:get',
+  SET_SYNC_MODE_CHANNEL: 'sync:mode:set',
 };

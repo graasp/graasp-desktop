@@ -52,11 +52,7 @@ describe('Save User Input in a space', function() {
         const { id: textInputAppId } = phases[0].items[1];
 
         // load space with user input
-        await loadSpaceById(
-          client,
-          SPACE_ATOMIC_STRUCTURE,
-          SPACE_ATOMIC_STRUCTURE_PATH
-        );
+        await loadSpaceById(client, SPACE_ATOMIC_STRUCTURE_PATH, id);
 
         // go to orientation tab
         await menuGoToPhase(client, 0);
@@ -104,11 +100,7 @@ describe('Save User Input in a space', function() {
           // first user load space
           if (index === 0) {
             // load space with user input
-            await loadSpaceById(
-              client,
-              SPACE_ATOMIC_STRUCTURE,
-              SPACE_ATOMIC_STRUCTURE_PATH
-            );
+            await loadSpaceById(client, SPACE_ATOMIC_STRUCTURE_PATH, id);
           }
           // next users go to home
           // this should change if users don't share spaces

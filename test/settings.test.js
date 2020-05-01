@@ -18,12 +18,19 @@ import {
   DEVELOPER_MENU_ITEM_ID,
   SPACE_CARD_CLASS,
   SPACE_NOT_AVAILABLE_TEXT_CLASS,
+  SYNC_MODE_SWITCH_ID,
+  SPACE_SYNC_BUTTON_CLASS,
+  buildSpaceCardId,
+  SYNC_VISUAL_MAIN_ID,
+  SYNC_ADVANCED_MAIN_ID,
+  SYNC_CANCEL_BUTTON_ID,
 } from '../src/config/selectors';
 import {
   DEFAULT_GLOBAL_TIMEOUT,
   SETTINGS_LOAD_PAUSE,
   LOAD_SPACE_PAUSE,
   LOAD_TAB_PAUSE,
+  SYNC_OPEN_SCREEN_PAUSE,
 } from './constants';
 import {
   openDrawer,
@@ -37,10 +44,17 @@ import {
   DEFAULT_LANGUAGE,
   DEFAULT_GEOLOCATION_ENABLED,
   DEFAULT_DEVELOPER_MODE,
+  DEFAULT_SYNC_MODE,
+  SYNC_MODES,
 } from '../src/config/constants';
 import { userSignIn } from './userSignIn.test';
 import { USER_GRAASP, USER_ALICE, USER_BOB } from './fixtures/users';
 import { settingsPerUser } from './fixtures/settings';
+import { loadSpaceById } from './spaces/loadSpace.test';
+import {
+  SPACE_WITH_REMOVAL,
+  SPACE_WITH_REMOVAL_PATH,
+} from './fixtures/syncSpace';
 
 const changeLanguage = async (client, value) => {
   const lang = await client.getAttribute(
@@ -79,6 +93,22 @@ const toggleDeveloperMode = async (client, value) => {
   }
 };
 
+// eslint-disable-next-line import/prefer-default-export
+export const toggleSyncAdvancedMode = async (client, value) => {
+  const syncAdvancedModeSwitchSelector = `#${SYNC_MODE_SWITCH_ID} input`;
+  const syncAdvancedMode = await client.getAttribute(
+    syncAdvancedModeSwitchSelector,
+    'value'
+  );
+  const booleanToMode = JSON.parse(syncAdvancedMode)
+    ? SYNC_MODES.ADVANCED
+    : SYNC_MODES.VISUAL;
+  if (booleanToMode !== value) {
+    await client.click(syncAdvancedModeSwitchSelector);
+    await client.pause(SETTINGS_LOAD_PAUSE);
+  }
+};
+
 const isLanguageSetTo = async (client, value) => {
   const lang = await client.getAttribute(
     `#${LANGUAGE_SELECT_ID} input`,
@@ -101,6 +131,17 @@ const isDeveloperModeSetTo = async (client, value) => {
     'value'
   );
   expect(JSON.parse(developer)).to.equal(value);
+};
+
+const isSyncAdvancedModeSetTo = async (client, value) => {
+  const mode = await client.getAttribute(
+    `#${SYNC_MODE_SWITCH_ID} input`,
+    'value'
+  );
+  const booleanToMode = JSON.parse(mode)
+    ? SYNC_MODES.ADVANCED
+    : SYNC_MODES.VISUAL;
+  expect(booleanToMode).to.equal(value);
 };
 
 describe('Settings Scenarios', function() {
@@ -131,6 +172,8 @@ describe('Settings Scenarios', function() {
         await isGeolocationEnabledSetTo(client, DEFAULT_GEOLOCATION_ENABLED);
 
         await isDeveloperModeSetTo(client, DEFAULT_DEVELOPER_MODE);
+
+        await isSyncAdvancedModeSetTo(client, DEFAULT_SYNC_MODE);
       })
     );
 
@@ -229,6 +272,42 @@ describe('Settings Scenarios', function() {
         );
       })
     );
+
+    it(
+      'Enable Sync Advanced Mode displays Advanced Sync',
+      mochaAsync(async () => {
+        const { client } = app;
+        const {
+          space: { id },
+        } = SPACE_WITH_REMOVAL;
+
+        // init with a modified space
+        await loadSpaceById(client, SPACE_WITH_REMOVAL_PATH);
+
+        await client.click(
+          `#${buildSpaceCardId(id)} .${SPACE_SYNC_BUTTON_CLASS}`
+        );
+        await client.pause(SYNC_OPEN_SCREEN_PAUSE);
+
+        await expectElementToExist(client, `#${SYNC_VISUAL_MAIN_ID}`);
+
+        // cancel sync and go to settings to enable sync advanced mode
+        await client.click(`#${SYNC_CANCEL_BUTTON_ID}`);
+        await client.pause(LOAD_TAB_PAUSE);
+        await menuGoToSettings(client);
+        await toggleSyncAdvancedMode(client, true);
+
+        // sync mode should be advanced
+        await menuGoToHome(client);
+
+        await client.click(
+          `#${buildSpaceCardId(id)} .${SPACE_SYNC_BUTTON_CLASS}`
+        );
+        await client.pause(SYNC_OPEN_SCREEN_PAUSE);
+
+        await expectElementToExist(client, `#${SYNC_ADVANCED_MAIN_ID}`);
+      })
+    );
   });
 
   describe('Use multiple users', function() {
@@ -244,9 +323,12 @@ describe('Settings Scenarios', function() {
         const { client } = app;
         const users = [USER_GRAASP, USER_ALICE, USER_BOB];
         for (const user of users) {
-          const { lang, developerMode, geolocationEnabled } = settingsPerUser[
-            user.name
-          ];
+          const {
+            lang,
+            developerMode,
+            geolocationEnabled,
+            syncMode,
+          } = settingsPerUser[user.name];
 
           await userSignIn(client, user);
 
@@ -256,6 +338,7 @@ describe('Settings Scenarios', function() {
           await changeLanguage(client, lang);
           await toggleDeveloperMode(client, developerMode);
           await toggleGeolocationEnabled(client, geolocationEnabled);
+          await toggleSyncAdvancedMode(client, syncMode);
 
           await menuGoToHome(client);
 
@@ -264,15 +347,19 @@ describe('Settings Scenarios', function() {
           await isLanguageSetTo(client, lang);
           await isDeveloperModeSetTo(client, developerMode);
           await isGeolocationEnabledSetTo(client, geolocationEnabled);
+          await isSyncAdvancedModeSetTo(client, syncMode);
 
           await menuGoToSignOut(client);
         }
 
         // check settings are saved after logout
         for (const user of users) {
-          const { lang, developerMode, geolocationEnabled } = settingsPerUser[
-            user.name
-          ];
+          const {
+            lang,
+            developerMode,
+            geolocationEnabled,
+            syncMode,
+          } = settingsPerUser[user.name];
 
           await userSignIn(client, user);
 
@@ -281,6 +368,7 @@ describe('Settings Scenarios', function() {
           await isLanguageSetTo(client, lang);
           await isDeveloperModeSetTo(client, developerMode);
           await isGeolocationEnabledSetTo(client, geolocationEnabled);
+          await isSyncAdvancedModeSetTo(client, syncMode);
 
           await menuGoToSignOut(client);
         }

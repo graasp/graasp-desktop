@@ -20,6 +20,10 @@ import {
   SET_GEOLOCATION_ENABLED_SUCCEEDED,
   FLAG_SETTING_GEOLOCATION_ENABLED,
   FLAG_GETTING_GEOLOCATION_ENABLED,
+  FLAG_SETTING_SYNC_MODE,
+  FLAG_GETTING_SYNC_MODE,
+  SET_SYNC_MODE_SUCCEEDED,
+  GET_SYNC_MODE_SUCCEEDED,
 } from '../types';
 import { updateActivityList } from './common';
 import {
@@ -27,12 +31,14 @@ import {
   DEFAULT_DEVELOPER_MODE,
   DEFAULT_LANGUAGE,
   DEFAULT_GEOLOCATION_ENABLED,
+  DEFAULT_SYNC_MODE,
 } from '../config/constants';
 
 export const DEFAULT_USER_SETTINGS = {
   lang: DEFAULT_LANGUAGE,
   developerMode: DEFAULT_DEVELOPER_MODE,
   geolocationEnabled: DEFAULT_GEOLOCATION_ENABLED,
+  syncMode: DEFAULT_SYNC_MODE,
 };
 
 export const DEFAULT_USER = {
@@ -56,6 +62,8 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case FLAG_GETTING_USER_FOLDER:
     case FLAG_SETTING_DEVELOPER_MODE:
     case FLAG_GETTING_DEVELOPER_MODE:
+    case FLAG_SETTING_SYNC_MODE:
+    case FLAG_GETTING_SYNC_MODE:
     case FLAG_SETTING_GEOLOCATION_ENABLED:
     case FLAG_GETTING_GEOLOCATION_ENABLED:
     case FLAG_SIGNING_IN:
@@ -90,6 +98,9 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case GET_GEOLOCATION_ENABLED_SUCCEEDED:
     case SET_GEOLOCATION_ENABLED_SUCCEEDED:
       return state.setIn(['user', 'settings', 'geolocationEnabled'], payload);
+    case SET_SYNC_MODE_SUCCEEDED:
+    case GET_SYNC_MODE_SUCCEEDED:
+      return state.setIn(['user', 'settings', 'syncMode'], payload);
     default:
       return state;
   }

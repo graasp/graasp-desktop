@@ -15,7 +15,7 @@ import {
   VISIT_INPUT_ID,
   VISIT_BUTTON_ID,
   PHASE_DESCRIPTION_ID,
-  PHASE_MENU_ITEM,
+  buildPhaseMenuItemId,
   BANNER_WARNING_PREVIEW_ID,
   SPACE_EXPORT_BUTTON_CLASS,
   SPACE_CLEAR_BUTTON_CLASS,
@@ -25,6 +25,8 @@ import {
   SPACE_DESCRIPTION_EXPAND_BUTTON_CLASS,
   buildSpaceCardDescriptionId,
   buildPhaseAppName,
+  TOOLS_BUTTON_CLASS,
+  TOOLS_CONTENT_PANE_ID,
 } from '../../src/config/selectors';
 import { hasMath } from '../../src/utils/math';
 import { SPACE_ATOMIC_STRUCTURE, SPACE_APOLLO_11 } from '../fixtures/spaces';
@@ -35,12 +37,23 @@ import {
   TOOLTIP_FADE_OUT_PAUSE,
   DEFAULT_GLOBAL_TIMEOUT,
   LOAD_PHASE_PAUSE,
+  OPEN_TOOLS_PAUSE,
 } from '../constants';
 import { userSignIn } from '../userSignIn.test';
 import { USER_GRAASP } from '../fixtures/users';
 
 const PREVIEW = 'preview';
 const SAVED = 'saved';
+
+export const openTools = async client => {
+  const isToolsContentVisible = await client.isVisible(
+    `#${TOOLS_CONTENT_PANE_ID}`
+  );
+  if (!isToolsContentVisible) {
+    await client.click(`.${TOOLS_BUTTON_CLASS}`);
+    await client.pause(OPEN_TOOLS_PAUSE);
+  }
+};
 
 const testTextOfElement = async (client, selector, text) => {
   if (hasMath(text)) {
@@ -220,6 +233,8 @@ const hasPhaseLayout = async (
     const element = await client.element(itemSelector);
     expect(element.value).to.exist;
 
+    const urlForMode = mode === PREVIEW ? url : asset;
+
     // @TODO use constants for category types
     // to reuse constants, use es6 for tests
     switch (category) {
@@ -231,13 +246,13 @@ const hasPhaseLayout = async (
           }
           case 'video/quicktime': {
             const html = await client.getHTML(`${itemSelector} video`);
-            expect(html).to.include(url);
+            expect(html).to.include(urlForMode);
             break;
           }
           case 'image/png':
           case 'image/jpeg': {
             const html = await client.getHTML(`${itemSelector} img`);
-            expect(html).to.include(url);
+            expect(html).to.include(urlForMode);
             break;
           }
           default: {
@@ -292,7 +307,7 @@ const checkPhasesLayout = async (client, phases, mode, resources = []) => {
     // phase name
     expect(text).to.equal(phases[idx].name);
 
-    const liSelector = `#${PHASE_MENU_LIST_ID} li#${PHASE_MENU_ITEM}-${idx}`;
+    const liSelector = `#${PHASE_MENU_LIST_ID} li#${buildPhaseMenuItemId(idx)}`;
 
     // go to phase
     await client.click(liSelector);

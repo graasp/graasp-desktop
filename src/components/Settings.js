@@ -11,6 +11,7 @@ import DeveloperSwitch from './common/DeveloperSwitch';
 import GeolocationControl from './common/GeolocationControl';
 import Main from './common/Main';
 import { SETTINGS_MAIN_ID } from '../config/selectors';
+import SyncAdvancedSwitch from './space/sync/SyncAdvancedSwitch';
 
 // eslint-disable-next-line react/prefer-stateless-function
 export class Settings extends Component {
@@ -42,6 +43,7 @@ export class Settings extends Component {
             <LanguageSelect />
             <DeveloperSwitch />
             <GeolocationControl />
+            <SyncAdvancedSwitch />
           </FormGroup>
         </div>
       </Main>

@@ -1,81 +1,71 @@
 import React, { Component } from 'react';
-import Qs from 'qs';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+import { Map } from 'immutable';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import IconButton from '@material-ui/core/IconButton/IconButton';
-import SyncIcon from '@material-ui/icons/Sync';
-import Tooltip from '@material-ui/core/Tooltip';
-import ClearIcon from '@material-ui/icons/Clear';
-import DoneIcon from '@material-ui/icons/Done';
-import clsx from 'clsx';
-import { withTranslation } from 'react-i18next';
 import CssBaseline from '@material-ui/core/CssBaseline/CssBaseline';
 import AppBar from '@material-ui/core/AppBar/AppBar';
-import classNames from 'classnames';
 import Toolbar from '@material-ui/core/Toolbar/Toolbar';
-import ReactDiffViewer from 'react-diff-viewer';
-import { withStyles } from '@material-ui/core';
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import Qs from 'qs';
+import { withTranslation } from 'react-i18next';
 import { withRouter } from 'react-router';
-import Banner from '../common/Banner';
-import Loader from '../common/Loader';
+import Button from '@material-ui/core//Button';
+import { withStyles } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 import {
-  clearSpacesForSync,
+  getSyncMode,
   getLocalSpaceForSync,
   getRemoteSpaceForSync,
-  syncSpace,
 } from '../../actions';
-import './SpaceScreen.css';
-import Styles from '../../Styles';
-import { HOME_PATH } from '../../config/paths';
+import SyncVisualScreen from './SyncVisualScreen';
+import SyncAdvancedScreen from './SyncAdvancedScreen';
+import { isSpaceUpToDate } from '../../utils/syncSpace';
 import SpaceNotFound from './SpaceNotFound';
+import Main from '../common/Main';
+import { HOME_PATH, VISIT_PATH } from '../../config/paths';
+import Styles from '../../Styles';
+import Loader from '../common/Loader';
+import { DEFAULT_SYNC_MODE, SYNC_MODES } from '../../config/constants';
 
-const SELECTED_SPACE_PROPERTIES = ['name', 'image', 'description', 'phases'];
-
-const diffEditorStyles = {
-  variables: {
-    highlightBackground: '#fefed5',
-    highlightGutterBackground: '#ffcd3c',
+const styles = theme => ({
+  ...Styles(theme),
+  centerText: {
+    textAlign: 'center',
   },
-  line: {
-    padding: '10px 2px',
-    wordBreak: 'break-word',
-    '&:hover': {
-      background: '#a26ea1',
-    },
-  },
-  titleBlock: {
-    pre: {
-      fontSize: '16px',
-      fontWeight: 'bold',
-      fontFamily: 'arial',
-    },
-  },
-};
+});
 
 class SyncScreen extends Component {
-  state = {
-    openDrawer: false,
-  };
-
   static propTypes = {
-    localSpace: ImmutablePropTypes.contains({
-      id: PropTypes.string.isRequired,
-      description: PropTypes.string,
-      name: PropTypes.string.isRequired,
-    }).isRequired,
-    remoteSpace: ImmutablePropTypes.contains({
-      id: PropTypes.string,
-      description: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-    }).isRequired,
+    dispatchGetSyncMode: PropTypes.func.isRequired,
+    activity: PropTypes.bool,
+    mode: PropTypes.oneOf(Object.values(SYNC_MODES)),
     dispatchGetLocalSpace: PropTypes.func.isRequired,
     dispatchGetRemoteSpace: PropTypes.func.isRequired,
-    dispatchClearSpaces: PropTypes.func.isRequired,
-    dispatchSync: PropTypes.func.isRequired,
-    activity: PropTypes.bool.isRequired,
-    deleted: PropTypes.bool.isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+      }),
+    }).isRequired,
+    location: PropTypes.shape({
+      search: PropTypes.string.isRequired,
+    }).isRequired,
+    localSpace: ImmutablePropTypes.contains({
+      id: PropTypes.string,
+      description: PropTypes.string,
+      name: PropTypes.string,
+      deleted: PropTypes.bool,
+    }),
+    remoteSpace: ImmutablePropTypes.contains({
+      id: PropTypes.string,
+      description: PropTypes.string,
+      name: PropTypes.string,
+    }),
+    t: PropTypes.func.isRequired,
+    history: PropTypes.shape({
+      goBack: PropTypes.func.isRequired,
+      push: PropTypes.func.isRequired,
+      replace: PropTypes.func.isRequired,
+    }).isRequired,
     classes: PropTypes.shape({
       root: PropTypes.string.isRequired,
       appBar: PropTypes.string.isRequired,
@@ -88,33 +78,26 @@ class SyncScreen extends Component {
       contentShift: PropTypes.string.isRequired,
       hide: PropTypes.string.isRequired,
       button: PropTypes.string.isRequired,
+      centerText: PropTypes.string.isRequired,
     }).isRequired,
-    theme: PropTypes.shape({ direction: PropTypes.string.isRequired })
-      .isRequired,
-    match: PropTypes.shape({
-      params: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-      }),
-    }).isRequired,
-    location: PropTypes.shape({
-      search: PropTypes.string.isRequired,
-    }).isRequired,
-    history: PropTypes.shape({
-      goBack: PropTypes.func.isRequired,
-      push: PropTypes.func.isRequired,
-      replace: PropTypes.func.isRequired,
-    }).isRequired,
-    t: PropTypes.func.isRequired,
   };
 
-  async componentDidMount() {
+  static defaultProps = {
+    mode: DEFAULT_SYNC_MODE,
+    activity: false,
+    localSpace: Map(),
+    remoteSpace: Map(),
+  };
+
+  componentDidMount() {
     const {
+      dispatchGetSyncMode,
+      dispatchGetLocalSpace,
+      dispatchGetRemoteSpace,
       match: {
         params: { id },
       },
       location: { search },
-      dispatchGetLocalSpace,
-      dispatchGetRemoteSpace,
     } = this.props;
 
     // tell action creator if this space has already been saved
@@ -123,86 +106,24 @@ class SyncScreen extends Component {
 
     // get remote space
     dispatchGetRemoteSpace({ id });
+
+    dispatchGetSyncMode();
   }
-
-  componentDidUpdate() {
-    const {
-      deleted,
-      history: { replace },
-    } = this.props;
-    // redirect to home if space is deleted
-    if (deleted) {
-      replace(HOME_PATH);
-    }
-  }
-
-  componentWillUnmount() {
-    const { dispatchClearSpaces } = this.props;
-    dispatchClearSpaces();
-  }
-
-  handleCancel = () => {
-    const {
-      history: { goBack },
-    } = this.props;
-
-    // return to previous screen
-    goBack();
-  };
-
-  handleSync = () => {
-    const {
-      localSpace: { id },
-      dispatchSync,
-      history: { push },
-    } = this.props;
-    dispatchSync({ id });
-
-    // redirect to space
-    push(`/space/${id}`);
-  };
-
-  renderCancelButton = () => {
-    const { t, classes } = this.props;
-    return (
-      <Tooltip title={t('Cancel Synchronization')}>
-        <IconButton
-          color="inherit"
-          className={clsx(classes.button)}
-          onClick={this.handleCancel}
-        >
-          <ClearIcon />
-        </IconButton>
-      </Tooltip>
-    );
-  };
-
-  renderDoneButton = () => {
-    const { t, classes } = this.props;
-    return (
-      <Tooltip title={t('Accept Synchronization')}>
-        <IconButton
-          color="inherit"
-          className={clsx(classes.button)}
-          onClick={this.handleSync}
-        >
-          <DoneIcon />
-        </IconButton>
-      </Tooltip>
-    );
-  };
 
   render() {
-    const { localSpace, remoteSpace, activity, classes, t } = this.props;
-    const { name } = localSpace;
-    const { openDrawer } = this.state;
-
-    const filteredSpace = _.pick(localSpace, SELECTED_SPACE_PROPERTIES);
-    const filteredRemoteSpace = _.pick(remoteSpace, SELECTED_SPACE_PROPERTIES);
+    const {
+      mode,
+      activity,
+      localSpace,
+      remoteSpace,
+      t,
+      classes,
+      history: { replace },
+    } = this.props;
 
     if (activity) {
       return (
-        <div className={classNames(classes.root, 'SpaceScreen')}>
+        <div className={classes.root}>
           <CssBaseline />
           <AppBar position="fixed">
             <Toolbar />
@@ -214,76 +135,73 @@ class SyncScreen extends Component {
       );
     }
 
-    if (
-      !localSpace ||
-      _.isEmpty(localSpace) ||
-      !remoteSpace ||
-      _.isEmpty(remoteSpace)
-    ) {
+    if (localSpace.isEmpty() || remoteSpace.isEmpty()) {
       return <SpaceNotFound />;
     }
 
-    return (
-      <>
-        <AppBar
-          position="fixed"
-          className={classNames(classes.appBar, {
-            [classes.appBarShift]: openDrawer,
-          })}
-        >
-          <Toolbar disableGutters={!openDrawer}>
-            <div
-              color="inherit"
-              className={classNames(
-                classes.menuButton,
-                openDrawer && classes.hide
-              )}
+    const mutableLocalSpace = localSpace.toJS();
+    const mutableRemoteSpace = remoteSpace.toJS();
+
+    // if the space contains no change
+    if (isSpaceUpToDate(mutableLocalSpace, mutableRemoteSpace)) {
+      return (
+        <Main fullScreen>
+          <div className={classes.centerText}>
+            <Typography align="center" variant="h5">
+              {t('This Space is already up to date')}
+            </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              onClick={() => replace(HOME_PATH)}
             >
-              <SyncIcon />
-            </div>
-            {`${t('Synchronization')}: ${name}`}
-            <span style={{ position: 'absolute', right: 20 }}>
-              {this.renderDoneButton()}
-              {this.renderCancelButton()}
-            </span>
-          </Toolbar>
-        </AppBar>
+              {t('Home')}
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              onClick={() => replace(VISIT_PATH)}
+            >
+              {t('Visit Another Space')}
+            </Button>
+          </div>
+        </Main>
+      );
+    }
 
-        <div className={classes.drawerHeader} />
-
-        <br />
-
-        <Banner
-          text={t(
-            'You are currently synchronizing a space. Either accept or cancel the synchronization. The synchronization is definitive and all user input will be deleted.'
-          )}
-          type="error"
-        />
-
-        <ReactDiffViewer
-          styles={diffEditorStyles}
-          oldValue={JSON.stringify(filteredSpace, null, '  ')}
-          newValue={JSON.stringify(filteredRemoteSpace, null, '  ')}
-          splitView
-          leftTitle={t('Current Version')}
-          rightTitle={t('Most Recent Online Version')}
-        />
-      </>
-    );
+    switch (mode) {
+      case SYNC_MODES.ADVANCED:
+        return (
+          <SyncAdvancedScreen
+            localSpace={mutableLocalSpace}
+            remoteSpace={mutableRemoteSpace}
+          />
+        );
+      case SYNC_MODES.VISUAL:
+      default:
+        return (
+          <SyncVisualScreen
+            localSpace={mutableLocalSpace}
+            remoteSpace={mutableRemoteSpace}
+          />
+        );
+    }
   }
 }
 
-const mapStateToProps = ({ syncSpace: syncSpaceReducer }) => ({
-  localSpace: syncSpaceReducer.get('localSpace').toJS(),
-  remoteSpace: syncSpaceReducer.get('remoteSpace').toJS(),
+const mapStateToProps = ({ authentication, syncSpace: syncSpaceReducer }) => ({
+  mode: authentication.getIn(['user', 'settings', 'syncMode']),
   activity: Boolean(syncSpaceReducer.getIn(['activity']).size),
+  localSpace: syncSpaceReducer.get('localSpace'),
+  remoteSpace: syncSpaceReducer.get('remoteSpace'),
 });
 
 const mapDispatchToProps = {
+  dispatchGetSyncMode: getSyncMode,
   dispatchGetLocalSpace: getLocalSpaceForSync,
   dispatchGetRemoteSpace: getRemoteSpaceForSync,
-  dispatchClearSpaces: clearSpacesForSync,
-  dispatchSync: syncSpace,
 };
 
 const ConnectedComponent = connect(
@@ -291,7 +209,7 @@ const ConnectedComponent = connect(
   mapDispatchToProps
 )(SyncScreen);
 
-const StyledComponent = withStyles(Styles, { withTheme: true })(
+const StyledComponent = withStyles(styles, { withTheme: true })(
   ConnectedComponent
 );
 

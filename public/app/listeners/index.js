@@ -3,7 +3,6 @@ const saveSpace = require('./saveSpace');
 const getSpace = require('./getSpace');
 const getSpaces = require('./getSpaces');
 const deleteSpace = require('./deleteSpace');
-const showSyncSpacePrompt = require('./showSyncSpacePrompt');
 const syncSpace = require('./syncSpace');
 const exportSpace = require('./exportSpace');
 const getGeolocationEnabled = require('./getGeolocationEnabled');
@@ -16,6 +15,8 @@ const setLanguage = require('./setLanguage');
 const getLanguage = require('./getLanguage');
 const getDeveloperMode = require('./getDeveloperMode');
 const setDeveloperMode = require('./setDeveloperMode');
+const getSyncMode = require('./getSyncMode');
+const setSyncMode = require('./setSyncMode');
 const clearUserInput = require('./clearUserInput');
 const showClearUserInputPrompt = require('./showClearUserInputPrompt');
 const postAction = require('./postAction');
@@ -32,7 +33,6 @@ module.exports = {
   saveSpace,
   getSpace,
   getSpaces,
-  showSyncSpacePrompt,
   syncSpace,
   deleteSpace,
   exportSpace,
@@ -46,6 +46,8 @@ module.exports = {
   getLanguage,
   getDeveloperMode,
   setDeveloperMode,
+  getSyncMode,
+  setSyncMode,
   clearUserInput,
   showClearUserInputPrompt,
   postAction,
