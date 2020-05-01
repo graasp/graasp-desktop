@@ -218,6 +218,8 @@ export const createDiffElements = (
   const blankObj = {};
 
   let securityLoopNb = 0;
+  let securityLoopLocalNb = 0;
+  let securityLoopRemoteNb = 0;
 
   let localObj = localObjects.shift();
   let remoteObj = remoteObjects.shift();
@@ -230,6 +232,14 @@ export const createDiffElements = (
     ) {
       finalObjects.push([localObj, blankObj]);
       localObj = localObjects.shift();
+
+      // security for infinite loop
+      securityLoopLocalNb += 1;
+      if (securityLoopLocalNb > SECURITY_LOOP_THRESHOLD) {
+        throw new Error(
+          'The syncing diff process stopped because it was in an infinite loop.'
+        );
+      }
     }
 
     // add blank object for added/moved remote elements
@@ -239,6 +249,14 @@ export const createDiffElements = (
     ) {
       finalObjects.push([blankObj, remoteObj]);
       remoteObj = remoteObjects.shift();
+
+      // security for infinite loop
+      securityLoopRemoteNb += 1;
+      if (securityLoopRemoteNb > SECURITY_LOOP_THRESHOLD) {
+        throw new Error(
+          'The syncing diff process stopped because it was in an infinite loop.'
+        );
+      }
     }
 
     // when local and remote ids match, it is either updated or not changed

@@ -70,6 +70,8 @@ const styles = theme => ({
   syncWrapper: {
     padding: '0 20px',
 
+    // for every two elements, we add a left border
+    // this simulates two columns from grid item elements
     [`& .${SYNC_ITEM_CLASS}:nth-child(2n)`]: {
       borderLeft: '1px solid black',
     },
@@ -173,7 +175,6 @@ class SyncScreen extends Component {
               },
             };
           });
-        // eslint-disable-next-line react/no-did-update-set-state
         this.setState({ syncPhases });
       } catch (e) {
         toastr.error(ERROR_MESSAGE_HEADER, ERROR_SYNCING_MESSAGE);
@@ -340,20 +341,24 @@ class SyncScreen extends Component {
     const { classes } = this.props;
     const { selected } = this.state;
 
-    const hasUpdate =
+    const hasChange =
+      // detect whether there is a change in phase description
       Object.values(diffDescription).includes(true) ||
       diffItems
+        // merge length of local and remote changes for each item
         .map(
           ([{ changes: lChanges = [] }, { changes: rChanges = [] }]) =>
             lChanges.length + rChanges.length
         )
+        // return whether one of the element has a change
         .some(nbChange => nbChange > 0);
 
     return (
       <MenuItem
         className={clsx({
           [classes[REMOVED]]: diffName[REMOVED],
-          [classes[UPDATED]]: hasUpdate,
+          // the menuitem is set as updated if one of its corresponding items has changed
+          [classes[UPDATED]]: hasChange,
           [classes[ADDED]]: diffName[ADDED],
         })}
         onClick={() => this.handlePhaseClicked(index)}
@@ -362,7 +367,7 @@ class SyncScreen extends Component {
         id={buildPhaseMenuItemId(index)}
       >
         <ListItemIcon>
-          {hasUpdate ? <NewReleaseIcon /> : <ChevronRightIcon />}
+          {hasChange ? <NewReleaseIcon /> : <ChevronRightIcon />}
         </ListItemIcon>
 
         <ListItemText>
