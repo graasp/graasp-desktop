@@ -56,7 +56,12 @@ export const SPACE_NOT_AVAILABLE_TEXT_CLASS = 'noSpaceAvailableText';
 
 export const LOAD_BROWSE_BUTTON_ID = 'loadBrowseButton';
 export const LOAD_INPUT_ID = 'loadInput';
+export const LOAD_SUBMIT_BUTTON_ID = 'loadSubmitButton';
 export const LOAD_LOAD_BUTTON_ID = 'loadLoadButton';
+export const LOAD_BACK_BUTTON_ID = 'loadCancelButton';
+
+export const EXPORT_SPACE_BUTTON_ID = 'exportSpaceButton';
+export const EXPORT_SPACE_BACK_BUTTON_ID = 'exportSpaceBackButton';
 
 export const LANGUAGE_SELECT_ID = 'settingsLanguageSelect';
 export const DEVELOPER_SWITCH_ID = 'settingsDeveloperSwitch';

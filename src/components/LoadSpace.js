@@ -25,7 +25,7 @@ import {
 import {
   LOAD_MAIN_ID,
   LOAD_BROWSE_BUTTON_ID,
-  LOAD_LOAD_BUTTON_ID,
+  LOAD_SUBMIT_BUTTON_ID,
   LOAD_INPUT_ID,
 } from '../config/selectors';
 import { LOAD_SELECTION_SPACE_PATH } from '../config/paths';
@@ -181,14 +181,14 @@ class LoadSpace extends Component {
             type="text"
           />
           <Button
-            id={LOAD_LOAD_BUTTON_ID}
+            id={LOAD_SUBMIT_BUTTON_ID}
             variant="contained"
             onClick={this.handleLoad}
             color="primary"
             className={classes.button}
             disabled={!fileLocation.endsWith('.zip')}
           >
-            {t('Load')}
+            {t('Submit')}
           </Button>
         </FormControl>
       </Main>

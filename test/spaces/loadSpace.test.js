@@ -9,13 +9,14 @@ import { menuGoToLoadSpace, menuGoToSavedSpaces } from '../menu.test';
 import {
   buildSpaceCardId,
   SPACE_CARD_LINK_CLASS,
-  LOAD_LOAD_BUTTON_ID,
+  LOAD_SUBMIT_BUTTON_ID,
   SPACE_EXPORT_BUTTON_CLASS,
   LOAD_INPUT_ID,
   SPACE_DELETE_BUTTON_CLASS,
   PHASE_MENU_LIST_ID,
   buildPhaseMenuItemId,
   SAVED_SPACES_MAIN_ID,
+  LOAD_LOAD_BUTTON_ID,
 } from '../../src/config/selectors';
 import {
   SPACE_ATOMIC_STRUCTURE,
@@ -28,6 +29,7 @@ import {
   TOOLTIP_FADE_OUT_PAUSE,
   INPUT_TYPE_PAUSE,
   LOAD_SPACE_PAUSE,
+  LOAD_SELECTION_SPACE_PAUSE,
   EXPORT_SPACE_PAUSE,
   EXPORT_FILEPATH,
   DELETE_SPACE_PAUSE,
@@ -49,6 +51,11 @@ export const loadFilepath = async (client, filepath) => {
 
   const value = await client.getValue(loadInput);
   expect(value).to.equal(absolutePath);
+
+  await client.click(`#${LOAD_SUBMIT_BUTTON_ID}`);
+  await client.pause(LOAD_SELECTION_SPACE_PAUSE);
+
+  // @TODO check checkboxes
 
   await client.click(`#${LOAD_LOAD_BUTTON_ID}`);
   await client.pause(LOAD_SPACE_PAUSE);

@@ -30,6 +30,10 @@ import {
   ERROR_STUDENT_FORBIDDEN_MESSAGE,
   UNEXPECTED_ERROR_MESSAGE,
 } from '../../../config/messages';
+import {
+  LOAD_LOAD_BUTTON_ID,
+  LOAD_BACK_BUTTON_ID,
+} from '../../../config/selectors';
 
 const styles = theme => ({
   ...Styles(theme),
@@ -283,6 +287,7 @@ class LoadSelectionScreen extends Component {
           <br />
           <div className={classes.buttonGroup}>
             <Button
+              id={LOAD_BACK_BUTTON_ID}
               variant="contained"
               color="primary"
               className={clsx(classes.button, classes.submitButton)}
@@ -291,6 +296,7 @@ class LoadSelectionScreen extends Component {
               {t('Back')}
             </Button>
             <Button
+              id={LOAD_LOAD_BUTTON_ID}
               variant="contained"
               color="primary"
               className={clsx(classes.button, classes.submitButton)}

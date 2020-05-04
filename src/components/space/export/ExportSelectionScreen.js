@@ -21,6 +21,10 @@ import Styles from '../../../Styles';
 import Loader from '../../common/Loader';
 import Main from '../../common/Main';
 import SpaceNotFound from '../SpaceNotFound';
+import {
+  EXPORT_SPACE_BUTTON_ID,
+  EXPORT_SPACE_BACK_BUTTON_ID,
+} from '../../../config/selectors';
 
 const styles = theme => ({
   ...Styles(theme),
@@ -232,6 +236,7 @@ class ExportSelectionScreen extends Component {
           <br />
           <div className={classes.buttonGroup}>
             <Button
+              id={EXPORT_SPACE_BACK_BUTTON_ID}
               variant="contained"
               color="primary"
               className={clsx(classes.button, classes.submitButton)}
@@ -240,6 +245,7 @@ class ExportSelectionScreen extends Component {
               {t('Back')}
             </Button>
             <Button
+              id={EXPORT_SPACE_BUTTON_ID}
               variant="contained"
               color="primary"
               className={clsx(classes.button, classes.submitButton)}

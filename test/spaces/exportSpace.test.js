@@ -9,6 +9,7 @@ import { menuGoToSavedSpaces } from '../menu.test';
 import {
   buildSpaceCardId,
   SPACE_EXPORT_BUTTON_CLASS,
+  EXPORT_SPACE_BUTTON_ID,
 } from '../../src/config/selectors';
 import { SPACE_ATOMIC_STRUCTURE } from '../fixtures/spaces';
 import { visitAndSaveSpaceById } from './visitSpace.test';
@@ -16,6 +17,7 @@ import {
   EXPORT_SPACE_PAUSE,
   EXPORT_FILEPATH,
   DEFAULT_GLOBAL_TIMEOUT,
+  EXPORT_SELECTION_SPACE_PAUSE,
 } from '../constants';
 import { userSignIn } from '../userSignIn.test';
 import { USER_GRAASP } from '../fixtures/users';
@@ -28,7 +30,7 @@ describe('Export a space', function() {
     return closeApplication(app);
   });
 
-  it(
+  it.only(
     'Exporting from toolbar saves space in local computer',
     mochaAsync(async () => {
       const {
@@ -46,6 +48,11 @@ describe('Export a space', function() {
       await visitAndSaveSpaceById(client, id);
 
       await client.click(`.${SPACE_EXPORT_BUTTON_CLASS}`);
+      await client.pause(EXPORT_SELECTION_SPACE_PAUSE);
+
+      // @TODO checkboxes
+
+      await client.click(`#${EXPORT_SPACE_BUTTON_ID}`);
       await client.pause(EXPORT_SPACE_PAUSE);
 
       // check exported files locally
