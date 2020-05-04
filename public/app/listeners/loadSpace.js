@@ -21,9 +21,38 @@ const {
   APP_INSTANCE_RESOURCES_COLLECTION,
   ACTIONS_COLLECTION,
 } = require('../db');
+const { deleteSpaceAndResources } = require('./deleteSpace');
 
 // use promisified fs
 const fsPromises = fs.promises;
+
+// rename prevPath to newPath if prevPath exists
+const renameSpaceFolder = async (prevPath, newPath) => {
+  // check destination path is available
+  const IsNewPathAvailable = await isFileAvailable(newPath);
+  if (IsNewPathAvailable) {
+    logger.error(
+      `unable to rename temporary folder: ${newPath} already exists`
+    );
+    return false;
+  }
+
+  // check prev path is available
+  const isPrevPathAvailable = isFileAvailable(prevPath);
+  if (!isPrevPathAvailable) {
+    logger.error(`temporary folder ${prevPath} does not exist`);
+    return isPrevPathAvailable;
+  }
+
+  // we need to wrap this operation to avoid errors in windows
+  performFileSystemOperation(fs.renameSync)(prevPath, newPath);
+  const wasRenamed = await isFileAvailable(newPath);
+  if (!wasRenamed) {
+    logger.error('unable to rename previous space folder');
+  }
+
+  return wasRenamed;
+};
 
 const extractFileToLoadSpace = (mainWindow, db) => async (
   event,
@@ -98,7 +127,7 @@ const loadSpace = (mainWindow, db) => async (
   }
 ) => {
   try {
-    // space must be always defined
+    // space should always be defined
     if (_.isEmpty(space)) {
       logger.debug('try to load undefined space');
       return mainWindow.webContents.send(LOADED_SPACE_CHANNEL, ERROR_GENERAL);
@@ -108,24 +137,39 @@ const loadSpace = (mainWindow, db) => async (
     if (isSpaceSelected) {
       const { id } = space;
       const finalPath = `${VAR_FOLDER}/${id}`;
+      const tmpPath = `${VAR_FOLDER}/.previousSpace-${id}`;
 
-      // we need to wrap this operation to avoid errors in windows
-      performFileSystemOperation(fs.renameSync)(extractPath, finalPath);
-
-      const wasRenamed = await isFileAvailable(finalPath);
-
-      if (!wasRenamed) {
-        logger.error('unable to rename extract path');
-        mainWindow.webContents.send(LOADED_SPACE_CHANNEL, ERROR_GENERAL);
-        return clean(extractPath);
+      // temporary rename previous space if exists
+      if (await isFileAvailable(finalPath)) {
+        const wasRenamed = await renameSpaceFolder(finalPath, tmpPath);
+        if (!wasRenamed) {
+          logger.error('unable to rename previous space folder');
+          clean(extractPath);
+          return mainWindow.webContents.send(
+            LOADED_SPACE_CHANNEL,
+            ERROR_GENERAL
+          );
+        }
       }
 
+      // we need to wrap this operation to avoid errors in windows
+      const wasRenamed = await renameSpaceFolder(extractPath, finalPath);
+      if (!wasRenamed) {
+        logger.error('unable to rename previous temporary new space folder');
+        clean(extractPath);
+        return mainWindow.webContents.send(LOADED_SPACE_CHANNEL, ERROR_GENERAL);
+      }
+
+      // remove previous space
+      deleteSpaceAndResources(db, id, tmpPath);
+
+      // add new space in database
       db.get(SPACES_COLLECTION)
         .push(space)
         .write();
-    } else {
-      clean(extractPath);
     }
+
+    const userId = db.get('user.id').value();
 
     // write resources to database if selected
     if (isResourcesSelected) {
@@ -133,9 +177,19 @@ const loadSpace = (mainWindow, db) => async (
         logger.debug('try to load empty resources');
         return mainWindow.webContents.send(LOADED_SPACE_CHANNEL, ERROR_GENERAL);
       }
-      db.get(APP_INSTANCE_RESOURCES_COLLECTION)
-        .push(...resources)
-        .write();
+
+      const savedResources = db.get(APP_INSTANCE_RESOURCES_COLLECTION);
+
+      const newResources = resources
+        // keep only non-duplicate resources
+        .filter(({ id }) => !savedResources.find({ id }).value())
+        // change user id by current user id
+        .map(resource => ({
+          ...resource,
+          user: userId,
+        }));
+
+      savedResources.push(...newResources).write();
     }
 
     // write actions to database if selected
@@ -144,9 +198,16 @@ const loadSpace = (mainWindow, db) => async (
         logger.debug('try to load empty actions');
         return mainWindow.webContents.send(LOADED_SPACE_CHANNEL, ERROR_GENERAL);
       }
-      db.get(ACTIONS_COLLECTION)
-        .push(...actions)
-        .write();
+
+      const savedActions = db.get(ACTIONS_COLLECTION);
+
+      const newActions = actions
+        // keep only non-duplicate actions
+        .filter(({ id }) => !savedActions.find({ id }).value())
+        // change user id by current user id
+        .map(action => ({ ...action, user: userId }));
+
+      savedActions.push(...newActions).write();
     }
 
     return mainWindow.webContents.send(LOADED_SPACE_CHANNEL, {
@@ -154,8 +215,8 @@ const loadSpace = (mainWindow, db) => async (
     });
   } catch (err) {
     logger.error(err);
-    mainWindow.webContents.send(LOADED_SPACE_CHANNEL, ERROR_GENERAL);
-    return clean(extractPath);
+    clean(extractPath);
+    return mainWindow.webContents.send(LOADED_SPACE_CHANNEL, ERROR_GENERAL);
   }
 };
 
