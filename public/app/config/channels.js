@@ -46,4 +46,6 @@ module.exports = {
   IS_AUTHENTICATED_CHANNEL: 'auth:authenticated:get',
   GET_SYNC_MODE_CHANNEL: 'sync:mode:get',
   SET_SYNC_MODE_CHANNEL: 'sync:mode:set',
+  GET_USER_MODE_CHANNEL: 'user:mode:get',
+  SET_USER_MODE_CHANNEL: 'user:mode:set',
 };

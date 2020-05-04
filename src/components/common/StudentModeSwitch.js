@@ -6,14 +6,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { setSyncMode, getSyncMode } from '../../../actions';
-import Loader from '../../common/Loader';
-import { SYNC_MODE_SWITCH_ID } from '../../../config/selectors';
-import {
-  SYNC_MODES,
-  DEFAULT_SYNC_MODE,
-  FORM_CONTROL_MIN_WIDTH,
-} from '../../../config/constants';
+import { getUserMode, setUserMode } from '../../actions';
+import Loader from './Loader';
+import { USER_MODES, FORM_CONTROL_MIN_WIDTH } from '../../config/constants';
 
 const styles = theme => ({
   formControl: {
@@ -22,73 +17,75 @@ const styles = theme => ({
   },
 });
 
-export class SyncAdvancedSwitch extends Component {
+export class StudentModeSwitch extends Component {
   static propTypes = {
-    mode: PropTypes.oneOf(Object.values(SYNC_MODES)),
+    userMode: PropTypes.oneOf(Object.values(USER_MODES)).isRequired,
     activity: PropTypes.bool.isRequired,
     t: PropTypes.func.isRequired,
+    dispatchGetUserMode: PropTypes.func.isRequired,
+    dispatchSetUserMode: PropTypes.func.isRequired,
     classes: PropTypes.shape({
       formControl: PropTypes.string.isRequired,
+      button: PropTypes.string.isRequired,
     }).isRequired,
-    dispatchgetSyncMode: PropTypes.func.isRequired,
-    dispatchsetSyncMode: PropTypes.func.isRequired,
-  };
-
-  static defaultProps = {
-    mode: DEFAULT_SYNC_MODE,
   };
 
   constructor(props) {
     super(props);
-    const { dispatchgetSyncMode } = this.props;
-    dispatchgetSyncMode();
+    const { dispatchGetUserMode } = this.props;
+    dispatchGetUserMode();
   }
 
   handleChange = async ({ target }) => {
-    const { dispatchsetSyncMode } = this.props;
+    const { dispatchSetUserMode } = this.props;
     const { checked } = target;
-    const mode = checked ? SYNC_MODES.ADVANCED : SYNC_MODES.VISUAL;
-    dispatchsetSyncMode(mode);
+    const mode = checked ? USER_MODES.STUDENT : USER_MODES.TEACHER;
+    dispatchSetUserMode(mode);
   };
 
   render() {
-    const { classes, t, mode, activity } = this.props;
+    const { classes, t, userMode, activity } = this.props;
+
+    const isStudent = userMode === USER_MODES.STUDENT;
 
     if (activity) {
       return <Loader />;
     }
 
-    const control = (
+    const switchControl = (
       <Switch
-        checked={mode === SYNC_MODES.ADVANCED}
+        checked={isStudent}
         onChange={this.handleChange}
-        value={mode === SYNC_MODES.ADVANCED}
+        value={isStudent}
         color="primary"
       />
     );
 
     return (
-      <FormControl id={SYNC_MODE_SWITCH_ID} className={classes.formControl}>
-        <FormControlLabel control={control} label={t('Sync Advanced Mode')} />
+      <FormControl className={classes.formControl}>
+        <FormControlLabel
+          control={switchControl}
+          label={t('Student Mode Enabled')}
+        />
       </FormControl>
     );
   }
 }
 
 const mapStateToProps = ({ authentication }) => ({
-  mode: authentication.getIn(['user', 'settings', 'syncMode']),
+  userMode: authentication.getIn(['user', 'settings', 'userMode']),
   activity: Boolean(authentication.getIn(['current', 'activity']).size),
 });
 
 const mapDispatchToProps = {
-  dispatchsetSyncMode: setSyncMode,
-  dispatchgetSyncMode: getSyncMode,
+  dispatchGetUserMode: getUserMode,
+  dispatchSetUserMode: setUserMode,
 };
 
 const ConnectedComponent = connect(
   mapStateToProps,
   mapDispatchToProps
-)(SyncAdvancedSwitch);
+)(StudentModeSwitch);
 
 const StyledComponent = withStyles(styles)(ConnectedComponent);
 

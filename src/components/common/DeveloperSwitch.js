@@ -9,11 +9,12 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { getDeveloperMode, setDeveloperMode } from '../../actions';
 import Loader from './Loader';
 import { DEVELOPER_SWITCH_ID } from '../../config/selectors';
+import { FORM_CONTROL_MIN_WIDTH } from '../../config/constants';
 
 const styles = theme => ({
   formControl: {
     margin: theme.spacing(),
-    minWidth: 120,
+    minWidth: FORM_CONTROL_MIN_WIDTH,
   },
 });
 

@@ -89,9 +89,6 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text defined r
     <Connect(withI18nextTranslation(WithStyles(ClearButton)))
       spaceId="id"
     />
-    <withI18nextTranslation(WithStyles(Connect(DeleteButton)))
-      spaceId="id"
-    />
     <withI18nextTranslation(WithStyles(Connect(ExportButton)))
       space={
         Object {
@@ -99,6 +96,9 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text defined r
           "name": "name",
         }
       }
+    />
+    <withI18nextTranslation(WithStyles(Connect(DeleteButton)))
+      spaceId="id"
     />
     <withRouter(withI18nextTranslation(WithStyles(SyncButton)))
       spaceId="id"
@@ -161,9 +161,6 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text undefined
     <Connect(withI18nextTranslation(WithStyles(ClearButton)))
       spaceId="id"
     />
-    <withI18nextTranslation(WithStyles(Connect(DeleteButton)))
-      spaceId="id"
-    />
     <withI18nextTranslation(WithStyles(Connect(ExportButton)))
       space={
         Object {
@@ -171,6 +168,9 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text undefined
           "name": "name",
         }
       }
+    />
+    <withI18nextTranslation(WithStyles(Connect(DeleteButton)))
+      spaceId="id"
     />
     <withRouter(withI18nextTranslation(WithStyles(SyncButton)))
       spaceId="id"
