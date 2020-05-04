@@ -1,6 +1,8 @@
+import { toastr } from 'react-redux-toastr';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
+import _ from 'lodash';
 import AppBar from '@material-ui/core/AppBar/AppBar';
 import Toolbar from '@material-ui/core/Toolbar/Toolbar';
 import { withRouter } from 'react-router';
@@ -20,7 +22,12 @@ import Styles from '../../../Styles';
 import Loader from '../../common/Loader';
 import Main from '../../common/Main';
 import { LOAD_SPACE_PATH } from '../../../config/paths';
-import { isSpaceUpToDate } from '../../../utils/syncSpace';
+import { USER_MODES } from '../../../config/constants';
+import {
+  ERROR_MESSAGE_HEADER,
+  ERROR_STUDENT_FORBIDDEN_MESSAGE,
+  UNEXPECTED_ERROR_MESSAGE,
+} from '../../../config/messages';
 
 const styles = theme => ({
   ...Styles(theme),
@@ -57,46 +64,45 @@ class LoadSelectionScreen extends Component {
     location: PropTypes.shape({
       search: PropTypes.string.isRequired,
       state: PropTypes.shape({
-        space: PropTypes.shape({
-          id: PropTypes.string.isRequired,
-          name: PropTypes.string.isRequired,
-        }),
+        isSpaceDifferent: PropTypes.bool.isRequired,
       }),
     }).isRequired,
     t: PropTypes.func.isRequired,
     elements: PropTypes.instanceOf(Map).isRequired,
     extractPath: PropTypes.string.isRequired,
-    savedSpace: PropTypes.instanceOf(Map),
+    isStudent: PropTypes.bool.isRequired,
   };
 
-  static defaultProps = {
-    savedSpace: Map(),
-  };
+  constructor(props) {
+    super(props);
+    const {
+      isStudent,
+      location: { state = {} },
+      history: { goBack, push },
+    } = props;
+
+    if (_.isEmpty(state)) {
+      toastr.error(ERROR_MESSAGE_HEADER, UNEXPECTED_ERROR_MESSAGE);
+      push(LOAD_SPACE_PATH);
+    }
+    // students cannot add out of date space data
+    else if (isStudent && state.isSpaceDifferent) {
+      toastr.error(ERROR_MESSAGE_HEADER, ERROR_STUDENT_FORBIDDEN_MESSAGE);
+      goBack();
+    }
+  }
 
   /* eslint-disable react/destructuring-assignment */
   state = {
     // check space if it is not empty and is different from saved space
-    space: !this.props.elements.get('space').isEmpty(),
+    // student cannot load spaces
+    space: this.props.location.state
+      ? this.props.location.state.isSpaceDifferent
+      : false,
     actions: !this.props.elements.get('actions').isEmpty(),
     resources: !this.props.elements.get('resources').isEmpty(),
-    isSpaceDifferent: true,
   };
   /* eslint-enable react/destructuring-assignment */
-
-  componentDidMount() {
-    const { savedSpace, elements } = this.props;
-    const space = elements.get('space');
-
-    // space is different if zip space is not empty and the space does not exist locally or
-    // there is a difference between currently saved space and space in zip
-    // it changes space checkbox as well
-    const isSpaceDifferent =
-      !space.isEmpty() &&
-      (savedSpace.isEmpty() ||
-        !isSpaceUpToDate(space.toJS(), savedSpace.toJS()));
-
-    this.setState({ isSpaceDifferent, space: isSpaceDifferent });
-  }
 
   componentWillUnmount() {
     const { dispatchCancelLoadSpace, extractPath } = this.props;
@@ -156,13 +162,36 @@ class LoadSelectionScreen extends Component {
     );
   };
 
+  renderSpaceHelperText = () => {
+    const {
+      isStudent,
+      t,
+      location: {
+        state: { isSpaceDifferent },
+      },
+    } = this.props;
+
+    if (isStudent) {
+      return (
+        <FormHelperText>{t('Students cannot load spaces')}</FormHelperText>
+      );
+    }
+
+    return isSpaceDifferent ? (
+      <FormHelperText>
+        {t(`The Space does not exist or is different`)}
+      </FormHelperText>
+    ) : (
+      <FormHelperText>{t('This space already exists')}</FormHelperText>
+    );
+  };
+
   render() {
     const { classes, t, activity, elements } = this.props;
     const {
       space: isSpaceChecked,
       resources: isResourcesChecked,
       actions: isActionsChecked,
-      isSpaceDifferent,
     } = this.state;
 
     const selection = { isSpaceChecked, isResourcesChecked, isActionsChecked };
@@ -201,13 +230,7 @@ class LoadSelectionScreen extends Component {
               true,
               t(`This file does not contain a space`)
             )}
-            {isSpaceDifferent ? (
-              <FormHelperText>
-                {t(`The Space is different from local`)}
-              </FormHelperText>
-            ) : (
-              <FormHelperText>{t('This space already exist')}</FormHelperText>
-            )}
+            {this.renderSpaceHelperText()}
 
             {this.renderCheckbox(
               t('resources'),
@@ -252,11 +275,13 @@ class LoadSelectionScreen extends Component {
   }
 }
 
-const mapStateToProps = ({ loadSpace: loadSpaceReducer }) => ({
+const mapStateToProps = ({ loadSpace: loadSpaceReducer, authentication }) => ({
   elements: loadSpaceReducer.getIn(['extract', 'elements']),
-  savedSpace: loadSpaceReducer.getIn(['extract', 'savedSpace']),
   activity: Boolean(loadSpaceReducer.getIn(['activity']).size),
   extractPath: loadSpaceReducer.getIn(['extract', 'extractPath']),
+  isStudent:
+    authentication.getIn(['user', 'settings', 'userMode']) ===
+    USER_MODES.STUDENT,
 });
 
 const mapDispatchToProps = {
