@@ -5,10 +5,12 @@ import { Map } from 'immutable';
 import _ from 'lodash';
 import AppBar from '@material-ui/core/AppBar/AppBar';
 import Toolbar from '@material-ui/core/Toolbar/Toolbar';
+import Grid from '@material-ui/core/Grid';
 import { withRouter } from 'react-router';
+import Tooltip from '@material-ui/core/Tooltip';
+import InfoIcon from '@material-ui/icons/Info';
 import clsx from 'clsx';
 import { withTranslation } from 'react-i18next';
-import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core//Button';
@@ -218,36 +220,66 @@ class LoadSelectionScreen extends Component {
           </Typography>
 
           <br />
-          <FormGroup>
-            {this.renderCheckbox(
-              t('space'),
-              t('This Space'),
-              isSpaceChecked,
-              // space is always disabled:
-              // when the space does not exist (force load)
-              // when the space has change (force load)
-              // when the space has no change (no load)
-              true,
-              t(`This file does not contain a space`)
-            )}
-            {this.renderSpaceHelperText()}
-
-            {this.renderCheckbox(
-              t('resources'),
-              t(`This Space's User Inputs`),
-              isResourcesChecked,
-              elements.get('resources').isEmpty(),
-              t(`This file does not contain any user input`)
-            )}
-
-            {this.renderCheckbox(
-              t('actions'),
-              t(`This Space's analytics`),
-              isActionsChecked,
-              elements.get('actions').isEmpty(),
-              t(`This file does not contain any analytics`)
-            )}
-          </FormGroup>
+          <Grid
+            container
+            alignItems="center"
+            alignContent="center"
+            justify="center"
+          >
+            <Grid item xs={7}>
+              {this.renderCheckbox(
+                t('space'),
+                t('This Space'),
+                isSpaceChecked,
+                // space is always disabled:
+                // when the space does not exist (force load)
+                // when the space has change (force load)
+                // when the space has no change (no load)
+                true,
+                t(`This file does not contain a space`)
+              )}
+              {this.renderSpaceHelperText()}
+            </Grid>
+            <Grid item xs={1} />
+            <Grid item xs={7}>
+              {this.renderCheckbox(
+                t('resources'),
+                t(`This Space's User Inputs`),
+                isResourcesChecked,
+                elements.get('resources').isEmpty(),
+                t(`This file does not contain any user input`)
+              )}
+            </Grid>
+            <Grid item xs={1}>
+              <Tooltip
+                title={t(
+                  'Resources are inputs a user save when using applications (ie. answer in Input Text App).'
+                )}
+                placement="right"
+              >
+                <InfoIcon color="primary" />
+              </Tooltip>
+            </Grid>
+            <Grid item xs={7}>
+              {this.renderCheckbox(
+                t('actions'),
+                t(`This Space's analytics`),
+                isActionsChecked,
+                elements.get('actions').isEmpty(),
+                t(`This file does not contain any analytics`)
+              )}
+            </Grid>
+            <Grid item xs={1}>
+              <Tooltip
+                title={t(
+                  'Analytics are various statistics and user data a user left while using Graasp Desktop.'
+                )}
+                placement="right"
+              >
+                <InfoIcon color="primary" />
+              </Tooltip>
+            </Grid>
+          </Grid>
           <br />
           <div className={classes.buttonGroup}>
             <Button

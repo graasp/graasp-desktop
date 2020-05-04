@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar/AppBar';
+import Grid from '@material-ui/core/Grid';
 import Toolbar from '@material-ui/core/Toolbar/Toolbar';
+import Tooltip from '@material-ui/core/Tooltip';
+import InfoIcon from '@material-ui/icons/Info';
 import Box from '@material-ui/core/Box';
 import { withRouter } from 'react-router';
 import clsx from 'clsx';
 import { withTranslation } from 'react-i18next';
-import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core//Button';
@@ -188,16 +190,45 @@ class ExportSelectionScreen extends Component {
           </Typography>
 
           <br />
-          <FormGroup>
-            <FormControlLabel
-              control={resourcesCheckbox}
-              label={t("This Space's User Inputs")}
-            />
-            <FormControlLabel
-              control={actionsCheckbox}
-              label={t("This Space's Analytics")}
-            />
-          </FormGroup>
+          <Grid
+            container
+            alignItems="center"
+            alignContent="center"
+            justify="center"
+          >
+            <Grid item xs={7}>
+              <FormControlLabel
+                control={resourcesCheckbox}
+                label={t("This Space's User Inputs")}
+              />
+            </Grid>
+            <Grid item xs={1}>
+              <Tooltip
+                title={t(
+                  'Actions are input a user save when using applications (ie. answer in Input Text App).'
+                )}
+                placement="right"
+              >
+                <InfoIcon color="primary" />
+              </Tooltip>
+            </Grid>
+            <Grid item xs={7}>
+              <FormControlLabel
+                control={actionsCheckbox}
+                label={t("This Space's Analytics")}
+              />
+            </Grid>
+            <Grid item xs={1}>
+              <Tooltip
+                title={t(
+                  'Analytics are various statistics and user data a user left while using Graasp Desktop.'
+                )}
+                placement="right"
+              >
+                <InfoIcon color="primary" />
+              </Tooltip>
+            </Grid>
+          </Grid>
           <br />
           <div className={classes.buttonGroup}>
             <Button
