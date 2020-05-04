@@ -18,9 +18,10 @@ import {
   SYNC_SPACE_SUCCEEDED,
   FLAG_CLEARING_USER_INPUT,
   CLEAR_USER_INPUT_SUCCEEDED,
-  SET_SPACE_SEARCH_QUERY,
+  SET_SPACE_SEARCH_QUERY_SUCCEEDED,
 } from '../types';
 import { updateActivityList } from './common';
+import { HOME_PATH, SPACES_NEARBY_PATH } from '../config/paths';
 
 const INITIAL_STATE = Map({
   current: Map({
@@ -37,7 +38,10 @@ const INITIAL_STATE = Map({
     content: Set(),
     activity: false,
   }),
-  searchQuery: '',
+  search: Map({
+    [HOME_PATH]: '',
+    [SPACES_NEARBY_PATH]: '',
+  }),
 });
 
 export default (state = INITIAL_STATE, { type, payload }) => {
@@ -74,8 +78,8 @@ export default (state = INITIAL_STATE, { type, payload }) => {
       return state.setIn(['nearby', 'activity'], payload);
     case GET_SPACES_NEARBY_SUCCEEDED:
       return state.setIn(['nearby', 'content'], Set(payload));
-    case SET_SPACE_SEARCH_QUERY:
-      return state.setIn(['searchQuery'], payload);
+    case SET_SPACE_SEARCH_QUERY_SUCCEEDED:
+      return state.setIn(['search', payload.pathname], payload.value);
     default:
       return state;
   }

@@ -15,6 +15,7 @@ import Loader from './components/common/Loader';
 import Main from './components/common/Main';
 import { HOME_MAIN_ID } from './config/selectors';
 import { searchSpacesByQuery } from './utils/search';
+import { HOME_PATH } from './config/paths';
 
 class Home extends Component {
   static propTypes = {
@@ -93,7 +94,7 @@ class Home extends Component {
 
 const mapStateToProps = ({ Space }) => ({
   spaces: Space.get('saved'),
-  searchQuery: Space.get('searchQuery'),
+  searchQuery: Space.getIn(['search', HOME_PATH]),
   activity: Boolean(Space.getIn(['current', 'activity']).size),
 });
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import InputBase from '@material-ui/core/InputBase';
 import { fade, withStyles } from '@material-ui/core/styles';
@@ -61,16 +62,27 @@ class SearchSpaceBar extends Component {
     }).isRequired,
     t: PropTypes.func.isRequired,
     dispatchSetSearchQuery: PropTypes.func.isRequired,
-    searchQuery: PropTypes.string.isRequired,
+    searchQueries: PropTypes.instanceOf(Map).isRequired,
+    location: PropTypes.shape({
+      pathname: PropTypes.string.isRequired,
+    }).isRequired,
   };
 
   handleOnChange = event => {
-    const { dispatchSetSearchQuery } = this.props;
-    dispatchSetSearchQuery({ value: event.target.value });
+    const {
+      dispatchSetSearchQuery,
+      location: { pathname },
+    } = this.props;
+    dispatchSetSearchQuery({ pathname, value: event.target.value });
   };
 
   render() {
-    const { classes, t, searchQuery } = this.props;
+    const {
+      classes,
+      t,
+      searchQueries,
+      location: { pathname },
+    } = this.props;
     return (
       <div className={classes.search}>
         <div className={classes.searchIcon}>
@@ -83,7 +95,7 @@ class SearchSpaceBar extends Component {
             root: classes.inputRoot,
             input: classes.inputInput,
           }}
-          value={searchQuery}
+          value={searchQueries.get(pathname)}
           onChange={this.handleOnChange}
           inputProps={{ 'aria-label': 'search' }}
         />
@@ -93,7 +105,7 @@ class SearchSpaceBar extends Component {
 }
 
 const mapStateToProps = ({ Space }) => ({
-  searchQuery: Space.get('searchQuery'),
+  searchQueries: Space.getIn(['search']),
 });
 
 const mapDispatchToProps = {
@@ -108,4 +120,5 @@ const ConnectedComponent = connect(
 const StyledComponent = withStyles(styles)(ConnectedComponent);
 
 const TranslatedComponent = withTranslation()(StyledComponent);
-export default TranslatedComponent;
+
+export default withRouter(TranslatedComponent);

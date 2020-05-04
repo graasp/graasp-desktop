@@ -17,6 +17,7 @@ import { CONTROL_TYPES } from '../config/constants';
 import Main from './common/Main';
 import { SPACES_NEARBY_MAIN_ID } from '../config/selectors';
 import { searchSpacesByQuery } from '../utils/search';
+import { SPACES_NEARBY_PATH } from '../config/paths';
 
 class SpacesNearby extends Component {
   static propTypes = {
@@ -137,7 +138,7 @@ const mapStateToProps = ({ authentication, Space }) => ({
     'settings',
     'geolocationEnabled',
   ]),
-  searchQuery: Space.get('searchQuery'),
+  searchQuery: Space.getIn(['search', SPACES_NEARBY_PATH]),
 });
 
 const mapDispatchToProps = {
