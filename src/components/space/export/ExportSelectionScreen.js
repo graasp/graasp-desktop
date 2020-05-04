@@ -9,6 +9,7 @@ import Box from '@material-ui/core/Box';
 import { withRouter } from 'react-router';
 import clsx from 'clsx';
 import { withTranslation } from 'react-i18next';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core//Button';
@@ -16,7 +17,7 @@ import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { Typography } from '@material-ui/core';
 import { connect } from 'react-redux';
-import { exportSpace } from '../../../actions';
+import { exportSpace, getDatabase } from '../../../actions';
 import Styles from '../../../Styles';
 import Loader from '../../common/Loader';
 import Main from '../../common/Main';
@@ -66,6 +67,7 @@ class ExportSelectionScreen extends Component {
     }).isRequired,
     theme: PropTypes.shape({ direction: PropTypes.string }).isRequired,
     dispatchExportSpace: PropTypes.func.isRequired,
+    dispatchGetDatabase: PropTypes.func.isRequired,
     activity: PropTypes.bool.isRequired,
     history: PropTypes.shape({
       goBack: PropTypes.func.isRequired,
@@ -82,12 +84,21 @@ class ExportSelectionScreen extends Component {
       }),
     }).isRequired,
     t: PropTypes.func.isRequired,
+    database: PropTypes.shape({
+      actions: PropTypes.arrayOf(PropTypes.object),
+      appInstanceResources: PropTypes.arrayOf(PropTypes.object),
+    }).isRequired,
   };
 
   state = {
     actions: true,
     resources: true,
   };
+
+  componentDidMount() {
+    const { dispatchGetDatabase } = this.props;
+    dispatchGetDatabase();
+  }
 
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.checked });
@@ -130,6 +141,37 @@ class ExportSelectionScreen extends Component {
     return <Box {...styles(theme).spaceName}>{name}</Box>;
   };
 
+  renderCheckbox(collectionName, label, isChecked, emptyHelperText) {
+    const {
+      database,
+      location: { state },
+      userId,
+    } = this.props;
+
+    const content = database ? database[collectionName] : [];
+    const hasContent =
+    content.filter(
+        ({ user, spaceId }) => user === userId && spaceId === state.space.id
+      ).length > 0;
+
+    const checkbox = (
+      <Checkbox
+        checked={isChecked && hasContent}
+        onChange={this.handleChange}
+        name={collectionName}
+        color="primary"
+        disabled={!hasContent}
+      />
+    );
+
+    return (
+      <>
+        <FormControlLabel control={checkbox} label={label} />
+        {!hasContent && <FormHelperText>{emptyHelperText}</FormHelperText>}
+      </>
+    );
+  }
+
   render() {
     const {
       classes,
@@ -137,6 +179,7 @@ class ExportSelectionScreen extends Component {
       location: { state },
       activity,
     } = this.props;
+
     const {
       resources: isResourcesChecked,
       actions: isActionsChecked,
@@ -159,23 +202,6 @@ class ExportSelectionScreen extends Component {
         </div>
       );
     }
-
-    const resourcesCheckbox = (
-      <Checkbox
-        checked={isResourcesChecked}
-        onChange={this.handleChange}
-        name="resources"
-        color="primary"
-      />
-    );
-    const actionsCheckbox = (
-      <Checkbox
-        checked={isActionsChecked}
-        onChange={this.handleChange}
-        name="actions"
-        color="primary"
-      />
-    );
 
     return (
       <Main fullScreen>
@@ -201,15 +227,17 @@ class ExportSelectionScreen extends Component {
             justify="center"
           >
             <Grid item xs={7}>
-              <FormControlLabel
-                control={resourcesCheckbox}
-                label={t("This Space's User Inputs")}
-              />
+              {this.renderCheckbox(
+                'appInstanceResources',
+                t("This Space's Resources"),
+                isResourcesChecked,
+                t('No Resource available for this Space')
+              )}
             </Grid>
             <Grid item xs={1}>
               <Tooltip
                 title={t(
-                  'Actions are input a user save when using applications (ie. answer in Input Text App).'
+                  'Resources are input a user save when using applications (ie. answer in Input Text App).'
                 )}
                 placement="right"
               >
@@ -217,15 +245,17 @@ class ExportSelectionScreen extends Component {
               </Tooltip>
             </Grid>
             <Grid item xs={7}>
-              <FormControlLabel
-                control={actionsCheckbox}
-                label={t("This Space's Analytics")}
-              />
+              {this.renderCheckbox(
+                'actions',
+                t("This Space's Actions"),
+                isActionsChecked,
+                t('No Action available for this Space')
+              )}
             </Grid>
             <Grid item xs={1}>
               <Tooltip
                 title={t(
-                  'Analytics are various statistics and user data a user left while using Graasp Desktop.'
+                  'Actions are various analytics and user data a user left while using Graasp Desktop.'
                 )}
                 placement="right"
               >
@@ -260,13 +290,15 @@ class ExportSelectionScreen extends Component {
   }
 }
 
-const mapStateToProps = ({ authentication, Space }) => ({
+const mapStateToProps = ({ authentication, Space, Developer }) => ({
   userId: authentication.getIn(['user', 'id']),
+  database: Developer.get('database'),
   activity: Boolean(Space.getIn(['current', 'activity']).size),
 });
 
 const mapDispatchToProps = {
   dispatchExportSpace: exportSpace,
+  dispatchGetDatabase: getDatabase,
 };
 
 const TranslatedComponent = withTranslation()(ExportSelectionScreen);

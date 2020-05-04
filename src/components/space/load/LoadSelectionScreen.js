@@ -248,7 +248,7 @@ class LoadSelectionScreen extends Component {
             <Grid item xs={7}>
               {this.renderCheckbox(
                 t('resources'),
-                t(`This Space's User Inputs`),
+                t(`This Space's Resources`),
                 isResourcesChecked,
                 elements.get('resources').isEmpty(),
                 t(`This file does not contain any user input`)
@@ -267,7 +267,7 @@ class LoadSelectionScreen extends Component {
             <Grid item xs={7}>
               {this.renderCheckbox(
                 t('actions'),
-                t(`This Space's analytics`),
+                t(`This Space's Actions`),
                 isActionsChecked,
                 elements.get('actions').isEmpty(),
                 t(`This file does not contain any analytics`)
@@ -276,7 +276,7 @@ class LoadSelectionScreen extends Component {
             <Grid item xs={1}>
               <Tooltip
                 title={t(
-                  'Analytics are various statistics and user data a user left while using Graasp Desktop.'
+                  'Actions are various analytics and user data a user left while using Graasp Desktop.'
                 )}
                 placement="right"
               >
