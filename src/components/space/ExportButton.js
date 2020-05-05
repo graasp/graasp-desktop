@@ -9,7 +9,7 @@ import UnarchiveIcon from '@material-ui/icons/Unarchive';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core';
 import Styles from '../../Styles';
-import { exportSpace } from '../../actions/space';
+import { setSpaceForExport } from '../../actions';
 import { SPACE_EXPORT_BUTTON_CLASS } from '../../config/selectors';
 import { buildExportSelectionPathForSpaceId } from '../../config/paths';
 
@@ -27,17 +27,17 @@ class ExportButton extends Component {
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
     }).isRequired,
+    dispatchSetExportSpace: PropTypes.func.isRequired,
   };
 
   handleExport = () => {
     const {
       history: { push },
       space,
+      dispatchSetExportSpace,
     } = this.props;
-    push({
-      pathname: buildExportSelectionPathForSpaceId(space.id),
-      state: { space },
-    });
+    dispatchSetExportSpace({ space });
+    push(buildExportSelectionPathForSpaceId(space.id));
   };
 
   render() {
@@ -61,7 +61,7 @@ const mapStateToProps = ({ authentication }) => ({
 });
 
 const mapDispatchToProps = {
-  dispatchExportSpace: exportSpace,
+  dispatchSetExportSpace: setSpaceForExport,
 };
 
 const ConnectedComponent = connect(

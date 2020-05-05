@@ -6,7 +6,7 @@ const ObjectId = require('bson-objectid');
 const { VAR_FOLDER } = require('../config/config');
 const {
   LOADED_SPACE_CHANNEL,
-  CANCEL_LOAD_SPACE_CHANNEL,
+  CLEAR_LOAD_SPACE_CHANNEL,
   EXTRACT_FILE_TO_LOAD_SPACE_CHANNEL,
 } = require('../config/channels');
 const { ERROR_GENERAL, ERROR_ZIP_CORRUPTED } = require('../config/errors');
@@ -86,12 +86,10 @@ const extractFileToLoadSpace = (mainWindow, db) => async (
     const savedSpace = spaces.find({ id }).value();
 
     const spaceString = await fsPromises.readFile(spacePath);
-    const {
-      space = {},
-      appInstanceResources: resources = [],
-      actions = [],
-    } = JSON.parse(spaceString);
-    const elements = { space, resources, actions };
+    const { space = {}, appInstanceResources = [], actions = [] } = JSON.parse(
+      spaceString
+    );
+    const elements = { space, appInstanceResources, actions };
 
     return mainWindow.webContents.send(EXTRACT_FILE_TO_LOAD_SPACE_CHANNEL, {
       extractPath,
@@ -108,9 +106,9 @@ const extractFileToLoadSpace = (mainWindow, db) => async (
   }
 };
 
-const cancelLoadSpace = mainWindow => async (event, { extractPath }) => {
+const clearLoadSpace = mainWindow => async (event, { extractPath }) => {
   const isCleanSuccessful = clean(extractPath);
-  mainWindow.webContents.send(CANCEL_LOAD_SPACE_CHANNEL, isCleanSuccessful);
+  mainWindow.webContents.send(CLEAR_LOAD_SPACE_CHANNEL);
   return isCleanSuccessful;
 };
 
@@ -118,10 +116,10 @@ const loadSpace = (mainWindow, db) => async (
   event,
   {
     extractPath,
-    elements: { space, actions, resources },
+    elements: { space, actions, appInstanceResources },
     selection: {
       space: isSpaceSelected,
-      resources: isResourcesSelected,
+      appInstanceResources: isResourcesSelected,
       actions: isActionsSelected,
     },
   }
@@ -173,14 +171,14 @@ const loadSpace = (mainWindow, db) => async (
 
     // write resources to database if selected
     if (isResourcesSelected) {
-      if (_.isEmpty(resources)) {
+      if (_.isEmpty(appInstanceResources)) {
         logger.debug('try to load empty resources');
         return mainWindow.webContents.send(LOADED_SPACE_CHANNEL, ERROR_GENERAL);
       }
 
       const savedResources = db.get(APP_INSTANCE_RESOURCES_COLLECTION);
 
-      const newResources = resources
+      const newResources = appInstanceResources
         // keep only non-duplicate resources
         .filter(({ id }) => !savedResources.find({ id }).value())
         // change user id by current user id
@@ -220,4 +218,4 @@ const loadSpace = (mainWindow, db) => async (
   }
 };
 
-module.exports = { cancelLoadSpace, extractFileToLoadSpace, loadSpace };
+module.exports = { clearLoadSpace, extractFileToLoadSpace, loadSpace };

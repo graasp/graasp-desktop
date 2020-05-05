@@ -59,7 +59,7 @@ const {
   SET_SPACE_AS_FAVORITE_CHANNEL,
   SET_SPACE_AS_RECENT_CHANNEL,
   EXTRACT_FILE_TO_LOAD_SPACE_CHANNEL,
-  CANCEL_LOAD_SPACE_CHANNEL,
+  CLEAR_LOAD_SPACE_CHANNEL,
 } = require('./app/config/channels');
 const env = require('./env.json');
 const {
@@ -96,7 +96,7 @@ const {
   getUserMode,
   setSpaceAsFavorite,
   setSpaceAsRecent,
-  cancelLoadSpace,
+  clearLoadSpace,
   extractFileToLoadSpace,
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
@@ -374,8 +374,8 @@ app.on('ready', async () => {
     extractFileToLoadSpace(mainWindow, db)
   );
 
-  // called when canceling to load a space
-  ipcMain.on(CANCEL_LOAD_SPACE_CHANNEL, cancelLoadSpace(mainWindow));
+  // called when clearing load space
+  ipcMain.on(CLEAR_LOAD_SPACE_CHANNEL, clearLoadSpace(mainWindow));
 
   // called when exporting a space
   ipcMain.on(EXPORT_SPACE_CHANNEL, exportSpace(mainWindow, db));

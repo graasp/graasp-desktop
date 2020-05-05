@@ -1,6 +1,6 @@
 const {
   loadSpace,
-  cancelLoadSpace,
+  clearLoadSpace,
   extractFileToLoadSpace,
 } = require('./loadSpace');
 const saveSpace = require('./saveSpace');
@@ -38,7 +38,7 @@ const setSpaceAsRecent = require('./setSpaceAsRecent');
 
 module.exports = {
   loadSpace,
-  cancelLoadSpace,
+  clearLoadSpace,
   extractFileToLoadSpace,
   saveSpace,
   getSpace,

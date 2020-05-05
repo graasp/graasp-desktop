@@ -14,3 +14,7 @@ export const SAVED_SPACES_PATH = '/saved-spaces';
 export const buildExportSelectionPathForSpaceId = (id = ':id') => {
   return `/space/export/${id}/selection`;
 };
+
+export const buildSpacePath = (id = ':id', saved = false) => {
+  return `/space/${id}?saved=${saved}`;
+};

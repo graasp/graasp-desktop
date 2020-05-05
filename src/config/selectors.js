@@ -59,6 +59,7 @@ export const LOAD_INPUT_ID = 'loadInput';
 export const LOAD_SUBMIT_BUTTON_ID = 'loadSubmitButton';
 export const LOAD_LOAD_BUTTON_ID = 'loadLoadButton';
 export const LOAD_BACK_BUTTON_ID = 'loadCancelButton';
+export const buildCheckboxLabel = name => `checkboxLabel-${name}`;
 
 export const EXPORT_SPACE_BUTTON_ID = 'exportSpaceButton';
 export const EXPORT_SPACE_BACK_BUTTON_ID = 'exportSpaceBackButton';

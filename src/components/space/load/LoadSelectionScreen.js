@@ -19,7 +19,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { Typography } from '@material-ui/core';
 import { connect } from 'react-redux';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import { loadSpace, cancelLoadSpace } from '../../../actions';
+import { loadSpace, clearLoadSpace } from '../../../actions';
 import Styles from '../../../Styles';
 import Loader from '../../common/Loader';
 import Main from '../../common/Main';
@@ -33,7 +33,9 @@ import {
 import {
   LOAD_LOAD_BUTTON_ID,
   LOAD_BACK_BUTTON_ID,
+  buildCheckboxLabel,
 } from '../../../config/selectors';
+import { LOAD_SPACE_STATUS } from '../../../reducers/loadSpaceReducer';
 
 const styles = theme => ({
   ...Styles(theme),
@@ -61,7 +63,7 @@ class LoadSelectionScreen extends Component {
     }).isRequired,
     theme: PropTypes.shape({ direction: PropTypes.string }).isRequired,
     dispatchLoadSpace: PropTypes.func.isRequired,
-    dispatchCancelLoadSpace: PropTypes.func.isRequired,
+    dispatchClearLoadSpace: PropTypes.func.isRequired,
     activity: PropTypes.bool.isRequired,
     history: PropTypes.shape({
       goBack: PropTypes.func.isRequired,
@@ -77,6 +79,7 @@ class LoadSelectionScreen extends Component {
     elements: PropTypes.instanceOf(Map).isRequired,
     extractPath: PropTypes.string.isRequired,
     isStudent: PropTypes.bool.isRequired,
+    status: PropTypes.oneOf(Object.values(LOAD_SPACE_STATUS)).isRequired,
   };
 
   constructor(props) {
@@ -85,9 +88,10 @@ class LoadSelectionScreen extends Component {
       isStudent,
       location: { state = {} },
       history: { goBack, push },
+      extractPath,
     } = props;
 
-    if (_.isEmpty(state)) {
+    if (_.isEmpty(state) || !extractPath.length) {
       toastr.error(ERROR_MESSAGE_HEADER, UNEXPECTED_ERROR_MESSAGE);
       push(LOAD_SPACE_PATH);
     }
@@ -106,13 +110,30 @@ class LoadSelectionScreen extends Component {
       ? this.props.location.state.isSpaceDifferent
       : false,
     actions: !this.props.elements.get('actions').isEmpty(),
-    resources: !this.props.elements.get('resources').isEmpty(),
+    appInstanceResources: !this.props.elements
+      .get('appInstanceResources')
+      .isEmpty(),
   };
   /* eslint-enable react/destructuring-assignment */
 
+  componentDidUpdate() {
+    const {
+      status,
+      history: { push },
+      dispatchClearLoadSpace,
+      extractPath,
+    } = this.props;
+
+    // when load is successful, redirect
+    if (status === LOAD_SPACE_STATUS.SUCCESS) {
+      dispatchClearLoadSpace({ extractPath });
+      push(LOAD_SPACE_PATH);
+    }
+  }
+
   componentWillUnmount() {
-    const { dispatchCancelLoadSpace, extractPath } = this.props;
-    dispatchCancelLoadSpace({ extractPath });
+    const { dispatchClearLoadSpace, extractPath } = this.props;
+    dispatchClearLoadSpace({ extractPath });
   }
 
   handleChange = event => {
@@ -121,29 +142,23 @@ class LoadSelectionScreen extends Component {
 
   handleBack = () => {
     const {
-      history: { goBack },
+      history: { push },
       extractPath,
-      dispatchCancelLoadSpace,
+      dispatchClearLoadSpace,
     } = this.props;
-    goBack();
-    dispatchCancelLoadSpace({ extractPath });
+    dispatchClearLoadSpace({ extractPath });
+    push(LOAD_SPACE_PATH);
   };
 
-  handleSubmit = async () => {
-    const {
-      dispatchLoadSpace,
-      elements,
-      extractPath,
-      history: { push },
-    } = this.props;
-    const { space, actions, resources } = this.state;
-    const selection = { space, actions, resources };
-    await dispatchLoadSpace({
+  handleSubmit = () => {
+    const { dispatchLoadSpace, elements, extractPath } = this.props;
+    const { space, actions, appInstanceResources } = this.state;
+    const selection = { space, actions, appInstanceResources };
+    dispatchLoadSpace({
       extractPath,
       elements: elements.toJS(),
       selection,
     });
-    push(LOAD_SPACE_PATH);
   };
 
   renderCheckbox = (name, label, isChecked, disabled, emptyHelperText) => {
@@ -162,7 +177,11 @@ class LoadSelectionScreen extends Component {
 
     return (
       <>
-        <FormControlLabel control={checkbox} label={label} />
+        <FormControlLabel
+          id={buildCheckboxLabel(name)}
+          control={checkbox}
+          label={label}
+        />
         {isEmpty && <FormHelperText>{emptyHelperText}</FormHelperText>}
       </>
     );
@@ -175,6 +194,7 @@ class LoadSelectionScreen extends Component {
       location: {
         state: { isSpaceDifferent },
       },
+      elements,
     } = this.props;
 
     if (isStudent) {
@@ -183,26 +203,34 @@ class LoadSelectionScreen extends Component {
       );
     }
 
-    return isSpaceDifferent ? (
-      <FormHelperText>
-        {t(`The Space does not exist or is different`)}
-      </FormHelperText>
-    ) : (
-      <FormHelperText>{t('This space already exists')}</FormHelperText>
-    );
+    if (isSpaceDifferent) {
+      return (
+        <FormHelperText>
+          {t(`The Space does not exist or is different`)}
+        </FormHelperText>
+      );
+    }
+
+    // when the zip space is not different and application already contains space
+    if (!elements.get('space').isEmpty()) {
+      return <FormHelperText>{t('This space already exists')}</FormHelperText>;
+    }
+
+    return null;
   };
 
   render() {
-    const { classes, t, activity, elements } = this.props;
+    const { classes, t, activity, elements, extractPath } = this.props;
     const {
       space: isSpaceChecked,
-      resources: isResourcesChecked,
+      appInstanceResources: isResourcesChecked,
       actions: isActionsChecked,
     } = this.state;
 
-    const selection = { isSpaceChecked, isResourcesChecked, isActionsChecked };
+    const selection = [isSpaceChecked, isResourcesChecked, isActionsChecked];
 
-    if (activity) {
+    // if extractPath is undefined, it returns in componentDidUpdate
+    if (activity || !extractPath.length) {
       return (
         <div className={classes.root}>
           <CssBaseline />
@@ -247,10 +275,10 @@ class LoadSelectionScreen extends Component {
             <Grid item xs={1} />
             <Grid item xs={7}>
               {this.renderCheckbox(
-                t('resources'),
+                t('appInstanceResources'),
                 t(`This Space's Resources`),
                 isResourcesChecked,
-                elements.get('resources').isEmpty(),
+                elements.get('appInstanceResources').isEmpty(),
                 t(`This file does not contain any user input`)
               )}
             </Grid>
@@ -302,7 +330,7 @@ class LoadSelectionScreen extends Component {
               className={clsx(classes.button, classes.submitButton)}
               onClick={this.handleSubmit}
               // disable load button if nothing is to be loaded
-              disabled={!Object.values(selection).includes(true)}
+              disabled={!selection.includes(true)}
             >
               {t('Load')}
             </Button>
@@ -320,11 +348,12 @@ const mapStateToProps = ({ loadSpace: loadSpaceReducer, authentication }) => ({
   isStudent:
     authentication.getIn(['user', 'settings', 'userMode']) ===
     USER_MODES.STUDENT,
+  status: loadSpaceReducer.getIn(['status']),
 });
 
 const mapDispatchToProps = {
   dispatchLoadSpace: loadSpace,
-  dispatchCancelLoadSpace: cancelLoadSpace,
+  dispatchClearLoadSpace: clearLoadSpace,
 };
 
 const TranslatedComponent = withTranslation()(LoadSelectionScreen);

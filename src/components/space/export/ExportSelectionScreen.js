@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { toastr } from 'react-redux-toastr';
 import AppBar from '@material-ui/core/AppBar/AppBar';
 import Grid from '@material-ui/core/Grid';
 import Toolbar from '@material-ui/core/Toolbar/Toolbar';
@@ -17,15 +18,20 @@ import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { Typography } from '@material-ui/core';
 import { connect } from 'react-redux';
-import { exportSpace, getDatabase } from '../../../actions';
+import { exportSpace, getDatabase, clearExportSpace } from '../../../actions';
 import Styles from '../../../Styles';
 import Loader from '../../common/Loader';
 import Main from '../../common/Main';
-import SpaceNotFound from '../SpaceNotFound';
 import {
   EXPORT_SPACE_BUTTON_ID,
   EXPORT_SPACE_BACK_BUTTON_ID,
+  buildCheckboxLabel,
 } from '../../../config/selectors';
+import { EXPORT_SPACE_STATUS } from '../../../reducers/exportSpaceReducer';
+import {
+  ERROR_MESSAGE_HEADER,
+  UNEXPECTED_ERROR_MESSAGE,
+} from '../../../config/messages';
 
 const styles = theme => ({
   ...Styles(theme),
@@ -68,6 +74,7 @@ class ExportSelectionScreen extends Component {
     theme: PropTypes.shape({ direction: PropTypes.string }).isRequired,
     dispatchExportSpace: PropTypes.func.isRequired,
     dispatchGetDatabase: PropTypes.func.isRequired,
+    dispatchClearExportSpace: PropTypes.func.isRequired,
     activity: PropTypes.bool.isRequired,
     history: PropTypes.shape({
       goBack: PropTypes.func.isRequired,
@@ -77,10 +84,7 @@ class ExportSelectionScreen extends Component {
     location: PropTypes.shape({
       search: PropTypes.string.isRequired,
       state: PropTypes.shape({
-        space: PropTypes.shape({
-          id: PropTypes.string.isRequired,
-          name: PropTypes.string.isRequired,
-        }),
+        from: PropTypes.string,
       }),
     }).isRequired,
     t: PropTypes.func.isRequired,
@@ -88,6 +92,8 @@ class ExportSelectionScreen extends Component {
       actions: PropTypes.arrayOf(PropTypes.object),
       appInstanceResources: PropTypes.arrayOf(PropTypes.object),
     }).isRequired,
+    space: PropTypes.instanceOf(Map).isRequired,
+    status: PropTypes.oneOf(Object.values(EXPORT_SPACE_STATUS)).isRequired,
   };
 
   state = {
@@ -100,59 +106,69 @@ class ExportSelectionScreen extends Component {
     dispatchGetDatabase();
   }
 
+  componentDidUpdate() {
+    const {
+      status,
+      history: { goBack },
+      dispatchClearExportSpace,
+      space,
+    } = this.props;
+
+    // when export is successful, redirect
+    if (status === EXPORT_SPACE_STATUS.SUCCESS) {
+      dispatchClearExportSpace();
+      goBack();
+    }
+    // during export return with error if space to export is not defined
+    else if (space.isEmpty() && status === EXPORT_SPACE_STATUS.PENDING) {
+      toastr.error(ERROR_MESSAGE_HEADER, UNEXPECTED_ERROR_MESSAGE);
+      goBack();
+    }
+  }
+
+  componentWillUnmount() {
+    const { dispatchClearExportSpace } = this.props;
+    dispatchClearExportSpace();
+  }
+
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.checked });
   };
 
   handleBack = () => {
     const {
+      dispatchClearExportSpace,
       history: { goBack },
     } = this.props;
+    dispatchClearExportSpace();
     goBack();
   };
 
   handleSubmit = () => {
-    const {
-      userId,
-      location: {
-        state: {
-          space: { id, name },
-        },
-      },
-      dispatchExportSpace,
-    } = this.props;
+    const { userId, space, dispatchExportSpace } = this.props;
     const { actions, resources } = this.state;
-
+    const id = space.get('id');
+    const name = space.get('name');
     // always export space
     const selection = { space: true, actions, resources };
     dispatchExportSpace(id, name, userId, selection);
   };
 
   renderSpaceName = () => {
-    const {
-      theme,
-      location: {
-        state: {
-          space: { name },
-        },
-      },
-    } = this.props;
+    const { theme, space } = this.props;
+    const name = space.get('name');
     // eslint-disable-next-line react/jsx-props-no-spreading
     return <Box {...styles(theme).spaceName}>{name}</Box>;
   };
 
   renderCheckbox(collectionName, label, isChecked, emptyHelperText) {
-    const {
-      database,
-      location: { state },
-      userId,
-    } = this.props;
+    const { database, space, userId } = this.props;
 
+    const id = space.get('id');
     const content = database ? database[collectionName] : [];
     const hasContent =
-    content.filter(
-        ({ user, spaceId }) => user === userId && spaceId === state.space.id
-      ).length > 0;
+      content.filter(({ user, spaceId }) => user === userId && spaceId === id)
+        .length > 0;
 
     const checkbox = (
       <Checkbox
@@ -166,30 +182,26 @@ class ExportSelectionScreen extends Component {
 
     return (
       <>
-        <FormControlLabel control={checkbox} label={label} />
+        <FormControlLabel
+          id={buildCheckboxLabel(collectionName)}
+          control={checkbox}
+          label={label}
+        />
         {!hasContent && <FormHelperText>{emptyHelperText}</FormHelperText>}
       </>
     );
   }
 
   render() {
-    const {
-      classes,
-      t,
-      location: { state },
-      activity,
-    } = this.props;
+    const { classes, t, activity, space } = this.props;
 
     const {
       resources: isResourcesChecked,
       actions: isActionsChecked,
     } = this.state;
 
-    if (!state || !state.space) {
-      return <SpaceNotFound />;
-    }
-
-    if (activity) {
+    // if space is not defined, it returns in componentDidUpdate
+    if (activity || space.isEmpty()) {
       return (
         <div className={classes.root}>
           <CssBaseline />
@@ -290,15 +302,22 @@ class ExportSelectionScreen extends Component {
   }
 }
 
-const mapStateToProps = ({ authentication, Space, Developer }) => ({
+const mapStateToProps = ({
+  authentication,
+  exportSpace: exportSpaceReducer,
+  Developer,
+}) => ({
   userId: authentication.getIn(['user', 'id']),
   database: Developer.get('database'),
-  activity: Boolean(Space.getIn(['current', 'activity']).size),
+  activity: Boolean(exportSpaceReducer.getIn(['activity']).size),
+  space: exportSpaceReducer.getIn(['space']),
+  status: exportSpaceReducer.getIn(['status']),
 });
 
 const mapDispatchToProps = {
   dispatchExportSpace: exportSpace,
   dispatchGetDatabase: getDatabase,
+  dispatchClearExportSpace: clearExportSpace,
 };
 
 const TranslatedComponent = withTranslation()(ExportSelectionScreen);

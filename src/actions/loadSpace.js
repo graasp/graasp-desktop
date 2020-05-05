@@ -2,8 +2,8 @@ import { toastr } from 'react-redux-toastr';
 import {
   FLAG_LOADING_SPACE,
   FLAG_EXTRACTING_FILE_TO_LOAD_SPACE,
-  FLAG_CANCELING_TO_LOAD_SPACE,
-  CANCEL_LOAD_SPACE_SUCCEEDED,
+  FLAG_CLEARING_LOAD_SPACE,
+  CLEAR_LOAD_SPACE_SUCCEEDED,
   LOAD_SPACE_SUCCEEDED,
   EXTRACT_FILE_TO_LOAD_SPACE_SUCCEEDED,
 } from '../types';
@@ -16,7 +16,7 @@ import {
 import {
   LOAD_SPACE_CHANNEL,
   LOADED_SPACE_CHANNEL,
-  CANCEL_LOAD_SPACE_CHANNEL,
+  CLEAR_LOAD_SPACE_CHANNEL,
   EXTRACT_FILE_TO_LOAD_SPACE_CHANNEL,
 } from '../config/channels';
 import {
@@ -35,7 +35,7 @@ const flagLoadingSpace = createFlag(FLAG_LOADING_SPACE);
 const flagExtractingFileToLoadSpace = createFlag(
   FLAG_EXTRACTING_FILE_TO_LOAD_SPACE
 );
-const flagCancelingLoadSpace = createFlag(FLAG_CANCELING_TO_LOAD_SPACE);
+const flagClearingLoadSpace = createFlag(FLAG_CLEARING_LOAD_SPACE);
 
 export const loadSpace = payload => dispatch => {
   dispatch(flagLoadingSpace(true));
@@ -89,19 +89,19 @@ export const extractFileToLoadSpace = ({ fileLocation }) => dispatch => {
   );
 };
 
-export const cancelLoadSpace = payload => dispatch => {
-  dispatch(flagCancelingLoadSpace(true));
-  window.ipcRenderer.send(CANCEL_LOAD_SPACE_CHANNEL, payload);
-  window.ipcRenderer.once(CANCEL_LOAD_SPACE_CHANNEL, (event, response) => {
+export const clearLoadSpace = payload => dispatch => {
+  dispatch(flagClearingLoadSpace(true));
+  window.ipcRenderer.send(CLEAR_LOAD_SPACE_CHANNEL, payload);
+  window.ipcRenderer.once(CLEAR_LOAD_SPACE_CHANNEL, (event, response) => {
     switch (response) {
       case ERROR_GENERAL:
         toastr.error(ERROR_MESSAGE_HEADER, ERROR_LOADING_MESSAGE);
         break;
       default:
         dispatch({
-          type: CANCEL_LOAD_SPACE_SUCCEEDED,
+          type: CLEAR_LOAD_SPACE_SUCCEEDED,
         });
     }
-    dispatch(flagCancelingLoadSpace(false));
+    dispatch(flagClearingLoadSpace(false));
   });
 };

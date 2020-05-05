@@ -8,7 +8,7 @@ module.exports = {
   GET_SPACES_CHANNEL: 'spaces:get',
   DELETE_SPACE_CHANNEL: 'space:delete',
   DELETED_SPACE_CHANNEL: 'space:deleted',
-  CANCEL_LOAD_SPACE_CHANNEL: 'space:load:cancel',
+  CLEAR_LOAD_SPACE_CHANNEL: 'space:load:clear',
   EXTRACT_FILE_TO_LOAD_SPACE_CHANNEL: 'space:load:extract-file',
   LOAD_SPACE_CHANNEL: 'space:load',
   LOADED_SPACE_CHANNEL: 'space:loaded',

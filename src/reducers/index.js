@@ -7,6 +7,7 @@ import layout from './layout';
 import authentication from './authenticationReducer';
 import syncSpace from './syncSpaceReducer';
 import loadSpace from './loadSpaceReducer';
+import exportSpace from './exportSpaceReducer';
 
 export default combineReducers({
   // todo: keys should always be camelCase
@@ -17,5 +18,6 @@ export default combineReducers({
   toastr,
   authentication,
   syncSpace,
+  exportSpace,
   loadSpace,
 });

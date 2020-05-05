@@ -5,7 +5,6 @@ import {
   FLAG_GETTING_SPACES,
   CLEAR_SPACE,
   GET_SPACE_SUCCEEDED,
-  FLAG_EXPORTING_SPACE,
   FLAG_DELETING_SPACE,
   DELETE_SPACE_SUCCESS,
   FLAG_SAVING_SPACE,
@@ -24,14 +23,10 @@ import { clearPhase } from './phase';
 import {
   DELETE_SPACE_CHANNEL,
   DELETED_SPACE_CHANNEL,
-  EXPORT_SPACE_CHANNEL,
-  EXPORTED_SPACE_CHANNEL,
   GET_SPACE_CHANNEL,
   GET_SPACES_CHANNEL,
   SHOW_DELETE_SPACE_PROMPT_CHANNEL,
   RESPOND_DELETE_SPACE_PROMPT_CHANNEL,
-  SHOW_EXPORT_SPACE_PROMPT_CHANNEL,
-  RESPOND_EXPORT_SPACE_PROMPT_CHANNEL,
   SAVE_SPACE_CHANNEL,
   CLEAR_USER_INPUT_CHANNEL,
   CLEARED_USER_INPUT_CHANNEL,
@@ -42,14 +37,12 @@ import {
   // ERROR_DOWNLOADING_MESSAGE,
   ERROR_DELETING_MESSAGE,
   ERROR_DOWNLOADING_MESSAGE,
-  ERROR_EXPORTING_MESSAGE,
   ERROR_GETTING_SPACE_MESSAGE,
   ERROR_GETTING_SPACES_NEARBY,
   ERROR_MESSAGE_HEADER,
   ERROR_SAVING_SPACE_MESSAGE,
   ERROR_SPACE_ALREADY_AVAILABLE_MESSAGE,
   SUCCESS_DELETING_MESSAGE,
-  SUCCESS_EXPORTING_MESSAGE,
   SUCCESS_MESSAGE_HEADER,
   SUCCESS_SAVING_MESSAGE,
   ERROR_CLEARING_USER_INPUT_MESSAGE,
@@ -66,7 +59,6 @@ import { setSpaceAsFavorite, setSpaceAsRecent } from './user';
 
 const flagGettingSpaces = createFlag(FLAG_GETTING_SPACES);
 const flagDeletingSpace = createFlag(FLAG_DELETING_SPACE);
-const flagExportingSpace = createFlag(FLAG_EXPORTING_SPACE);
 const flagSavingSpace = createFlag(FLAG_SAVING_SPACE);
 const flagGettingSpacesNearby = createFlag(FLAG_GETTING_SPACES_NEARBY);
 const flagClearingUserInput = createFlag(FLAG_CLEARING_USER_INPUT);
@@ -237,34 +229,6 @@ const clearSpace = () => dispatch => {
   });
 };
 
-const exportSpace = (id, spaceName, userId, selection) => dispatch => {
-  window.ipcRenderer.send(SHOW_EXPORT_SPACE_PROMPT_CHANNEL, spaceName);
-  window.ipcRenderer.once(
-    RESPOND_EXPORT_SPACE_PROMPT_CHANNEL,
-    (event, archivePath) => {
-      dispatch(flagExportingSpace(true));
-      if (archivePath) {
-        window.ipcRenderer.send(EXPORT_SPACE_CHANNEL, {
-          archivePath,
-          id,
-          userId,
-          selection,
-        });
-      } else {
-        dispatch(flagExportingSpace(false));
-      }
-    }
-  );
-  window.ipcRenderer.once(EXPORTED_SPACE_CHANNEL, (event, response) => {
-    if (response === ERROR_GENERAL) {
-      toastr.error(ERROR_MESSAGE_HEADER, ERROR_EXPORTING_MESSAGE);
-    } else {
-      toastr.success(SUCCESS_MESSAGE_HEADER, SUCCESS_EXPORTING_MESSAGE);
-    }
-    dispatch(flagExportingSpace(false));
-  });
-};
-
 const deleteSpace = ({ id }) => dispatch => {
   // show confirmation prompt
   window.ipcRenderer.send(SHOW_DELETE_SPACE_PROMPT_CHANNEL);
@@ -387,7 +351,6 @@ const setSearchQuery = async payload => async dispatch => {
 export {
   clearSpace,
   deleteSpace,
-  exportSpace,
   getRemoteSpace,
   getLocalSpace,
   getSpaces,
