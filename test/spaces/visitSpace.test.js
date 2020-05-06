@@ -41,6 +41,7 @@ import {
 } from '../constants';
 import { userSignIn } from '../userSignIn.test';
 import { USER_GRAASP } from '../fixtures/users';
+import { USER_MODES } from '../../src/config/constants';
 
 const PREVIEW = 'preview';
 const SAVED = 'saved';
@@ -131,36 +132,39 @@ export const hasPreviewSpaceHomeLayout = async (
 // check home phase of given space when saved
 export const hasSavedSpaceHomeLayout = async (
   client,
-  { name: spaceName, description: spaceDescription }
+  { name: spaceName, description: spaceDescription },
+  userMode
 ) => {
   // space name
   const spaceToolbarSelector = `#${SPACE_TOOLBAR_ID}`;
   const toolbarText = await client.getText(spaceToolbarSelector);
   expect(toolbarText).to.include(spaceName);
 
-  // space save icon
+  // space export icon
   const exportIcon = await client.element(
     `${spaceToolbarSelector} .${SPACE_EXPORT_BUTTON_CLASS}`
   );
   expect(exportIcon.value).to.exist;
 
-  // space preview icon
-  const deleteIcon = await client.element(
-    `${spaceToolbarSelector} .${SPACE_DELETE_BUTTON_CLASS}`
-  );
-  expect(deleteIcon.value).to.exist;
-
-  // space preview icon
+  // space clear icon
   const clearIcon = await client.element(
     `${spaceToolbarSelector} .${SPACE_CLEAR_BUTTON_CLASS}`
   );
   expect(clearIcon.value).to.exist;
 
-  // space preview icon
-  const syncIcon = await client.element(
-    `${spaceToolbarSelector} .${SPACE_SYNC_BUTTON_CLASS}`
-  );
-  expect(syncIcon.value).to.exist;
+  if (userMode !== USER_MODES.STUDENT) {
+    // space delete icon
+    const deleteIcon = await client.element(
+      `${spaceToolbarSelector} .${SPACE_DELETE_BUTTON_CLASS}`
+    );
+    expect(deleteIcon.value).to.exist;
+
+    // space sync icon
+    const syncIcon = await client.element(
+      `${spaceToolbarSelector} .${SPACE_SYNC_BUTTON_CLASS}`
+    );
+    expect(syncIcon.value).to.exist;
+  }
 
   // space description
   if (spaceDescription && spaceDescription !== '') {
@@ -331,9 +335,10 @@ const checkPhasesLayout = async (client, phases, mode, resources = []) => {
 export const hasSavedSpaceLayout = async (
   client,
   { space: { phases, description, name } },
-  resources = []
+  resources = [],
+  userMode = USER_MODES.TEACHER
 ) => {
-  await hasSavedSpaceHomeLayout(client, { description, name });
+  await hasSavedSpaceHomeLayout(client, { description, name }, userMode);
   await checkPhasesLayout(client, phases, SAVED, resources);
 };
 

@@ -6,6 +6,7 @@ import {
   mochaAsync,
   expectElementToNotExist,
   expectElementToExist,
+  toggleSyncAdvancedMode,
 } from '../utils';
 import { createApplication, closeApplication } from '../application';
 import {
@@ -52,7 +53,6 @@ import { USER_GRAASP } from '../fixtures/users';
 import { loadSpaceById } from './loadSpace.test';
 import { openTools, hasSavedSpaceLayout } from './visitSpace.test';
 import { SYNC_CHANGES } from '../../src/config/constants';
-import { toggleSyncAdvancedMode } from '../settings.test';
 import { menuGoToSettings } from '../menu.test';
 
 const { ADDED, REMOVED, UPDATED, MOVED } = SYNC_CHANGES;

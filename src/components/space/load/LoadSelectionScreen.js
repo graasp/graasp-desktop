@@ -102,19 +102,20 @@ class LoadSelectionScreen extends Component {
     }
   }
 
-  /* eslint-disable react/destructuring-assignment */
-  state = {
-    // check space if it is not empty and is different from saved space
-    // student cannot load spaces
-    space: this.props.location.state
-      ? this.props.location.state.isSpaceDifferent
-      : false,
-    actions: !this.props.elements.get('actions').isEmpty(),
-    appInstanceResources: !this.props.elements
-      .get('appInstanceResources')
-      .isEmpty(),
-  };
-  /* eslint-enable react/destructuring-assignment */
+  state = (() => {
+    const {
+      location: { state },
+      elements,
+    } = this.props;
+
+    return {
+      // check space if it is not empty and is different from saved space
+      // student cannot load spaces
+      space: state ? state.isSpaceDifferent : false,
+      actions: !elements.get('actions').isEmpty(),
+      appInstanceResources: !elements.get('appInstanceResources').isEmpty(),
+    };
+  })();
 
   componentDidUpdate() {
     const {
@@ -206,7 +207,7 @@ class LoadSelectionScreen extends Component {
     if (isSpaceDifferent) {
       return (
         <FormHelperText>
-          {t(`The Space does not exist or is different`)}
+          {t(`This space does not exist or is different`)}
         </FormHelperText>
       );
     }

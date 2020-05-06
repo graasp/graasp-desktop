@@ -9,9 +9,7 @@ import MediaCard from '../common/MediaCard';
 import { clearSpace } from '../../actions';
 import DefaultThumbnail from '../../data/graasp.jpg';
 import { MIN_CARD_WIDTH } from '../../config/constants';
-import {
-  SPACE_CARD_CLASS,
-} from '../../config/selectors';
+import { SPACE_CARD_CLASS } from '../../config/selectors';
 import NoSpacesAvailable from '../common/NoSpacesAvailable';
 import { buildSpacePath } from '../../config/paths';
 

@@ -8,6 +8,10 @@ import {
   expectElementToNotExist,
   expectElementToExist,
   expectAnyElementToExist,
+  toggleDeveloperMode,
+  toggleGeolocationEnabled,
+  toggleSyncAdvancedMode,
+  changeLanguage,
 } from './utils';
 import { createApplication, closeApplication } from './application';
 import {
@@ -17,7 +21,7 @@ import {
   DEVELOPER_SWITCH_ID,
   DEVELOPER_MENU_ITEM_ID,
   SPACE_CARD_CLASS,
-  SPACE_NOT_AVAILABLE_TEXT_CLASS,
+  SPACE_NOT_AVAILABLE_TEXT_ID,
   SYNC_MODE_SWITCH_ID,
   SPACE_SYNC_BUTTON_CLASS,
   buildSpaceCardId,
@@ -27,7 +31,6 @@ import {
 } from '../src/config/selectors';
 import {
   DEFAULT_GLOBAL_TIMEOUT,
-  SETTINGS_LOAD_PAUSE,
   LOAD_SPACE_PAUSE,
   LOAD_TAB_PAUSE,
   SYNC_OPEN_SCREEN_PAUSE,
@@ -55,59 +58,6 @@ import {
   SPACE_WITH_REMOVAL,
   SPACE_WITH_REMOVAL_PATH,
 } from './fixtures/syncSpace';
-
-const changeLanguage = async (client, value) => {
-  const lang = await client.getAttribute(
-    `#${LANGUAGE_SELECT_ID} input`,
-    'value'
-  );
-  if (lang !== value) {
-    await client.click(`#${LANGUAGE_SELECT_ID}`);
-    await client.pause(1000);
-    await client.click(`[data-value='${value}']`);
-    await client.pause(LOAD_TAB_PAUSE);
-  }
-};
-
-const toggleGeolocationEnabled = async (client, value) => {
-  const geolocationEnabledSelector = `#${GEOLOCATION_CONTROL_ID} input`;
-  const geolocationEnabled = await client.getAttribute(
-    geolocationEnabledSelector,
-    'value'
-  );
-  if (JSON.parse(geolocationEnabled) !== value) {
-    await client.click(geolocationEnabledSelector);
-    await client.pause(SETTINGS_LOAD_PAUSE);
-  }
-};
-
-const toggleDeveloperMode = async (client, value) => {
-  const developerSwitchSelector = `#${DEVELOPER_SWITCH_ID} input`;
-  const developerMode = await client.getAttribute(
-    developerSwitchSelector,
-    'value'
-  );
-  if (JSON.parse(developerMode) !== value) {
-    await client.click(developerSwitchSelector);
-    await client.pause(SETTINGS_LOAD_PAUSE);
-  }
-};
-
-// eslint-disable-next-line import/prefer-default-export
-export const toggleSyncAdvancedMode = async (client, value) => {
-  const syncAdvancedModeSwitchSelector = `#${SYNC_MODE_SWITCH_ID} input`;
-  const syncAdvancedMode = await client.getAttribute(
-    syncAdvancedModeSwitchSelector,
-    'value'
-  );
-  const booleanToMode = JSON.parse(syncAdvancedMode)
-    ? SYNC_MODES.ADVANCED
-    : SYNC_MODES.VISUAL;
-  if (booleanToMode !== value) {
-    await client.click(syncAdvancedModeSwitchSelector);
-    await client.pause(SETTINGS_LOAD_PAUSE);
-  }
-};
 
 const isLanguageSetTo = async (client, value) => {
   const lang = await client.getAttribute(
@@ -218,7 +168,7 @@ describe('Settings Scenarios', function() {
         // spaces should be displayed
         await expectAnyElementToExist(client, [
           `.${SPACE_CARD_CLASS}`,
-          `#${SPACE_NOT_AVAILABLE_TEXT_CLASS}`,
+          `#${SPACE_NOT_AVAILABLE_TEXT_ID}`,
         ]);
       })
     );
