@@ -43,9 +43,7 @@ const Header = ({
         >
           <MenuIcon />
         </IconButton>
-        {showSearch ? (
-          <SearchSpaceBar handleOnInputChange={handleOnSearch} />
-        ) : null}
+        {showSearch && <SearchSpaceBar handleOnInputChange={handleOnSearch} />}
       </Toolbar>
     </AppBar>
   );

@@ -54,7 +54,6 @@ export const loadFilepath = async (client, filepath) => {
   await client.pause(LOAD_SPACE_PAUSE);
 };
 
-/* eslint-disable-next-line import/prefer-default-export */
 export const loadSpaceById = async (client, filepath, id) => {
   await menuGoToLoadSpace(client);
 
@@ -98,11 +97,11 @@ describe('Load Space Scenarios', function() {
         await client.setValue(`#${LOAD_INPUT_ID}`, 'somefilepath');
         await client.pause(INPUT_TYPE_PAUSE);
 
-        const IsLoadButtonDisabled = await client.getAttribute(
+        const isLoadButtonDisabled = await client.getAttribute(
           `#${LOAD_LOAD_BUTTON_ID}`,
           'disabled'
         );
-        expect(IsLoadButtonDisabled).to.be.true;
+        expect(isLoadButtonDisabled).to.be.true;
       })
     );
 

@@ -44,14 +44,14 @@ class Home extends Component {
     searchQuery: PropTypes.string.isRequired,
   };
 
-  state = {
-    // eslint-disable-next-line react/destructuring-assignment
-    filteredSpaces: this.props.spaces,
-  };
+  state = (() => {
+    const { spaces } = this.props;
+    return { filteredSpaces: spaces };
+  })();
 
-  async componentDidMount() {
+  componentDidMount() {
     const { dispatchGetSpaces } = this.props;
-    await dispatchGetSpaces();
+    dispatchGetSpaces();
   }
 
   componentDidUpdate({ spaces: prevSpaces, searchQuery: prevSearchQuery }) {

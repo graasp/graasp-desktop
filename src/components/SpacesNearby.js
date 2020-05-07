@@ -52,10 +52,10 @@ class SpacesNearby extends Component {
     activity: false,
   };
 
-  state = {
-    // eslint-disable-next-line react/destructuring-assignment
-    filteredSpaces: this.props.spaces,
-  };
+  state = (() => {
+    const { spaces } = this.props;
+    return { filteredSpaces: spaces };
+  })();
 
   constructor(props) {
     super(props);

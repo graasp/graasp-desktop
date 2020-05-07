@@ -9,6 +9,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import { setSearchQuery } from '../../actions';
 import { SPACE_SEARCH_INPUT_ID } from '../../config/selectors';
 
+// styles from https://material-ui.com/components/app-bar/
 const styles = theme => ({
   search: {
     position: 'absolute',
