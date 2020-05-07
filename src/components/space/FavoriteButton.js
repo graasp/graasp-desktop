@@ -11,6 +11,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core';
 import Styles from '../../Styles';
 import { setSpaceAsFavorite } from '../../actions';
+import { SPACE_FAVORITE_BUTTON_CLASS } from '../../config/selectors';
 
 const styles = theme => ({
   ...Styles(theme),
@@ -57,7 +58,11 @@ class FavoriteButton extends Component {
         <IconButton
           color="inherit"
           onClick={() => this.handleOnClick(isFavorite)}
-          className={clsx(classes.button, { [classes.isFavorite]: isFavorite })}
+          className={clsx(
+            classes.button,
+            { [classes.isFavorite]: isFavorite },
+            SPACE_FAVORITE_BUTTON_CLASS
+          )}
         >
           {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
         </IconButton>

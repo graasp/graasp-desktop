@@ -21,3 +21,4 @@ export const SYNC_SPACE_PAUSE = 5000;
 export const SYNC_OPEN_SCREEN_PAUSE = 5000;
 export const OPEN_TOOLS_PAUSE = 1000;
 export const SPACE_SEARCH_PAUSE = 3000;
+export const SET_SPACE_AS_FAVORITE_PAUSE = 1000;

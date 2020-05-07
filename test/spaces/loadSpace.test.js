@@ -65,7 +65,6 @@ export const loadSpaceById = async (client, filepath, id) => {
   if (id) {
     await client.click(`#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`);
 
-    // this waiting time is longer to wait for tooltip to fade out
     await client.pause(OPEN_SAVED_SPACE_PAUSE);
   }
 };
@@ -135,7 +134,6 @@ describe('Load Space Scenarios', function() {
         await loadSpaceById(client, SPACE_ATOMIC_STRUCTURE_WITH_CHANGES_PATH);
 
         const savedSpacesHtml = await client.getText(`#${HOME_MAIN_ID}`);
-        console.log('savedSpacesHtml', savedSpacesHtml);
         expect(savedSpacesHtml).to.not.include(
           SPACE_ATOMIC_STRUCTURE_WITH_CHANGES.space.name
         );

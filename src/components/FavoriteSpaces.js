@@ -12,7 +12,7 @@ import Styles from '../Styles';
 import SpaceGrid from './space/SpaceGrid';
 import Loader from './common/Loader';
 import Main from './common/Main';
-import { SPACES_NEARBY_MAIN_ID } from '../config/selectors';
+import { FAVORITE_SPACES_MAIN_ID } from '../config/selectors';
 import { searchSpacesByQuery } from '../utils/search';
 import { getSpaces } from '../actions';
 
@@ -102,7 +102,7 @@ class FavoriteSpaces extends Component {
       <Main
         showSearch
         handleOnSearch={this.handleOnSearch}
-        id={SPACES_NEARBY_MAIN_ID}
+        id={FAVORITE_SPACES_MAIN_ID}
       >
         <SpaceGrid spaces={filteredSpaces} showActions saved />
       </Main>
