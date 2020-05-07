@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { SIGN_IN_PATH, HOME_PATH } from '../config/paths';
-import { AUTHENTICATED } from '../config/constants';
+import { AUTHENTICATED, USER_MODES } from '../config/constants';
 
 // todo: remove eslint disable when parameter is used
 // eslint-disable-next-line no-unused-vars
-const Authorization = () => ChildComponent => {
+const Authorization = (authorizedUserModes = []) => ChildComponent => {
   class ComposedComponent extends Component {
     static redirectToSignIn(props) {
       // pathname inside location matches the path in url
@@ -33,9 +33,7 @@ const Authorization = () => ChildComponent => {
     }
 
     static propTypes = {
-      user: PropTypes.shape({
-        username: PropTypes.string,
-      }),
+      userMode: PropTypes.oneOf(Object.values(USER_MODES)).isRequired,
       authenticated: PropTypes.bool,
       dispatch: PropTypes.func.isRequired,
       match: PropTypes.shape({
@@ -45,27 +43,36 @@ const Authorization = () => ChildComponent => {
     };
 
     static defaultProps = {
-      user: null,
       authenticated: false,
       activity: false,
     };
 
     componentDidMount() {
-      const { authenticated, activity } = this.props;
+      const { authenticated, activity, userMode } = this.props;
 
       // check if authenticated
       if (!authenticated && !activity) {
         ComposedComponent.redirectToSignIn(this.props);
       }
-      // todo: check if user has access to current view
+      if (
+        authorizedUserModes.length &&
+        !authorizedUserModes.includes(userMode)
+      ) {
+        ComposedComponent.redirectToHome(this.props);
+      }
     }
 
     componentDidUpdate() {
-      const { authenticated } = this.props;
+      const { authenticated, userMode } = this.props;
       if (!authenticated) {
         ComposedComponent.redirectToSignIn(this.props);
       }
-      // todo: check if user has access to current view
+      if (
+        authorizedUserModes.length &&
+        !authorizedUserModes.includes(userMode)
+      ) {
+        ComposedComponent.redirectToHome(this.props);
+      }
     }
 
     render() {
@@ -75,7 +82,7 @@ const Authorization = () => ChildComponent => {
   }
 
   const mapStateToProps = ({ authentication }) => ({
-    user: authentication.get('user'),
+    userMode: authentication.getIn(['user', 'settings', 'userMode']),
     authenticated: authentication.get('authenticated') === AUTHENTICATED,
     activity: Boolean(authentication.getIn(['current', 'activity']).size),
   });

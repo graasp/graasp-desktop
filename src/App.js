@@ -23,6 +23,7 @@ import { OnlineTheme, OfflineTheme } from './themes';
 import Dashboard from './components/dashboard/Dashboard';
 import SignInScreen from './components/signin/SignInScreen';
 import Authorization from './components/Authorization';
+import TeacherBoard from './components/teacherBoard/TeacherBoard';
 import {
   SETTINGS_PATH,
   SYNC_SPACE_PATH,
@@ -37,6 +38,8 @@ import {
   SAVED_SPACES_PATH,
   buildExportSelectionPathForSpaceId,
   LOAD_SELECTION_SPACE_PATH,
+  CLASSROOMS_PATH,
+  buildClassroomPath,
 } from './config/paths';
 import {
   getGeolocation,
@@ -46,7 +49,7 @@ import {
   getGeolocationEnabled,
   isAuthenticated,
 } from './actions';
-import { DEFAULT_LANGUAGE } from './config/constants';
+import { DEFAULT_LANGUAGE, USER_MODES } from './config/constants';
 import {
   CONNECTION_MESSAGE_HEADER,
   CONNECTION_OFFLINE_MESSAGE,
@@ -54,6 +57,7 @@ import {
 } from './config/messages';
 import './App.css';
 import SavedSpaces from './components/SavedSpaces';
+import ClassroomScreen from './components/teacherBoard/ClassroomScreen';
 
 const styles = () => ({
   toastrIcon: { marginBottom: '-20px', fontSize: '45px' },
@@ -216,6 +220,20 @@ export class App extends Component {
                     exact
                     path={DASHBOARD_PATH}
                     component={Authorization()(Dashboard)}
+                  />
+                  <Route
+                    exact
+                    path={buildClassroomPath()}
+                    component={Authorization([USER_MODES.TEACHER])(
+                      ClassroomScreen
+                    )}
+                  />
+                  <Route
+                    exact
+                    path={CLASSROOMS_PATH}
+                    component={Authorization([USER_MODES.TEACHER])(
+                      TeacherBoard
+                    )}
                   />
                   <Route
                     exact

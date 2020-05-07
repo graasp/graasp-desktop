@@ -28,6 +28,7 @@ import {
   DASHBOARD_PATH,
   SIGN_IN_PATH,
   SAVED_SPACES_PATH,
+  CLASSROOMS_PATH,
 } from '../../config/paths';
 import {
   SETTINGS_MENU_ITEM_ID,
@@ -41,7 +42,7 @@ import {
   SAVED_SPACES_MENU_ITEM_ID,
 } from '../../config/selectors';
 import { signOut } from '../../actions/authentication';
-import { AUTHENTICATED } from '../../config/constants';
+import { AUTHENTICATED, USER_MODES } from '../../config/constants';
 
 export class MainMenu extends Component {
   static propTypes = {
@@ -53,6 +54,7 @@ export class MainMenu extends Component {
     authenticated: PropTypes.bool.isRequired,
     location: PropTypes.shape({ pathname: PropTypes.string.isRequired })
       .isRequired,
+    userMode: PropTypes.oneOf(Object.values(USER_MODES)).isRequired,
   };
 
   handleClick = path => {
@@ -171,6 +173,31 @@ export class MainMenu extends Component {
     return null;
   };
 
+  renderClassrooms = () => {
+    const {
+      authenticated,
+      userMode,
+      match: { path },
+      t,
+    } = this.props;
+
+    if (authenticated && userMode === USER_MODES.TEACHER) {
+      return (
+        <MenuItem
+          onClick={() => this.handleClick(CLASSROOMS_PATH)}
+          button
+          selected={path === CLASSROOMS_PATH}
+        >
+          <ListItemIcon>
+            <ShowChartIcon />
+          </ListItemIcon>
+          <ListItemText primary={t('Classrooms')} />
+        </MenuItem>
+      );
+    }
+    return null;
+  };
+
   renderAuthenticatedMenu() {
     const {
       authenticated,
@@ -279,6 +306,7 @@ export class MainMenu extends Component {
           <ListItemText primary={t('Settings')} />
         </MenuItem>
         {this.renderDashboard()}
+        {this.renderClassrooms()}
         {this.renderDeveloperMode()}
         {this.renderSignOut()}
       </List>
@@ -289,6 +317,7 @@ export class MainMenu extends Component {
 const mapStateToProps = ({ authentication }) => ({
   authenticated: authentication.getIn(['authenticated']) === AUTHENTICATED,
   developerMode: authentication.getIn(['user', 'settings', 'developerMode']),
+  userMode: authentication.getIn(['user', 'settings', 'userMode']),
   activity: Boolean(authentication.getIn(['current', 'activity']).size),
 });
 const mapDispatchToProps = {

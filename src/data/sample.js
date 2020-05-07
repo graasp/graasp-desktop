@@ -202,6 +202,16 @@ const SampleDatabase = {
       id: '5ce430152f6f6672b16fca57',
     },
   ],
+  classrooms: [
+    {
+      spaces: [],
+      users: [],
+      appInstanceResources: [],
+      actions: [],
+      id: 'id',
+      name: 'my classroom name',
+    },
+  ],
 };
 
 export default SampleDatabase;

@@ -12,6 +12,7 @@ const SPACES_COLLECTION = 'spaces';
 const ACTIONS_COLLECTION = 'actions';
 const USERS_COLLECTION = 'users';
 const APP_INSTANCE_RESOURCES_COLLECTION = 'appInstanceResources';
+const CLASSROOMS_COLLECTION = 'classrooms';
 
 // bootstrap database
 const ensureDatabaseExists = async (dbPath = DATABASE_PATH) => {
@@ -39,6 +40,7 @@ const bootstrapDatabase = (dbPath = DATABASE_PATH) => {
     user: { lang: DEFAULT_LANG },
     [ACTIONS_COLLECTION]: [],
     [APP_INSTANCE_RESOURCES_COLLECTION]: [],
+    [CLASSROOMS_COLLECTION]: [],
   }).write();
   return db;
 };
@@ -48,6 +50,7 @@ module.exports = {
   USERS_COLLECTION,
   APP_INSTANCE_RESOURCES_COLLECTION,
   ACTIONS_COLLECTION,
+  CLASSROOMS_COLLECTION,
   ensureDatabaseExists,
   bootstrapDatabase,
 };

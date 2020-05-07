@@ -35,6 +35,12 @@ const patchAppInstanceResource = require('./patchAppInstanceResource');
 const getAppInstance = require('./getAppInstance');
 const setSpaceAsFavorite = require('./setSpaceAsFavorite');
 const setSpaceAsRecent = require('./setSpaceAsRecent');
+const addClassroom = require('./addClassroom');
+const getClassrooms = require('./getClassrooms');
+const deleteClassroom = require('./deleteClassroom');
+const editClassroom = require('./editClassroom');
+const showDeleteClassroomPrompt = require('./showDeleteClassroomPrompt');
+const getClassroom = require('./getClassroom');
 
 module.exports = {
   loadSpace,
@@ -73,4 +79,10 @@ module.exports = {
   setUserMode,
   setSpaceAsFavorite,
   setSpaceAsRecent,
+  addClassroom,
+  deleteClassroom,
+  editClassroom,
+  getClassrooms,
+  getClassroom,
+  showDeleteClassroomPrompt,
 };
