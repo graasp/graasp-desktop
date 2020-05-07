@@ -19,6 +19,7 @@ import DeleteButton from './DeleteButton';
 import ExportButton from './ExportButton';
 import SyncButton from './SyncButton';
 import ClearButton from './ClearButton';
+import FavoriteButton from './FavoriteButton';
 import {
   SPACE_TOOLBAR_ID,
   SPACE_SAVE_ICON_CLASS,
@@ -151,6 +152,14 @@ class SpaceHeader extends Component {
         </>
       );
     }
+  }
+  
+  renderFavoriteButton() {
+    const { space } = this.props;
+    const { saved, id } = space;
+    if (saved) {
+      return <FavoriteButton spaceId={id} />;
+    }
     return null;
   }
 
@@ -187,6 +196,7 @@ class SpaceHeader extends Component {
             {this.renderPreviewIcon()}
             {this.renderExportButton()}
             {this.renderTeacherButtons()}
+            {this.renderFavoriteButton()}
           </span>
         </Toolbar>
       </AppBar>
