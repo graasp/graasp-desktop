@@ -13,9 +13,9 @@ import {
   SPACE_EXPORT_BUTTON_CLASS,
   LOAD_INPUT_ID,
   SPACE_DELETE_BUTTON_CLASS,
-  HOME_MAIN_ID,
   PHASE_MENU_LIST_ID,
   buildPhaseMenuItemId,
+  SAVED_SPACES_MAIN_ID,
 } from '../../src/config/selectors';
 import {
   SPACE_ATOMIC_STRUCTURE,
@@ -100,7 +100,7 @@ describe('Load Space Scenarios', function() {
           `#${LOAD_LOAD_BUTTON_ID}`,
           'disabled'
         );
-        expect(isLoadButtonDisabled).to.be.true;
+        expect(isLoadButtonDisabled).to.equal('true');
       })
     );
 
@@ -133,7 +133,9 @@ describe('Load Space Scenarios', function() {
         // load space
         await loadSpaceById(client, SPACE_ATOMIC_STRUCTURE_WITH_CHANGES_PATH);
 
-        const savedSpacesHtml = await client.getText(`#${HOME_MAIN_ID}`);
+        const savedSpacesHtml = await client.getText(
+          `#${SAVED_SPACES_MAIN_ID}`
+        );
         expect(savedSpacesHtml).to.not.include(
           SPACE_ATOMIC_STRUCTURE_WITH_CHANGES.space.name
         );

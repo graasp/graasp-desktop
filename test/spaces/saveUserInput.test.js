@@ -99,6 +99,7 @@ describe('Save User Input in a space', function() {
 
         for (const [index, user] of users.entries()) {
           await userSignIn(app.client, user);
+          await menuGoToSavedSpaces(client);
           const text = userInputTextForUser(user.name);
 
           // first user load space
@@ -139,6 +140,7 @@ describe('Save User Input in a space', function() {
         // check user input still exist after logout
         for (const user of users) {
           await userSignIn(client, user);
+          await menuGoToSavedSpaces(client);
           const text = userInputTextForUser(user.name);
 
           await client.click(

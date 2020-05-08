@@ -16,6 +16,7 @@ import {
   buildSpaceCardId,
   SPACE_FAVORITE_BUTTON_CLASS,
   SPACE_CARD_LINK_CLASS,
+  FAVORITE_SPACES_WRAPPER_ID,
 } from '../../src/config/selectors';
 import { SPACE_ATOMIC_STRUCTURE } from '../fixtures/spaces';
 import { visitAndSaveSpaceById } from './visitSpace.test';
@@ -63,7 +64,10 @@ describe('Set space as favorite', function() {
 
         // check space is in home
         await menuGoToHome(client);
-        await expectElementToExist(client, `#${buildSpaceCardId(id)}`);
+        await expectElementToExist(
+          client,
+          `#${FAVORITE_SPACES_WRAPPER_ID} #${buildSpaceCardId(id)}`
+        );
 
         // uncheck favorite
         await client.click(
@@ -72,7 +76,10 @@ describe('Set space as favorite', function() {
         await client.pause(SET_SPACE_AS_FAVORITE_PAUSE);
 
         // space should not be in favorite spaces
-        await expectElementToNotExist(client, `#${buildSpaceCardId(id)}`);
+        await expectElementToNotExist(
+          client,
+          `#${FAVORITE_SPACES_WRAPPER_ID} #${buildSpaceCardId(id)}`
+        );
       })
     );
 
@@ -92,7 +99,10 @@ describe('Set space as favorite', function() {
 
         // check space is in home tab
         await menuGoToHome(client);
-        await expectElementToExist(client, `#${buildSpaceCardId(id)}`);
+        await expectElementToExist(
+          client,
+          `#${FAVORITE_SPACES_WRAPPER_ID} #${buildSpaceCardId(id)}`
+        );
 
         // uncheck favorite
         await menuGoToSavedSpaces(client);
@@ -105,13 +115,16 @@ describe('Set space as favorite', function() {
 
         // space should not be in home
         await menuGoToHome(client);
-        await expectElementToNotExist(client, `#${buildSpaceCardId(id)}`);
+        await expectElementToNotExist(
+          client,
+          `#${FAVORITE_SPACES_WRAPPER_ID} #${buildSpaceCardId(id)}`
+        );
       })
     );
   });
 
   describe('Multi-users', function() {
-    it.only(
+    it(
       'Set a space as favorite is different per user',
       mochaAsync(async () => {
         app = await createApplication();

@@ -220,7 +220,7 @@ class SpaceScreen extends Component {
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
-              <ListItemText primary="Home" />
+              <ListItemText primary={space.get('name')} />
             </MenuItem>
             {phases.map((item, i) => (
               <MenuItem

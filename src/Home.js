@@ -13,7 +13,11 @@ import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Star';
 import HistoryIcon from '@material-ui/icons/History';
 import NoSpacesAvailable from './components/common/NoSpacesAvailable';
-import { HOME_MAIN_ID } from './config/selectors';
+import {
+  HOME_MAIN_ID,
+  FAVORITE_SPACES_WRAPPER_ID,
+  RECENT_SPACES_WRAPPER_ID,
+} from './config/selectors';
 import { searchSpacesByQuery } from './utils/search';
 import { getSpaces } from './actions';
 import Styles from './Styles';
@@ -133,13 +137,13 @@ class Home extends Component {
     }
 
     return (
-      <>
+      <div id={FAVORITE_SPACES_WRAPPER_ID}>
         <Typography className={classes.title} variant="h6">
           <FavoriteIcon className={classes.icon} />
           {t('Favorite Spaces')}
         </Typography>
         <SpaceGrid spaces={filteredFavoriteSpaces} showActions saved />
-      </>
+      </div>
     );
   };
 
@@ -152,13 +156,13 @@ class Home extends Component {
     }
 
     return (
-      <>
+      <div id={RECENT_SPACES_WRAPPER_ID}>
         <Typography className={classes.title} variant="h6">
           <HistoryIcon className={classes.icon} />
           {t('Recent Spaces')}
         </Typography>
         <SpaceGrid spaces={filteredRecentSpaces} showActions saved />
-      </>
+      </div>
     );
   };
 

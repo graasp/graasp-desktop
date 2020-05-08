@@ -218,6 +218,7 @@ describe('Clear User Input in a space', function() {
 
         // login as bob, save user input
         await userSignIn(client, USER_BOB);
+        await menuGoToSavedSpaces(client);
         await client.click(
           `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
         );
@@ -229,6 +230,7 @@ describe('Clear User Input in a space', function() {
 
         // login as Alice, clear user input
         await userSignIn(client, USER_ALICE);
+        await menuGoToSavedSpaces(client);
         await client.click(
           `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
         );
@@ -249,6 +251,7 @@ describe('Clear User Input in a space', function() {
 
         // login as Bob, check user input are still saved
         await userSignIn(client, USER_BOB);
+        await menuGoToSavedSpaces(client);
         await client.click(
           `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
         );
