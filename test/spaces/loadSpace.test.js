@@ -39,20 +39,25 @@ import { userSignIn } from '../userSignIn.test';
 import { USER_GRAASP } from '../fixtures/users';
 import { typeInTextInputApp } from '../apps/textInputApp';
 
-/* eslint-disable-next-line import/prefer-default-export */
-export const loadSpaceById = async (client, filepath, id) => {
-  await menuGoToLoadSpace(client);
+export const loadFilepath = async (client, filepath) => {
+  const loadInput = `#${LOAD_INPUT_ID}`;
 
   // input space id
   const absolutePath = path.resolve(__dirname, '../fixtures/spaces', filepath);
-  await client.setValue(`#${LOAD_INPUT_ID}`, absolutePath);
+  await client.setValue(loadInput, absolutePath);
   await client.pause(INPUT_TYPE_PAUSE);
 
-  const value = await client.getValue(`#${LOAD_INPUT_ID}`);
+  const value = await client.getValue(loadInput);
   expect(value).to.equal(absolutePath);
 
   await client.click(`#${LOAD_LOAD_BUTTON_ID}`);
   await client.pause(LOAD_SPACE_PAUSE);
+};
+
+export const loadSpaceById = async (client, filepath, id) => {
+  await menuGoToLoadSpace(client);
+
+  await loadFilepath(client, filepath);
 
   // go to space
   await menuGoToHome(client);
@@ -92,8 +97,11 @@ describe('Load Space Scenarios', function() {
         await client.setValue(`#${LOAD_INPUT_ID}`, 'somefilepath');
         await client.pause(INPUT_TYPE_PAUSE);
 
-        const loadButtonHtml = await client.getHTML(`#${LOAD_LOAD_BUTTON_ID}`);
-        expect(loadButtonHtml).to.include('disabled');
+        const isLoadButtonDisabled = await client.getAttribute(
+          `#${LOAD_LOAD_BUTTON_ID}`,
+          'disabled'
+        );
+        expect(isLoadButtonDisabled).to.be.true;
       })
     );
 
@@ -126,7 +134,8 @@ describe('Load Space Scenarios', function() {
         // load space
         await loadSpaceById(client, SPACE_ATOMIC_STRUCTURE_WITH_CHANGES_PATH);
 
-        const savedSpacesHtml = await client.getHTML(`#${HOME_MAIN_ID}`);
+        const savedSpacesHtml = await client.getText(`#${HOME_MAIN_ID}`);
+        console.log('savedSpacesHtml', savedSpacesHtml);
         expect(savedSpacesHtml).to.not.include(
           SPACE_ATOMIC_STRUCTURE_WITH_CHANGES.space.name
         );

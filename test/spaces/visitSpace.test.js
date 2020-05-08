@@ -245,14 +245,17 @@ const hasPhaseLayout = async (
             break;
           }
           case 'video/quicktime': {
-            const html = await client.getHTML(`${itemSelector} video`);
-            expect(html).to.include(urlForMode);
+            const src = await client.getAttribute(
+              `${itemSelector} video source`,
+              'src'
+            );
+            expect(src).to.include(urlForMode);
             break;
           }
           case 'image/png':
           case 'image/jpeg': {
-            const html = await client.getHTML(`${itemSelector} img`);
-            expect(html).to.include(urlForMode);
+            const src = await client.getAttribute(`${itemSelector} img`, 'src');
+            expect(src).to.include(urlForMode);
             break;
           }
           default: {
@@ -264,14 +267,20 @@ const hasPhaseLayout = async (
       case 'Application': {
         switch (mode) {
           case PREVIEW: {
-            const iframe = await client.getHTML(`${itemSelector} iframe`);
-            expect(iframe).to.include(url);
+            const src = await client.getAttribute(
+              `${itemSelector} iframe`,
+              'src'
+            );
+            expect(src).to.include(url);
             await checkUserInputInApp(client, { id, url });
             break;
           }
           case SAVED: {
-            const iframe = await client.getHTML(`${itemSelector} iframe`);
-            expect(iframe).to.include(asset);
+            const src = await client.getAttribute(
+              `${itemSelector} iframe`,
+              'src'
+            );
+            expect(src).to.include(asset);
             if (appInstance) {
               const { id: appInstanceId } = appInstance;
               const filteredResources = resources.filter(

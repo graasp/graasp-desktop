@@ -16,6 +16,8 @@ import GeolocationControl from './common/GeolocationControl';
 import { CONTROL_TYPES } from '../config/constants';
 import Main from './common/Main';
 import { SPACES_NEARBY_MAIN_ID } from '../config/selectors';
+import { searchSpacesByQuery } from '../utils/search';
+import { SPACES_NEARBY_PATH } from '../config/paths';
 
 class SpacesNearby extends Component {
   static propTypes = {
@@ -42,6 +44,7 @@ class SpacesNearby extends Component {
     spaces: PropTypes.instanceOf(Set).isRequired,
     activity: PropTypes.bool,
     geolocationEnabled: PropTypes.bool.isRequired,
+    searchQuery: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -49,15 +52,27 @@ class SpacesNearby extends Component {
     activity: false,
   };
 
+  state = (() => {
+    const { spaces } = this.props;
+    return { filteredSpaces: spaces };
+  })();
+
   constructor(props) {
     super(props);
     this.getSpacesNearby();
   }
 
-  componentDidUpdate({ geolocation: prevGeolocation }) {
-    const { geolocation } = this.props;
+  componentDidUpdate({
+    geolocation: prevGeolocation,
+    spaces: prevSpaces,
+    searchQuery: prevSearchQuery,
+  }) {
+    const { geolocation, spaces, searchQuery } = this.props;
     if (!geolocation.equals(prevGeolocation)) {
       this.getSpacesNearby();
+    }
+    if (!spaces.equals(prevSpaces) || searchQuery !== prevSearchQuery) {
+      this.filterSpacesWithSearchQuery();
     }
   }
 
@@ -74,8 +89,15 @@ class SpacesNearby extends Component {
     }
   };
 
+  filterSpacesWithSearchQuery = () => {
+    const { spaces, searchQuery } = this.props;
+    const filteredSpaces = searchSpacesByQuery(spaces, searchQuery);
+    this.setState({ filteredSpaces });
+  };
+
   render() {
-    const { classes, spaces, activity, geolocationEnabled } = this.props;
+    const { classes, activity, geolocationEnabled } = this.props;
+    const { filteredSpaces } = this.state;
 
     if (activity) {
       return (
@@ -92,14 +114,18 @@ class SpacesNearby extends Component {
     }
 
     const geolocationContent = geolocationEnabled ? (
-      <SpaceGrid spaces={spaces} />
+      <SpaceGrid spaces={filteredSpaces} />
     ) : (
       <div className="Main">
         <GeolocationControl controlType={CONTROL_TYPES.BUTTON} />
       </div>
     );
 
-    return <Main id={SPACES_NEARBY_MAIN_ID}>{geolocationContent}</Main>;
+    return (
+      <Main showSearch id={SPACES_NEARBY_MAIN_ID}>
+        {geolocationContent}
+      </Main>
+    );
   }
 }
 
@@ -112,6 +138,7 @@ const mapStateToProps = ({ authentication, Space }) => ({
     'settings',
     'geolocationEnabled',
   ]),
+  searchQuery: Space.getIn(['search', SPACES_NEARBY_PATH]),
 });
 
 const mapDispatchToProps = {

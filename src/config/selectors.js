@@ -29,6 +29,7 @@ export const SPACE_DESCRIPTION_ID = 'spaceDescription';
 export const SPACE_SAVE_ICON_CLASS = 'spaceSaveIcon';
 export const SPACE_PREVIEW_ICON_CLASS = 'spacePreviewIcon';
 export const PHASE_DESCRIPTION_ID = 'phaseDescription';
+export const SPACE_MEDIA_CARD_CLASS = 'spaceMediaCard';
 export const buildPhaseMenuItemId = id => `phaseMenuItemId-${id}`;
 export const BANNER_WARNING_PREVIEW_ID = 'bannerWarningPreview';
 export const SPACE_EXPORT_BUTTON_CLASS = 'spaceExportButton';
@@ -37,6 +38,7 @@ export const SPACE_CLEAR_BUTTON_CLASS = 'spaceClearButton';
 export const SPACE_SYNC_BUTTON_CLASS = 'spaceSyncButton';
 export const TOOLS_BUTTON_CLASS = 'toolsButton';
 export const TOOLS_CONTENT_PANE_ID = 'toolsContentPane';
+export const SPACE_SEARCH_INPUT_ID = 'searchInput';
 
 export const SPACE_CARD_CLASS = 'spaceCard';
 export const buildSpaceCardId = id => `spaceCard-${id}`;

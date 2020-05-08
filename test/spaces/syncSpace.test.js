@@ -81,7 +81,7 @@ const constructToolsPhase = items => ({
 });
 
 const checkItemHasChange = async (client, selector, change) => {
-  const itemHtml = await client.getHTML(selector);
+  const itemHtml = await client.getAttribute(selector, 'class');
   switch (change) {
     case UPDATED:
       // there exist 2 elements with the same data-id on update

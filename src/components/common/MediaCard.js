@@ -23,6 +23,7 @@ import {
   SPACE_DESCRIPTION_EXPAND_BUTTON_CLASS,
   buildSpaceCardDescriptionId,
   SPACE_CARD_LINK_CLASS,
+  SPACE_MEDIA_CARD_CLASS,
 } from '../../config/selectors';
 
 const styles = theme => ({
@@ -85,7 +86,10 @@ export const MediaCard = props => {
   };
 
   return (
-    <Card id={buildSpaceCardId(id)} className={classes.card}>
+    <Card
+      id={buildSpaceCardId(id)}
+      className={clsx(SPACE_MEDIA_CARD_CLASS, classes.card)}
+    >
       <CardActionArea className={SPACE_CARD_LINK_CLASS} onClick={viewLink}>
         <CardMedia className={classes.media} image={image} title={name} />
 

@@ -16,6 +16,7 @@ import {
   FLAG_SYNCING_SPACE,
   SYNC_SPACE_SUCCEEDED,
   FLAG_CLEARING_USER_INPUT,
+  SET_SPACE_SEARCH_QUERY_SUCCEEDED,
 } from '../types';
 import {
   ERROR_ZIP_CORRUPTED,
@@ -445,6 +446,13 @@ const getSpacesNearby = async ({
   }
 };
 
+const setSearchQuery = async payload => async dispatch => {
+  dispatch({
+    type: SET_SPACE_SEARCH_QUERY_SUCCEEDED,
+    payload,
+  });
+};
+
 export {
   loadSpace,
   clearSpace,
@@ -460,4 +468,5 @@ export {
   clearUserInput,
   createGetLocalSpace,
   createGetRemoteSpace,
+  setSearchQuery,
 };

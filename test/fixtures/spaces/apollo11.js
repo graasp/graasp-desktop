@@ -1,4 +1,4 @@
-const SPACE_APOLLO_11 = {
+export const SPACE_APOLLO_11 = {
   space: {
     id: '5d2db762fcb4d60e33ad32fe',
     name: 'Apollo 11',
@@ -207,5 +207,4 @@ const SPACE_APOLLO_11 = {
   appInstanceResources: [],
 };
 
-/* eslint-disable-next-line import/prefer-default-export */
-export { SPACE_APOLLO_11 };
+export const SPACE_APOLLO_11_PATH = 'apollo11.zip';

@@ -10,8 +10,19 @@ import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import Styles from '../../Styles';
 import { DRAWER_BUTTON_ID } from '../../config/selectors';
+import SearchSpaceBar from './SearchSpaceBar';
 
-const Header = ({ classes, handleDrawerOpen, isSidebarOpen }) => {
+const styles = theme => ({
+  ...Styles(theme),
+});
+
+const Header = ({
+  classes,
+  handleDrawerOpen,
+  isSidebarOpen,
+  showSearch,
+  handleOnSearch,
+}) => {
   return (
     <AppBar
       position="fixed"
@@ -32,6 +43,7 @@ const Header = ({ classes, handleDrawerOpen, isSidebarOpen }) => {
         >
           <MenuIcon />
         </IconButton>
+        {showSearch && <SearchSpaceBar handleOnInputChange={handleOnSearch} />}
       </Toolbar>
     </AppBar>
   );
@@ -52,12 +64,20 @@ Header.propTypes = {
     formControl: PropTypes.string.isRequired,
     input: PropTypes.string.isRequired,
     button: PropTypes.string.isRequired,
+    toolbarRoot: PropTypes.string.isRequired,
   }).isRequired,
   theme: PropTypes.shape({
     direction: PropTypes.string.isRequired,
   }).isRequired,
   isSidebarOpen: PropTypes.bool.isRequired,
   handleDrawerOpen: PropTypes.func.isRequired,
+  handleOnSearch: PropTypes.func,
+  showSearch: PropTypes.bool,
+};
+
+Header.defaultProps = {
+  showSearch: false,
+  handleOnSearch: () => {},
 };
 
 const mapStateToProps = ({ authentication }) => ({
@@ -68,7 +88,7 @@ const mapDispatchToProps = {};
 
 const ConnectedComponent = connect(mapStateToProps, mapDispatchToProps)(Header);
 
-const StyledComponent = withStyles(Styles, { withTheme: true })(
+const StyledComponent = withStyles(styles, { withTheme: true })(
   ConnectedComponent
 );
 
