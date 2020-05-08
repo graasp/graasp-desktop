@@ -35,7 +35,7 @@ import {
 import {
   openDrawer,
   menuGoToSettings,
-  menuGoToHome,
+  menuGoToSavedSpaces,
   menuGoToDeveloper,
   menuGoToSpacesNearby,
   menuGoToSignOut,
@@ -298,7 +298,7 @@ describe('Settings Scenarios', function() {
         await toggleSyncAdvancedMode(client, true);
 
         // sync mode should be advanced
-        await menuGoToHome(client);
+        await menuGoToSavedSpaces(client);
 
         await client.click(
           `#${buildSpaceCardId(id)} .${SPACE_SYNC_BUTTON_CLASS}`
@@ -340,7 +340,7 @@ describe('Settings Scenarios', function() {
           await toggleGeolocationEnabled(client, geolocationEnabled);
           await toggleSyncAdvancedMode(client, syncMode);
 
-          await menuGoToHome(client);
+          await menuGoToSavedSpaces(client);
 
           // check settings are saved
           await menuGoToSettings(client);

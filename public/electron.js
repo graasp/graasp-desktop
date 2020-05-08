@@ -57,6 +57,7 @@ const {
   GET_USER_MODE_CHANNEL,
   SET_USER_MODE_CHANNEL,
   SET_SPACE_AS_FAVORITE_CHANNEL,
+  SET_SPACE_AS_RECENT_CHANNEL,
 } = require('./app/config/channels');
 const env = require('./env.json');
 const {
@@ -92,6 +93,7 @@ const {
   setUserMode,
   getUserMode,
   setSpaceAsFavorite,
+  setSpaceAsRecent,
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
 
@@ -406,8 +408,11 @@ app.on('ready', async () => {
   // called when getting sync mode
   ipcMain.on(GET_SYNC_MODE_CHANNEL, getSyncMode(mainWindow, db));
 
-  // called when setting developer mode
+  // called when setting space as favorite
   ipcMain.on(SET_SPACE_AS_FAVORITE_CHANNEL, setSpaceAsFavorite(mainWindow, db));
+
+  // called when setting space as recent
+  ipcMain.on(SET_SPACE_AS_RECENT_CHANNEL, setSpaceAsRecent(mainWindow, db));
 
   // called when getting geolocation enabled
   ipcMain.on(

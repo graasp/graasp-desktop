@@ -8,8 +8,8 @@ import {
 } from '../utils';
 import { createApplication, closeApplication } from '../application';
 import {
+  menuGoToSavedSpaces,
   menuGoToHome,
-  menuGoToFavoriteSpaces,
   menuGoToSignOut,
 } from '../menu.test';
 import {
@@ -54,15 +54,15 @@ describe('Set space as favorite', function() {
 
         await visitAndSaveSpaceById(client, id);
 
-        await menuGoToHome(client);
+        await menuGoToSavedSpaces(client);
 
         await client.click(
           `#${buildSpaceCardId(id)} .${SPACE_FAVORITE_BUTTON_CLASS}`
         );
         await client.pause(SET_SPACE_AS_FAVORITE_PAUSE);
 
-        // check space is in favorite tab
-        await menuGoToFavoriteSpaces(client);
+        // check space is in home
+        await menuGoToHome(client);
         await expectElementToExist(client, `#${buildSpaceCardId(id)}`);
 
         // uncheck favorite
@@ -90,12 +90,12 @@ describe('Set space as favorite', function() {
         await client.click(`.${SPACE_FAVORITE_BUTTON_CLASS}`);
         await client.pause(SET_SPACE_AS_FAVORITE_PAUSE);
 
-        // check space is in favorite tab
-        await menuGoToFavoriteSpaces(client);
+        // check space is in home tab
+        await menuGoToHome(client);
         await expectElementToExist(client, `#${buildSpaceCardId(id)}`);
 
         // uncheck favorite
-        await menuGoToHome(client);
+        await menuGoToSavedSpaces(client);
         await client.click(
           `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
         );
@@ -103,8 +103,8 @@ describe('Set space as favorite', function() {
         await client.click(`.${SPACE_FAVORITE_BUTTON_CLASS}`);
         await client.pause(SET_SPACE_AS_FAVORITE_PAUSE);
 
-        // space should not be in favorite spaces
-        await menuGoToFavoriteSpaces(client);
+        // space should not be in home
+        await menuGoToHome(client);
         await expectElementToNotExist(client, `#${buildSpaceCardId(id)}`);
       })
     );
@@ -131,13 +131,11 @@ describe('Set space as favorite', function() {
 
         // sign in with bob, no favorite
         await userSignIn(app.client, USER_BOB);
-        await menuGoToFavoriteSpaces(client);
         await expectElementToNotExist(client, `#${buildSpaceCardId(id)}`);
         await menuGoToSignOut(client);
 
         // sign in with alice, still favorite
         await userSignIn(app.client, USER_ALICE);
-        await menuGoToFavoriteSpaces(client);
         await expectElementToExist(client, `#${buildSpaceCardId(id)}`);
       })
     );

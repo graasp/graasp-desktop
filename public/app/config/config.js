@@ -63,9 +63,12 @@ const DEFAULT_USER = {
     userMode: DEFAULT_USER_MODE,
   },
   favoriteSpaces: [],
+  recentSpaces: [],
 };
 
 const ANONYMOUS_USERNAME = 'Anonymous';
+
+const MAX_RECENT_SPACES_SPACES = 5;
 
 module.exports = {
   DEFAULT_LOGGING_LEVEL,
@@ -89,4 +92,5 @@ module.exports = {
   VISUAL_SYNC_MODE,
   DEFAULT_SYNC_MODE,
   DEFAULT_USER_MODE,
+  MAX_RECENT_SPACES_SPACES,
 };

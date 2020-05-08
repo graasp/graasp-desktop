@@ -1,9 +1,9 @@
 export const DRAWER_BUTTON_ID = 'drawerButton';
 
-export const FAVORITE_MENU_ITEM_ID = 'favoriteSpacesMenuItem';
+export const SAVED_SPACES_MENU_ITEM_ID = 'savedSpacesMenuItem';
 export const SPACES_NEARBY_MENU_ITEM_ID = 'spacesNearbyMenuItem';
 export const SPACES_NEARBY_MAIN_ID = 'spacesNearbyMain';
-export const FAVORITE_SPACES_MAIN_ID = 'favoriteSpacesMain';
+export const SAVED_SPACES_MAIN_ID = 'savedSpacesMain';
 export const VISIT_MENU_ITEM_ID = 'visitMenuItem';
 export const VISIT_MAIN_ID = 'visit';
 export const LOAD_MENU_ITEM_ID = 'loadMenuItem';

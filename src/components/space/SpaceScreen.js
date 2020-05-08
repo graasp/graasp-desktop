@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Qs from 'qs';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { List as ImmList } from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import CssBaseline from '@material-ui/core/CssBaseline/CssBaseline';
 import AppBar from '@material-ui/core/AppBar/AppBar';
@@ -21,7 +22,13 @@ import { withStyles } from '@material-ui/core';
 import { withRouter } from 'react-router';
 import Loader from '../common/Loader';
 import PhaseComponent from '../phase/Phase';
-import { selectPhase, clearPhase, clearSpace, getSpace } from '../../actions';
+import {
+  selectPhase,
+  clearPhase,
+  clearSpace,
+  getSpace,
+  setSpaceAsRecent,
+} from '../../actions';
 import './SpaceScreen.css';
 import Styles from '../../Styles';
 import { HOME_PATH } from '../../config/paths';
@@ -76,6 +83,8 @@ class SpaceScreen extends Component {
       length: PropTypes.number.isRequired,
       replace: PropTypes.func.isRequired,
     }).isRequired,
+    recentSpaces: PropTypes.instanceOf(ImmList).isRequired,
+    dispatchSetSpaceAsRecent: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
@@ -98,6 +107,9 @@ class SpaceScreen extends Component {
       deleted,
       phase,
       history: { replace },
+      space,
+      recentSpaces,
+      dispatchSetSpaceAsRecent,
     } = this.props;
     // redirect to home if space is deleted
     if (deleted) {
@@ -105,6 +117,17 @@ class SpaceScreen extends Component {
     } else if (selected !== -1 && (!phase || phase.isEmpty())) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ selected: -1 });
+    }
+
+    if (space && !space.isEmpty()) {
+      const spaceId = space.get('id');
+      const recentIndex = recentSpaces.indexOf(spaceId);
+
+      // update recent spaces if space is not recent
+      // or space is not most recent space
+      if (recentIndex < 0 || recentIndex !== recentSpaces.size - 1) {
+        dispatchSetSpaceAsRecent({ spaceId, isRecent: true });
+      }
     }
   }
 
@@ -233,7 +256,7 @@ class SpaceScreen extends Component {
   }
 }
 
-const mapStateToProps = ({ Space, Phase }) => ({
+const mapStateToProps = ({ Space, Phase, authentication }) => ({
   space: Space.get('current').get('content'),
   open: Space.get('current')
     .get('menu')
@@ -241,6 +264,7 @@ const mapStateToProps = ({ Space, Phase }) => ({
   phase: Phase.get('current').get('content'),
   activity: Boolean(Space.getIn(['current', 'activity']).size),
   deleted: Space.get('current').get('deleted'),
+  recentSpaces: authentication.getIn(['user', 'recentSpaces']),
 });
 
 const mapDispatchToProps = {
@@ -248,6 +272,7 @@ const mapDispatchToProps = {
   dispatchGetSpace: getSpace,
   dispatchClearPhase: clearPhase,
   dispatchClearSpace: clearSpace,
+  dispatchSetSpaceAsRecent: setSpaceAsRecent,
 };
 
 const ConnectedComponent = connect(

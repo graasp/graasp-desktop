@@ -13,7 +13,7 @@ import {
   SETTINGS_PATH,
   DEVELOPER_PATH,
   DASHBOARD_PATH,
-  FAVORITE_PATH,
+  SAVED_SPACES_PATH,
 } from '../../config/paths';
 
 const MENUITEM_OFFLINE_NUMBER = 2;
@@ -102,14 +102,14 @@ describe('<MainMenu />', () => {
   });
 
   describe.each([
-    [true, HOME_PATH, 'Saved Spaces'],
+    [true, HOME_PATH, 'Home'],
+    [true, SAVED_SPACES_PATH, 'Saved Spaces'],
     [true, SPACES_NEARBY_PATH, 'Spaces Nearby'],
     [true, VISIT_PATH, 'Visit a Space'],
     [true, LOAD_SPACE_PATH, 'Load'],
     [true, SETTINGS_PATH, 'Settings'],
     [true, DEVELOPER_PATH, 'Developer'],
     [true, DASHBOARD_PATH, 'Dashboard'],
-    [true, FAVORITE_PATH, 'Favorite Spaces'],
   ])('<MainMenu /> selects one MenuItem', (developerMode, path, text) => {
     it(`select path=${path} (developerMode = ${developerMode})`, () => {
       const props = createMainMenuProps(developerMode, path);

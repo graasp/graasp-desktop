@@ -30,8 +30,9 @@ import {
   FLAG_SETTING_USER_MODE,
   FLAG_SETTING_SPACE_AS_FAVORITE,
   SET_SPACE_AS_FAVORITE_SUCCEEDED,
+  SET_SPACE_AS_RECENT_SPACES_SUCCEEDED,
 } from '../types';
-import { updateActivityList, updateFavoriteSpaces } from './common';
+import { updateActivityList } from './common';
 import {
   AUTHENTICATED,
   DEFAULT_DEVELOPER_MODE,
@@ -39,7 +40,44 @@ import {
   DEFAULT_GEOLOCATION_ENABLED,
   DEFAULT_SYNC_MODE,
   DEFAULT_USER_MODE,
+  MAX_RECENT_SPACES_SPACES,
 } from '../config/constants';
+
+const updateFavoriteSpaces = ({ favorite, spaceId }) => favoriteSpaces => {
+  const tmp = new Set(favoriteSpaces);
+  if (favorite) {
+    tmp.add(spaceId);
+  } else {
+    tmp.delete(spaceId);
+  }
+  return List(tmp);
+};
+
+const updateRecentSpaces = ({ isRecent, spaceId }) => recentSpaces => {
+  let tmp = recentSpaces;
+  const index = tmp.indexOf(spaceId);
+
+  // if already exists push at end
+  if (isRecent) {
+    // remove previously existing id
+    if (index >= 0) {
+      tmp = tmp.delete(index);
+    }
+    tmp = tmp.push(spaceId);
+
+    // if there is more than a set nb of spaces, remove least recent space
+    if (tmp.size > MAX_RECENT_SPACES_SPACES) {
+      tmp = tmp.delete(0);
+    }
+  }
+
+  // if is not recent and exists, delete
+  if (!isRecent && index >= 0) {
+    tmp = tmp.delete(index);
+  }
+
+  return tmp;
+};
 
 export const DEFAULT_USER_SETTINGS = {
   lang: DEFAULT_LANGUAGE,
@@ -54,6 +92,7 @@ export const DEFAULT_USER = {
   settings: { ...DEFAULT_USER_SETTINGS },
   // redux doesn't seem to detect updates with sets
   favoriteSpaces: List(),
+  recentSpaces: List(),
 };
 
 export const INITIAL_STATE = Map({
@@ -121,6 +160,11 @@ export default (state = INITIAL_STATE, { type, payload }) => {
       return state.updateIn(
         ['user', 'favoriteSpaces'],
         updateFavoriteSpaces(payload)
+      );
+    case SET_SPACE_AS_RECENT_SPACES_SUCCEEDED:
+      return state.updateIn(
+        ['user', 'recentSpaces'],
+        updateRecentSpaces(payload)
       );
     default:
       return state;

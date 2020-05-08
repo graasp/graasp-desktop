@@ -143,17 +143,15 @@ class SpaceHeader extends Component {
 
   renderTeacherButtons() {
     const { userMode } = this.props;
-    if (userMode === USER_MODES.TEACHER) {
-      return (
-        <>
-          {this.renderDeleteButton()}
-          {this.renderSyncButton()}
-          {this.renderSaveButton()}
-        </>
-      );
-    }
+    return userMode === USER_MODES.TEACHER ? (
+      <>
+        {this.renderDeleteButton()}
+        {this.renderSyncButton()}
+        {this.renderSaveButton()}
+      </>
+    ) : null;
   }
-  
+
   renderFavoriteButton() {
     const { space } = this.props;
     const { saved, id } = space;

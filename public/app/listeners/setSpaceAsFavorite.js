@@ -6,31 +6,19 @@ const setSpaceAsFavorite = (mainWindow, db) => async (
   event,
   { spaceId, favorite }
 ) => {
-  // add spaceId if does not exist
   try {
-    if (favorite) {
-      const foundId = db
-        .get('user.favoriteSpaces')
-        .find(id => id === spaceId)
-        .value();
-      if (!foundId) {
-        db.get('user.favoriteSpaces')
-          .push(spaceId)
-          .write();
-      }
+    const favoriteSpaces = db.get('user.favoriteSpaces');
+    const foundId = favoriteSpaces.find(id => id === spaceId).value();
+
+    // add spaceId if does not exist
+    if (favorite && !foundId) {
+      favoriteSpaces.push(spaceId).write();
     }
     // remove spaceId if exists
-    else {
-      const foundId = db
-        .get('user.favoriteSpaces')
-        .find(id => id === spaceId)
-        .value();
-      if (foundId) {
-        db.get('user.favoriteSpaces')
-          .remove(id => id === spaceId)
-          .write();
-      }
+    else if (!favorite && foundId) {
+      favoriteSpaces.remove(id => id === spaceId).write();
     }
+
     mainWindow.webContents.send(SET_SPACE_AS_FAVORITE_CHANNEL, {
       favorite,
       spaceId,

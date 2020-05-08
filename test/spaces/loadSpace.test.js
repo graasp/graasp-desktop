@@ -5,7 +5,7 @@ import { expect } from 'chai';
 import path from 'path';
 import { mochaAsync, createRandomString } from '../utils';
 import { createApplication, closeApplication } from '../application';
-import { menuGoToLoadSpace, menuGoToHome } from '../menu.test';
+import { menuGoToLoadSpace, menuGoToSavedSpaces } from '../menu.test';
 import {
   buildSpaceCardId,
   SPACE_CARD_LINK_CLASS,
@@ -60,7 +60,7 @@ export const loadSpaceById = async (client, filepath, id) => {
   await loadFilepath(client, filepath);
 
   // go to space
-  await menuGoToHome(client);
+  await menuGoToSavedSpaces(client);
 
   if (id) {
     await client.click(`#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`);

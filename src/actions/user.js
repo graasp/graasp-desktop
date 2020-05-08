@@ -26,6 +26,8 @@ import {
   SET_USER_MODE_SUCCEEDED,
   FLAG_SETTING_SPACE_AS_FAVORITE,
   SET_SPACE_AS_FAVORITE_SUCCEEDED,
+  FLAG_SETTING_SPACE_AS_RECENT,
+  SET_SPACE_AS_RECENT_SPACES_SUCCEEDED,
 } from '../types';
 import {
   ERROR_GETTING_GEOLOCATION,
@@ -42,6 +44,7 @@ import {
   ERROR_GETTING_USER_MODE,
   ERROR_SETTING_USER_MODE,
   ERROR_SETTING_SPACE_AS_FAVORITE,
+  ERROR_SETTING_SPACE_AS_RECENT,
 } from '../config/messages';
 import {
   GET_USER_FOLDER_CHANNEL,
@@ -56,6 +59,7 @@ import {
   GET_USER_MODE_CHANNEL,
   SET_USER_MODE_CHANNEL,
   SET_SPACE_AS_FAVORITE_CHANNEL,
+  SET_SPACE_AS_RECENT_CHANNEL,
 } from '../config/channels';
 import { createFlag } from './common';
 import { ERROR_GENERAL } from '../config/errors';
@@ -76,6 +80,7 @@ const flagSettingSyncMode = createFlag(FLAG_SETTING_SYNC_MODE);
 const flagGettingUserMode = createFlag(FLAG_GETTING_USER_MODE);
 const flagSettingUserMode = createFlag(FLAG_SETTING_USER_MODE);
 const flagSettingSpaceAsFavorite = createFlag(FLAG_SETTING_SPACE_AS_FAVORITE);
+const flagSettingSpaceAsRecent = createFlag(FLAG_SETTING_SPACE_AS_RECENT);
 
 const getGeolocation = async () => async dispatch => {
   // only fetch location if online
@@ -349,14 +354,14 @@ const setUserMode = async userMode => dispatch => {
   }
 };
 
-const setSpaceAsFavorite = async payload => dispatch => {
+const setSpaceAsFavorite = payload => dispatch => {
   try {
     dispatch(flagSettingSpaceAsFavorite(true));
     window.ipcRenderer.send(SET_SPACE_AS_FAVORITE_CHANNEL, payload);
     window.ipcRenderer.once(
       SET_SPACE_AS_FAVORITE_CHANNEL,
-      (event, favorite) => {
-        if (favorite === ERROR_GENERAL) {
+      (event, response) => {
+        if (response === ERROR_GENERAL) {
           toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_SPACE_AS_FAVORITE);
         } else {
           dispatch({
@@ -370,6 +375,27 @@ const setSpaceAsFavorite = async payload => dispatch => {
   } catch (e) {
     console.error(e);
     toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_SPACE_AS_FAVORITE);
+  }
+};
+
+const setSpaceAsRecent = payload => dispatch => {
+  try {
+    dispatch(flagSettingSpaceAsRecent(true));
+    window.ipcRenderer.send(SET_SPACE_AS_RECENT_CHANNEL, payload);
+    window.ipcRenderer.once(SET_SPACE_AS_RECENT_CHANNEL, (event, response) => {
+      if (response === ERROR_GENERAL) {
+        toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_SPACE_AS_RECENT);
+      } else {
+        dispatch({
+          type: SET_SPACE_AS_RECENT_SPACES_SUCCEEDED,
+          payload,
+        });
+      }
+      dispatch(flagSettingSpaceAsRecent(false));
+    });
+  } catch (e) {
+    console.error(e);
+    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_SPACE_AS_RECENT);
   }
 };
 
@@ -387,4 +413,5 @@ export {
   getUserMode,
   setUserMode,
   setSpaceAsFavorite,
+  setSpaceAsRecent,
 };

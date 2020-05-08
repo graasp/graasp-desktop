@@ -15,7 +15,6 @@ import SpacesNearby from './components/SpacesNearby';
 import Settings from './components/Settings';
 import LoadSpace from './components/LoadSpace';
 import SpaceScreen from './components/space/SpaceScreen';
-import FavoriteSpaces from './components/FavoriteSpaces';
 import SyncScreen from './components/space/SyncScreen';
 import DeveloperScreen from './components/developer/DeveloperScreen';
 import { OnlineTheme, OfflineTheme } from './themes';
@@ -33,7 +32,7 @@ import {
   DEVELOPER_PATH,
   DASHBOARD_PATH,
   SIGN_IN_PATH,
-  FAVORITE_PATH,
+  SAVED_SPACES_PATH,
 } from './config/paths';
 import {
   getGeolocation,
@@ -50,6 +49,7 @@ import {
   CONNECTION_ONLINE_MESSAGE,
 } from './config/messages';
 import './App.css';
+import SavedSpaces from './components/SavedSpaces';
 
 const styles = () => ({
   toastrIcon: { marginBottom: '-20px', fontSize: '45px' },
@@ -165,8 +165,8 @@ export class App extends Component {
                   />
                   <Route
                     exact
-                    path={FAVORITE_PATH}
-                    component={Authorization()(FavoriteSpaces)}
+                    path={SAVED_SPACES_PATH}
+                    component={Authorization()(SavedSpaces)}
                   />
                   <Route
                     exact

@@ -77,6 +77,7 @@ import {
 } from '../config/endpoints';
 import { DEFAULT_GET_REQUEST } from '../config/rest';
 import { DEFAULT_RADIUS } from '../config/constants';
+import { setSpaceAsFavorite, setSpaceAsRecent } from './user';
 
 const flagGettingSpaces = createFlag(FLAG_GETTING_SPACES);
 const flagLoadingSpace = createFlag(FLAG_LOADING_SPACE);
@@ -306,6 +307,13 @@ const deleteSpace = ({ id }) => dispatch => {
         payload: true,
       });
     }
+
+    // delete in favorite
+    setSpaceAsFavorite({ favorite: false, spaceId: id })(dispatch);
+
+    // delete in recent
+    setSpaceAsRecent({ isRecent: false, spaceId: id })(dispatch);
+
     dispatch(flagDeletingSpace(false));
   });
 };
@@ -403,8 +411,14 @@ const loadSpace = ({ fileLocation }) => dispatch => {
       case ERROR_GENERAL:
         toastr.error(ERROR_MESSAGE_HEADER, ERROR_LOADING_MESSAGE);
         break;
-      default:
+      default: {
+        // add in recent spaces
+        setSpaceAsRecent({ isRecent: true, spaceId: response.spaceId })(
+          dispatch
+        );
+
         toastr.success(SUCCESS_MESSAGE_HEADER, SUCCESS_SPACE_LOADED_MESSAGE);
+      }
     }
     dispatch(flagLoadingSpace(false));
   });

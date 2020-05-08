@@ -9,23 +9,23 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
     selected={true}
   >
     <WithStyles(ForwardRef(ListItemIcon))>
-      <SaveIcon />
+      <HomeIcon />
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
-      primary="Saved Spaces"
+      primary="Home"
     />
   </WithStyles(ForwardRef(MenuItem))>
   <WithStyles(ForwardRef(MenuItem))
     button={true}
-    id="favoriteSpacesMenuItem"
+    id="savedSpacesMenuItem"
     onClick={[Function]}
     selected={false}
   >
     <WithStyles(ForwardRef(ListItemIcon))>
-      <StarIcon />
+      <SaveIcon />
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
-      primary="Favorite Spaces"
+      primary="Saved Spaces"
     />
   </WithStyles(ForwardRef(MenuItem))>
   <Offline
@@ -180,23 +180,23 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
     selected={true}
   >
     <WithStyles(ForwardRef(ListItemIcon))>
-      <SaveIcon />
+      <HomeIcon />
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
-      primary="Saved Spaces"
+      primary="Home"
     />
   </WithStyles(ForwardRef(MenuItem))>
   <WithStyles(ForwardRef(MenuItem))
     button={true}
-    id="favoriteSpacesMenuItem"
+    id="savedSpacesMenuItem"
     onClick={[Function]}
     selected={false}
   >
     <WithStyles(ForwardRef(ListItemIcon))>
-      <StarIcon />
+      <SaveIcon />
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
-      primary="Favorite Spaces"
+      primary="Saved Spaces"
     />
   </WithStyles(ForwardRef(MenuItem))>
   <Offline

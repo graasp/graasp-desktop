@@ -49,4 +49,5 @@ module.exports = {
   GET_USER_MODE_CHANNEL: 'user:mode:get',
   SET_USER_MODE_CHANNEL: 'user:mode:set',
   SET_SPACE_AS_FAVORITE_CHANNEL: 'user:set-space-favorite:set',
+  SET_SPACE_AS_RECENT_CHANNEL: 'user:set-space-recent:set',
 };

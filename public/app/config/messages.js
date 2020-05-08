@@ -61,6 +61,8 @@ const ERROR_GETTING_USER_MODE = 'There was an error getting the user mode';
 const ERROR_SETTING_USER_MODE = 'There was an error setting the user mode';
 const ERROR_SETTING_SPACE_AS_FAVORITE =
   'There was an error setting space as favorite';
+const ERROR_SETTING_SPACE_AS_RECENT =
+  'There was an error setting space as recent space';
 
 module.exports = {
   ERROR_GETTING_DEVELOPER_MODE,
@@ -108,4 +110,5 @@ module.exports = {
   ERROR_SETTING_USER_MODE,
   ERROR_GETTING_USER_MODE,
   ERROR_SETTING_SPACE_AS_FAVORITE,
+  ERROR_SETTING_SPACE_AS_RECENT,
 };

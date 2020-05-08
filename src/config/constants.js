@@ -87,3 +87,4 @@ export const SYNC_ITEM_PROPERTIES = ['name', 'description', 'content'];
 export const SECURITY_LOOP_THRESHOLD = 50;
 
 export const FORM_CONTROL_MIN_WIDTH = 120;
+export const MAX_RECENT_SPACES_SPACES = 5;

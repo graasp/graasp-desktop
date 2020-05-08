@@ -3,7 +3,11 @@
 /* eslint-disable no-restricted-syntax */
 import { mochaAsync } from '../utils';
 import { createApplication, closeApplication } from '../application';
-import { menuGoToHome, menuGoToPhase, menuGoToSignOut } from '../menu.test';
+import {
+  menuGoToSavedSpaces,
+  menuGoToPhase,
+  menuGoToSignOut,
+} from '../menu.test';
 import {
   buildSpaceCardId,
   SPACE_CLEAR_BUTTON_CLASS,
@@ -110,7 +114,7 @@ describe('Clear User Input in a space', function() {
           await menuGoToPhase(client, 1);
           await checkTextInputAppContainsText(client, textInputAppId1, text1);
 
-          await menuGoToHome(client);
+          await menuGoToSavedSpaces(client);
 
           // clear user input
           await client.click(
