@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import { Set, List } from 'immutable';
+import { List } from 'immutable';
 import { withRouter } from 'react-router';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
@@ -66,7 +66,7 @@ class Home extends Component {
     history: PropTypes.shape({
       replace: PropTypes.func.isRequired,
     }).isRequired,
-    spaces: PropTypes.instanceOf(Set).isRequired,
+    spaces: PropTypes.instanceOf(List).isRequired,
     activity: PropTypes.bool,
     favoriteSpaces: PropTypes.instanceOf(List).isRequired,
     recentSpaces: PropTypes.instanceOf(List).isRequired,
@@ -80,8 +80,8 @@ class Home extends Component {
   };
 
   state = {
-    filteredRecentSpaces: Set(),
-    filteredFavoriteSpaces: Set(),
+    filteredRecentSpaces: List(),
+    filteredFavoriteSpaces: List(),
   };
 
   componentDidMount() {
@@ -125,9 +125,13 @@ class Home extends Component {
 
   filterSpaces = spaces => {
     const { searchQuery, spaces: originalSpaces } = this.props;
-    let filteredSpaces = spaces.map(id =>
-      originalSpaces.find(({ id: spaceId }) => id === spaceId)
-    );
+    // get space content by id
+    let filteredSpaces = spaces
+      .map(id => originalSpaces.find(({ id: spaceId }) => id === spaceId))
+      // remove undefined space
+      // this case can happen if originalSpaces is updated before spaces
+      .filter(space => space);
+
     filteredSpaces = searchSpacesByQuery(filteredSpaces, searchQuery);
     return filteredSpaces;
   };
