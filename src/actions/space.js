@@ -312,7 +312,7 @@ const deleteSpace = ({ id }) => dispatch => {
     setSpaceAsFavorite({ favorite: false, spaceId: id })(dispatch);
 
     // delete in recent
-    setSpaceAsRecent({ isRecent: false, spaceId: id })(dispatch);
+    setSpaceAsRecent({ recent: false, spaceId: id })(dispatch);
 
     dispatch(flagDeletingSpace(false));
   });
@@ -413,9 +413,7 @@ const loadSpace = ({ fileLocation }) => dispatch => {
         break;
       default: {
         // add in recent spaces
-        setSpaceAsRecent({ isRecent: true, spaceId: response.spaceId })(
-          dispatch
-        );
+        setSpaceAsRecent({ recent: true, spaceId: response.spaceId })(dispatch);
 
         toastr.success(SUCCESS_MESSAGE_HEADER, SUCCESS_SPACE_LOADED_MESSAGE);
       }

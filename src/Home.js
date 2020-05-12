@@ -12,6 +12,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Star';
 import HistoryIcon from '@material-ui/icons/History';
+import Divider from '@material-ui/core/Divider';
 import NoSpacesAvailable from './components/common/NoSpacesAvailable';
 import {
   HOME_MAIN_ID,
@@ -28,7 +29,10 @@ import { HOME_PATH } from './config/paths';
 
 const styles = theme => ({
   ...Styles(theme),
-  home: { paddingTop: theme.spacing(3) },
+  wrapper: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+  },
   title: {
     paddingLeft: theme.spacing(3),
     display: 'flex',
@@ -54,7 +58,7 @@ class Home extends Component {
       settings: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       icon: PropTypes.string.isRequired,
-      home: PropTypes.string.isRequired,
+      wrapper: PropTypes.string.isRequired,
     }).isRequired,
     theme: PropTypes.shape({
       direction: PropTypes.string.isRequired,
@@ -137,7 +141,7 @@ class Home extends Component {
     }
 
     return (
-      <div id={FAVORITE_SPACES_WRAPPER_ID}>
+      <div id={FAVORITE_SPACES_WRAPPER_ID} className={classes.wrapper}>
         <Typography className={classes.title} variant="h6">
           <FavoriteIcon className={classes.icon} />
           {t('Favorite Spaces')}
@@ -156,7 +160,7 @@ class Home extends Component {
     }
 
     return (
-      <div id={RECENT_SPACES_WRAPPER_ID}>
+      <div id={RECENT_SPACES_WRAPPER_ID} className={classes.wrapper}>
         <Typography className={classes.title} variant="h6">
           <HistoryIcon className={classes.icon} />
           {t('Recent Spaces')}
@@ -192,9 +196,9 @@ class Home extends Component {
         {noSpacesAvailable ? (
           <NoSpacesAvailable />
         ) : (
-          <div className={classes.home}>
+          <div>
             {this.renderRecentSpaces()}
-            <br />
+            <Divider />
             {this.renderFavoriteSpaces()}
           </div>
         )}

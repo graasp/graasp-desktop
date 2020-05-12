@@ -61,6 +61,8 @@
     "Remote Space Image": "Remote Space Image",
     "No Item to Display": "No Item to Display",
     "Add this Space to your Favorite Spaces": "Add this Space to your Favorite Spaces",
-    "Favorite Spaces": "Favorite Spaces"
+    "Favorite Spaces": "Favorite Spaces",
+    "This Space is already in your Favorite Spaces": "This Space is already in your Favorite Spaces",
+    "Recent Spaces": "Recent Spaces"
   }
 }

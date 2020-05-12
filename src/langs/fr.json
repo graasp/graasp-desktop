@@ -60,7 +60,9 @@
     "Local Space Image": "Image Espace Locale",
     "Remote Space Image": "Image Espace En Ligne",
     "No Item to Display": "Aucun Element à Afficher",
-    "Add this Space to your Favorite Spaces": "Add this Space to your Favorite Spaces",
-    "Favorite Spaces": "Espaces Favoris"
+    "Add this space to your Favorite Spaces": "Ajoute cet espace dans tes Espaces Favoris",
+    "Favorite Spaces": "Espaces Favoris",
+    "This space is already in your Favorite Spaces": "Cet espace est déjà dans tes Espace Favoris",
+    "Recent Spaces": "Espaces Récents"
   }
 }

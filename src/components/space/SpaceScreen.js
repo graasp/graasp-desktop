@@ -126,7 +126,7 @@ class SpaceScreen extends Component {
       // update recent spaces if space is not recent
       // or space is not most recent space
       if (recentIndex < 0 || recentIndex !== recentSpaces.size - 1) {
-        dispatchSetSpaceAsRecent({ spaceId, isRecent: true });
+        dispatchSetSpaceAsRecent({ spaceId, recent: true });
       }
     }
   }

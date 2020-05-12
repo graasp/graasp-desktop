@@ -40,7 +40,7 @@ import {
   DEFAULT_GEOLOCATION_ENABLED,
   DEFAULT_SYNC_MODE,
   DEFAULT_USER_MODE,
-  MAX_RECENT_SPACES_SPACES,
+  MAX_RECENT_SPACES,
 } from '../config/constants';
 
 const updateFavoriteSpaces = ({ favorite, spaceId }) => favoriteSpaces => {
@@ -53,12 +53,12 @@ const updateFavoriteSpaces = ({ favorite, spaceId }) => favoriteSpaces => {
   return List(tmp);
 };
 
-const updateRecentSpaces = ({ isRecent, spaceId }) => recentSpaces => {
+const updateRecentSpaces = ({ recent, spaceId }) => recentSpaces => {
   let tmp = recentSpaces;
   const index = tmp.indexOf(spaceId);
 
   // if already exists push at end
-  if (isRecent) {
+  if (recent) {
     // remove previously existing id
     if (index >= 0) {
       tmp = tmp.delete(index);
@@ -66,13 +66,13 @@ const updateRecentSpaces = ({ isRecent, spaceId }) => recentSpaces => {
     tmp = tmp.push(spaceId);
 
     // if there is more than a set nb of spaces, remove least recent space
-    if (tmp.size > MAX_RECENT_SPACES_SPACES) {
+    if (tmp.size > MAX_RECENT_SPACES) {
       tmp = tmp.delete(0);
     }
   }
 
   // if is not recent and exists, delete
-  if (!isRecent && index >= 0) {
+  if (!recent && index >= 0) {
     tmp = tmp.delete(index);
   }
 

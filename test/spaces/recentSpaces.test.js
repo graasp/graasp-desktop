@@ -28,7 +28,7 @@ import { DEFAULT_GLOBAL_TIMEOUT } from '../constants';
 import { userSignIn } from '../userSignIn.test';
 import { USER_GRAASP, USER_ALICE } from '../fixtures/users';
 import { loadSpaceById } from './loadSpace.test';
-import { MAX_RECENT_SPACES_SPACES } from '../../src/config/constants';
+import { MAX_RECENT_SPACES } from '../../src/config/constants';
 
 describe('Recent Spaces', function() {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
@@ -82,7 +82,7 @@ describe('Recent Spaces', function() {
 
     describe('Opening saved spaces', function() {
       it(
-        `Display only ${MAX_RECENT_SPACES_SPACES} most recent spaces`,
+        `Display only ${MAX_RECENT_SPACES} most recent spaces`,
         mochaAsync(async () => {
           const { client } = app;
 
@@ -94,16 +94,16 @@ describe('Recent Spaces', function() {
             SPACE_MOON,
             SPACE_AMPHIBIANS,
           ];
-          if (spaces.length < MAX_RECENT_SPACES_SPACES + 1) {
+          if (spaces.length < MAX_RECENT_SPACES + 1) {
             throw new Error(
               "spaces don't contain enough spaces to make the test work correctly"
             );
           }
 
-          // visit and save one more space than MAX_RECENT_SPACES_SPACES
+          // visit and save one more space than MAX_RECENT_SPACES
           for (const {
             space: { id },
-          } of spaces.slice(-(MAX_RECENT_SPACES_SPACES + 1))) {
+          } of spaces.slice(-(MAX_RECENT_SPACES + 1))) {
             await visitAndSaveSpaceById(client, id);
           }
 
@@ -113,7 +113,7 @@ describe('Recent Spaces', function() {
             `#${RECENT_SPACES_WRAPPER_ID} .${SPACE_MEDIA_CARD_CLASS}`,
             'id'
           );
-          expect(mediaCards.length).to.equal(MAX_RECENT_SPACES_SPACES);
+          expect(mediaCards.length).to.equal(MAX_RECENT_SPACES);
 
           // we do not check order because in the dom it doesn't have the same order
           spaces

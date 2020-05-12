@@ -53,8 +53,12 @@ class FavoriteButton extends Component {
 
     const isFavorite = favoriteSpaces.includes(spaceId);
 
+    const tooltipText = isFavorite
+      ? t('This space is already in your Favorite Spaces')
+      : t('Add this space to your Favorite Spaces');
+
     return (
-      <Tooltip title={t('Add this Space to your Favorite Spaces')}>
+      <Tooltip title={tooltipText}>
         <IconButton
           color="inherit"
           onClick={() => this.handleOnClick(isFavorite)}
