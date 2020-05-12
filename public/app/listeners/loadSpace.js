@@ -97,7 +97,7 @@ const loadSpace = (mainWindow, db) => async (event, { fileLocation }) => {
       .push(...actions)
       .write();
 
-    return mainWindow.webContents.send(LOADED_SPACE_CHANNEL);
+    return mainWindow.webContents.send(LOADED_SPACE_CHANNEL, { spaceId: id });
   } catch (err) {
     logger.error(err);
     mainWindow.webContents.send(LOADED_SPACE_CHANNEL, ERROR_GENERAL);

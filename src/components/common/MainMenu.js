@@ -13,6 +13,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import List from '@material-ui/core/List';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
+import HomeIcon from '@material-ui/icons/Home';
 import PublishIcon from '@material-ui/icons/Publish';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { Online, Offline } from 'react-detect-offline';
@@ -26,6 +27,7 @@ import {
   DEVELOPER_PATH,
   DASHBOARD_PATH,
   SIGN_IN_PATH,
+  SAVED_SPACES_PATH,
 } from '../../config/paths';
 import {
   SETTINGS_MENU_ITEM_ID,
@@ -36,6 +38,7 @@ import {
   DASHBOARD_MENU_ITEM_ID,
   DEVELOPER_MENU_ITEM_ID,
   SIGN_OUT_MENU_ITEM_ID,
+  SAVED_SPACES_MENU_ITEM_ID,
 } from '../../config/selectors';
 import { signOut } from '../../actions/authentication';
 import { AUTHENTICATED } from '../../config/constants';
@@ -183,6 +186,17 @@ export class MainMenu extends Component {
             onClick={() => this.handleClick(HOME_PATH)}
             button
             selected={path === HOME_PATH}
+          >
+            <ListItemIcon>
+              <HomeIcon />
+            </ListItemIcon>
+            <ListItemText primary={t('Home')} />
+          </MenuItem>
+          <MenuItem
+            id={SAVED_SPACES_MENU_ITEM_ID}
+            onClick={() => this.handleClick(SAVED_SPACES_PATH)}
+            button
+            selected={path === SAVED_SPACES_PATH}
           >
             <ListItemIcon>
               <SaveIcon />

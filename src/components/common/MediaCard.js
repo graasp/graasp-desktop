@@ -15,6 +15,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DeleteButton from '../space/DeleteButton';
 import ClearButton from '../space/ClearButton';
 import ExportButton from '../space/ExportButton';
+import FavoriteButton from '../space/FavoriteButton';
 import SyncButton from '../space/SyncButton';
 import Text from './Text';
 import { MIN_CARD_WIDTH, USER_MODES } from '../../config/constants';
@@ -115,7 +116,7 @@ export const MediaCard = props => {
           <ClearButton spaceId={id} />
           <ExportButton space={space} />
           {renderTeacherActions()}
-
+          <FavoriteButton spaceId={id} />
           {text && (
             <IconButton
               className={clsx(

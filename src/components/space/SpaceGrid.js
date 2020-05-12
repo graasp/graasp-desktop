@@ -4,17 +4,13 @@ import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { withStyles } from '@material-ui/core';
 import { withRouter } from 'react-router';
-import { withTranslation } from 'react-i18next';
-import Typography from '@material-ui/core/Typography/Typography';
 import Grid from '@material-ui/core/Grid/Grid';
 import MediaCard from '../common/MediaCard';
 import { clearSpace } from '../../actions';
 import DefaultThumbnail from '../../data/graasp.jpg';
 import { MIN_CARD_WIDTH } from '../../config/constants';
-import {
-  SPACE_CARD_CLASS,
-  SPACE_NOT_AVAILABLE_TEXT_CLASS,
-} from '../../config/selectors';
+import { SPACE_CARD_CLASS } from '../../config/selectors';
+import NoSpacesAvailable from '../common/NoSpacesAvailable';
 
 class SpaceGrid extends Component {
   state = {
@@ -33,7 +29,6 @@ class SpaceGrid extends Component {
       push: PropTypes.func.isRequired,
     }).isRequired,
     dispatchClearSpace: PropTypes.func.isRequired,
-    t: PropTypes.func.isRequired,
     saved: PropTypes.bool,
     showActions: PropTypes.bool,
   };
@@ -103,7 +98,7 @@ class SpaceGrid extends Component {
   };
 
   render() {
-    const { spaces, history, saved, t, showActions } = this.props;
+    const { spaces, history, saved, showActions } = this.props;
     const { columnNb } = this.state;
 
     const cardMargin = 15;
@@ -167,17 +162,7 @@ class SpaceGrid extends Component {
     });
 
     if (!MediaCards.length) {
-      return (
-        <div className="Main">
-          <Typography
-            id={SPACE_NOT_AVAILABLE_TEXT_CLASS}
-            variant="h5"
-            color="inherit"
-          >
-            {t('No Spaces Available')}
-          </Typography>
-        </div>
-      );
+      return <NoSpacesAvailable />;
     }
     return (
       <Grid container style={{ display: 'flex' }}>
@@ -201,6 +186,4 @@ const ConnectedComponent = connect(
   mapDispatchToProps
 )(SpaceGrid);
 
-const TranslatedComponent = withTranslation()(ConnectedComponent);
-
-export default withRouter(withStyles(SpaceGrid.styles)(TranslatedComponent));
+export default withRouter(withStyles(SpaceGrid.styles)(ConnectedComponent));

@@ -3,7 +3,11 @@
 /* eslint-disable no-restricted-syntax */
 import { mochaAsync } from '../utils';
 import { createApplication, closeApplication } from '../application';
-import { menuGoToHome, menuGoToSignOut, menuGoToPhase } from '../menu.test';
+import {
+  menuGoToSavedSpaces,
+  menuGoToSignOut,
+  menuGoToPhase,
+} from '../menu.test';
 import {
   buildSpaceCardId,
   SPACE_CARD_LINK_CLASS,
@@ -61,7 +65,7 @@ describe('Save User Input in a space', function() {
         await typeInTextInputApp(client, textInputAppId, text);
 
         // go back to home
-        await menuGoToHome(client);
+        await menuGoToSavedSpaces(client);
 
         // check user input is saved
         await client.click(
@@ -95,6 +99,7 @@ describe('Save User Input in a space', function() {
 
         for (const [index, user] of users.entries()) {
           await userSignIn(app.client, user);
+          await menuGoToSavedSpaces(client);
           const text = userInputTextForUser(user.name);
 
           // first user load space
@@ -118,7 +123,7 @@ describe('Save User Input in a space', function() {
           await typeInTextInputApp(client, textInputAppId, text);
 
           // go back to home
-          await menuGoToHome(client);
+          await menuGoToSavedSpaces(client);
 
           // check user input is saved
           await client.click(
@@ -135,6 +140,7 @@ describe('Save User Input in a space', function() {
         // check user input still exist after logout
         for (const user of users) {
           await userSignIn(client, user);
+          await menuGoToSavedSpaces(client);
           const text = userInputTextForUser(user.name);
 
           await client.click(

@@ -32,6 +32,7 @@ import {
   DEVELOPER_PATH,
   DASHBOARD_PATH,
   SIGN_IN_PATH,
+  SAVED_SPACES_PATH,
 } from './config/paths';
 import {
   getGeolocation,
@@ -48,6 +49,7 @@ import {
   CONNECTION_ONLINE_MESSAGE,
 } from './config/messages';
 import './App.css';
+import SavedSpaces from './components/SavedSpaces';
 
 const styles = () => ({
   toastrIcon: { marginBottom: '-20px', fontSize: '45px' },
@@ -160,6 +162,11 @@ export class App extends Component {
                     exact
                     path={HOME_PATH}
                     component={Authorization()(Home)}
+                  />
+                  <Route
+                    exact
+                    path={SAVED_SPACES_PATH}
+                    component={Authorization()(SavedSpaces)}
                   />
                   <Route
                     exact

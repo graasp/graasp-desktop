@@ -87,3 +87,6 @@ export const SYNC_ITEM_PROPERTIES = ['name', 'description', 'content'];
 export const SECURITY_LOOP_THRESHOLD = 50;
 
 export const FORM_CONTROL_MIN_WIDTH = 120;
+
+// this value exists in app/public/config/config.js as well
+export const MAX_RECENT_SPACES = 5;

@@ -5,7 +5,5 @@ const updateActivityList = flag => {
   return list => list.pop();
 };
 
-export {
-  // eslint-disable-next-line import/prefer-default-export
-  updateActivityList,
-};
+// eslint-disable-next-line import/prefer-default-export
+export { updateActivityList };

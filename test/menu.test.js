@@ -23,6 +23,8 @@ import {
   SIGN_OUT_MENU_ITEM_ID,
   PHASE_MENU_LIST_ID,
   buildPhaseMenuItemId,
+  SAVED_SPACES_MENU_ITEM_ID,
+  SAVED_SPACES_MAIN_ID,
 } from '../src/config/selectors';
 import {
   LOAD_TAB_PAUSE,
@@ -88,6 +90,10 @@ export const menuGoToHome = async client => {
   await menuGoTo(client, HOME_MENU_ITEM_ID, HOME_MAIN_ID);
 };
 
+export const menuGoToSavedSpaces = async client => {
+  await menuGoTo(client, SAVED_SPACES_MENU_ITEM_ID, SAVED_SPACES_MAIN_ID);
+};
+
 describe('Menu Scenarios', function() {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
@@ -111,7 +117,7 @@ describe('Menu Scenarios', function() {
       await menuGoToLoadSpace(client);
       await menuGoToSettings(client);
       await menuGoToDashboard(client);
-      await menuGoToHome(client);
+      await menuGoToSavedSpaces(client);
     })
   );
 });

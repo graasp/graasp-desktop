@@ -1,7 +1,12 @@
 export const DRAWER_BUTTON_ID = 'drawerButton';
 
+export const FAVORITE_SPACES_WRAPPER_ID = 'favoriteSpacesWrapper';
+export const RECENT_SPACES_WRAPPER_ID = 'recentSpacesWrapper';
+
+export const SAVED_SPACES_MENU_ITEM_ID = 'savedSpacesMenuItem';
 export const SPACES_NEARBY_MENU_ITEM_ID = 'spacesNearbyMenuItem';
 export const SPACES_NEARBY_MAIN_ID = 'spacesNearbyMain';
+export const SAVED_SPACES_MAIN_ID = 'savedSpacesMain';
 export const VISIT_MENU_ITEM_ID = 'visitMenuItem';
 export const VISIT_MAIN_ID = 'visit';
 export const LOAD_MENU_ITEM_ID = 'loadMenuItem';
@@ -36,6 +41,7 @@ export const SPACE_EXPORT_BUTTON_CLASS = 'spaceExportButton';
 export const SPACE_DELETE_BUTTON_CLASS = 'spaceDeleteButton';
 export const SPACE_CLEAR_BUTTON_CLASS = 'spaceClearButton';
 export const SPACE_SYNC_BUTTON_CLASS = 'spaceSyncButton';
+export const SPACE_FAVORITE_BUTTON_CLASS = 'spaceFavoriteButton';
 export const TOOLS_BUTTON_CLASS = 'toolsButton';
 export const TOOLS_CONTENT_PANE_ID = 'toolsContentPane';
 export const SPACE_SEARCH_INPUT_ID = 'searchInput';

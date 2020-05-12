@@ -5,7 +5,7 @@ import { expect } from 'chai';
 import path from 'path';
 import { mochaAsync, createRandomString } from '../utils';
 import { createApplication, closeApplication } from '../application';
-import { menuGoToLoadSpace, menuGoToHome } from '../menu.test';
+import { menuGoToLoadSpace, menuGoToSavedSpaces } from '../menu.test';
 import {
   buildSpaceCardId,
   SPACE_CARD_LINK_CLASS,
@@ -13,9 +13,9 @@ import {
   SPACE_EXPORT_BUTTON_CLASS,
   LOAD_INPUT_ID,
   SPACE_DELETE_BUTTON_CLASS,
-  HOME_MAIN_ID,
   PHASE_MENU_LIST_ID,
   buildPhaseMenuItemId,
+  SAVED_SPACES_MAIN_ID,
 } from '../../src/config/selectors';
 import {
   SPACE_ATOMIC_STRUCTURE,
@@ -60,12 +60,11 @@ export const loadSpaceById = async (client, filepath, id) => {
   await loadFilepath(client, filepath);
 
   // go to space
-  await menuGoToHome(client);
+  await menuGoToSavedSpaces(client);
 
   if (id) {
     await client.click(`#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`);
 
-    // this waiting time is longer to wait for tooltip to fade out
     await client.pause(OPEN_SAVED_SPACE_PAUSE);
   }
 };
@@ -101,7 +100,7 @@ describe('Load Space Scenarios', function() {
           `#${LOAD_LOAD_BUTTON_ID}`,
           'disabled'
         );
-        expect(isLoadButtonDisabled).to.be.true;
+        expect(isLoadButtonDisabled).to.equal('true');
       })
     );
 
@@ -134,8 +133,9 @@ describe('Load Space Scenarios', function() {
         // load space
         await loadSpaceById(client, SPACE_ATOMIC_STRUCTURE_WITH_CHANGES_PATH);
 
-        const savedSpacesHtml = await client.getText(`#${HOME_MAIN_ID}`);
-        console.log('savedSpacesHtml', savedSpacesHtml);
+        const savedSpacesHtml = await client.getText(
+          `#${SAVED_SPACES_MAIN_ID}`
+        );
         expect(savedSpacesHtml).to.not.include(
           SPACE_ATOMIC_STRUCTURE_WITH_CHANGES.space.name
         );

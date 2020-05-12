@@ -21,7 +21,11 @@ import {
   SET_SPACE_SEARCH_QUERY_SUCCEEDED,
 } from '../types';
 import { updateActivityList } from './common';
-import { HOME_PATH, SPACES_NEARBY_PATH } from '../config/paths';
+import {
+  HOME_PATH,
+  SPACES_NEARBY_PATH,
+  SAVED_SPACES_PATH,
+} from '../config/paths';
 
 const INITIAL_STATE = Map({
   current: Map({
@@ -41,6 +45,7 @@ const INITIAL_STATE = Map({
   search: Map({
     [HOME_PATH]: '',
     [SPACES_NEARBY_PATH]: '',
+    [SAVED_SPACES_PATH]: '',
   }),
 });
 

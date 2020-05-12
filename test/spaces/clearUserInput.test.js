@@ -3,7 +3,11 @@
 /* eslint-disable no-restricted-syntax */
 import { mochaAsync } from '../utils';
 import { createApplication, closeApplication } from '../application';
-import { menuGoToHome, menuGoToPhase, menuGoToSignOut } from '../menu.test';
+import {
+  menuGoToSavedSpaces,
+  menuGoToPhase,
+  menuGoToSignOut,
+} from '../menu.test';
 import {
   buildSpaceCardId,
   SPACE_CLEAR_BUTTON_CLASS,
@@ -110,7 +114,7 @@ describe('Clear User Input in a space', function() {
           await menuGoToPhase(client, 1);
           await checkTextInputAppContainsText(client, textInputAppId1, text1);
 
-          await menuGoToHome(client);
+          await menuGoToSavedSpaces(client);
 
           // clear user input
           await client.click(
@@ -214,6 +218,7 @@ describe('Clear User Input in a space', function() {
 
         // login as bob, save user input
         await userSignIn(client, USER_BOB);
+        await menuGoToSavedSpaces(client);
         await client.click(
           `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
         );
@@ -225,6 +230,7 @@ describe('Clear User Input in a space', function() {
 
         // login as Alice, clear user input
         await userSignIn(client, USER_ALICE);
+        await menuGoToSavedSpaces(client);
         await client.click(
           `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
         );
@@ -245,6 +251,7 @@ describe('Clear User Input in a space', function() {
 
         // login as Bob, check user input are still saved
         await userSignIn(client, USER_BOB);
+        await menuGoToSavedSpaces(client);
         await client.click(
           `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
         );

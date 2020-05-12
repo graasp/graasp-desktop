@@ -103,6 +103,9 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text defined r
     <withRouter(withI18nextTranslation(WithStyles(SyncButton)))
       spaceId="id"
     />
+    <withI18nextTranslation(WithStyles(Connect(FavoriteButton)))
+      spaceId="id"
+    />
     <WithStyles(ForwardRef(IconButton))
       aria-expanded={false}
       aria-label="Show more"
@@ -173,6 +176,9 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text undefined
       spaceId="id"
     />
     <withRouter(withI18nextTranslation(WithStyles(SyncButton)))
+      spaceId="id"
+    />
+    <withI18nextTranslation(WithStyles(Connect(FavoriteButton)))
       spaceId="id"
     />
   </WithStyles(ForwardRef(CardActions))>

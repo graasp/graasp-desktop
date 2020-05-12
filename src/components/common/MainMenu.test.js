@@ -13,10 +13,11 @@ import {
   SETTINGS_PATH,
   DEVELOPER_PATH,
   DASHBOARD_PATH,
+  SAVED_SPACES_PATH,
 } from '../../config/paths';
 
 const MENUITEM_OFFLINE_NUMBER = 2;
-const MENUITEM_OFFLINE_ONLINE_COUNT = 9;
+const MENUITEM_OFFLINE_ONLINE_COUNT = 10;
 
 const createMainMenuProps = (developerMode, path, authenticated = true) => {
   return {
@@ -101,7 +102,8 @@ describe('<MainMenu />', () => {
   });
 
   describe.each([
-    [true, HOME_PATH, 'Saved Spaces'],
+    [true, HOME_PATH, 'Home'],
+    [true, SAVED_SPACES_PATH, 'Saved Spaces'],
     [true, SPACES_NEARBY_PATH, 'Spaces Nearby'],
     [true, VISIT_PATH, 'Visit a Space'],
     [true, LOAD_SPACE_PATH, 'Load'],
