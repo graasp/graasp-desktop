@@ -38,7 +38,7 @@ const styles = theme => ({
   buttonGroup: {
     textAlign: 'center',
   },
-
+  paragraph: { display: 'flex', justifyContent: 'center' },
   spaceName: {
     component: 'span',
     fontStyle: 'italic',
@@ -70,6 +70,7 @@ class ExportSelectionScreen extends Component {
       buttonGroup: PropTypes.string.isRequired,
       submitButton: PropTypes.string.isRequired,
       button: PropTypes.string.isRequired,
+      paragraph: PropTypes.string.isRequired,
     }).isRequired,
     theme: PropTypes.shape({ direction: PropTypes.string }).isRequired,
     dispatchExportSpace: PropTypes.func.isRequired,
@@ -107,6 +108,15 @@ class ExportSelectionScreen extends Component {
   }
 
   componentDidUpdate() {
+    this.handleStatusChange();
+  }
+
+  componentWillUnmount() {
+    const { dispatchClearExportSpace } = this.props;
+    dispatchClearExportSpace();
+  }
+
+  handleStatusChange = () => {
     const {
       status,
       history: { goBack },
@@ -124,12 +134,7 @@ class ExportSelectionScreen extends Component {
       toastr.error(ERROR_MESSAGE_HEADER, UNEXPECTED_ERROR_MESSAGE);
       goBack();
     }
-  }
-
-  componentWillUnmount() {
-    const { dispatchClearExportSpace } = this.props;
-    dispatchClearExportSpace();
-  }
+  };
 
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.checked });
@@ -166,9 +171,9 @@ class ExportSelectionScreen extends Component {
 
     const id = space.get('id');
     const content = database ? database[collectionName] : [];
-    const hasContent =
-      content.filter(({ user, spaceId }) => user === userId && spaceId === id)
-        .length > 0;
+    const hasContent = content.filter(
+      ({ user, spaceId }) => user === userId && spaceId === id
+    ).length;
 
     const checkbox = (
       <Checkbox
@@ -200,7 +205,7 @@ class ExportSelectionScreen extends Component {
       actions: isActionsChecked,
     } = this.state;
 
-    // if space is not defined, it returns in componentDidUpdate
+    // corner case of empty space is handled in handleStatusChange
     if (activity || space.isEmpty()) {
       return (
         <div className={classes.root}>
@@ -219,10 +224,10 @@ class ExportSelectionScreen extends Component {
       <Main fullScreen>
         <div>
           <Typography variant="h3" align="center">
-            {t('Export Space ')}
+            {t('Export Space')}
           </Typography>
 
-          <Typography variant="h5" align="center" style={{ display: 'flex' }}>
+          <Typography variant="h5" align="center" className={classes.paragraph}>
             {t('You are going to export')}
             {this.renderSpaceName()}
           </Typography>
@@ -249,7 +254,7 @@ class ExportSelectionScreen extends Component {
             <Grid item xs={1}>
               <Tooltip
                 title={t(
-                  'Resources are input a user save when using applications (ie. answer in Input Text App).'
+                  'Resources are user-generated content saved when using applications (e.g., answer submitted via an input box)'
                 )}
                 placement="right"
               >
@@ -267,7 +272,7 @@ class ExportSelectionScreen extends Component {
             <Grid item xs={1}>
               <Tooltip
                 title={t(
-                  'Actions are various analytics and user data a user left while using Graasp Desktop.'
+                  'Actions are analytics generated when a user interacts with a space.'
                 )}
                 placement="right"
               >

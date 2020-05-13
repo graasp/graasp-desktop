@@ -19,6 +19,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { Typography } from '@material-ui/core';
 import { connect } from 'react-redux';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import Banner from '../../common/Banner';
 import { loadSpace, clearLoadSpace } from '../../../actions';
 import Styles from '../../../Styles';
 import Loader from '../../common/Loader';
@@ -60,6 +61,7 @@ class LoadSelectionScreen extends Component {
       buttonGroup: PropTypes.string.isRequired,
       submitButton: PropTypes.string.isRequired,
       button: PropTypes.string.isRequired,
+      warning: PropTypes.string.isRequired,
     }).isRequired,
     theme: PropTypes.shape({ direction: PropTypes.string }).isRequired,
     dispatchLoadSpace: PropTypes.func.isRequired,
@@ -104,14 +106,14 @@ class LoadSelectionScreen extends Component {
 
   state = (() => {
     const {
-      location: { state },
+      location: { state: locationState },
       elements,
     } = this.props;
 
     return {
       // check space if it is not empty and is different from saved space
       // student cannot load spaces
-      space: state ? state.isSpaceDifferent : false,
+      space: locationState ? locationState.isSpaceDifferent : false,
       actions: !elements.get('actions').isEmpty(),
       appInstanceResources: !elements.get('appInstanceResources').isEmpty(),
     };
@@ -230,7 +232,7 @@ class LoadSelectionScreen extends Component {
 
     const selection = [isSpaceChecked, isResourcesChecked, isActionsChecked];
 
-    // if extractPath is undefined, it returns in componentDidUpdate
+    // corner case of empty extractPath is handled in constructor
     if (activity || !extractPath.length) {
       return (
         <div className={classes.root}>
@@ -251,8 +253,13 @@ class LoadSelectionScreen extends Component {
           <Typography align="center" variant="h4">
             {t('What do you want to load?')}
           </Typography>
-
           <br />
+
+          <Banner
+            text={t('Imported data will be reassigned as your own data')}
+            type="error"
+          />
+
           <Grid
             container
             alignItems="center"
@@ -286,7 +293,7 @@ class LoadSelectionScreen extends Component {
             <Grid item xs={1}>
               <Tooltip
                 title={t(
-                  'Resources are inputs a user save when using applications (ie. answer in Input Text App).'
+                  'Resources are user-generated content saved when using applications (e.g., answer submitted via an input box)'
                 )}
                 placement="right"
               >
@@ -305,7 +312,7 @@ class LoadSelectionScreen extends Component {
             <Grid item xs={1}>
               <Tooltip
                 title={t(
-                  'Actions are various analytics and user data a user left while using Graasp Desktop.'
+                  'Actions are analytics generated when a user interacts with a space.'
                 )}
                 placement="right"
               >

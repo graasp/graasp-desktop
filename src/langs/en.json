@@ -63,6 +63,26 @@
     "Add this Space to your Favorite Spaces": "Add this Space to your Favorite Spaces",
     "Favorite Spaces": "Favorite Spaces",
     "This Space is already in your Favorite Spaces": "This Space is already in your Favorite Spaces",
-    "Recent Spaces": "Recent Spaces"
+    "Recent Spaces": "Recent Spaces",
+    "Resources are user-generated content saved when using applications (e.g., answer submitted via an input box)": "Resources are user-generated content saved when using applications (e.g., answer submitted via an input box)",
+    "Actions are analytics generated when a user interacts with a space.": "Actions are analytics generated when a user interacts with a space.",
+    "No Action available for this Space": "No Action available for this Space",
+    "This Space's Actions": "This Space's Actions",
+    "No Resource available for this Space": "No Resource available for this Space",
+    "This Space's Resources": "This Space's Resources",
+    "You are going to export": "You are going to export",
+    "Include": "Include",
+    "Export Space": "Export Space",
+    "Export": "Export",
+    "Back": "Back",
+    "This Space": "This Space",
+    "This file does not contain any analytics": "This file does not contain any analytics",
+    "This file does not contain any user input": "This file does not contain any user input",
+    "This file does not contain a space": "This file does not contain a space",
+    "This space does not exist or is different": "This space does not exist or is different",
+    "Students cannot load spaces": "Students cannot load spaces",
+    "This space already exists": "This space already exists",
+    "What do you want to load?": "What do you want to load?",
+    "Imported data will be reassigned as your own data": "Imported data will be reassigned as your own data"
   }
 }

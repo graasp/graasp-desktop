@@ -27,16 +27,16 @@ class ExportButton extends Component {
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
     }).isRequired,
-    dispatchSetExportSpace: PropTypes.func.isRequired,
+    dispatchSetSpaceForExport: PropTypes.func.isRequired,
   };
 
   handleExport = () => {
     const {
       history: { push },
       space,
-      dispatchSetExportSpace,
+      dispatchSetSpaceForExport,
     } = this.props;
-    dispatchSetExportSpace({ space });
+    dispatchSetSpaceForExport({ space });
     push(buildExportSelectionPathForSpaceId(space.id));
   };
 
@@ -61,7 +61,7 @@ const mapStateToProps = ({ authentication }) => ({
 });
 
 const mapDispatchToProps = {
-  dispatchSetExportSpace: setSpaceForExport,
+  dispatchSetSpaceForExport: setSpaceForExport,
 };
 
 const ConnectedComponent = connect(

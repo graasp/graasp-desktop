@@ -70,6 +70,11 @@ const ANONYMOUS_USERNAME = 'Anonymous';
 
 const MAX_RECENT_SPACES = 5;
 
+const VISIBILITIES = {
+  PUBLIC: 'public',
+  PRIVATE: 'private',
+};
+
 module.exports = {
   DEFAULT_LOGGING_LEVEL,
   DEFAULT_PROTOCOL,
@@ -93,4 +98,5 @@ module.exports = {
   DEFAULT_SYNC_MODE,
   DEFAULT_USER_MODE,
   MAX_RECENT_SPACES,
+  VISIBILITIES,
 };

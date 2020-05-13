@@ -29,8 +29,8 @@ const fsPromises = fs.promises;
 // rename prevPath to newPath if prevPath exists
 const renameSpaceFolder = async (prevPath, newPath) => {
   // check destination path is available
-  const IsNewPathAvailable = await isFileAvailable(newPath);
-  if (IsNewPathAvailable) {
+  const isNewPathAvailable = await isFileAvailable(newPath);
+  if (isNewPathAvailable) {
     logger.error(
       `unable to rename temporary folder: ${newPath} already exists`
     );
@@ -38,7 +38,7 @@ const renameSpaceFolder = async (prevPath, newPath) => {
   }
 
   // check prev path is available
-  const isPrevPathAvailable = isFileAvailable(prevPath);
+  const isPrevPathAvailable = await isFileAvailable(prevPath);
   if (!isPrevPathAvailable) {
     logger.error(`temporary folder ${prevPath} does not exist`);
     return isPrevPathAvailable;

@@ -4,7 +4,7 @@ const archiver = require('archiver');
 const fs = require('fs');
 const logger = require('../logger');
 
-const { VAR_FOLDER } = require('../config/config');
+const { VAR_FOLDER, VISIBILITIES } = require('../config/config');
 const { ERROR_GENERAL } = require('../config/errors');
 const {
   SPACES_COLLECTION,
@@ -15,6 +15,23 @@ const { EXPORTED_SPACE_CHANNEL } = require('../config/channels');
 
 // use promisified fs
 const fsPromises = fs.promises;
+
+// validate conditions when fetching resources and actions for a given space
+const validateConditions = (
+  { user, spaceId, visibility },
+  id,
+  userId,
+  isStudent
+) => {
+  const spaceCondition = spaceId === id;
+  // teachers can fetch every user's data
+  // students can only fetch their own data
+  const studentCondition = !isStudent || user === userId;
+  // public data are always fetched
+  const visiblityCondition = visibility === VISIBILITIES.PUBLIC;
+
+  return spaceCondition && (studentCondition || visiblityCondition);
+};
 
 // we export the space and the current user's resources and actions
 // In the future we can add options so that the behaviour can be slightly modified
@@ -40,27 +57,22 @@ const exportSpace = (mainWindow, db) => async (
           .value()
       : {};
 
-    // build conditions when fetching resources and actions
-    // teachers can fetch every user's data
-    // students can only fetch their own data
     const isStudent = db.get('user.settings.studentMode').value();
-    const conditions = { spaceId: id };
-    if (isStudent) {
-      conditions.user = userId;
-    }
 
     // export the user's resources, private and public
     const resources = isResourcesSelected
       ? db
           .get(APP_INSTANCE_RESOURCES_COLLECTION)
-          .filter(conditions)
+          .filter(resource =>
+            validateConditions(resource, id, userId, isStudent)
+          )
           .value()
       : [];
 
     const actions = isActionsSelected
       ? db
           .get(ACTIONS_COLLECTION)
-          .filter(conditions)
+          .filter(action => validateConditions(action, id, userId, isStudent))
           .value()
       : [];
 

@@ -33,7 +33,7 @@ import { extractFileToLoadSpace } from '../actions';
 import { isSpaceUpToDate } from '../utils/syncSpace';
 import {
   ERROR_MESSAGE_HEADER,
-  ERROR_STUDENT_LOAD_OUT_OF_DATA_SPACE_MESSAGE,
+  ERROR_STUDENT_LOAD_OUT_OF_DATE_SPACE_MESSAGE,
 } from '../config/messages';
 import { USER_MODES } from '../config/constants';
 
@@ -98,7 +98,7 @@ class LoadSpace extends Component {
     if (isSpaceDifferent && isStudent) {
       toastr.error(
         ERROR_MESSAGE_HEADER,
-        ERROR_STUDENT_LOAD_OUT_OF_DATA_SPACE_MESSAGE
+        ERROR_STUDENT_LOAD_OUT_OF_DATE_SPACE_MESSAGE
       );
     } else if (extractPath.length) {
       push({
