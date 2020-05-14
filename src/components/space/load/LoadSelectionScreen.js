@@ -128,7 +128,7 @@ class LoadSelectionScreen extends Component {
     } = this.props;
 
     // when load is successful, redirect
-    if (status === LOAD_SPACE_STATUS.SUCCESS) {
+    if (status === LOAD_SPACE_STATUS.DONE) {
       dispatchClearLoadSpace({ extractPath });
       push(LOAD_SPACE_PATH);
     }

@@ -125,12 +125,12 @@ class ExportSelectionScreen extends Component {
     } = this.props;
 
     // when export is successful, redirect
-    if (status === EXPORT_SPACE_STATUS.SUCCESS) {
+    if (status === EXPORT_SPACE_STATUS.DONE) {
       dispatchClearExportSpace();
       goBack();
     }
     // during export return with error if space to export is not defined
-    else if (space.isEmpty() && status === EXPORT_SPACE_STATUS.PENDING) {
+    else if (space.isEmpty() && status === EXPORT_SPACE_STATUS.RUNNING) {
       toastr.error(ERROR_MESSAGE_HEADER, UNEXPECTED_ERROR_MESSAGE);
       goBack();
     }

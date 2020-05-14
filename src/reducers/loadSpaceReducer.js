@@ -10,9 +10,9 @@ import {
 import { updateActivityList } from './common';
 
 export const LOAD_SPACE_STATUS = {
-  IDLE: 'idle',
-  PENDING: 'pending',
-  SUCCESS: 'success',
+  READY: 'ready',
+  RUNNING: 'running',
+  DONE: 'done',
 };
 
 const DEFAULT_EXTRACT_PARAMETERS = Map({
@@ -27,7 +27,7 @@ const DEFAULT_EXTRACT_PARAMETERS = Map({
 
 const INITIAL_STATE = Map({
   activity: List(),
-  status: LOAD_SPACE_STATUS.IDLE,
+  status: LOAD_SPACE_STATUS.READY,
   extract: DEFAULT_EXTRACT_PARAMETERS,
 });
 
@@ -40,17 +40,17 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case EXTRACT_FILE_TO_LOAD_SPACE_SUCCEEDED: {
       return state
         .setIn(['extract'], fromJS(payload))
-        .setIn(['status'], LOAD_SPACE_STATUS.PENDING);
+        .setIn(['status'], LOAD_SPACE_STATUS.RUNNING);
     }
     // clear extract info on cancel or on successful load
     case LOAD_SPACE_SUCCEEDED:
       return state
         .setIn(['extract'], DEFAULT_EXTRACT_PARAMETERS)
-        .setIn(['status'], LOAD_SPACE_STATUS.SUCCESS);
+        .setIn(['status'], LOAD_SPACE_STATUS.DONE);
     case CLEAR_LOAD_SPACE_SUCCEEDED:
       return state
         .setIn(['extract'], DEFAULT_EXTRACT_PARAMETERS)
-        .setIn(['status'], LOAD_SPACE_STATUS.IDLE);
+        .setIn(['status'], LOAD_SPACE_STATUS.READY);
     default:
       return state;
   }

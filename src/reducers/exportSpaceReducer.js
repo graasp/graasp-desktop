@@ -10,14 +10,14 @@ import {
 import { updateActivityList } from './common';
 
 export const EXPORT_SPACE_STATUS = {
-  IDLE: 'idle',
-  PENDING: 'pending',
-  SUCCESS: 'success',
+  READY: 'ready',
+  RUNNING: 'running',
+  DONE: 'done',
 };
 
 const INITIAL_STATE = Map({
   activity: List(),
-  status: EXPORT_SPACE_STATUS.IDLE,
+  status: EXPORT_SPACE_STATUS.READY,
   space: Map(),
 });
 
@@ -30,12 +30,12 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case SET_EXPORT_SPACE:
       return state
         .setIn(['space'], Map(payload.space))
-        .setIn(['status'], EXPORT_SPACE_STATUS.PENDING);
+        .setIn(['status'], EXPORT_SPACE_STATUS.RUNNING);
     case EXPORT_SPACE_SUCCESS:
-      return state.setIn(['status'], EXPORT_SPACE_STATUS.SUCCESS);
+      return state.setIn(['status'], EXPORT_SPACE_STATUS.DONE);
     case CLEAR_EXPORT_SPACE:
       return state
-        .setIn(['status'], EXPORT_SPACE_STATUS.IDLE)
+        .setIn(['status'], EXPORT_SPACE_STATUS.READY)
         .setIn(['space'], Map());
     default:
       return state;
