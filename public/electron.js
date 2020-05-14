@@ -58,6 +58,8 @@ const {
   SET_USER_MODE_CHANNEL,
   SET_SPACE_AS_FAVORITE_CHANNEL,
   SET_SPACE_AS_RECENT_CHANNEL,
+  EXTRACT_FILE_TO_LOAD_SPACE_CHANNEL,
+  CLEAR_LOAD_SPACE_CHANNEL,
 } = require('./app/config/channels');
 const env = require('./env.json');
 const {
@@ -94,6 +96,8 @@ const {
   getUserMode,
   setSpaceAsFavorite,
   setSpaceAsRecent,
+  clearLoadSpace,
+  extractFileToLoadSpace,
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
 
@@ -358,14 +362,23 @@ app.on('ready', async () => {
   // called when deleting a space
   ipcMain.on(DELETE_SPACE_CHANNEL, deleteSpace(mainWindow, db));
 
+  // prompt when loading a space
+  ipcMain.on(SHOW_LOAD_SPACE_PROMPT_CHANNEL, showLoadSpacePrompt(mainWindow));
+
   // called when loading a space
   ipcMain.on(LOAD_SPACE_CHANNEL, loadSpace(mainWindow, db));
 
+  // called when requesting to load a space
+  ipcMain.on(
+    EXTRACT_FILE_TO_LOAD_SPACE_CHANNEL,
+    extractFileToLoadSpace(mainWindow, db)
+  );
+
+  // called when clearing load space
+  ipcMain.on(CLEAR_LOAD_SPACE_CHANNEL, clearLoadSpace(mainWindow));
+
   // called when exporting a space
   ipcMain.on(EXPORT_SPACE_CHANNEL, exportSpace(mainWindow, db));
-
-  // prompt when loading a space
-  ipcMain.on(SHOW_LOAD_SPACE_PROMPT_CHANNEL, showLoadSpacePrompt(mainWindow));
 
   // prompt when exporting a space
   ipcMain.on(

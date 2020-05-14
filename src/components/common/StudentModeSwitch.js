@@ -9,6 +9,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { getUserMode, setUserMode } from '../../actions';
 import Loader from './Loader';
 import { USER_MODES, FORM_CONTROL_MIN_WIDTH } from '../../config/constants';
+import { STUDENT_MODE_SWITCH_ID } from '../../config/selectors';
 
 const styles = theme => ({
   formControl: {
@@ -62,7 +63,7 @@ export class StudentModeSwitch extends Component {
     );
 
     return (
-      <FormControl className={classes.formControl}>
+      <FormControl id={STUDENT_MODE_SWITCH_ID} className={classes.formControl}>
         <FormControlLabel
           control={switchControl}
           label={t('Student Mode Enabled')}

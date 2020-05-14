@@ -63,6 +63,26 @@
     "Add this space to your Favorite Spaces": "Ajoute cet espace dans tes Espaces Favoris",
     "Favorite Spaces": "Espaces Favoris",
     "This space is already in your Favorite Spaces": "Cet espace est déjà dans tes Espace Favoris",
-    "Recent Spaces": "Espaces Récents"
+    "Recent Spaces": "Espaces Récents",
+    "Resources are user-generated content saved when using applications (e.g., answer submitted via an input box)": "Les resources sont les contenus enregistrés et générés par les utilisateurs lors de l'utilisation d'applications (ex., réponse entrée dans l'input box)",
+    "Actions are analytics generated when a user interacts with a space.": "Les actions sont des traces d'utilisation générées quand un utilisateur interargit avec un espace.",
+    "No Action available for this Space": "Aucune Action disponible pour cet Espace",
+    "This Space's Actions": "Les Actions de cet Espace",
+    "No Resource available for this Space": "Aucune Resource disponible pour cet Espace",
+    "This Space's Resources": "Les Resources de cet Espace",
+    "You are going to export": "Export en cours pour",
+    "Include": "Avec",
+    "Export Space": "Exporter un Espace",
+    "Export": "Exporter",
+    "Back": "Retour",
+    "This Space": "Cet Espace",
+    "This file does not contain any analytics": "Ce fichier ne contient aucune action",
+    "This file does not contain any user input": "Ce fichier ne contient aucune resource",
+    "This file does not contain a space": "Ce fichier ne contient aucun espace",
+    "This space does not exist or is different": "Cet espace n'existe pas ou est différent",
+    "Students cannot load spaces": "Les étudiants ne peuvent pas importer des espaces",
+    "This space already exists": "L'espace existe déjà",
+    "What do you want to load?": "Que souhaitez-vous importer ?",
+    "Imported data will be reassigned as your own data": "Les données importées seront réassignées comme les vôtres"
   }
 }

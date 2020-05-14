@@ -8,3 +8,5 @@ export * from './layout';
 export * from './action';
 export * from './authentication';
 export * from './syncSpace';
+export * from './loadSpace';
+export * from './exportSpace';

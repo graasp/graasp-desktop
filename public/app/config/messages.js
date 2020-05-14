@@ -63,6 +63,9 @@ const ERROR_SETTING_SPACE_AS_FAVORITE =
   'There was an error setting space as favorite';
 const ERROR_SETTING_SPACE_AS_RECENT =
   'There was an error setting space as recent space';
+const ERROR_STUDENT_LOAD_OUT_OF_DATE_SPACE_MESSAGE =
+  'The space contained in this file is out of date. Ask your teacher for more information.';
+const ERROR_STUDENT_FORBIDDEN_MESSAGE = 'Students cannot access this page';
 
 module.exports = {
   ERROR_GETTING_DEVELOPER_MODE,
@@ -111,4 +114,6 @@ module.exports = {
   ERROR_GETTING_USER_MODE,
   ERROR_SETTING_SPACE_AS_FAVORITE,
   ERROR_SETTING_SPACE_AS_RECENT,
+  ERROR_STUDENT_LOAD_OUT_OF_DATE_SPACE_MESSAGE,
+  ERROR_STUDENT_FORBIDDEN_MESSAGE,
 };

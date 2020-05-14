@@ -52,16 +52,23 @@ export const SPACE_DESCRIPTION_EXPAND_BUTTON_CLASS =
   'spaceDescriptionExpandButton';
 export const buildSpaceCardDescriptionId = id => `spaceCardDescription-${id}`;
 export const SPACE_CARD_LINK_CLASS = 'spaceCardLink';
-export const SPACE_NOT_AVAILABLE_TEXT_CLASS = 'noSpaceAvailableText';
+export const SPACE_NOT_AVAILABLE_TEXT_ID = 'noSpaceAvailableText';
 
 export const LOAD_BROWSE_BUTTON_ID = 'loadBrowseButton';
 export const LOAD_INPUT_ID = 'loadInput';
+export const LOAD_SUBMIT_BUTTON_ID = 'loadSubmitButton';
 export const LOAD_LOAD_BUTTON_ID = 'loadLoadButton';
+export const LOAD_BACK_BUTTON_ID = 'loadCancelButton';
+export const buildCheckboxLabel = name => `checkboxLabel-${name}`;
+
+export const EXPORT_SPACE_BUTTON_ID = 'exportSpaceButton';
+export const EXPORT_SPACE_BACK_BUTTON_ID = 'exportSpaceBackButton';
 
 export const LANGUAGE_SELECT_ID = 'settingsLanguageSelect';
 export const DEVELOPER_SWITCH_ID = 'settingsDeveloperSwitch';
 export const GEOLOCATION_CONTROL_ID = 'settingsGeolocationControl';
 export const SYNC_MODE_SWITCH_ID = 'syncModeSwitch';
+export const STUDENT_MODE_SWITCH_ID = 'studentModeSwitch';
 
 export const buildPhaseAppName = id => `phaseApp-${id}`;
 

@@ -89,7 +89,7 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text defined r
     <Connect(withI18nextTranslation(WithStyles(ClearButton)))
       spaceId="id"
     />
-    <withI18nextTranslation(WithStyles(Connect(ExportButton)))
+    <withRouter(withI18nextTranslation(WithStyles(Connect(ExportButton))))
       space={
         Object {
           "id": "id",
@@ -164,7 +164,7 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text undefined
     <Connect(withI18nextTranslation(WithStyles(ClearButton)))
       spaceId="id"
     />
-    <withI18nextTranslation(WithStyles(Connect(ExportButton)))
+    <withRouter(withI18nextTranslation(WithStyles(Connect(ExportButton))))
       space={
         Object {
           "id": "id",

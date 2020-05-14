@@ -179,6 +179,7 @@ const SampleDatabase = {
       id: 1,
       username: 'graasp',
       createdAt: '2019-05-21T17:06:29.683Z',
+      geolocation: null,
       settings: {
         lang: 'en',
         developerMode: true,

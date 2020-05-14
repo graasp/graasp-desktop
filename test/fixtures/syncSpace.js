@@ -161,7 +161,7 @@ export const SPACE_WITH_TOOLS_UPDATE_CHANGES = {
 };
 
 export const SPACE_WITH_MULTIPLE_CHANGES_PATH =
-  './spaceWithMutlipleChanges.zip';
+  './spaceWithMultipleChanges.zip';
 export const SPACE_WITH_MULTIPLE_CHANGES = {
   space: {
     id: '5ea029f5f851e7716e3722fe',

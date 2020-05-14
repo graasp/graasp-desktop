@@ -11,6 +11,7 @@ import DefaultThumbnail from '../../data/graasp.jpg';
 import { MIN_CARD_WIDTH } from '../../config/constants';
 import { SPACE_CARD_CLASS } from '../../config/selectors';
 import NoSpacesAvailable from '../common/NoSpacesAvailable';
+import { buildSpacePath } from '../../config/paths';
 
 class SpaceGrid extends Component {
   state = {
@@ -122,7 +123,7 @@ class SpaceGrid extends Component {
       const { push } = history;
 
       const viewLink = () => {
-        push(`/space/${id}?saved=${saved}`);
+        push(buildSpacePath(id, saved));
       };
 
       const card = (

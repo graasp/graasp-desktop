@@ -3,24 +3,18 @@ import {
   GET_SPACES,
   FLAG_GETTING_SPACE,
   FLAG_GETTING_SPACES,
-  FLAG_LOADING_SPACE,
   CLEAR_SPACE,
   GET_SPACE_SUCCEEDED,
-  FLAG_EXPORTING_SPACE,
   FLAG_DELETING_SPACE,
   DELETE_SPACE_SUCCESS,
   FLAG_SAVING_SPACE,
   SAVE_SPACE_SUCCEEDED,
   FLAG_GETTING_SPACES_NEARBY,
   GET_SPACES_NEARBY_SUCCEEDED,
-  FLAG_SYNCING_SPACE,
-  SYNC_SPACE_SUCCEEDED,
   FLAG_CLEARING_USER_INPUT,
   SET_SPACE_SEARCH_QUERY_SUCCEEDED,
 } from '../types';
 import {
-  ERROR_ZIP_CORRUPTED,
-  ERROR_JSON_CORRUPTED,
   ERROR_SPACE_ALREADY_AVAILABLE,
   ERROR_GENERAL,
   ERROR_DOWNLOADING_FILE,
@@ -29,19 +23,11 @@ import { clearPhase } from './phase';
 import {
   DELETE_SPACE_CHANNEL,
   DELETED_SPACE_CHANNEL,
-  EXPORT_SPACE_CHANNEL,
-  EXPORTED_SPACE_CHANNEL,
   GET_SPACE_CHANNEL,
   GET_SPACES_CHANNEL,
-  LOAD_SPACE_CHANNEL,
-  LOADED_SPACE_CHANNEL,
   SHOW_DELETE_SPACE_PROMPT_CHANNEL,
   RESPOND_DELETE_SPACE_PROMPT_CHANNEL,
-  SHOW_EXPORT_SPACE_PROMPT_CHANNEL,
-  RESPOND_EXPORT_SPACE_PROMPT_CHANNEL,
   SAVE_SPACE_CHANNEL,
-  SYNC_SPACE_CHANNEL,
-  SYNCED_SPACE_CHANNEL,
   CLEAR_USER_INPUT_CHANNEL,
   CLEARED_USER_INPUT_CHANNEL,
   RESPOND_CLEAR_USER_INPUT_PROMPT_CHANNEL,
@@ -51,22 +37,14 @@ import {
   // ERROR_DOWNLOADING_MESSAGE,
   ERROR_DELETING_MESSAGE,
   ERROR_DOWNLOADING_MESSAGE,
-  ERROR_EXPORTING_MESSAGE,
   ERROR_GETTING_SPACE_MESSAGE,
   ERROR_GETTING_SPACES_NEARBY,
-  ERROR_JSON_CORRUPTED_MESSAGE,
-  ERROR_LOADING_MESSAGE,
   ERROR_MESSAGE_HEADER,
   ERROR_SAVING_SPACE_MESSAGE,
   ERROR_SPACE_ALREADY_AVAILABLE_MESSAGE,
-  ERROR_ZIP_CORRUPTED_MESSAGE,
   SUCCESS_DELETING_MESSAGE,
-  SUCCESS_EXPORTING_MESSAGE,
   SUCCESS_MESSAGE_HEADER,
   SUCCESS_SAVING_MESSAGE,
-  SUCCESS_SPACE_LOADED_MESSAGE,
-  SUCCESS_SYNCING_MESSAGE,
-  ERROR_SYNCING_MESSAGE,
   ERROR_CLEARING_USER_INPUT_MESSAGE,
   SUCCESS_CLEARING_USER_INPUT_MESSAGE,
 } from '../config/messages';
@@ -80,14 +58,10 @@ import { DEFAULT_RADIUS } from '../config/constants';
 import { setSpaceAsFavorite, setSpaceAsRecent } from './user';
 
 const flagGettingSpaces = createFlag(FLAG_GETTING_SPACES);
-const flagLoadingSpace = createFlag(FLAG_LOADING_SPACE);
 const flagDeletingSpace = createFlag(FLAG_DELETING_SPACE);
-const flagExportingSpace = createFlag(FLAG_EXPORTING_SPACE);
 const flagSavingSpace = createFlag(FLAG_SAVING_SPACE);
 const flagGettingSpacesNearby = createFlag(FLAG_GETTING_SPACES_NEARBY);
-const flagSyncingSpace = createFlag(FLAG_SYNCING_SPACE);
 const flagClearingUserInput = createFlag(FLAG_CLEARING_USER_INPUT);
-
 /**
  * helper function to wrap a listener to the get space channel around a promise
  * @param online
@@ -255,33 +229,6 @@ const clearSpace = () => dispatch => {
   });
 };
 
-const exportSpace = (id, spaceName, userId) => dispatch => {
-  window.ipcRenderer.send(SHOW_EXPORT_SPACE_PROMPT_CHANNEL, spaceName);
-  window.ipcRenderer.once(
-    RESPOND_EXPORT_SPACE_PROMPT_CHANNEL,
-    (event, archivePath) => {
-      dispatch(flagExportingSpace(true));
-      if (archivePath) {
-        window.ipcRenderer.send(EXPORT_SPACE_CHANNEL, {
-          archivePath,
-          id,
-          userId,
-        });
-      } else {
-        dispatch(flagExportingSpace(false));
-      }
-    }
-  );
-  window.ipcRenderer.once(EXPORTED_SPACE_CHANNEL, (event, response) => {
-    if (response === ERROR_GENERAL) {
-      toastr.error(ERROR_MESSAGE_HEADER, ERROR_EXPORTING_MESSAGE);
-    } else {
-      toastr.success(SUCCESS_MESSAGE_HEADER, SUCCESS_EXPORTING_MESSAGE);
-    }
-    dispatch(flagExportingSpace(false));
-  });
-};
-
 const deleteSpace = ({ id }) => dispatch => {
   // show confirmation prompt
   window.ipcRenderer.send(SHOW_DELETE_SPACE_PROMPT_CHANNEL);
@@ -358,70 +305,6 @@ const clearUserInput = async ({ spaceId, userId }) => async dispatch => {
   }
 };
 
-const syncSpace = async ({ id }) => async dispatch => {
-  try {
-    const url = generateGetSpaceEndpoint(id);
-    const response = await fetch(url, DEFAULT_GET_REQUEST);
-    // throws if it is an error
-    await isErrorResponse(response);
-    const remoteSpace = await response.json();
-
-    dispatch(flagSyncingSpace(true));
-    window.ipcRenderer.send(SYNC_SPACE_CHANNEL, { remoteSpace });
-
-    // this runs once the space has been synced
-    window.ipcRenderer.once(SYNCED_SPACE_CHANNEL, (event, res) => {
-      if (res === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_SYNCING_MESSAGE);
-      } else {
-        // update saved spaces in state
-        dispatch(getSpaces());
-
-        toastr.success(SUCCESS_MESSAGE_HEADER, SUCCESS_SYNCING_MESSAGE);
-        dispatch({
-          type: SYNC_SPACE_SUCCEEDED,
-          payload: res,
-        });
-      }
-      dispatch(flagSyncingSpace(false));
-    });
-  } catch (err) {
-    dispatch(flagSyncingSpace(false));
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SYNCING_MESSAGE);
-  }
-};
-
-const loadSpace = ({ fileLocation }) => dispatch => {
-  dispatch(flagLoadingSpace(true));
-  window.ipcRenderer.send(LOAD_SPACE_CHANNEL, { fileLocation });
-  window.ipcRenderer.once(LOADED_SPACE_CHANNEL, (event, response) => {
-    switch (response) {
-      case ERROR_ZIP_CORRUPTED:
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_ZIP_CORRUPTED_MESSAGE);
-        break;
-      case ERROR_JSON_CORRUPTED:
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_JSON_CORRUPTED_MESSAGE);
-        break;
-      case ERROR_SPACE_ALREADY_AVAILABLE:
-        toastr.error(
-          ERROR_MESSAGE_HEADER,
-          ERROR_SPACE_ALREADY_AVAILABLE_MESSAGE
-        );
-        break;
-      case ERROR_GENERAL:
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_LOADING_MESSAGE);
-        break;
-      default: {
-        // add in recent spaces
-        setSpaceAsRecent({ recent: true, spaceId: response.spaceId })(dispatch);
-
-        toastr.success(SUCCESS_MESSAGE_HEADER, SUCCESS_SPACE_LOADED_MESSAGE);
-      }
-    }
-    dispatch(flagLoadingSpace(false));
-  });
-};
-
 const getSpace = ({ id, saved = false, user }) => dispatch => {
   // only get the space from the api if not saved
   if (!saved) {
@@ -466,17 +349,14 @@ const setSearchQuery = async payload => async dispatch => {
 };
 
 export {
-  loadSpace,
   clearSpace,
   deleteSpace,
-  exportSpace,
   getRemoteSpace,
   getLocalSpace,
   getSpaces,
   getSpace,
   saveSpace,
   getSpacesNearby,
-  syncSpace,
   clearUserInput,
   createGetLocalSpace,
   createGetRemoteSpace,

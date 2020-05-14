@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
+import { withRouter } from 'react-router';
 import clsx from 'clsx';
 import IconButton from '@material-ui/core/IconButton/IconButton';
 import UnarchiveIcon from '@material-ui/icons/Unarchive';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core';
 import Styles from '../../Styles';
-import { exportSpace } from '../../actions/space';
+import { setSpaceForExport } from '../../actions';
 import { SPACE_EXPORT_BUTTON_CLASS } from '../../config/selectors';
+import { buildExportSelectionPathForSpaceId } from '../../config/paths';
 
 class ExportButton extends Component {
   static propTypes = {
@@ -21,15 +23,21 @@ class ExportButton extends Component {
       appBar: PropTypes.string.isRequired,
       button: PropTypes.string.isRequired,
     }).isRequired,
-    dispatchExportSpace: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
-    userId: PropTypes.string.isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
+    dispatchSetSpaceForExport: PropTypes.func.isRequired,
   };
 
   handleExport = () => {
-    const { space, dispatchExportSpace, userId } = this.props;
-    const { id, name } = space;
-    dispatchExportSpace(id, name, userId);
+    const {
+      history: { push },
+      space,
+      dispatchSetSpaceForExport,
+    } = this.props;
+    dispatchSetSpaceForExport({ space });
+    push(buildExportSelectionPathForSpaceId(space.id));
   };
 
   render() {
@@ -53,7 +61,7 @@ const mapStateToProps = ({ authentication }) => ({
 });
 
 const mapDispatchToProps = {
-  dispatchExportSpace: exportSpace,
+  dispatchSetSpaceForExport: setSpaceForExport,
 };
 
 const ConnectedComponent = connect(
@@ -67,4 +75,4 @@ const StyledComponent = withStyles(Styles, { withTheme: true })(
 
 const TranslatedComponent = withTranslation()(StyledComponent);
 
-export default TranslatedComponent;
+export default withRouter(TranslatedComponent);

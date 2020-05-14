@@ -1,8 +1,12 @@
-const loadSpace = require('./loadSpace');
+const {
+  loadSpace,
+  clearLoadSpace,
+  extractFileToLoadSpace,
+} = require('./loadSpace');
 const saveSpace = require('./saveSpace');
 const getSpace = require('./getSpace');
 const getSpaces = require('./getSpaces');
-const deleteSpace = require('./deleteSpace');
+const { deleteSpace, deleteSpaceAndResources } = require('./deleteSpace');
 const syncSpace = require('./syncSpace');
 const exportSpace = require('./exportSpace');
 const getGeolocationEnabled = require('./getGeolocationEnabled');
@@ -34,11 +38,14 @@ const setSpaceAsRecent = require('./setSpaceAsRecent');
 
 module.exports = {
   loadSpace,
+  clearLoadSpace,
+  extractFileToLoadSpace,
   saveSpace,
   getSpace,
   getSpaces,
   syncSpace,
   deleteSpace,
+  deleteSpaceAndResources,
   exportSpace,
   getGeolocationEnabled,
   setGeolocationEnabled,
