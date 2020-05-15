@@ -24,8 +24,8 @@ class ClassroomScreen extends Component {
     dispatchGetClassroom: PropTypes.func.isRequired,
     activity: PropTypes.bool.isRequired,
     classes: PropTypes.shape({
-      root: PropTypes.string.isRequired
-    }).isRequired
+      root: PropTypes.string.isRequired,
+    }).isRequired,
   };
 
   static defaultProps = {

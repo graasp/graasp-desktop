@@ -14,6 +14,7 @@ import { getClassrooms } from '../../actions';
 import AddClassroomButton from './AddClassroomButton';
 import ClassroomGrid from './ClassroomGrid';
 import Styles from '../../Styles';
+import { CLASSROOMS_MAIN_ID } from '../../config/selectors';
 
 export class Teacherboard extends Component {
   static propTypes = {
@@ -52,7 +53,7 @@ export class Teacherboard extends Component {
     }
 
     return (
-      <Main>
+      <Main id={CLASSROOMS_MAIN_ID}>
         <ClassroomGrid classrooms={classrooms} />
 
         <AddClassroomButton />

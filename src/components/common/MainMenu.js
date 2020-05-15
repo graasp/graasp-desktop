@@ -40,6 +40,7 @@ import {
   DEVELOPER_MENU_ITEM_ID,
   SIGN_OUT_MENU_ITEM_ID,
   SAVED_SPACES_MENU_ITEM_ID,
+  CLASSROOMS_MENU_ITEM_ID,
 } from '../../config/selectors';
 import { signOut } from '../../actions/authentication';
 import { AUTHENTICATED, USER_MODES } from '../../config/constants';
@@ -184,6 +185,7 @@ export class MainMenu extends Component {
     if (authenticated && userMode === USER_MODES.TEACHER) {
       return (
         <MenuItem
+          id={CLASSROOMS_MENU_ITEM_ID}
           onClick={() => this.handleClick(CLASSROOMS_PATH)}
           button
           selected={path === CLASSROOMS_PATH}

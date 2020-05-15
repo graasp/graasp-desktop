@@ -104,7 +104,6 @@ export const toggleStudentMode = async (client, value) => {
   }
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export const toggleSyncAdvancedMode = async (client, value) => {
   const syncAdvancedModeSwitchSelector = `#${SYNC_MODE_SWITCH_ID} input`;
   const syncAdvancedMode = await client.getAttribute(

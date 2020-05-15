@@ -15,6 +15,11 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { deleteClassroom } from '../../actions';
 import EditClassroomButton from './EditClassroomButton';
 import { buildClassroomPath } from '../../config/paths';
+import {
+  CLASSROOM_CARD_CLASS,
+  buildClassroomCardId,
+  DELETE_CLASSROOM_BUTTON_CLASS,
+} from '../../config/selectors';
 
 const styles = () => ({
   bullet: {
@@ -63,7 +68,11 @@ class ClassroomCard extends Component {
     const { t } = this.props;
     return (
       <Tooltip title={t('Delete this classroom.')}>
-        <IconButton color="inherit" onClick={this.deleteClassroom}>
+        <IconButton
+          color="inherit"
+          onClick={this.deleteClassroom}
+          className={DELETE_CLASSROOM_BUTTON_CLASS}
+        >
           <DeleteIcon />
         </IconButton>
       </Tooltip>
@@ -72,12 +81,16 @@ class ClassroomCard extends Component {
 
   render() {
     const { classroom, classes, t } = this.props;
-    const { spaces, name, users } = classroom;
+    const { spaces, name, users, id } = classroom;
     const nbSpaces = spaces.length.toString();
     const nbUsers = users.length.toString();
 
     return (
-      <Card>
+      <Card
+        className={CLASSROOM_CARD_CLASS}
+        data-name={name}
+        id={buildClassroomCardId(id)}
+      >
         <CardActionArea onClick={this.viewLink}>
           <CardContent>
             <Typography variant="h5" component="h2">

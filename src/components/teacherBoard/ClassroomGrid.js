@@ -5,13 +5,14 @@ import { withTranslation } from 'react-i18next';
 import Typography from '@material-ui/core/Typography/Typography';
 import PropTypes from 'prop-types';
 import ClassroomCard from './ClassroomCard';
+import { NO_CLASSROOM_AVAILABLE_ID } from '../../config/selectors';
 
 const styles = () => ({});
 
 const ClassroomGrid = ({ classrooms, t }) => {
   if (classrooms.isEmpty()) {
     return (
-      <div className="Main">
+      <div id={NO_CLASSROOM_AVAILABLE_ID} className="Main">
         <Typography variant="h5" color="inherit">
           {t('No Classroom Available')}
         </Typography>

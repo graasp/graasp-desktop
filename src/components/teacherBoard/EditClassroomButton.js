@@ -12,6 +12,12 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { editClassroom } from '../../actions';
+import {
+  EDIT_CLASSROOM_BUTTON_CLASS,
+  EDIT_CLASSROOM_INPUT_ID,
+  EDIT_CLASSROOM_VALIDATE_BUTTON_ID,
+  EDIT_CLASSROOM_CANCEL_BUTTON_ID,
+} from '../../config/selectors';
 
 class EditClassroomButton extends Component {
   state = (() => {
@@ -70,7 +76,11 @@ class EditClassroomButton extends Component {
     return (
       <>
         <Tooltip title={t('Edit this classroom.')}>
-          <IconButton color="inherit" onClick={this.handleClickOpen}>
+          <IconButton
+            color="inherit"
+            onClick={this.handleClickOpen}
+            className={EDIT_CLASSROOM_BUTTON_CLASS}
+          >
             <EditIcon />
           </IconButton>
         </Tooltip>
@@ -84,6 +94,7 @@ class EditClassroomButton extends Component {
           </DialogTitle>
           <DialogContent>
             <TextField
+              id={EDIT_CLASSROOM_INPUT_ID}
               autoFocus
               margin="dense"
               label={t("Classroom's name")}
@@ -94,10 +105,18 @@ class EditClassroomButton extends Component {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleCancel} color="primary">
+            <Button
+              onClick={this.handleCancel}
+              color="primary"
+              id={EDIT_CLASSROOM_CANCEL_BUTTON_ID}
+            >
               {t('Cancel')}
             </Button>
-            <Button onClick={this.handleValidate} color="primary">
+            <Button
+              onClick={this.handleValidate}
+              color="primary"
+              id={EDIT_CLASSROOM_VALIDATE_BUTTON_ID}
+            >
               {t('Validate')}
             </Button>
           </DialogActions>

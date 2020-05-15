@@ -12,6 +12,12 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { addClassroom } from '../../actions';
+import {
+  ADD_CLASSROOM_BUTTON_ID,
+  ADD_CLASSROOM_NAME_INPUT_ID,
+  ADD_CLASSROOM_VALIDATE_BUTTON_ID,
+  ADD_CLASSROOM_CANCEL_BUTTON_ID,
+} from '../../config/selectors';
 
 const styles = theme => ({
   fab: {
@@ -69,6 +75,7 @@ class AddClassroomButton extends Component {
     return (
       <>
         <Fab
+          id={ADD_CLASSROOM_BUTTON_ID}
           aria-label={t('add classroom')}
           className={classes.fab}
           color="primary"
@@ -87,6 +94,7 @@ class AddClassroomButton extends Component {
           </DialogTitle>
           <DialogContent>
             <TextField
+              id={ADD_CLASSROOM_NAME_INPUT_ID}
               autoFocus
               margin="dense"
               label={t("Classroom's name")}
@@ -97,10 +105,18 @@ class AddClassroomButton extends Component {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleCancel} color="primary">
+            <Button
+              onClick={this.handleCancel}
+              color="primary"
+              id={ADD_CLASSROOM_CANCEL_BUTTON_ID}
+            >
               {t('Cancel')}
             </Button>
-            <Button onClick={this.handleValidate} color="primary">
+            <Button
+              onClick={this.handleValidate}
+              color="primary"
+              id={ADD_CLASSROOM_VALIDATE_BUTTON_ID}
+            >
               {t('Validate')}
             </Button>
           </DialogActions>

@@ -3,6 +3,8 @@ export const DRAWER_BUTTON_ID = 'drawerButton';
 export const FAVORITE_SPACES_WRAPPER_ID = 'favoriteSpacesWrapper';
 export const RECENT_SPACES_WRAPPER_ID = 'recentSpacesWrapper';
 
+export const CLASSROOMS_MENU_ITEM_ID = 'classroomsMenuItem';
+export const CLASSROOMS_MAIN_ID = 'classroomsMain';
 export const SAVED_SPACES_MENU_ITEM_ID = 'savedSpacesMenuItem';
 export const SPACES_NEARBY_MENU_ITEM_ID = 'spacesNearbyMenuItem';
 export const SPACES_NEARBY_MAIN_ID = 'spacesNearbyMain';
@@ -81,3 +83,16 @@ export const SYNC_ACCEPT_BUTTON_ID = 'syncAcceptButton';
 export const SYNC_CANCEL_BUTTON_ID = 'syncCancelButton';
 export const SYNC_ADVANCED_MAIN_ID = 'syncAdvancedMain';
 export const SYNC_VISUAL_MAIN_ID = 'syncVisualMain';
+
+export const NO_CLASSROOM_AVAILABLE_ID = 'noClassroomAvailable';
+export const ADD_CLASSROOM_BUTTON_ID = 'addClassroomButton';
+export const ADD_CLASSROOM_NAME_INPUT_ID = 'addClassroomNameInput';
+export const ADD_CLASSROOM_VALIDATE_BUTTON_ID = 'addClassroomValidateButton';
+export const ADD_CLASSROOM_CANCEL_BUTTON_ID = 'addClassroomCancelButton';
+export const CLASSROOM_CARD_CLASS = 'classroomCard';
+export const buildClassroomCardId = id => `classroomCard-${id}`;
+export const EDIT_CLASSROOM_BUTTON_CLASS = 'editClassroomButton';
+export const EDIT_CLASSROOM_INPUT_ID = 'editClassroomInput';
+export const EDIT_CLASSROOM_VALIDATE_BUTTON_ID = 'editClassroomValidateButton';
+export const EDIT_CLASSROOM_CANCEL_BUTTON_ID = 'editClassroomCancelButton';
+export const DELETE_CLASSROOM_BUTTON_CLASS = 'deleteClassroomButton';
