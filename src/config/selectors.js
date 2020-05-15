@@ -100,3 +100,18 @@ export const EDIT_USER_IN_CLASSROOM_DIALOG_TITLE_ID =
   'editUserInClassroomDialogTitle';
 export const ADD_USER_IN_CLASSROOM_DIALOG_TITLE_ID =
   'addUserInClassroomDialogTitle';
+export const ADD_USER_IN_CLASSROOM_BUTTON_ID = 'addUserInClassroomButton';
+export const ADD_USER_IN_CLASSROOM_NAME_INPUT_ID =
+  'addUserInClassroomNameInput';
+export const ADD_USER_IN_CLASSROOM_VALIDATE_BUTTON_ID =
+  'addUserInClassroomValideButton';
+export const ADD_USER_IN_CLASSROOM_CANCEL_BUTTON_ID =
+  'addUserInClassroomCancelButton';
+export const EDIT_USER_IN_CLASSROOM_BUTTON_CLASS = 'editUserInClassroomButton';
+export const EDIT_USER_IN_CLASSROOM_USERNAME_INPUT_ID =
+  'editUserInClassroomUsernameInput';
+export const EDIT_USER_IN_CLASSROOM_VALIDATE_BUTTON_ID =
+  'editUserInClassroomValidateButton';
+export const CLASSROOM_TABLE_BODY_ID = 'classroomTableBody';
+export const DELETE_USER_IN_CLASSROOM_BUTTON_CLASS =
+  'deleteUserInClassroomButton';

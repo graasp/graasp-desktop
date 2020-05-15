@@ -7,7 +7,11 @@ import {
   SYNC_MODE_SWITCH_ID,
   STUDENT_MODE_SWITCH_ID,
 } from '../src/config/selectors';
-import { SETTINGS_LOAD_PAUSE, LOAD_TAB_PAUSE } from './constants';
+import {
+  SETTINGS_LOAD_PAUSE,
+  LOAD_TAB_PAUSE,
+  CLEAR_INPUT_PAUSE,
+} from './constants';
 import { SYNC_MODES } from '../src/config/constants';
 
 export const mochaAsync = fn => {
@@ -54,6 +58,13 @@ export const expectElementToExist = async (client, elementSelector) => {
     console.log(`${elementSelector} is not found`);
   }
   expect(found).to.be.true;
+};
+
+export const clearInput = async (client, selector) => {
+  const value = await client.getValue(selector);
+  const backSpaces = new Array(value.length).fill('Backspace');
+  await client.setValue(selector, backSpaces);
+  await client.pause(CLEAR_INPUT_PAUSE);
 };
 
 // settings utils

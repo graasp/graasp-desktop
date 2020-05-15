@@ -21,6 +21,10 @@ import TableToolbar from './TableToolbar';
 import { TABLE_ORDER } from '../../config/constants';
 import { deleteUserInClassroom } from '../../actions';
 import EditUserInClassroomButton from './EditUserInClassroomButton';
+import {
+  CLASSROOM_TABLE_BODY_ID,
+  DELETE_USER_IN_CLASSROOM_BUTTON_CLASS,
+} from '../../config/selectors';
 
 const USERNAME_HEAD_CELL_ID = 'username';
 const OPERATIONS_HEAD_CELL_ID = 'operations';
@@ -199,7 +203,11 @@ class StudentsTable extends Component {
     const { t } = this.props;
     return (
       <Tooltip title={t('Delete this user.')}>
-        <IconButton color="inherit" onClick={() => this.handleDeleteUser(row)}>
+        <IconButton
+          className={DELETE_USER_IN_CLASSROOM_BUTTON_CLASS}
+          color="inherit"
+          onClick={() => this.handleDeleteUser(row)}
+        >
           <DeleteIcon />
         </IconButton>
       </Tooltip>
@@ -258,7 +266,7 @@ class StudentsTable extends Component {
                 onRequestSort={this.handleRequestSort}
                 rowCount={rows.length}
               />
-              <TableBody>
+              <TableBody id={CLASSROOM_TABLE_BODY_ID}>
                 {stableSort(rows, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map(row => {
@@ -272,6 +280,7 @@ class StudentsTable extends Component {
 
                     return (
                       <TableRow
+                        data-name={row[USERNAME_HEAD_CELL_ID]}
                         hover
                         onClick={handleOnClick}
                         role="checkbox"

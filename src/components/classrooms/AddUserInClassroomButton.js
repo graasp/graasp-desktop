@@ -12,7 +12,13 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { addUserInClassroom } from '../../actions';
-import { ADD_USER_IN_CLASSROOM_DIALOG_TITLE_ID } from '../../config/selectors';
+import {
+  ADD_USER_IN_CLASSROOM_DIALOG_TITLE_ID,
+  ADD_USER_IN_CLASSROOM_NAME_INPUT_ID,
+  ADD_USER_IN_CLASSROOM_BUTTON_ID,
+  ADD_USER_IN_CLASSROOM_VALIDATE_BUTTON_ID,
+  ADD_USER_IN_CLASSROOM_CANCEL_BUTTON_ID,
+} from '../../config/selectors';
 import { isUsernameValid } from '../../utils/user';
 
 const styles = theme => ({
@@ -80,6 +86,7 @@ class AddUserInClassroomButton extends Component {
     return (
       <>
         <Fab
+          id={ADD_USER_IN_CLASSROOM_BUTTON_ID}
           aria-label={t('add classroom')}
           className={classes.fab}
           color="primary"
@@ -98,6 +105,7 @@ class AddUserInClassroomButton extends Component {
           </DialogTitle>
           <DialogContent>
             <TextField
+              id={ADD_USER_IN_CLASSROOM_NAME_INPUT_ID}
               autoFocus
               margin="dense"
               label={t("Student's name")}
@@ -110,13 +118,18 @@ class AddUserInClassroomButton extends Component {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleCancel} color="primary">
+            <Button
+              onClick={this.handleCancel}
+              color="primary"
+              id={ADD_USER_IN_CLASSROOM_CANCEL_BUTTON_ID}
+            >
               {t('Cancel')}
             </Button>
             <Button
               onClick={this.handleValidate}
               color="primary"
               disabled={!isValid}
+              id={ADD_USER_IN_CLASSROOM_VALIDATE_BUTTON_ID}
             >
               {t('Validate')}
             </Button>

@@ -13,7 +13,12 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { editUserInClassroom } from '../../actions';
-import { EDIT_USER_IN_CLASSROOM_DIALOG_TITLE_ID } from '../../config/selectors';
+import {
+  EDIT_USER_IN_CLASSROOM_DIALOG_TITLE_ID,
+  EDIT_USER_IN_CLASSROOM_BUTTON_CLASS,
+  EDIT_USER_IN_CLASSROOM_VALIDATE_BUTTON_ID,
+  EDIT_USER_IN_CLASSROOM_USERNAME_INPUT_ID,
+} from '../../config/selectors';
 import {
   ERROR_MESSAGE_HEADER,
   ERROR_INVALID_USERNAME_MESSAGE,
@@ -109,7 +114,11 @@ class EditUserInClassroomButton extends Component {
     return (
       <>
         <Tooltip title={`${t('Edit')} ${name}`}>
-          <IconButton color="inherit" onClick={this.handleClickOpen}>
+          <IconButton
+            className={EDIT_USER_IN_CLASSROOM_BUTTON_CLASS}
+            color="inherit"
+            onClick={this.handleClickOpen}
+          >
             <EditIcon />
           </IconButton>
         </Tooltip>
@@ -123,6 +132,7 @@ class EditUserInClassroomButton extends Component {
           </DialogTitle>
           <DialogContent>
             <TextField
+              id={EDIT_USER_IN_CLASSROOM_USERNAME_INPUT_ID}
               autoFocus
               margin="dense"
               label={t('Username')}
@@ -142,6 +152,7 @@ class EditUserInClassroomButton extends Component {
               onClick={this.handleValidate}
               color="primary"
               disabled={isDataInvalid}
+              id={EDIT_USER_IN_CLASSROOM_VALIDATE_BUTTON_ID}
             >
               {t('Validate')}
             </Button>
