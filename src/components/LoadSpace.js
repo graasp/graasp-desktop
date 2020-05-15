@@ -17,10 +17,6 @@ import Styles from '../Styles';
 import Loader from './common/Loader';
 import Main from './common/Main';
 import {
-  RESPOND_LOAD_SPACE_PROMPT_CHANNEL,
-  SHOW_LOAD_SPACE_PROMPT_CHANNEL,
-} from '../config/channels';
-import {
   LOAD_MAIN_ID,
   LOAD_BROWSE_BUTTON_ID,
   LOAD_SUBMIT_BUTTON_ID,
@@ -28,6 +24,7 @@ import {
 } from '../config/selectors';
 import { LOAD_SELECTION_SPACE_PATH } from '../config/paths';
 import { extractFileToLoadSpace } from '../actions';
+import { showBrowsePrompt } from '../utils/browse';
 
 class LoadSpace extends Component {
   state = {
@@ -88,19 +85,7 @@ class LoadSpace extends Component {
   };
 
   handleBrowse = () => {
-    const options = {
-      filters: [{ name: 'zip', extensions: ['zip'] }],
-    };
-    window.ipcRenderer.send(SHOW_LOAD_SPACE_PROMPT_CHANNEL, options);
-    window.ipcRenderer.once(
-      RESPOND_LOAD_SPACE_PROMPT_CHANNEL,
-      (event, filePaths) => {
-        if (filePaths && filePaths.length) {
-          // currently we select only one file
-          this.handleFileLocation(filePaths[0]);
-        }
-      }
-    );
+    showBrowsePrompt(this.handleFileLocation);
   };
 
   render() {

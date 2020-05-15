@@ -117,7 +117,7 @@ class ClassroomScreen extends Component {
 }
 
 const mapStateToProps = ({ classroom, authentication }) => ({
-  classroom: classroom.get('current'),
+  classroom: classroom.getIn(['current', 'classroom']),
   activity: Boolean(classroom.get('activity').size),
   userId: authentication.getIn(['user', 'id']),
 });

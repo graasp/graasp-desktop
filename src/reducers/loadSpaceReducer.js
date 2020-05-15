@@ -17,7 +17,7 @@ export const LOAD_SPACE_STATUS = {
   DONE: 'done',
 };
 
-const DEFAULT_EXTRACT_PARAMETERS = Map({
+export const DEFAULT_EXTRACT_PARAMETERS = Map({
   extractPath: '',
   elements: Map({
     space: Map(),

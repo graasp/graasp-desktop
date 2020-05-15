@@ -161,6 +161,9 @@ const loadSpace = (mainWindow, db) => async (
       db.get(SPACES_COLLECTION)
         .push(space)
         .write();
+    } else {
+      // clean temp space folder
+      clean(extractPath);
     }
 
     const userId = db.get('user.id').value();
@@ -214,4 +217,9 @@ const loadSpace = (mainWindow, db) => async (
   }
 };
 
-module.exports = { clearLoadSpace, extractFileToLoadSpace, loadSpace };
+module.exports = {
+  clearLoadSpace,
+  extractFileToLoadSpace,
+  loadSpace,
+  renameSpaceFolder,
+};

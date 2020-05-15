@@ -19,7 +19,7 @@ import Loader from '../../common/Loader';
 import Main from '../../common/Main';
 import { LOAD_SPACE_PATH } from '../../../config/paths';
 import { USER_MODES } from '../../../config/constants';
-import { isSpaceUpToDate } from '../../../utils/syncSpace';
+import { isSpaceDifferent as isSpaceDifferentFunc } from '../../../utils/syncSpace';
 import {
   ERROR_MESSAGE_HEADER,
   UNEXPECTED_ERROR_MESSAGE,
@@ -129,13 +129,7 @@ class LoadSelectionScreen extends Component {
       isStudent,
     } = this.props;
 
-    // space is different if zip space is not empty and the space does not exist locally or
-    // there is a difference between currently saved space and space in zip
-    // it changes space checkbox as well
-    const isSpaceDifferent =
-      !space.isEmpty() &&
-      (savedSpace.isEmpty() ||
-        !isSpaceUpToDate(space.toJS(), savedSpace.toJS()));
+    const isSpaceDifferent = isSpaceDifferentFunc(savedSpace, space);
 
     // students cannot add out of date space data
     if (isStudent && isSpaceDifferent) {
@@ -214,6 +208,11 @@ class LoadSelectionScreen extends Component {
             type="error"
           />
           <LoadSpaceSelectors
+            // space is always disabled:
+            // when the space does not exist (force load)
+            // when the space has change (force load)
+            // when the space has no change (no load)
+            isSpaceDisabled
             isSpaceDifferent={isSpaceDifferent}
             isSpaceChecked={isSpaceChecked}
             isResourcesChecked={isResourcesChecked}
@@ -221,7 +220,7 @@ class LoadSelectionScreen extends Component {
             handleChange={this.handleChange}
             elements={elements}
           />
-          <br />
+
           <div className={classes.buttonGroup}>
             <Button
               id={LOAD_BACK_BUTTON_ID}

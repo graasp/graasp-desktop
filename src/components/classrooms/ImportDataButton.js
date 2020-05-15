@@ -4,6 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
+import { buildImportDataInClassroom } from '../../config/paths';
 
 const styles = () => ({
   center: {
@@ -18,10 +19,24 @@ class ImportDataButton extends Component {
       center: PropTypes.string.isRequired,
     }).isRequired,
     t: PropTypes.func.isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+      }).isRequired,
+    }).isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
   };
 
   handleOnClick = () => {
-    // todo: go to student data import page
+    const {
+      match: {
+        params: { id },
+      },
+      history: { push },
+    } = this.props;
+    push(buildImportDataInClassroom(id));
   };
 
   render() {

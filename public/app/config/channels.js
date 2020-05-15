@@ -67,4 +67,6 @@ module.exports = {
     'prompt:classroom:user:delete:respond',
   EDIT_USER_IN_CLASSROOM_CHANNEL: 'classroom:user:edit',
   GET_SPACE_IN_CLASSROOM_CHANNEL: 'classroom:space:get',
+  LOAD_SPACE_IN_CLASSROOM_CHANNEL: 'classroom:space:load',
+  GET_SPACE_TO_LOAD_IN_CLASSROOM_CHANNEL: 'classroom:space:load:get-space',
 };

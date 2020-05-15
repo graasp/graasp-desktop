@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { withRouter } from 'react-router';
+import { withStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import InfoIcon from '@material-ui/icons/Info';
 import { withTranslation } from 'react-i18next';
@@ -12,8 +13,18 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import { USER_MODES } from '../../../config/constants';
 import { buildCheckboxLabel } from '../../../config/selectors';
 
+const styles = theme => ({
+  wrapper: {
+    textAlign: 'left',
+    marginBottom: theme.spacing(3),
+  },
+});
+
 class LoadSpaceSelectors extends Component {
   static propTypes = {
+    classes: PropTypes.shape({
+      wrapper: PropTypes.string.isRequired,
+    }).isRequired,
     handleChange: PropTypes.func.isRequired,
     elements: PropTypes.instanceOf(Map).isRequired,
     isStudent: PropTypes.bool.isRequired,
@@ -27,6 +38,7 @@ class LoadSpaceSelectors extends Component {
       }).isRequired,
     }).isRequired,
     isSpaceDifferent: PropTypes.bool.isRequired,
+    isSpaceDisabled: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -92,11 +104,14 @@ class LoadSpaceSelectors extends Component {
       isSpaceChecked,
       isResourcesChecked,
       isActionsChecked,
+      isSpaceDisabled,
       elements,
+      classes,
     } = this.props;
 
     return (
       <Grid
+        classes={{ root: classes.wrapper }}
         container
         alignItems="center"
         alignContent="center"
@@ -107,11 +122,7 @@ class LoadSpaceSelectors extends Component {
             t('space'),
             t('This Space'),
             isSpaceChecked,
-            // space is always disabled:
-            // when the space does not exist (force load)
-            // when the space has change (force load)
-            // when the space has no change (no load)
-            true,
+            isSpaceDisabled,
             t(`This file does not contain a space`)
           )}
           {this.renderSpaceHelperText()}
@@ -166,6 +177,12 @@ const mapStateToProps = ({ authentication }) => ({
     USER_MODES.STUDENT,
 });
 
-const TranslatedComponent = withTranslation()(LoadSpaceSelectors);
+const ConnectedComponent = connect(mapStateToProps, null)(LoadSpaceSelectors);
 
-export default withRouter(connect(mapStateToProps, null)(TranslatedComponent));
+const TranslatedComponent = withTranslation()(ConnectedComponent);
+
+const StyledComponent = withStyles(styles, { withTheme: true })(
+  TranslatedComponent
+);
+
+export default withRouter(StyledComponent);

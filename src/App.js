@@ -24,6 +24,7 @@ import Dashboard from './components/dashboard/Dashboard';
 import SignInScreen from './components/signin/SignInScreen';
 import Authorization from './components/Authorization';
 import Classrooms from './components/classrooms/Classrooms';
+import ImportDataScreen from './components/classrooms/ImportDataScreen';
 import {
   SETTINGS_PATH,
   SYNC_SPACE_PATH,
@@ -40,6 +41,7 @@ import {
   LOAD_SELECTION_SPACE_PATH,
   CLASSROOMS_PATH,
   buildClassroomPath,
+  buildImportDataInClassroom,
 } from './config/paths';
 import {
   getGeolocation,
@@ -59,9 +61,7 @@ import './App.css';
 import SavedSpaces from './components/SavedSpaces';
 import ClassroomScreen from './components/classrooms/ClassroomScreen';
 
-const styles = () => ({
-  toastrIcon: { marginBottom: '-20px', fontSize: '45px' },
-});
+const styles = () => ({});
 
 export class App extends Component {
   state = { height: 0 };
@@ -232,6 +232,13 @@ export class App extends Component {
                     exact
                     path={CLASSROOMS_PATH}
                     component={Authorization([USER_MODES.TEACHER])(Classrooms)}
+                  />
+                  <Route
+                    exact
+                    path={buildImportDataInClassroom()}
+                    component={Authorization([USER_MODES.TEACHER])(
+                      ImportDataScreen
+                    )}
                   />
                   <Route
                     exact

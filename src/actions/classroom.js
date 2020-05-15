@@ -13,10 +13,20 @@ import {
   FLAG_DELETING_USERS_IN_CLASSROOM,
   GET_SPACE_IN_CLASSROOM_SUCCEEDED,
   FLAG_GETTING_SPACE_IN_CLASSROOM,
+  FLAG_EXTRACTING_FILE_TO_LOAD_SPACE_IN_CLASSROOM,
+  EXTRACT_FILE_TO_LOAD_SPACE_IN_CLASSROOM_SUCCEEDED,
+  FLAG_CLEARING_LOAD_SPACE_IN_CLASSROOM,
+  CLEAR_LOAD_SPACE_IN_CLASSROOM_SUCCEEDED,
+  FLAG_LOADING_SPACE_IN_CLASSROOM,
+  LOAD_SPACE_IN_CLASSROOM_SUCCEEDED,
+  FLAG_GETTING_SPACE_TO_LOAD_IN_CLASSROOM,
+  GET_SPACE_TO_LOAD_IN_CLASSROOM_SUCCEEDED,
 } from '../types';
 import {
   ERROR_GENERAL,
   ERROR_DUPLICATE_CLASSROOM_NAME,
+  ERROR_LOADING_MESSAGE,
+  ERROR_INVALID_USERNAME,
   ERROR_DUPLICATE_USERNAME_IN_CLASSROOM,
   ERROR_NO_USER_TO_DELETE,
 } from '../config/errors';
@@ -34,6 +44,7 @@ import {
   RESPOND_DELETE_USERS_IN_CLASSROOM_PROMPT_CHANNEL,
   EDIT_USER_IN_CLASSROOM_CHANNEL,
   GET_SPACE_IN_CLASSROOM_CHANNEL,
+  LOAD_SPACE_IN_CLASSROOM_CHANNEL,
 } from '../config/channels';
 import {
   ERROR_MESSAGE_HEADER,
@@ -54,8 +65,11 @@ import {
   SUCCESS_DELETING_USERS_IN_CLASSROOM_MESSAGE,
   ERROR_NO_USER_TO_DELETE_MESSAGE,
   ERROR_GETTING_SPACE_IN_CLASSROOM_MESSAGE,
+  ERROR_INVALID_USERNAME_MESSAGE,
+  SUCCESS_SPACE_LOADED_MESSAGE,
 } from '../config/messages';
 import { createFlag } from './common';
+import { createExtractFile, createClearLoadSpace } from './loadSpace';
 
 const flagGettingClassroom = createFlag(FLAG_GETTING_CLASSROOM);
 const flagGettingClassrooms = createFlag(FLAG_GETTING_CLASSROOMS);
@@ -67,7 +81,6 @@ const flagAddingUserInClassroom = createFlag(FLAG_ADDING_USER_IN_CLASSROOM);
 const flagDeletingUsersInClassroom = createFlag(
   FLAG_DELETING_USERS_IN_CLASSROOM
 );
-const flagGetSpaceInClassroom = createFlag(FLAG_GETTING_SPACE_IN_CLASSROOM);
 
 export const getClassrooms = () => dispatch => {
   dispatch(flagGettingClassrooms(true));
@@ -310,7 +323,12 @@ export const editUserInClassroom = payload => dispatch => {
   });
 };
 
-export const getSpaceInClassroom = payload => dispatch => {
+export const createGetSpaceInClassroom = (
+  payload,
+  type,
+  flagType
+) => dispatch => {
+  const flagGetSpaceInClassroom = createFlag(flagType);
   dispatch(flagGetSpaceInClassroom(true));
   window.ipcRenderer.send(GET_SPACE_IN_CLASSROOM_CHANNEL, payload);
   window.ipcRenderer.once(GET_SPACE_IN_CLASSROOM_CHANNEL, (event, response) => {
@@ -321,11 +339,73 @@ export const getSpaceInClassroom = payload => dispatch => {
       );
     } else {
       dispatch({
-        type: GET_SPACE_IN_CLASSROOM_SUCCEEDED,
-        payload,
+        type,
+        payload: response,
       });
     }
 
     dispatch(flagGetSpaceInClassroom(false));
   });
+};
+
+export const getSpaceInClassroom = payload =>
+  createGetSpaceInClassroom(
+    payload,
+    GET_SPACE_IN_CLASSROOM_SUCCEEDED,
+    FLAG_GETTING_SPACE_IN_CLASSROOM
+  );
+
+export const getSpaceToLoadInClassroom = payload =>
+  createGetSpaceInClassroom(
+    payload,
+    GET_SPACE_TO_LOAD_IN_CLASSROOM_SUCCEEDED,
+    FLAG_GETTING_SPACE_TO_LOAD_IN_CLASSROOM
+  );
+
+export const clearLoadSpaceInClassroom = payload =>
+  createClearLoadSpace(
+    payload,
+    CLEAR_LOAD_SPACE_IN_CLASSROOM_SUCCEEDED,
+    FLAG_CLEARING_LOAD_SPACE_IN_CLASSROOM
+  );
+
+export const extractFileToLoadSpaceInClassroom = payload =>
+  createExtractFile(
+    payload,
+    EXTRACT_FILE_TO_LOAD_SPACE_IN_CLASSROOM_SUCCEEDED,
+    FLAG_EXTRACTING_FILE_TO_LOAD_SPACE_IN_CLASSROOM,
+    getSpaceToLoadInClassroom
+  );
+
+export const loadSpaceInClassroom = payload => dispatch => {
+  const flagLoadingSpaceInClassroom = createFlag(
+    FLAG_LOADING_SPACE_IN_CLASSROOM
+  );
+  dispatch(flagLoadingSpaceInClassroom(true));
+  window.ipcRenderer.send(LOAD_SPACE_IN_CLASSROOM_CHANNEL, payload);
+  window.ipcRenderer.once(
+    LOAD_SPACE_IN_CLASSROOM_CHANNEL,
+    (event, response) => {
+      switch (response) {
+        case ERROR_GENERAL:
+          toastr.error(ERROR_MESSAGE_HEADER, ERROR_LOADING_MESSAGE);
+          break;
+        case ERROR_DUPLICATE_USERNAME_IN_CLASSROOM:
+          toastr.error(
+            ERROR_MESSAGE_HEADER,
+            ERROR_DUPLICATE_USERNAME_IN_CLASSROOM_MESSAGE
+          );
+          break;
+        case ERROR_INVALID_USERNAME:
+          toastr.error(ERROR_MESSAGE_HEADER, ERROR_INVALID_USERNAME_MESSAGE);
+          break;
+        default:
+          dispatch({
+            type: LOAD_SPACE_IN_CLASSROOM_SUCCEEDED,
+          });
+          toastr.success(SUCCESS_MESSAGE_HEADER, SUCCESS_SPACE_LOADED_MESSAGE);
+      }
+      dispatch(flagLoadingSpaceInClassroom(false));
+    }
+  );
 };

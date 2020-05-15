@@ -82,6 +82,19 @@ const createSpaceDirectory = ({ id, tmp }) => {
   }
 };
 
+// create classroom directory
+const createClassroomDirectory = ({ id, tmp }) => {
+  try {
+    const rootPath = tmp ? `${VAR_FOLDER}/${TMP_FOLDER}` : VAR_FOLDER;
+    const p = `${rootPath}/${id}`;
+    mkdirp.sync(p);
+    return p;
+  } catch (err) {
+    logger.error(err);
+    return false;
+  }
+};
+
 // wraps file system operation so that it can be retried
 // many times for windows operating systems
 const performFileSystemOperation = functionToWrap => (...args) => {
@@ -130,4 +143,5 @@ module.exports = {
   generateHash,
   createSpaceDirectory,
   isFileAvailable,
+  createClassroomDirectory,
 };
