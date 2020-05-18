@@ -11,6 +11,8 @@ import {
   FLAG_ADDING_USER_IN_CLASSROOM,
   FLAG_EDITING_USER_IN_CLASSROOM,
   FLAG_DELETING_USERS_IN_CLASSROOM,
+  GET_SPACE_IN_CLASSROOM_SUCCEEDED,
+  FLAG_GETTING_SPACE_IN_CLASSROOM,
 } from '../types';
 import {
   ERROR_GENERAL,
@@ -31,6 +33,7 @@ import {
   SHOW_DELETE_USERS_IN_CLASSROOM_PROMPT_CHANNEL,
   RESPOND_DELETE_USERS_IN_CLASSROOM_PROMPT_CHANNEL,
   EDIT_USER_IN_CLASSROOM_CHANNEL,
+  GET_SPACE_IN_CLASSROOM_CHANNEL,
 } from '../config/channels';
 import {
   ERROR_MESSAGE_HEADER,
@@ -50,6 +53,7 @@ import {
   SUCCESS_EDITING_USER_IN_CLASSROOM_MESSAGE,
   SUCCESS_DELETING_USERS_IN_CLASSROOM_MESSAGE,
   ERROR_NO_USER_TO_DELETE_MESSAGE,
+  ERROR_GETTING_SPACE_IN_CLASSROOM_MESSAGE,
 } from '../config/messages';
 import { createFlag } from './common';
 
@@ -63,6 +67,7 @@ const flagAddingUserInClassroom = createFlag(FLAG_ADDING_USER_IN_CLASSROOM);
 const flagDeletingUsersInClassroom = createFlag(
   FLAG_DELETING_USERS_IN_CLASSROOM
 );
+const flagGetSpaceInClassroom = createFlag(FLAG_GETTING_SPACE_IN_CLASSROOM);
 
 export const getClassrooms = () => dispatch => {
   dispatch(flagGettingClassrooms(true));
@@ -302,5 +307,25 @@ export const editUserInClassroom = payload => dispatch => {
     }
 
     dispatch(flagEditingUserInClassroom(false));
+  });
+};
+
+export const getSpaceInClassroom = payload => dispatch => {
+  dispatch(flagGetSpaceInClassroom(true));
+  window.ipcRenderer.send(GET_SPACE_IN_CLASSROOM_CHANNEL, payload);
+  window.ipcRenderer.once(GET_SPACE_IN_CLASSROOM_CHANNEL, (event, response) => {
+    if (response === ERROR_GENERAL) {
+      toastr.error(
+        ERROR_MESSAGE_HEADER,
+        ERROR_GETTING_SPACE_IN_CLASSROOM_MESSAGE
+      );
+    } else {
+      dispatch({
+        type: GET_SPACE_IN_CLASSROOM_SUCCEEDED,
+        payload,
+      });
+    }
+
+    dispatch(flagGetSpaceInClassroom(false));
   });
 };

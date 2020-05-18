@@ -45,6 +45,7 @@ const getClassroom = require('./getClassroom');
 const addUserInClassroom = require('./addUserInClassroom');
 const deleteUsersInClassroom = require('./deleteUsersInClassroom');
 const editUserInClassroom = require('./editUserInClassroom');
+const getSpaceInClassroom = require('./getSpaceInClassroom');
 
 module.exports = {
   loadSpace,
@@ -93,4 +94,5 @@ module.exports = {
   deleteUsersInClassroom,
   showDeleteUsersInClassroomPrompt,
   editUserInClassroom,
+  getSpaceInClassroom,
 };

@@ -70,6 +70,7 @@ const {
   DELETE_USERS_IN_CLASSROOM_CHANNEL,
   SHOW_DELETE_USERS_IN_CLASSROOM_PROMPT_CHANNEL,
   EDIT_USER_IN_CLASSROOM_CHANNEL,
+  GET_SPACE_IN_CLASSROOM_CHANNEL,
 } = require('./app/config/channels');
 const env = require('./env.json');
 const {
@@ -118,6 +119,7 @@ const {
   showDeleteUsersInClassroomPrompt,
   deleteUsersInClassroom,
   editUserInClassroom,
+  getSpaceInClassroom,
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
 
@@ -537,6 +539,12 @@ app.on('ready', async () => {
   ipcMain.on(
     EDIT_USER_IN_CLASSROOM_CHANNEL,
     editUserInClassroom(mainWindow, db)
+  );
+
+  // called when getting a space in a classroom
+  ipcMain.on(
+    GET_SPACE_IN_CLASSROOM_CHANNEL,
+    getSpaceInClassroom(mainWindow, db)
   );
 
   // called when getting the database
