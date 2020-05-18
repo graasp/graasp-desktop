@@ -44,7 +44,7 @@ const addClassroom = (mainWindow, db) => async (event, { name, userId }) => {
       id,
       name,
       createdAt: now,
-      lastUpdatedAt: now,
+      updatedAt: now,
       teacherId: userId,
     };
 

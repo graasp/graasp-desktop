@@ -63,7 +63,7 @@ const deleteClassroom = async (client, name) => {
   await client.pause(DELETE_CLASSROOM_PAUSE);
 };
 
-describe('Teacher Board Scenarios', function() {
+describe('Classrooms Scenarios', function() {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 

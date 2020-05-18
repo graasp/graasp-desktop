@@ -12,6 +12,7 @@ import {
 import {
   ERROR_GENERAL,
   ERROR_DUPLICATE_CLASSROOM_NAME,
+  ERROR_ACCESS_DENIED_CLASSROOM,
 } from '../config/errors';
 import {
   ADD_CLASSROOM_CHANNEL,
@@ -33,6 +34,7 @@ import {
   ERROR_EDITING_CLASSROOM_MESSAGE,
   SUCCESS_EDITING_CLASSROOM_MESSAGE,
   ERROR_GETTING_CLASSROOM_MESSAGE,
+  ERROR_ACCESS_DENIED_CLASSROOM_MESSAGE,
 } from '../config/messages';
 import { createFlag } from './common';
 
@@ -70,6 +72,12 @@ export const getClassroom = async payload => async dispatch => {
       }
 
       switch (response) {
+        case ERROR_ACCESS_DENIED_CLASSROOM:
+          toastr.error(
+            ERROR_MESSAGE_HEADER,
+            ERROR_ACCESS_DENIED_CLASSROOM_MESSAGE
+          );
+          break;
         case ERROR_GENERAL:
           toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_CLASSROOM_MESSAGE);
           break;

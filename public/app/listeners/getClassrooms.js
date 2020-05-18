@@ -5,7 +5,7 @@ const { ERROR_GENERAL } = require('../config/errors');
 
 const getClassrooms = (mainWindow, db) => async () => {
   try {
-    // get handle to spaces collection
+    // get handle to classrooms collection
     const classrooms = db.get(CLASSROOMS_COLLECTION).value();
     mainWindow.webContents.send(GET_CLASSROOMS_CHANNEL, classrooms);
   } catch (e) {

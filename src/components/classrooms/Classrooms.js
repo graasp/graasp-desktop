@@ -16,7 +16,7 @@ import ClassroomGrid from './ClassroomGrid';
 import Styles from '../../Styles';
 import { CLASSROOMS_MAIN_ID } from '../../config/selectors';
 
-export class Teacherboard extends Component {
+export class Classrooms extends Component {
   static propTypes = {
     classes: PropTypes.shape({
       root: PropTypes.string.isRequired,
@@ -24,6 +24,7 @@ export class Teacherboard extends Component {
     classrooms: PropTypes.instanceOf(Set),
     dispatchGetClassrooms: PropTypes.string.isRequired,
     activity: PropTypes.bool.isRequired,
+    userId: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -36,7 +37,7 @@ export class Teacherboard extends Component {
   }
 
   render() {
-    const { classrooms, activity, classes } = this.props;
+    const { classrooms, activity, classes, userId } = this.props;
 
     if (activity) {
       return (
@@ -52,9 +53,13 @@ export class Teacherboard extends Component {
       );
     }
 
+    const filteredClassrooms = classrooms.filter(
+      ({ teacherId }) => teacherId === userId
+    );
+
     return (
       <Main id={CLASSROOMS_MAIN_ID}>
-        <ClassroomGrid classrooms={classrooms} />
+        <ClassroomGrid classrooms={filteredClassrooms} />
 
         <AddClassroomButton />
       </Main>
@@ -62,9 +67,10 @@ export class Teacherboard extends Component {
   }
 }
 
-const mapStateToProps = ({ teacherBoard }) => ({
-  classrooms: teacherBoard.getIn(['classrooms']),
-  activity: Boolean(teacherBoard.getIn(['activity']).length),
+const mapStateToProps = ({ classroom, authentication }) => ({
+  classrooms: classroom.getIn(['classrooms']),
+  activity: Boolean(classroom.getIn(['activity']).length),
+  userId: authentication.getIn(['user', 'id']),
 });
 
 const mapDispatchToProps = {
@@ -74,7 +80,7 @@ const mapDispatchToProps = {
 const ConnectedComponent = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Teacherboard);
+)(Classrooms);
 
 const StyledComponent = withStyles(Styles, { withTheme: true })(
   ConnectedComponent

@@ -17,7 +17,7 @@ const editClassroom = (mainWindow, db) => async (event, { name, id }) => {
 
     // update data
     const now = new Date();
-    classroom.assign({ name, lastUpdatedAt: now }).write();
+    classroom.assign({ name, updatedAt: now }).write();
 
     mainWindow.webContents.send(EDIT_CLASSROOM_CHANNEL);
   } catch (err) {

@@ -10,4 +10,4 @@ export * from './authentication';
 export * from './syncSpace';
 export * from './loadSpace';
 export * from './exportSpace';
-export * from './teacherBoard';
+export * from './classroom';

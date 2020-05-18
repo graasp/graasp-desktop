@@ -21,11 +21,10 @@ import {
   DELETE_CLASSROOM_BUTTON_CLASS,
 } from '../../config/selectors';
 
-const styles = () => ({
+const styles = theme => ({
   bullet: {
     display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
+    margin: `0 ${theme.spacing(1)}px`,
   },
 });
 

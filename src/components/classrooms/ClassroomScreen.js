@@ -26,6 +26,8 @@ class ClassroomScreen extends Component {
     classes: PropTypes.shape({
       root: PropTypes.string.isRequired,
     }).isRequired,
+    userId: PropTypes.string.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -35,15 +37,16 @@ class ClassroomScreen extends Component {
   componentDidMount() {
     const {
       dispatchGetClassroom,
+      userId,
       match: {
         params: { id },
       },
     } = this.props;
-    dispatchGetClassroom({ id });
+    dispatchGetClassroom({ id, userId });
   }
 
   render() {
-    const { activity, classroom, classes } = this.props;
+    const { activity, classroom, classes, t } = this.props;
 
     if (activity) {
       return (
@@ -59,7 +62,7 @@ class ClassroomScreen extends Component {
       );
     }
     if (!classroom || classroom.isEmpty()) {
-      return <span>Classroom not found</span>;
+      return <span>{t('Classroom not found')}</span>;
     }
 
     return (
@@ -70,9 +73,10 @@ class ClassroomScreen extends Component {
   }
 }
 
-const mapStateToProps = ({ teacherBoard }) => ({
-  classroom: teacherBoard.get('current'),
-  activity: Boolean(teacherBoard.get('activity').size),
+const mapStateToProps = ({ classroom, authentication }) => ({
+  classroom: classroom.get('current'),
+  activity: Boolean(classroom.get('activity').size),
+  userId: authentication.getIn(['user', 'id']),
 });
 
 const mapDispatchToProps = {

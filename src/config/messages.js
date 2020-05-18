@@ -82,6 +82,7 @@ const SUCCESS_EDITING_CLASSROOM_MESSAGE =
   'The classroom was successfully edited';
 const ERROR_GETTING_CLASSROOM_MESSAGE =
   'There was an error getting the classroom';
+const ERROR_ACCESS_DENIED_CLASSROOM_MESSAGE = `This user does not have access to this classroom`;
 
 module.exports = {
   ERROR_GETTING_DEVELOPER_MODE,
@@ -140,4 +141,5 @@ module.exports = {
   ERROR_EDITING_CLASSROOM_MESSAGE,
   SUCCESS_EDITING_CLASSROOM_MESSAGE,
   ERROR_GETTING_CLASSROOM_MESSAGE,
+  ERROR_ACCESS_DENIED_CLASSROOM_MESSAGE,
 };

@@ -23,7 +23,7 @@ import { OnlineTheme, OfflineTheme } from './themes';
 import Dashboard from './components/dashboard/Dashboard';
 import SignInScreen from './components/signin/SignInScreen';
 import Authorization from './components/Authorization';
-import TeacherBoard from './components/teacherBoard/TeacherBoard';
+import Classrooms from './components/classrooms/Classrooms';
 import {
   SETTINGS_PATH,
   SYNC_SPACE_PATH,
@@ -57,7 +57,7 @@ import {
 } from './config/messages';
 import './App.css';
 import SavedSpaces from './components/SavedSpaces';
-import ClassroomScreen from './components/teacherBoard/ClassroomScreen';
+import ClassroomScreen from './components/classrooms/ClassroomScreen';
 
 const styles = () => ({
   toastrIcon: { marginBottom: '-20px', fontSize: '45px' },
@@ -231,9 +231,7 @@ export class App extends Component {
                   <Route
                     exact
                     path={CLASSROOMS_PATH}
-                    component={Authorization([USER_MODES.TEACHER])(
-                      TeacherBoard
-                    )}
+                    component={Authorization([USER_MODES.TEACHER])(Classrooms)}
                   />
                   <Route
                     exact

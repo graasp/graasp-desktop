@@ -8,7 +8,7 @@ import authentication from './authenticationReducer';
 import syncSpace from './syncSpaceReducer';
 import loadSpace from './loadSpaceReducer';
 import exportSpace from './exportSpaceReducer';
-import teacherBoard from './teacherBoardReducer';
+import classroom from './classroomReducer';
 
 export default combineReducers({
   // todo: keys should always be camelCase
@@ -21,5 +21,5 @@ export default combineReducers({
   syncSpace,
   exportSpace,
   loadSpace,
-  teacherBoard,
+  classroom,
 });
