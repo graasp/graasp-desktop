@@ -54,7 +54,7 @@ const renameSpaceFolder = async (prevPath, newPath) => {
   return wasRenamed;
 };
 
-const extractFileToLoadSpace = (mainWindow, db) => async (
+const extractFileToLoadSpace = mainWindow => async (
   event,
   { fileLocation }
 ) => {
@@ -81,10 +81,6 @@ const extractFileToLoadSpace = (mainWindow, db) => async (
     const { id } = manifest;
     const spacePath = `${extractPath}/${id}.json`;
 
-    // get handle to spaces collection
-    const spaces = db.get(SPACES_COLLECTION);
-    const savedSpace = spaces.find({ id }).value();
-
     const spaceString = await fsPromises.readFile(spacePath);
     const { space = {}, appInstanceResources = [], actions = [] } = JSON.parse(
       spaceString
@@ -92,8 +88,8 @@ const extractFileToLoadSpace = (mainWindow, db) => async (
     const elements = { space, appInstanceResources, actions };
 
     return mainWindow.webContents.send(EXTRACT_FILE_TO_LOAD_SPACE_CHANNEL, {
+      spaceId: id,
       extractPath,
-      savedSpace,
       elements,
     });
   } catch (err) {

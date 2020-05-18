@@ -1,6 +1,4 @@
-import { toastr } from 'react-redux-toastr';
 import React, { Component } from 'react';
-import { Map } from 'immutable';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -30,12 +28,6 @@ import {
 } from '../config/selectors';
 import { LOAD_SELECTION_SPACE_PATH } from '../config/paths';
 import { extractFileToLoadSpace } from '../actions';
-import { isSpaceUpToDate } from '../utils/syncSpace';
-import {
-  ERROR_MESSAGE_HEADER,
-  ERROR_STUDENT_LOAD_OUT_OF_DATE_SPACE_MESSAGE,
-} from '../config/messages';
-import { USER_MODES } from '../config/constants';
 
 class LoadSpace extends Component {
   state = {
@@ -66,44 +58,19 @@ class LoadSpace extends Component {
       formControl: PropTypes.string.isRequired,
     }).isRequired,
     extractPath: PropTypes.string.isRequired,
-    isStudent: PropTypes.bool.isRequired,
-    space: PropTypes.instanceOf(Map),
-    savedSpace: PropTypes.instanceOf(Map),
-  };
-
-  static defaultProps = {
-    savedSpace: Map(),
-    space: Map(),
   };
 
   componentDidUpdate() {
     // load space from extractpath if it is set
     const {
       extractPath,
-      isStudent,
-      space,
-      savedSpace,
       history: { push },
     } = this.props;
 
-    // space is different if zip space is not empty and the space does not exist locally or
-    // there is a difference between currently saved space and space in zip
-    // it changes space checkbox as well
-    const isSpaceDifferent =
-      !space.isEmpty() &&
-      (savedSpace.isEmpty() ||
-        !isSpaceUpToDate(space.toJS(), savedSpace.toJS()));
-
-    // students cannot add out of date space data
-    if (isSpaceDifferent && isStudent) {
-      toastr.error(
-        ERROR_MESSAGE_HEADER,
-        ERROR_STUDENT_LOAD_OUT_OF_DATE_SPACE_MESSAGE
-      );
-    } else if (extractPath.length) {
+    // once file is extracted, go to load selection
+    if (extractPath.length) {
       push({
         pathname: LOAD_SELECTION_SPACE_PATH,
-        state: { isSpaceDifferent },
       });
     }
   }
@@ -200,14 +167,9 @@ const mapDispatchToProps = {
   dispatchExtractFileToLoadSpace: extractFileToLoadSpace,
 };
 
-const mapStateToProps = ({ authentication, loadSpace }) => ({
+const mapStateToProps = ({ loadSpace }) => ({
   extractPath: loadSpace.getIn(['extract', 'extractPath']),
   activity: Boolean(loadSpace.getIn(['activity']).size),
-  savedSpace: loadSpace.getIn(['extract', 'savedSpace']),
-  space: loadSpace.getIn(['extract', 'elements', 'space']),
-  isStudent:
-    authentication.getIn(['user', 'settings', 'userMode']) ===
-    USER_MODES.STUDENT,
 });
 
 const ConnectedComponent = connect(

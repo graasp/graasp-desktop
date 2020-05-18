@@ -6,6 +6,8 @@ import {
   CLEAR_LOAD_SPACE_SUCCEEDED,
   LOAD_SPACE_SUCCEEDED,
   EXTRACT_FILE_TO_LOAD_SPACE_SUCCEEDED,
+  FLAG_GETTING_SPACE_TO_LOAD_SPACE,
+  GET_SPACE_TO_LOAD_SPACE_SUCCEEDED,
 } from '../types';
 import {
   ERROR_ZIP_CORRUPTED,
@@ -30,6 +32,7 @@ import {
 } from '../config/messages';
 import { createFlag } from './common';
 import { setSpaceAsRecent } from './user';
+import { createGetLocalSpace } from './space';
 
 const flagLoadingSpace = createFlag(FLAG_LOADING_SPACE);
 const flagExtractingFileToLoadSpace = createFlag(
@@ -56,6 +59,14 @@ export const loadSpace = payload => dispatch => {
   });
 };
 
+export const getSpaceToLoadSpace = payload =>
+  createGetLocalSpace(
+    payload,
+    GET_SPACE_TO_LOAD_SPACE_SUCCEEDED,
+    FLAG_GETTING_SPACE_TO_LOAD_SPACE,
+    false
+  );
+
 export const extractFileToLoadSpace = ({ fileLocation }) => dispatch => {
   dispatch(flagExtractingFileToLoadSpace(true));
   window.ipcRenderer.send(EXTRACT_FILE_TO_LOAD_SPACE_CHANNEL, { fileLocation });
@@ -79,6 +90,9 @@ export const extractFileToLoadSpace = ({ fileLocation }) => dispatch => {
           toastr.error(ERROR_MESSAGE_HEADER, ERROR_LOADING_MESSAGE);
           break;
         default:
+          // get saved space
+          dispatch(getSpaceToLoadSpace({ id: response.spaceId }));
+
           dispatch({
             type: EXTRACT_FILE_TO_LOAD_SPACE_SUCCEEDED,
             payload: response,
