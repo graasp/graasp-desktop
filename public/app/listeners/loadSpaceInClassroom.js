@@ -115,11 +115,13 @@ const loadSpaceInClassroom = (mainWindow, db) => async (
 
       const savedResources = classroom.get(APP_INSTANCE_RESOURCES_COLLECTION);
 
-      // todo: replace resources
+      // remove previous corresponding resources
+      // eslint-disable-next-line no-restricted-syntax
+      for (const { id, createdAt } of appInstanceResources) {
+        savedResources.remove({ id, createdAt }).write();
+      }
 
       const newResources = appInstanceResources
-        // keep only non-duplicate resources
-        .filter(({ id }) => !savedResources.find({ id }).value())
         // change user id with given user
         .map(action => ({ ...action, user: userId }));
 
@@ -138,11 +140,17 @@ const loadSpaceInClassroom = (mainWindow, db) => async (
 
       const savedActions = classroom.get(ACTIONS_COLLECTION);
 
-      // todo: replace actions
+      // remove previous corresponding actions
+      // eslint-disable-next-line no-restricted-syntax
+      for (const { id, createdAt } of actions) {
+        savedActions.remove({ id, createdAt }).write();
+      }
 
       const newActions = actions
         // keep only non-duplicate actions
-        .filter(({ id }) => !savedActions.find({ id }).value())
+        .filter(
+          ({ id, createdAt }) => !savedActions.find({ id, createdAt }).value()
+        )
         // change user id with given user
         .map(action => ({ ...action, user: userId }));
 
