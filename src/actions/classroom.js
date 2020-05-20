@@ -25,10 +25,10 @@ import {
 import {
   ERROR_GENERAL,
   ERROR_DUPLICATE_CLASSROOM_NAME,
-  ERROR_LOADING_MESSAGE,
   ERROR_INVALID_USERNAME,
   ERROR_DUPLICATE_USERNAME_IN_CLASSROOM,
   ERROR_NO_USER_TO_DELETE,
+  ERROR_ACCESS_DENIED_CLASSROOM,
 } from '../config/errors';
 import {
   ADD_CLASSROOM_CHANNEL,
@@ -67,6 +67,8 @@ import {
   ERROR_GETTING_SPACE_IN_CLASSROOM_MESSAGE,
   ERROR_INVALID_USERNAME_MESSAGE,
   SUCCESS_SPACE_LOADED_MESSAGE,
+  ERROR_LOADING_MESSAGE,
+  ERROR_ACCESS_DENIED_CLASSROOM_MESSAGE,
 } from '../config/messages';
 import { createFlag } from './common';
 import { createExtractFile, createClearLoadSpace } from './loadSpace';
@@ -110,6 +112,12 @@ export const getClassroom = async payload => async dispatch => {
       }
 
       switch (response) {
+        case ERROR_ACCESS_DENIED_CLASSROOM:
+          toastr.error(
+            ERROR_MESSAGE_HEADER,
+            ERROR_ACCESS_DENIED_CLASSROOM_MESSAGE
+          );
+          break;
         case ERROR_GENERAL:
           toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_CLASSROOM_MESSAGE);
           break;

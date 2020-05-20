@@ -86,7 +86,7 @@ export const SYNC_VISUAL_MAIN_ID = 'syncVisualMain';
 
 export const NO_CLASSROOM_AVAILABLE_ID = 'noClassroomAvailable';
 export const ADD_CLASSROOM_BUTTON_ID = 'addClassroomButton';
-export const ADD_CLASSROOM_NAME_INPUT_ID = 'addClassroomNameInput';
+export const CLASSROOM_NAME_INPUT_ID = 'classroomNameInput';
 export const ADD_CLASSROOM_VALIDATE_BUTTON_ID = 'addClassroomValidateButton';
 export const ADD_CLASSROOM_CANCEL_BUTTON_ID = 'addClassroomCancelButton';
 export const CLASSROOM_CARD_CLASS = 'classroomCard';

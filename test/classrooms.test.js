@@ -13,12 +13,11 @@ import { createApplication, closeApplication } from './application';
 import {
   CLASSROOMS_MENU_ITEM_ID,
   ADD_CLASSROOM_BUTTON_ID,
-  ADD_CLASSROOM_NAME_INPUT_ID,
+  CLASSROOM_NAME_INPUT_ID,
   ADD_CLASSROOM_VALIDATE_BUTTON_ID,
   ADD_CLASSROOM_CANCEL_BUTTON_ID,
   CLASSROOM_CARD_CLASS,
   NO_CLASSROOM_AVAILABLE_ID,
-  EDIT_CLASSROOM_INPUT_ID,
   EDIT_CLASSROOM_VALIDATE_BUTTON_ID,
   EDIT_CLASSROOM_BUTTON_CLASS,
   DELETE_CLASSROOM_BUTTON_CLASS,
@@ -59,7 +58,7 @@ const openClassroom = async (client, name) => {
 const addClassroom = async (client, name) => {
   await client.click(`#${ADD_CLASSROOM_BUTTON_ID}`);
   await client.pause(MODAL_OPEN_PAUSE);
-  const inputSelector = `#${ADD_CLASSROOM_NAME_INPUT_ID}`;
+  const inputSelector = `#${CLASSROOM_NAME_INPUT_ID}`;
   await clearInput(client, inputSelector);
   await client.setValue(inputSelector, name);
   await client.pause(INPUT_TYPE_PAUSE);
@@ -73,7 +72,7 @@ const editClassroom = async (client, name, newName) => {
 
   await client.click(`${classroomSelector} .${EDIT_CLASSROOM_BUTTON_CLASS}`);
   await client.pause(MODAL_OPEN_PAUSE);
-  const editInput = `#${EDIT_CLASSROOM_INPUT_ID}`;
+  const editInput = `#${CLASSROOM_NAME_INPUT_ID}`;
   await clearInput(client, editInput);
   await client.setValue(editInput, newName);
   await client.pause(INPUT_TYPE_PAUSE);

@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import { withTranslation } from 'react-i18next';
-import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -14,10 +13,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { addClassroom } from '../../actions';
 import {
   ADD_CLASSROOM_BUTTON_ID,
-  ADD_CLASSROOM_NAME_INPUT_ID,
   ADD_CLASSROOM_VALIDATE_BUTTON_ID,
   ADD_CLASSROOM_CANCEL_BUTTON_ID,
 } from '../../config/selectors';
+import ClassroomNameTextField from './ClassroomNameTextField';
 
 const styles = theme => ({
   fab: {
@@ -41,18 +40,25 @@ class AddClassroomButton extends Component {
 
   state = (() => {
     const { t } = this.props;
+    const defaultName = t('New Classroom');
     return {
       open: false,
-      name: t('New Classroom'),
+      name: defaultName,
     };
   })();
+
+  isClassroomNameValid = () => {
+    const { name } = this.state;
+    // todo: check for special characters
+    return name.trim().length;
+  };
 
   handleClickOpen = () => {
     this.setState({ open: true });
   };
 
   close = () => {
-    this.setState({ name: '', open: false });
+    this.setState({ open: false });
   };
 
   handleCancel = () => {
@@ -62,11 +68,14 @@ class AddClassroomButton extends Component {
   handleValidate = () => {
     const { name } = this.state;
     const { userId, dispatchAddClassroom } = this.props;
-    dispatchAddClassroom({ name, userId });
-    this.close();
+    if (this.isClassroomNameValid()) {
+      const trimmedName = name.trim();
+      dispatchAddClassroom({ name: trimmedName, userId });
+      this.close();
+    }
   };
 
-  handleChange = event => {
+  handleNameChange = event => {
     const { target } = event;
     this.setState({ name: target.value });
   };
@@ -96,15 +105,9 @@ class AddClassroomButton extends Component {
             {t('Enter a name for your new classroom')}
           </DialogTitle>
           <DialogContent>
-            <TextField
-              id={ADD_CLASSROOM_NAME_INPUT_ID}
-              autoFocus
-              margin="dense"
-              label={t("Classroom's Name")}
-              type="text"
-              fullWidth
-              value={name}
-              onChange={this.handleChange}
+            <ClassroomNameTextField
+              name={name}
+              handleChange={this.handleNameChange}
             />
           </DialogContent>
           <DialogActions>
@@ -119,6 +122,7 @@ class AddClassroomButton extends Component {
               onClick={this.handleValidate}
               color="primary"
               id={ADD_CLASSROOM_VALIDATE_BUTTON_ID}
+              disabled={!this.isClassroomNameValid()}
             >
               {t('Validate')}
             </Button>

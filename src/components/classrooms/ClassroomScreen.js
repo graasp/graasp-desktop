@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import { withRouter } from 'react-router';
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -45,6 +45,7 @@ class ClassroomScreen extends Component {
       goBack: PropTypes.func.isRequired,
     }).isRequired,
     userId: PropTypes.string.isRequired,
+    classrooms: PropTypes.instanceOf(List).isRequired,
   };
 
   static defaultProps = {
@@ -60,6 +61,22 @@ class ClassroomScreen extends Component {
       userId,
     } = this.props;
     dispatchGetClassroom({ id, userId });
+  }
+
+  componentDidUpdate({ classrooms: prevClassrooms }) {
+    const {
+      dispatchGetClassroom,
+      classrooms,
+      match: {
+        params: { id },
+      },
+      userId,
+    } = this.props;
+
+    // update current classroom if classrooms change
+    if (!prevClassrooms.equals(classrooms)) {
+      dispatchGetClassroom({ id, userId });
+    }
   }
 
   renderBackButton = () => {
@@ -117,6 +134,7 @@ class ClassroomScreen extends Component {
 }
 
 const mapStateToProps = ({ classroom, authentication }) => ({
+  classrooms: classroom.getIn(['classrooms']),
   classroom: classroom.getIn(['current', 'classroom']),
   activity: Boolean(classroom.get('activity').size),
   userId: authentication.getIn(['user', 'id']),
