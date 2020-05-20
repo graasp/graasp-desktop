@@ -66,6 +66,10 @@ const {
   SHOW_DELETE_CLASSROOM_PROMPT_CHANNEL,
   EDIT_CLASSROOM_CHANNEL,
   GET_CLASSROOM_CHANNEL,
+  ADD_USER_IN_CLASSROOM_CHANNEL,
+  DELETE_USER_IN_CLASSROOM_CHANNEL,
+  SHOW_DELETE_USER_IN_CLASSROOM_PROMPT_CHANNEL,
+  EDIT_USER_IN_CLASSROOM_CHANNEL,
 } = require('./app/config/channels');
 const env = require('./env.json');
 const {
@@ -110,6 +114,10 @@ const {
   showDeleteClassroomPrompt,
   editClassroom,
   getClassroom,
+  addUserInClassroom,
+  showDeleteUserInClassroomPrompt,
+  deleteUserInClassroom,
+  editUserInClassroom,
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
 
@@ -501,6 +509,21 @@ app.on('ready', async () => {
   // called when editing a classroom
   ipcMain.on(EDIT_CLASSROOM_CHANNEL, editClassroom(mainWindow, db));
 
+  // called when adding a user in a classroom
+  ipcMain.on(ADD_USER_IN_CLASSROOM_CHANNEL, addUserInClassroom(mainWindow, db));
+
+  // prompt when deleting a user in a classroom
+  ipcMain.on(
+    SHOW_DELETE_USER_IN_CLASSROOM_PROMPT_CHANNEL,
+    showDeleteUserInClassroomPrompt(mainWindow, db)
+  );
+
+  // called when deleting a user in a classroom
+  ipcMain.on(
+    DELETE_USER_IN_CLASSROOM_CHANNEL,
+    deleteUserInClassroom(mainWindow, db)
+  );
+
   // prompt when deleting a classroom
   ipcMain.on(
     SHOW_DELETE_CLASSROOM_PROMPT_CHANNEL,
@@ -509,6 +532,12 @@ app.on('ready', async () => {
 
   // called when deleting a classroom
   ipcMain.on(DELETE_CLASSROOM_CHANNEL, deleteClassroom(mainWindow, db));
+
+  // called when editing a user in a classroom
+  ipcMain.on(
+    EDIT_USER_IN_CLASSROOM_CHANNEL,
+    editUserInClassroom(mainWindow, db)
+  );
 
   // called when getting the database
   ipcMain.on(GET_DATABASE_CHANNEL, async () => {

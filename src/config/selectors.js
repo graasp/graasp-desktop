@@ -96,3 +96,7 @@ export const EDIT_CLASSROOM_INPUT_ID = 'editClassroomInput';
 export const EDIT_CLASSROOM_VALIDATE_BUTTON_ID = 'editClassroomValidateButton';
 export const EDIT_CLASSROOM_CANCEL_BUTTON_ID = 'editClassroomCancelButton';
 export const DELETE_CLASSROOM_BUTTON_CLASS = 'deleteClassroomButton';
+export const EDIT_USER_IN_CLASSROOM_DIALOG_TITLE_ID =
+  'editUserInClassroomDialogTitle';
+export const ADD_USER_IN_CLASSROOM_DIALOG_TITLE_ID =
+  'addUserInClassroomDialogTitle';

@@ -24,10 +24,10 @@ const addClassroom = (mainWindow, db) => async (event, { name, userId }) => {
   logger.debug('adding a classroom');
 
   try {
-    // check name does not already exists
+    // check name does not already exists for given user
     const found = db
       .get(CLASSROOMS_COLLECTION)
-      .find({ name })
+      .find({ name, teacherId: userId })
       .value();
     if (found) {
       mainWindow.webContents.send(

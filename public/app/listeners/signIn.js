@@ -52,4 +52,4 @@ const signIn = (mainWindow, db) => async (
   mainWindow.webContents.send(SIGN_IN_CHANNEL, updatedUser);
 };
 
-module.exports = signIn;
+module.exports = { signIn, createNewUser };

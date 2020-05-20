@@ -8,11 +8,14 @@ import {
   FLAG_EDITING_CLASSROOM,
   FLAG_GETTING_CLASSROOM,
   GET_CLASSROOM_SUCCEEDED,
+  FLAG_ADDING_USER_IN_CLASSROOM,
+  FLAG_EDITING_USER_IN_CLASSROOM,
+  FLAG_DELETING_USER_IN_CLASSROOM,
 } from '../types';
 import {
   ERROR_GENERAL,
   ERROR_DUPLICATE_CLASSROOM_NAME,
-  ERROR_ACCESS_DENIED_CLASSROOM,
+  ERROR_DUPLICATE_USERNAME_IN_CLASSROOM,
 } from '../config/errors';
 import {
   ADD_CLASSROOM_CHANNEL,
@@ -22,6 +25,11 @@ import {
   RESPOND_DELETE_CLASSROOM_PROMPT_CHANNEL,
   GET_CLASSROOM_CHANNEL,
   EDIT_CLASSROOM_CHANNEL,
+  ADD_USER_IN_CLASSROOM_CHANNEL,
+  DELETE_USER_IN_CLASSROOM_CHANNEL,
+  SHOW_DELETE_USER_IN_CLASSROOM_PROMPT_CHANNEL,
+  RESPOND_DELETE_USER_IN_CLASSROOM_PROMPT_CHANNEL,
+  EDIT_USER_IN_CLASSROOM_CHANNEL,
 } from '../config/channels';
 import {
   ERROR_MESSAGE_HEADER,
@@ -34,7 +42,12 @@ import {
   ERROR_EDITING_CLASSROOM_MESSAGE,
   SUCCESS_EDITING_CLASSROOM_MESSAGE,
   ERROR_GETTING_CLASSROOM_MESSAGE,
-  ERROR_ACCESS_DENIED_CLASSROOM_MESSAGE,
+  ERROR_DUPLICATE_USERNAME_IN_CLASSROOM_MESSAGE,
+  ERROR_ADDING_USER_IN_CLASSROOM_MESSAGE,
+  ERROR_DELETING_USER_IN_CLASSROOM_MESSAGE,
+  ERROR_EDITING_USER_IN_CLASSROOM_MESSAGE,
+  SUCCESS_EDITING_USER_IN_CLASSROOM_MESSAGE,
+  SUCCESS_DELETING_USER_IN_CLASSROOM_MESSAGE,
 } from '../config/messages';
 import { createFlag } from './common';
 
@@ -43,6 +56,9 @@ const flagGettingClassrooms = createFlag(FLAG_GETTING_CLASSROOMS);
 const flagAddingClassroom = createFlag(FLAG_ADDING_CLASSROOM);
 const flagDeletingClassroom = createFlag(FLAG_DELETING_CLASSROOM);
 const flagEditingClassroom = createFlag(FLAG_EDITING_CLASSROOM);
+const flagEditingUserInClassroom = createFlag(FLAG_EDITING_USER_IN_CLASSROOM);
+const flagAddingUserInClassroom = createFlag(FLAG_ADDING_USER_IN_CLASSROOM);
+const flagDeletingUserInClassroom = createFlag(FLAG_DELETING_USER_IN_CLASSROOM);
 
 export const getClassrooms = () => dispatch => {
   dispatch(flagGettingClassrooms(true));
@@ -72,12 +88,6 @@ export const getClassroom = async payload => async dispatch => {
       }
 
       switch (response) {
-        case ERROR_ACCESS_DENIED_CLASSROOM:
-          toastr.error(
-            ERROR_MESSAGE_HEADER,
-            ERROR_ACCESS_DENIED_CLASSROOM_MESSAGE
-          );
-          break;
         case ERROR_GENERAL:
           toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_CLASSROOM_MESSAGE);
           break;
@@ -138,9 +148,9 @@ export const addClassroom = payload => dispatch => {
   }
 };
 
-export const deleteClassroom = ({ id }) => dispatch => {
+export const deleteClassroom = ({ id, name }) => dispatch => {
   // show confirmation prompt
-  window.ipcRenderer.send(SHOW_DELETE_CLASSROOM_PROMPT_CHANNEL);
+  window.ipcRenderer.send(SHOW_DELETE_CLASSROOM_PROMPT_CHANNEL, { name });
   window.ipcRenderer.once(
     RESPOND_DELETE_CLASSROOM_PROMPT_CHANNEL,
     (event, response) => {
@@ -181,5 +191,97 @@ export const editClassroom = payload => dispatch => {
     }
 
     dispatch(flagEditingClassroom(false));
+  });
+};
+
+export const addUserInClassroom = payload => dispatch => {
+  dispatch(flagAddingUserInClassroom(true));
+  window.ipcRenderer.send(ADD_USER_IN_CLASSROOM_CHANNEL, payload);
+  // create listener
+  window.ipcRenderer.once(ADD_USER_IN_CLASSROOM_CHANNEL, (event, response) => {
+    switch (response) {
+      case ERROR_DUPLICATE_USERNAME_IN_CLASSROOM:
+        toastr.error(
+          ERROR_MESSAGE_HEADER,
+          ERROR_DUPLICATE_USERNAME_IN_CLASSROOM_MESSAGE
+        );
+        break;
+
+      case ERROR_GENERAL:
+        toastr.error(
+          ERROR_MESSAGE_HEADER,
+          ERROR_ADDING_USER_IN_CLASSROOM_MESSAGE
+        );
+        break;
+      default:
+        // update current classroom
+        dispatch(
+          getClassroom({ id: payload.classroomId, userId: payload.userId })
+        );
+    }
+
+    dispatch(flagAddingUserInClassroom(false));
+  });
+};
+
+export const deleteUserInClassroom = payload => dispatch => {
+  // show confirmation prompt
+  window.ipcRenderer.send(SHOW_DELETE_USER_IN_CLASSROOM_PROMPT_CHANNEL);
+  window.ipcRenderer.once(
+    RESPOND_DELETE_USER_IN_CLASSROOM_PROMPT_CHANNEL,
+    (event, response) => {
+      if (response === 1) {
+        dispatch(flagDeletingUserInClassroom(true));
+        window.ipcRenderer.send(DELETE_USER_IN_CLASSROOM_CHANNEL, payload);
+      }
+    }
+  );
+  window.ipcRenderer.once(
+    DELETE_USER_IN_CLASSROOM_CHANNEL,
+    (event, response) => {
+      if (response === ERROR_GENERAL) {
+        toastr.error(
+          ERROR_MESSAGE_HEADER,
+          ERROR_DELETING_USER_IN_CLASSROOM_MESSAGE
+        );
+      } else {
+        // update current classroom
+        dispatch(
+          getClassroom({ id: payload.classroomId, userId: payload.teacherId })
+        );
+
+        toastr.success(
+          SUCCESS_MESSAGE_HEADER,
+          SUCCESS_DELETING_USER_IN_CLASSROOM_MESSAGE
+        );
+      }
+
+      dispatch(flagDeletingUserInClassroom(false));
+    }
+  );
+};
+
+export const editUserInClassroom = payload => dispatch => {
+  dispatch(flagEditingUserInClassroom(true));
+  window.ipcRenderer.send(EDIT_USER_IN_CLASSROOM_CHANNEL, payload);
+  window.ipcRenderer.once(EDIT_USER_IN_CLASSROOM_CHANNEL, (event, response) => {
+    if (response === ERROR_GENERAL) {
+      toastr.error(
+        ERROR_MESSAGE_HEADER,
+        ERROR_EDITING_USER_IN_CLASSROOM_MESSAGE
+      );
+    } else {
+      // update saved classrooms in state
+      dispatch(
+        getClassroom({ id: payload.classroomId, userId: payload.teacherId })
+      );
+
+      toastr.success(
+        SUCCESS_MESSAGE_HEADER,
+        SUCCESS_EDITING_USER_IN_CLASSROOM_MESSAGE
+      );
+    }
+
+    dispatch(flagEditingUserInClassroom(false));
   });
 };

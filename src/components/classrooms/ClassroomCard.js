@@ -44,6 +44,7 @@ class ClassroomCard extends Component {
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
     }).isRequired,
+    userId: PropTypes.string.isRequired,
   };
 
   viewLink = () => {
@@ -56,10 +57,11 @@ class ClassroomCard extends Component {
 
   deleteClassroom = () => {
     const {
-      classroom: { id },
+      classroom: { id, name },
+      userId,
       dispatchDeleteClassroom,
     } = this.props;
-    dispatchDeleteClassroom({ id });
+    dispatchDeleteClassroom({ id, name, userId });
   };
 
   renderDeleteButton = () => {
@@ -110,11 +112,18 @@ class ClassroomCard extends Component {
   }
 }
 
+const mapStateToProps = ({ authentication }) => ({
+  userId: authentication.getIn(['user', 'id']),
+});
+
 const mapDispatchToProps = {
   dispatchDeleteClassroom: deleteClassroom,
 };
 
-const ConnectedComponent = connect(null, mapDispatchToProps)(ClassroomCard);
+const ConnectedComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ClassroomCard);
 const StyledComponent = withStyles(styles, { withTheme: true })(
   ConnectedComponent
 );

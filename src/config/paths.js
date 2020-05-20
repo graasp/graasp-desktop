@@ -11,7 +11,6 @@ export const SIGN_IN_PATH = '/signin';
 export const SYNC_SPACE_PATH = '/space/sync/:id';
 export const SAVED_SPACES_PATH = '/saved-spaces';
 export const CLASSROOMS_PATH = '/classrooms';
-export const CLASSROOMS_IMPORT_STUDENT_DATA_PATH = '/classrooms/import';
 
 export const buildExportSelectionPathForSpaceId = (id = ':id') => {
   return `/space/export/${id}/selection`;

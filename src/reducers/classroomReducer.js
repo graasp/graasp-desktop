@@ -8,6 +8,9 @@ import {
   FLAG_DELETING_CLASSROOM,
   GET_CLASSROOM_SUCCEEDED,
   FLAG_GETTING_CLASSROOM,
+  FLAG_ADDING_USER_IN_CLASSROOM,
+  FLAG_DELETING_USER_IN_CLASSROOM,
+  FLAG_EDITING_USER_IN_CLASSROOM,
 } from '../types';
 import { updateActivityList } from './common';
 
@@ -24,6 +27,9 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case FLAG_GETTING_CLASSROOMS:
     case FLAG_DELETING_CLASSROOM:
     case FLAG_EDITING_CLASSROOM:
+    case FLAG_DELETING_USER_IN_CLASSROOM:
+    case FLAG_ADDING_USER_IN_CLASSROOM:
+    case FLAG_EDITING_USER_IN_CLASSROOM:
       return state.updateIn(['activity'], updateActivityList(payload));
     case GET_CLASSROOM_SUCCEEDED:
       return state.setIn(['current'], Map(payload));
