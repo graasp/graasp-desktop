@@ -24,7 +24,7 @@ import {
 const styles = theme => ({
   bullet: {
     display: 'inline-block',
-    margin: `0 ${theme.spacing(1)}px`,
+    margin: theme.spacing(0, 1),
   },
 });
 
@@ -32,7 +32,6 @@ class ClassroomCard extends Component {
   static propTypes = {
     classes: PropTypes.shape({
       bullet: PropTypes.string.isRequired,
-      secondaryText: PropTypes.string.isRequired,
     }).isRequired,
     classroom: PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -41,7 +40,7 @@ class ClassroomCard extends Component {
       users: PropTypes.arrayOf(PropTypes.object),
     }).isRequired,
     t: PropTypes.func.isRequired,
-    dispatchDeleteClassroom: PropTypes.string.isRequired,
+    dispatchDeleteClassroom: PropTypes.func.isRequired,
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
     }).isRequired,
@@ -96,11 +95,9 @@ class ClassroomCard extends Component {
               {name}
             </Typography>
             <Typography>
-              {nbSpaces}
-              {t(`space(s)`)}
+              {`${nbSpaces} ${t('space(s)')}`}
               <span className={classes.bullet}>•</span>
-              {nbUsers}
-              {t('student(s)')}
+              {`${nbUsers} ${t('student(s)')}`}
             </Typography>
           </CardContent>
         </CardActionArea>

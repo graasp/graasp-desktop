@@ -83,6 +83,18 @@
     "Students cannot load spaces": "Students cannot load spaces",
     "This space already exists": "This space already exists",
     "What do you want to load?": "What do you want to load?",
-    "Imported data will be reassigned as your own data": "Imported data will be reassigned as your own data"
+    "Imported data will be reassigned as your own data": "Imported data will be reassigned as your own data",
+    "Classroom's Name": "Classroom's Name",
+    "Edit Classroom Information": "Edit Classroom Information",
+    "Validate": "Validate",
+    "Edit this classroom.": "Edit this classroom.",
+    "Enter a name for your new classroom": "Enter a name for your new classroom",
+    "Delete this classroom.": "Delete this classroom.",
+    "student(s)": "student(s)",
+    "space(s)": "space(s)",
+    "add classroom": "add classroom",
+    "New Classroom": "New Classroom",
+    "No Classroom Available": "No Classroom Available",
+    "Classrooms": "Classrooms"
   }
 }

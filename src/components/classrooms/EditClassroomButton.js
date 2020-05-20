@@ -32,7 +32,6 @@ class EditClassroomButton extends Component {
   })();
 
   static propTypes = {
-    classes: PropTypes.shape({}).isRequired,
     dispatchEditClassroom: PropTypes.func.isRequired,
     classroom: PropTypes.shape({
       id: PropTypes.string.isRequired,

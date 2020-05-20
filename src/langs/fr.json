@@ -83,6 +83,18 @@
     "Students cannot load spaces": "Les étudiants ne peuvent pas importer des espaces",
     "This space already exists": "L'espace existe déjà",
     "What do you want to load?": "Que souhaitez-vous importer ?",
-    "Imported data will be reassigned as your own data": "Les données importées seront réassignées comme les vôtres"
+    "Imported data will be reassigned as your own data": "Les données importées seront réassignées comme les vôtres",
+    "Classroom's Name": "Nom de la Classe",
+    "Edit Classroom Information": "Modifier les informations de la Classe",
+    "Validate": "Valider",
+    "Edit this classroom.": "Modifier cette classe.",
+    "Enter a name for your new classroom": "Entre un nom pour ta nouvelle classe",
+    "Delete this classroom.": "Supprime cette classe.",
+    "student(s)": "étudiants(s)",
+    "space(s)": "esspace(s)",
+    "add classroom": "ajouter une classe",
+    "New Classroom": "Nouvelle Classe",
+    "No Classroom Available": "Aucune Classe Disponible",
+    "Classrooms": "Classes"
   }
 }

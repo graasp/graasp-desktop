@@ -22,7 +22,7 @@ export class Classrooms extends Component {
       root: PropTypes.string.isRequired,
     }).isRequired,
     classrooms: PropTypes.instanceOf(Set),
-    dispatchGetClassrooms: PropTypes.string.isRequired,
+    dispatchGetClassrooms: PropTypes.func.isRequired,
     activity: PropTypes.bool.isRequired,
     userId: PropTypes.string.isRequired,
   };

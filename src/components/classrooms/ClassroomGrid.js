@@ -24,7 +24,7 @@ const ClassroomGrid = ({ classrooms, t }) => {
     <>
       <Grid container spacing={3}>
         {classrooms.map(classroom => (
-          <Grid item xs={6} sm={3}>
+          <Grid item key={classroom.id} xs={6} sm={3}>
             <ClassroomCard key={classroom.id} classroom={classroom} />
           </Grid>
         ))}
