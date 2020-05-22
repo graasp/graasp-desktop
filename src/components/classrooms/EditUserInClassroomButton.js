@@ -26,6 +26,7 @@ import {
   EDIT_USER_IN_CLASSROOM_BUTTON_CLASS,
   EDIT_USER_IN_CLASSROOM_VALIDATE_BUTTON_ID,
   EDIT_USER_IN_CLASSROOM_USERNAME_INPUT_ID,
+  EDIT_USER_IN_CLASSROOM_DELETE_DATA_BUTTON_CLASS,
 } from '../../config/selectors';
 import {
   ERROR_MESSAGE_HEADER,
@@ -233,13 +234,17 @@ class EditUserInClassroomButton extends Component {
                     color="inherit"
                     onClick={e => this.changeDeleteSelection(e, spaceId, true)}
                   >
-                    <DeleteIcon />
+                    <DeleteIcon
+                      className={
+                        EDIT_USER_IN_CLASSROOM_DELETE_DATA_BUTTON_CLASS
+                      }
+                    />
                   </IconButton>
                 </Tooltip>
               );
 
               return (
-                <>
+                <Grid container data-space-id={spaceId}>
                   <Grid item xs={2} classes={{ root: classes.editSpaceRow }}>
                     {button}
                   </Grid>
@@ -256,7 +261,7 @@ class EditUserInClassroomButton extends Component {
                     {hasResources && <ResourceIcon />}
                     {hasActions && <ActionIcon />}
                   </Grid>
-                </>
+                </Grid>
               );
             })}
           </Grid>

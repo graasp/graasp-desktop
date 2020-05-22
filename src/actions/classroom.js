@@ -24,11 +24,11 @@ import {
 } from '../types';
 import {
   ERROR_GENERAL,
+  ERROR_ACCESS_DENIED_CLASSROOM,
   ERROR_DUPLICATE_CLASSROOM_NAME,
   ERROR_INVALID_USERNAME,
   ERROR_DUPLICATE_USERNAME_IN_CLASSROOM,
   ERROR_NO_USER_TO_DELETE,
-  ERROR_ACCESS_DENIED_CLASSROOM,
 } from '../config/errors';
 import {
   ADD_CLASSROOM_CHANNEL,
@@ -90,10 +90,14 @@ export const getClassrooms = () => dispatch => {
   // create listener
   window.ipcRenderer.once(GET_CLASSROOMS_CHANNEL, (event, classrooms) => {
     // dispatch that the getter has succeeded
-    dispatch({
-      type: GET_CLASSROOMS_SUCCEEDED,
-      payload: classrooms,
-    });
+    if (classrooms === ERROR_ACCESS_DENIED_CLASSROOM) {
+      toastr.error(ERROR_MESSAGE_HEADER, ERROR_ACCESS_DENIED_CLASSROOM_MESSAGE);
+    } else {
+      dispatch({
+        type: GET_CLASSROOMS_SUCCEEDED,
+        payload: classrooms,
+      });
+    }
     dispatch(flagGettingClassrooms(false));
   });
 };
@@ -214,7 +218,8 @@ export const editClassroom = payload => dispatch => {
     if (response === ERROR_GENERAL) {
       toastr.error(ERROR_MESSAGE_HEADER, ERROR_EDITING_CLASSROOM_MESSAGE);
     } else {
-      // update saved classrooms in state
+      // update saved classrooms and current classroom in state
+      dispatch(getClassroom(payload));
       dispatch(getClassrooms());
 
       toastr.success(SUCCESS_MESSAGE_HEADER, SUCCESS_EDITING_CLASSROOM_MESSAGE);

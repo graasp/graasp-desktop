@@ -12,6 +12,7 @@ import { loadSpaceInClassroom, clearLoadSpaceInClassroom } from '../../actions';
 import StudentForm from './StudentForm';
 import LoadSpaceSelectors from '../space/load/LoadSpaceSelectors';
 import { isSpaceDifferent as isSpaceDifferentFunc } from '../../utils/syncSpace';
+import { IMPORT_DATA_CLASSROOM_VALIDATE_BUTTON_ID } from '../../config/selectors';
 
 const styles = theme => ({
   ...Styles(theme),
@@ -117,6 +118,7 @@ class ImportDataAssignUserForm extends Component {
 
     return (
       <Button
+        id={IMPORT_DATA_CLASSROOM_VALIDATE_BUTTON_ID}
         variant="contained"
         onClick={this.handleValidate}
         color="primary"

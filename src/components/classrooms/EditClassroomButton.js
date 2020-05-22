@@ -21,6 +21,7 @@ import {
   EDIT_CLASSROOM_BUTTON_CLASS,
   EDIT_CLASSROOM_VALIDATE_BUTTON_ID,
   EDIT_CLASSROOM_CANCEL_BUTTON_ID,
+  EDIT_CLASSROOM_DELETE_DATA_BUTTON_CLASS,
 } from '../../config/selectors';
 import ClassroomNameTextField from './ClassroomNameTextField';
 import { isClassroomNameValid } from '../../utils/classroom';
@@ -56,6 +57,7 @@ class EditClassroomButton extends Component {
       spaces: PropTypes.arrayOf({}).isRequired,
     }).isRequired,
     t: PropTypes.func.isRequired,
+    userId: PropTypes.string.isRequired,
   };
 
   state = (() => {
@@ -95,9 +97,10 @@ class EditClassroomButton extends Component {
     const {
       dispatchEditClassroom,
       classroom: { id },
+      userId,
     } = this.props;
     if (isClassroomNameValid(name)) {
-      dispatchEditClassroom({ name, id, deleteSelection });
+      dispatchEditClassroom({ name, id, deleteSelection, userId });
       this.close();
     }
   };
@@ -142,6 +145,7 @@ class EditClassroomButton extends Component {
               ) : (
                 <Tooltip title={t(`Delete this space`)}>
                   <IconButton
+                    className={EDIT_CLASSROOM_DELETE_DATA_BUTTON_CLASS}
                     color="inherit"
                     onClick={e => this.changeDeleteSelection(e, spaceId, true)}
                   >
@@ -151,7 +155,7 @@ class EditClassroomButton extends Component {
               );
 
               return (
-                <>
+                <Grid container data-space-id={spaceId} alignItems="center">
                   <Grid item xs={2}>
                     {button}
                   </Grid>
@@ -166,7 +170,7 @@ class EditClassroomButton extends Component {
                   >
                     <Typography>{spaceName}</Typography>
                   </Grid>
-                </>
+                </Grid>
               );
             })}
           </Grid>
@@ -231,12 +235,16 @@ class EditClassroomButton extends Component {
   }
 }
 
+const mapStateToProps = ({ authentication }) => ({
+  userId: authentication.getIn(['user', 'id']),
+});
+
 const mapDispatchToProps = {
   dispatchEditClassroom: editClassroom,
 };
 
 const ConnectedComponent = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(EditClassroomButton);
 

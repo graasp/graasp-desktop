@@ -231,7 +231,7 @@ describe('Classrooms Scenarios', function() {
         // open and cancel modal
         await client.click(`#${ADD_CLASSROOM_BUTTON_ID}`);
         await client.pause(MODAL_OPEN_PAUSE);
-        await client.setValue(`#${ADD_CLASSROOM_NAME_INPUT_ID}`, name);
+        await client.setValue(`#${CLASSROOM_NAME_INPUT_ID}`, name);
         await client.pause(INPUT_TYPE_PAUSE);
         await client.click(`#${ADD_CLASSROOM_CANCEL_BUTTON_ID}`);
         await client.pause(MODAL_CLOSE_PAUSE);

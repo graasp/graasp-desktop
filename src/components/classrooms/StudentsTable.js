@@ -32,6 +32,8 @@ import {
   CLASSROOM_TABLE_BODY_ID,
   DELETE_USER_IN_CLASSROOM_BUTTON_CLASS,
   SELECT_USER_IN_CLASSROOM_CLASS,
+  STUDENT_ROW_ACTIONS_CLASS,
+  STUDENT_ROW_RESOURCES_CLASS,
 } from '../../config/selectors';
 import {
   getUserResourcesForSpaceInClassroom,
@@ -284,8 +286,12 @@ class StudentsTable extends Component {
           // display all other data depending on headcells
           .map(({ id }) => (
             <TableCell key={id}>
-              {row[id].actions.length > 0 && <ActionIcon />}
-              {row[id].resources.length > 0 && <ResourceIcon />}
+              {row[id].actions.length > 0 && (
+                <ActionIcon className={STUDENT_ROW_ACTIONS_CLASS} />
+              )}
+              {row[id].resources.length > 0 && (
+                <ResourceIcon className={STUDENT_ROW_RESOURCES_CLASS} />
+              )}
             </TableCell>
           ))}
         {this.renderUserOperations(row)}
