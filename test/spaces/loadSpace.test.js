@@ -57,7 +57,7 @@ import { typeInTextInputApp } from '../apps/textInputApp';
 import { exportSpaceWithSelected } from './exportSpace.test';
 import { USER_MODES } from '../../src/config/constants';
 
-const setCheckboxesTo = async (
+export const setCheckboxesTo = async (
   client,
   { resources = false, actions = false }
 ) => {
@@ -80,7 +80,7 @@ const setCheckboxesTo = async (
   }
 };
 
-const checkLoadSelectionLayout = async (
+export const checkLoadSelectionLayout = async (
   client,
   { space = true, resources = false, actions = false }
 ) => {

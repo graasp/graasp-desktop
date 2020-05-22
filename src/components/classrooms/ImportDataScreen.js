@@ -29,6 +29,11 @@ import {
 import ImportDataAssignUserForm from './ImportDataAssignUserForm';
 import { showBrowsePrompt } from '../../utils/browse';
 import { buildClassroomPath, CLASSROOMS_PATH } from '../../config/paths';
+import {
+  IMPORT_FILEPATH_IN_CLASSROOM_INPUT_ID,
+  IMPORT_DATA_IN_CLASSROOM_SUBMIT_BUTTON_ID,
+  IMPORT_DATA_IN_CLASSROOM_BACK_BUTTON_ID,
+} from '../../config/selectors';
 
 const styles = theme => ({
   ...Styles(theme),
@@ -188,6 +193,7 @@ class ImportDataScreen extends Component {
                   {t('Browse')}
                 </Button>
                 <Input
+                  id={IMPORT_FILEPATH_IN_CLASSROOM_INPUT_ID}
                   required
                   onChange={this.handleFileLocation}
                   className={classes.input}
@@ -200,6 +206,7 @@ class ImportDataScreen extends Component {
                 />
                 <div className={classes.buttons}>
                   <Button
+                    id={IMPORT_DATA_IN_CLASSROOM_BACK_BUTTON_ID}
                     variant="outlined"
                     onClick={this.handleBack}
                     color="primary"
@@ -208,6 +215,7 @@ class ImportDataScreen extends Component {
                     {t('Back')}
                   </Button>
                   <Button
+                    id={IMPORT_DATA_IN_CLASSROOM_SUBMIT_BUTTON_ID}
                     variant="contained"
                     onClick={this.handleLoad}
                     color="primary"

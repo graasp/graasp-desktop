@@ -285,7 +285,7 @@ class StudentsTable extends Component {
           .slice(1, headCells.length - 1)
           // display all other data depending on headcells
           .map(({ id }) => (
-            <TableCell key={id}>
+            <TableCell key={id} data-head-cell-id={id}>
               {row[id].actions.length > 0 && (
                 <ActionIcon className={STUDENT_ROW_ACTIONS_CLASS} />
               )}

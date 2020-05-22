@@ -10,7 +10,7 @@ import {
   SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES,
   SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES_PATH,
 } from './atomicStructureWithActionsAndResources';
-import { SPACE_APOLLO_11 } from './apollo11';
+import { SPACE_APOLLO_11, SPACE_APOLLO_11_PATH } from './apollo11';
 import { SPACE_AIR_POLLUTION } from './airPollution';
 import { SPACE_LIGHT_COLOR } from './lightColor';
 import { SPACE_WITH_TOOLS_CHANGED } from './spaceWithToolsChanged';
@@ -23,6 +23,7 @@ export {
   SPACE_WITH_MULTIPLE_CHANGES,
   SPACE_WITH_MULTIPLE_CHANGES_PATH,
   SPACE_APOLLO_11,
+  SPACE_APOLLO_11_PATH,
   SPACE_AIR_POLLUTION,
   SPACE_LIGHT_COLOR,
   SPACE_WITH_TOOLS_CHANGED,
