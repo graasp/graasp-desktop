@@ -60,6 +60,12 @@ const {
   SET_SPACE_AS_RECENT_CHANNEL,
   EXTRACT_FILE_TO_LOAD_SPACE_CHANNEL,
   CLEAR_LOAD_SPACE_CHANNEL,
+  ADD_CLASSROOM_CHANNEL,
+  GET_CLASSROOMS_CHANNEL,
+  DELETE_CLASSROOM_CHANNEL,
+  SHOW_DELETE_CLASSROOM_PROMPT_CHANNEL,
+  EDIT_CLASSROOM_CHANNEL,
+  GET_CLASSROOM_CHANNEL,
 } = require('./app/config/channels');
 const env = require('./env.json');
 const {
@@ -98,6 +104,12 @@ const {
   setSpaceAsRecent,
   clearLoadSpace,
   extractFileToLoadSpace,
+  addClassroom,
+  getClassrooms,
+  deleteClassroom,
+  showDeleteClassroomPrompt,
+  editClassroom,
+  getClassroom,
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
 
@@ -476,6 +488,27 @@ app.on('ready', async () => {
 
   // called when getting an AppInstance
   ipcMain.on(GET_APP_INSTANCE_CHANNEL, getAppInstance(mainWindow, db));
+
+  // called when getting classrooms
+  ipcMain.on(GET_CLASSROOMS_CHANNEL, getClassrooms(mainWindow, db));
+
+  // called when getting a classroom
+  ipcMain.on(GET_CLASSROOM_CHANNEL, getClassroom(mainWindow, db));
+
+  // called when adding a classroom
+  ipcMain.on(ADD_CLASSROOM_CHANNEL, addClassroom(mainWindow, db));
+
+  // called when editing a classroom
+  ipcMain.on(EDIT_CLASSROOM_CHANNEL, editClassroom(mainWindow, db));
+
+  // prompt when deleting a classroom
+  ipcMain.on(
+    SHOW_DELETE_CLASSROOM_PROMPT_CHANNEL,
+    showDeleteClassroomPrompt(mainWindow, db)
+  );
+
+  // called when deleting a classroom
+  ipcMain.on(DELETE_CLASSROOM_CHANNEL, deleteClassroom(mainWindow, db));
 
   // called when getting the database
   ipcMain.on(GET_DATABASE_CHANNEL, async () => {

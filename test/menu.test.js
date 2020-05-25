@@ -25,6 +25,8 @@ import {
   buildPhaseMenuItemId,
   SAVED_SPACES_MENU_ITEM_ID,
   SAVED_SPACES_MAIN_ID,
+  CLASSROOMS_MAIN_ID,
+  CLASSROOMS_MENU_ITEM_ID,
 } from '../src/config/selectors';
 import {
   LOAD_TAB_PAUSE,
@@ -92,6 +94,10 @@ export const menuGoToHome = async client => {
 
 export const menuGoToSavedSpaces = async client => {
   await menuGoTo(client, SAVED_SPACES_MENU_ITEM_ID, SAVED_SPACES_MAIN_ID);
+};
+
+export const menuGoToClassrooms = async client => {
+  await menuGoTo(client, CLASSROOMS_MENU_ITEM_ID, CLASSROOMS_MAIN_ID);
 };
 
 describe('Menu Scenarios', function() {

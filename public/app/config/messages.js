@@ -66,6 +66,23 @@ const ERROR_SETTING_SPACE_AS_RECENT =
 const ERROR_STUDENT_LOAD_OUT_OF_DATE_SPACE_MESSAGE =
   'The space contained in this file is out of date. Ask your teacher for more information.';
 const ERROR_STUDENT_FORBIDDEN_MESSAGE = 'Students cannot access this page';
+const ERROR_ADDING_CLASSROOM_MESSAGE =
+  'There was an error adding the classroom';
+const ERROR_DUPLICATE_CLASSROOM_NAME_MESSAGE =
+  'This classroom name already exists';
+const SUCCESS_ADDING_CLASSROOM_MESSAGE =
+  'The classroom was successfully created';
+const SUCCESS_DELETING_CLASSROOM_MESSAGE =
+  'The classroom was successfully deleted';
+const ERROR_DELETING_CLASSROOM_MESSAGE =
+  'There was an error deleting this classroom';
+const ERROR_EDITING_CLASSROOM_MESSAGE =
+  'There was an error editing this classroom';
+const SUCCESS_EDITING_CLASSROOM_MESSAGE =
+  'The classroom was successfully edited';
+const ERROR_GETTING_CLASSROOM_MESSAGE =
+  'There was an error getting the classroom';
+const ERROR_ACCESS_DENIED_CLASSROOM_MESSAGE = `This user does not have access to this classroom`;
 
 module.exports = {
   ERROR_GETTING_DEVELOPER_MODE,
@@ -116,4 +133,13 @@ module.exports = {
   ERROR_SETTING_SPACE_AS_RECENT,
   ERROR_STUDENT_LOAD_OUT_OF_DATE_SPACE_MESSAGE,
   ERROR_STUDENT_FORBIDDEN_MESSAGE,
+  ERROR_ADDING_CLASSROOM_MESSAGE,
+  ERROR_DUPLICATE_CLASSROOM_NAME_MESSAGE,
+  SUCCESS_ADDING_CLASSROOM_MESSAGE,
+  SUCCESS_DELETING_CLASSROOM_MESSAGE,
+  ERROR_DELETING_CLASSROOM_MESSAGE,
+  ERROR_EDITING_CLASSROOM_MESSAGE,
+  SUCCESS_EDITING_CLASSROOM_MESSAGE,
+  ERROR_GETTING_CLASSROOM_MESSAGE,
+  ERROR_ACCESS_DENIED_CLASSROOM_MESSAGE,
 };

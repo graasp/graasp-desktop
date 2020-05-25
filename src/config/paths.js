@@ -10,6 +10,8 @@ export const DASHBOARD_PATH = '/dashboard';
 export const SIGN_IN_PATH = '/signin';
 export const SYNC_SPACE_PATH = '/space/sync/:id';
 export const SAVED_SPACES_PATH = '/saved-spaces';
+export const CLASSROOMS_PATH = '/classrooms';
+export const CLASSROOMS_IMPORT_STUDENT_DATA_PATH = '/classrooms/import';
 
 export const buildExportSelectionPathForSpaceId = (id = ':id') => {
   return `/space/export/${id}/selection`;
@@ -17,4 +19,8 @@ export const buildExportSelectionPathForSpaceId = (id = ':id') => {
 
 export const buildSpacePath = (id = ':id', saved = false) => {
   return `/space/${id}?saved=${saved}`;
+};
+
+export const buildClassroomPath = (id = ':id') => {
+  return `/classrooms/${id}`;
 };
