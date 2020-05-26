@@ -3,6 +3,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { withStyles } from '@material-ui/core';
 import Fab from '@material-ui/core/Fab';
 import { connect } from 'react-redux';
+import Tooltip from '@material-ui/core/Tooltip';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import { withTranslation } from 'react-i18next';
@@ -23,7 +24,7 @@ import { isUsernameValid } from '../../utils/user';
 
 const styles = theme => ({
   fab: {
-    position: 'absolute',
+    position: 'fixed',
     bottom: theme.spacing(3),
     right: theme.spacing(3),
   },
@@ -85,15 +86,17 @@ class AddUserInClassroomButton extends Component {
 
     return (
       <>
-        <Fab
-          id={ADD_USER_IN_CLASSROOM_BUTTON_ID}
-          aria-label={t('add classroom')}
-          className={classes.fab}
-          color="primary"
-          onClick={this.handleClickOpen}
-        >
-          <AddIcon />
-        </Fab>
+        <Tooltip title={t('Add a user in this classroom.')}>
+          <Fab
+            id={ADD_USER_IN_CLASSROOM_BUTTON_ID}
+            aria-label={t('add classroom')}
+            className={classes.fab}
+            color="primary"
+            onClick={this.handleClickOpen}
+          >
+            <AddIcon />
+          </Fab>
+        </Tooltip>
 
         <Dialog
           open={open}
