@@ -35,7 +35,13 @@ class TableHeader extends Component {
     order: PropTypes.oneOf(Object.values(TABLE_ORDER)).isRequired,
     orderBy: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired,
-    headCells: PropTypes.shape([PropTypes.shape({})]).isRequired,
+    headCells: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        numeric: PropTypes.bool.isRequired,
+        label: PropTypes.string.isRequired,
+      })
+    ).isRequired,
     t: PropTypes.func.isRequired,
   };
 

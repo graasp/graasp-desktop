@@ -38,15 +38,14 @@ class EditUserInClassroomButton extends Component {
   })();
 
   static propTypes = {
-    classes: PropTypes.shape({}).isRequired,
     user: PropTypes.shape({
       id: PropTypes.string.isRequired,
       username: PropTypes.string.isRequired,
     }).isRequired,
-    dispatchEditUserInClassroom: PropTypes.string.isRequired,
+    dispatchEditUserInClassroom: PropTypes.func.isRequired,
     classroomId: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
-    userId: PropTypes.func.isRequired,
+    userId: PropTypes.string.isRequired,
   };
 
   handleClickOpen = () => {
@@ -80,7 +79,12 @@ class EditUserInClassroomButton extends Component {
     if (!isUsernameValid(trimmedUsername)) {
       toastr.error(ERROR_MESSAGE_HEADER, ERROR_INVALID_USERNAME_MESSAGE);
     } else {
-      dispatchEditUserInClassroom({ username: trimmedUsername, userId, classroomId, teacherId });
+      dispatchEditUserInClassroom({
+        username: trimmedUsername,
+        userId,
+        classroomId,
+        teacherId,
+      });
       this.close();
     }
   };

@@ -26,7 +26,7 @@ const styles = theme => ({
 });
 
 class ClassroomScreen extends Component {
-  propTypes = {
+  static propTypes = {
     match: PropTypes.shape({
       params: PropTypes.shape({
         id: PropTypes.string.isRequired,

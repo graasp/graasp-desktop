@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
+import { Map } from 'immutable';
 import _ from 'lodash';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -88,7 +89,6 @@ class StudentsTable extends Component {
     classes: PropTypes.shape({
       root: PropTypes.string.isRequired,
       paper: PropTypes.string.isRequired,
-      table: PropTypes.string.isRequired,
     }).isRequired,
     t: PropTypes.func.isRequired,
     dispatchDeleteUsersInClassroom: PropTypes.func.isRequired,
@@ -237,7 +237,6 @@ class StudentsTable extends Component {
             <Table size="small">
               <TableHeader
                 headCells={headCells}
-                classes={classes}
                 numSelected={selected.length}
                 order={order}
                 orderBy={orderBy}
