@@ -75,10 +75,12 @@ class EditUserInClassroomButton extends Component {
       userId: teacherId,
     } = this.props;
 
-    if (!isUsernameValid(username)) {
+    const trimmedUsername = username;
+
+    if (!isUsernameValid(trimmedUsername)) {
       toastr.error(ERROR_MESSAGE_HEADER, ERROR_INVALID_USERNAME_MESSAGE);
     } else {
-      dispatchEditUserInClassroom({ username, userId, classroomId, teacherId });
+      dispatchEditUserInClassroom({ username: trimmedUsername, userId, classroomId, teacherId });
       this.close();
     }
   };
@@ -98,7 +100,8 @@ class EditUserInClassroomButton extends Component {
     const { username, open } = this.state;
 
     // check data to display error in form
-    const usernameValidity = isUsernameValid(username);
+    const trimmedUsername = username.trim();
+    const usernameValidity = isUsernameValid(trimmedUsername);
 
     let errorProps = {};
     if (!usernameValidity) {

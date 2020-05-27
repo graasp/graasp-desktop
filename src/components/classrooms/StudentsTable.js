@@ -14,8 +14,6 @@ import IconButton from '@material-ui/core/IconButton/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
 import PropTypes from 'prop-types';
 import TableHeader from './TableHeader';
 import TableToolbar from './TableToolbar';
@@ -23,6 +21,7 @@ import {
   TABLE_ORDER,
   TABLE_HEAD_CELL_IDS,
   ROWS_PER_PAGE_OPTIONS,
+  TABLE_ROW_HEIGHT,
 } from '../../config/constants';
 import { deleteUsersInClassroom } from '../../actions';
 import EditUserInClassroomButton from './EditUserInClassroomButton';
@@ -68,10 +67,9 @@ const stableSort = (array, comparator) => {
   return stabilizedThis.map(el => el[0]);
 };
 
-const createHeadCell = (id, label, numeric = false, disablePadding = true) => ({
+const createHeadCell = (id, label, numeric = false) => ({
   id,
   numeric,
-  disablePadding,
   label,
 });
 
@@ -106,7 +104,6 @@ class StudentsTable extends Component {
       orderBy: TABLE_HEAD_CELL_IDS.USERNAME,
       selected: [],
       page: 0,
-      dense: false,
       rowsPerPage: 5,
       rows,
     };
@@ -172,10 +169,6 @@ class StudentsTable extends Component {
     this.setState({ page: 0, rowsPerPage });
   };
 
-  handleChangeDense = event => {
-    this.setState({ dense: event.target.checked });
-  };
-
   handleDeleteUser = row => {
     const {
       dispatchDeleteUsersInClassroom,
@@ -187,19 +180,6 @@ class StudentsTable extends Component {
       teacherId,
       classroomId: classroom.get('id'),
     });
-  };
-
-  renderDenseSwitch = () => {
-    const { t } = this.props;
-    const { dense } = this.state;
-    const switchEl = (
-      <Switch
-        checked={dense}
-        color="primary"
-        onChange={this.handleChangeDense}
-      />
-    );
-    return <FormControlLabel control={switchEl} label={t('Dense padding')} />;
   };
 
   renderDeleteUserButton = row => {
@@ -236,15 +216,7 @@ class StudentsTable extends Component {
   };
 
   render() {
-    const {
-      selected,
-      page,
-      rowsPerPage,
-      dense,
-      order,
-      orderBy,
-      rows,
-    } = this.state;
+    const { selected, page, rowsPerPage, order, orderBy, rows } = this.state;
 
     const { classes, classroom } = this.props;
 
@@ -262,7 +234,7 @@ class StudentsTable extends Component {
         <Paper className={classes.paper}>
           <TableToolbar selected={selected} classroom={classroom} />
           <TableContainer>
-            <Table size={dense ? 'small' : 'medium'}>
+            <Table size="small">
               <TableHeader
                 headCells={headCells}
                 classes={classes}
@@ -319,7 +291,7 @@ class StudentsTable extends Component {
                     );
                   })}
                 {emptyRows > 0 && (
-                  <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                  <TableRow style={{ height: TABLE_ROW_HEIGHT * emptyRows }}>
                     <TableCell colSpan={6} />
                   </TableRow>
                 )}
@@ -336,7 +308,6 @@ class StudentsTable extends Component {
             onChangeRowsPerPage={this.handleChangeRowsPerPage}
           />
         </Paper>
-        {this.renderDenseSwitch()}
       </div>
     );
   }

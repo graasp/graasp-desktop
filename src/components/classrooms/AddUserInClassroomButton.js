@@ -74,7 +74,9 @@ class AddUserInClassroomButton extends Component {
     const { classes, t } = this.props;
     const { name, open } = this.state;
 
-    const isValid = isUsernameValid(name);
+    const trimmedName = name.trim();
+
+    const isValid = isUsernameValid(trimmedName);
     let errorProps = {};
     if (!isValid) {
       errorProps = {

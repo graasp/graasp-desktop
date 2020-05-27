@@ -72,7 +72,6 @@ class TableHeader extends Component {
             <TableCell
               key={headCell.id}
               align={headCell.numeric ? 'right' : 'left'}
-              padding={headCell.disablePadding ? 'none' : 'default'}
               sortDirection={orderBy === headCell.id ? order : false}
             >
               <TableSortLabel
