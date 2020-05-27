@@ -74,7 +74,7 @@ class EditUserInClassroomButton extends Component {
       userId: teacherId,
     } = this.props;
 
-    const trimmedUsername = username;
+    const trimmedUsername = username.trim();
 
     if (!isUsernameValid(trimmedUsername)) {
       toastr.error(ERROR_MESSAGE_HEADER, ERROR_INVALID_USERNAME_MESSAGE);
