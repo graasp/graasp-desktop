@@ -119,3 +119,6 @@ export const CLASSROOM_CARD_SPACES_CLASS = 'classroomCardSpaces';
 export const CLASSROOM_CARD_STUDENTS_CLASS = 'classroomCardStudents';
 export const CLASSROOM_SCREEN_BACK_BUTTON_ID = 'classroomScreenBackButton';
 export const CLASSROOM_CARD_NAME_CLASS = 'classroomCardName';
+export const SELECT_USER_IN_CLASSROOM_CLASS = 'selectUserInClassroom';
+export const DELETE_USERS_IN_CLASSROOM_BUTTON_ID =
+  'deleteUsersInClassroomButton';

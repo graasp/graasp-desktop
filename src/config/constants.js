@@ -95,3 +95,8 @@ export const TABLE_ORDER = {
   ASC: 'asc',
   DESC: 'desc',
 };
+
+export const TABLE_HEAD_CELL_IDS = {
+  USERNAME: 'username',
+  OPERATIONS: 'operations',
+};

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
+import _ from 'lodash';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import { connect } from 'react-redux';
@@ -18,16 +19,14 @@ import Switch from '@material-ui/core/Switch';
 import PropTypes from 'prop-types';
 import TableHeader from './TableHeader';
 import TableToolbar from './TableToolbar';
-import { TABLE_ORDER } from '../../config/constants';
-import { deleteUserInClassroom } from '../../actions';
+import { TABLE_ORDER, TABLE_HEAD_CELL_IDS } from '../../config/constants';
+import { deleteUsersInClassroom } from '../../actions';
 import EditUserInClassroomButton from './EditUserInClassroomButton';
 import {
   CLASSROOM_TABLE_BODY_ID,
   DELETE_USER_IN_CLASSROOM_BUTTON_CLASS,
+  SELECT_USER_IN_CLASSROOM_CLASS,
 } from '../../config/selectors';
-
-const USERNAME_HEAD_CELL_ID = 'username';
-const OPERATIONS_HEAD_CELL_ID = 'operations';
 
 const styles = theme => ({
   root: {
@@ -75,7 +74,7 @@ const createHeadCell = (id, label, numeric = false, disablePadding = true) => ({
 const createStudentRow = ({ id, username }) => {
   return {
     id,
-    [USERNAME_HEAD_CELL_ID]: username,
+    [TABLE_HEAD_CELL_IDS.USERNAME]: username,
   };
 };
 
@@ -90,7 +89,7 @@ class StudentsTable extends Component {
       table: PropTypes.string.isRequired,
     }).isRequired,
     t: PropTypes.func.isRequired,
-    dispatchDeleteUserInClassroom: PropTypes.func.isRequired,
+    dispatchDeleteUsersInClassroom: PropTypes.func.isRequired,
     userId: PropTypes.string.isRequired,
   };
 
@@ -100,7 +99,7 @@ class StudentsTable extends Component {
 
     return {
       order: TABLE_ORDER.ASC,
-      orderBy: USERNAME_HEAD_CELL_ID,
+      orderBy: TABLE_HEAD_CELL_IDS.USERNAME,
       selected: [],
       page: 0,
       dense: false,
@@ -112,8 +111,8 @@ class StudentsTable extends Component {
   buildHeadCells = () => {
     const { t } = this.props;
     return [
-      createHeadCell(USERNAME_HEAD_CELL_ID, t('Username')),
-      createHeadCell(OPERATIONS_HEAD_CELL_ID, t('Operations')),
+      createHeadCell(TABLE_HEAD_CELL_IDS.USERNAME, t('Username')),
+      createHeadCell(TABLE_HEAD_CELL_IDS.OPERATIONS, t('Operations')),
       // todo : add header cell per space
     ];
   };
@@ -130,20 +129,22 @@ class StudentsTable extends Component {
   handleSelectAllClick = event => {
     if (event.target.checked) {
       const { rows } = this.state;
-      const newSelecteds = rows.map(n => n[USERNAME_HEAD_CELL_ID]);
+      const newSelecteds = _.cloneDeep(rows);
       this.setState({ selected: newSelecteds });
       return;
     }
     this.setState({ selected: [] });
   };
 
-  handleClick = (event, name) => {
+  handleClick = (event, row) => {
     const { selected } = this.state;
-    const selectedIndex = selected.indexOf(name);
+    const selectedIndex = selected.findIndex(thisRow =>
+      _.isEqual(row, thisRow)
+    );
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, row);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -172,15 +173,13 @@ class StudentsTable extends Component {
   };
 
   handleDeleteUser = row => {
-    const { id: userId } = row;
     const {
-      dispatchDeleteUserInClassroom,
+      dispatchDeleteUsersInClassroom,
       classroom,
       userId: teacherId,
     } = this.props;
-    dispatchDeleteUserInClassroom({
-      username: row[USERNAME_HEAD_CELL_ID],
-      userId,
+    dispatchDeleteUsersInClassroom({
+      users: [row],
       teacherId,
       classroomId: classroom.get('id'),
     });
@@ -227,6 +226,11 @@ class StudentsTable extends Component {
     );
   };
 
+  findRowSelectedIndex = row => {
+    const { selected } = this.state;
+    return selected.findIndex(thisRow => _.isEqual(row, thisRow));
+  };
+
   render() {
     const {
       selected,
@@ -240,8 +244,6 @@ class StudentsTable extends Component {
 
     const { classes, classroom } = this.props;
 
-    const isSelected = name => selected.indexOf(name) !== -1;
-
     const headCells = this.buildHeadCells();
 
     const emptyRows =
@@ -250,10 +252,7 @@ class StudentsTable extends Component {
     return (
       <div className={classes.root}>
         <Paper className={classes.paper}>
-          <TableToolbar
-            numSelected={selected.length}
-            classroomName={classroom.get('name')}
-          />
+          <TableToolbar selected={selected} classroom={classroom} />
           <TableContainer>
             <Table size={dense ? 'small' : 'medium'}>
               <TableHeader
@@ -270,29 +269,34 @@ class StudentsTable extends Component {
                 {stableSort(rows, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map(row => {
-                    const isItemSelected = isSelected(
-                      row[USERNAME_HEAD_CELL_ID]
-                    );
+                    const username = row[TABLE_HEAD_CELL_IDS.USERNAME];
+
+                    const isItemSelected =
+                      this.findRowSelectedIndex(row) !== -1;
 
                     const handleOnClick = event => {
-                      this.handleClick(event, row[USERNAME_HEAD_CELL_ID]);
+                      this.handleClick(event, row);
                     };
 
                     return (
                       <TableRow
-                        data-name={row[USERNAME_HEAD_CELL_ID]}
+                        data-name={username}
                         hover
                         onClick={handleOnClick}
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
-                        key={row[USERNAME_HEAD_CELL_ID]}
+                        key={row.id}
                         selected={isItemSelected}
                       >
                         <TableCell padding="checkbox">
-                          <Checkbox checked={isItemSelected} color="primary" />
+                          <Checkbox
+                            checked={isItemSelected}
+                            color="primary"
+                            className={SELECT_USER_IN_CLASSROOM_CLASS}
+                          />
                         </TableCell>
-                        <TableCell>{row[USERNAME_HEAD_CELL_ID]}</TableCell>
+                        <TableCell>{username}</TableCell>
                         {headCells
                           // remove first element and last element: username and operations
                           .slice(1, headCells.length - 1)
@@ -335,7 +339,7 @@ const mapStateToProps = ({ authentication }) => ({
 });
 
 const mapDispatchToProps = {
-  dispatchDeleteUserInClassroom: deleteUserInClassroom,
+  dispatchDeleteUsersInClassroom: deleteUsersInClassroom,
 };
 
 const ConnectedComponent = connect(

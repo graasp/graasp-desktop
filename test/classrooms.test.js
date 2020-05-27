@@ -34,6 +34,8 @@ import {
   CLASSROOM_CARD_STUDENTS_CLASS,
   CLASSROOM_SCREEN_BACK_BUTTON_ID,
   CLASSROOM_CARD_NAME_CLASS,
+  SELECT_USER_IN_CLASSROOM_CLASS,
+  DELETE_USERS_IN_CLASSROOM_BUTTON_ID,
 } from '../src/config/selectors';
 import {
   DEFAULT_GLOBAL_TIMEOUT,
@@ -43,6 +45,7 @@ import {
   DELETE_CLASSROOM_PAUSE,
   DELETE_USER_IN_CLASSROOM_PAUSE,
   OPEN_CLASSROOM_PAUSE,
+  TOOLTIP_FADE_OUT_PAUSE,
 } from './constants';
 import { openDrawer, menuGoToSettings, menuGoToClassrooms } from './menu.test';
 import { userSignIn } from './userSignIn.test';
@@ -107,6 +110,17 @@ const deleteUserInClassroom = async (client, username) => {
   await client.pause(DELETE_USER_IN_CLASSROOM_PAUSE);
 };
 
+const deleteUsersInClassroom = async (client, usernames) => {
+  // check all rows for given usernames
+  for (const username of usernames) {
+    // search based on name since id is generated on the fly
+    const userRowSelector = `#${CLASSROOM_TABLE_BODY_ID} tr[data-name='${username}']`;
+    await client.click(`${userRowSelector} .${SELECT_USER_IN_CLASSROOM_CLASS}`);
+  }
+  await client.click(`#${DELETE_USERS_IN_CLASSROOM_BUTTON_ID}`);
+  await client.pause(DELETE_USER_IN_CLASSROOM_PAUSE);
+};
+
 // changes is appended to username
 const editUserInClassroom = async (client, username, changes) => {
   // search based on name since id is generated on the fly
@@ -126,7 +140,10 @@ const editUserInClassroom = async (client, username, changes) => {
 const hasStudentsTableLayout = async (client, usernames = []) => {
   // no user should have no table row
   if (!usernames.length) {
-    await expectElementToNotExist(client, `#${CLASSROOM_TABLE_BODY_ID} tr`);
+    await expectElementToNotExist(
+      client,
+      `#${CLASSROOM_TABLE_BODY_ID} tr[data-name]`
+    );
   }
 
   for (const username of usernames) {
@@ -270,6 +287,9 @@ describe('Classrooms Scenarios', function() {
         const username1 = 'bob';
         await addUserInClassroom(client, username1);
         await hasStudentsTableLayout(client, [username, username1]);
+        const username2 = 'cedric';
+        await addUserInClassroom(client, username2);
+        await hasStudentsTableLayout(client, [username, username1, username2]);
 
         // edit user
         const changes = ' g.';
@@ -279,7 +299,7 @@ describe('Classrooms Scenarios', function() {
 
         // check classroom layout
         await client.click(`#${CLASSROOM_SCREEN_BACK_BUTTON_ID}`);
-        await hasClassroomCardLayout(client, name, 0, 2);
+        await hasClassroomCardLayout(client, name, 0, 3);
 
         // check data is not shared between classrooms
         // create new classroom
@@ -290,7 +310,12 @@ describe('Classrooms Scenarios', function() {
         // delete user in first classroom
         await openClassroom(client, name);
         await deleteUserInClassroom(client, newName);
-        await hasStudentsTableLayout(client, [username1]);
+        await client.pause(TOOLTIP_FADE_OUT_PAUSE);
+        await hasStudentsTableLayout(client, [username1, username2]);
+
+        // delete two users in classroom
+        await deleteUsersInClassroom(client, [username1, username2]);
+        await hasStudentsTableLayout(client, []);
       })
     );
 

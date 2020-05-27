@@ -10,12 +10,13 @@ import {
   GET_CLASSROOM_SUCCEEDED,
   FLAG_ADDING_USER_IN_CLASSROOM,
   FLAG_EDITING_USER_IN_CLASSROOM,
-  FLAG_DELETING_USER_IN_CLASSROOM,
+  FLAG_DELETING_USERS_IN_CLASSROOM,
 } from '../types';
 import {
   ERROR_GENERAL,
   ERROR_DUPLICATE_CLASSROOM_NAME,
   ERROR_DUPLICATE_USERNAME_IN_CLASSROOM,
+  ERROR_NO_USER_TO_DELETE,
 } from '../config/errors';
 import {
   ADD_CLASSROOM_CHANNEL,
@@ -26,9 +27,9 @@ import {
   GET_CLASSROOM_CHANNEL,
   EDIT_CLASSROOM_CHANNEL,
   ADD_USER_IN_CLASSROOM_CHANNEL,
-  DELETE_USER_IN_CLASSROOM_CHANNEL,
-  SHOW_DELETE_USER_IN_CLASSROOM_PROMPT_CHANNEL,
-  RESPOND_DELETE_USER_IN_CLASSROOM_PROMPT_CHANNEL,
+  DELETE_USERS_IN_CLASSROOM_CHANNEL,
+  SHOW_DELETE_USERS_IN_CLASSROOM_PROMPT_CHANNEL,
+  RESPOND_DELETE_USERS_IN_CLASSROOM_PROMPT_CHANNEL,
   EDIT_USER_IN_CLASSROOM_CHANNEL,
 } from '../config/channels';
 import {
@@ -47,7 +48,8 @@ import {
   ERROR_DELETING_USER_IN_CLASSROOM_MESSAGE,
   ERROR_EDITING_USER_IN_CLASSROOM_MESSAGE,
   SUCCESS_EDITING_USER_IN_CLASSROOM_MESSAGE,
-  SUCCESS_DELETING_USER_IN_CLASSROOM_MESSAGE,
+  SUCCESS_DELETING_USERS_IN_CLASSROOM_MESSAGE,
+  ERROR_NO_USER_TO_DELETE_MESSAGE,
 } from '../config/messages';
 import { createFlag } from './common';
 
@@ -58,7 +60,9 @@ const flagDeletingClassroom = createFlag(FLAG_DELETING_CLASSROOM);
 const flagEditingClassroom = createFlag(FLAG_EDITING_CLASSROOM);
 const flagEditingUserInClassroom = createFlag(FLAG_EDITING_USER_IN_CLASSROOM);
 const flagAddingUserInClassroom = createFlag(FLAG_ADDING_USER_IN_CLASSROOM);
-const flagDeletingUserInClassroom = createFlag(FLAG_DELETING_USER_IN_CLASSROOM);
+const flagDeletingUsersInClassroom = createFlag(
+  FLAG_DELETING_USERS_IN_CLASSROOM
+);
 
 export const getClassrooms = () => dispatch => {
   dispatch(flagGettingClassrooms(true));
@@ -224,41 +228,56 @@ export const addUserInClassroom = payload => dispatch => {
   });
 };
 
-export const deleteUserInClassroom = payload => dispatch => {
+export const deleteUsersInClassroom = payload => dispatch => {
   // show confirmation prompt
-  window.ipcRenderer.send(SHOW_DELETE_USER_IN_CLASSROOM_PROMPT_CHANNEL);
+  window.ipcRenderer.send(
+    SHOW_DELETE_USERS_IN_CLASSROOM_PROMPT_CHANNEL,
+    payload
+  );
   window.ipcRenderer.once(
-    RESPOND_DELETE_USER_IN_CLASSROOM_PROMPT_CHANNEL,
+    RESPOND_DELETE_USERS_IN_CLASSROOM_PROMPT_CHANNEL,
     (event, response) => {
+      if (response === ERROR_NO_USER_TO_DELETE) {
+        toastr.error(ERROR_MESSAGE_HEADER, ERROR_NO_USER_TO_DELETE_MESSAGE);
+      }
+      // accept deletion
       if (response === 1) {
-        dispatch(flagDeletingUserInClassroom(true));
-        window.ipcRenderer.send(DELETE_USER_IN_CLASSROOM_CHANNEL, payload);
+        dispatch(flagDeletingUsersInClassroom(true));
+        window.ipcRenderer.send(DELETE_USERS_IN_CLASSROOM_CHANNEL, payload);
       }
     }
   );
-  window.ipcRenderer.once(
-    DELETE_USER_IN_CLASSROOM_CHANNEL,
-    (event, response) => {
-      if (response === ERROR_GENERAL) {
+  window.ipcRenderer.once(DELETE_USERS_IN_CLASSROOM_CHANNEL, (e, response) => {
+    switch (response) {
+      case ERROR_NO_USER_TO_DELETE: {
+        toastr.error(ERROR_MESSAGE_HEADER, ERROR_NO_USER_TO_DELETE_MESSAGE);
+        break;
+      }
+      case ERROR_GENERAL: {
         toastr.error(
           ERROR_MESSAGE_HEADER,
           ERROR_DELETING_USER_IN_CLASSROOM_MESSAGE
         );
-      } else {
+        break;
+      }
+      default: {
         // update current classroom
         dispatch(
-          getClassroom({ id: payload.classroomId, userId: payload.teacherId })
+          getClassroom({
+            id: payload.classroomId,
+            userId: payload.teacherId,
+          })
         );
 
         toastr.success(
           SUCCESS_MESSAGE_HEADER,
-          SUCCESS_DELETING_USER_IN_CLASSROOM_MESSAGE
+          SUCCESS_DELETING_USERS_IN_CLASSROOM_MESSAGE
         );
       }
-
-      dispatch(flagDeletingUserInClassroom(false));
     }
-  );
+
+    dispatch(flagDeletingUsersInClassroom(false));
+  });
 };
 
 export const editUserInClassroom = payload => dispatch => {

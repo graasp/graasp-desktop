@@ -60,10 +60,10 @@ module.exports = {
   EDIT_CLASSROOM_CHANNEL: 'classroom:edit',
   GET_CLASSROOM_CHANNEL: 'classroom:get',
   ADD_USER_IN_CLASSROOM_CHANNEL: 'classroom:user:add',
-  DELETE_USER_IN_CLASSROOM_CHANNEL: 'classroom:user:delete',
-  SHOW_DELETE_USER_IN_CLASSROOM_PROMPT_CHANNEL:
+  DELETE_USERS_IN_CLASSROOM_CHANNEL: 'classroom:user:delete',
+  SHOW_DELETE_USERS_IN_CLASSROOM_PROMPT_CHANNEL:
     'prompt:classroom:user:delete:show',
-  RESPOND_DELETE_USER_IN_CLASSROOM_PROMPT_CHANNEL:
+  RESPOND_DELETE_USERS_IN_CLASSROOM_PROMPT_CHANNEL:
     'prompt:classroom:user:delete:respond',
   EDIT_USER_IN_CLASSROOM_CHANNEL: 'classroom:user:edit',
 };

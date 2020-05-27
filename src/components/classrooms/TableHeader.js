@@ -64,6 +64,7 @@ class TableHeader extends Component {
               indeterminate={numSelected > 0 && numSelected < rowCount}
               checked={rowCount > 0 && numSelected === rowCount}
               onChange={onSelectAllClick}
+              color="primary"
               inputProps={{ 'aria-label': t('select all') }}
             />
           </TableCell>

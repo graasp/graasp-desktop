@@ -40,10 +40,10 @@ const getClassrooms = require('./getClassrooms');
 const deleteClassroom = require('./deleteClassroom');
 const editClassroom = require('./editClassroom');
 const showDeleteClassroomPrompt = require('./showDeleteClassroomPrompt');
-const showDeleteUserInClassroomPrompt = require('./showDeleteUserInClassroomPrompt');
+const showDeleteUsersInClassroomPrompt = require('./showDeleteUsersInClassroomPrompt');
 const getClassroom = require('./getClassroom');
 const addUserInClassroom = require('./addUserInClassroom');
-const deleteUserInClassroom = require('./deleteUserInClassroom');
+const deleteUsersInClassroom = require('./deleteUsersInClassroom');
 const editUserInClassroom = require('./editUserInClassroom');
 
 module.exports = {
@@ -90,7 +90,7 @@ module.exports = {
   getClassroom,
   showDeleteClassroomPrompt,
   addUserInClassroom,
-  deleteUserInClassroom,
-  showDeleteUserInClassroomPrompt,
+  deleteUsersInClassroom,
+  showDeleteUsersInClassroomPrompt,
   editUserInClassroom,
 };
