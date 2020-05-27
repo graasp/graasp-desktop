@@ -100,3 +100,5 @@ export const TABLE_HEAD_CELL_IDS = {
   USERNAME: 'username',
   OPERATIONS: 'operations',
 };
+
+export const ROWS_PER_PAGE_OPTIONS = [5, 10, 25];

@@ -19,7 +19,11 @@ import Switch from '@material-ui/core/Switch';
 import PropTypes from 'prop-types';
 import TableHeader from './TableHeader';
 import TableToolbar from './TableToolbar';
-import { TABLE_ORDER, TABLE_HEAD_CELL_IDS } from '../../config/constants';
+import {
+  TABLE_ORDER,
+  TABLE_HEAD_CELL_IDS,
+  ROWS_PER_PAGE_OPTIONS,
+} from '../../config/constants';
 import { deleteUsersInClassroom } from '../../actions';
 import EditUserInClassroomButton from './EditUserInClassroomButton';
 import {
@@ -246,8 +250,12 @@ class StudentsTable extends Component {
 
     const headCells = this.buildHeadCells();
 
+    // compute indexes to display rows for a given current page
+    const startingIndex = page * rowsPerPage;
+    const endingIndex = startingIndex + rowsPerPage;
+
     const emptyRows =
-      rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+      rowsPerPage - Math.min(rowsPerPage, rows.length - startingIndex);
 
     return (
       <div className={classes.root}>
@@ -267,7 +275,7 @@ class StudentsTable extends Component {
               />
               <TableBody id={CLASSROOM_TABLE_BODY_ID}>
                 {stableSort(rows, getComparator(order, orderBy))
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .slice(startingIndex, endingIndex)
                   .map(row => {
                     const username = row[TABLE_HEAD_CELL_IDS.USERNAME];
 
@@ -319,7 +327,7 @@ class StudentsTable extends Component {
             </Table>
           </TableContainer>
           <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
+            rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
             component="div"
             count={rows.length}
             rowsPerPage={rowsPerPage}
