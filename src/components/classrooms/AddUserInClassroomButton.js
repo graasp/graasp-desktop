@@ -88,7 +88,7 @@ class AddUserInClassroomButton extends Component {
 
     return (
       <>
-        <Tooltip title={t('Add a user in this classroom.')}>
+        <Tooltip title={t('Add a student in this classroom.')}>
           <Fab
             id={ADD_USER_IN_CLASSROOM_BUTTON_ID}
             aria-label={t('add classroom')}

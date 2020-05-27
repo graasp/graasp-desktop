@@ -218,7 +218,7 @@ class StudentsTable extends Component {
   render() {
     const { selected, page, rowsPerPage, order, orderBy, rows } = this.state;
 
-    const { classes, classroom } = this.props;
+    const { classes, classroom, t } = this.props;
 
     const headCells = this.buildHeadCells();
 
@@ -299,6 +299,7 @@ class StudentsTable extends Component {
             </Table>
           </TableContainer>
           <TablePagination
+            labelRowsPerPage={t('Rows per page')}
             rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
             component="div"
             count={rows.length}
