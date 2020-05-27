@@ -50,7 +50,7 @@
     "Time": "Time",
     "Sign In": "Sign In",
     "Sign Out": "Sign Out",
-    "Username": "Enter your Username",
+    "Enter your Username": "Enter your Username",
     "Sign in as Guest": "Sign in as Guest",
     "Graasp logo": "Graasp logo",
     "Accept Synchronization": "Accept Synchronization",
@@ -95,6 +95,21 @@
     "add classroom": "add classroom",
     "New Classroom": "New Classroom",
     "No Classroom Available": "No Classroom Available",
-    "Classrooms": "Classrooms"
+    "Classrooms": "Classrooms",
+    "Edit": "Edit",
+    "Username": "Username",
+    "Import Data": "Import Data",
+    "Add a student in this classroom.": "Add a student in this classroom.",
+    "Enter a name for a new student": "Enter a name for a new student",
+    "Student's name": "Student's name",
+    "sorted ascending": "sorted ascending",
+    "sorted descending": "sorted descending",
+    "Select all": "Select all",
+    "Operations": "Operations",
+    "Delete this user.": "Delete this user.",
+    "Classroom not found": "Classroom not found",
+    "selected": "selected",
+    "Username is not valid.": "Username is not valid.",
+    "Rows per page": "Rows per page"
   }
 }

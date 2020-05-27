@@ -38,6 +38,7 @@ class EditClassroomButton extends Component {
       name: PropTypes.string.isRequired,
     }).isRequired,
     t: PropTypes.func.isRequired,
+    userId: PropTypes.string.isRequired,
   };
 
   handleClickOpen = () => {
@@ -57,8 +58,9 @@ class EditClassroomButton extends Component {
     const {
       dispatchEditClassroom,
       classroom: { id },
+      userId,
     } = this.props;
-    dispatchEditClassroom({ name, id });
+    dispatchEditClassroom({ name, id, userId });
     this.close();
   };
 
@@ -124,13 +126,16 @@ class EditClassroomButton extends Component {
     );
   }
 }
+const mapStateToProps = ({ authentication }) => ({
+  userId: authentication.getIn(['user', 'id']),
+});
 
 const mapDispatchToProps = {
   dispatchEditClassroom: editClassroom,
 };
 
 const ConnectedComponent = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(EditClassroomButton);
 

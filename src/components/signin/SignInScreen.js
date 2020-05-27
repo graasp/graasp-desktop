@@ -169,7 +169,7 @@ class SignInScreen extends Component {
           />
           <CssTextField
             id={LOGIN_USERNAME_INPUT_ID}
-            label={t('Username')}
+            label={t('Enter your Username')}
             variant="outlined"
             onChange={this.handleUsername}
             onKeyPress={this.handleKeyPressed}

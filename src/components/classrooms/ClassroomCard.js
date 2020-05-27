@@ -19,6 +19,9 @@ import {
   CLASSROOM_CARD_CLASS,
   buildClassroomCardId,
   DELETE_CLASSROOM_BUTTON_CLASS,
+  CLASSROOM_CARD_SPACES_CLASS,
+  CLASSROOM_CARD_STUDENTS_CLASS,
+  CLASSROOM_CARD_NAME_CLASS,
 } from '../../config/selectors';
 
 const styles = theme => ({
@@ -44,6 +47,7 @@ class ClassroomCard extends Component {
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
     }).isRequired,
+    userId: PropTypes.string.isRequired,
   };
 
   viewLink = () => {
@@ -56,10 +60,11 @@ class ClassroomCard extends Component {
 
   deleteClassroom = () => {
     const {
-      classroom: { id },
+      classroom: { id, name },
+      userId,
       dispatchDeleteClassroom,
     } = this.props;
-    dispatchDeleteClassroom({ id });
+    dispatchDeleteClassroom({ id, name, userId });
   };
 
   renderDeleteButton = () => {
@@ -91,13 +96,21 @@ class ClassroomCard extends Component {
       >
         <CardActionArea onClick={this.viewLink}>
           <CardContent>
-            <Typography variant="h5" component="h2">
+            <Typography
+              variant="h5"
+              component="h2"
+              className={CLASSROOM_CARD_NAME_CLASS}
+            >
               {name}
             </Typography>
             <Typography>
-              {`${nbSpaces} ${t('space(s)')}`}
+              <span className={CLASSROOM_CARD_SPACES_CLASS}>
+                {`${nbSpaces} ${t('space(s)')}`}
+              </span>
               <span className={classes.bullet}>•</span>
-              {`${nbUsers} ${t('student(s)')}`}
+              <span className={CLASSROOM_CARD_STUDENTS_CLASS}>
+                {`${nbUsers} ${t('student(s)')}`}
+              </span>
             </Typography>
           </CardContent>
         </CardActionArea>
@@ -110,11 +123,18 @@ class ClassroomCard extends Component {
   }
 }
 
+const mapStateToProps = ({ authentication }) => ({
+  userId: authentication.getIn(['user', 'id']),
+});
+
 const mapDispatchToProps = {
   dispatchDeleteClassroom: deleteClassroom,
 };
 
-const ConnectedComponent = connect(null, mapDispatchToProps)(ClassroomCard);
+const ConnectedComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ClassroomCard);
 const StyledComponent = withStyles(styles, { withTheme: true })(
   ConnectedComponent
 );

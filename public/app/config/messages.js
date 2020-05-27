@@ -83,6 +83,20 @@ const SUCCESS_EDITING_CLASSROOM_MESSAGE =
 const ERROR_GETTING_CLASSROOM_MESSAGE =
   'There was an error getting the classroom';
 const ERROR_ACCESS_DENIED_CLASSROOM_MESSAGE = `This user does not have access to this classroom`;
+const ERROR_DUPLICATE_USERNAME_IN_CLASSROOM_MESSAGE =
+  'This username already exists in this classroom';
+const ERROR_ADDING_USER_IN_CLASSROOM_MESSAGE =
+  'There was an error adding a new user in this classroom';
+const ERROR_DELETING_USER_IN_CLASSROOM_MESSAGE =
+  'There was an error deleting a user in this classroom';
+const ERROR_EDITING_USER_IN_CLASSROOM_MESSAGE =
+  'There was an error editing a user in this classroom';
+const SUCCESS_EDITING_USER_IN_CLASSROOM_MESSAGE =
+  'The user was successfully edited';
+const SUCCESS_DELETING_USERS_IN_CLASSROOM_MESSAGE =
+  'The user was successfully deleted';
+const ERROR_INVALID_USERNAME_MESSAGE = 'This username is invalid';
+const ERROR_NO_USER_TO_DELETE_MESSAGE = 'There is no user to delete';
 
 module.exports = {
   ERROR_GETTING_DEVELOPER_MODE,
@@ -142,4 +156,12 @@ module.exports = {
   SUCCESS_EDITING_CLASSROOM_MESSAGE,
   ERROR_GETTING_CLASSROOM_MESSAGE,
   ERROR_ACCESS_DENIED_CLASSROOM_MESSAGE,
+  ERROR_DUPLICATE_USERNAME_IN_CLASSROOM_MESSAGE,
+  ERROR_ADDING_USER_IN_CLASSROOM_MESSAGE,
+  ERROR_DELETING_USER_IN_CLASSROOM_MESSAGE,
+  ERROR_EDITING_USER_IN_CLASSROOM_MESSAGE,
+  SUCCESS_DELETING_USERS_IN_CLASSROOM_MESSAGE,
+  SUCCESS_EDITING_USER_IN_CLASSROOM_MESSAGE,
+  ERROR_INVALID_USERNAME_MESSAGE,
+  ERROR_NO_USER_TO_DELETE_MESSAGE,
 };

@@ -1,5 +1,6 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
+import { Set } from 'immutable';
 import { withStyles } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import Typography from '@material-ui/core/Typography/Typography';

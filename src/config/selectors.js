@@ -96,3 +96,29 @@ export const EDIT_CLASSROOM_INPUT_ID = 'editClassroomInput';
 export const EDIT_CLASSROOM_VALIDATE_BUTTON_ID = 'editClassroomValidateButton';
 export const EDIT_CLASSROOM_CANCEL_BUTTON_ID = 'editClassroomCancelButton';
 export const DELETE_CLASSROOM_BUTTON_CLASS = 'deleteClassroomButton';
+export const EDIT_USER_IN_CLASSROOM_DIALOG_TITLE_ID =
+  'editUserInClassroomDialogTitle';
+export const ADD_USER_IN_CLASSROOM_DIALOG_TITLE_ID =
+  'addUserInClassroomDialogTitle';
+export const ADD_USER_IN_CLASSROOM_BUTTON_ID = 'addUserInClassroomButton';
+export const ADD_USER_IN_CLASSROOM_NAME_INPUT_ID =
+  'addUserInClassroomNameInput';
+export const ADD_USER_IN_CLASSROOM_VALIDATE_BUTTON_ID =
+  'addUserInClassroomValideButton';
+export const ADD_USER_IN_CLASSROOM_CANCEL_BUTTON_ID =
+  'addUserInClassroomCancelButton';
+export const EDIT_USER_IN_CLASSROOM_BUTTON_CLASS = 'editUserInClassroomButton';
+export const EDIT_USER_IN_CLASSROOM_USERNAME_INPUT_ID =
+  'editUserInClassroomUsernameInput';
+export const EDIT_USER_IN_CLASSROOM_VALIDATE_BUTTON_ID =
+  'editUserInClassroomValidateButton';
+export const CLASSROOM_TABLE_BODY_ID = 'classroomTableBody';
+export const DELETE_USER_IN_CLASSROOM_BUTTON_CLASS =
+  'deleteUserInClassroomButton';
+export const CLASSROOM_CARD_SPACES_CLASS = 'classroomCardSpaces';
+export const CLASSROOM_CARD_STUDENTS_CLASS = 'classroomCardStudents';
+export const CLASSROOM_SCREEN_BACK_BUTTON_ID = 'classroomScreenBackButton';
+export const CLASSROOM_CARD_NAME_CLASS = 'classroomCardName';
+export const SELECT_USER_IN_CLASSROOM_CLASS = 'selectUserInClassroom';
+export const DELETE_USERS_IN_CLASSROOM_BUTTON_ID =
+  'deleteUsersInClassroomButton';

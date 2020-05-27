@@ -26,7 +26,7 @@ const setUserMode = require('./setUserMode');
 const clearUserInput = require('./clearUserInput');
 const showClearUserInputPrompt = require('./showClearUserInputPrompt');
 const postAction = require('./postAction');
-const signIn = require('./signIn');
+const { signIn } = require('./signIn');
 const signOut = require('./signOut');
 const isAuthenticated = require('./isAuthenticated');
 const getAppInstanceResources = require('./getAppInstanceResources');
@@ -40,7 +40,11 @@ const getClassrooms = require('./getClassrooms');
 const deleteClassroom = require('./deleteClassroom');
 const editClassroom = require('./editClassroom');
 const showDeleteClassroomPrompt = require('./showDeleteClassroomPrompt');
+const showDeleteUsersInClassroomPrompt = require('./showDeleteUsersInClassroomPrompt');
 const getClassroom = require('./getClassroom');
+const addUserInClassroom = require('./addUserInClassroom');
+const deleteUsersInClassroom = require('./deleteUsersInClassroom');
+const editUserInClassroom = require('./editUserInClassroom');
 
 module.exports = {
   loadSpace,
@@ -85,4 +89,8 @@ module.exports = {
   getClassrooms,
   getClassroom,
   showDeleteClassroomPrompt,
+  addUserInClassroom,
+  deleteUsersInClassroom,
+  showDeleteUsersInClassroomPrompt,
+  editUserInClassroom,
 };

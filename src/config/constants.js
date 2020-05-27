@@ -90,3 +90,16 @@ export const FORM_CONTROL_MIN_WIDTH = 120;
 
 // this value exists in app/public/config/config.js as well
 export const MAX_RECENT_SPACES = 5;
+
+export const TABLE_ORDER = {
+  ASC: 'asc',
+  DESC: 'desc',
+};
+
+export const TABLE_HEAD_CELL_IDS = {
+  USERNAME: 'username',
+  OPERATIONS: 'operations',
+};
+
+export const ROWS_PER_PAGE_OPTIONS = [5, 10, 25];
+export const TABLE_ROW_HEIGHT = 43;

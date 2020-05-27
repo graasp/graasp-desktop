@@ -50,7 +50,7 @@
     "Time": "Ligne du temps",
     "Sign In": "Se connecter",
     "Sign Out": "Se déconnecter",
-    "Username": "Entre ton nom d'utilisateur",
+    "Enter your Username": "Entre ton nom d'utilisateur",
     "Sign in as Guest": "Se connecter en tant qu'invité",
     "Graasp logo": "Logo de Graasp",
     "Accept Synchronization": "Accepter la synchronisation",
@@ -95,6 +95,21 @@
     "add classroom": "ajouter une classe",
     "New Classroom": "Nouvelle Classe",
     "No Classroom Available": "Aucune Classe Disponible",
-    "Classrooms": "Classes"
+    "Classrooms": "Classes",
+    "Edit": "Modifier",
+    "Username": "Nom d'utilisateur",
+    "Import Data": "Importer des données",
+    "Add a student in this classroom.": "Ajouter un utilisateur dans cette classe.",
+    "Enter a name for a new student": "Enter un nom pour un nouvel étudiant",
+    "Student's name": "Nom d'utilisateur",
+    "sorted ascending": "trié par ordre croissant",
+    "sorted descending": "trié par ordre décroissant",
+    "Select all": "Tout sélectioner",
+    "Operations": "Opérations",
+    "Delete this user.": "Supprimer cet utilisateur.",
+    "Classroom not found": "Classe introuvable",
+    "selected": "sélectioné",
+    "Username is not valid.": "Le nom d'utilisateur n'est pas valide.",
+    "Rows per page": "Lignes par page"
   }
 }
