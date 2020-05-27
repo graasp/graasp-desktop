@@ -115,3 +115,7 @@ export const EDIT_USER_IN_CLASSROOM_VALIDATE_BUTTON_ID =
 export const CLASSROOM_TABLE_BODY_ID = 'classroomTableBody';
 export const DELETE_USER_IN_CLASSROOM_BUTTON_CLASS =
   'deleteUserInClassroomButton';
+export const CLASSROOM_CARD_SPACES_CLASS = 'classroomCardSpaces';
+export const CLASSROOM_CARD_STUDENTS_CLASS = 'classroomCardStudents';
+export const CLASSROOM_SCREEN_BACK_BUTTON_ID = 'classroomScreenBackButton';
+export const CLASSROOM_CARD_NAME_CLASS = 'classroomCardName';

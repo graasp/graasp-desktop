@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
+import { expect } from 'chai';
 import {
   mochaAsync,
   expectElementToNotExist,
@@ -29,6 +30,10 @@ import {
   EDIT_USER_IN_CLASSROOM_BUTTON_CLASS,
   CLASSROOM_TABLE_BODY_ID,
   DELETE_USER_IN_CLASSROOM_BUTTON_CLASS,
+  CLASSROOM_CARD_SPACES_CLASS,
+  CLASSROOM_CARD_STUDENTS_CLASS,
+  CLASSROOM_SCREEN_BACK_BUTTON_ID,
+  CLASSROOM_CARD_NAME_CLASS,
 } from '../src/config/selectors';
 import {
   DEFAULT_GLOBAL_TIMEOUT,
@@ -43,6 +48,11 @@ import { openDrawer, menuGoToSettings, menuGoToClassrooms } from './menu.test';
 import { userSignIn } from './userSignIn.test';
 import { USER_GRAASP } from './fixtures/users';
 
+const openClassroom = async (client, name) => {
+  await client.click(`.${CLASSROOM_CARD_CLASS}[data-name='${name}']`);
+  await client.pause(OPEN_CLASSROOM_PAUSE);
+};
+
 const addClassroom = async (client, name) => {
   await client.click(`#${ADD_CLASSROOM_BUTTON_ID}`);
   await client.pause(MODAL_OPEN_PAUSE);
@@ -54,15 +64,15 @@ const addClassroom = async (client, name) => {
   await client.pause(MODAL_CLOSE_PAUSE);
 };
 
-// newName is appended to name
-const editClassroom = async (client, name, changes) => {
+const editClassroom = async (client, name, newName) => {
   // search based on name since id is generated on the fly
   const classroomSelector = `.${CLASSROOM_CARD_CLASS}[data-name='${name}']`;
 
   await client.click(`${classroomSelector} .${EDIT_CLASSROOM_BUTTON_CLASS}`);
   await client.pause(MODAL_OPEN_PAUSE);
   const editInput = `#${EDIT_CLASSROOM_INPUT_ID}`;
-  await client.setValue(editInput, changes);
+  await clearInput(client, editInput);
+  await client.setValue(editInput, newName);
   await client.pause(INPUT_TYPE_PAUSE);
   await client.click(`#${EDIT_CLASSROOM_VALIDATE_BUTTON_ID}`);
   await client.pause(MODAL_CLOSE_PAUSE);
@@ -127,6 +137,34 @@ const hasStudentsTableLayout = async (client, usernames = []) => {
   }
 };
 
+const hasClassroomCardLayout = async (
+  client,
+  name,
+  nbSpace = 0,
+  nbStudent = 0
+) => {
+  const classroomSelector = `.${CLASSROOM_CARD_CLASS}[data-name='${name}']`;
+  await expectElementToExist(client, classroomSelector);
+
+  // check title
+  const title = await client.getText(
+    `${classroomSelector} .${CLASSROOM_CARD_NAME_CLASS}`
+  );
+  expect(title).to.equal(name);
+
+  // check space number
+  const spacesText = await client.getText(
+    `${classroomSelector} .${CLASSROOM_CARD_SPACES_CLASS}`
+  );
+  expect(spacesText).to.include(nbSpace);
+
+  // check student number
+  const studentsText = await client.getText(
+    `${classroomSelector} .${CLASSROOM_CARD_STUDENTS_CLASS}`
+  );
+  expect(studentsText).to.include(nbStudent);
+};
+
 describe('Classrooms Scenarios', function() {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
@@ -185,19 +223,12 @@ describe('Classrooms Scenarios', function() {
 
         // add classroom
         await addClassroom(client, name);
-        await expectElementToExist(
-          client,
-          `.${CLASSROOM_CARD_CLASS}[data-name='${name}']`
-        );
+        await hasClassroomCardLayout(client, name);
 
         // edit
-        const changes = ' graasp';
-        const newName = name + changes;
-        await editClassroom(client, name, changes);
-        await expectElementToExist(
-          client,
-          `.${CLASSROOM_CARD_CLASS}[data-name='${newName}']`
-        );
+        const newName = 'graasp';
+        await editClassroom(client, name, newName);
+        await hasClassroomCardLayout(client, newName);
 
         // delete
         await deleteClassroom(client, newName);
@@ -228,8 +259,7 @@ describe('Classrooms Scenarios', function() {
 
         // add classroom
         await addClassroom(client, name);
-        await client.click(`.${CLASSROOM_CARD_CLASS}[data-name='${name}']`);
-        await client.pause(OPEN_CLASSROOM_PAUSE);
+        await openClassroom(client, name);
 
         // add user
         const username = 'anna';
@@ -247,7 +277,18 @@ describe('Classrooms Scenarios', function() {
         await editUserInClassroom(client, username, changes);
         await hasStudentsTableLayout(client, [newName]);
 
-        // delete user
+        // check classroom layout
+        await client.click(`#${CLASSROOM_SCREEN_BACK_BUTTON_ID}`);
+        await hasClassroomCardLayout(client, name, 0, 2);
+
+        // check data is not shared between classrooms
+        // create new classroom
+        const classroomName = 'name';
+        await addClassroom(client, classroomName);
+        await hasClassroomCardLayout(client, classroomName, 0, 0);
+
+        // delete user in first classroom
+        await openClassroom(client, name);
         await deleteUserInClassroom(client, newName);
         await hasStudentsTableLayout(client, [username1]);
       })

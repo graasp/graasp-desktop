@@ -1,4 +1,5 @@
 const ObjectId = require('bson-objectid');
+const _ = require('lodash');
 const { ADD_CLASSROOM_CHANNEL } = require('../config/channels');
 const {
   ERROR_GENERAL,
@@ -40,7 +41,7 @@ const addClassroom = (mainWindow, db) => async (event, { name, userId }) => {
     const id = ObjectId().str;
     const now = new Date();
     const newClassroom = {
-      ...DEFAULT_CLASSROOM,
+      ..._.cloneDeep(DEFAULT_CLASSROOM),
       id,
       name,
       createdAt: now,

@@ -16,6 +16,7 @@ import StudentsTable from './StudentsTable';
 import AddUserInClassroomButton from './AddUserInClassroomButton';
 import { getClassroom } from '../../actions';
 import ImportDataButton from './ImportDataButton';
+import { CLASSROOM_SCREEN_BACK_BUTTON_ID } from '../../config/selectors';
 
 const styles = theme => ({
   ...Styles(theme),
@@ -69,6 +70,7 @@ class ClassroomScreen extends Component {
     } = this.props;
     return (
       <Button
+        id={CLASSROOM_SCREEN_BACK_BUTTON_ID}
         variant="contained"
         onClick={goBack}
         color="primary"
