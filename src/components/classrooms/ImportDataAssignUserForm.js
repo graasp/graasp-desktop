@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { toastr } from 'react-redux-toastr';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
@@ -13,6 +14,7 @@ import StudentForm from './StudentForm';
 import LoadSpaceSelectors from '../space/load/LoadSpaceSelectors';
 import { isSpaceDifferent as isSpaceDifferentFunc } from '../../utils/syncSpace';
 import { IMPORT_DATA_CLASSROOM_VALIDATE_BUTTON_ID } from '../../config/selectors';
+import { ERROR_MESSAGE_HEADER } from '../../config/messages';
 
 const styles = theme => ({
   ...Styles(theme),
@@ -109,11 +111,12 @@ class ImportDataAssignUserForm extends Component {
       const { space, actions, appInstanceResources } = this.state;
       const selection = [space, actions, appInstanceResources];
 
-      // disable submit if no username is specified and if nothing is checked
+      // disable submit if (no username is specified and there are resources/actions) and if nothing is checked
+      const importResourcesOrActions = actions || appInstanceResources;
       disabled =
         !selection.includes(true) ||
-        !usernameOption ||
-        !usernameOption.value.length;
+        (importResourcesOrActions &&
+          (!usernameOption || !usernameOption.value.length));
     }
 
     return (
@@ -137,24 +140,29 @@ class ImportDataAssignUserForm extends Component {
       classroom,
       dispatchLoadSpaceInClassroom,
     } = this.props;
-    const {
-      space,
-      appInstanceResources,
-      actions,
-      usernameOption: { value: username },
-    } = this.state;
+    const { space, appInstanceResources, actions, usernameOption } = this.state;
 
-    dispatchLoadSpaceInClassroom({
-      extractPath,
-      classroomId: classroom.get('id'),
-      elements: elements.toJS(),
-      username,
-      selection: {
-        space,
-        appInstanceResources,
-        actions,
-      },
-    });
+    let username = null;
+    if (usernameOption) {
+      ({ value: username } = usernameOption);
+    }
+
+    // username cannot be null if actions or resources are imported
+    if (!username && (appInstanceResources || actions)) {
+      toastr.error(ERROR_MESSAGE_HEADER, 'A user need to be specified');
+    } else {
+      dispatchLoadSpaceInClassroom({
+        extractPath,
+        classroomId: classroom.get('id'),
+        elements: elements.toJS(),
+        username,
+        selection: {
+          space,
+          appInstanceResources,
+          actions,
+        },
+      });
+    }
   };
 
   renderBackButton = () => {
