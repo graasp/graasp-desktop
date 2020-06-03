@@ -9,6 +9,8 @@ const deleteClassroomAndResources = (db, id) => {
     .write();
 
   // todo: remove containing spaces
+
+  // todo: remove folder
 };
 
 const deleteClassroom = (mainWindow, db) => async (event, { id }) => {

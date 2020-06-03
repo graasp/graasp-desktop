@@ -24,6 +24,7 @@ import Dashboard from './components/dashboard/Dashboard';
 import SignInScreen from './components/signin/SignInScreen';
 import Authorization from './components/Authorization';
 import Classrooms from './components/classrooms/Classrooms';
+import ImportDataScreen from './components/classrooms/ImportDataScreen';
 import {
   SETTINGS_PATH,
   SYNC_SPACE_PATH,
@@ -40,6 +41,7 @@ import {
   LOAD_SELECTION_SPACE_PATH,
   CLASSROOMS_PATH,
   buildClassroomPath,
+  buildImportDataInClassroomPath,
 } from './config/paths';
 import {
   getGeolocation,
@@ -232,6 +234,13 @@ export class App extends Component {
                     exact
                     path={CLASSROOMS_PATH}
                     component={Authorization([USER_MODES.TEACHER])(Classrooms)}
+                  />
+                  <Route
+                    exact
+                    path={buildImportDataInClassroomPath()}
+                    component={Authorization([USER_MODES.TEACHER])(
+                      ImportDataScreen
+                    )}
                   />
                   <Route
                     exact

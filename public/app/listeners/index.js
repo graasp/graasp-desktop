@@ -42,9 +42,11 @@ const editClassroom = require('./editClassroom');
 const showDeleteClassroomPrompt = require('./showDeleteClassroomPrompt');
 const showDeleteUsersInClassroomPrompt = require('./showDeleteUsersInClassroomPrompt');
 const getClassroom = require('./getClassroom');
-const addUserInClassroom = require('./addUserInClassroom');
+const { addUserInClassroom } = require('./addUserInClassroom');
 const deleteUsersInClassroom = require('./deleteUsersInClassroom');
 const editUserInClassroom = require('./editUserInClassroom');
+const getSpaceInClassroom = require('./getSpaceInClassroom');
+const loadSpaceInClassroom = require('./loadSpaceInClassroom');
 
 module.exports = {
   loadSpace,
@@ -93,4 +95,6 @@ module.exports = {
   deleteUsersInClassroom,
   showDeleteUsersInClassroomPrompt,
   editUserInClassroom,
+  getSpaceInClassroom,
+  loadSpaceInClassroom,
 };

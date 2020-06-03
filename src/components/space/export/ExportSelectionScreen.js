@@ -232,8 +232,7 @@ class ExportSelectionScreen extends Component {
             {this.renderSpaceName()}
           </Typography>
           <Typography variant="h5" align="left">
-            {t('Include')}
-            {':'}
+            {`${t('Include')}:`}
           </Typography>
 
           <br />

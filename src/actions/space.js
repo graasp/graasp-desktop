@@ -64,7 +64,7 @@ const flagGettingSpacesNearby = createFlag(FLAG_GETTING_SPACES_NEARBY);
 const flagClearingUserInput = createFlag(FLAG_CLEARING_USER_INPUT);
 /**
  * helper function to wrap a listener to the get space channel around a promise
- * @param online
+ * @param {Boolean} online
  * @returns {Promise<any>}
  */
 const waitForSpace = ({ online }) =>
@@ -90,16 +90,17 @@ const waitForSpace = ({ online }) =>
   });
 
 const createGetLocalSpace = async (
-  { id, user },
+  { id },
   type,
-  flagType
+  flagType,
+  showError = true
 ) => async dispatch => {
   const flagGettingSpace = createFlag(flagType);
   try {
     dispatch(flagGettingSpace(true));
 
     // tell electron to get space
-    window.ipcRenderer.send(GET_SPACE_CHANNEL, { id, user });
+    window.ipcRenderer.send(GET_SPACE_CHANNEL, { id });
 
     const space = await waitForSpace({ online: false });
 
@@ -108,7 +109,9 @@ const createGetLocalSpace = async (
       payload: space,
     });
   } catch (err) {
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_SPACE_MESSAGE);
+    if (showError) {
+      toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_SPACE_MESSAGE);
+    }
   } finally {
     dispatch(flagGettingSpace(false));
   }

@@ -13,6 +13,7 @@ const {
   USERS_COLLECTION,
 } = require('../db');
 const logger = require('../logger');
+const { createClassroomDirectory } = require('../utilities');
 
 const DEFAULT_CLASSROOM = {
   [SPACES_COLLECTION]: [],
@@ -39,6 +40,10 @@ const addClassroom = (mainWindow, db) => async (event, { name, userId }) => {
 
     // create new classroom
     const id = ObjectId().str;
+
+    // create directory where resources will be stored
+    createClassroomDirectory({ id });
+
     const now = new Date();
     const newClassroom = {
       ..._.cloneDeep(DEFAULT_CLASSROOM),

@@ -23,3 +23,7 @@ export const buildSpacePath = (id = ':id', saved = false) => {
 export const buildClassroomPath = (id = ':id') => {
   return `/classrooms/${id}`;
 };
+
+export const buildImportDataInClassroomPath = (id = ':id') => {
+  return `/classrooms/${id}/import`;
+};

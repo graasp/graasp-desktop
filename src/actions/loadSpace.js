@@ -6,6 +6,8 @@ import {
   CLEAR_LOAD_SPACE_SUCCEEDED,
   LOAD_SPACE_SUCCEEDED,
   EXTRACT_FILE_TO_LOAD_SPACE_SUCCEEDED,
+  FLAG_GETTING_SPACE_TO_LOAD_SPACE,
+  GET_SPACE_TO_LOAD_SPACE_SUCCEEDED,
 } from '../types';
 import {
   ERROR_ZIP_CORRUPTED,
@@ -30,12 +32,9 @@ import {
 } from '../config/messages';
 import { createFlag } from './common';
 import { setSpaceAsRecent } from './user';
+import { createGetLocalSpace } from './space';
 
 const flagLoadingSpace = createFlag(FLAG_LOADING_SPACE);
-const flagExtractingFileToLoadSpace = createFlag(
-  FLAG_EXTRACTING_FILE_TO_LOAD_SPACE
-);
-const flagClearingLoadSpace = createFlag(FLAG_CLEARING_LOAD_SPACE);
 
 export const loadSpace = payload => dispatch => {
   dispatch(flagLoadingSpace(true));
@@ -56,12 +55,26 @@ export const loadSpace = payload => dispatch => {
   });
 };
 
-export const extractFileToLoadSpace = ({ fileLocation }) => dispatch => {
-  dispatch(flagExtractingFileToLoadSpace(true));
+export const getSpaceToLoadSpace = payload =>
+  createGetLocalSpace(
+    payload,
+    GET_SPACE_TO_LOAD_SPACE_SUCCEEDED,
+    FLAG_GETTING_SPACE_TO_LOAD_SPACE,
+    false
+  );
+
+export const createExtractFile = (
+  { fileLocation, classroomId = null },
+  type,
+  flagType,
+  getSpace
+) => dispatch => {
+  const flagExtractingFile = createFlag(flagType);
+  dispatch(flagExtractingFile(true));
   window.ipcRenderer.send(EXTRACT_FILE_TO_LOAD_SPACE_CHANNEL, { fileLocation });
   window.ipcRenderer.once(
     EXTRACT_FILE_TO_LOAD_SPACE_CHANNEL,
-    (event, response) => {
+    async (event, response) => {
       switch (response) {
         case ERROR_ZIP_CORRUPTED:
           toastr.error(ERROR_MESSAGE_HEADER, ERROR_ZIP_CORRUPTED_MESSAGE);
@@ -79,17 +92,29 @@ export const extractFileToLoadSpace = ({ fileLocation }) => dispatch => {
           toastr.error(ERROR_MESSAGE_HEADER, ERROR_LOADING_MESSAGE);
           break;
         default:
+          // wait for saved space
+          await dispatch(getSpace({ classroomId, id: response.spaceId }));
+
           dispatch({
-            type: EXTRACT_FILE_TO_LOAD_SPACE_SUCCEEDED,
+            type,
             payload: response,
           });
       }
-      dispatch(flagExtractingFileToLoadSpace(false));
+      dispatch(flagExtractingFile(false));
     }
   );
 };
 
-export const clearLoadSpace = payload => dispatch => {
+export const extractFileToLoadSpace = payload =>
+  createExtractFile(
+    payload,
+    EXTRACT_FILE_TO_LOAD_SPACE_SUCCEEDED,
+    FLAG_EXTRACTING_FILE_TO_LOAD_SPACE,
+    getSpaceToLoadSpace
+  );
+
+export const createClearLoadSpace = (payload, type, flagType) => dispatch => {
+  const flagClearingLoadSpace = createFlag(flagType);
   dispatch(flagClearingLoadSpace(true));
   window.ipcRenderer.send(CLEAR_LOAD_SPACE_CHANNEL, payload);
   window.ipcRenderer.once(CLEAR_LOAD_SPACE_CHANNEL, (event, response) => {
@@ -99,9 +124,16 @@ export const clearLoadSpace = payload => dispatch => {
         break;
       default:
         dispatch({
-          type: CLEAR_LOAD_SPACE_SUCCEEDED,
+          type,
         });
     }
     dispatch(flagClearingLoadSpace(false));
   });
 };
+
+export const clearLoadSpace = payload =>
+  createClearLoadSpace(
+    payload,
+    CLEAR_LOAD_SPACE_SUCCEEDED,
+    FLAG_CLEARING_LOAD_SPACE
+  );
