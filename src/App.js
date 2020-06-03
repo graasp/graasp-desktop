@@ -41,7 +41,7 @@ import {
   LOAD_SELECTION_SPACE_PATH,
   CLASSROOMS_PATH,
   buildClassroomPath,
-  buildImportDataInClassroom,
+  buildImportDataInClassroomPath,
 } from './config/paths';
 import {
   getGeolocation,
@@ -61,7 +61,9 @@ import './App.css';
 import SavedSpaces from './components/SavedSpaces';
 import ClassroomScreen from './components/classrooms/ClassroomScreen';
 
-const styles = () => ({});
+const styles = () => ({
+  toastrIcon: { marginBottom: '-20px', fontSize: '45px' },
+});
 
 export class App extends Component {
   state = { height: 0 };
@@ -235,7 +237,7 @@ export class App extends Component {
                   />
                   <Route
                     exact
-                    path={buildImportDataInClassroom()}
+                    path={buildImportDataInClassroomPath()}
                     component={Authorization([USER_MODES.TEACHER])(
                       ImportDataScreen
                     )}

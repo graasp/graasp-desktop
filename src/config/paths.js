@@ -24,6 +24,6 @@ export const buildClassroomPath = (id = ':id') => {
   return `/classrooms/${id}`;
 };
 
-export const buildImportDataInClassroom = (id = ':id') => {
+export const buildImportDataInClassroomPath = (id = ':id') => {
   return `/classrooms/${id}/import`;
 };

@@ -167,7 +167,7 @@ class ImportDataScreen extends Component {
             color="inherit"
             className={classes.title}
           >
-            {`${t('Import Data in')} ${classroom.get('name')}`}
+            {`${t('Import Data to')} ${classroom.get('name')}`}
           </Typography>
 
           <FormControl className={classes.form}>
@@ -186,7 +186,7 @@ class ImportDataScreen extends Component {
                   onChange={this.handleFileLocation}
                   className={classes.input}
                   inputProps={{
-                    'aria-label': 'Description',
+                    'aria-label': t('Description'),
                   }}
                   autoFocus
                   value={fileLocation}

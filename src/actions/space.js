@@ -64,7 +64,7 @@ const flagGettingSpacesNearby = createFlag(FLAG_GETTING_SPACES_NEARBY);
 const flagClearingUserInput = createFlag(FLAG_CLEARING_USER_INPUT);
 /**
  * helper function to wrap a listener to the get space channel around a promise
- * @param online
+ * @param {Boolean} online
  * @returns {Promise<any>}
  */
 const waitForSpace = ({ online }) =>

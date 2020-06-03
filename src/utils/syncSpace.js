@@ -33,10 +33,11 @@ export const isSpaceUpToDate = (localSpace, remoteSpace) => {
   return _.isEqual(filteredLocalSpace, filteredRemoteSpace);
 };
 
-// return whether the localSpace is different from the remoteSpace
-// handle immutable spaces
-// @param localSpace : saved space in local database, immutable Map
-// @param remoteSpace: space to load, immutable Map
+/** return whether the localSpace is different from the remoteSpace
+ * handle immutable spaces
+ * @param {immutable Map} localSpace : saved space in local database,
+ * @param {immutable Map} remoteSpace: space to load
+ */
 export const isSpaceDifferent = (localSpace, remoteSpace) => {
   // space is different if remoteSpace is not empty and the localSpace does not exist locally or
   // there is a difference between localSpace and remoteSpace
@@ -47,10 +48,12 @@ export const isSpaceDifferent = (localSpace, remoteSpace) => {
   );
 };
 
-// change object creator
-// @param status : type of change
-// @param localIdx: index position in the local space, interesting for move change
-// @param remoteIdx: index position in the remote space, interesting for move change
+/** change object creator
+ * @param {String} status : type of change
+ * @param {Number} localIdx: index position in the local space, interesting for move change
+ * @param {Number} remoteIdx: index position in the remote space, interesting for move change
+ */
+
 export const createChangeObj = (
   id,
   status,

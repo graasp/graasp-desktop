@@ -4,7 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
-import { buildImportDataInClassroom } from '../../config/paths';
+import { buildImportDataInClassroomPath } from '../../config/paths';
 
 const styles = () => ({
   center: {
@@ -36,7 +36,7 @@ class ImportDataButton extends Component {
       },
       history: { push },
     } = this.props;
-    push(buildImportDataInClassroom(id));
+    push(buildImportDataInClassroomPath(id));
   };
 
   render() {
