@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import { withRouter } from 'react-router';
+import { toastr } from 'react-redux-toastr';
 import Typography from '@material-ui/core/Typography/Typography';
 import { Map } from 'immutable';
 import Input from '@material-ui/core/Input';
@@ -16,6 +17,10 @@ import Styles from '../../Styles';
 import Loader from '../common/Loader';
 import Main from '../common/Main';
 import {
+  ERROR_MESSAGE_HEADER,
+  ERROR_GETTING_CLASSROOM_MESSAGE,
+} from '../../config/messages';
+import {
   getClassroom,
   extractFileToLoadSpaceInClassroom,
   clearLoadSpaceInClassroom,
@@ -23,7 +28,7 @@ import {
 } from '../../actions';
 import ImportDataAssignUserForm from './ImportDataAssignUserForm';
 import { showBrowsePrompt } from '../../utils/browse';
-import { buildClassroomPath } from '../../config/paths';
+import { buildClassroomPath, CLASSROOMS_PATH } from '../../config/paths';
 
 const styles = theme => ({
   ...Styles(theme),
@@ -50,7 +55,7 @@ const styles = theme => ({
 });
 
 class ImportDataScreen extends Component {
-  propTypes = {
+  static propTypes = {
     match: PropTypes.shape({
       params: PropTypes.shape({
         id: PropTypes.string.isRequired,
@@ -61,24 +66,17 @@ class ImportDataScreen extends Component {
     activity: PropTypes.bool.isRequired,
     classes: PropTypes.shape({
       root: PropTypes.string.isRequired,
-      screen: PropTypes.string.isRequired,
       button: PropTypes.string.isRequired,
       buttons: PropTypes.string.isRequired,
       wrapper: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       form: PropTypes.string.isRequired,
       center: PropTypes.string.isRequired,
-      submit: PropTypes.string.isRequired,
       input: PropTypes.string.isRequired,
     }).isRequired,
     t: PropTypes.func.isRequired,
     history: PropTypes.shape({
       replace: PropTypes.func.isRequired,
-    }).isRequired,
-    location: PropTypes.shape({
-      state: PropTypes.shape({
-        isSpaceDifferent: PropTypes.bool.isRequired,
-      }).isRequired,
     }).isRequired,
     extractPath: PropTypes.string,
     dispatchClearLoadSpaceInClassroom: PropTypes.func.isRequired,
@@ -102,8 +100,16 @@ class ImportDataScreen extends Component {
         params: { id },
       },
       userId,
+      history: { replace },
     } = this.props;
-    dispatchGetClassroom({ id, userId });
+
+    // if id is not defined, return to classrooms
+    if (!id) {
+      toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_CLASSROOM_MESSAGE);
+      replace(CLASSROOMS_PATH);
+    } else {
+      dispatchGetClassroom({ id, userId });
+    }
   }
 
   componentWillUnmount() {

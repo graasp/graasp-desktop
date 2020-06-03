@@ -23,7 +23,7 @@ const styles = theme => ({
 });
 
 class ImportDataAssignUserForm extends Component {
-  propTypes = {
+  static propTypes = {
     classroom: PropTypes.instanceOf(Map),
     t: PropTypes.func.isRequired,
     history: PropTypes.shape({

@@ -22,7 +22,7 @@ const styles = theme => ({
 });
 
 class StudentForm extends Component {
-  propTypes = {
+  static propTypes = {
     match: PropTypes.shape({
       params: PropTypes.shape({
         id: PropTypes.string.isRequired,
@@ -38,9 +38,11 @@ class StudentForm extends Component {
       goBack: PropTypes.func.isRequired,
     }).isRequired,
     setUsername: PropTypes.func.isRequired,
-    users: PropTypes.arrayOf({
-      username: PropTypes.string.isRequired,
-    }).isRequired,
+    users: PropTypes.arrayOf(
+      PropTypes.shape({
+        username: PropTypes.string.isRequired,
+      })
+    ).isRequired,
   };
 
   handleValidate = () => {

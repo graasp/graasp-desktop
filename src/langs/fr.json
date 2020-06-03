@@ -110,6 +110,11 @@
     "Classroom not found": "Classe introuvable",
     "selected": "sélectioné",
     "Username is not valid.": "Le nom d'utilisateur n'est pas valide.",
-    "Rows per page": "Lignes par page"
+    "Rows per page": "Lignes par page",
+    "Import Data to": "Import des données dans",
+    "Description": "Description",
+    "Submit": "Envoyer",
+    "Assign data to student": "Assigner les données à l'étudiant",
+    "Create new student...": "Créer un nouvel étudiant..."
   }
 }

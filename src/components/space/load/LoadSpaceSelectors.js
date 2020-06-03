@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Map } from 'immutable';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { withRouter } from 'react-router';
@@ -32,11 +33,6 @@ class LoadSpaceSelectors extends Component {
     isSpaceChecked: PropTypes.bool,
     isResourcesChecked: PropTypes.bool,
     t: PropTypes.func.isRequired,
-    location: PropTypes.shape({
-      state: PropTypes.shape({
-        isSpaceDifferent: PropTypes.bool.isRequired,
-      }).isRequired,
-    }).isRequired,
     isSpaceDifferent: PropTypes.bool.isRequired,
     isSpaceDisabled: PropTypes.bool.isRequired,
   };
@@ -119,7 +115,7 @@ class LoadSpaceSelectors extends Component {
       >
         <Grid item xs={7}>
           {this.renderCheckbox(
-            t('space'),
+            'space',
             t('This Space'),
             isSpaceChecked,
             isSpaceDisabled,
@@ -130,7 +126,7 @@ class LoadSpaceSelectors extends Component {
         <Grid item xs={1} />
         <Grid item xs={7}>
           {this.renderCheckbox(
-            t('appInstanceResources'),
+            'appInstanceResources',
             t(`This Space's Resources`),
             isResourcesChecked,
             elements.get('appInstanceResources').isEmpty(),
@@ -149,7 +145,7 @@ class LoadSpaceSelectors extends Component {
         </Grid>
         <Grid item xs={7}>
           {this.renderCheckbox(
-            t('actions'),
+            'actions',
             t(`This Space's Actions`),
             isActionsChecked,
             elements.get('actions').isEmpty(),

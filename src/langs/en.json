@@ -110,6 +110,11 @@
     "Classroom not found": "Classroom not found",
     "selected": "selected",
     "Username is not valid.": "Username is not valid.",
-    "Rows per page": "Rows per page"
+    "Rows per page": "Rows per page",
+    "Import Data to": "Import Data to",
+    "Description": "Description",
+    "Submit": "Submit",
+    "Assign data to student": "Assign data to student",
+    "Create new student...": "Create new student..."
   }
 }
