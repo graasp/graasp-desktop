@@ -1,6 +1,12 @@
 export const isClassroomNameValid = name => {
   // todo: check for special characters
-  return name.trim().length;
+
+  // check name is a string
+  if (typeof name !== 'string' && !(name instanceof String)) {
+    return false;
+  }
+
+  return Boolean(name.trim().length);
 };
 
 export const getUserResourcesForSpaceInClassroom = (
