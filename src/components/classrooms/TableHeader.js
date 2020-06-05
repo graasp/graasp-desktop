@@ -8,6 +8,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import PropTypes from 'prop-types';
 import { TABLE_ORDER } from '../../config/constants';
+import { buildTableCellSpaceId } from '../../config/selectors';
 
 const styles = () => ({
   visuallyHidden: {
@@ -74,19 +75,20 @@ class TableHeader extends Component {
               inputProps={{ 'aria-label': t('Select all') }}
             />
           </TableCell>
-          {headCells.map(headCell => (
+          {headCells.map(({ id, numeric, label }) => (
             <TableCell
-              key={headCell.id}
-              align={headCell.numeric ? 'right' : 'left'}
-              sortDirection={orderBy === headCell.id ? order : false}
+              id={buildTableCellSpaceId(id)}
+              key={id}
+              align={numeric ? 'right' : 'left'}
+              sortDirection={orderBy === id ? order : false}
             >
               <TableSortLabel
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : TABLE_ORDER.ASC}
-                onClick={createSortHandler(headCell.id)}
+                active={orderBy === id}
+                direction={orderBy === id ? order : TABLE_ORDER.ASC}
+                onClick={createSortHandler(id)}
               >
-                {headCell.label}
-                {orderBy === headCell.id ? (
+                {label}
+                {orderBy === id ? (
                   <span className={classes.visuallyHidden}>
                     {order === TABLE_ORDER.DESC
                       ? t('sorted descending')

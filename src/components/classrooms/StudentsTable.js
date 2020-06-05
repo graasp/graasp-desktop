@@ -11,6 +11,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import DeleteIcon from '@material-ui/icons/Delete';
+import ResourceIcon from '@material-ui/icons/AssignmentInd';
+import ActionIcon from '@material-ui/icons/Assessment';
 import IconButton from '@material-ui/core/IconButton/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Paper from '@material-ui/core/Paper';
@@ -30,7 +32,13 @@ import {
   CLASSROOM_TABLE_BODY_ID,
   DELETE_USER_IN_CLASSROOM_BUTTON_CLASS,
   SELECT_USER_IN_CLASSROOM_CLASS,
+  STUDENT_ROW_ACTIONS_CLASS,
+  STUDENT_ROW_RESOURCES_CLASS,
 } from '../../config/selectors';
+import {
+  getUserResourcesForSpaceInClassroom,
+  getUserActionsForSpaceInClassroom,
+} from '../../utils/classroom';
 
 const styles = theme => ({
   root: {
@@ -74,11 +82,41 @@ const createHeadCell = (id, label, numeric = false) => ({
   label,
 });
 
-const createStudentRow = ({ id, username }) => {
-  return {
-    id,
-    [TABLE_HEAD_CELL_IDS.USERNAME]: username,
-  };
+const createRows = classroom => {
+  return classroom.get('users').map(({ id: userId, username }) => {
+    // create map for a given user of its data for each space
+    const spaceData = classroom.get('spaces').reduce((data, { id }) => {
+      const resources = getUserResourcesForSpaceInClassroom(
+        classroom,
+        id,
+        userId
+      );
+      const actions = getUserActionsForSpaceInClassroom(classroom, id, userId);
+      return { ...data, [id]: { actions, resources } };
+    }, {});
+
+    return {
+      id: userId,
+      [TABLE_HEAD_CELL_IDS.USERNAME]: username,
+      ...spaceData,
+    };
+  });
+};
+
+const buildHeadCells = (classroom, t) => {
+  // create header cell for each space
+  const spaceCells = classroom
+    .get('spaces')
+    // sort per name
+    .sort(({ name: a }, { name: b }) => a - b)
+    // create cell
+    .map(({ id, name }) => createHeadCell(id, name));
+
+  return [
+    createHeadCell(TABLE_HEAD_CELL_IDS.USERNAME, t('Username')),
+    ...spaceCells,
+    createHeadCell(TABLE_HEAD_CELL_IDS.OPERATIONS, t('Operations')),
+  ];
 };
 
 // inspired from material table
@@ -96,10 +134,16 @@ class StudentsTable extends Component {
   };
 
   state = (() => {
-    const { classroom } = this.props;
-    const rows = classroom.get('users').map(createStudentRow);
+    const { t, classroom } = this.props;
+
+    // create head cells from spaces
+    const headCells = buildHeadCells(classroom, t);
+
+    // create table rows
+    const rows = createRows(classroom);
 
     return {
+      headCells,
       order: TABLE_ORDER.ASC,
       orderBy: TABLE_HEAD_CELL_IDS.USERNAME,
       selected: [],
@@ -109,14 +153,20 @@ class StudentsTable extends Component {
     };
   })();
 
-  buildHeadCells = () => {
-    const { t } = this.props;
-    return [
-      createHeadCell(TABLE_HEAD_CELL_IDS.USERNAME, t('Username')),
-      createHeadCell(TABLE_HEAD_CELL_IDS.OPERATIONS, t('Operations')),
-      // todo : add header cell per space
-    ];
-  };
+  componentDidUpdate({ classroom: prevClassroom }) {
+    const { classroom, t } = this.props;
+
+    if (!classroom.equals(prevClassroom)) {
+      // update head cells
+      const headCells = buildHeadCells(t);
+
+      // update rows
+      const rows = createRows(classroom);
+
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ rows, headCells });
+    }
+  }
 
   handleRequestSort = (event, property) => {
     const { orderBy, order } = this.state;
@@ -202,10 +252,7 @@ class StudentsTable extends Component {
     return (
       <TableCell>
         {this.renderDeleteUserButton(row)}
-        <EditUserInClassroomButton
-          classroomId={classroom.get('id')}
-          user={row}
-        />
+        <EditUserInClassroomButton classroom={classroom} user={row} />
       </TableCell>
     );
   };
@@ -215,12 +262,55 @@ class StudentsTable extends Component {
     return selected.findIndex(thisRow => _.isEqual(row, thisRow));
   };
 
+  renderRow = (row, isItemSelected) => {
+    const { headCells } = this.state;
+
+    const handleOnClick = event => {
+      this.handleClick(event, row);
+    };
+
+    return (
+      <>
+        <TableCell padding="checkbox">
+          <Checkbox
+            className={SELECT_USER_IN_CLASSROOM_CLASS}
+            checked={isItemSelected}
+            color="primary"
+            onClick={handleOnClick}
+          />
+        </TableCell>
+        <TableCell>{row[TABLE_HEAD_CELL_IDS.USERNAME]}</TableCell>
+        {headCells
+          // remove first element and last element: username and operations
+          .slice(1, headCells.length - 1)
+          // display all other data depending on headcells
+          .map(({ id }) => (
+            <TableCell key={id} data-head-cell-id={id}>
+              {row[id].actions.length > 0 && (
+                <ActionIcon className={STUDENT_ROW_ACTIONS_CLASS} />
+              )}
+              {row[id].resources.length > 0 && (
+                <ResourceIcon className={STUDENT_ROW_RESOURCES_CLASS} />
+              )}
+            </TableCell>
+          ))}
+        {this.renderUserOperations(row)}
+      </>
+    );
+  };
+
   render() {
-    const { selected, page, rowsPerPage, order, orderBy, rows } = this.state;
+    const {
+      selected,
+      page,
+      rowsPerPage,
+      order,
+      orderBy,
+      rows,
+      headCells,
+    } = this.state;
 
     const { classes, classroom, t } = this.props;
-
-    const headCells = this.buildHeadCells();
 
     // compute indexes to display rows for a given current page
     const startingIndex = page * rowsPerPage;
@@ -253,39 +343,17 @@ class StudentsTable extends Component {
                     const isItemSelected =
                       this.findRowSelectedIndex(row) !== -1;
 
-                    const handleOnClick = event => {
-                      this.handleClick(event, row);
-                    };
-
                     return (
                       <TableRow
                         data-name={username}
                         hover
-                        onClick={handleOnClick}
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
                         key={row.id}
                         selected={isItemSelected}
                       >
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            checked={isItemSelected}
-                            color="primary"
-                            className={SELECT_USER_IN_CLASSROOM_CLASS}
-                          />
-                        </TableCell>
-                        <TableCell>{username}</TableCell>
-                        {headCells
-                          // remove first element and last element: username and operations
-                          .slice(1, headCells.length - 1)
-                          // display all other data depending on headcells
-                          .map(({ id }) => (
-                            <TableCell key={id} align="right">
-                              {row[id]}
-                            </TableCell>
-                          ))}
-                        {this.renderUserOperations(row)}
+                        {this.renderRow(row, isItemSelected)}
                       </TableRow>
                     );
                   })}

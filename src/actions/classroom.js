@@ -24,8 +24,8 @@ import {
 } from '../types';
 import {
   ERROR_GENERAL,
+  ERROR_ACCESS_DENIED_CLASSROOM,
   ERROR_DUPLICATE_CLASSROOM_NAME,
-  ERROR_LOADING_MESSAGE,
   ERROR_INVALID_USERNAME,
   ERROR_DUPLICATE_USERNAME_IN_CLASSROOM,
   ERROR_NO_USER_TO_DELETE,
@@ -67,6 +67,8 @@ import {
   ERROR_GETTING_SPACE_IN_CLASSROOM_MESSAGE,
   ERROR_INVALID_USERNAME_MESSAGE,
   SUCCESS_SPACE_LOADED_MESSAGE,
+  ERROR_LOADING_MESSAGE,
+  ERROR_ACCESS_DENIED_CLASSROOM_MESSAGE,
 } from '../config/messages';
 import { createFlag } from './common';
 import { createExtractFile, createClearLoadSpace } from './loadSpace';
@@ -88,10 +90,14 @@ export const getClassrooms = () => dispatch => {
   // create listener
   window.ipcRenderer.once(GET_CLASSROOMS_CHANNEL, (event, classrooms) => {
     // dispatch that the getter has succeeded
-    dispatch({
-      type: GET_CLASSROOMS_SUCCEEDED,
-      payload: classrooms,
-    });
+    if (classrooms === ERROR_ACCESS_DENIED_CLASSROOM) {
+      toastr.error(ERROR_MESSAGE_HEADER, ERROR_ACCESS_DENIED_CLASSROOM_MESSAGE);
+    } else {
+      dispatch({
+        type: GET_CLASSROOMS_SUCCEEDED,
+        payload: classrooms,
+      });
+    }
     dispatch(flagGettingClassrooms(false));
   });
 };
@@ -110,6 +116,12 @@ export const getClassroom = async payload => async dispatch => {
       }
 
       switch (response) {
+        case ERROR_ACCESS_DENIED_CLASSROOM:
+          toastr.error(
+            ERROR_MESSAGE_HEADER,
+            ERROR_ACCESS_DENIED_CLASSROOM_MESSAGE
+          );
+          break;
         case ERROR_GENERAL:
           toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_CLASSROOM_MESSAGE);
           break;
@@ -206,7 +218,8 @@ export const editClassroom = payload => dispatch => {
     if (response === ERROR_GENERAL) {
       toastr.error(ERROR_MESSAGE_HEADER, ERROR_EDITING_CLASSROOM_MESSAGE);
     } else {
-      // update saved classrooms in state
+      // update saved classrooms and current classroom in state
+      dispatch(getClassroom(payload));
       dispatch(getClassrooms());
 
       toastr.success(SUCCESS_MESSAGE_HEADER, SUCCESS_EDITING_CLASSROOM_MESSAGE);

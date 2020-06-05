@@ -200,6 +200,7 @@ const SampleDatabase = {
       visibility: 'private',
       user: '5ce422795fe28eeca1001e0a',
       id: '5ce430152f6f6672b16fca57',
+      spaceId: '6ccb068bbb18b80359966632',
     },
   ],
   classrooms: [

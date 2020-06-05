@@ -2,18 +2,19 @@ import React, { Component } from 'react';
 import { Map } from 'immutable';
 import { withStyles } from '@material-ui/core';
 import clsx from 'clsx';
+import Typography from '@material-ui/core/Typography';
 import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { lighten } from '@material-ui/core/styles';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton/IconButton';
+import Toolbar from '@material-ui/core/Toolbar';
 import PropTypes from 'prop-types';
 import { deleteUsersInClassroom } from '../../actions';
 import { TABLE_HEAD_CELL_IDS } from '../../config/constants';
 import { DELETE_USERS_IN_CLASSROOM_BUTTON_ID } from '../../config/selectors';
+import EditClassroomButton from './EditClassroomButton';
 
 const styles = theme => ({
   root: {
@@ -102,6 +103,10 @@ class TableToolbar extends Component {
               <DeleteIcon />
             </IconButton>
           </Tooltip>
+        )}
+
+        {numSelected === 0 && (
+          <EditClassroomButton classroom={classroom.toJS()} />
         )}
       </Toolbar>
     );

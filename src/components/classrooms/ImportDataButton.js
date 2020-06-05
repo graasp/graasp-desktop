@@ -5,6 +5,7 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import { buildImportDataInClassroomPath } from '../../config/paths';
+import { IMPORT_DATA_IN_CLASSROOM_BUTTON_ID } from '../../config/selectors';
 
 const styles = () => ({
   center: {
@@ -43,6 +44,7 @@ class ImportDataButton extends Component {
     const { classes, t } = this.props;
     return (
       <Button
+        id={IMPORT_DATA_IN_CLASSROOM_BUTTON_ID}
         classes={{ root: classes.center }}
         variant="contained"
         color="primary"

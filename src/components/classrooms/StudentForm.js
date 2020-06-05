@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
+import clsx from 'clsx';
 import { withRouter } from 'react-router';
 import Typography from '@material-ui/core/Typography/Typography';
 import PropTypes from 'prop-types';
@@ -10,6 +11,10 @@ import Toolbar from '@material-ui/core/Toolbar';
 import CssBaseline from '@material-ui/core/CssBaseline/CssBaseline';
 import AppBar from '@material-ui/core/AppBar/AppBar';
 import Loader from '../common/Loader';
+import {
+  IMPORT_DATA_IN_CLASSROOM_STUDENT_SELECT_PREFIX_CLASS,
+  IMPORT_DATA_IN_CLASSROOM_STUDENT_SELECT_CONTAINER_CLASS,
+} from '../../config/selectors';
 
 const styles = theme => ({
   select: {
@@ -82,7 +87,11 @@ class StudentForm extends Component {
           {t('Assign data to student')}
         </Typography>
         <Creatable
-          className={classes.select}
+          className={clsx(
+            classes.select,
+            IMPORT_DATA_IN_CLASSROOM_STUDENT_SELECT_CONTAINER_CLASS
+          )}
+          classNamePrefix={IMPORT_DATA_IN_CLASSROOM_STUDENT_SELECT_PREFIX_CLASS}
           options={options}
           isClearable
           placeholder={t('Create new student...')}

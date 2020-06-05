@@ -16,10 +16,18 @@ import ClassroomGrid from './ClassroomGrid';
 import Styles from '../../Styles';
 import { CLASSROOMS_MAIN_ID } from '../../config/selectors';
 
+const styles = theme => ({
+  ...Styles(theme),
+  wrapper: {
+    padding: theme.spacing(3),
+  },
+});
+
 export class Classrooms extends Component {
   static propTypes = {
     classes: PropTypes.shape({
       root: PropTypes.string.isRequired,
+      wrapper: PropTypes.string.isRequired,
     }).isRequired,
     classrooms: PropTypes.instanceOf(Set),
     dispatchGetClassrooms: PropTypes.func.isRequired,
@@ -59,8 +67,9 @@ export class Classrooms extends Component {
 
     return (
       <Main id={CLASSROOMS_MAIN_ID}>
-        <ClassroomGrid classrooms={filteredClassrooms} />
-
+        <div className={classes.wrapper}>
+          <ClassroomGrid classrooms={filteredClassrooms} />
+        </div>
         <AddClassroomButton />
       </Main>
     );
@@ -82,7 +91,7 @@ const ConnectedComponent = connect(
   mapDispatchToProps
 )(Classrooms);
 
-const StyledComponent = withStyles(Styles, { withTheme: true })(
+const StyledComponent = withStyles(styles, { withTheme: true })(
   ConnectedComponent
 );
 

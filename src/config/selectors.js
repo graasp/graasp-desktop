@@ -86,7 +86,7 @@ export const SYNC_VISUAL_MAIN_ID = 'syncVisualMain';
 
 export const NO_CLASSROOM_AVAILABLE_ID = 'noClassroomAvailable';
 export const ADD_CLASSROOM_BUTTON_ID = 'addClassroomButton';
-export const ADD_CLASSROOM_NAME_INPUT_ID = 'addClassroomNameInput';
+export const CLASSROOM_NAME_INPUT_ID = 'classroomNameInput';
 export const ADD_CLASSROOM_VALIDATE_BUTTON_ID = 'addClassroomValidateButton';
 export const ADD_CLASSROOM_CANCEL_BUTTON_ID = 'addClassroomCancelButton';
 export const CLASSROOM_CARD_CLASS = 'classroomCard';
@@ -122,3 +122,23 @@ export const CLASSROOM_CARD_NAME_CLASS = 'classroomCardName';
 export const SELECT_USER_IN_CLASSROOM_CLASS = 'selectUserInClassroom';
 export const DELETE_USERS_IN_CLASSROOM_BUTTON_ID =
   'deleteUsersInClassroomButton';
+export const IMPORT_DATA_IN_CLASSROOM_BUTTON_ID = 'importDataInClassroomButton';
+export const IMPORT_FILEPATH_IN_CLASSROOM_INPUT_ID =
+  'importFilepathInClassroomInput';
+export const IMPORT_DATA_IN_CLASSROOM_SUBMIT_BUTTON_ID =
+  'importDataInClassroomSubmitButton';
+export const IMPORT_DATA_IN_CLASSROOM_STUDENT_SELECT_CONTAINER_CLASS =
+  'importDataInClassroomStudentSelectContainer';
+export const IMPORT_DATA_IN_CLASSROOM_STUDENT_SELECT_PREFIX_CLASS =
+  'importDataInClassroomStudentSelectPrefix';
+export const IMPORT_DATA_IN_CLASSROOM_BACK_BUTTON_ID =
+  'importDataInClassroomBackButton';
+export const IMPORT_DATA_CLASSROOM_VALIDATE_BUTTON_ID =
+  'importDataInClassroomValidateButton';
+export const STUDENT_ROW_RESOURCES_CLASS = 'studentRowResources';
+export const STUDENT_ROW_ACTIONS_CLASS = 'studentRowActions';
+export const EDIT_USER_IN_CLASSROOM_DELETE_DATA_BUTTON_CLASS =
+  'editUserInClassroomDeleteDataButton';
+export const EDIT_CLASSROOM_DELETE_DATA_BUTTON_CLASS =
+  'editClassroomDeleteDataButton';
+export const buildTableCellSpaceId = id => `tableCellSpace-${id}`;

@@ -38,13 +38,35 @@ const loadSpaceInClassroom = (mainWindow, db) => async (
   try {
     const classroom = db.get(CLASSROOMS_COLLECTION).find({ id: classroomId });
 
-    // add user if doesn't exist
-    let user = classroom
-      .get(USERS_COLLECTION)
-      .find({ username })
-      .value();
-    if (!user) {
-      user = addUserInClassroomDatabase(db, { username, id: classroomId });
+    // username should be defined if add resources or actions
+    if (isResourcesSelected || isActionsSelected) {
+      if (!username) {
+        logger.debug('username not specified');
+        return mainWindow.webContents.send(
+          LOAD_SPACE_IN_CLASSROOM_CHANNEL,
+          ERROR_GENERAL
+        );
+      }
+    }
+
+    // add user
+    let user = null;
+    if (username) {
+      user = classroom
+        .get(USERS_COLLECTION)
+        .find({ username })
+        .value();
+      if (!user) {
+        try {
+          user = addUserInClassroomDatabase(db, { username, id: classroomId });
+        } catch (err) {
+          logger.debug(err);
+          return mainWindow.webContents.send(
+            LOAD_SPACE_IN_CLASSROOM_CHANNEL,
+            err
+          );
+        }
+      }
     }
 
     // todo: check teacher can write in classroom
@@ -101,8 +123,6 @@ const loadSpaceInClassroom = (mainWindow, db) => async (
       clean(extractPath);
     }
 
-    const { id: userId } = user;
-
     // write resources to database if selected
     if (isResourcesSelected) {
       if (_.isEmpty(appInstanceResources)) {
@@ -113,6 +133,7 @@ const loadSpaceInClassroom = (mainWindow, db) => async (
         );
       }
 
+      const { id: userId } = user;
       const savedResources = classroom.get(APP_INSTANCE_RESOURCES_COLLECTION);
 
       // remove previous corresponding resources
@@ -138,6 +159,7 @@ const loadSpaceInClassroom = (mainWindow, db) => async (
         );
       }
 
+      const { id: userId } = user;
       const savedActions = classroom.get(ACTIONS_COLLECTION);
 
       // remove previous corresponding actions
