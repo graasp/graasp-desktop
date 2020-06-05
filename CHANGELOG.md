@@ -2,6 +2,48 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.15.5](https://github.com/graasp/graasp-desktop/compare/v0.15.4...v0.15.5) (2020-06-05)
+
+### Features
+
+- add ActionEditor to visualize actions json, update tests ([bada1b2](https://github.com/graasp/graasp-desktop/commit/bada1b2dde6c023e47ae812439812324f511bdcd)), closes [#226](https://github.com/graasp/graasp-desktop/issues/226)
+- add classrooms functionalities (get, add, edit, delete) ([6336467](https://github.com/graasp/graasp-desktop/commit/63364672f86ce266b2ce561227bf7545a7872075))
+- add dashboard vizualisation with recharts ([c25dead](https://github.com/graasp/graasp-desktop/commit/c25deade5b871b072313d1b6702d62fe91639344))
+- add favorite feature for spaces, add favorite spaces in menu ([c26b807](https://github.com/graasp/graasp-desktop/commit/c26b807745fae09272bc5206d8f5596615605f00)), closes [#223](https://github.com/graasp/graasp-desktop/issues/223)
+- add filter per space in dashboard ([cdb2e41](https://github.com/graasp/graasp-desktop/commit/cdb2e41045e6efbe64a5d49dc4fad76d4e58495c))
+- add geolocation in save action ([682b965](https://github.com/graasp/graasp-desktop/commit/682b9657ac98b13fd28777ab1bbaf939e16055d8))
+- add online and offline theme ([b5409e6](https://github.com/graasp/graasp-desktop/commit/b5409e60c54c5616debf0920de62af511f4c8043))
+- add recent spaces, home displays favorite and recent spaces ([d87b1fb](https://github.com/graasp/graasp-desktop/commit/d87b1fb3f5b30361e1e2feebebe659e3bd89d4d4))
+- add selection when exporting a space ([335a3a9](https://github.com/graasp/graasp-desktop/commit/335a3a92a4382974ac72629020d4f2376bf5dfea))
+- add selection when loading a space, multiple refactor ([97206b4](https://github.com/graasp/graasp-desktop/commit/97206b4d186bb680015eca476cb259e401d5e00e))
+- add space search bar in home and spaces nearby ([aa67b77](https://github.com/graasp/graasp-desktop/commit/aa67b77aaf0afbd9f78053dbc0cc11d49179f90d))
+- add spaces, actions, resources to table, add functionalities ([2affd69](https://github.com/graasp/graasp-desktop/commit/2affd695ef92a5d23567be6c9bb7da898be29585))
+- add student mode switch ([05652a2](https://github.com/graasp/graasp-desktop/commit/05652a2e3617968e0991ce7a8f63f4b4a0762137))
+- add syncAdvancedMode to display different sync screens ([934db99](https://github.com/graasp/graasp-desktop/commit/934db9998742f38c9f94dd18f2cb11365b4afc2e))
+- add toastr on connection status change ([9491058](https://github.com/graasp/graasp-desktop/commit/9491058de25397c0afbebc36e097a30c11262015))
+- add tooltips on export and load selection screens ([edbcbc4](https://github.com/graasp/graasp-desktop/commit/edbcbc49c1bd2b88c383fec5b13e405eeda19717))
+- add user authentication, actions linked to userId ([98e952e](https://github.com/graasp/graasp-desktop/commit/98e952e9fa7c06ceacf6f7d8470067284fcef48c))
+- add user functionalities in classroom (add, delete, edit) ([df64116](https://github.com/graasp/graasp-desktop/commit/df64116469054dcdadb4c914bedd2562e0708f72))
+- allow load data in classroom without user if load only space ([6fcef41](https://github.com/graasp/graasp-desktop/commit/6fcef41909d363ef1a1b556e439ec3a0c20869de))
+- delete multiple users from table toolbar ([fc4a626](https://github.com/graasp/graasp-desktop/commit/fc4a626e315a9a4d0d11caa47b212040c9c507c2))
+- display colorful space diff on synchronization ([e8655ae](https://github.com/graasp/graasp-desktop/commit/e8655ae7e501bdf9bd13a1f77afbe04e48c43327))
+- factor out appInstanceResources ([1d39da8](https://github.com/graasp/graasp-desktop/commit/1d39da85ea9ddb598c278c455c86f64ef72df036))
+- get space from classroom process ([9d5cc83](https://github.com/graasp/graasp-desktop/commit/9d5cc8375ecd8c7d3de1ac4280e84d3b47f89f1b))
+- hide dev mode, sync and deletion when student mode is enabled ([dbd1c06](https://github.com/graasp/graasp-desktop/commit/dbd1c06667ecfd17488443561989204eceac1179))
+- load user data in classroom ([30bfa7d](https://github.com/graasp/graasp-desktop/commit/30bfa7dc3c1f3347616b2429e131d016edb5e88c))
+- previsualize changes when sync space ([978e984](https://github.com/graasp/graasp-desktop/commit/978e9845e1bb7dc8f9c099031e430722f111e346))
+- restrict actions data in dashboard on studentMode ([10c1dcb](https://github.com/graasp/graasp-desktop/commit/10c1dcb855b70e477b83bcfd4096b7762349a29d)), closes [#259](https://github.com/graasp/graasp-desktop/issues/259)
+- retrieve post actions and save it in appInstance ([47b4fc0](https://github.com/graasp/graasp-desktop/commit/47b4fc0e4203dcbb54e7c4c4b016a048efbeb157))
+
+### Bug Fixes
+
+- add empty ending line in babelrc file ([b355fde](https://github.com/graasp/graasp-desktop/commit/b355fde6c52033d403600458ca56ec9b8084b7b4))
+- add missing trim to validate username ([1ce97fb](https://github.com/graasp/graasp-desktop/commit/1ce97fb24c42fd9984bc71468e1009fdb1816949))
+- classrooms do not share instances, tests ([46a6557](https://github.com/graasp/graasp-desktop/commit/46a65573e974e7d0b8024031f94a5ed331b17c34))
+- handle searching for undefined spaces ([98674fe](https://github.com/graasp/graasp-desktop/commit/98674fe294f710eed3df1011730d350ae5d529eb))
+- rename SPACE_NEARBY_SPACE_GRID_ID to SPACES_NEARBY_SPACE_GRID_ID ([e1aa8ae](https://github.com/graasp/graasp-desktop/commit/e1aa8ae7bc6823abfc357d974aa9506f856dc4fd))
+- user access to classroom after edit, refactor, add selectors ([f69843a](https://github.com/graasp/graasp-desktop/commit/f69843aed9bf4a82640eb9d3b686830b414fe05c))
+
 ### [0.15.4](https://github.com/graasp/graasp-desktop/compare/v0.15.3...v0.15.4) (2020-03-06)
 
 ### Features

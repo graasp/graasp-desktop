@@ -1,6 +1,6 @@
 {
   "name": "graasp-desktop",
-  "version": "0.15.4",
+  "version": "0.15.5",
   "description": "Desktop application for the Graasp ecosystem.",
   "private": true,
   "author": "React EPFL",
