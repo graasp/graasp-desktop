@@ -128,7 +128,7 @@ class EditClassroomButton extends Component {
       <>
         <Typography className={classes.dataTitle}>{t('Spaces')}</Typography>
 
-        {spaces.length > 0 ? (
+        {spaces.length ? (
           <Grid container direction="row" justify="center" alignItems="center">
             {spaces.map(({ id: spaceId, name: spaceName }) => {
               const isSelected = deleteSelection[spaceId];

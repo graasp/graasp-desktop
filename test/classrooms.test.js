@@ -202,7 +202,13 @@ const editUserInClassroom = async (
   await client.pause(MODAL_CLOSE_PAUSE);
 };
 
-// @param usernames: array of object {username, actions: {[spaceId]: boolean}, hasResources: {[spaceId]: boolean}}
+/**
+ * Check whether the students table displays the correct data
+ * @param {Object[]} usernames: list of users
+ * @param {string} usernames[].username: username of a user
+ * @param {Object<string, boolean>} usernames[].actions: map object describing whether the user has actions for a spaceId
+ * @param {Object<string, boolean>} usernames[].resources: map object describing whether the user has resources for a spaceId
+ */
 const hasStudentsTableLayout = async (client, spaces = [], usernames = []) => {
   // no user should have no table row
   if (!usernames.length) {

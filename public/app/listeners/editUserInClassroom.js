@@ -8,7 +8,9 @@ const {
 } = require('../db');
 const logger = require('../logger');
 
-// @param deleteSelection : map key-value with space id as key to whether the space data should be deleted
+/**
+ * @param {Object<string,boolean>} deleteSelection : object mapping space id to  whether the space data should be deleted
+ */
 const editUserInClassroom = (mainWindow, db) => async (
   event,
   { username, userId, classroomId, deleteSelection }
@@ -41,7 +43,7 @@ const editUserInClassroom = (mainWindow, db) => async (
 
     // update data
     const now = new Date();
-    user.assign({ username, lastUpdatedAt: now }).write();
+    user.assign({ username, updatedAt: now }).write();
 
     mainWindow.webContents.send(EDIT_USER_IN_CLASSROOM_CHANNEL);
   } catch (err) {

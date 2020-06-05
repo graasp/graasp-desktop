@@ -139,6 +139,7 @@ class ImportDataAssignUserForm extends Component {
       elements,
       classroom,
       dispatchLoadSpaceInClassroom,
+      t,
     } = this.props;
     const { space, appInstanceResources, actions, usernameOption } = this.state;
 
@@ -149,7 +150,7 @@ class ImportDataAssignUserForm extends Component {
 
     // username cannot be null if actions or resources are imported
     if (!username && (appInstanceResources || actions)) {
-      toastr.error(ERROR_MESSAGE_HEADER, 'A user need to be specified');
+      toastr.error(ERROR_MESSAGE_HEADER, t('A user needs to be specified'));
     } else {
       dispatchLoadSpaceInClassroom({
         extractPath,
