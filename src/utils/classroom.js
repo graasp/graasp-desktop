@@ -1,8 +1,10 @@
+import _ from 'lodash';
+
 export const isClassroomNameValid = name => {
   // todo: check for special characters
 
   // check name is a string
-  if (typeof name !== 'string' && !(name instanceof String)) {
+  if (!_.isString(name)) {
     return false;
   }
 
