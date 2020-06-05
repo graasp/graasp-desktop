@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import { Map } from 'immutable';
 import { toastr } from 'react-redux-toastr';
 import EditIcon from '@material-ui/icons/Create';
 import { withStyles } from '@material-ui/core';
@@ -244,7 +245,7 @@ class EditUserInClassroomButton extends Component {
               );
 
               return (
-                <Grid container data-space-id={spaceId}>
+                <Grid key={spaceId} container data-space-id={spaceId}>
                   <Grid
                     item
                     xs={10}

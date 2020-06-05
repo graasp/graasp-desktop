@@ -115,6 +115,13 @@
     "Description": "Description",
     "Submit": "Submit",
     "Assign data to student": "Assign data to student",
-    "Create new student...": "Create new student..."
+    "Create new student...": "Create new student...",
+    "Delete this space": "Delete this space",
+    "Spaces": "Spaces",
+    "This classroom is empty": "This classroom is empty",
+    "Actions and Resources": "Actions and Resources",
+    "Delete these data": "Delete these data",
+    "This user has no content": "This user has no content",
+    "Cancel delete": "Cancel delete"
   }
 }

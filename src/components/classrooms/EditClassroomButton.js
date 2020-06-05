@@ -54,7 +54,7 @@ class EditClassroomButton extends Component {
     classroom: PropTypes.shape({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      spaces: PropTypes.arrayOf({}).isRequired,
+      spaces: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     }).isRequired,
     t: PropTypes.func.isRequired,
     userId: PropTypes.string.isRequired,
@@ -155,7 +155,12 @@ class EditClassroomButton extends Component {
               );
 
               return (
-                <Grid container data-space-id={spaceId} alignItems="center">
+                <Grid
+                  key={spaceId}
+                  container
+                  data-space-id={spaceId}
+                  alignItems="center"
+                >
                   <Grid
                     item
                     xs={10}

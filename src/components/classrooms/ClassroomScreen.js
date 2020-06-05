@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import { withRouter } from 'react-router';
-import { Map, List } from 'immutable';
+import { Map, Set } from 'immutable';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -45,7 +45,7 @@ class ClassroomScreen extends Component {
       goBack: PropTypes.func.isRequired,
     }).isRequired,
     userId: PropTypes.string.isRequired,
-    classrooms: PropTypes.instanceOf(List).isRequired,
+    classrooms: PropTypes.instanceOf(Set).isRequired,
   };
 
   static defaultProps = {

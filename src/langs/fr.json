@@ -115,6 +115,13 @@
     "Description": "Description",
     "Submit": "Envoyer",
     "Assign data to student": "Assigner les données à l'étudiant",
-    "Create new student...": "Créer un nouvel étudiant..."
+    "Create new student...": "Créer un nouvel étudiant...",
+    "Delete this space": "Supprimer cet espace",
+    "Spaces": "Espaces",
+    "This classroom is empty": "Cette classe est vide",
+    "Actions and Resources": "Actions et Resources",
+    "Delete these data": "Supprimer ces données",
+    "This user has no content": "Cet utilisateur n'a pas de contenu",
+    "Cancel delete": "Annuler la suppression"
   }
 }
