@@ -136,7 +136,7 @@ class EditClassroomButton extends Component {
               const button = isSelected ? (
                 <Tooltip title={t(`Cancel delete`)}>
                   <IconButton
-                    color="inherit"
+                    color="primary"
                     onClick={e => this.changeDeleteSelection(e, spaceId, false)}
                   >
                     <CancelIcon />
@@ -146,7 +146,7 @@ class EditClassroomButton extends Component {
                 <Tooltip title={t(`Delete this space`)}>
                   <IconButton
                     className={EDIT_CLASSROOM_DELETE_DATA_BUTTON_CLASS}
-                    color="inherit"
+                    color="primary"
                     onClick={e => this.changeDeleteSelection(e, spaceId, true)}
                   >
                     <DeleteIcon />
@@ -156,9 +156,6 @@ class EditClassroomButton extends Component {
 
               return (
                 <Grid container data-space-id={spaceId} alignItems="center">
-                  <Grid item xs={2}>
-                    {button}
-                  </Grid>
                   <Grid
                     item
                     xs={10}
@@ -169,6 +166,9 @@ class EditClassroomButton extends Component {
                     }}
                   >
                     <Typography>{spaceName}</Typography>
+                  </Grid>
+                  <Grid item xs={2}>
+                    {button}
                   </Grid>
                 </Grid>
               );
