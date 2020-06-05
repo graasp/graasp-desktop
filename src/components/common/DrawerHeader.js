@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
+import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import { Online, Offline } from 'react-detect-offline';
 import Typography from '@material-ui/core/Typography/Typography';
@@ -43,14 +44,16 @@ const DrawerHeader = ({ classes, theme, handleDrawerClose, username }) => {
         </Offline>
       </ListItemIcon>
 
-      <Typography
-        variant="inherit"
-        color="inherit"
-        noWrap
-        classes={{ root: classes.username }}
-      >
-        {username}
-      </Typography>
+      <Tooltip title={username}>
+        <Typography
+          variant="inherit"
+          color="inherit"
+          noWrap
+          classes={{ root: classes.username }}
+        >
+          {username}
+        </Typography>
+      </Tooltip>
 
       <ListItemSecondaryAction classes={{ root: classes.secondaryAction }}>
         <IconButton onClick={handleDrawerClose}>
