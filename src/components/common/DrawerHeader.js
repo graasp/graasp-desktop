@@ -14,10 +14,11 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import { DRAWER_HEADER_HEIGHT } from '../../config/constants';
 
 const styles = () => ({
   drawerHeader: {
-    height: '55px',
+    height: DRAWER_HEADER_HEIGHT,
   },
   username: {
     fontWeight: 'bold',
