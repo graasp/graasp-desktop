@@ -7,10 +7,8 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import CssBaseline from '@material-ui/core/CssBaseline/CssBaseline';
 import AppBar from '@material-ui/core/AppBar/AppBar';
 import classNames from 'classnames';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Toolbar from '@material-ui/core/Toolbar/Toolbar';
-import IconButton from '@material-ui/core/IconButton/IconButton';
 import HomeIcon from '@material-ui/icons/Home';
 import Drawer from '@material-ui/core/Drawer/Drawer';
 import Divider from '@material-ui/core/Divider/Divider';
@@ -39,6 +37,7 @@ import {
   PHASE_MENU_LIST_ID,
   buildPhaseMenuItemId,
 } from '../../config/selectors';
+import DrawerHeader from '../common/DrawerHeader';
 
 class SpaceScreen extends Component {
   state = {
@@ -162,7 +161,7 @@ class SpaceScreen extends Component {
   };
 
   render() {
-    const { space, phase, activity, classes, theme } = this.props;
+    const { space, phase, activity, classes } = this.props;
     const { openDrawer, selected } = this.state;
 
     if (activity) {
@@ -201,16 +200,7 @@ class SpaceScreen extends Component {
             paper: classes.drawerPaper,
           }}
         >
-          <div className={classes.drawerHeader}>
-            <IconButton onClick={this.handleDrawerClose}>
-              {theme.direction === 'ltr' ? (
-                <ChevronLeftIcon />
-              ) : (
-                <ChevronRightIcon />
-              )}
-            </IconButton>
-          </div>
-          <Divider />
+          <DrawerHeader handleDrawerClose={this.handleDrawerClose} />
           <List id={PHASE_MENU_LIST_ID}>
             <MenuItem
               onClick={this.handleClearPhase}

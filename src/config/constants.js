@@ -103,3 +103,5 @@ export const TABLE_HEAD_CELL_IDS = {
 
 export const ROWS_PER_PAGE_OPTIONS = [5, 10, 25];
 export const TABLE_ROW_HEIGHT = 43;
+
+export const DRAWER_HEADER_HEIGHT = 55;
