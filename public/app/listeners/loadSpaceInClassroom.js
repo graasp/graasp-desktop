@@ -16,7 +16,6 @@ const {
   USERS_COLLECTION,
 } = require('../db');
 const { renameSpaceFolder } = require('./loadSpace');
-const { deleteSpaceAndResources } = require('./deleteSpace');
 const { addUserInClassroomDatabase } = require('./addUserInClassroom');
 
 const loadSpaceInClassroom = (mainWindow, db) => async (
@@ -111,7 +110,10 @@ const loadSpaceInClassroom = (mainWindow, db) => async (
       }
 
       // remove previous space
-      deleteSpaceAndResources(db, id, tmpPath);
+      classroom
+        .get(SPACES_COLLECTION)
+        .remove({ id })
+        .write();
 
       // add new space in database
       classroom
