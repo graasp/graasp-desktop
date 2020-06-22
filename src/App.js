@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import WifiIcon from '@material-ui/icons/Wifi';
 import WifiOffIcon from '@material-ui/icons/WifiOff';
+import { MuiThemeProvider } from '@material-ui/core/styles';
 import Home from './Home';
 import VisitSpace from './components/VisitSpace';
 import SpacesNearby from './components/SpacesNearby';
@@ -22,6 +23,7 @@ import SignInScreen from './components/signin/SignInScreen';
 import Authorization from './components/Authorization';
 import Classrooms from './components/classrooms/Classrooms';
 import ImportDataScreen from './components/classrooms/ImportDataScreen';
+import { OnlineTheme, OfflineTheme } from './themes';
 import {
   SETTINGS_PATH,
   SYNC_SPACE_PATH,
@@ -81,6 +83,7 @@ export class App extends Component {
       toastrIcon: PropTypes.string.isRequired,
     }).isRequired,
     connexionStatus: PropTypes.bool.isRequired,
+    userMode: PropTypes.oneOf(USER_MODES).isRequired,
   };
 
   static defaultProps = {
@@ -155,86 +158,93 @@ export class App extends Component {
 
   render() {
     const { height } = this.state;
+    const { userMode, connexionStatus } = this.props;
 
     return (
-      <Router>
-        <div className="app" style={{ height }}>
-          <Switch>
-            <Route exact path={SIGN_IN_PATH} component={SignInScreen} />
-            <Route exact path={HOME_PATH} component={Authorization()(Home)} />
-            <Route
-              exact
-              path={SAVED_SPACES_PATH}
-              component={Authorization()(SavedSpaces)}
-            />
-            <Route
-              exact
-              path={SPACES_NEARBY_PATH}
-              component={Authorization()(SpacesNearby)}
-            />
-            <Route
-              exact
-              path={VISIT_PATH}
-              component={Authorization()(VisitSpace)}
-            />
-            <Route
-              exact
-              path={LOAD_SPACE_PATH}
-              component={Authorization()(LoadSpace)}
-            />
-            <Route
-              exact
-              path={LOAD_SELECTION_SPACE_PATH}
-              component={Authorization()(LoadSelectionScreen)}
-            />
-            <Route
-              exact
-              path={SETTINGS_PATH}
-              component={Authorization()(Settings)}
-            />
-            <Route
-              exact
-              path={SYNC_SPACE_PATH}
-              component={Authorization()(SyncScreen)}
-            />
-            <Route
-              exact
-              path={buildExportSelectionPathForSpaceId()}
-              component={Authorization()(ExportSelectionScreen)}
-            />
-            <Route
-              exact
-              path={SPACE_PATH}
-              component={Authorization()(SpaceScreen)}
-            />
-            <Route
-              exact
-              path={DASHBOARD_PATH}
-              component={Authorization()(Dashboard)}
-            />
-            <Route
-              exact
-              path={buildClassroomPath()}
-              component={Authorization([USER_MODES.TEACHER])(ClassroomScreen)}
-            />
-            <Route
-              exact
-              path={CLASSROOMS_PATH}
-              component={Authorization([USER_MODES.TEACHER])(Classrooms)}
-            />
-            <Route
-              exact
-              path={buildImportDataInClassroomPath()}
-              component={Authorization([USER_MODES.TEACHER])(ImportDataScreen)}
-            />
-            <Route
-              exact
-              path={DEVELOPER_PATH}
-              component={Authorization()(DeveloperScreen)}
-            />
-          </Switch>
-        </div>
-      </Router>
+      <MuiThemeProvider
+        theme={connexionStatus ? OnlineTheme(userMode) : OfflineTheme}
+      >
+        <Router>
+          <div className="app" style={{ height }}>
+            <Switch>
+              <Route exact path={SIGN_IN_PATH} component={SignInScreen} />
+              <Route exact path={HOME_PATH} component={Authorization()(Home)} />
+              <Route
+                exact
+                path={SAVED_SPACES_PATH}
+                component={Authorization()(SavedSpaces)}
+              />
+              <Route
+                exact
+                path={SPACES_NEARBY_PATH}
+                component={Authorization()(SpacesNearby)}
+              />
+              <Route
+                exact
+                path={VISIT_PATH}
+                component={Authorization()(VisitSpace)}
+              />
+              <Route
+                exact
+                path={LOAD_SPACE_PATH}
+                component={Authorization()(LoadSpace)}
+              />
+              <Route
+                exact
+                path={LOAD_SELECTION_SPACE_PATH}
+                component={Authorization()(LoadSelectionScreen)}
+              />
+              <Route
+                exact
+                path={SETTINGS_PATH}
+                component={Authorization()(Settings)}
+              />
+              <Route
+                exact
+                path={SYNC_SPACE_PATH}
+                component={Authorization()(SyncScreen)}
+              />
+              <Route
+                exact
+                path={buildExportSelectionPathForSpaceId()}
+                component={Authorization()(ExportSelectionScreen)}
+              />
+              <Route
+                exact
+                path={SPACE_PATH}
+                component={Authorization()(SpaceScreen)}
+              />
+              <Route
+                exact
+                path={DASHBOARD_PATH}
+                component={Authorization()(Dashboard)}
+              />
+              <Route
+                exact
+                path={buildClassroomPath()}
+                component={Authorization([USER_MODES.TEACHER])(ClassroomScreen)}
+              />
+              <Route
+                exact
+                path={CLASSROOMS_PATH}
+                component={Authorization([USER_MODES.TEACHER])(Classrooms)}
+              />
+              <Route
+                exact
+                path={buildImportDataInClassroomPath()}
+                component={Authorization([USER_MODES.TEACHER])(
+                  ImportDataScreen
+                )}
+              />
+              <Route
+                exact
+                path={DEVELOPER_PATH}
+                component={Authorization()(DeveloperScreen)}
+              />
+            </Switch>
+          </div>
+        </Router>
+      </MuiThemeProvider>
     );
   }
 }
@@ -246,6 +256,7 @@ const mapStateToProps = ({ authentication }) => ({
     'settings',
     'geolocationEnabled',
   ]),
+  userMode: authentication.getIn(['user', 'settings', 'userMode']),
 });
 
 const mapDispatchToProps = {

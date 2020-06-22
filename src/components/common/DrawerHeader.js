@@ -4,17 +4,20 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
-import { Online, Offline } from 'react-detect-offline';
 import Typography from '@material-ui/core/Typography/Typography';
-import CloudIcon from '@material-ui/icons/Cloud';
-import CloudOffIcon from '@material-ui/icons/CloudOff';
+import PersonIcon from '@material-ui/icons/Person';
 import { withTranslation } from 'react-i18next';
 import ListItem from '@material-ui/core/ListItem';
+import TeacherIcon from '@material-ui/icons/School';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import { DRAWER_HEADER_HEIGHT } from '../../config/constants';
+import {
+  DRAWER_HEADER_HEIGHT,
+  USER_MODES,
+  THEME_COLORS,
+} from '../../config/constants';
 
 const styles = () => ({
   drawerHeader: {
@@ -27,9 +30,18 @@ const styles = () => ({
   secondaryAction: {
     right: '5px',
   },
+  teacherColor: {
+    color: THEME_COLORS[USER_MODES.TEACHER],
+  },
 });
 
-const DrawerHeader = ({ classes, theme, handleDrawerClose, username }) => {
+const DrawerHeader = ({
+  classes,
+  theme,
+  handleDrawerClose,
+  username,
+  isTeacher,
+}) => {
   return (
     <ListItem
       classes={{ root: classes.drawerHeader }}
@@ -37,12 +49,11 @@ const DrawerHeader = ({ classes, theme, handleDrawerClose, username }) => {
       ContainerComponent="div"
     >
       <ListItemIcon>
-        <Online>
-          <CloudIcon />
-        </Online>
-        <Offline>
-          <CloudOffIcon />
-        </Offline>
+        {isTeacher ? (
+          <TeacherIcon className={classes.teacherColor} />
+        ) : (
+          <PersonIcon />
+        )}
       </ListItemIcon>
 
       <Tooltip title={username}>
@@ -74,16 +85,21 @@ DrawerHeader.propTypes = {
     username: PropTypes.string.isRequired,
     secondaryAction: PropTypes.string.isRequired,
     drawerHeader: PropTypes.string.isRequired,
+    teacherColor: PropTypes.string.isRequired,
   }).isRequired,
   theme: PropTypes.shape({
     direction: PropTypes.string.isRequired,
   }).isRequired,
   handleDrawerClose: PropTypes.func.isRequired,
   username: PropTypes.string.isRequired,
+  isTeacher: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = ({ authentication }) => ({
   username: authentication.getIn(['user', 'username']),
+  isTeacher:
+    authentication.getIn(['user', 'settings', 'userMode']) ===
+    USER_MODES.TEACHER,
 });
 
 const ConnectedComponent = connect(mapStateToProps, null)(DrawerHeader);

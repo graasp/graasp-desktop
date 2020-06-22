@@ -14,6 +14,11 @@ export const USER_MODES = {
   TEACHER: 'teacher',
 };
 export const DEFAULT_USER_MODE = USER_MODES.TEACHER;
+export const THEME_COLORS = {
+  [DEFAULT_USER_MODE]: '#5050d2',
+  [USER_MODES.STUDENT]: '#5050d2',
+  [USER_MODES.TEACHER]: '#3A31AF',
+};
 export const SHORT_ID_LENGTH = 6;
 export const LONG_ID_LENGTH = 24;
 export const SMART_GATEWAY_HOST = 'gateway.golabz.eu';
