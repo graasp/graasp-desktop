@@ -15,7 +15,7 @@ import ExportButton from '../space/ExportButton';
 import SyncButton from '../space/SyncButton';
 import ClearButton from '../space/ClearButton';
 import Text from './Text';
-import { DEFAULT_USER_MODE } from '../../config/constants';
+import { USER_MODES } from '../../config/constants';
 
 const createMediaCardProps = (showActions, text) => {
   return {
@@ -27,7 +27,7 @@ const createMediaCardProps = (showActions, text) => {
     text,
     viewLink: jest.fn(),
     showActions,
-    userMode: DEFAULT_USER_MODE,
+    userMode: USER_MODES.TEACHER,
     classes: {
       card: '',
       cardDescription: '',
