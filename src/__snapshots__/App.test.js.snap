@@ -1,9 +1,217 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<App /> renders correctly 1`] = `
-<Detector
-  polling={true}
-  render={[Function]}
-  wrapperType="span"
-/>
+<HashRouter>
+  <div
+    className="app"
+    style={
+      Object {
+        "height": 768,
+      }
+    }
+  >
+    <Switch>
+      <Route
+        component={[Function]}
+        exact={true}
+        path="/signin"
+      />
+      <Route
+        component={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(ComposedComponent)",
+            "type": [Function],
+          }
+        }
+        exact={true}
+        path="/"
+      />
+      <Route
+        component={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(ComposedComponent)",
+            "type": [Function],
+          }
+        }
+        exact={true}
+        path="/saved-spaces"
+      />
+      <Route
+        component={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(ComposedComponent)",
+            "type": [Function],
+          }
+        }
+        exact={true}
+        path="/nearby"
+      />
+      <Route
+        component={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(ComposedComponent)",
+            "type": [Function],
+          }
+        }
+        exact={true}
+        path="/visit-space"
+      />
+      <Route
+        component={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(ComposedComponent)",
+            "type": [Function],
+          }
+        }
+        exact={true}
+        path="/load-space"
+      />
+      <Route
+        component={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(ComposedComponent)",
+            "type": [Function],
+          }
+        }
+        exact={true}
+        path="/load-space/selection"
+      />
+      <Route
+        component={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(ComposedComponent)",
+            "type": [Function],
+          }
+        }
+        exact={true}
+        path="/settings"
+      />
+      <Route
+        component={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(ComposedComponent)",
+            "type": [Function],
+          }
+        }
+        exact={true}
+        path="/space/sync/:id"
+      />
+      <Route
+        component={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(ComposedComponent)",
+            "type": [Function],
+          }
+        }
+        exact={true}
+        path="/space/export/:id/selection"
+      />
+      <Route
+        component={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(ComposedComponent)",
+            "type": [Function],
+          }
+        }
+        exact={true}
+        path="/space/:id"
+      />
+      <Route
+        component={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(ComposedComponent)",
+            "type": [Function],
+          }
+        }
+        exact={true}
+        path="/dashboard"
+      />
+      <Route
+        component={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(ComposedComponent)",
+            "type": [Function],
+          }
+        }
+        exact={true}
+        path="/classrooms/:id"
+      />
+      <Route
+        component={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(ComposedComponent)",
+            "type": [Function],
+          }
+        }
+        exact={true}
+        path="/classrooms"
+      />
+      <Route
+        component={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(ComposedComponent)",
+            "type": [Function],
+          }
+        }
+        exact={true}
+        path="/classrooms/:id/import"
+      />
+      <Route
+        component={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(ComposedComponent)",
+            "type": [Function],
+          }
+        }
+        exact={true}
+        path="/developer"
+      />
+    </Switch>
+  </div>
+</HashRouter>
 `;
