@@ -5,7 +5,7 @@ import { Settings } from './Settings';
 import LanguageSelect from './common/LanguageSelect';
 import DeveloperSwitch from './common/DeveloperSwitch';
 import GeolocationControl from './common/GeolocationControl';
-import { DEFAULT_USER_MODE } from '../config/constants';
+import { USER_MODES } from '../config/constants';
 
 const createSettingsProps = () => {
   return {
@@ -32,7 +32,7 @@ const createSettingsProps = () => {
     i18n: {
       changeLanguage: jest.fn(),
     },
-    userMode: DEFAULT_USER_MODE,
+    userMode: USER_MODES.TEACHER,
   };
 };
 
