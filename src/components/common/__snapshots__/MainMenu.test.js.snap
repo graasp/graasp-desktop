@@ -168,6 +168,17 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
       primary="Sign Out"
     />
   </WithStyles(ForwardRef(MenuItem))>
+  <WithStyles(ForwardRef(MenuItem))
+    button={true}
+    onClick={[Function]}
+  >
+    <WithStyles(ForwardRef(ListItemIcon))>
+      <ExitToAppIcon />
+    </WithStyles(ForwardRef(ListItemIcon))>
+    <WithStyles(ForwardRef(ListItemText))
+      primary="Quit"
+    />
+  </WithStyles(ForwardRef(MenuItem))>
 </WithStyles(ForwardRef(List))>
 `;
 
@@ -350,6 +361,17 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
       primary="Sign Out"
+    />
+  </WithStyles(ForwardRef(MenuItem))>
+  <WithStyles(ForwardRef(MenuItem))
+    button={true}
+    onClick={[Function]}
+  >
+    <WithStyles(ForwardRef(ListItemIcon))>
+      <ExitToAppIcon />
+    </WithStyles(ForwardRef(ListItemIcon))>
+    <WithStyles(ForwardRef(ListItemText))
+      primary="Quit"
     />
   </WithStyles(ForwardRef(MenuItem))>
 </WithStyles(ForwardRef(List))>
