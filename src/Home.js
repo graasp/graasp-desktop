@@ -13,7 +13,6 @@ import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Star';
 import HistoryIcon from '@material-ui/icons/History';
 import Divider from '@material-ui/core/Divider';
-import NoSpacesAvailable from './components/common/NoSpacesAvailable';
 import {
   HOME_MAIN_ID,
   FAVORITE_SPACES_WRAPPER_ID,
@@ -26,6 +25,7 @@ import SpaceGrid from './components/space/SpaceGrid';
 import Loader from './components/common/Loader';
 import Main from './components/common/Main';
 import { HOME_PATH } from './config/paths';
+import WelcomeContent from './components/common/WelcomeContent';
 
 const styles = theme => ({
   ...Styles(theme),
@@ -175,7 +175,7 @@ class Home extends Component {
   };
 
   render() {
-    const { classes, activity } = this.props;
+    const { classes, activity, spaces } = this.props;
     const { filteredFavoriteSpaces, filteredRecentSpaces } = this.state;
 
     const noSpacesAvailable =
@@ -198,7 +198,7 @@ class Home extends Component {
     return (
       <Main showSearch handleOnSearch={this.handleOnSearch} id={HOME_MAIN_ID}>
         {noSpacesAvailable ? (
-          <NoSpacesAvailable />
+          <WelcomeContent hasSavedSpaces={spaces.size > 0} />
         ) : (
           <div>
             {this.renderRecentSpaces()}
