@@ -19,7 +19,11 @@ import ActionEditor from './ActionEditor';
 import Loader from '../common/Loader';
 import Main from '../common/Main';
 import { getDatabase } from '../../actions';
-import { FILTER_ALL_SPACE_ID, USER_MODES } from '../../config/constants';
+import {
+  FILTER_ALL_SPACES_ID,
+  FILTER_ALL_USERS_ID,
+  USER_MODES,
+} from '../../config/constants';
 import { DASHBOARD_MAIN_ID } from '../../config/selectors';
 
 const styles = theme => ({
@@ -36,7 +40,8 @@ const styles = theme => ({
 
 export class Dashboard extends Component {
   state = {
-    spaceId: FILTER_ALL_SPACE_ID,
+    spaceId: FILTER_ALL_SPACES_ID,
+    filteredUserId: FILTER_ALL_USERS_ID,
   };
 
   static propTypes = {
@@ -69,6 +74,7 @@ export class Dashboard extends Component {
     database: PropTypes.shape({
       user: PropTypes.object,
       spaces: PropTypes.arrayOf(PropTypes.object),
+      users: PropTypes.arrayOf(PropTypes.object),
       actions: PropTypes.arrayOf(PropTypes.object),
     }),
     dispatchGetDatabase: PropTypes.func.isRequired,
@@ -89,6 +95,10 @@ export class Dashboard extends Component {
     this.setState({ spaceId: event.target.value });
   };
 
+  handleUserChange = event => {
+    this.setState({ filteredUserId: event.target.value });
+  };
+
   renderSpaceFilter = () => {
     const { database, t } = this.props;
     const { spaceId } = this.state;
@@ -105,7 +115,7 @@ export class Dashboard extends Component {
           value={spaceId}
           onChange={this.handleSpaceChange}
         >
-          <MenuItem value={FILTER_ALL_SPACE_ID}>
+          <MenuItem value={FILTER_ALL_SPACES_ID}>
             <em>{t('All Spaces')}</em>
           </MenuItem>
           {database.spaces.map(space => (
@@ -116,19 +126,54 @@ export class Dashboard extends Component {
     );
   };
 
+  renderUserFilter = () => {
+    const { database, t, userMode } = this.props;
+    const { filteredUserId } = this.state;
+
+    if (!database || _.isEmpty(database)) {
+      return <Loader />;
+    }
+
+    if (userMode !== USER_MODES.TEACHER) {
+      return null;
+    }
+
+    return (
+      <FormControl variant="outlined" fullWidth>
+        <InputLabel>{t('Filter by User')}</InputLabel>
+        <Select
+          label="Filter by User"
+          value={filteredUserId}
+          onChange={this.handleUserChange}
+        >
+          <MenuItem value={FILTER_ALL_USERS_ID}>
+            <em>{t('All Users')}</em>
+          </MenuItem>
+          {database.users.map(user => (
+            <MenuItem value={user.id}>{user.username}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    );
+  };
+
   renderActionWidgets = () => {
     const { database, t, classes, userMode, userId } = this.props;
-    const { spaceId } = this.state;
+    const { spaceId, filteredUserId } = this.state;
 
     let filteredActions = database.actions;
 
-    // filter action per user if userMode is student
+    // filter action per user if userMode is student or with filter
     if (userMode === USER_MODES.STUDENT) {
       filteredActions = filteredActions.filter(({ user }) => user === userId);
+    } else if (filteredUserId !== FILTER_ALL_USERS_ID) {
+      filteredActions = filteredActions.filter(
+        ({ user }) => user === filteredUserId
+      );
     }
 
     // filter action per space
-    if (spaceId !== FILTER_ALL_SPACE_ID) {
+    if (spaceId !== FILTER_ALL_SPACES_ID) {
       filteredActions = filteredActions.filter(
         ({ spaceId: id }) => id === spaceId
       );
@@ -164,7 +209,7 @@ export class Dashboard extends Component {
 
   render() {
     const { classes, t, database } = this.props;
-    const { spaceId } = this.state;
+    const { spaceId, filteredUserId } = this.state;
 
     if (!database) {
       return <Loader />;
@@ -184,10 +229,13 @@ export class Dashboard extends Component {
             alignItems="center"
             spacing={3}
           >
-            <Grid item xs={12} sm={9}>
+            <Grid item xs={12} sm={6}>
               <Typography variant="h4" className={classes.screenTitle}>
                 {t('Dashboard')}
               </Typography>
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              {this.renderUserFilter()}
             </Grid>
             <Grid item xs={12} sm={3}>
               {this.renderSpaceFilter()}
@@ -196,7 +244,7 @@ export class Dashboard extends Component {
 
           {this.renderActionWidgets()}
 
-          <ActionEditor spaceId={spaceId} />
+          <ActionEditor spaceId={spaceId} userId={filteredUserId} />
         </div>
       </Main>
     );

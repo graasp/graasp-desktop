@@ -9,7 +9,10 @@ import { withStyles } from '@material-ui/core';
 import { getDatabase } from '../../actions';
 import Loader from '../common/Loader';
 import Styles from '../../Styles';
-import { FILTER_ALL_SPACE_ID } from '../../config/constants';
+import {
+  FILTER_ALL_SPACES_ID,
+  FILTER_ALL_USERS_ID,
+} from '../../config/constants';
 
 export class ActionEditor extends Component {
   static propTypes = {
@@ -24,11 +27,13 @@ export class ActionEditor extends Component {
       actions: PropTypes.arrayOf(PropTypes.object),
     }),
     spaceId: PropTypes.string,
+    userId: PropTypes.string,
   };
 
   static defaultProps = {
     database: {},
-    spaceId: FILTER_ALL_SPACE_ID,
+    spaceId: FILTER_ALL_SPACES_ID,
+    userId: FILTER_ALL_USERS_ID,
   };
 
   componentDidMount() {
@@ -37,7 +42,7 @@ export class ActionEditor extends Component {
   }
 
   render() {
-    const { database, t, spaceId } = this.props;
+    const { database, t, spaceId, userId } = this.props;
 
     if (!database) {
       return <Loader />;
@@ -48,7 +53,10 @@ export class ActionEditor extends Component {
     }
 
     let { actions } = database;
-    if (spaceId !== FILTER_ALL_SPACE_ID) {
+    if (userId !== FILTER_ALL_USERS_ID) {
+      actions = actions.filter(({ user }) => user === userId);
+    }
+    if (spaceId !== FILTER_ALL_SPACES_ID) {
       actions = actions.filter(({ spaceId: id }) => id === spaceId);
     }
 
