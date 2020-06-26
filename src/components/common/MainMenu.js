@@ -15,6 +15,7 @@ import List from '@material-ui/core/List';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 import HomeIcon from '@material-ui/icons/Home';
 import PublishIcon from '@material-ui/icons/Publish';
+import CloseIcon from '@material-ui/icons/ExitToApp';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { Online, Offline } from 'react-detect-offline';
 import { withTranslation } from 'react-i18next';
@@ -200,6 +201,24 @@ export class MainMenu extends Component {
     return null;
   };
 
+  renderCloseApp = () => {
+    const { t } = this.props;
+
+    return (
+      <MenuItem
+        onClick={() => {
+          window.close();
+        }}
+        button
+      >
+        <ListItemIcon>
+          <CloseIcon />
+        </ListItemIcon>
+        <ListItemText primary={t('Quit')} />
+      </MenuItem>
+    );
+  };
+
   renderAuthenticatedMenu() {
     const {
       authenticated,
@@ -311,6 +330,7 @@ export class MainMenu extends Component {
         {this.renderClassrooms()}
         {this.renderDeveloperMode()}
         {this.renderSignOut()}
+        {this.renderCloseApp()}
       </List>
     );
   }

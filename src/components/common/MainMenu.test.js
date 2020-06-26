@@ -17,7 +17,7 @@ import {
 } from '../../config/paths';
 
 const MENUITEM_OFFLINE_NUMBER = 2;
-const MENUITEM_OFFLINE_ONLINE_COUNT = 10;
+const MENUITEM_OFFLINE_ONLINE_COUNT = 11;
 
 const createMainMenuProps = (developerMode, path, authenticated = true) => {
   return {
