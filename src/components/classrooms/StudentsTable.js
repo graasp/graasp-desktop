@@ -11,8 +11,6 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import DeleteIcon from '@material-ui/icons/Delete';
-import ResourceIcon from '@material-ui/icons/AssignmentInd';
-import ActionIcon from '@material-ui/icons/Assessment';
 import IconButton from '@material-ui/core/IconButton/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Paper from '@material-ui/core/Paper';
@@ -39,6 +37,8 @@ import {
   getUserResourcesForSpaceInClassroom,
   getUserActionsForSpaceInClassroom,
 } from '../../utils/classroom';
+import ActionIcon from './ActionIcon';
+import ResourceIcon from './ResourceIcon';
 
 const styles = theme => ({
   root: {

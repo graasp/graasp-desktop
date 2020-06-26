@@ -13,8 +13,6 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import { withTranslation } from 'react-i18next';
 import Typography from '@material-ui/core/Typography';
-import ResourceIcon from '@material-ui/icons/AssignmentInd';
-import ActionIcon from '@material-ui/icons/Assessment';
 import CancelIcon from '@material-ui/icons/Cancel';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -39,6 +37,8 @@ import {
   hasUserResourcesForSpaceInClassroom,
   hasUserDataInClassroom,
 } from '../../utils/classroom';
+import ResourceIcon from './ResourceIcon';
+import ActionIcon from './ActionIcon';
 
 const styles = theme => ({
   formControl: {
