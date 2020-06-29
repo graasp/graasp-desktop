@@ -17,7 +17,7 @@ import SyncAdvancedSwitch from './space/sync/SyncAdvancedSwitch';
 import StudentModeSwitch from './common/StudentModeSwitch';
 import ActionEnabledSwitch from './common/ActionEnabledSwitch';
 import ActionAccessibilitySwitch from './common/ActionAccessibilitySwitch';
-import { USER_MODES } from '../config/constants';
+import { USER_MODES, DEFAULT_USER_MODE } from '../config/constants';
 
 const styles = theme => ({
   ...Styles(theme),
@@ -43,10 +43,31 @@ export class Settings extends Component {
       changeLanguage: PropTypes.func.isRequired,
     }).isRequired,
     userMode: PropTypes.oneOf(Object.values(USER_MODES)).isRequired,
+    authenticated: PropTypes.bool.isRequired,
+  };
+
+  renderDeveloperModeSwitch = () => {
+    const { userMode } = this.props;
+    return userMode === USER_MODES.TEACHER ? <DeveloperSwitch /> : null;
+  };
+
+  renderActionSettings = () => {
+    const { t } = this.props;
+    return (
+      <>
+        <Typography variant="h5" color="inherit" className="mt-2">
+          {t('Actions')}
+        </Typography>
+        <FormGroup>
+          <ActionEnabledSwitch />
+          <ActionAccessibilitySwitch />
+        </FormGroup>
+      </>
+    );
   };
 
   render() {
-    const { classes, t, userMode } = this.props;
+    const { classes, t, authenticated } = this.props;
 
     return (
       <Main id={SETTINGS_MAIN_ID}>
@@ -56,19 +77,18 @@ export class Settings extends Component {
           </Typography>
           <FormGroup>
             <LanguageSelect />
-            <GeolocationControl />
-            <SyncAdvancedSwitch />
-            <StudentModeSwitch />
-            {userMode === USER_MODES.TEACHER ? <DeveloperSwitch /> : null}
+            {authenticated && (
+              <>
+                <GeolocationControl />
+                <SyncAdvancedSwitch />
+                <StudentModeSwitch />
+                {this.renderDeveloperModeSwitch()}
+              </>
+            )}
           </FormGroup>
           <Divider variant="middle" classes={{ root: classes.divider }} />
-          <Typography variant="h5" color="inherit" className="mt-2">
-            {t('Actions')}
-          </Typography>
-          <FormGroup>
-            <ActionEnabledSwitch />
-            <ActionAccessibilitySwitch />
-          </FormGroup>
+
+          {authenticated && this.renderActionSettings()}
         </div>
       </Main>
     );
@@ -76,7 +96,9 @@ export class Settings extends Component {
 }
 
 const mapStateToProps = ({ authentication }) => ({
-  userMode: authentication.getIn(['user', 'settings', 'userMode']),
+  authenticated: authentication.getIn(['authenticated']),
+  userMode:
+    authentication.getIn(['user', 'settings', 'userMode']) || DEFAULT_USER_MODE,
 });
 
 const ConnectedComponent = connect(mapStateToProps, null)(Settings);

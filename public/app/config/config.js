@@ -43,7 +43,7 @@ const PRODUCT_NAME = 'Graasp';
 const TMP_FOLDER = 'tmp';
 const DEFAULT_LANG = 'en';
 const DEFAULT_DEVELOPER_MODE = false;
-const TEACHER_USER_MODE = 'teacher';
+const TEACHER_USER_MODE = 'student';
 const DEFAULT_USER_MODE = TEACHER_USER_MODE;
 const DEFAULT_GEOLOCATION_ENABLED = false;
 const VISUAL_SYNC_MODE = 'visual';
@@ -55,10 +55,10 @@ const DEFAULT_AUTHENTICATION = false;
 const DEFAULT_ACTION_ACCESSIBILITY = false;
 const DEFAULT_ACTIONS_AS_ENABLED = true;
 
-const DEFAULT_USER = {
+const DEFAULT_USER = (lang = DEFAULT_LANG) => ({
   geolocation: null,
   settings: {
-    lang: DEFAULT_LANG,
+    lang,
     developerMode: DEFAULT_DEVELOPER_MODE,
     geolocationEnabled: DEFAULT_GEOLOCATION_ENABLED,
     syncMode: DEFAULT_SYNC_MODE,
@@ -68,7 +68,7 @@ const DEFAULT_USER = {
   },
   favoriteSpaces: [],
   recentSpaces: [],
-};
+});
 
 const ANONYMOUS_USERNAME = 'Anonymous';
 

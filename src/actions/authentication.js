@@ -27,10 +27,10 @@ const flagSigningIn = createFlag(FLAG_SIGNING_IN);
 const flagSigningOut = createFlag(FLAG_SIGNING_OUT);
 const flagGettingAuthenticated = createFlag(FLAG_GETTING_AUTHENTICATED);
 
-const signIn = async ({ username, anonymous }) => async dispatch => {
+const signIn = async ({ username, lang, anonymous }) => async dispatch => {
   try {
     dispatch(flagSigningIn(true));
-    window.ipcRenderer.send(SIGN_IN_CHANNEL, { username, anonymous });
+    window.ipcRenderer.send(SIGN_IN_CHANNEL, { username, lang, anonymous });
     window.ipcRenderer.once(SIGN_IN_CHANNEL, async (event, user) => {
       if (user === ERROR_GENERAL) {
         toastr.error(ERROR_MESSAGE_HEADER, ERROR_SIGNING_IN);

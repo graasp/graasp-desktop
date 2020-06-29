@@ -194,11 +194,7 @@ export class App extends Component {
                 path={LOAD_SELECTION_SPACE_PATH}
                 component={Authorization()(LoadSelectionScreen)}
               />
-              <Route
-                exact
-                path={SETTINGS_PATH}
-                component={Authorization()(Settings)}
-              />
+              <Route exact path={SETTINGS_PATH} component={Settings} />
               <Route
                 exact
                 path={SYNC_SPACE_PATH}

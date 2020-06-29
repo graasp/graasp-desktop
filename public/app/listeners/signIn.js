@@ -1,14 +1,19 @@
 const ObjectId = require('bson-objectid');
-const _ = require('lodash');
 const { USERS_COLLECTION } = require('../db');
 const { SIGN_IN_CHANNEL } = require('../config/channels');
 const {
   DEFAULT_USER,
   ANONYMOUS_USERNAME,
   AUTHENTICATED,
+  DEFAULT_LANG,
 } = require('../config/config');
 
-const createNewUser = (username, createdAt, anonymous = false) => {
+const createNewUser = (
+  username,
+  createdAt,
+  lang = DEFAULT_LANG,
+  anonymous = false
+) => {
   const id = ObjectId().str;
 
   return {
@@ -16,13 +21,13 @@ const createNewUser = (username, createdAt, anonymous = false) => {
     username,
     createdAt,
     anonymous,
-    ..._.cloneDeep(DEFAULT_USER),
+    ...DEFAULT_USER(lang),
   };
 };
 
 const signIn = (mainWindow, db) => async (
   event,
-  { username, anonymous = false }
+  { username, lang = DEFAULT_LANG, anonymous = false }
 ) => {
   const users = db.get(USERS_COLLECTION);
 
@@ -30,14 +35,14 @@ const signIn = (mainWindow, db) => async (
 
   let user;
   if (anonymous) {
-    user = createNewUser(ANONYMOUS_USERNAME, now, anonymous);
+    user = createNewUser(ANONYMOUS_USERNAME, now, lang, anonymous);
     users.push(user).write();
   } else {
     // check in db if username exists
     user = users.find({ username }).value();
 
     if (!user) {
-      user = createNewUser(username, now);
+      user = createNewUser(username, now, lang);
       users.push(user).write();
     }
   }
