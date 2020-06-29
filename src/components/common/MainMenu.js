@@ -11,6 +11,7 @@ import Language from '@material-ui/icons/Language';
 import CodeIcon from '@material-ui/icons/Code';
 import ListItemText from '@material-ui/core/ListItemText';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import ClassroomIcon from '@material-ui/icons/SupervisedUserCircle';
 import List from '@material-ui/core/List';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 import HomeIcon from '@material-ui/icons/Home';
@@ -192,7 +193,7 @@ export class MainMenu extends Component {
           selected={path === CLASSROOMS_PATH}
         >
           <ListItemIcon>
-            <ShowChartIcon />
+            <ClassroomIcon />
           </ListItemIcon>
           <ListItemText primary={t('Classrooms')} />
         </MenuItem>
