@@ -5,15 +5,17 @@ const {
 } = require('../config/channels');
 const logger = require('../logger');
 
-const showClearUserInputPrompt = mainWindow => () => {
+const showClearUserInputPrompt = mainWindow => (
+  event,
+  { message, buttons }
+) => {
   logger.debug('showing clear user input prompt');
   const options = {
     type: 'warning',
-    buttons: ['Cancel', 'Clear'],
+    buttons,
     defaultId: 0,
     cancelId: 0,
-    message:
-      'Are you sure you want to clear all of the user input in this space?',
+    message,
   };
   dialog.showMessageBox(mainWindow, options).then(({ response }) => {
     mainWindow.webContents.send(

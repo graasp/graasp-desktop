@@ -127,6 +127,15 @@
     "Track Actions": "Track Actions",
     "Share Actions with Teachers": "Share Actions with Teachers",
     "Actions": "Actions",
-    "When enabled, your interaction with learning spaces and apps will be stored locally. This can help you get feedback on your learning process.": "When enabled, your interaction with learning spaces and apps will be stored locally. This can help you get feedback on your learning process."
+    "When enabled, your interaction with learning spaces and apps will be stored locally. This can help you get feedback on your learning process.": "When enabled, your interaction with learning spaces and apps will be stored locally. This can help you get feedback on your learning process.",
+    "Search…": "Search…",
+    "Clear all of the user input in this space.": "Clear all of the user input in this space.",
+    "Quit": "Quit",
+    "Welcome to Graasp Desktop": "Welcome to Graasp Desktop",
+    "Go to Saved Spaces": "Go to Saved Spaces",
+    "Sync Advanced Mode": "Sync Advanced Mode",
+    "Student Mode Enabled": "Student Mode Enabled",
+    "Are you sure you want to clear all of the user input in this space?": "Are you sure you want to clear all of the user input in this space?",
+    "Clear": "Clear"
   }
 }

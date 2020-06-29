@@ -46,6 +46,7 @@
     "Action Count": "Nombre d'actions",
     "The database is empty.": "La base de données est vide.",
     "Filter by Space": "Filtrer par Espace",
+    "Filter by User": "Filtrer par Utilisateur",
     "All Spaces": "Tous les Espaces",
     "All Users": "Tous les Utilisateurs",
     "Time": "Ligne du temps",
@@ -127,6 +128,15 @@
     "Track Actions": "Enregistrer les Actions",
     "Share Actions with Teachers": "Partager les Actions avec les Enseignants",
     "Actions": "Actions",
-    "When enabled, your interaction with learning spaces and apps will be stored locally. This can help you get feedback on your learning process.": "Si cette option est activée, les interactions avec les espaces et les apps seront sauvegardées localement. Ces données permettent un suivi du processus d'apprentissage."
+    "When enabled, your interaction with learning spaces and apps will be stored locally. This can help you get feedback on your learning process.": "Si cette option est activée, les interactions avec les espaces et les apps seront sauvegardées localement. Ces données permettent un suivi du processus d'apprentissage.",
+    "Search…": "Chercher…",
+    "Clear all of the user input in this space.": "Effacer toutes les entrées utilisateur de cet espace.",
+    "Quit": "Quitter",
+    "Welcome to Graasp Desktop": "Bienvenue dans Graasp Desktop",
+    "Go to Saved Spaces": "Aller aux Espaces Sauvegardés",
+    "Sync Advanced Mode": "Mode de Synchronisation Avancé",
+    "Student Mode Enabled": "Mode Étudiant Activé",
+    "Are you sure you want to clear all of the user input in this space?": "Êtes-vous sûr de vouloir supprimer toutes les entrées utilisateur de cet espace ?",
+    "Clear": "Effacer"
   }
 }

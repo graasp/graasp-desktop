@@ -104,6 +104,10 @@ const ERROR_SETTING_ACTION_ACCESSIBILITY =
 const ERROR_SETTING_ACTIONS_AS_ENABLED = 'There was an error enabling actions';
 const ERROR_POSTING_FILE_MESSAGE = 'There was an error uploading the file';
 const ERROR_DELETING_FILE_MESSAGE = 'There was an error deleting the file';
+const PROMPT_DELETE_SPACE_MESSAGE =
+  'Are you sure you want to delete this space?';
+const PROMPT_CLEAR_USER_INPUT_MESSAGE =
+  'Are you sure you want to clear all of the user input in this space?';
 
 module.exports = {
   ERROR_GETTING_DEVELOPER_MODE,
@@ -176,4 +180,6 @@ module.exports = {
   ERROR_SETTING_ACTIONS_AS_ENABLED,
   ERROR_POSTING_FILE_MESSAGE,
   ERROR_DELETING_FILE_MESSAGE,
+  PROMPT_DELETE_SPACE_MESSAGE,
+  PROMPT_CLEAR_USER_INPUT_MESSAGE,
 };

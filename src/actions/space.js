@@ -1,4 +1,5 @@
 import { toastr } from 'react-redux-toastr';
+import i18n from '../config/i18n';
 import {
   GET_SPACES,
   FLAG_GETTING_SPACE,
@@ -47,6 +48,8 @@ import {
   SUCCESS_SAVING_MESSAGE,
   ERROR_CLEARING_USER_INPUT_MESSAGE,
   SUCCESS_CLEARING_USER_INPUT_MESSAGE,
+  PROMPT_DELETE_SPACE_MESSAGE,
+  PROMPT_CLEAR_USER_INPUT_MESSAGE,
 } from '../config/messages';
 import { createFlag, isErrorResponse } from './common';
 import {
@@ -234,7 +237,11 @@ const clearSpace = () => dispatch => {
 
 const deleteSpace = ({ id }) => dispatch => {
   // show confirmation prompt
-  window.ipcRenderer.send(SHOW_DELETE_SPACE_PROMPT_CHANNEL);
+  const buttons = [i18n.t('Cancel'), i18n.t('Delete')];
+  window.ipcRenderer.send(SHOW_DELETE_SPACE_PROMPT_CHANNEL, {
+    message: i18n.t(PROMPT_DELETE_SPACE_MESSAGE),
+    buttons,
+  });
   window.ipcRenderer.once(
     RESPOND_DELETE_SPACE_PROMPT_CHANNEL,
     (event, response) => {
@@ -271,7 +278,11 @@ const deleteSpace = ({ id }) => dispatch => {
 const clearUserInput = async ({ spaceId, userId }) => async dispatch => {
   try {
     // show confirmation prompt
-    window.ipcRenderer.send(SHOW_CLEAR_USER_INPUT_PROMPT_CHANNEL);
+    const buttons = [i18n.t('Cancel'), i18n.t('Clear')];
+    window.ipcRenderer.send(SHOW_CLEAR_USER_INPUT_PROMPT_CHANNEL, {
+      message: i18n.t(PROMPT_CLEAR_USER_INPUT_MESSAGE),
+      buttons,
+    });
 
     // listen for response from prompt
     window.ipcRenderer.once(
