@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
 import CssBaseline from '@material-ui/core/CssBaseline/CssBaseline';
 import AppBar from '@material-ui/core/AppBar/AppBar';
+import ClassroomLegend from './ClassroomLegend';
 import Styles from '../../Styles';
 import Loader from '../common/Loader';
 import Main from '../common/Main';
@@ -124,6 +125,7 @@ class ClassroomScreen extends Component {
       <Main>
         <div className={classes.screen}>
           <StudentsTable classroom={classroom} />
+          <ClassroomLegend />
           <ImportDataButton classroomId={classroomId} />
           <AddUserInClassroomButton classroomId={classroomId} />
           {this.renderBackButton()}
