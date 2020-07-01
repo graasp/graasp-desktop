@@ -9,7 +9,7 @@ exports[`<Settings /> renders correctly 1`] = `
   >
     <WithStyles(ForwardRef(Typography))
       color="inherit"
-      variant="h5"
+      variant="h4"
     >
       Settings
     </WithStyles(ForwardRef(Typography))>
@@ -19,6 +19,25 @@ exports[`<Settings /> renders correctly 1`] = `
       <withI18nextTranslation(WithStyles(Connect(SyncAdvancedSwitch))) />
       <withI18nextTranslation(WithStyles(Connect(StudentModeSwitch))) />
       <withI18nextTranslation(WithStyles(Connect(DeveloperSwitch))) />
+    </WithStyles(ForwardRef(FormGroup))>
+    <WithStyles(ForwardRef(Divider))
+      classes={
+        Object {
+          "root": undefined,
+        }
+      }
+      variant="middle"
+    />
+    <WithStyles(ForwardRef(Typography))
+      className="mt-2"
+      color="inherit"
+      variant="h5"
+    >
+      Actions
+    </WithStyles(ForwardRef(Typography))>
+    <WithStyles(ForwardRef(FormGroup))>
+      <withI18nextTranslation(WithStyles(Connect(ActionEnabledSwitch))) />
+      <withI18nextTranslation(WithStyles(Connect(ActionAccessibilitySwitch))) />
     </WithStyles(ForwardRef(FormGroup))>
   </div>
 </withI18nextTranslation(WithStyles(Connect(Main)))>

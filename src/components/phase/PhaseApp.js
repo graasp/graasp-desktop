@@ -25,6 +25,7 @@ import {
 import {
   DEFAULT_LANGUAGE,
   SMART_GATEWAY_QUERY_STRING_DIVIDER,
+  DEFAULT_ACTION_ENABLED,
 } from '../../config/constants';
 import { isSmartGatewayUrl } from '../../utils/url';
 import { getHeight, setHeight } from '../../actions/layout';
@@ -60,6 +61,7 @@ class PhaseApp extends Component {
     }),
     geolocation: PropTypes.instanceOf(Map),
     geolocationEnabled: PropTypes.bool.isRequired,
+    actionEnabled: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -117,6 +119,7 @@ class PhaseApp extends Component {
         dispatchPostAction,
         geolocation,
         geolocationEnabled,
+        actionEnabled,
       } = this.props;
 
       // get app instance id in message
@@ -139,13 +142,16 @@ class PhaseApp extends Component {
           case GET_APP_INSTANCE:
             return dispatchGetAppInstance(payload, this.postMessage);
           case POST_ACTION: {
-            // add geolocation to action if enabled
-            payload.geolocation = null;
-            if (geolocationEnabled) {
-              const { latitude, longitude } = geolocation.getIn(['coords']);
-              payload.geolocation = { ll: [latitude, longitude] };
+            if (actionEnabled) {
+              // add geolocation to action if enabled
+              payload.geolocation = null;
+              if (geolocationEnabled) {
+                const { latitude, longitude } = geolocation.getIn(['coords']);
+                payload.geolocation = { ll: [latitude, longitude] };
+              }
+              return dispatchPostAction(payload, this.postMessage);
             }
-            return dispatchPostAction(payload, this.postMessage);
+            break;
           }
           default:
             return false;
@@ -197,6 +203,7 @@ class PhaseApp extends Component {
       phaseId,
       appInstance,
       userId,
+      actionEnabled,
     } = this.props;
     let uri = url;
     if (asset) {
@@ -231,6 +238,7 @@ class PhaseApp extends Component {
       itemId: id,
       offline: true,
       subSpaceId: phaseId,
+      analytics: actionEnabled,
     };
 
     const queryString = Qs.stringify(params);
@@ -308,6 +316,9 @@ const mapStateToProps = ({ authentication, Space }) => ({
     'geolocationEnabled',
   ]),
   userId: authentication.getIn(['user', 'id']),
+  actionEnabled:
+    authentication.getIn(['user', 'settings', 'actionEnabled']) ||
+    DEFAULT_ACTION_ENABLED,
 });
 
 const mapDispatchToProps = {

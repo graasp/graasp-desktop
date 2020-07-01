@@ -50,7 +50,7 @@ describe('<Settings />', () => {
   });
 
   it('renders one <Typography /> component with text Settings', () => {
-    const typography = wrapper.find(Typography);
+    const typography = wrapper.find(Typography).find({ variant: 'h4' });
     expect(typography).toHaveLength(1);
     expect(typography.contains('Settings')).toBeTruthy();
   });

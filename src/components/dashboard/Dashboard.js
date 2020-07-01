@@ -157,31 +157,8 @@ export class Dashboard extends Component {
     );
   };
 
-  renderActionWidgets = () => {
-    const { database, t, classes, userMode, userId } = this.props;
-    const { spaceId, filteredUserId } = this.state;
-
-    let filteredActions = database.actions;
-
-    // filter action per user if userMode is student or with filter
-    if (userMode === USER_MODES.STUDENT) {
-      filteredActions = filteredActions.filter(({ user }) => user === userId);
-    } else if (filteredUserId !== SELECT_ALL_USERS_ID) {
-      filteredActions = filteredActions.filter(
-        ({ user }) => user === filteredUserId
-      );
-    }
-
-    // filter action per space
-    if (spaceId !== SELECT_ALL_SPACES_ID) {
-      filteredActions = filteredActions.filter(
-        ({ spaceId: id }) => id === spaceId
-      );
-    }
-
-    if (_.isEmpty(filteredActions)) {
-      return <p>{t('No action has been recorded.')}</p>;
-    }
+  renderActionWidgets = filteredActions => {
+    const { database, classes } = this.props;
 
     return (
       <Grid
@@ -207,9 +184,53 @@ export class Dashboard extends Component {
     );
   };
 
+  renderContent = () => {
+    const { t, database, userMode, userId } = this.props;
+    const { spaceId, filteredUserId } = this.state;
+
+    let filteredActions = database.actions;
+    const { users } = database;
+    const isStudent = userMode === USER_MODES.STUDENT;
+
+    filteredActions = filteredActions.filter(({ user }) => {
+      const isOwnAction = user === userId;
+      const actionUser = users.find(({ id }) => id === user);
+      const isAccessible =
+        actionUser && actionUser.settings.actionAccessibility;
+      const filteredUserSelected = filteredUserId !== SELECT_ALL_USERS_ID;
+
+      // filter action per user if userMode is student
+      return (
+        (isStudent && isOwnAction) ||
+        // filter actions per selected user if selected
+        // only teachers have access to user filter
+        // actions are displayed either if the user set action as accessible or
+        // actions are own by the current user
+        (!isStudent &&
+          (!filteredUserSelected || user === filteredUserId) &&
+          (isAccessible || isOwnAction))
+      );
+    });
+
+    // filter action per space
+    if (spaceId !== SELECT_ALL_SPACES_ID) {
+      filteredActions = filteredActions.filter(
+        ({ spaceId: id }) => id === spaceId
+      );
+    }
+
+    return filteredActions.length ? (
+      <>
+        {this.renderActionWidgets(filteredActions)}
+        <ActionEditor actions={filteredActions} />
+      </>
+    ) : (
+      <Typography>{t('No action has been recorded.')}</Typography>
+    );
+  };
+
   render() {
     const { classes, t, database } = this.props;
-    const { spaceId, filteredUserId } = this.state;
 
     if (!database) {
       return <Loader />;
@@ -242,9 +263,7 @@ export class Dashboard extends Component {
             </Grid>
           </Grid>
 
-          {this.renderActionWidgets()}
-
-          <ActionEditor spaceId={spaceId} userId={filteredUserId} />
+          {this.renderContent()}
         </div>
       </Main>
     );
