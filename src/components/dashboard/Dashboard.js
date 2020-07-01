@@ -20,8 +20,8 @@ import Loader from '../common/Loader';
 import Main from '../common/Main';
 import { getDatabase } from '../../actions';
 import {
-  FILTER_ALL_SPACES_ID,
-  FILTER_ALL_USERS_ID,
+  SELECT_ALL_SPACES_ID,
+  SELECT_ALL_USERS_ID,
   USER_MODES,
 } from '../../config/constants';
 import { DASHBOARD_MAIN_ID } from '../../config/selectors';
@@ -40,8 +40,8 @@ const styles = theme => ({
 
 export class Dashboard extends Component {
   state = {
-    spaceId: FILTER_ALL_SPACES_ID,
-    filteredUserId: FILTER_ALL_USERS_ID,
+    spaceId: SELECT_ALL_SPACES_ID,
+    filteredUserId: SELECT_ALL_USERS_ID,
   };
 
   static propTypes = {
@@ -103,7 +103,7 @@ export class Dashboard extends Component {
     const { database, t } = this.props;
     const { spaceId } = this.state;
 
-    if (!database || _.isEmpty(database)) {
+    if (database) {
       return <Loader />;
     }
 
@@ -115,7 +115,7 @@ export class Dashboard extends Component {
           value={spaceId}
           onChange={this.handleSpaceChange}
         >
-          <MenuItem value={FILTER_ALL_SPACES_ID}>
+          <MenuItem value={SELECT_ALL_SPACES_ID}>
             <em>{t('All Spaces')}</em>
           </MenuItem>
           {database.spaces.map(space => (
@@ -130,7 +130,7 @@ export class Dashboard extends Component {
     const { database, t, userMode } = this.props;
     const { filteredUserId } = this.state;
 
-    if (!database || _.isEmpty(database)) {
+    if (!database) {
       return <Loader />;
     }
 
@@ -146,7 +146,7 @@ export class Dashboard extends Component {
           value={filteredUserId}
           onChange={this.handleUserChange}
         >
-          <MenuItem value={FILTER_ALL_USERS_ID}>
+          <MenuItem value={SELECT_ALL_USERS_ID}>
             <em>{t('All Users')}</em>
           </MenuItem>
           {database.users.map(user => (
@@ -166,14 +166,14 @@ export class Dashboard extends Component {
     // filter action per user if userMode is student or with filter
     if (userMode === USER_MODES.STUDENT) {
       filteredActions = filteredActions.filter(({ user }) => user === userId);
-    } else if (filteredUserId !== FILTER_ALL_USERS_ID) {
+    } else if (filteredUserId !== SELECT_ALL_USERS_ID) {
       filteredActions = filteredActions.filter(
         ({ user }) => user === filteredUserId
       );
     }
 
     // filter action per space
-    if (spaceId !== FILTER_ALL_SPACES_ID) {
+    if (spaceId !== SELECT_ALL_SPACES_ID) {
       filteredActions = filteredActions.filter(
         ({ spaceId: id }) => id === spaceId
       );

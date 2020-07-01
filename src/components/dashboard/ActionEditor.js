@@ -10,8 +10,8 @@ import { getDatabase } from '../../actions';
 import Loader from '../common/Loader';
 import Styles from '../../Styles';
 import {
-  FILTER_ALL_SPACES_ID,
-  FILTER_ALL_USERS_ID,
+  SELECT_ALL_SPACES_ID,
+  SELECT_ALL_USERS_ID,
 } from '../../config/constants';
 
 export class ActionEditor extends Component {
@@ -32,8 +32,8 @@ export class ActionEditor extends Component {
 
   static defaultProps = {
     database: {},
-    spaceId: FILTER_ALL_SPACES_ID,
-    userId: FILTER_ALL_USERS_ID,
+    spaceId: SELECT_ALL_SPACES_ID,
+    userId: SELECT_ALL_USERS_ID,
   };
 
   componentDidMount() {
@@ -53,10 +53,10 @@ export class ActionEditor extends Component {
     }
 
     let { actions } = database;
-    if (userId !== FILTER_ALL_USERS_ID) {
+    if (userId !== SELECT_ALL_USERS_ID) {
       actions = actions.filter(({ user }) => user === userId);
     }
-    if (spaceId !== FILTER_ALL_SPACES_ID) {
+    if (spaceId !== SELECT_ALL_SPACES_ID) {
       actions = actions.filter(({ spaceId: id }) => id === spaceId);
     }
 
