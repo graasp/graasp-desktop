@@ -39,7 +39,8 @@ export const BLOCK_MATH_REGEX = /(\\\[(.*?)\\])/g;
 export const INLINE_MATH_REGEX = /(\\\((.*?)\\\))/g;
 export const RADIX = 10;
 
-export const FILTER_ALL_SPACE_ID = 'defaultid';
+export const SELECT_ALL_SPACES_ID = 'allSpacesSelectId';
+export const SELECT_ALL_USERS_ID = 'allUsersSelectId';
 export const DEFAULT_AUTHENTICATION = false;
 export const AUTHENTICATED = 'authenticated';
 
