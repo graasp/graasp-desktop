@@ -103,7 +103,7 @@ export class Dashboard extends Component {
     const { database, t } = this.props;
     const { spaceId } = this.state;
 
-    if (database) {
+    if (!database) {
       return <Loader />;
     }
 
