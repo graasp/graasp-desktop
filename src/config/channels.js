@@ -53,7 +53,7 @@ module.exports = {
   SET_SPACE_AS_FAVORITE_CHANNEL: 'user:set-space-favorite:set',
   SET_SPACE_AS_RECENT_CHANNEL: 'user:set-space-recent:set',
   SET_ACTION_ACCESSIBILITY_CHANNEL: 'user:action:accessibility:set',
-  SET_ACTION_ENABLED_CHANNEL: 'user:action:enabled:set',
+  SET_ACTIONS_AS_ENABLED_CHANNEL: 'user:action:enabled:set',
   GET_CLASSROOMS_CHANNEL: 'classrooms:get',
   ADD_CLASSROOM_CHANNEL: 'classroom:add',
   DELETE_CLASSROOM_CHANNEL: 'classroom:delete',

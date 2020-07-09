@@ -2,7 +2,7 @@ import {
   SYNC_MODES,
   USER_MODES,
   DEFAULT_ACTION_ACCESSIBILITY,
-  DEFAULT_ACTION_ENABLED,
+  DEFAULT_ACTIONS_AS_ENABLED,
 } from '../config/constants';
 
 const SampleDatabase = {
@@ -191,7 +191,7 @@ const SampleDatabase = {
         geolocationEnabled: false,
         syncMode: SYNC_MODES.ADVANCED,
         userMode: USER_MODES.TEACHER,
-        actionEnabled: DEFAULT_ACTION_ENABLED,
+        actionsAsEnabled: DEFAULT_ACTIONS_AS_ENABLED,
         actionAccessibility: DEFAULT_ACTION_ACCESSIBILITY,
       },
     },

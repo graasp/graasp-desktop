@@ -33,8 +33,8 @@ import {
   SET_SPACE_AS_RECENT_SPACES_SUCCEEDED,
   FLAG_SETTING_ACTION_ACCESSIBILITY,
   SET_ACTION_ACCESSIBILITY_SUCCEEDED,
-  SET_ACTION_ENABLED_SUCCEEDED,
-  FLAG_SETTING_ACTION_ENABLED,
+  SET_ACTIONS_AS_ENABLED_SUCCEEDED,
+  FLAG_SETTING_ACTIONS_AS_ENABLED,
 } from '../types';
 import { updateActivityList } from './common';
 import {
@@ -46,7 +46,7 @@ import {
   DEFAULT_USER_MODE,
   MAX_RECENT_SPACES,
   DEFAULT_ACTION_ACCESSIBILITY,
-  DEFAULT_ACTION_ENABLED,
+  DEFAULT_ACTIONS_AS_ENABLED,
 } from '../config/constants';
 
 const updateFavoriteSpaces = ({ favorite, spaceId }) => favoriteSpaces => {
@@ -92,7 +92,7 @@ export const DEFAULT_USER_SETTINGS = {
   syncMode: DEFAULT_SYNC_MODE,
   userMode: DEFAULT_USER_MODE,
   actionAccessibility: DEFAULT_ACTION_ACCESSIBILITY,
-  actionEnabled: DEFAULT_ACTION_ENABLED,
+  actionsAsEnabled: DEFAULT_ACTIONS_AS_ENABLED,
 };
 
 export const DEFAULT_USER = {
@@ -129,7 +129,7 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case FLAG_SIGNING_IN:
     case FLAG_SIGNING_OUT:
     case FLAG_SETTING_ACTION_ACCESSIBILITY:
-    case FLAG_SETTING_ACTION_ENABLED:
+    case FLAG_SETTING_ACTIONS_AS_ENABLED:
       return state.updateIn(
         ['current', 'activity'],
         updateActivityList(payload)
@@ -176,8 +176,8 @@ export default (state = INITIAL_STATE, { type, payload }) => {
         ['user', 'recentSpaces'],
         updateRecentSpaces(payload)
       );
-    case SET_ACTION_ENABLED_SUCCEEDED:
-      return state.setIn(['user', 'settings', 'actionEnabled'], payload);
+    case SET_ACTIONS_AS_ENABLED_SUCCEEDED:
+      return state.setIn(['user', 'settings', 'actionsAsEnabled'], payload);
     case SET_ACTION_ACCESSIBILITY_SUCCEEDED:
       return state.setIn(['user', 'settings', 'actionAccessibility'], payload);
     default:

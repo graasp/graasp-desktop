@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import FormControl from '@material-ui/core/FormControl';
 import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
+import Tooltip from '@material-ui/core/Tooltip';
+import InfoIcon from '@material-ui/icons/Info';
 import PropTypes from 'prop-types';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { setActionEnabled } from '../../actions';
+import { setActionsAsEnabled } from '../../actions';
 import Loader from './Loader';
-import {
-  FORM_CONTROL_MIN_WIDTH,
-  DEFAULT_ACTION_ENABLED,
-} from '../../config/constants';
+import { FORM_CONTROL_MIN_WIDTH } from '../../config/constants';
 
 const styles = theme => ({
   formControl: {
@@ -22,23 +22,23 @@ const styles = theme => ({
 
 export class ActionEnabledSwitch extends Component {
   static propTypes = {
-    actionEnabled: PropTypes.bool.isRequired,
+    actionsAsEnabled: PropTypes.bool.isRequired,
     activity: PropTypes.bool.isRequired,
     t: PropTypes.func.isRequired,
-    dispatchSetActionEnabled: PropTypes.func.isRequired,
+    dispatchSetActionsAsEnabled: PropTypes.func.isRequired,
     classes: PropTypes.shape({
       formControl: PropTypes.string.isRequired,
     }).isRequired,
   };
 
   handleChange = async ({ target }) => {
-    const { dispatchSetActionEnabled } = this.props;
+    const { dispatchSetActionsAsEnabled } = this.props;
     const { checked } = target;
-    dispatchSetActionEnabled(checked);
+    dispatchSetActionsAsEnabled(checked);
   };
 
   render() {
-    const { classes, t, actionEnabled, activity } = this.props;
+    const { classes, t, actionsAsEnabled, activity } = this.props;
 
     if (activity) {
       return <Loader />;
@@ -46,30 +46,46 @@ export class ActionEnabledSwitch extends Component {
 
     const control = (
       <Switch
-        checked={actionEnabled}
+        checked={actionsAsEnabled}
         onChange={this.handleChange}
-        value={actionEnabled}
+        value={actionsAsEnabled}
         color="primary"
       />
     );
 
     return (
-      <FormControl className={classes.formControl}>
-        <FormControlLabel control={control} label={t('Action Enabled')} />
-      </FormControl>
+      <Grid container alignItems="center">
+        <Grid item>
+          <FormControl className={classes.formControl}>
+            <FormControlLabel control={control} label={t('Track Actions')} />
+          </FormControl>
+        </Grid>
+        <Grid>
+          <Tooltip
+            title={t(
+              'When enabled, your interaction with learning spaces and apps will be stored locally. This can help you get feedback on your learning process.'
+            )}
+            placement="right"
+          >
+            <InfoIcon color="primary" />
+          </Tooltip>
+        </Grid>
+      </Grid>
     );
   }
 }
 
 const mapStateToProps = ({ authentication }) => ({
-  actionEnabled:
-    authentication.getIn(['user', 'settings', 'actionEnabled']) ||
-    DEFAULT_ACTION_ENABLED,
+  actionsAsEnabled: authentication.getIn([
+    'user',
+    'settings',
+    'actionsAsEnabled',
+  ]),
   activity: Boolean(authentication.getIn(['current', 'activity']).size),
 });
 
 const mapDispatchToProps = {
-  dispatchSetActionEnabled: setActionEnabled,
+  dispatchSetActionsAsEnabled: setActionsAsEnabled,
 };
 
 const ConnectedComponent = connect(

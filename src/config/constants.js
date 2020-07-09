@@ -31,7 +31,7 @@ export const MIN_CARD_WIDTH = 345;
 export const DEFAULT_PROTOCOL = 'https';
 
 export const DEFAULT_ACTION_ACCESSIBILITY = false;
-export const DEFAULT_ACTION_ENABLED = true;
+export const DEFAULT_ACTIONS_AS_ENABLED = true;
 
 // math
 export const BLOCK_MATH_DIV = 'p';

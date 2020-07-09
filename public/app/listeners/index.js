@@ -48,7 +48,7 @@ const editUserInClassroom = require('./editUserInClassroom');
 const getSpaceInClassroom = require('./getSpaceInClassroom');
 const loadSpaceInClassroom = require('./loadSpaceInClassroom');
 const setActionAccessibility = require('./setActionAccessibility');
-const setActionEnabled = require('./setActionEnabled');
+const setActionsAsEnabled = require('./setActionsAsEnabled');
 
 module.exports = {
   loadSpace,
@@ -100,5 +100,5 @@ module.exports = {
   getSpaceInClassroom,
   loadSpaceInClassroom,
   setActionAccessibility,
-  setActionEnabled,
+  setActionsAsEnabled,
 };
