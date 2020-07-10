@@ -25,7 +25,6 @@ import {
 import {
   DEFAULT_LANGUAGE,
   SMART_GATEWAY_QUERY_STRING_DIVIDER,
-  DEFAULT_ACTIONS_AS_ENABLED,
 } from '../../config/constants';
 import { isSmartGatewayUrl } from '../../utils/url';
 import { getHeight, setHeight } from '../../actions/layout';
@@ -61,7 +60,7 @@ class PhaseApp extends Component {
     }),
     geolocation: PropTypes.instanceOf(Map),
     geolocationEnabled: PropTypes.bool.isRequired,
-    actionsAsEnabled: PropTypes.bool.isRequired,
+    actionEnabled: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -119,7 +118,7 @@ class PhaseApp extends Component {
         dispatchPostAction,
         geolocation,
         geolocationEnabled,
-        actionsAsEnabled,
+        actionEnabled,
       } = this.props;
 
       // get app instance id in message
@@ -142,7 +141,7 @@ class PhaseApp extends Component {
           case GET_APP_INSTANCE:
             return dispatchGetAppInstance(payload, this.postMessage);
           case POST_ACTION: {
-            if (actionsAsEnabled) {
+            if (actionEnabled) {
               // add geolocation to action if enabled
               payload.geolocation = null;
               if (geolocationEnabled) {
@@ -203,7 +202,7 @@ class PhaseApp extends Component {
       phaseId,
       appInstance,
       userId,
-      actionsAsEnabled,
+      actionEnabled,
     } = this.props;
     let uri = url;
     if (asset) {
@@ -238,7 +237,7 @@ class PhaseApp extends Component {
       itemId: id,
       offline: true,
       subSpaceId: phaseId,
-      analytics: actionsAsEnabled,
+      analytics: actionEnabled,
     };
 
     const queryString = Qs.stringify(params);
@@ -316,9 +315,7 @@ const mapStateToProps = ({ authentication, Space }) => ({
     'geolocationEnabled',
   ]),
   userId: authentication.getIn(['user', 'id']),
-  actionsAsEnabled:
-    authentication.getIn(['user', 'settings', 'actionsAsEnabled']) ||
-    DEFAULT_ACTIONS_AS_ENABLED,
+  actionEnabled: authentication.getIn(['user', 'settings', 'actionEnabled']),
 });
 
 const mapDispatchToProps = {

@@ -191,7 +191,7 @@ const SampleDatabase = {
         geolocationEnabled: false,
         syncMode: SYNC_MODES.ADVANCED,
         userMode: USER_MODES.TEACHER,
-        actionsAsEnabled: DEFAULT_ACTIONS_AS_ENABLED,
+        actionEnabled: DEFAULT_ACTIONS_AS_ENABLED,
         actionAccessibility: DEFAULT_ACTION_ACCESSIBILITY,
       },
     },
