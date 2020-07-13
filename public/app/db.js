@@ -10,6 +10,7 @@ const fsPromises = fs.promises;
 
 const SPACES_COLLECTION = 'spaces';
 const ACTIONS_COLLECTION = 'actions';
+const USER_COLLECTION = 'user';
 const USERS_COLLECTION = 'users';
 const APP_INSTANCE_RESOURCES_COLLECTION = 'appInstanceResources';
 const CLASSROOMS_COLLECTION = 'classrooms';
@@ -37,7 +38,7 @@ const bootstrapDatabase = (dbPath = DATABASE_PATH) => {
   db.defaults({
     [SPACES_COLLECTION]: [],
     [USERS_COLLECTION]: [],
-    user: { lang: DEFAULT_LANG },
+    [USER_COLLECTION]: { lang: DEFAULT_LANG },
     [ACTIONS_COLLECTION]: [],
     [APP_INSTANCE_RESOURCES_COLLECTION]: [],
     [CLASSROOMS_COLLECTION]: [],
@@ -47,6 +48,7 @@ const bootstrapDatabase = (dbPath = DATABASE_PATH) => {
 
 module.exports = {
   SPACES_COLLECTION,
+  USER_COLLECTION,
   USERS_COLLECTION,
   APP_INSTANCE_RESOURCES_COLLECTION,
   ACTIONS_COLLECTION,

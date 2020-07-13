@@ -15,12 +15,17 @@ const ua = require('universal-analytics');
 const { machineIdSync } = require('node-machine-id');
 const openAboutWindow = require('about-window').default;
 const logger = require('./app/logger');
-const { ensureDatabaseExists, bootstrapDatabase } = require('./app/db');
+const {
+  ensureDatabaseExists,
+  bootstrapDatabase,
+  USER_COLLECTION,
+} = require('./app/db');
 const {
   DATABASE_PATH,
   ICON_PATH,
   PRODUCT_NAME,
   escapeEscapeCharacter,
+  ACTIONS_VERBS,
 } = require('./app/config/config');
 const {
   LOAD_SPACE_CHANNEL,
@@ -602,6 +607,18 @@ app.on('ready', async () => {
 });
 
 app.on('window-all-closed', () => {
+  // post sign out action
+  const db = bootstrapDatabase(DATABASE_PATH);
+  const { id: userId, username, anonymous, geolocation } = db
+    .get(USER_COLLECTION)
+    .value();
+  postAction(mainWindow, db)(null, {
+    userId,
+    verb: ACTIONS_VERBS.SIGNOUT,
+    data: { id: userId, username, anonymous },
+    geolocation,
+  });
+
   app.quit();
 });
 

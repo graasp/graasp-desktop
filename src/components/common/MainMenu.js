@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Map } from 'immutable';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -58,6 +59,11 @@ export class MainMenu extends Component {
     location: PropTypes.shape({ pathname: PropTypes.string.isRequired })
       .isRequired,
     userMode: PropTypes.oneOf(Object.values(USER_MODES)).isRequired,
+    user: PropTypes.instanceOf(Map),
+  };
+
+  static defaultProps = {
+    user: Map(),
   };
 
   handleClick = path => {
@@ -74,12 +80,12 @@ export class MainMenu extends Component {
 
   handleSignOut() {
     // pathname inside location matches the path in url
-    const { location: { pathname } = {}, dispatchSignOut } = this.props;
+    const { location: { pathname } = {}, dispatchSignOut, user } = this.props;
     if (pathname) {
       sessionStorage.setItem('redirect', pathname);
     }
 
-    dispatchSignOut();
+    dispatchSignOut(user);
   }
 
   renderSignOut() {
@@ -342,6 +348,7 @@ const mapStateToProps = ({ authentication }) => ({
   developerMode: authentication.getIn(['user', 'settings', 'developerMode']),
   userMode: authentication.getIn(['user', 'settings', 'userMode']),
   activity: Boolean(authentication.getIn(['current', 'activity']).size),
+  user: authentication.get('user'),
 });
 const mapDispatchToProps = {
   dispatchSignOut: signOut,

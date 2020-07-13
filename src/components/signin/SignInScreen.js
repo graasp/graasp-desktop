@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core';
+import { Map } from 'immutable';
 import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
@@ -10,8 +11,8 @@ import TextField from '@material-ui/core/TextField';
 import PropTypes from 'prop-types';
 import logo from '../../logo.svg';
 import Styles from '../../Styles';
-import { signIn, signOut } from '../../actions/authentication';
-import { AUTHENTICATED } from '../../config/constants';
+import { signIn } from '../../actions/authentication';
+import { AUTHENTICATED, ACTION_VERBS } from '../../config/constants';
 import { HOME_PATH } from '../../config/paths';
 import Main from '../common/Main';
 import {
@@ -19,6 +20,7 @@ import {
   LOGIN_BUTTON_ID,
   SIGN_IN_MAIN_ID,
 } from '../../config/selectors';
+import { postAction } from '../../actions';
 
 const CssTextField = withStyles({
   root: {
@@ -90,14 +92,37 @@ class SignInScreen extends Component {
       changeLanguage: PropTypes.func.isRequired,
     }).isRequired,
     dispatchSignIn: PropTypes.func.isRequired,
-    dispatchSignOut: PropTypes.func.isRequired,
+    dispatchPostAction: PropTypes.func.isRequired,
     authenticated: PropTypes.bool.isRequired,
+    actionsEnabled: PropTypes.bool.isRequired,
+    user: PropTypes.instanceOf(Map),
+  };
+
+  static defaultProps = {
+    user: Map(),
   };
 
   componentDidMount = () => {
-    const { authenticated } = this.props;
-    // redirect to home if already authenticated
+    this.handleOnAuthenticated();
+  };
+
+  componentDidUpdate = () => {
+    this.handleOnAuthenticated();
+  };
+
+  handleOnAuthenticated = () => {
+    const { authenticated, user, dispatchPostAction } = this.props;
     if (authenticated) {
+      // send sign in action
+      const username = user.get('username');
+      const anonymous = user.get('anonymous');
+      const id = user.get('id');
+      dispatchPostAction(
+        { verb: ACTION_VERBS.SIGNIN, data: { username, id, anonymous } },
+        user
+      );
+
+      // redirect to home
       this.redirect();
     }
   };
@@ -109,30 +134,17 @@ class SignInScreen extends Component {
     replace(HOME_PATH);
   };
 
-  componentDidUpdate = () => {
-    const { authenticated } = this.props;
-    // redirect to home if already authenticated
-    if (authenticated) {
-      this.redirect();
-    }
-  };
-
   handleSignIn = () => {
     const { username } = this.state;
-    const { dispatchSignIn } = this.props;
+    const { dispatchSignIn, actionsEnabled } = this.props;
     if (username.length) {
-      dispatchSignIn({ username });
+      dispatchSignIn({ username, actionsEnabled });
     }
   };
 
   handleAnonymousSignIn = () => {
     const { dispatchSignIn } = this.props;
     dispatchSignIn({ anonymous: true });
-  };
-
-  handleSignOut = () => {
-    const { dispatchSignOut } = this.props;
-    dispatchSignOut();
   };
 
   handleUsername = event => {
@@ -206,11 +218,12 @@ class SignInScreen extends Component {
 const mapStateToProps = ({ authentication }) => ({
   user: authentication.getIn(['user']),
   authenticated: authentication.getIn(['authenticated']) === AUTHENTICATED,
+  actionsEnabled: authentication.getIn(['user', 'settings', 'actionsEnabled']),
 });
 
 const mapDispatchToProps = {
   dispatchSignIn: signIn,
-  dispatchSignOut: signOut,
+  dispatchPostAction: postAction,
 };
 
 const StyledComponent = withStyles(styles, { withTheme: true })(SignInScreen);

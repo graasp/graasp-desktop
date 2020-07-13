@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import ReactJson from 'react-json-view';
 import PropTypes from 'prop-types';
+import { Map } from 'immutable';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { withTranslation } from 'react-i18next';
@@ -21,9 +22,9 @@ export class DatabaseEditor extends Component {
     dispatchGetDatabase: PropTypes.func.isRequired,
     dispatchSetDatabase: PropTypes.func.isRequired,
     database: PropTypes.shape({
-      user: PropTypes.object,
       spaces: PropTypes.array,
     }),
+    user: PropTypes.instanceOf(Map).isRequired,
     dispatchSignOut: PropTypes.func.isRequired,
   };
 
@@ -42,11 +43,11 @@ export class DatabaseEditor extends Component {
   };
 
   handleUseSampleDatabase = () => {
-    const { dispatchSetDatabase, dispatchSignOut } = this.props;
+    const { dispatchSetDatabase, dispatchSignOut, user } = this.props;
     dispatchSetDatabase(SampleDatabase);
 
     // sign out to force authenticate with existing user
-    dispatchSignOut();
+    dispatchSignOut(user);
   };
 
   render() {
@@ -84,8 +85,9 @@ export class DatabaseEditor extends Component {
   }
 }
 
-const mapStateToProps = ({ Developer }) => ({
+const mapStateToProps = ({ Developer, authentication }) => ({
   database: Developer.get('database'),
+  user: authentication.get('user'),
 });
 
 const mapDispatchToProps = {

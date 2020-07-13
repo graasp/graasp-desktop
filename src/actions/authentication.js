@@ -20,6 +20,8 @@ import {
 } from '../config/channels';
 import { createFlag } from './common';
 import { ERROR_GENERAL } from '../config/errors';
+import { postAction } from './action';
+import { ACTION_VERBS } from '../config/constants';
 
 const flagSigningIn = createFlag(FLAG_SIGNING_IN);
 const flagSigningOut = createFlag(FLAG_SIGNING_OUT);
@@ -37,6 +39,7 @@ const signIn = async ({ username, anonymous }) => async dispatch => {
           type: SIGN_IN_SUCCEEDED,
           payload: user,
         });
+        // action is sent in sign in redirection
       }
       dispatch(flagSigningIn(false));
     });
@@ -46,7 +49,7 @@ const signIn = async ({ username, anonymous }) => async dispatch => {
   }
 };
 
-const signOut = () => dispatch => {
+const signOut = user => dispatch => {
   try {
     dispatch(flagSigningOut(true));
     window.ipcRenderer.send(SIGN_OUT_CHANNEL);
@@ -58,6 +61,18 @@ const signOut = () => dispatch => {
           type: SIGN_OUT_SUCCEEDED,
           payload: response,
         });
+        const username = user.get('username');
+        const id = user.get('id');
+        const anonymous = user.get('anonymous');
+        dispatch(
+          postAction(
+            {
+              verb: ACTION_VERBS.SIGNOUT,
+              data: { username, id, anonymous },
+            },
+            user
+          )
+        );
       }
       dispatch(flagSigningOut(false));
     });
