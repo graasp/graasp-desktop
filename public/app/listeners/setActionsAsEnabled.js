@@ -5,13 +5,13 @@ const logger = require('../logger');
 
 const setActionsAsEnabled = (mainWindow, db) => async (
   event,
-  actionEnabled
+  actionsEnabled
 ) => {
   try {
-    db.set('user.settings.actionEnabled', actionEnabled).write();
+    db.set('user.settings.actionsEnabled', actionsEnabled).write();
     mainWindow.webContents.send(
       SET_ACTIONS_AS_ENABLED_CHANNEL,
-      actionEnabled || DEFAULT_ACTIONS_AS_ENABLED
+      actionsEnabled || DEFAULT_ACTIONS_AS_ENABLED
     );
   } catch (e) {
     logger.error(e);

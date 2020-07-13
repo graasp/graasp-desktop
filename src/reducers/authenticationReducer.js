@@ -92,7 +92,7 @@ export const DEFAULT_USER_SETTINGS = {
   syncMode: DEFAULT_SYNC_MODE,
   userMode: DEFAULT_USER_MODE,
   actionAccessibility: DEFAULT_ACTION_ACCESSIBILITY,
-  actionEnabled: DEFAULT_ACTIONS_AS_ENABLED,
+  actionsEnabled: DEFAULT_ACTIONS_AS_ENABLED,
 };
 
 export const DEFAULT_USER = {
@@ -177,7 +177,7 @@ export default (state = INITIAL_STATE, { type, payload }) => {
         updateRecentSpaces(payload)
       );
     case SET_ACTIONS_AS_ENABLED_SUCCEEDED:
-      return state.setIn(['user', 'settings', 'actionEnabled'], payload);
+      return state.setIn(['user', 'settings', 'actionsEnabled'], payload);
     case SET_ACTION_ACCESSIBILITY_SUCCEEDED:
       return state.setIn(['user', 'settings', 'actionAccessibility'], payload);
     default:

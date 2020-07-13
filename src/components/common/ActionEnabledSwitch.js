@@ -22,7 +22,7 @@ const styles = theme => ({
 
 export class ActionEnabledSwitch extends Component {
   static propTypes = {
-    actionEnabled: PropTypes.bool.isRequired,
+    actionsEnabled: PropTypes.bool.isRequired,
     activity: PropTypes.bool.isRequired,
     t: PropTypes.func.isRequired,
     dispatchSetActionsAsEnabled: PropTypes.func.isRequired,
@@ -38,7 +38,7 @@ export class ActionEnabledSwitch extends Component {
   };
 
   render() {
-    const { classes, t, actionEnabled, activity } = this.props;
+    const { classes, t, actionsEnabled, activity } = this.props;
 
     if (activity) {
       return <Loader />;
@@ -46,9 +46,9 @@ export class ActionEnabledSwitch extends Component {
 
     const control = (
       <Switch
-        checked={actionEnabled}
+        checked={actionsEnabled}
         onChange={this.handleChange}
-        value={actionEnabled}
+        value={actionsEnabled}
         color="primary"
       />
     );
@@ -76,7 +76,7 @@ export class ActionEnabledSwitch extends Component {
 }
 
 const mapStateToProps = ({ authentication }) => ({
-  actionEnabled: authentication.getIn(['user', 'settings', 'actionEnabled']),
+  actionsEnabled: authentication.getIn(['user', 'settings', 'actionsEnabled']),
   activity: Boolean(authentication.getIn(['current', 'activity']).size),
 });
 

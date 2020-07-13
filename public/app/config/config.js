@@ -64,7 +64,7 @@ const DEFAULT_USER = {
     syncMode: DEFAULT_SYNC_MODE,
     userMode: DEFAULT_USER_MODE,
     actionAccessibility: DEFAULT_ACTION_ACCESSIBILITY,
-    actionEnabled: DEFAULT_ACTIONS_AS_ENABLED,
+    actionsEnabled: DEFAULT_ACTIONS_AS_ENABLED,
   },
   favoriteSpaces: [],
   recentSpaces: [],

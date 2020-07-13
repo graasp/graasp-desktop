@@ -60,7 +60,7 @@ class PhaseApp extends Component {
     }),
     geolocation: PropTypes.instanceOf(Map),
     geolocationEnabled: PropTypes.bool.isRequired,
-    actionEnabled: PropTypes.bool.isRequired,
+    actionsEnabled: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -118,7 +118,7 @@ class PhaseApp extends Component {
         dispatchPostAction,
         geolocation,
         geolocationEnabled,
-        actionEnabled,
+        actionsEnabled,
       } = this.props;
 
       // get app instance id in message
@@ -141,7 +141,7 @@ class PhaseApp extends Component {
           case GET_APP_INSTANCE:
             return dispatchGetAppInstance(payload, this.postMessage);
           case POST_ACTION: {
-            if (actionEnabled) {
+            if (actionsEnabled) {
               // add geolocation to action if enabled
               payload.geolocation = null;
               if (geolocationEnabled) {
@@ -202,7 +202,7 @@ class PhaseApp extends Component {
       phaseId,
       appInstance,
       userId,
-      actionEnabled,
+      actionsEnabled,
     } = this.props;
     let uri = url;
     if (asset) {
@@ -237,7 +237,7 @@ class PhaseApp extends Component {
       itemId: id,
       offline: true,
       subSpaceId: phaseId,
-      analytics: actionEnabled,
+      analytics: actionsEnabled,
     };
 
     const queryString = Qs.stringify(params);
@@ -315,7 +315,7 @@ const mapStateToProps = ({ authentication, Space }) => ({
     'geolocationEnabled',
   ]),
   userId: authentication.getIn(['user', 'id']),
-  actionEnabled: authentication.getIn(['user', 'settings', 'actionEnabled']),
+  actionsEnabled: authentication.getIn(['user', 'settings', 'actionsEnabled']),
 });
 
 const mapDispatchToProps = {
