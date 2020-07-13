@@ -60,6 +60,7 @@ class PhaseApp extends Component {
     }),
     geolocation: PropTypes.instanceOf(Map),
     geolocationEnabled: PropTypes.bool.isRequired,
+    actionsEnabled: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -117,6 +118,7 @@ class PhaseApp extends Component {
         dispatchPostAction,
         geolocation,
         geolocationEnabled,
+        actionsEnabled,
       } = this.props;
 
       // get app instance id in message
@@ -139,13 +141,16 @@ class PhaseApp extends Component {
           case GET_APP_INSTANCE:
             return dispatchGetAppInstance(payload, this.postMessage);
           case POST_ACTION: {
-            // add geolocation to action if enabled
-            payload.geolocation = null;
-            if (geolocationEnabled) {
-              const { latitude, longitude } = geolocation.getIn(['coords']);
-              payload.geolocation = { ll: [latitude, longitude] };
+            if (actionsEnabled) {
+              // add geolocation to action if enabled
+              payload.geolocation = null;
+              if (geolocationEnabled) {
+                const { latitude, longitude } = geolocation.getIn(['coords']);
+                payload.geolocation = { ll: [latitude, longitude] };
+              }
+              return dispatchPostAction(payload, this.postMessage);
             }
-            return dispatchPostAction(payload, this.postMessage);
+            break;
           }
           default:
             return false;
@@ -197,6 +202,7 @@ class PhaseApp extends Component {
       phaseId,
       appInstance,
       userId,
+      actionsEnabled,
     } = this.props;
     let uri = url;
     if (asset) {
@@ -231,6 +237,7 @@ class PhaseApp extends Component {
       itemId: id,
       offline: true,
       subSpaceId: phaseId,
+      analytics: actionsEnabled,
     };
 
     const queryString = Qs.stringify(params);
@@ -308,6 +315,7 @@ const mapStateToProps = ({ authentication, Space }) => ({
     'geolocationEnabled',
   ]),
   userId: authentication.getIn(['user', 'id']),
+  actionsEnabled: authentication.getIn(['user', 'settings', 'actionsEnabled']),
 });
 
 const mapDispatchToProps = {

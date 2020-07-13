@@ -123,6 +123,10 @@
     "Actions and Resources": "Actions and Resources",
     "Delete these data": "Delete these data",
     "This user has no content": "This user has no content",
-    "Cancel delete": "Cancel delete"
+    "Cancel delete": "Cancel delete",
+    "Track Actions": "Track Actions",
+    "Share Actions with Teachers": "Share Actions with Teachers",
+    "Actions": "Actions",
+    "When enabled, your interaction with learning spaces and apps will be stored locally. This can help you get feedback on your learning process.": "When enabled, your interaction with learning spaces and apps will be stored locally. This can help you get feedback on your learning process."
   }
 }

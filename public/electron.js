@@ -72,6 +72,8 @@ const {
   EDIT_USER_IN_CLASSROOM_CHANNEL,
   GET_SPACE_IN_CLASSROOM_CHANNEL,
   LOAD_SPACE_IN_CLASSROOM_CHANNEL,
+  SET_ACTION_ACCESSIBILITY_CHANNEL,
+  SET_ACTIONS_AS_ENABLED_CHANNEL,
 } = require('./app/config/channels');
 const env = require('./env.json');
 const {
@@ -122,6 +124,8 @@ const {
   editUserInClassroom,
   getSpaceInClassroom,
   loadSpaceInClassroom,
+  setActionAccessibility,
+  setActionsAsEnabled,
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
 
@@ -461,6 +465,18 @@ app.on('ready', async () => {
   ipcMain.on(
     SET_GEOLOCATION_ENABLED_CHANNEL,
     setGeolocationEnabled(mainWindow, db)
+  );
+
+  // called when setting action accessibility
+  ipcMain.on(
+    SET_ACTION_ACCESSIBILITY_CHANNEL,
+    setActionAccessibility(mainWindow, db)
+  );
+
+  // called when setting action enabled
+  ipcMain.on(
+    SET_ACTIONS_AS_ENABLED_CHANNEL,
+    setActionsAsEnabled(mainWindow, db)
   );
 
   // called when getting student mode

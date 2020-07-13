@@ -1,4 +1,9 @@
-import { SYNC_MODES, USER_MODES } from '../config/constants';
+import {
+  SYNC_MODES,
+  USER_MODES,
+  DEFAULT_ACTION_ACCESSIBILITY,
+  DEFAULT_ACTIONS_AS_ENABLED,
+} from '../config/constants';
 
 const SampleDatabase = {
   spaces: [
@@ -168,7 +173,7 @@ const SampleDatabase = {
       format: 'v1',
       type: 'input',
       visibility: 'private',
-      user: '5ce422795fe28eeca1001e0a',
+      user: '1',
       id: '5ce430152f6f6672b16fca57',
       verb: 'saved',
       spaceId: '6ccb068bbb18b80359966631',
@@ -176,7 +181,7 @@ const SampleDatabase = {
   ],
   users: [
     {
-      id: 1,
+      id: '1',
       username: 'graasp',
       createdAt: '2019-05-21T17:06:29.683Z',
       geolocation: null,
@@ -186,6 +191,8 @@ const SampleDatabase = {
         geolocationEnabled: false,
         syncMode: SYNC_MODES.ADVANCED,
         userMode: USER_MODES.TEACHER,
+        actionsEnabled: DEFAULT_ACTIONS_AS_ENABLED,
+        actionAccessibility: DEFAULT_ACTION_ACCESSIBILITY,
       },
     },
   ],

@@ -123,6 +123,10 @@
     "Actions and Resources": "Actions et Resources",
     "Delete these data": "Supprimer ces données",
     "This user has no content": "Cet utilisateur n'a pas de contenu",
-    "Cancel delete": "Annuler la suppression"
+    "Cancel delete": "Annuler la suppression",
+    "Track Actions": "Enregistrer les Actions",
+    "Share Actions with Teachers": "Partager les Actions avec les Enseignants",
+    "Actions": "Actions",
+    "When enabled, your interaction with learning spaces and apps will be stored locally. This can help you get feedback on your learning process.": "Si cette option est activée, les interactions avec les espaces et les apps seront sauvegardées localement. Ces données permettent un suivi du processus d'apprentissage."
   }
 }

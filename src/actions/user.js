@@ -28,6 +28,10 @@ import {
   SET_SPACE_AS_FAVORITE_SUCCEEDED,
   FLAG_SETTING_SPACE_AS_RECENT,
   SET_SPACE_AS_RECENT_SPACES_SUCCEEDED,
+  FLAG_SETTING_ACTION_ACCESSIBILITY,
+  SET_ACTION_ACCESSIBILITY_SUCCEEDED,
+  FLAG_SETTING_ACTIONS_AS_ENABLED,
+  SET_ACTIONS_AS_ENABLED_SUCCEEDED,
 } from '../types';
 import {
   ERROR_GETTING_GEOLOCATION,
@@ -45,6 +49,8 @@ import {
   ERROR_SETTING_USER_MODE,
   ERROR_SETTING_SPACE_AS_FAVORITE,
   ERROR_SETTING_SPACE_AS_RECENT,
+  ERROR_SETTING_ACTION_ACCESSIBILITY,
+  ERROR_SETTING_ACTIONS_AS_ENABLED,
 } from '../config/messages';
 import {
   GET_USER_FOLDER_CHANNEL,
@@ -60,6 +66,8 @@ import {
   SET_USER_MODE_CHANNEL,
   SET_SPACE_AS_FAVORITE_CHANNEL,
   SET_SPACE_AS_RECENT_CHANNEL,
+  SET_ACTION_ACCESSIBILITY_CHANNEL,
+  SET_ACTIONS_AS_ENABLED_CHANNEL,
 } from '../config/channels';
 import { createFlag } from './common';
 import { ERROR_GENERAL } from '../config/errors';
@@ -81,6 +89,10 @@ const flagGettingUserMode = createFlag(FLAG_GETTING_USER_MODE);
 const flagSettingUserMode = createFlag(FLAG_SETTING_USER_MODE);
 const flagSettingSpaceAsFavorite = createFlag(FLAG_SETTING_SPACE_AS_FAVORITE);
 const flagSettingSpaceAsRecent = createFlag(FLAG_SETTING_SPACE_AS_RECENT);
+const flagSettingActionAccessibility = createFlag(
+  FLAG_SETTING_ACTION_ACCESSIBILITY
+);
+const flagSettingActionsAsEnabled = createFlag(FLAG_SETTING_ACTIONS_AS_ENABLED);
 
 const getGeolocation = async () => async dispatch => {
   // only fetch location if online
@@ -399,6 +411,57 @@ const setSpaceAsRecent = payload => dispatch => {
   }
 };
 
+const setActionAccessibility = payload => dispatch => {
+  try {
+    dispatch(flagSettingActionAccessibility(true));
+    window.ipcRenderer.send(SET_ACTION_ACCESSIBILITY_CHANNEL, payload);
+    window.ipcRenderer.once(
+      SET_ACTION_ACCESSIBILITY_CHANNEL,
+      (event, response) => {
+        if (response === ERROR_GENERAL) {
+          toastr.error(
+            ERROR_MESSAGE_HEADER,
+            ERROR_SETTING_ACTION_ACCESSIBILITY
+          );
+        } else {
+          dispatch({
+            type: SET_ACTION_ACCESSIBILITY_SUCCEEDED,
+            payload,
+          });
+        }
+        dispatch(flagSettingActionAccessibility(false));
+      }
+    );
+  } catch (e) {
+    console.error(e);
+    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_ACTION_ACCESSIBILITY);
+  }
+};
+
+const setActionsAsEnabled = payload => dispatch => {
+  try {
+    dispatch(flagSettingActionsAsEnabled(true));
+    window.ipcRenderer.send(SET_ACTIONS_AS_ENABLED_CHANNEL, payload);
+    window.ipcRenderer.once(
+      SET_ACTIONS_AS_ENABLED_CHANNEL,
+      (event, response) => {
+        if (response === ERROR_GENERAL) {
+          toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_ACTIONS_AS_ENABLED);
+        } else {
+          dispatch({
+            type: SET_ACTIONS_AS_ENABLED_SUCCEEDED,
+            payload,
+          });
+        }
+        dispatch(flagSettingActionsAsEnabled(false));
+      }
+    );
+  } catch (e) {
+    console.error(e);
+    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_ACTIONS_AS_ENABLED);
+  }
+};
+
 export {
   getUserFolder,
   getGeolocation,
@@ -414,4 +477,6 @@ export {
   setUserMode,
   setSpaceAsFavorite,
   setSpaceAsRecent,
+  setActionAccessibility,
+  setActionsAsEnabled,
 };
