@@ -32,7 +32,7 @@ const addClassroom = (mainWindow, db) => async (event, { name, userId }) => {
       .find({ name, teacherId: userId })
       .value();
     if (found) {
-      mainWindow.webContents.send(
+      return mainWindow.webContents.send(
         ADD_CLASSROOM_CHANNEL,
         ERROR_DUPLICATE_CLASSROOM_NAME
       );
@@ -58,10 +58,10 @@ const addClassroom = (mainWindow, db) => async (event, { name, userId }) => {
       .push(newClassroom)
       .write();
 
-    mainWindow.webContents.send(ADD_CLASSROOM_CHANNEL, newClassroom);
+    return mainWindow.webContents.send(ADD_CLASSROOM_CHANNEL, newClassroom);
   } catch (err) {
     logger.error(err);
-    mainWindow.webContents.send(ADD_CLASSROOM_CHANNEL, ERROR_GENERAL);
+    return mainWindow.webContents.send(ADD_CLASSROOM_CHANNEL, ERROR_GENERAL);
   }
 };
 
