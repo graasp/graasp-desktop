@@ -344,7 +344,7 @@ describe('Load Space Scenarios', function() {
           await client.click(`#${LOAD_SUBMIT_BUTTON_ID}`);
           await client.pause(LOAD_SELECTION_SPACE_PAUSE);
 
-          await menuGoToHome(client);
+          await menuGoToSavedSpaces(client);
 
           await expectElementToExist(client, `#${SPACE_NOT_AVAILABLE_TEXT_ID}`);
         })

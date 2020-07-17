@@ -15,7 +15,6 @@ import {
 } from './utils';
 import { createApplication, closeApplication } from './application';
 import {
-  SETTINGS_MAIN_ID,
   LANGUAGE_SELECT_ID,
   GEOLOCATION_CONTROL_ID,
   DEVELOPER_SWITCH_ID,
@@ -28,6 +27,7 @@ import {
   SYNC_VISUAL_MAIN_ID,
   SYNC_ADVANCED_MAIN_ID,
   SYNC_CANCEL_BUTTON_ID,
+  SETTINGS_TITLE_ID,
 } from '../src/config/selectors';
 import {
   DEFAULT_GLOBAL_TIMEOUT,
@@ -182,7 +182,7 @@ describe('Settings Scenarios', function() {
         await menuGoToSettings(client);
 
         // check settings screen displays in english
-        const settingsTitle = await client.getText(`#${SETTINGS_MAIN_ID} h5`);
+        const settingsTitle = await client.getText(`#${SETTINGS_TITLE_ID}`);
         expect(settingsTitle).to.equal(i18n.t('Settings'));
         const languageSelectTitle = await client.getText(
           `#${LANGUAGE_SELECT_ID} label`
@@ -204,7 +204,7 @@ describe('Settings Scenarios', function() {
         await i18n.changeLanguage('fr');
 
         // check settings screen displays in english
-        const settingsTitleFr = await client.getText(`#${SETTINGS_MAIN_ID} h5`);
+        const settingsTitleFr = await client.getText(`#${SETTINGS_TITLE_ID}`);
         expect(settingsTitleFr).to.equal(i18n.t('Settings'));
         const languageSelectTitleFr = await client.getText(
           `#${LANGUAGE_SELECT_ID} label`
