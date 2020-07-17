@@ -118,7 +118,7 @@ class SignInScreen extends Component {
       const anonymous = user.get('anonymous');
       const id = user.get('id');
       dispatchPostAction(
-        { verb: ACTION_VERBS.SIGNIN, data: { username, id, anonymous } },
+        { verb: ACTION_VERBS.LOGIN, data: { username, id, anonymous } },
         user
       );
 

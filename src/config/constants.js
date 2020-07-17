@@ -116,6 +116,6 @@ export const TABLE_ROW_HEIGHT = 43;
 export const DRAWER_HEADER_HEIGHT = 55;
 
 export const ACTION_VERBS = {
-  SIGNIN: 'signin',
-  SIGNOUT: 'signout',
+  LOGIN: 'login',
+  LOGOUT: 'logout',
 };

@@ -67,7 +67,7 @@ const signOut = user => dispatch => {
         dispatch(
           postAction(
             {
-              verb: ACTION_VERBS.SIGNOUT,
+              verb: ACTION_VERBS.LOGOUT,
               data: { username, id, anonymous },
             },
             user

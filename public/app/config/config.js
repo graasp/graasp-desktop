@@ -81,7 +81,7 @@ const VISIBILITIES = {
 
 const DEFAULT_FORMAT = 'v1';
 const ACTIONS_VERBS = {
-  SIGNOUT: 'signout',
+  LOGOUT: 'logout',
 };
 
 module.exports = {

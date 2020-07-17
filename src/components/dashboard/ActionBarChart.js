@@ -14,7 +14,6 @@ import {
 } from 'recharts';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core';
-import Loader from '../common/Loader';
 import Styles from '../../Styles';
 
 class ActionBarChart extends PureComponent {
@@ -107,10 +106,6 @@ class ActionBarChart extends PureComponent {
 
   render() {
     const { spaces, t, actions } = this.props;
-
-    if (!spaces || !actions) {
-      return <Loader />;
-    }
 
     // remove actions unrelated to spaces
     const actionsWithDefinedSpaceId = actions.filter(({ spaceId }) => spaceId);
