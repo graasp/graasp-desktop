@@ -13,6 +13,12 @@ import { SPACE_CARD_CLASS } from '../../config/selectors';
 import NoSpacesAvailable from '../common/NoSpacesAvailable';
 import { buildSpacePath } from '../../config/paths';
 
+const styles = {
+  leftIcon: {
+    marginRight: '0.5rem',
+  },
+};
+
 class SpaceGrid extends Component {
   state = {
     columnNb: 4,
@@ -90,12 +96,6 @@ class SpaceGrid extends Component {
 
     // if nothing present return default image
     return DefaultThumbnail;
-  };
-
-  static styles = {
-    leftIcon: {
-      marginRight: '0.5rem',
-    },
   };
 
   render() {
@@ -187,4 +187,4 @@ const ConnectedComponent = connect(
   mapDispatchToProps
 )(SpaceGrid);
 
-export default withRouter(withStyles(SpaceGrid.styles)(ConnectedComponent));
+export default withRouter(withStyles(styles)(ConnectedComponent));
