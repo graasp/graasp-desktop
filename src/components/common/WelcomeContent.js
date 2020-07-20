@@ -102,7 +102,6 @@ class WelcomeContent extends Component {
           {t('Welcome to Graasp Desktop')}
         </Typography>
         <ButtonGroup
-          disableElevation
           variant="contained"
           color="primary"
           aria-label="contained group primary button"

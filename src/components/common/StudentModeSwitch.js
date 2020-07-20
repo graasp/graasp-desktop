@@ -27,7 +27,6 @@ export class StudentModeSwitch extends Component {
     dispatchSetUserMode: PropTypes.func.isRequired,
     classes: PropTypes.shape({
       formControl: PropTypes.string.isRequired,
-      button: PropTypes.string.isRequired,
     }).isRequired,
   };
 

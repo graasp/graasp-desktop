@@ -28,7 +28,6 @@ export class GeolocationControl extends Component {
     dispatchSetGeolocationEnabled: PropTypes.func.isRequired,
     classes: PropTypes.shape({
       formControl: PropTypes.string.isRequired,
-      button: PropTypes.string.isRequired,
     }).isRequired,
     controlType: PropTypes.oneOf(Object.keys(CONTROL_TYPES)),
   };
@@ -86,7 +85,6 @@ export class GeolocationControl extends Component {
                   variant="contained"
                   onClick={this.handleClick}
                   color="primary"
-                  className={classes.button}
                 >
                   {t('Enable Geolocation')}
                 </Button>

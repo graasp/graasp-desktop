@@ -64,7 +64,6 @@ Header.propTypes = {
     formControl: PropTypes.string.isRequired,
     input: PropTypes.string.isRequired,
     button: PropTypes.string.isRequired,
-    toolbarRoot: PropTypes.string.isRequired,
   }).isRequired,
   theme: PropTypes.shape({
     direction: PropTypes.string.isRequired,

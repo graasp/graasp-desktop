@@ -105,7 +105,7 @@ export class App extends Component {
       fullScreen: PropTypes.string.isRequired,
     }).isRequired,
     connexionStatus: PropTypes.bool.isRequired,
-    userMode: PropTypes.oneOf(USER_MODES).isRequired,
+    userMode: PropTypes.oneOf(Object.values(USER_MODES)).isRequired,
     t: PropTypes.func.isRequired,
   };
 

@@ -6,7 +6,6 @@ exports[`<GeolocationControl /> <GeolocationControl /> as button renders correct
   id="settingsGeolocationControl"
 >
   <WithStyles(ForwardRef(Button))
-    className=""
     color="primary"
     onClick={[Function]}
     variant="contained"
@@ -22,7 +21,6 @@ exports[`<GeolocationControl /> <GeolocationControl /> as button renders correct
   id="settingsGeolocationControl"
 >
   <WithStyles(ForwardRef(Button))
-    className=""
     color="primary"
     onClick={[Function]}
     variant="contained"
