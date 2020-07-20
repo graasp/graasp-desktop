@@ -1,4 +1,5 @@
 import { toastr } from 'react-redux-toastr';
+import i18n from '../config/i18n';
 import {
   FLAG_SIGNING_IN,
   FLAG_SIGNING_OUT,
@@ -33,7 +34,7 @@ const signIn = async ({ username, lang, anonymous }) => async dispatch => {
     window.ipcRenderer.send(SIGN_IN_CHANNEL, { username, lang, anonymous });
     window.ipcRenderer.once(SIGN_IN_CHANNEL, async (event, user) => {
       if (user === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_SIGNING_IN);
+        toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_SIGNING_IN));
       } else {
         dispatch({
           type: SIGN_IN_SUCCEEDED,
@@ -44,7 +45,7 @@ const signIn = async ({ username, lang, anonymous }) => async dispatch => {
       dispatch(flagSigningIn(false));
     });
   } catch (e) {
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SIGNING_IN);
+    toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_SIGNING_IN));
     dispatch(flagSigningIn(false));
   }
 };
@@ -55,7 +56,7 @@ const signOut = user => dispatch => {
     window.ipcRenderer.send(SIGN_OUT_CHANNEL);
     window.ipcRenderer.once(SIGN_OUT_CHANNEL, (event, response) => {
       if (response === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_SIGNING_OUT);
+        toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_SIGNING_OUT));
       } else {
         dispatch({
           type: SIGN_OUT_SUCCEEDED,
@@ -78,7 +79,7 @@ const signOut = user => dispatch => {
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SIGNING_OUT);
+    toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_SIGNING_OUT));
     dispatch(flagSigningOut(false));
   }
 };
@@ -91,7 +92,10 @@ const isAuthenticated = async () => dispatch => {
       IS_AUTHENTICATED_CHANNEL,
       (event, authenticated) => {
         if (authenticated === ERROR_GENERAL) {
-          toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_AUTHENTICATED);
+          toastr.error(
+            ERROR_MESSAGE_HEADER,
+            i18n.t(ERROR_GETTING_AUTHENTICATED)
+          );
         } else {
           dispatch({
             type: IS_AUTHENTICATED_SUCCEEDED,
@@ -103,7 +107,7 @@ const isAuthenticated = async () => dispatch => {
     );
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_AUTHENTICATED);
+    toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_GETTING_AUTHENTICATED));
     dispatch(flagGettingAuthenticated(false));
   }
 };

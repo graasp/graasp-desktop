@@ -1,4 +1,5 @@
 import { toastr } from 'react-redux-toastr';
+import i18n from '../config/i18n';
 import {
   FLAG_LOADING_SPACE,
   FLAG_EXTRACTING_FILE_TO_LOAD_SPACE,
@@ -42,13 +43,16 @@ export const loadSpace = payload => dispatch => {
   window.ipcRenderer.once(LOADED_SPACE_CHANNEL, (event, response) => {
     switch (response) {
       case ERROR_GENERAL:
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_LOADING_MESSAGE);
+        toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_LOADING_MESSAGE));
         break;
       default:
         dispatch({
           type: LOAD_SPACE_SUCCEEDED,
         });
-        toastr.success(SUCCESS_MESSAGE_HEADER, SUCCESS_SPACE_LOADED_MESSAGE);
+        toastr.success(
+          SUCCESS_MESSAGE_HEADER,
+          i18n.t(SUCCESS_SPACE_LOADED_MESSAGE)
+        );
         setSpaceAsRecent({ spaceId: response.spaceId, recent: true })(dispatch);
     }
     dispatch(flagLoadingSpace(false));
@@ -77,19 +81,25 @@ export const createExtractFile = (
     async (event, response) => {
       switch (response) {
         case ERROR_ZIP_CORRUPTED:
-          toastr.error(ERROR_MESSAGE_HEADER, ERROR_ZIP_CORRUPTED_MESSAGE);
+          toastr.error(
+            ERROR_MESSAGE_HEADER,
+            i18n.t(ERROR_ZIP_CORRUPTED_MESSAGE)
+          );
           break;
         case ERROR_JSON_CORRUPTED:
-          toastr.error(ERROR_MESSAGE_HEADER, ERROR_JSON_CORRUPTED_MESSAGE);
+          toastr.error(
+            ERROR_MESSAGE_HEADER,
+            i18n.t(ERROR_JSON_CORRUPTED_MESSAGE)
+          );
           break;
         case ERROR_SPACE_ALREADY_AVAILABLE:
           toastr.error(
             ERROR_MESSAGE_HEADER,
-            ERROR_SPACE_ALREADY_AVAILABLE_MESSAGE
+            i18n.t(ERROR_SPACE_ALREADY_AVAILABLE_MESSAGE)
           );
           break;
         case ERROR_GENERAL:
-          toastr.error(ERROR_MESSAGE_HEADER, ERROR_LOADING_MESSAGE);
+          toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_LOADING_MESSAGE));
           break;
         default:
           // wait for saved space
@@ -120,7 +130,7 @@ export const createClearLoadSpace = (payload, type, flagType) => dispatch => {
   window.ipcRenderer.once(CLEAR_LOAD_SPACE_CHANNEL, (event, response) => {
     switch (response) {
       case ERROR_GENERAL:
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_LOADING_MESSAGE);
+        toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_LOADING_MESSAGE));
         break;
       default:
         dispatch({

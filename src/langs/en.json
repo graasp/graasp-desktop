@@ -136,6 +136,11 @@
     "Sync Advanced Mode": "Sync Advanced Mode",
     "Student Mode Enabled": "Student Mode Enabled",
     "Are you sure you want to clear all of the user input in this space?": "Are you sure you want to clear all of the user input in this space?",
-    "Clear": "Clear"
+    "Clear": "Clear",
+    "User input was successfully cleared.": "User input was successfully cleared.",
+    "Space was deleted successfully": "Space was deleted successfully",
+    "A space with the same id is already available": "A space with the same id is already available",
+    "This Space is already up to date": "This Space is already up to date",
+    "Space was saved successfully": "Space was saved successfully"
   }
 }

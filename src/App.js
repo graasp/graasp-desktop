@@ -84,6 +84,7 @@ export class App extends Component {
     }).isRequired,
     connexionStatus: PropTypes.bool.isRequired,
     userMode: PropTypes.oneOf(USER_MODES).isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -143,14 +144,14 @@ export class App extends Component {
   };
 
   triggerConnectionToastr = () => {
-    const { classes, connexionStatus } = this.props;
+    const { classes, connexionStatus, t } = this.props;
 
     if (connexionStatus) {
-      toastr.light(CONNECTION_MESSAGE_HEADER, CONNECTION_ONLINE_MESSAGE, {
+      toastr.light(CONNECTION_MESSAGE_HEADER, t(CONNECTION_ONLINE_MESSAGE), {
         icon: <WifiIcon className={classes.toastrIcon} />,
       });
     } else {
-      toastr.light(CONNECTION_MESSAGE_HEADER, CONNECTION_OFFLINE_MESSAGE, {
+      toastr.light(CONNECTION_MESSAGE_HEADER, t(CONNECTION_OFFLINE_MESSAGE), {
         icon: <WifiOffIcon className={classes.toastrIcon} />,
       });
     }
