@@ -126,6 +126,7 @@ const {
   loadSpaceInClassroom,
   setActionAccessibility,
   setActionsAsEnabled,
+  windowAllClosed,
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
 
@@ -601,9 +602,7 @@ app.on('ready', async () => {
   ipcMain.on(SYNC_SPACE_CHANNEL, syncSpace(mainWindow, db));
 });
 
-app.on('window-all-closed', () => {
-  app.quit();
-});
+app.on('window-all-closed', () => windowAllClosed(mainWindow));
 
 app.on('activate', () => {
   if (mainWindow === null) {

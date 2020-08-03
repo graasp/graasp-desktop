@@ -14,7 +14,6 @@ import {
 } from 'recharts';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core';
-import Loader from '../common/Loader';
 import Styles from '../../Styles';
 
 class ActionBarChart extends PureComponent {
@@ -55,19 +54,11 @@ class ActionBarChart extends PureComponent {
     spaces: [],
   };
 
-  render() {
-    const { spaces, theme, t, actions } = this.props;
+  renderChart = actions => {
+    const { spaces, theme, t } = this.props;
     const {
       palette: { primary, type },
     } = theme;
-
-    if (!spaces || !actions) {
-      return <Loader />;
-    }
-
-    if (_.isEmpty(spaces) || _.isEmpty(actions)) {
-      return <p>{t('No action has been recorded.')}</p>;
-    }
 
     const data =
       // group actions by space id
@@ -84,38 +75,52 @@ class ActionBarChart extends PureComponent {
         });
 
     return (
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart
+          width="100%"
+          height="100%"
+          data={data}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="space" />
+          <YAxis
+            label={{
+              value: t('Action Count'),
+              angle: -90,
+              position: 'insideLeft',
+            }}
+          />
+          <Tooltip />
+          <Legend />
+          <Bar name={t('Action Count')} dataKey="count" fill={primary[type]} />
+        </BarChart>
+      </ResponsiveContainer>
+    );
+  };
+
+  render() {
+    const { spaces, t, actions } = this.props;
+
+    // remove actions unrelated to spaces
+    const actionsWithDefinedSpaceId = actions.filter(({ spaceId }) => spaceId);
+
+    const content =
+      _.isEmpty(spaces) || _.isEmpty(actionsWithDefinedSpaceId) ? (
+        <p>{t('No action has been recorded.')}</p>
+      ) : (
+        this.renderChart(actionsWithDefinedSpaceId)
+      );
+
+    return (
       <>
         <Typography variant="h5">{t('Action Count Per Space')}</Typography>
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            width="100%"
-            height="100%"
-            data={data}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="space" />
-            <YAxis
-              label={{
-                value: t('Action Count'),
-                angle: -90,
-                position: 'insideLeft',
-              }}
-            />
-            <Tooltip />
-            <Legend />
-            <Bar
-              name={t('Action Count')}
-              dataKey="count"
-              fill={primary[type]}
-            />
-          </BarChart>
-        </ResponsiveContainer>
+        {content}
       </>
     );
   }

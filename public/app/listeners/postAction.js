@@ -1,6 +1,7 @@
 const ObjectId = require('bson-objectid');
 const { POST_ACTION_CHANNEL } = require('../config/channels');
 const logger = require('../logger');
+const { DEFAULT_FORMAT } = require('../config/config');
 
 const postAction = (mainWindow, db) => (event, payload = {}) => {
   try {
@@ -9,7 +10,7 @@ const postAction = (mainWindow, db) => (event, payload = {}) => {
       appInstanceId,
       spaceId,
       subSpaceId,
-      format,
+      format = DEFAULT_FORMAT,
       verb,
       data,
       geolocation,
@@ -21,9 +22,9 @@ const postAction = (mainWindow, db) => (event, payload = {}) => {
 
     // prepare the action that we will create
     const actionToWrite = {
-      spaceId,
-      subSpaceId,
-      appInstanceId,
+      ...(spaceId ? { spaceId } : {}),
+      ...(subSpaceId ? { subSpaceId } : {}),
+      ...(appInstanceId ? { appInstanceId } : {}),
       createdAt: now,
       updatedAt: now,
       data,
@@ -40,11 +41,13 @@ const postAction = (mainWindow, db) => (event, payload = {}) => {
       .push(actionToWrite)
       .write();
 
-    // send back the resource
-    mainWindow.webContents.send(
-      `${POST_ACTION_CHANNEL}_${appInstanceId}`,
-      actionToWrite
-    );
+    // send back the action to the app
+    if (appInstanceId) {
+      mainWindow.webContents.send(
+        `${POST_ACTION_CHANNEL}_${appInstanceId}`,
+        actionToWrite
+      );
+    }
   } catch (e) {
     logger.error(e);
     mainWindow.webContents.send(POST_ACTION_CHANNEL, null);

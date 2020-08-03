@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Map } from 'immutable';
 import Qs from 'qs';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -58,8 +59,7 @@ class PhaseApp extends Component {
     appInstance: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }),
-    geolocation: PropTypes.instanceOf(Map),
-    geolocationEnabled: PropTypes.bool.isRequired,
+    user: PropTypes.instanceOf(Map).isRequired,
     actionsEnabled: PropTypes.bool.isRequired,
   };
 
@@ -69,7 +69,6 @@ class PhaseApp extends Component {
     appInstance: null,
     name: 'Image',
     lang: DEFAULT_LANGUAGE,
-    geolocation: null,
     userId: null,
   };
 
@@ -116,9 +115,7 @@ class PhaseApp extends Component {
         dispatchGetAppInstance,
         appInstance,
         dispatchPostAction,
-        geolocation,
-        geolocationEnabled,
-        actionsEnabled,
+        user,
       } = this.props;
 
       // get app instance id in message
@@ -141,16 +138,7 @@ class PhaseApp extends Component {
           case GET_APP_INSTANCE:
             return dispatchGetAppInstance(payload, this.postMessage);
           case POST_ACTION: {
-            if (actionsEnabled) {
-              // add geolocation to action if enabled
-              payload.geolocation = null;
-              if (geolocationEnabled) {
-                const { latitude, longitude } = geolocation.getIn(['coords']);
-                payload.geolocation = { ll: [latitude, longitude] };
-              }
-              return dispatchPostAction(payload, this.postMessage);
-            }
-            break;
+            return dispatchPostAction(payload, user, this.postMessage);
           }
           default:
             return false;
@@ -315,6 +303,7 @@ const mapStateToProps = ({ authentication, Space }) => ({
     'geolocationEnabled',
   ]),
   userId: authentication.getIn(['user', 'id']),
+  user: authentication.getIn(['user']),
   actionsEnabled: authentication.getIn(['user', 'settings', 'actionsEnabled']),
 });
 

@@ -79,6 +79,11 @@ const VISIBILITIES = {
   PRIVATE: 'private',
 };
 
+const DEFAULT_FORMAT = 'v1';
+const ACTIONS_VERBS = {
+  LOGOUT: 'logout',
+};
+
 module.exports = {
   DEFAULT_LOGGING_LEVEL,
   DEFAULT_PROTOCOL,
@@ -103,4 +108,6 @@ module.exports = {
   DEFAULT_USER_MODE,
   MAX_RECENT_SPACES,
   VISIBILITIES,
+  DEFAULT_FORMAT,
+  ACTIONS_VERBS,
 };
