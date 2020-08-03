@@ -147,13 +147,17 @@ export class App extends Component {
     const { classes, connexionStatus, t } = this.props;
 
     if (connexionStatus) {
-      toastr.light(CONNECTION_MESSAGE_HEADER, t(CONNECTION_ONLINE_MESSAGE), {
+      toastr.light(t(CONNECTION_MESSAGE_HEADER), t(CONNECTION_ONLINE_MESSAGE), {
         icon: <WifiIcon className={classes.toastrIcon} />,
       });
     } else {
-      toastr.light(CONNECTION_MESSAGE_HEADER, t(CONNECTION_OFFLINE_MESSAGE), {
-        icon: <WifiOffIcon className={classes.toastrIcon} />,
-      });
+      toastr.light(
+        t(CONNECTION_MESSAGE_HEADER),
+        t(CONNECTION_OFFLINE_MESSAGE),
+        {
+          icon: <WifiOffIcon className={classes.toastrIcon} />,
+        }
+      );
     }
   };
 

@@ -128,7 +128,7 @@ class SyncScreen extends Component {
   };
 
   componentDidMount() {
-    const { localSpace, remoteSpace, classes } = this.props;
+    const { localSpace, remoteSpace, classes, t } = this.props;
 
     if (!_.isEmpty(localSpace) && !_.isEmpty(remoteSpace)) {
       // detect diff and return sync phases to display
@@ -136,8 +136,8 @@ class SyncScreen extends Component {
       // rendered as added / moved phases
       try {
         const syncPhases = createDiffElements(
-          [createToolsPhase(localSpace.items), ...localSpace.phases],
-          [createToolsPhase(remoteSpace.items), ...remoteSpace.phases],
+          [createToolsPhase(localSpace.items, t), ...localSpace.phases],
+          [createToolsPhase(remoteSpace.items, t), ...remoteSpace.phases],
           classes,
           SYNC_PHASE_PROPERTIES
         )

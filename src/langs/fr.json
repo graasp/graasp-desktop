@@ -142,6 +142,10 @@
     "Space was deleted successfully": "L'espace a été supprimé avec succès",
     "A space with the same id is already available": "Un espace avec le même identifiant existe déjà",
     "This Space is already up to date": "Cet espace est déjà à jour",
-    "Space was saved successfully": "L'espace a été correctement sauvegardé"
+    "Space was saved successfully": "L'espace a été correctement sauvegardé",
+    "Connection Status": "Statut de la Connexion",
+    "You are offline.": "Vous êtes hors ligne.",
+    "You are online.": "Vous êtes en ligne.",
+    "Tools": "Outils"
   }
 }
