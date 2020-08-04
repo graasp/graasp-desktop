@@ -66,6 +66,7 @@ export const buildCheckboxLabel = name => `checkboxLabel-${name}`;
 export const EXPORT_SPACE_BUTTON_ID = 'exportSpaceButton';
 export const EXPORT_SPACE_BACK_BUTTON_ID = 'exportSpaceBackButton';
 
+export const SETTINGS_TITLE_ID = 'settingsTitle';
 export const LANGUAGE_SELECT_ID = 'settingsLanguageSelect';
 export const DEVELOPER_SWITCH_ID = 'settingsDeveloperSwitch';
 export const GEOLOCATION_CONTROL_ID = 'settingsGeolocationControl';

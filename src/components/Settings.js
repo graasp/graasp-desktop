@@ -12,7 +12,7 @@ import LanguageSelect from './common/LanguageSelect';
 import DeveloperSwitch from './common/DeveloperSwitch';
 import GeolocationControl from './common/GeolocationControl';
 import Main from './common/Main';
-import { SETTINGS_MAIN_ID } from '../config/selectors';
+import { SETTINGS_MAIN_ID, SETTINGS_TITLE_ID } from '../config/selectors';
 import SyncAdvancedSwitch from './space/sync/SyncAdvancedSwitch';
 import StudentModeSwitch from './common/StudentModeSwitch';
 import ActionEnabledSwitch from './common/ActionEnabledSwitch';
@@ -51,7 +51,7 @@ export class Settings extends Component {
     return (
       <Main id={SETTINGS_MAIN_ID}>
         <div className={classes.settings}>
-          <Typography variant="h4" color="inherit">
+          <Typography variant="h4" color="inherit" id={SETTINGS_TITLE_ID}>
             {t('Settings')}
           </Typography>
           <FormGroup>
