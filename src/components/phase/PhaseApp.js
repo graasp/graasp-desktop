@@ -61,6 +61,7 @@ class PhaseApp extends Component {
     }),
     user: PropTypes.instanceOf(Map).isRequired,
     actionsEnabled: PropTypes.bool.isRequired,
+    isSpaceSaved: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -70,6 +71,7 @@ class PhaseApp extends Component {
     name: 'Image',
     lang: DEFAULT_LANGUAGE,
     userId: null,
+    isSpaceSaved: false,
   };
 
   state = {
@@ -116,6 +118,7 @@ class PhaseApp extends Component {
         appInstance,
         dispatchPostAction,
         user,
+        isSpaceSaved,
       } = this.props;
 
       // get app instance id in message
@@ -127,18 +130,28 @@ class PhaseApp extends Component {
       }
 
       // only receive message from intended app instance
+      // save data if space is saved
       if (componentAppInstanceId === messageAppInstanceId) {
         switch (type) {
+          case GET_APP_INSTANCE:
+            return dispatchGetAppInstance(payload, this.postMessage);
           case GET_APP_INSTANCE_RESOURCES:
             return getAppInstanceResources(payload, this.postMessage);
           case POST_APP_INSTANCE_RESOURCE:
-            return postAppInstanceResource(payload, this.postMessage);
+            if (isSpaceSaved) {
+              return postAppInstanceResource(payload, this.postMessage);
+            }
+            break;
           case PATCH_APP_INSTANCE_RESOURCE:
-            return patchAppInstanceResource(payload, this.postMessage);
-          case GET_APP_INSTANCE:
-            return dispatchGetAppInstance(payload, this.postMessage);
+            if (isSpaceSaved) {
+              return patchAppInstanceResource(payload, this.postMessage);
+            }
+            break;
           case POST_ACTION: {
-            return dispatchPostAction(payload, user, this.postMessage);
+            if (isSpaceSaved) {
+              return dispatchPostAction(payload, user, this.postMessage);
+            }
+            break;
           }
           default:
             return false;
@@ -305,6 +318,7 @@ const mapStateToProps = ({ authentication, Space }) => ({
   userId: authentication.getIn(['user', 'id']),
   user: authentication.getIn(['user']),
   actionsEnabled: authentication.getIn(['user', 'settings', 'actionsEnabled']),
+  isSpaceSaved: Space.getIn(['current', 'content', 'saved']),
 });
 
 const mapDispatchToProps = {
