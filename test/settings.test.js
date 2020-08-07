@@ -12,6 +12,13 @@ import {
   toggleGeolocationEnabled,
   toggleSyncAdvancedMode,
   changeLanguage,
+  openDrawer,
+  menuGoToSettings,
+  menuGoToSavedSpaces,
+  menuGoToDeveloper,
+  menuGoToSpacesNearby,
+  menuGoToSignOut,
+  userSignIn,
 } from './utils';
 import { createApplication, closeApplication } from './application';
 import {
@@ -36,22 +43,13 @@ import {
   SYNC_OPEN_SCREEN_PAUSE,
 } from './constants';
 import {
-  openDrawer,
-  menuGoToSettings,
-  menuGoToSavedSpaces,
-  menuGoToDeveloper,
-  menuGoToSpacesNearby,
-  menuGoToSignOut,
-} from './menu.test';
-import {
   DEFAULT_LANGUAGE,
   DEFAULT_GEOLOCATION_ENABLED,
   DEFAULT_DEVELOPER_MODE,
   DEFAULT_SYNC_MODE,
   SYNC_MODES,
 } from '../src/config/constants';
-import { userSignIn } from './userSignIn.test';
-import { USER_GRAASP, USER_ALICE, USER_BOB } from './fixtures/users';
+import { USER_GRAASP, USER_ALICE, USER_CEDRIC } from './fixtures/users';
 import { settingsPerUser } from './fixtures/settings';
 import { loadSpaceById } from './spaces/loadSpace.test';
 import {
@@ -271,7 +269,7 @@ describe('Settings Scenarios', function() {
       'Settings are saved for each user',
       mochaAsync(async () => {
         const { client } = app;
-        const users = [USER_GRAASP, USER_ALICE, USER_BOB];
+        const users = [USER_GRAASP, USER_ALICE, USER_CEDRIC];
         for (const user of users) {
           const {
             lang,

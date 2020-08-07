@@ -2,9 +2,14 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
 import { expect } from 'chai';
-import { removeSpace, removeTags, mochaAsync } from '../utils';
+import {
+  removeSpace,
+  removeTags,
+  mochaAsync,
+  userSignIn,
+  menuGoToVisitSpace,
+} from '../utils';
 import { closeApplication, createApplication } from '../application';
-import { menuGoToVisitSpace } from '../menu.test';
 import {
   SPACE_TOOLBAR_ID,
   PHASE_MENU_LIST_ID,
@@ -39,9 +44,8 @@ import {
   LOAD_PHASE_PAUSE,
   OPEN_TOOLS_PAUSE,
 } from '../constants';
-import { userSignIn } from '../userSignIn.test';
 import { USER_GRAASP } from '../fixtures/users';
-import { USER_MODES } from '../../src/config/constants';
+import { USER_MODES, DEFAULT_USER_MODE } from '../../src/config/constants';
 
 const PREVIEW = 'preview';
 const SAVED = 'saved';
@@ -94,7 +98,8 @@ export const visitAndSaveSpaceById = async (client, id) => {
 // check home phase of given space when preview
 export const hasPreviewSpaceHomeLayout = async (
   client,
-  { name: spaceName, description: spaceDescription }
+  { name: spaceName, description: spaceDescription },
+  mode = DEFAULT_USER_MODE
 ) => {
   // space name
   const spaceToolbarSelector = `#${SPACE_TOOLBAR_ID}`;
@@ -118,11 +123,13 @@ export const hasPreviewSpaceHomeLayout = async (
   const previewButton = await client.getText(`#${SPACE_START_PREVIEW_BUTTON}`);
   expect(previewButton.toLowerCase()).to.equal('preview');
 
-  // space save icon
-  const saveIcon = await client.element(
-    `${spaceToolbarSelector} .${SPACE_SAVE_ICON_CLASS}`
-  );
-  expect(saveIcon.value).to.exist;
+  // space save icon if teacher
+  if (mode === USER_MODES.TEACHER) {
+    const saveIcon = await client.element(
+      `${spaceToolbarSelector} .${SPACE_SAVE_ICON_CLASS}`
+    );
+    expect(saveIcon.value).to.exist;
+  }
 
   // space preview icon
   const previewIcon = await client.element(`.${SPACE_PREVIEW_ICON_CLASS}`);
@@ -335,19 +342,20 @@ const checkPhasesLayout = async (client, phases, mode, resources = []) => {
 export const hasSavedSpaceLayout = async (
   client,
   { space: { phases, description, name } },
-  resources = [],
-  userMode = USER_MODES.TEACHER
+  { resources = [], user = {} } = {}
 ) => {
-  await hasSavedSpaceHomeLayout(client, { description, name }, userMode);
+  const { mode = DEFAULT_USER_MODE } = user;
+  await hasSavedSpaceHomeLayout(client, { description, name }, mode);
   await checkPhasesLayout(client, phases, SAVED, resources);
 };
 
 // check space layout when preview
 export const hasPreviewSpaceLayout = async (
   client,
-  { space: { phases, description, name }, resources = [] }
+  { space: { phases, description, name }, resources = [] },
+  { mode }
 ) => {
-  await hasPreviewSpaceHomeLayout(client, { description, name });
+  await hasPreviewSpaceHomeLayout(client, { description, name }, mode);
   await checkPhasesLayout(client, phases, PREVIEW, resources);
 };
 
@@ -400,6 +408,7 @@ export const checkSpaceCardLayout = async (
 describe('Visit Space Scenarios', function() {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
+  let globalUser;
 
   afterEach(function() {
     return closeApplication(app);
@@ -408,7 +417,8 @@ describe('Visit Space Scenarios', function() {
   beforeEach(
     mochaAsync(async () => {
       app = await createApplication();
-      await userSignIn(app.client, USER_GRAASP);
+      globalUser = USER_GRAASP;
+      await userSignIn(app.client, globalUser);
     })
   );
 
@@ -425,7 +435,7 @@ describe('Visit Space Scenarios', function() {
 
         await visitSpaceById(client, id);
 
-        await hasPreviewSpaceLayout(client, space);
+        await hasPreviewSpaceLayout(client, space, globalUser);
       })
     );
   });

@@ -1,13 +1,14 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
-import { mochaAsync } from '../utils';
-import { createApplication, closeApplication } from '../application';
 import {
+  mochaAsync,
+  userSignIn,
   menuGoToSavedSpaces,
   menuGoToSignOut,
   menuGoToPhase,
-} from '../menu.test';
+} from '../utils';
+import { createApplication, closeApplication } from '../application';
 import {
   buildSpaceCardId,
   SPACE_CARD_LINK_CLASS,
@@ -18,7 +19,6 @@ import {
 } from '../fixtures/spaces';
 import { loadSpaceById } from './loadSpace.test';
 import { DEFAULT_GLOBAL_TIMEOUT, OPEN_SAVED_SPACE_PAUSE } from '../constants';
-import { userSignIn } from '../userSignIn.test';
 import { USER_GRAASP, USER_BOB, USER_ALICE } from '../fixtures/users';
 import {
   typeInTextInputApp,

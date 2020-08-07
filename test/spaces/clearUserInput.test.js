@@ -1,13 +1,14 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
-import { mochaAsync } from '../utils';
-import { createApplication, closeApplication } from '../application';
 import {
+  mochaAsync,
+  userSignIn,
   menuGoToSavedSpaces,
   menuGoToPhase,
   menuGoToSignOut,
-} from '../menu.test';
+} from '../utils';
+import { createApplication, closeApplication } from '../application';
 import {
   buildSpaceCardId,
   SPACE_CLEAR_BUTTON_CLASS,
@@ -23,7 +24,6 @@ import {
   TOOLTIP_FADE_OUT_PAUSE,
   OPEN_SAVED_SPACE_PAUSE,
 } from '../constants';
-import { userSignIn } from '../userSignIn.test';
 import { USER_GRAASP, USER_BOB, USER_ALICE } from '../fixtures/users';
 import {
   typeInTextInputApp,
@@ -156,12 +156,7 @@ describe('Clear User Input in a space', function() {
           const text1 = 'some user input conceptualisation';
 
           // load space with user input
-          await loadSpaceById(
-            client,
-
-            SPACE_ATOMIC_STRUCTURE_PATH,
-            spaceId
-          );
+          await loadSpaceById(client, SPACE_ATOMIC_STRUCTURE_PATH, spaceId);
 
           // add user input
           await menuGoToPhase(client, 0);

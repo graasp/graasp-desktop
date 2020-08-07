@@ -5,13 +5,12 @@ import {
   mochaAsync,
   expectElementToExist,
   expectElementToNotExist,
-} from '../utils';
-import { createApplication, closeApplication } from '../application';
-import {
   menuGoToSavedSpaces,
   menuGoToHome,
   menuGoToSignOut,
-} from '../menu.test';
+  userSignIn,
+} from '../utils';
+import { createApplication, closeApplication } from '../application';
 import {
   buildSpaceCardId,
   SPACE_FAVORITE_BUTTON_CLASS,
@@ -25,7 +24,6 @@ import {
   DEFAULT_GLOBAL_TIMEOUT,
   OPEN_SAVED_SPACE_PAUSE,
 } from '../constants';
-import { userSignIn } from '../userSignIn.test';
 import { USER_GRAASP, USER_ALICE, USER_BOB } from '../fixtures/users';
 
 describe('Set space as favorite', function() {

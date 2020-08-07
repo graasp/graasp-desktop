@@ -6,9 +6,11 @@ import {
   mochaAsync,
   expectElementToExist,
   expectElementToNotExist,
+  userSignIn,
+  menuGoToHome,
+  menuGoToSignOut,
 } from '../utils';
 import { createApplication, closeApplication } from '../application';
-import { menuGoToHome, menuGoToSignOut } from '../menu.test';
 import {
   buildSpaceCardId,
   SPACE_MEDIA_CARD_CLASS,
@@ -25,8 +27,7 @@ import {
 } from '../fixtures/spaces';
 import { visitAndSaveSpaceById } from './visitSpace.test';
 import { DEFAULT_GLOBAL_TIMEOUT } from '../constants';
-import { userSignIn } from '../userSignIn.test';
-import { USER_GRAASP, USER_ALICE } from '../fixtures/users';
+import { USER_GRAASP, USER_BOB } from '../fixtures/users';
 import { loadSpaceById } from './loadSpace.test';
 import { MAX_RECENT_SPACES } from '../../src/config/constants';
 
@@ -146,8 +147,8 @@ describe('Recent Spaces', function() {
       await expectElementToExist(client, `#${buildSpaceCardId(id)}`);
       await menuGoToSignOut(client);
 
-      // sign in as alice, no recent spaces
-      await userSignIn(client, USER_ALICE);
+      // sign in as Bob, no recent spaces
+      await userSignIn(client, USER_BOB);
       await expectElementToNotExist(client, `#${buildSpaceCardId(id)}`);
       await menuGoToSignOut(client);
 

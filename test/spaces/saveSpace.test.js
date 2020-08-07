@@ -1,9 +1,8 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
-import { mochaAsync } from '../utils';
+import { mochaAsync, userSignIn, menuGoToSavedSpaces } from '../utils';
 import { createApplication, closeApplication } from '../application';
-import { menuGoToSavedSpaces } from '../menu.test';
 import {
   buildSpaceCardId,
   SPACE_CARD_LINK_CLASS,
@@ -16,12 +15,12 @@ import {
   visitAndSaveSpaceById,
 } from './visitSpace.test';
 import { OPEN_SAVED_SPACE_PAUSE, DEFAULT_GLOBAL_TIMEOUT } from '../constants';
-import { userSignIn } from '../userSignIn.test';
 import { USER_GRAASP } from '../fixtures/users';
 
 describe('Save a space', function() {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
+  let globalUser;
 
   afterEach(function() {
     return closeApplication(app);
@@ -30,7 +29,8 @@ describe('Save a space', function() {
   beforeEach(
     mochaAsync(async () => {
       app = await createApplication();
-      await userSignIn(app.client, USER_GRAASP);
+      globalUser = USER_GRAASP;
+      await userSignIn(app.client, globalUser);
     })
   );
   it(
@@ -43,7 +43,9 @@ describe('Save a space', function() {
 
       await visitAndSaveSpaceById(client, id);
 
-      await hasSavedSpaceLayout(client, SPACE_ATOMIC_STRUCTURE);
+      await hasSavedSpaceLayout(client, SPACE_ATOMIC_STRUCTURE, {
+        user: globalUser,
+      });
 
       // check space is referenced in saved spaces
       await menuGoToSavedSpaces(client);

@@ -143,3 +143,5 @@ export const EDIT_USER_IN_CLASSROOM_DELETE_DATA_BUTTON_CLASS =
 export const EDIT_CLASSROOM_DELETE_DATA_BUTTON_CLASS =
   'editClassroomDeleteDataButton';
 export const buildTableCellSpaceId = id => `tableCellSpace-${id}`;
+
+export const DRAWER_HEADER_TEACHER_ICON_ID = 'drawerHeaderTeacherIcon';

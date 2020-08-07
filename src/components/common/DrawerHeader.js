@@ -18,6 +18,7 @@ import {
   USER_MODES,
   THEME_COLORS,
 } from '../../config/constants';
+import { DRAWER_HEADER_TEACHER_ICON_ID } from '../../config/selectors';
 
 const styles = () => ({
   drawerHeader: {
@@ -50,7 +51,10 @@ const DrawerHeader = ({
     >
       <ListItemIcon>
         {isTeacher ? (
-          <TeacherIcon className={classes.teacherColor} />
+          <TeacherIcon
+            className={classes.teacherColor}
+            id={DRAWER_HEADER_TEACHER_ICON_ID}
+          />
         ) : (
           <PersonIcon />
         )}
