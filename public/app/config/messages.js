@@ -102,6 +102,7 @@ const ERROR_GETTING_SPACE_IN_CLASSROOM_MESSAGE =
 const ERROR_SETTING_ACTION_ACCESSIBILITY =
   'There was an error setting the action accessibility';
 const ERROR_SETTING_ACTIONS_AS_ENABLED = 'There was an error enabling actions';
+const ERROR_POSTING_FILE_MESSAGE = 'There was an error uploading the file';
 
 module.exports = {
   ERROR_GETTING_DEVELOPER_MODE,
@@ -172,4 +173,5 @@ module.exports = {
   ERROR_INVALID_USERNAME_MESSAGE,
   ERROR_SETTING_ACTION_ACCESSIBILITY,
   ERROR_SETTING_ACTIONS_AS_ENABLED,
+  ERROR_POSTING_FILE_MESSAGE,
 };

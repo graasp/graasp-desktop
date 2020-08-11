@@ -74,6 +74,7 @@ const {
   LOAD_SPACE_IN_CLASSROOM_CHANNEL,
   SET_ACTION_ACCESSIBILITY_CHANNEL,
   SET_ACTIONS_AS_ENABLED_CHANNEL,
+  POST_FILE_CHANNEL,
 } = require('./app/config/channels');
 const env = require('./env.json');
 const {
@@ -127,6 +128,7 @@ const {
   setActionAccessibility,
   setActionsAsEnabled,
   windowAllClosed,
+  postFile,
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
 
@@ -488,6 +490,10 @@ app.on('ready', async () => {
 
   // called when creating an action
   ipcMain.on(POST_ACTION_CHANNEL, postAction(mainWindow, db));
+
+  // called when creating a file
+  ipcMain.on(POST_FILE_CHANNEL, postFile(mainWindow, db));
+
   // called when logging in a user
   ipcMain.on(SIGN_IN_CHANNEL, signIn(mainWindow, db));
 
