@@ -55,7 +55,7 @@ const DEFAULT_AUTHENTICATION = false;
 const DEFAULT_ACTION_ACCESSIBILITY = false;
 const DEFAULT_ACTIONS_AS_ENABLED = true;
 
-const DEFAULT_USER = (lang = DEFAULT_LANG) => ({
+const buildDefaultUser = (lang = DEFAULT_LANG) => ({
   geolocation: null,
   settings: {
     lang,
@@ -100,7 +100,7 @@ module.exports = {
   PRODUCT_NAME,
   escapeEscapeCharacter,
   DEFAULT_AUTHENTICATION,
-  DEFAULT_USER,
+  buildDefaultUser,
   AUTHENTICATED,
   ANONYMOUS_USERNAME,
   VISUAL_SYNC_MODE,

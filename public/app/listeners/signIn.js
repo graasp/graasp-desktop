@@ -2,7 +2,7 @@ const ObjectId = require('bson-objectid');
 const { USERS_COLLECTION } = require('../db');
 const { SIGN_IN_CHANNEL } = require('../config/channels');
 const {
-  DEFAULT_USER,
+  buildDefaultUser,
   ANONYMOUS_USERNAME,
   AUTHENTICATED,
   DEFAULT_LANG,
@@ -21,7 +21,7 @@ const createNewUser = (
     username,
     createdAt,
     anonymous,
-    ...DEFAULT_USER(lang),
+    ...buildDefaultUser(lang),
   };
 };
 
