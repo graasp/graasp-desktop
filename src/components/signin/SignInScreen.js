@@ -224,6 +224,7 @@ const mapStateToProps = ({ authentication }) => ({
   lang: authentication.getIn(['user', 'settings', 'lang']) || DEFAULT_LANGUAGE,
   authenticated: authentication.getIn(['authenticated']) === AUTHENTICATED,
   actionsEnabled: authentication.getIn(['user', 'settings', 'actionsEnabled']),
+  user: authentication.getIn(['user']),
 });
 
 const mapDispatchToProps = {
