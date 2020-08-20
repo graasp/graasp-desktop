@@ -2,9 +2,8 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
 import { expect } from 'chai';
-import { mochaAsync } from '../utils';
+import { mochaAsync, userSignIn, menuGoToSavedSpaces } from '../utils';
 import { createApplication, closeApplication } from '../application';
-import { menuGoToSavedSpaces } from '../menu.test';
 import {
   buildSpaceCardId,
   SPACE_DELETE_BUTTON_CLASS,
@@ -12,7 +11,6 @@ import {
 import { SPACE_ATOMIC_STRUCTURE } from '../fixtures/spaces';
 import { visitAndSaveSpaceById } from './visitSpace.test';
 import { DELETE_SPACE_PAUSE, DEFAULT_GLOBAL_TIMEOUT } from '../constants';
-import { userSignIn } from '../userSignIn.test';
 import { USER_GRAASP } from '../fixtures/users';
 
 describe('Delete a space', function() {

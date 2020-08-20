@@ -12,7 +12,11 @@ import PropTypes from 'prop-types';
 import logo from '../../logo.svg';
 import Styles from '../../Styles';
 import { signIn } from '../../actions/authentication';
-import { AUTHENTICATED, ACTION_VERBS } from '../../config/constants';
+import {
+  AUTHENTICATED,
+  ACTION_VERBS,
+  DEFAULT_LANGUAGE,
+} from '../../config/constants';
 import { HOME_PATH } from '../../config/paths';
 import Main from '../common/Main';
 import {
@@ -96,6 +100,7 @@ class SignInScreen extends Component {
     authenticated: PropTypes.bool.isRequired,
     actionsEnabled: PropTypes.bool.isRequired,
     user: PropTypes.instanceOf(Map),
+    lang: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -136,15 +141,15 @@ class SignInScreen extends Component {
 
   handleSignIn = () => {
     const { username } = this.state;
-    const { dispatchSignIn, actionsEnabled } = this.props;
+    const { dispatchSignIn, actionsEnabled, lang } = this.props;
     if (username.length) {
-      dispatchSignIn({ username, actionsEnabled });
+      dispatchSignIn({ username, actionsEnabled, lang });
     }
   };
 
   handleAnonymousSignIn = () => {
-    const { dispatchSignIn } = this.props;
-    dispatchSignIn({ anonymous: true });
+    const { dispatchSignIn, lang } = this.props;
+    dispatchSignIn({ anonymous: true, lang });
   };
 
   handleUsername = event => {
@@ -216,9 +221,10 @@ class SignInScreen extends Component {
 }
 
 const mapStateToProps = ({ authentication }) => ({
-  user: authentication.getIn(['user']),
+  lang: authentication.getIn(['user', 'settings', 'lang']) || DEFAULT_LANGUAGE,
   authenticated: authentication.getIn(['authenticated']) === AUTHENTICATED,
   actionsEnabled: authentication.getIn(['user', 'settings', 'actionsEnabled']),
+  user: authentication.getIn(['user']),
 });
 
 const mapDispatchToProps = {

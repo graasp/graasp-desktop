@@ -7,6 +7,8 @@ import {
   expectElementToNotExist,
   expectElementToExist,
   toggleSyncAdvancedMode,
+  userSignIn,
+  menuGoToSettings,
 } from '../utils';
 import { createApplication, closeApplication } from '../application';
 import {
@@ -48,12 +50,10 @@ import {
   LOAD_PHASE_PAUSE,
   LOAD_TAB_PAUSE,
 } from '../constants';
-import { userSignIn } from '../userSignIn.test';
 import { USER_GRAASP } from '../fixtures/users';
 import { loadSpaceById } from './loadSpace.test';
 import { openTools, hasSavedSpaceLayout } from './visitSpace.test';
 import { SYNC_CHANGES } from '../../src/config/constants';
-import { menuGoToSettings } from '../menu.test';
 
 const { ADDED, REMOVED, UPDATED, MOVED } = SYNC_CHANGES;
 
@@ -244,6 +244,7 @@ const cancelSync = async client => {
 describe('Sync a space', function() {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
+  let globalUser;
 
   afterEach(function() {
     return closeApplication(app);
@@ -254,7 +255,8 @@ describe('Sync a space', function() {
       mochaAsync(async () => {
         app = await createApplication();
         const { client } = app;
-        await userSignIn(client, USER_GRAASP);
+        globalUser = USER_GRAASP;
+        await userSignIn(client, globalUser);
       })
     );
 
@@ -330,7 +332,7 @@ describe('Sync a space', function() {
         await client.pause(LOAD_TAB_PAUSE);
 
         // space still has local content
-        await hasSavedSpaceLayout(client, space);
+        await hasSavedSpaceLayout(client, space, { user: globalUser });
       })
     );
   });
@@ -411,7 +413,7 @@ describe('Sync a space', function() {
         await cancelSync(client);
 
         // space still has local content
-        await hasSavedSpaceLayout(client, space);
+        await hasSavedSpaceLayout(client, space, { user: globalUser });
       })
     );
   });

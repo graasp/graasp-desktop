@@ -8,14 +8,13 @@ import {
   createRandomString,
   expectElementToExist,
   toggleStudentMode,
-} from '../utils';
-import { createApplication, closeApplication } from '../application';
-import {
   menuGoToLoadSpace,
   menuGoToHome,
   menuGoToSavedSpaces,
   menuGoToSettings,
-} from '../menu.test';
+  userSignIn,
+} from '../utils';
+import { createApplication, closeApplication } from '../application';
 import {
   buildSpaceCardId,
   SPACE_CARD_LINK_CLASS,
@@ -51,11 +50,9 @@ import {
   DEFAULT_GLOBAL_TIMEOUT,
   LOAD_TAB_PAUSE,
 } from '../constants';
-import { userSignIn } from '../userSignIn.test';
-import { USER_GRAASP } from '../fixtures/users';
+import { USER_GRAASP, USER_BOB } from '../fixtures/users';
 import { typeInTextInputApp } from '../apps/textInputApp';
 import { exportSpaceWithSelected } from './exportSpace.test';
-import { USER_MODES } from '../../src/config/constants';
 
 export const setCheckboxesTo = async (
   client,
@@ -178,6 +175,7 @@ export const loadSpaceById = async (
 describe('Load Space Scenarios', function() {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
+  let globalUser;
 
   afterEach(function() {
     return closeApplication(app);
@@ -187,7 +185,8 @@ describe('Load Space Scenarios', function() {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication();
-        await userSignIn(app.client, USER_GRAASP);
+        globalUser = USER_GRAASP;
+        await userSignIn(app.client, globalUser);
       })
     );
 
@@ -236,7 +235,9 @@ describe('Load Space Scenarios', function() {
           SPACE_ATOMIC_STRUCTURE.space.id
         );
 
-        await hasSavedSpaceLayout(client, SPACE_ATOMIC_STRUCTURE);
+        await hasSavedSpaceLayout(client, SPACE_ATOMIC_STRUCTURE, {
+          user: globalUser,
+        });
       })
     );
 
@@ -257,7 +258,9 @@ describe('Load Space Scenarios', function() {
           await loadSpaceById(client, SPACE_WITH_MULTIPLE_CHANGES_PATH, id);
 
           // check content has changed
-          await hasSavedSpaceLayout(client, SPACE_WITH_MULTIPLE_CHANGES);
+          await hasSavedSpaceLayout(client, SPACE_WITH_MULTIPLE_CHANGES, {
+            user: globalUser,
+          });
         })
       );
       it(
@@ -289,7 +292,7 @@ describe('Load Space Scenarios', function() {
           await hasSavedSpaceLayout(
             client,
             SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES,
-            appInstanceResources
+            { resources: appInstanceResources, user: globalUser }
           );
         })
       );
@@ -316,77 +319,89 @@ describe('Load Space Scenarios', function() {
           // check content
           await hasSavedSpaceLayout(
             client,
-            SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES
-          );
-        })
-      );
-    });
-
-    describe('Student', function() {
-      it(
-        `Cannot load non-existing space ${SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES.space.name}`,
-        mochaAsync(async () => {
-          const { client } = app;
-          await menuGoToSettings(client);
-          await toggleStudentMode(client, true);
-
-          // load space without actions and resources
-          await menuGoToLoadSpace(client);
-
-          // submit a zip file
-          const absolutePath = path.resolve(
-            __dirname,
-            '../fixtures/spaces',
-            SPACE_ATOMIC_STRUCTURE_PATH
-          );
-          await client.setValue(`#${LOAD_INPUT_ID}`, absolutePath);
-          await client.pause(INPUT_TYPE_PAUSE);
-          await client.click(`#${LOAD_SUBMIT_BUTTON_ID}`);
-          await client.pause(LOAD_SELECTION_SPACE_PAUSE);
-
-          await menuGoToSavedSpaces(client);
-
-          await expectElementToExist(client, `#${SPACE_NOT_AVAILABLE_TEXT_ID}`);
-        })
-      );
-      it(
-        `Can only load actions and resources of ${SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES.space.name}`,
-        mochaAsync(async () => {
-          const { client } = app;
-          const {
-            space: { id },
-            appInstanceResources,
-          } = SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES;
-
-          // get space
-          await visitAndSaveSpaceById(client, id);
-
-          // set student mode
-          await menuGoToSettings(client);
-          await toggleStudentMode(client, true);
-
-          // load space without actions and resources
-          await loadSpaceById(
-            client,
-            SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES_PATH,
-            id,
-            { space: false, actions: true, resources: true },
-            { actions: true, resources: true }
-          );
-
-          // check content
-          await hasSavedSpaceLayout(
-            client,
             SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES,
-            appInstanceResources,
-            USER_MODES.STUDENT
+            { user: globalUser }
           );
         })
       );
     });
   });
 
+  describe('Predefined Export Spaces for Student', function() {
+    beforeEach(
+      mochaAsync(async () => {
+        app = await createApplication();
+        globalUser = USER_BOB;
+        await userSignIn(app.client, USER_BOB);
+      })
+    );
+
+    it(
+      `Cannot load non-existing space ${SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES.space.name}`,
+      mochaAsync(async () => {
+        const { client } = app;
+
+        // load space without actions and resources
+        await menuGoToLoadSpace(client);
+
+        // submit a zip file
+        const absolutePath = path.resolve(
+          __dirname,
+          '../fixtures/spaces',
+          SPACE_ATOMIC_STRUCTURE_PATH
+        );
+        await client.setValue(`#${LOAD_INPUT_ID}`, absolutePath);
+        await client.pause(INPUT_TYPE_PAUSE);
+        await client.click(`#${LOAD_SUBMIT_BUTTON_ID}`);
+        await client.pause(LOAD_SELECTION_SPACE_PAUSE);
+
+        await menuGoToSavedSpaces(client);
+
+        await expectElementToExist(client, `#${SPACE_NOT_AVAILABLE_TEXT_ID}`);
+      })
+    );
+    it(
+      `Can only load actions and resources of ${SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES.space.name}`,
+      mochaAsync(async () => {
+        const { client } = app;
+        const {
+          space: { id },
+          appInstanceResources,
+        } = SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES;
+
+        // set teacher mode
+        await menuGoToSettings(client);
+        await toggleStudentMode(client, false);
+
+        // get space
+        await visitAndSaveSpaceById(client, id);
+
+        // set student mode
+        await menuGoToSettings(client);
+        await toggleStudentMode(client, true);
+
+        // load space without actions and resources
+        await loadSpaceById(
+          client,
+          SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES_PATH,
+          id,
+          { space: false, actions: true, resources: true },
+          { actions: true, resources: true }
+        );
+
+        // check content
+        await hasSavedSpaceLayout(
+          client,
+          SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES,
+          { resources: appInstanceResources, user: globalUser }
+        );
+      })
+    );
+  });
+
   describe('Load from app created export files', function() {
+    globalUser = USER_GRAASP;
+
     it(
       `Load exported space of ${SPACE_ATOMIC_STRUCTURE.space.name}`,
       mochaAsync(async () => {
@@ -401,8 +416,7 @@ describe('Load Space Scenarios', function() {
         });
 
         const { client } = app;
-
-        await userSignIn(client, USER_GRAASP);
+        await userSignIn(client, globalUser);
 
         // get space
         await visitAndSaveSpaceById(client, id);
@@ -425,7 +439,9 @@ describe('Load Space Scenarios', function() {
         await loadSpaceById(client, filepath, SPACE_ATOMIC_STRUCTURE.space.id);
 
         // check content
-        await hasSavedSpaceLayout(client, SPACE_ATOMIC_STRUCTURE);
+        await hasSavedSpaceLayout(client, SPACE_ATOMIC_STRUCTURE, {
+          user: globalUser,
+        });
       })
     );
 
@@ -443,8 +459,7 @@ describe('Load Space Scenarios', function() {
         });
 
         const { client } = app;
-
-        await userSignIn(client, USER_GRAASP);
+        await userSignIn(client, globalUser);
 
         // get space
         await visitAndSaveSpaceById(client, id);
@@ -494,7 +509,10 @@ describe('Load Space Scenarios', function() {
         );
 
         // check content
-        await hasSavedSpaceLayout(client, SPACE_ATOMIC_STRUCTURE, resources);
+        await hasSavedSpaceLayout(client, SPACE_ATOMIC_STRUCTURE, {
+          resources,
+          user: globalUser,
+        });
       })
     );
 
@@ -513,7 +531,7 @@ describe('Load Space Scenarios', function() {
 
         const { client } = app;
 
-        await userSignIn(client, USER_GRAASP);
+        await userSignIn(client, globalUser);
 
         // get space
         await visitAndSaveSpaceById(client, id);
@@ -563,7 +581,9 @@ describe('Load Space Scenarios', function() {
         );
 
         // check content
-        await hasSavedSpaceLayout(client, SPACE_ATOMIC_STRUCTURE);
+        await hasSavedSpaceLayout(client, SPACE_ATOMIC_STRUCTURE, {
+          user: globalUser,
+        });
       })
     );
   });

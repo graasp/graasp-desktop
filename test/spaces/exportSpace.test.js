@@ -3,9 +3,15 @@
 /* eslint-disable no-restricted-syntax */
 import { expect } from 'chai';
 import fs from 'fs';
-import { mochaAsync, createRandomString, expectElementToExist } from '../utils';
+import {
+  mochaAsync,
+  createRandomString,
+  expectElementToExist,
+  menuGoToSavedSpaces,
+  menuGoToPhase,
+  userSignIn,
+} from '../utils';
 import { createApplication, closeApplication } from '../application';
-import { menuGoToSavedSpaces, menuGoToPhase } from '../menu.test';
 import {
   buildSpaceCardId,
   SPACE_EXPORT_BUTTON_CLASS,
@@ -23,7 +29,6 @@ import {
   TOOLTIP_FADE_OUT_PAUSE,
   OPEN_SAVED_SPACE_PAUSE,
 } from '../constants';
-import { userSignIn } from '../userSignIn.test';
 import { USER_GRAASP } from '../fixtures/users';
 import { typeInTextInputApp } from '../apps/textInputApp';
 

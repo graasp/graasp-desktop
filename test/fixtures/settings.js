@@ -5,7 +5,7 @@ import {
   SYNC_MODES,
   DEFAULT_SYNC_MODE,
 } from '../../src/config/constants';
-import { USER_ALICE, USER_GRAASP, USER_BOB } from './users';
+import { USER_ALICE, USER_GRAASP, USER_CEDRIC } from './users';
 
 /* eslint-disable-next-line import/prefer-default-export */
 export const settingsPerUser = {
@@ -21,7 +21,7 @@ export const settingsPerUser = {
     geolocationEnabled: true,
     syncMode: SYNC_MODES.ADVANCED,
   },
-  [USER_BOB.name]: {
+  [USER_CEDRIC.name]: {
     lang: 'ja',
     developerMode: true,
     geolocationEnabled: DEFAULT_GEOLOCATION_ENABLED,

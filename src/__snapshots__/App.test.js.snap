@@ -388,15 +388,7 @@ exports[`<App /> renders correctly 1`] = `
           path="/load-space/selection"
         />
         <Route
-          component={
-            Object {
-              "$$typeof": Symbol(react.memo),
-              "WrappedComponent": [Function],
-              "compare": null,
-              "displayName": "Connect(ComposedComponent)",
-              "type": [Function],
-            }
-          }
+          component={[Function]}
           exact={true}
           path="/settings"
         />

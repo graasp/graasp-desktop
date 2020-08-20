@@ -10,6 +10,11 @@ import {
   expectElementToExist,
   toggleStudentMode,
   clearInput,
+  menuGoToSettings,
+  menuGoToClassrooms,
+  menuGoToSignOut,
+  userSignIn,
+  openDrawer,
 } from './utils';
 import { createApplication, closeApplication } from './application';
 import {
@@ -63,14 +68,7 @@ import {
   SELECT_OPEN_PAUSE,
   OPEN_IMPORT_DATA_IN_CLASSROOM_PAUSE,
 } from './constants';
-import {
-  openDrawer,
-  menuGoToSettings,
-  menuGoToClassrooms,
-  menuGoToSignOut,
-} from './menu.test';
-import { userSignIn } from './userSignIn.test';
-import { USER_GRAASP, USER_ALICE, USER_BOB } from './fixtures/users';
+import { USER_GRAASP, USER_ALICE } from './fixtures/users';
 import {
   checkLoadSelectionLayout,
   setCheckboxesTo,
@@ -449,8 +447,8 @@ describe('Classrooms Scenarios', function() {
 
         await menuGoToSignOut(client);
 
-        // add classroom as bob
-        await userSignIn(client, USER_BOB);
+        // add classroom as graasp
+        await userSignIn(client, USER_GRAASP);
 
         await menuGoToClassrooms(client);
 

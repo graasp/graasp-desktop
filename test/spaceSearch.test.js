@@ -2,7 +2,7 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
 import { expect } from 'chai';
-import { mochaAsync } from './utils';
+import { mochaAsync, userSignIn } from './utils';
 import { createApplication, closeApplication } from './application';
 import {
   SPACE_SEARCH_INPUT_ID,
@@ -13,7 +13,6 @@ import {
   SPACE_SEARCH_PAUSE,
   TOOLTIP_FADE_OUT_PAUSE,
 } from './constants';
-import { userSignIn } from './userSignIn.test';
 import { USER_GRAASP } from './fixtures/users';
 import { loadSpaceById } from './spaces/loadSpace.test';
 import { searchSpacesFixtures } from './fixtures/searchSpaces';

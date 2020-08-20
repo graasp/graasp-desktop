@@ -93,6 +93,7 @@ export class MainMenu extends Component {
       authenticated,
       t,
       match: { path },
+      history: { push },
     } = this.props;
 
     if (authenticated) {
@@ -101,6 +102,10 @@ export class MainMenu extends Component {
           id={SIGN_OUT_MENU_ITEM_ID}
           onClick={() => {
             this.handleSignOut();
+
+            // manual redirect for pages (settings) which are
+            // also available when disconnected
+            push(SIGN_IN_PATH);
           }}
           selected={path === SIGN_IN_PATH}
           button

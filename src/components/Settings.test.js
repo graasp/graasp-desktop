@@ -33,6 +33,7 @@ const createSettingsProps = () => {
       changeLanguage: jest.fn(),
     },
     userMode: USER_MODES.TEACHER,
+    authenticated: true,
   };
 };
 
