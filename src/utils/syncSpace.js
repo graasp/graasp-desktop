@@ -18,7 +18,9 @@ export const filterSpace = space => {
   // remove properties in items
   // eslint-disable-next-line no-restricted-syntax
   for (const phase of filteredSpace.phases) {
-    phase.items = phase.items.map(item => _.pick(item, SYNC_ITEM_PROPERTIES));
+    if (!_.isEmpty(phase.items)) {
+      phase.items = phase.items.map(item => _.pick(item, SYNC_ITEM_PROPERTIES));
+    }
   }
 
   return filteredSpace;
