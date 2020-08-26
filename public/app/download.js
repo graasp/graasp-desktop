@@ -1,11 +1,18 @@
 const _ = require('lodash');
 const request = require('request-promise');
+const { promisify } = require('util');
 const cheerio = require('cheerio');
+const extract = require('extract-zip');
 const download = require('download');
 const providers = require('./config/providers');
 const logger = require('./logger');
 const mapping = require('./config/mapping');
-const { DEFAULT_PROTOCOL, DEFAULT_LANG } = require('./config/config');
+
+const {
+  DEFAULT_PROTOCOL,
+  DEFAULT_LANG,
+  APPLICATION,
+} = require('./config/config');
 const {
   getExtension,
   isDownloadable,
@@ -15,7 +22,7 @@ const {
 
 const getDownloadUrl = async ({ url, lang }) => {
   let proxied = false;
-  providers.forEach(provider => {
+  providers.forEach((provider) => {
     if (url.includes(provider)) {
       proxied = true;
     }
@@ -42,6 +49,73 @@ const getDownloadUrl = async ({ url, lang }) => {
   return false;
 };
 
+const downloadFile = async ({
+  ext,
+  hash,
+  relativeSpacePath,
+  absoluteSpacePath,
+  url,
+}) => {
+  const fileName = `${hash}.${ext}`;
+  const relativeFilePath = `${relativeSpacePath}/${fileName}`;
+  const absoluteFilePath = `${absoluteSpacePath}/${fileName}`;
+
+  // eslint-disable-next-line no-await-in-loop
+  const fileAvailable = await isFileAvailable(absoluteFilePath);
+
+  // if the file is available, point this resource to its path
+  if (!fileAvailable) {
+    logger.debug(`downloading ${url}`);
+    // eslint-disable-next-line no-await-in-loop
+    await download(url, absoluteSpacePath, {
+      filename: fileName,
+    });
+    logger.debug(`downloaded ${url} to ${absoluteFilePath}`);
+  }
+
+  // returning this indicates that resource was downloaded successfully
+  return relativeFilePath;
+};
+
+const downloadApplication = async ({
+  ext,
+  relativeSpacePath,
+  absoluteSpacePath,
+  app,
+}) => {
+  const { name, url, main } = app;
+  // generate hash to save file
+  const tmpZipName = `application.${ext}`;
+  const tmpZipPath = `${absoluteSpacePath}/${tmpZipName}`;
+  const absoluteMainFilePath = `${absoluteSpacePath}/${name}/${main}`;
+
+  // eslint-disable-next-line no-await-in-loop
+  const fileAvailable = await isFileAvailable(absoluteMainFilePath);
+
+  // if the file is available, point this resource to its path
+  if (!fileAvailable) {
+    logger.debug(`downloading application ${url}`);
+    // eslint-disable-next-line no-await-in-loop
+    await download(url, absoluteSpacePath, {
+      filename: tmpZipName,
+    });
+    logger.debug(`downloaded application ${url} to ${tmpZipPath}`);
+  }
+  // unzip application files
+  try {
+    await promisify(extract)(tmpZipPath, {
+      dir: `${absoluteSpacePath}/${name}`,
+    });
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+
+  // returning this indicates that resource was downloaded successfully
+  const relativeMainFilePath = `${relativeSpacePath}/${name}/${main}`;
+  return relativeMainFilePath;
+};
+
 const downloadResource = async ({
   resource,
   absoluteSpacePath,
@@ -49,56 +123,57 @@ const downloadResource = async ({
   relativeSpacePath,
 }) => {
   if (resource && isDownloadable(resource)) {
-    let { url } = resource;
-
+    const { url } = resource;
+    let resourceObj = { url };
     // check mappings for files
     if (mapping[url]) {
-      url = mapping[url];
+      resourceObj = mapping[url];
     }
 
     // download from proxy url if available
     // eslint-disable-next-line no-await-in-loop
-    const downloadUrl = await getDownloadUrl({ url, lang });
+    const downloadUrl = await getDownloadUrl({ url: resourceObj.url, lang });
     if (downloadUrl) {
-      url = downloadUrl;
+      resourceObj.url = downloadUrl;
     }
 
     // default to https
-    if (url.startsWith('//')) {
-      url = `https:${url}`;
+    if (resourceObj.url.startsWith('//')) {
+      resourceObj.url = `https:${resourceObj.url}`;
     }
 
     // get extension to save file
-    const ext = getExtension(resource);
+    const ext = getExtension({
+      url: resourceObj.url,
+      mimeType: resource.mimeType,
+    });
 
-    // only download if extension is present
-    if (ext) {
-      // generate hash to save file
-      const hash = generateHash(resource);
-      const fileName = `${hash}.${ext}`;
-      const relativeFilePath = `${relativeSpacePath}/${fileName}`;
-      const absoluteFilePath = `${absoluteSpacePath}/${fileName}`;
-
-      // eslint-disable-next-line no-await-in-loop
-      const fileAvailable = await isFileAvailable(absoluteFilePath);
-
-      // if the file is available, point this resource to its path
-      if (!fileAvailable) {
-        logger.debug(`downloading ${url}`);
-        // eslint-disable-next-line no-await-in-loop
-        await download(url, absoluteSpacePath, {
-          filename: fileName,
-        });
-        logger.debug(`downloaded ${url} to ${absoluteSpacePath}/${fileName}`);
-      }
-
-      // returning this indicates that resource was downloaded successfully
-      return {
-        asset: relativeFilePath,
-        hash,
-      };
+    if (_.isNil(ext)) {
+      return false;
     }
-    return false;
+
+    // generate hash to save file
+    const hash = generateHash(resource);
+    let asset = null;
+    if (ext === 'zip' && resource.category === APPLICATION) {
+      asset = await downloadApplication({
+        ext,
+        relativeSpacePath,
+        absoluteSpacePath,
+        app: resourceObj,
+      });
+    }
+    // only download if extension is present
+    else if (ext) {
+      asset = await downloadFile({
+        ext,
+        hash,
+        relativeSpacePath,
+        absoluteSpacePath,
+        url: resourceObj.url,
+      });
+    }
+    return { asset, hash };
   }
   return false;
 };
