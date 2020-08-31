@@ -6,8 +6,7 @@ Since Graasp Desktop v.0.15.4, a user authentication is available in order for m
 
 The authentication process is triggered right at the launch of the application. It asks for a username before allowing access to the application. Each new username will create a corresponding user account on the fly. If a username already exists in the database, the user will sign in with the corresponding account and be able to access previously stored data.
 
-One can use the application anonymously without restriction, but any saved data will not be retrievable after the user closes the
-session.
+One can use the application anonymously without restriction, but any saved data will not be retrievable after the user closes the session.
 
 In order to automatically authenticate whenever the application is launched, the
 current user session is stored in a dedicated part of the local storage and is used to sign

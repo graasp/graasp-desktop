@@ -45,15 +45,15 @@ on teacher and student differences in order to develop a teacher mode.
 |           Action            | Student  |             Teacher              |
 | :-------------------------: | :------: | :------------------------------: |
 |        Visit a Space        |   yes    |               yes                |
-|       Export a space        |   yes    |               yes                |
+|       Export a Space        |   yes    |               yes                |
 |        Save a Space         |    no    |               yes                |
 |         Add a Space         |    no    |               yes                |
-|       Delete a space        |    no    |               yes                |
-|        Sync a space         |    no    |               yes                |
-|        Load a space         |    no    |               yes                |
-|      Load space's data      | no/yes\* |               yes                |
-| Classrooms functionalities  |    no    |               yes                |
-| Displayed data in dashboard | own data | own and other users' shared data |
+|       Delete a Space        |    no    |               yes                |
+|        Sync a Space         |    no    |               yes                |
+|        Load a Space         |    no    |               yes                |
+|      Load Space's data      | no/yes\* |               yes                |
+| Classrooms Functionalities  |    no    |               yes                |
+| Displayed data in Dashboard | own data | own and other users' shared data |
 
 <center>*Student*'s and *Teacher*'s permissions comparison</center>
 
