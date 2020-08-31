@@ -54,7 +54,6 @@ class PhaseApp extends Component {
     folder: PropTypes.string.isRequired,
     dispatchGetAppInstance: PropTypes.func.isRequired,
     dispatchPostAction: PropTypes.func.isRequired,
-    dispatchPostFile: PropTypes.func.isRequired,
     id: PropTypes.string.isRequired,
     phaseId: PropTypes.string.isRequired,
     spaceId: PropTypes.string.isRequired,
@@ -119,7 +118,6 @@ class PhaseApp extends Component {
     try {
       const {
         dispatchGetAppInstance,
-        dispatchPostFile,
         appInstance,
         dispatchPostAction,
         user,
@@ -166,7 +164,7 @@ class PhaseApp extends Component {
           }
           case POST_FILE: {
             if (isSpaceSaved) {
-              return dispatchPostFile(payload, this.postMessage);
+              return postFile(payload, this.postMessage);
             }
             break;
           }
@@ -341,7 +339,6 @@ const mapStateToProps = ({ authentication, Space }) => ({
 const mapDispatchToProps = {
   dispatchGetAppInstance: getAppInstance,
   dispatchPostAction: postAction,
-  dispatchPostFile: postFile,
 };
 
 const ConnectedComponent = connect(

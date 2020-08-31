@@ -28,7 +28,7 @@ const postFile = mainWindow => (event, payload = {}) => {
     // send back the resource
     mainWindow.webContents.send(POST_FILE_CHANNEL, newPayload);
   } catch (e) {
-    console.error(e);
+    logger.error(e);
     mainWindow.webContents.send(POST_FILE_CHANNEL, ERROR_GENERAL);
   }
 };

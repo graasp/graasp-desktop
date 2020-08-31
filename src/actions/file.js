@@ -7,7 +7,7 @@ import { ERROR_POSTING_FILE_MESSAGE } from '../config/messages';
 export const postFile = async (
   { userId, appInstanceId, spaceId, subSpaceId, format, data, type } = {},
   callback
-) => () => {
+) => {
   try {
     window.ipcRenderer.send(POST_FILE_CHANNEL, {
       userId,
@@ -36,6 +36,10 @@ export const postFile = async (
       }
     });
   } catch (err) {
-    console.error(err);
+    callback({
+      appInstanceId,
+      type: POST_FILE_FAILED,
+      payload: ERROR_POSTING_FILE_MESSAGE,
+    });
   }
 };
