@@ -85,7 +85,7 @@ const ACTIONS_VERBS = {
   LOGOUT: 'logout',
 };
 
-const buildFilesPath = ({ userId, spaceId, name }) => {
+const buildFilePath = ({ userId, spaceId, name }) => {
   // add generated id to handle duplicate files
   const generatedId = ObjectId().str;
   return `${VAR_FOLDER}/${spaceId}/files/${userId}/${generatedId}_${name}`;
@@ -117,5 +117,5 @@ module.exports = {
   VISIBILITIES,
   DEFAULT_FORMAT,
   ACTIONS_VERBS,
-  buildFilesPath,
+  buildFilePath,
 };

@@ -1,6 +1,5 @@
 const mkdirp = require('mkdirp');
 const rimraf = require('rimraf');
-const path = require('path');
 const { promisify } = require('util');
 const mime = require('mime-types');
 const md5 = require('md5');
@@ -136,21 +135,8 @@ const clean = async dir => {
   return promisify(rimraf)(dir);
 };
 
-/**
- * Ensure directories for given filepath exist
- */
-function ensureDirectoryExistence(filePath) {
-  const dirname = path.dirname(filePath);
-  if (fs.existsSync(dirname)) {
-    return true;
-  }
-  ensureDirectoryExistence(dirname);
-  return fs.mkdirSync(dirname);
-}
-
 module.exports = {
   clean,
-  ensureDirectoryExistence,
   performFileSystemOperation,
   getExtension,
   isDownloadable,

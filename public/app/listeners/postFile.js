@@ -1,25 +1,20 @@
-const fs = require('fs');
+const fse = require('fs-extra');
+const path = require('path');
 const { POST_FILE_CHANNEL } = require('../config/channels');
-const { buildFilesPath } = require('../config/config');
-const { ensureDirectoryExistence } = require('../utilities');
+const { buildFilePath } = require('../config/config');
 const logger = require('../logger');
 const { ERROR_GENERAL } = require('../config/errors');
 
 const postFile = mainWindow => (event, payload = {}) => {
+  const { userId, spaceId, data } = payload;
+  // download file given path
+  const { path: filepath, name } = data;
+  const savePath = buildFilePath({ userId, spaceId, name });
+  const dirPath = path.dirname(savePath);
   try {
-    const { userId, spaceId, data } = payload;
-
-    // download file given path
-    const { path, name } = data;
-
-    const savePath = buildFilesPath({ userId, spaceId, name });
-    ensureDirectoryExistence(savePath);
-    fs.copyFile(path, savePath, err => {
-      if (err) {
-        throw err;
-      }
-      logger.debug(`the file ${name} was uploaded`);
-    });
+    fse.ensureDirSync(dirPath);
+    fse.copySync(filepath, path.resolve(savePath));
+    logger.debug(`the file ${name} was uploaded`);
 
     // update data
     const newData = { name, uri: `file://${savePath}` };
