@@ -15,6 +15,8 @@ import {
   APP_INSTANCE_RESOURCE_TYPES,
   POST_ACTION,
   ACTION_TYPES,
+  POST_FILE,
+  FILE_TYPES,
 } from '../../types';
 import {
   getAppInstanceResources,
@@ -22,6 +24,7 @@ import {
   postAppInstanceResource,
   getAppInstance,
   postAction,
+  postFile,
 } from '../../actions';
 import {
   DEFAULT_LANGUAGE,
@@ -125,7 +128,13 @@ class PhaseApp extends Component {
       const { id: componentAppInstanceId } = appInstance || {};
       const { type, payload } = JSON.parse(event.data);
       let { id: messageAppInstanceId } = payload;
-      if ([...APP_INSTANCE_RESOURCE_TYPES, ...ACTION_TYPES].includes(type)) {
+      if (
+        [
+          ...APP_INSTANCE_RESOURCE_TYPES,
+          ...ACTION_TYPES,
+          ...FILE_TYPES,
+        ].includes(type)
+      ) {
         ({ appInstanceId: messageAppInstanceId } = payload);
       }
 
@@ -150,6 +159,12 @@ class PhaseApp extends Component {
           case POST_ACTION: {
             if (isSpaceSaved) {
               return dispatchPostAction(payload, user, this.postMessage);
+            }
+            break;
+          }
+          case POST_FILE: {
+            if (isSpaceSaved) {
+              return postFile(payload, this.postMessage);
             }
             break;
           }
