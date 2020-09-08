@@ -6,8 +6,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Loader from '../common/Loader';
-
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+import { ACCENT_COLORS } from '../../config/constants';
 
 const RADIAN = Math.PI / 180;
 
@@ -156,7 +155,7 @@ class ActionPieChart extends PureComponent {
               {data.map((entry, index) => (
                 <Cell
                   key={`cell-${entry.verb}`}
-                  fill={COLORS[index % COLORS.length]}
+                  fill={ACCENT_COLORS[index % ACCENT_COLORS.length]}
                 />
               ))}
             </Pie>
