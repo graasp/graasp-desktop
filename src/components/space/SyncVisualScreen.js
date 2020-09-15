@@ -176,7 +176,7 @@ class SyncScreen extends Component {
           });
         this.setState({ syncPhases });
       } catch (e) {
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_SYNCING_MESSAGE);
+        toastr.error(t(ERROR_MESSAGE_HEADER), t(ERROR_SYNCING_MESSAGE));
         this.handleCancel();
       }
     }

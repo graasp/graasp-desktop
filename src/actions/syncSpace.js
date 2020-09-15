@@ -40,12 +40,18 @@ export const syncSpace = async ({ id }) => async dispatch => {
     // this runs once the space has been synced
     window.ipcRenderer.once(SYNCED_SPACE_CHANNEL, (event, res) => {
       if (res === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_SYNCING_MESSAGE));
+        toastr.error(
+          i18n.t(ERROR_MESSAGE_HEADER),
+          i18n.t(ERROR_SYNCING_MESSAGE)
+        );
       } else {
         // update saved spaces in state
         dispatch(getSpaces());
 
-        toastr.success(SUCCESS_MESSAGE_HEADER, i18n.t(SUCCESS_SYNCING_MESSAGE));
+        toastr.success(
+          i18n.t(SUCCESS_MESSAGE_HEADER),
+          i18n.t(SUCCESS_SYNCING_MESSAGE)
+        );
         dispatch({
           type: SYNC_SPACE_SUCCEEDED,
           payload: res,
@@ -55,7 +61,7 @@ export const syncSpace = async ({ id }) => async dispatch => {
     });
   } catch (err) {
     dispatch(flagSyncingSpace(false));
-    toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_SYNCING_MESSAGE));
+    toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_SYNCING_MESSAGE));
   }
 };
 

@@ -105,12 +105,13 @@ class ImportDataScreen extends Component {
         params: { id },
       },
       userId,
+      t,
       history: { replace },
     } = this.props;
 
     // if id is not defined, return to classrooms
     if (!id) {
-      toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_CLASSROOM_MESSAGE);
+      toastr.error(t(ERROR_MESSAGE_HEADER), t(ERROR_GETTING_CLASSROOM_MESSAGE));
       replace(CLASSROOMS_PATH);
     } else {
       dispatchGetClassroom({ id, userId });

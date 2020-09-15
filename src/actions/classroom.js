@@ -93,7 +93,7 @@ export const getClassrooms = () => dispatch => {
     // dispatch that the getter has succeeded
     if (classrooms === ERROR_ACCESS_DENIED_CLASSROOM) {
       toastr.error(
-        ERROR_MESSAGE_HEADER,
+        i18n.t(ERROR_MESSAGE_HEADER),
         i18n.t(ERROR_ACCESS_DENIED_CLASSROOM_MESSAGE)
       );
     } else {
@@ -117,7 +117,7 @@ export const getClassroom = async payload => async dispatch => {
       // if there is no response, show error
       if (!response) {
         toastr.error(
-          ERROR_MESSAGE_HEADER,
+          i18n.t(ERROR_MESSAGE_HEADER),
           i18n.t(ERROR_GETTING_CLASSROOM_MESSAGE)
         );
       }
@@ -125,13 +125,13 @@ export const getClassroom = async payload => async dispatch => {
       switch (response) {
         case ERROR_ACCESS_DENIED_CLASSROOM:
           toastr.error(
-            ERROR_MESSAGE_HEADER,
-            ERROR_ACCESS_DENIED_CLASSROOM_MESSAGE
+            i18n.t(ERROR_MESSAGE_HEADER),
+            i18n.t(ERROR_ACCESS_DENIED_CLASSROOM_MESSAGE)
           );
           break;
         case ERROR_GENERAL:
           toastr.error(
-            ERROR_MESSAGE_HEADER,
+            i18n.t(ERROR_MESSAGE_HEADER),
             i18n.t(ERROR_GETTING_CLASSROOM_MESSAGE)
           );
           break;
@@ -145,7 +145,10 @@ export const getClassroom = async payload => async dispatch => {
       return dispatch(flagGettingClassroom(false));
     });
   } catch (err) {
-    toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_GETTING_CLASSROOM_MESSAGE));
+    toastr.error(
+      i18n.t(ERROR_MESSAGE_HEADER),
+      i18n.t(ERROR_GETTING_CLASSROOM_MESSAGE)
+    );
   }
 };
 
@@ -161,7 +164,7 @@ export const addClassroom = payload => dispatch => {
       // if there is no response, show error
       if (!response) {
         toastr.error(
-          ERROR_MESSAGE_HEADER,
+          i18n.t(ERROR_MESSAGE_HEADER),
           i18n.t(ERROR_ADDING_CLASSROOM_MESSAGE)
         );
       }
@@ -169,21 +172,21 @@ export const addClassroom = payload => dispatch => {
       switch (response) {
         case ERROR_DUPLICATE_CLASSROOM_NAME:
           toastr.error(
-            ERROR_MESSAGE_HEADER,
-            ERROR_DUPLICATE_CLASSROOM_NAME_MESSAGE
+            i18n.t(ERROR_MESSAGE_HEADER),
+            i18n.t(ERROR_DUPLICATE_CLASSROOM_NAME_MESSAGE)
           );
           break;
         case ERROR_GENERAL:
           toastr.error(
-            ERROR_MESSAGE_HEADER,
+            i18n.t(ERROR_MESSAGE_HEADER),
             i18n.t(ERROR_ADDING_CLASSROOM_MESSAGE)
           );
           break;
         // todo: check that it is actually a classroom before dispatching success
         default:
           toastr.success(
-            SUCCESS_MESSAGE_HEADER,
-            SUCCESS_ADDING_CLASSROOM_MESSAGE
+            i18n.t(SUCCESS_MESSAGE_HEADER),
+            i18n.t(SUCCESS_ADDING_CLASSROOM_MESSAGE)
           );
           dispatch({
             type: ADD_CLASSROOM_SUCCEEDED,
@@ -193,7 +196,10 @@ export const addClassroom = payload => dispatch => {
       return dispatch(flagAddingClassroom(false));
     });
   } catch (err) {
-    toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_ADDING_CLASSROOM_MESSAGE));
+    toastr.error(
+      i18n.t(ERROR_MESSAGE_HEADER),
+      i18n.t(ERROR_ADDING_CLASSROOM_MESSAGE)
+    );
     dispatch(flagAddingClassroom(false));
   }
 };
@@ -213,7 +219,7 @@ export const deleteClassroom = ({ id, name }) => dispatch => {
   window.ipcRenderer.once(DELETE_CLASSROOM_CHANNEL, (event, response) => {
     if (response === ERROR_GENERAL) {
       toastr.error(
-        ERROR_MESSAGE_HEADER,
+        i18n.t(ERROR_MESSAGE_HEADER),
         i18n.t(ERROR_DELETING_CLASSROOM_MESSAGE)
       );
     } else {
@@ -221,7 +227,7 @@ export const deleteClassroom = ({ id, name }) => dispatch => {
       dispatch(getClassrooms());
 
       toastr.success(
-        SUCCESS_MESSAGE_HEADER,
+        i18n.t(SUCCESS_MESSAGE_HEADER),
         i18n.t(SUCCESS_DELETING_CLASSROOM_MESSAGE)
       );
     }
@@ -236,7 +242,7 @@ export const editClassroom = payload => dispatch => {
   window.ipcRenderer.once(EDIT_CLASSROOM_CHANNEL, (event, response) => {
     if (response === ERROR_GENERAL) {
       toastr.error(
-        ERROR_MESSAGE_HEADER,
+        i18n.t(ERROR_MESSAGE_HEADER),
         i18n.t(ERROR_EDITING_CLASSROOM_MESSAGE)
       );
     } else {
@@ -245,7 +251,7 @@ export const editClassroom = payload => dispatch => {
       dispatch(getClassrooms());
 
       toastr.success(
-        SUCCESS_MESSAGE_HEADER,
+        i18n.t(SUCCESS_MESSAGE_HEADER),
         i18n.t(SUCCESS_EDITING_CLASSROOM_MESSAGE)
       );
     }
@@ -262,14 +268,14 @@ export const addUserInClassroom = payload => dispatch => {
     switch (response) {
       case ERROR_DUPLICATE_USERNAME_IN_CLASSROOM:
         toastr.error(
-          ERROR_MESSAGE_HEADER,
+          i18n.t(ERROR_MESSAGE_HEADER),
           i18n.t(ERROR_DUPLICATE_USERNAME_IN_CLASSROOM_MESSAGE)
         );
         break;
 
       case ERROR_GENERAL:
         toastr.error(
-          ERROR_MESSAGE_HEADER,
+          i18n.t(ERROR_MESSAGE_HEADER),
           i18n.t(ERROR_ADDING_USER_IN_CLASSROOM_MESSAGE)
         );
         break;
@@ -295,7 +301,7 @@ export const deleteUsersInClassroom = payload => dispatch => {
     (event, response) => {
       if (response === ERROR_NO_USER_TO_DELETE) {
         toastr.error(
-          ERROR_MESSAGE_HEADER,
+          i18n.t(ERROR_MESSAGE_HEADER),
           i18n.t(ERROR_NO_USER_TO_DELETE_MESSAGE)
         );
       }
@@ -310,14 +316,14 @@ export const deleteUsersInClassroom = payload => dispatch => {
     switch (response) {
       case ERROR_NO_USER_TO_DELETE: {
         toastr.error(
-          ERROR_MESSAGE_HEADER,
+          i18n.t(ERROR_MESSAGE_HEADER),
           i18n.t(ERROR_NO_USER_TO_DELETE_MESSAGE)
         );
         break;
       }
       case ERROR_GENERAL: {
         toastr.error(
-          ERROR_MESSAGE_HEADER,
+          i18n.t(ERROR_MESSAGE_HEADER),
           i18n.t(ERROR_DELETING_USER_IN_CLASSROOM_MESSAGE)
         );
         break;
@@ -332,7 +338,7 @@ export const deleteUsersInClassroom = payload => dispatch => {
         );
 
         toastr.success(
-          SUCCESS_MESSAGE_HEADER,
+          i18n.t(SUCCESS_MESSAGE_HEADER),
           i18n.t(SUCCESS_DELETING_USERS_IN_CLASSROOM_MESSAGE)
         );
       }
@@ -348,7 +354,7 @@ export const editUserInClassroom = payload => dispatch => {
   window.ipcRenderer.once(EDIT_USER_IN_CLASSROOM_CHANNEL, (event, response) => {
     if (response === ERROR_GENERAL) {
       toastr.error(
-        ERROR_MESSAGE_HEADER,
+        i18n.t(ERROR_MESSAGE_HEADER),
         i18n.t(ERROR_EDITING_USER_IN_CLASSROOM_MESSAGE)
       );
     } else {
@@ -358,7 +364,7 @@ export const editUserInClassroom = payload => dispatch => {
       );
 
       toastr.success(
-        SUCCESS_MESSAGE_HEADER,
+        i18n.t(SUCCESS_MESSAGE_HEADER),
         i18n.t(SUCCESS_EDITING_USER_IN_CLASSROOM_MESSAGE)
       );
     }
@@ -378,7 +384,7 @@ export const createGetSpaceInClassroom = (
   window.ipcRenderer.once(GET_SPACE_IN_CLASSROOM_CHANNEL, (event, response) => {
     if (response === ERROR_GENERAL) {
       toastr.error(
-        ERROR_MESSAGE_HEADER,
+        i18n.t(ERROR_MESSAGE_HEADER),
         i18n.t(ERROR_GETTING_SPACE_IN_CLASSROOM_MESSAGE)
       );
     } else {
@@ -432,17 +438,20 @@ export const loadSpaceInClassroom = payload => dispatch => {
     (event, response) => {
       switch (response) {
         case ERROR_GENERAL:
-          toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_LOADING_MESSAGE));
+          toastr.error(
+            i18n.t(ERROR_MESSAGE_HEADER),
+            i18n.t(ERROR_LOADING_MESSAGE)
+          );
           break;
         case ERROR_DUPLICATE_USERNAME_IN_CLASSROOM:
           toastr.error(
-            ERROR_MESSAGE_HEADER,
+            i18n.t(ERROR_MESSAGE_HEADER),
             i18n.t(ERROR_DUPLICATE_USERNAME_IN_CLASSROOM_MESSAGE)
           );
           break;
         case ERROR_INVALID_USERNAME:
           toastr.error(
-            ERROR_MESSAGE_HEADER,
+            i18n.t(ERROR_MESSAGE_HEADER),
             i18n.t(ERROR_INVALID_USERNAME_MESSAGE)
           );
           break;
@@ -451,7 +460,7 @@ export const loadSpaceInClassroom = payload => dispatch => {
             type: LOAD_SPACE_IN_CLASSROOM_SUCCEEDED,
           });
           toastr.success(
-            SUCCESS_MESSAGE_HEADER,
+            i18n.t(SUCCESS_MESSAGE_HEADER),
             i18n.t(SUCCESS_SPACE_LOADED_MESSAGE)
           );
       }

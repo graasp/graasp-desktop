@@ -47,9 +47,15 @@ export const exportSpace = (id, spaceName, userId, selection) => dispatch => {
   );
   window.ipcRenderer.once(EXPORTED_SPACE_CHANNEL, (event, response) => {
     if (response === ERROR_GENERAL) {
-      toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_EXPORTING_MESSAGE));
+      toastr.error(
+        i18n.t(ERROR_MESSAGE_HEADER),
+        i18n.t(ERROR_EXPORTING_MESSAGE)
+      );
     } else {
-      toastr.success(SUCCESS_MESSAGE_HEADER, i18n.t(SUCCESS_EXPORTING_MESSAGE));
+      toastr.success(
+        i18n.t(SUCCESS_MESSAGE_HEADER),
+        i18n.t(SUCCESS_EXPORTING_MESSAGE)
+      );
       dispatch({
         type: EXPORT_SPACE_SUCCESS,
       });

@@ -80,10 +80,11 @@ class LoadSelectionScreen extends Component {
     const {
       history: { push },
       extractPath,
+      t,
     } = props;
 
     if (!extractPath.length) {
-      toastr.error(ERROR_MESSAGE_HEADER, UNEXPECTED_ERROR_MESSAGE);
+      toastr.error(t(ERROR_MESSAGE_HEADER), t(UNEXPECTED_ERROR_MESSAGE));
       push(LOAD_SPACE_PATH);
     }
   }

@@ -118,7 +118,10 @@ const getGeolocation = async () => async dispatch => {
       });
     } catch (e) {
       console.error(e);
-      toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_GETTING_GEOLOCATION));
+      toastr.error(
+        i18n.t(ERROR_MESSAGE_HEADER),
+        i18n.t(ERROR_GETTING_GEOLOCATION)
+      );
     }
   }
 };
@@ -129,7 +132,10 @@ const getUserFolder = async () => dispatch => {
     window.ipcRenderer.send(GET_USER_FOLDER_CHANNEL);
     window.ipcRenderer.once(GET_USER_FOLDER_CHANNEL, (event, folder) => {
       if (folder === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_GETTING_USER_FOLDER));
+        toastr.error(
+          i18n.t(ERROR_MESSAGE_HEADER),
+          i18n.t(ERROR_GETTING_USER_FOLDER)
+        );
       } else {
         dispatch({
           type: GET_USER_FOLDER_SUCCEEDED,
@@ -140,7 +146,10 @@ const getUserFolder = async () => dispatch => {
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_GETTING_USER_FOLDER));
+    toastr.error(
+      i18n.t(ERROR_MESSAGE_HEADER),
+      i18n.t(ERROR_GETTING_USER_FOLDER)
+    );
     dispatch(flagGettingUserFolder(false));
   }
 };
@@ -151,7 +160,10 @@ const getLanguage = async () => dispatch => {
     window.ipcRenderer.send(GET_LANGUAGE_CHANNEL);
     window.ipcRenderer.once(GET_LANGUAGE_CHANNEL, (event, lang) => {
       if (lang === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_GETTING_LANGUAGE));
+        toastr.error(
+          i18n.t(ERROR_MESSAGE_HEADER),
+          i18n.t(ERROR_GETTING_LANGUAGE)
+        );
       } else {
         dispatch({
           type: GET_LANGUAGE_SUCCEEDED,
@@ -162,7 +174,7 @@ const getLanguage = async () => dispatch => {
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_GETTING_LANGUAGE));
+    toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_GETTING_LANGUAGE));
   }
 };
 
@@ -172,7 +184,10 @@ const setLanguage = async ({ lang }) => dispatch => {
     window.ipcRenderer.send(SET_LANGUAGE_CHANNEL, lang);
     window.ipcRenderer.once(SET_LANGUAGE_CHANNEL, (event, language) => {
       if (language === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_SETTING_LANGUAGE));
+        toastr.error(
+          i18n.t(ERROR_MESSAGE_HEADER),
+          i18n.t(ERROR_SETTING_LANGUAGE)
+        );
       } else {
         dispatch({
           type: SET_LANGUAGE_SUCCEEDED,
@@ -183,7 +198,7 @@ const setLanguage = async ({ lang }) => dispatch => {
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_SETTING_LANGUAGE));
+    toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_SETTING_LANGUAGE));
   }
 };
 
@@ -196,7 +211,7 @@ const getDeveloperMode = async () => dispatch => {
       (event, developerMode) => {
         if (developerMode === ERROR_GENERAL) {
           toastr.error(
-            ERROR_MESSAGE_HEADER,
+            i18n.t(ERROR_MESSAGE_HEADER),
             i18n.t(ERROR_GETTING_DEVELOPER_MODE)
           );
         } else {
@@ -210,7 +225,10 @@ const getDeveloperMode = async () => dispatch => {
     );
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_GETTING_DEVELOPER_MODE));
+    toastr.error(
+      i18n.t(ERROR_MESSAGE_HEADER),
+      i18n.t(ERROR_GETTING_DEVELOPER_MODE)
+    );
   }
 };
 
@@ -221,7 +239,7 @@ const setDeveloperMode = async developerMode => dispatch => {
     window.ipcRenderer.once(SET_DEVELOPER_MODE_CHANNEL, (event, mode) => {
       if (mode === ERROR_GENERAL) {
         toastr.error(
-          ERROR_MESSAGE_HEADER,
+          i18n.t(ERROR_MESSAGE_HEADER),
           i18n.t(ERROR_SETTING_DEVELOPER_MODE)
         );
       } else {
@@ -234,7 +252,10 @@ const setDeveloperMode = async developerMode => dispatch => {
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_SETTING_DEVELOPER_MODE));
+    toastr.error(
+      i18n.t(ERROR_MESSAGE_HEADER),
+      i18n.t(ERROR_SETTING_DEVELOPER_MODE)
+    );
   }
 };
 
@@ -247,7 +268,7 @@ const getGeolocationEnabled = async () => dispatch => {
       (event, geolocationEnabled) => {
         if (geolocationEnabled === ERROR_GENERAL) {
           toastr.error(
-            ERROR_MESSAGE_HEADER,
+            i18n.t(ERROR_MESSAGE_HEADER),
             i18n.t(ERROR_GETTING_GEOLOCATION_ENABLED)
           );
         } else {
@@ -262,7 +283,7 @@ const getGeolocationEnabled = async () => dispatch => {
   } catch (e) {
     console.error(e);
     toastr.error(
-      ERROR_MESSAGE_HEADER,
+      i18n.t(ERROR_MESSAGE_HEADER),
       i18n.t(ERROR_GETTING_GEOLOCATION_ENABLED)
     );
   }
@@ -280,7 +301,7 @@ const setGeolocationEnabled = async geolocationEnabled => dispatch => {
       (event, enabled) => {
         if (enabled === ERROR_GENERAL) {
           toastr.error(
-            ERROR_MESSAGE_HEADER,
+            i18n.t(ERROR_MESSAGE_HEADER),
             i18n.t(ERROR_SETTING_GEOLOCATION_ENABLED)
           );
         } else {
@@ -295,7 +316,7 @@ const setGeolocationEnabled = async geolocationEnabled => dispatch => {
   } catch (e) {
     console.error(e);
     toastr.error(
-      ERROR_MESSAGE_HEADER,
+      i18n.t(ERROR_MESSAGE_HEADER),
       i18n.t(ERROR_SETTING_GEOLOCATION_ENABLED)
     );
   }
@@ -307,7 +328,10 @@ const getSyncMode = async () => dispatch => {
     window.ipcRenderer.send(GET_SYNC_MODE_CHANNEL);
     window.ipcRenderer.once(GET_SYNC_MODE_CHANNEL, (event, mode) => {
       if (mode === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_GETTING_SYNC_MODE));
+        toastr.error(
+          i18n.t(ERROR_MESSAGE_HEADER),
+          i18n.t(ERROR_GETTING_SYNC_MODE)
+        );
       } else {
         dispatch({
           type: GET_SYNC_MODE_SUCCEEDED,
@@ -318,7 +342,7 @@ const getSyncMode = async () => dispatch => {
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_GETTING_SYNC_MODE));
+    toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_GETTING_SYNC_MODE));
   }
 };
 
@@ -328,7 +352,10 @@ const setSyncMode = async syncMode => dispatch => {
     window.ipcRenderer.send(SET_SYNC_MODE_CHANNEL, syncMode);
     window.ipcRenderer.once(SET_SYNC_MODE_CHANNEL, (event, mode) => {
       if (mode === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_SETTING_SYNC_MODE));
+        toastr.error(
+          i18n.t(ERROR_MESSAGE_HEADER),
+          i18n.t(ERROR_SETTING_SYNC_MODE)
+        );
       } else {
         dispatch({
           type: SET_SYNC_MODE_SUCCEEDED,
@@ -339,7 +366,7 @@ const setSyncMode = async syncMode => dispatch => {
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_SETTING_SYNC_MODE));
+    toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_SETTING_SYNC_MODE));
   }
 };
 
@@ -349,7 +376,10 @@ const getUserMode = async () => dispatch => {
     window.ipcRenderer.send(GET_USER_MODE_CHANNEL);
     window.ipcRenderer.once(GET_USER_MODE_CHANNEL, (event, userMode) => {
       if (userMode === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_GETTING_USER_MODE));
+        toastr.error(
+          i18n.t(ERROR_MESSAGE_HEADER),
+          i18n.t(ERROR_GETTING_USER_MODE)
+        );
       } else {
         dispatch({
           type: GET_USER_MODE_SUCCEEDED,
@@ -360,7 +390,7 @@ const getUserMode = async () => dispatch => {
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_GETTING_USER_MODE));
+    toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_GETTING_USER_MODE));
   }
 };
 
@@ -370,7 +400,10 @@ const setUserMode = async userMode => dispatch => {
     window.ipcRenderer.send(SET_USER_MODE_CHANNEL, userMode);
     window.ipcRenderer.once(SET_USER_MODE_CHANNEL, (event, mode) => {
       if (mode === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_SETTING_USER_MODE));
+        toastr.error(
+          i18n.t(ERROR_MESSAGE_HEADER),
+          i18n.t(ERROR_SETTING_USER_MODE)
+        );
       } else {
         dispatch({
           type: SET_USER_MODE_SUCCEEDED,
@@ -381,7 +414,7 @@ const setUserMode = async userMode => dispatch => {
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_SETTING_USER_MODE));
+    toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_SETTING_USER_MODE));
   }
 };
 
@@ -394,7 +427,7 @@ const setSpaceAsFavorite = payload => dispatch => {
       (event, response) => {
         if (response === ERROR_GENERAL) {
           toastr.error(
-            ERROR_MESSAGE_HEADER,
+            i18n.t(ERROR_MESSAGE_HEADER),
             i18n.t(ERROR_SETTING_SPACE_AS_FAVORITE)
           );
         } else {
@@ -408,7 +441,10 @@ const setSpaceAsFavorite = payload => dispatch => {
     );
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_SETTING_SPACE_AS_FAVORITE));
+    toastr.error(
+      i18n.t(ERROR_MESSAGE_HEADER),
+      i18n.t(ERROR_SETTING_SPACE_AS_FAVORITE)
+    );
   }
 };
 
@@ -419,7 +455,7 @@ const setSpaceAsRecent = payload => dispatch => {
     window.ipcRenderer.once(SET_SPACE_AS_RECENT_CHANNEL, (event, response) => {
       if (response === ERROR_GENERAL) {
         toastr.error(
-          ERROR_MESSAGE_HEADER,
+          i18n.t(ERROR_MESSAGE_HEADER),
           i18n.t(ERROR_SETTING_SPACE_AS_RECENT)
         );
       } else {
@@ -432,7 +468,10 @@ const setSpaceAsRecent = payload => dispatch => {
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_SETTING_SPACE_AS_RECENT));
+    toastr.error(
+      i18n.t(ERROR_MESSAGE_HEADER),
+      i18n.t(ERROR_SETTING_SPACE_AS_RECENT)
+    );
   }
 };
 
@@ -445,7 +484,7 @@ const setActionAccessibility = payload => dispatch => {
       (event, response) => {
         if (response === ERROR_GENERAL) {
           toastr.error(
-            ERROR_MESSAGE_HEADER,
+            i18n.t(ERROR_MESSAGE_HEADER),
             i18n.t(ERROR_SETTING_ACTION_ACCESSIBILITY)
           );
         } else {
@@ -460,7 +499,7 @@ const setActionAccessibility = payload => dispatch => {
   } catch (e) {
     console.error(e);
     toastr.error(
-      ERROR_MESSAGE_HEADER,
+      i18n.t(ERROR_MESSAGE_HEADER),
       i18n.t(ERROR_SETTING_ACTION_ACCESSIBILITY)
     );
   }
@@ -475,7 +514,7 @@ const setActionsAsEnabled = payload => dispatch => {
       (event, response) => {
         if (response === ERROR_GENERAL) {
           toastr.error(
-            ERROR_MESSAGE_HEADER,
+            i18n.t(ERROR_MESSAGE_HEADER),
             i18n.t(ERROR_SETTING_ACTIONS_AS_ENABLED)
           );
         } else {
@@ -490,7 +529,7 @@ const setActionsAsEnabled = payload => dispatch => {
   } catch (e) {
     console.error(e);
     toastr.error(
-      ERROR_MESSAGE_HEADER,
+      i18n.t(ERROR_MESSAGE_HEADER),
       i18n.t(ERROR_SETTING_ACTIONS_AS_ENABLED)
     );
   }

@@ -24,7 +24,10 @@ const getDatabase = async () => dispatch => {
     window.ipcRenderer.send(GET_DATABASE_CHANNEL);
     window.ipcRenderer.once(GET_DATABASE_CHANNEL, (event, db) => {
       if (db === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_GETTING_DATABASE));
+        toastr.error(
+          i18n.t(ERROR_MESSAGE_HEADER),
+          i18n.t(ERROR_GETTING_DATABASE)
+        );
       } else {
         dispatch({
           type: GET_DATABASE_SUCCEEDED,
@@ -35,7 +38,7 @@ const getDatabase = async () => dispatch => {
     });
   } catch (err) {
     console.error(err);
-    toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_GETTING_DATABASE));
+    toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_GETTING_DATABASE));
   }
 };
 
@@ -45,7 +48,10 @@ const setDatabase = async database => dispatch => {
     window.ipcRenderer.send(SET_DATABASE_CHANNEL, database);
     window.ipcRenderer.once(SET_DATABASE_CHANNEL, (event, db) => {
       if (db === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_GETTING_DATABASE));
+        toastr.error(
+          i18n.t(ERROR_MESSAGE_HEADER),
+          i18n.t(ERROR_GETTING_DATABASE)
+        );
       } else {
         dispatch({
           type: SET_DATABASE_SUCCEEDED,
@@ -56,7 +62,7 @@ const setDatabase = async database => dispatch => {
     });
   } catch (err) {
     console.error(err);
-    toastr.error(ERROR_MESSAGE_HEADER, i18n.t(ERROR_SETTING_DATABASE));
+    toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_SETTING_DATABASE));
   }
 };
 
