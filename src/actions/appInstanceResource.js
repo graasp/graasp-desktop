@@ -2,11 +2,13 @@ import {
   GET_APP_INSTANCE_RESOURCES_CHANNEL,
   PATCH_APP_INSTANCE_RESOURCE_CHANNEL,
   POST_APP_INSTANCE_RESOURCE_CHANNEL,
+  DELETE_APP_INSTANCE_RESOURCE_CHANNEL,
 } from '../config/channels';
 import {
   GET_APP_INSTANCE_RESOURCES_SUCCEEDED,
   PATCH_APP_INSTANCE_RESOURCE_SUCCEEDED,
   POST_APP_INSTANCE_RESOURCE_SUCCEEDED,
+  DELETE_APP_INSTANCE_RESOURCE_SUCCEEDED,
 } from '../types';
 
 const getAppInstanceResources = async (
@@ -100,8 +102,38 @@ const patchAppInstanceResource = async (
   }
 };
 
+const deleteAppInstanceResource = async (
+  { id, data, appInstanceId, spaceId, subSpaceId, type } = {},
+  callback
+) => {
+  try {
+    window.ipcRenderer.send(DELETE_APP_INSTANCE_RESOURCE_CHANNEL, {
+      id,
+      data,
+      appInstanceId,
+      spaceId,
+      subSpaceId,
+      type,
+    });
+
+    window.ipcRenderer.once(
+      DELETE_APP_INSTANCE_RESOURCE_CHANNEL,
+      async (event, response) => {
+        callback({
+          appInstanceId,
+          type: DELETE_APP_INSTANCE_RESOURCE_SUCCEEDED,
+          payload: response,
+        });
+      }
+    );
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 export {
   getAppInstanceResources,
   postAppInstanceResource,
   patchAppInstanceResource,
+  deleteAppInstanceResource,
 };

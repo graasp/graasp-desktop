@@ -37,6 +37,7 @@ const {
   SET_LANGUAGE_CHANNEL,
   GET_APP_INSTANCE_RESOURCES_CHANNEL,
   POST_APP_INSTANCE_RESOURCE_CHANNEL,
+  DELETE_APP_INSTANCE_RESOURCE_CHANNEL,
   PATCH_APP_INSTANCE_RESOURCE_CHANNEL,
   GET_APP_INSTANCE_CHANNEL,
   GET_DEVELOPER_MODE_CHANNEL,
@@ -75,6 +76,7 @@ const {
   SET_ACTION_ACCESSIBILITY_CHANNEL,
   SET_ACTIONS_AS_ENABLED_CHANNEL,
   POST_FILE_CHANNEL,
+  DELETE_FILE_CHANNEL,
 } = require('./app/config/channels');
 const env = require('./env.json');
 const {
@@ -104,6 +106,7 @@ const {
   getAppInstanceResources,
   postAppInstanceResource,
   patchAppInstanceResource,
+  deleteAppInstanceResource,
   getAppInstance,
   setSyncMode,
   getSyncMode,
@@ -129,6 +132,7 @@ const {
   setActionsAsEnabled,
   windowAllClosed,
   postFile,
+  deleteFile,
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
 
@@ -494,6 +498,9 @@ app.on('ready', async () => {
   // called when creating a file
   ipcMain.on(POST_FILE_CHANNEL, postFile(mainWindow, db));
 
+  // called when creating a file
+  ipcMain.on(DELETE_FILE_CHANNEL, deleteFile(mainWindow, db));
+
   // called when logging in a user
   ipcMain.on(SIGN_IN_CHANNEL, signIn(mainWindow, db));
 
@@ -519,6 +526,12 @@ app.on('ready', async () => {
   ipcMain.on(
     PATCH_APP_INSTANCE_RESOURCE_CHANNEL,
     patchAppInstanceResource(mainWindow, db)
+  );
+
+  // called when deleting an AppInstanceResource
+  ipcMain.on(
+    DELETE_APP_INSTANCE_RESOURCE_CHANNEL,
+    deleteAppInstanceResource(mainWindow, db)
   );
 
   // called when getting an AppInstance

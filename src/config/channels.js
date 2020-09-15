@@ -72,4 +72,5 @@ module.exports = {
   LOAD_SPACE_IN_CLASSROOM_CHANNEL: 'classroom:space:load',
   GET_SPACE_TO_LOAD_IN_CLASSROOM_CHANNEL: 'classroom:space:load:get-space',
   POST_FILE_CHANNEL: 'file:post',
+  DELETE_FILE_CHANNEL: 'file:delete',
 };

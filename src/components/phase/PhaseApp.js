@@ -12,19 +12,23 @@ import {
   PATCH_APP_INSTANCE_RESOURCE,
   GET_APP_INSTANCE,
   POST_APP_INSTANCE_RESOURCE,
+  DELETE_APP_INSTANCE_RESOURCE,
   APP_INSTANCE_RESOURCE_TYPES,
   POST_ACTION,
   ACTION_TYPES,
   POST_FILE,
   FILE_TYPES,
+  DELETE_FILE,
 } from '../../types';
 import {
   getAppInstanceResources,
   patchAppInstanceResource,
   postAppInstanceResource,
+  deleteAppInstanceResource,
   getAppInstance,
   postAction,
   postFile,
+  deleteFile,
 } from '../../actions';
 import {
   DEFAULT_LANGUAGE,
@@ -156,6 +160,11 @@ class PhaseApp extends Component {
               return patchAppInstanceResource(payload, this.postMessage);
             }
             break;
+          case DELETE_APP_INSTANCE_RESOURCE:
+            if (isSpaceSaved) {
+              return deleteAppInstanceResource(payload, this.postMessage);
+            }
+            break;
           case POST_ACTION: {
             if (isSpaceSaved) {
               return dispatchPostAction(payload, user, this.postMessage);
@@ -165,6 +174,12 @@ class PhaseApp extends Component {
           case POST_FILE: {
             if (isSpaceSaved) {
               return postFile(payload, this.postMessage);
+            }
+            break;
+          }
+          case DELETE_FILE: {
+            if (isSpaceSaved) {
+              return deleteFile(payload, this.postMessage);
             }
             break;
           }
