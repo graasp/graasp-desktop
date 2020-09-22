@@ -1,4 +1,5 @@
 import { toastr } from 'react-redux-toastr';
+import i18n from '../config/i18n';
 import { getCurrentPosition } from '../utils/geolocation';
 import {
   GET_GEOLOCATION_SUCCEEDED,
@@ -117,7 +118,10 @@ const getGeolocation = async () => async dispatch => {
       });
     } catch (e) {
       console.error(e);
-      toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_GEOLOCATION);
+      toastr.error(
+        i18n.t(ERROR_MESSAGE_HEADER),
+        i18n.t(ERROR_GETTING_GEOLOCATION)
+      );
     }
   }
 };
@@ -128,7 +132,10 @@ const getUserFolder = async () => dispatch => {
     window.ipcRenderer.send(GET_USER_FOLDER_CHANNEL);
     window.ipcRenderer.once(GET_USER_FOLDER_CHANNEL, (event, folder) => {
       if (folder === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_USER_FOLDER);
+        toastr.error(
+          i18n.t(ERROR_MESSAGE_HEADER),
+          i18n.t(ERROR_GETTING_USER_FOLDER)
+        );
       } else {
         dispatch({
           type: GET_USER_FOLDER_SUCCEEDED,
@@ -139,7 +146,10 @@ const getUserFolder = async () => dispatch => {
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_USER_FOLDER);
+    toastr.error(
+      i18n.t(ERROR_MESSAGE_HEADER),
+      i18n.t(ERROR_GETTING_USER_FOLDER)
+    );
     dispatch(flagGettingUserFolder(false));
   }
 };
@@ -150,7 +160,10 @@ const getLanguage = async () => dispatch => {
     window.ipcRenderer.send(GET_LANGUAGE_CHANNEL);
     window.ipcRenderer.once(GET_LANGUAGE_CHANNEL, (event, lang) => {
       if (lang === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_LANGUAGE);
+        toastr.error(
+          i18n.t(ERROR_MESSAGE_HEADER),
+          i18n.t(ERROR_GETTING_LANGUAGE)
+        );
       } else {
         dispatch({
           type: GET_LANGUAGE_SUCCEEDED,
@@ -161,7 +174,7 @@ const getLanguage = async () => dispatch => {
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_LANGUAGE);
+    toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_GETTING_LANGUAGE));
   }
 };
 
@@ -171,7 +184,10 @@ const setLanguage = async ({ lang }) => dispatch => {
     window.ipcRenderer.send(SET_LANGUAGE_CHANNEL, lang);
     window.ipcRenderer.once(SET_LANGUAGE_CHANNEL, (event, language) => {
       if (language === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_LANGUAGE);
+        toastr.error(
+          i18n.t(ERROR_MESSAGE_HEADER),
+          i18n.t(ERROR_SETTING_LANGUAGE)
+        );
       } else {
         dispatch({
           type: SET_LANGUAGE_SUCCEEDED,
@@ -182,7 +198,7 @@ const setLanguage = async ({ lang }) => dispatch => {
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_LANGUAGE);
+    toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_SETTING_LANGUAGE));
   }
 };
 
@@ -194,7 +210,10 @@ const getDeveloperMode = async () => dispatch => {
       GET_DEVELOPER_MODE_CHANNEL,
       (event, developerMode) => {
         if (developerMode === ERROR_GENERAL) {
-          toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_DEVELOPER_MODE);
+          toastr.error(
+            i18n.t(ERROR_MESSAGE_HEADER),
+            i18n.t(ERROR_GETTING_DEVELOPER_MODE)
+          );
         } else {
           dispatch({
             type: GET_DEVELOPER_MODE_SUCCEEDED,
@@ -206,7 +225,10 @@ const getDeveloperMode = async () => dispatch => {
     );
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_DEVELOPER_MODE);
+    toastr.error(
+      i18n.t(ERROR_MESSAGE_HEADER),
+      i18n.t(ERROR_GETTING_DEVELOPER_MODE)
+    );
   }
 };
 
@@ -216,7 +238,10 @@ const setDeveloperMode = async developerMode => dispatch => {
     window.ipcRenderer.send(SET_DEVELOPER_MODE_CHANNEL, developerMode);
     window.ipcRenderer.once(SET_DEVELOPER_MODE_CHANNEL, (event, mode) => {
       if (mode === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_DEVELOPER_MODE);
+        toastr.error(
+          i18n.t(ERROR_MESSAGE_HEADER),
+          i18n.t(ERROR_SETTING_DEVELOPER_MODE)
+        );
       } else {
         dispatch({
           type: SET_DEVELOPER_MODE_SUCCEEDED,
@@ -227,7 +252,10 @@ const setDeveloperMode = async developerMode => dispatch => {
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_DEVELOPER_MODE);
+    toastr.error(
+      i18n.t(ERROR_MESSAGE_HEADER),
+      i18n.t(ERROR_SETTING_DEVELOPER_MODE)
+    );
   }
 };
 
@@ -239,7 +267,10 @@ const getGeolocationEnabled = async () => dispatch => {
       GET_GEOLOCATION_ENABLED_CHANNEL,
       (event, geolocationEnabled) => {
         if (geolocationEnabled === ERROR_GENERAL) {
-          toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_GEOLOCATION_ENABLED);
+          toastr.error(
+            i18n.t(ERROR_MESSAGE_HEADER),
+            i18n.t(ERROR_GETTING_GEOLOCATION_ENABLED)
+          );
         } else {
           dispatch({
             type: GET_GEOLOCATION_ENABLED_SUCCEEDED,
@@ -251,7 +282,10 @@ const getGeolocationEnabled = async () => dispatch => {
     );
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_GEOLOCATION_ENABLED);
+    toastr.error(
+      i18n.t(ERROR_MESSAGE_HEADER),
+      i18n.t(ERROR_GETTING_GEOLOCATION_ENABLED)
+    );
   }
 };
 
@@ -266,7 +300,10 @@ const setGeolocationEnabled = async geolocationEnabled => dispatch => {
       SET_GEOLOCATION_ENABLED_CHANNEL,
       (event, enabled) => {
         if (enabled === ERROR_GENERAL) {
-          toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_GEOLOCATION_ENABLED);
+          toastr.error(
+            i18n.t(ERROR_MESSAGE_HEADER),
+            i18n.t(ERROR_SETTING_GEOLOCATION_ENABLED)
+          );
         } else {
           dispatch({
             type: SET_GEOLOCATION_ENABLED_SUCCEEDED,
@@ -278,7 +315,10 @@ const setGeolocationEnabled = async geolocationEnabled => dispatch => {
     );
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_GEOLOCATION_ENABLED);
+    toastr.error(
+      i18n.t(ERROR_MESSAGE_HEADER),
+      i18n.t(ERROR_SETTING_GEOLOCATION_ENABLED)
+    );
   }
 };
 
@@ -288,7 +328,10 @@ const getSyncMode = async () => dispatch => {
     window.ipcRenderer.send(GET_SYNC_MODE_CHANNEL);
     window.ipcRenderer.once(GET_SYNC_MODE_CHANNEL, (event, mode) => {
       if (mode === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_SYNC_MODE);
+        toastr.error(
+          i18n.t(ERROR_MESSAGE_HEADER),
+          i18n.t(ERROR_GETTING_SYNC_MODE)
+        );
       } else {
         dispatch({
           type: GET_SYNC_MODE_SUCCEEDED,
@@ -299,7 +342,7 @@ const getSyncMode = async () => dispatch => {
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_SYNC_MODE);
+    toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_GETTING_SYNC_MODE));
   }
 };
 
@@ -309,7 +352,10 @@ const setSyncMode = async syncMode => dispatch => {
     window.ipcRenderer.send(SET_SYNC_MODE_CHANNEL, syncMode);
     window.ipcRenderer.once(SET_SYNC_MODE_CHANNEL, (event, mode) => {
       if (mode === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_SYNC_MODE);
+        toastr.error(
+          i18n.t(ERROR_MESSAGE_HEADER),
+          i18n.t(ERROR_SETTING_SYNC_MODE)
+        );
       } else {
         dispatch({
           type: SET_SYNC_MODE_SUCCEEDED,
@@ -320,7 +366,7 @@ const setSyncMode = async syncMode => dispatch => {
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_SYNC_MODE);
+    toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_SETTING_SYNC_MODE));
   }
 };
 
@@ -330,7 +376,10 @@ const getUserMode = async () => dispatch => {
     window.ipcRenderer.send(GET_USER_MODE_CHANNEL);
     window.ipcRenderer.once(GET_USER_MODE_CHANNEL, (event, userMode) => {
       if (userMode === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_USER_MODE);
+        toastr.error(
+          i18n.t(ERROR_MESSAGE_HEADER),
+          i18n.t(ERROR_GETTING_USER_MODE)
+        );
       } else {
         dispatch({
           type: GET_USER_MODE_SUCCEEDED,
@@ -341,7 +390,7 @@ const getUserMode = async () => dispatch => {
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_USER_MODE);
+    toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_GETTING_USER_MODE));
   }
 };
 
@@ -351,7 +400,10 @@ const setUserMode = async userMode => dispatch => {
     window.ipcRenderer.send(SET_USER_MODE_CHANNEL, userMode);
     window.ipcRenderer.once(SET_USER_MODE_CHANNEL, (event, mode) => {
       if (mode === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_USER_MODE);
+        toastr.error(
+          i18n.t(ERROR_MESSAGE_HEADER),
+          i18n.t(ERROR_SETTING_USER_MODE)
+        );
       } else {
         dispatch({
           type: SET_USER_MODE_SUCCEEDED,
@@ -362,7 +414,7 @@ const setUserMode = async userMode => dispatch => {
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_USER_MODE);
+    toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_SETTING_USER_MODE));
   }
 };
 
@@ -374,7 +426,10 @@ const setSpaceAsFavorite = payload => dispatch => {
       SET_SPACE_AS_FAVORITE_CHANNEL,
       (event, response) => {
         if (response === ERROR_GENERAL) {
-          toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_SPACE_AS_FAVORITE);
+          toastr.error(
+            i18n.t(ERROR_MESSAGE_HEADER),
+            i18n.t(ERROR_SETTING_SPACE_AS_FAVORITE)
+          );
         } else {
           dispatch({
             type: SET_SPACE_AS_FAVORITE_SUCCEEDED,
@@ -386,7 +441,10 @@ const setSpaceAsFavorite = payload => dispatch => {
     );
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_SPACE_AS_FAVORITE);
+    toastr.error(
+      i18n.t(ERROR_MESSAGE_HEADER),
+      i18n.t(ERROR_SETTING_SPACE_AS_FAVORITE)
+    );
   }
 };
 
@@ -396,7 +454,10 @@ const setSpaceAsRecent = payload => dispatch => {
     window.ipcRenderer.send(SET_SPACE_AS_RECENT_CHANNEL, payload);
     window.ipcRenderer.once(SET_SPACE_AS_RECENT_CHANNEL, (event, response) => {
       if (response === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_SPACE_AS_RECENT);
+        toastr.error(
+          i18n.t(ERROR_MESSAGE_HEADER),
+          i18n.t(ERROR_SETTING_SPACE_AS_RECENT)
+        );
       } else {
         dispatch({
           type: SET_SPACE_AS_RECENT_SPACES_SUCCEEDED,
@@ -407,7 +468,10 @@ const setSpaceAsRecent = payload => dispatch => {
     });
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_SPACE_AS_RECENT);
+    toastr.error(
+      i18n.t(ERROR_MESSAGE_HEADER),
+      i18n.t(ERROR_SETTING_SPACE_AS_RECENT)
+    );
   }
 };
 
@@ -420,8 +484,8 @@ const setActionAccessibility = payload => dispatch => {
       (event, response) => {
         if (response === ERROR_GENERAL) {
           toastr.error(
-            ERROR_MESSAGE_HEADER,
-            ERROR_SETTING_ACTION_ACCESSIBILITY
+            i18n.t(ERROR_MESSAGE_HEADER),
+            i18n.t(ERROR_SETTING_ACTION_ACCESSIBILITY)
           );
         } else {
           dispatch({
@@ -434,7 +498,10 @@ const setActionAccessibility = payload => dispatch => {
     );
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_ACTION_ACCESSIBILITY);
+    toastr.error(
+      i18n.t(ERROR_MESSAGE_HEADER),
+      i18n.t(ERROR_SETTING_ACTION_ACCESSIBILITY)
+    );
   }
 };
 
@@ -446,7 +513,10 @@ const setActionsAsEnabled = payload => dispatch => {
       SET_ACTIONS_AS_ENABLED_CHANNEL,
       (event, response) => {
         if (response === ERROR_GENERAL) {
-          toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_ACTIONS_AS_ENABLED);
+          toastr.error(
+            i18n.t(ERROR_MESSAGE_HEADER),
+            i18n.t(ERROR_SETTING_ACTIONS_AS_ENABLED)
+          );
         } else {
           dispatch({
             type: SET_ACTIONS_AS_ENABLED_SUCCEEDED,
@@ -458,7 +528,10 @@ const setActionsAsEnabled = payload => dispatch => {
     );
   } catch (e) {
     console.error(e);
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SETTING_ACTIONS_AS_ENABLED);
+    toastr.error(
+      i18n.t(ERROR_MESSAGE_HEADER),
+      i18n.t(ERROR_SETTING_ACTIONS_AS_ENABLED)
+    );
   }
 };
 
