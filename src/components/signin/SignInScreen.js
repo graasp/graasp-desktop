@@ -107,12 +107,11 @@ class SignInScreen extends Component {
     user: Map(),
   };
 
-  componentDidMount = () => {
-    this.handleOnAuthenticated();
-  };
-
-  componentDidUpdate = () => {
-    this.handleOnAuthenticated();
+  componentDidUpdate = ({ authenticated: prevAuthenticated }) => {
+    const { authenticated } = this.props;
+    if (prevAuthenticated !== authenticated) {
+      this.handleOnAuthenticated();
+    }
   };
 
   handleOnAuthenticated = () => {
