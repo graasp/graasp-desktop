@@ -51,6 +51,7 @@ import {
   DIFF_STYLES,
   SYNC_PHASE_PROPERTIES,
   SYNC_ITEM_PROPERTIES,
+  DEFAULT_PROTOCOL,
 } from '../../config/constants';
 import {
   diffString,
@@ -247,6 +248,13 @@ class SyncScreen extends Component {
 
     // compare images using thumbnail url
     const change = diffString(localThumbnailUrl, remoteThumbnailUrl);
+
+    // append default protocol to display image
+    let fullRemoteThumbnailUrl = remoteThumbnailUrl;
+    if (fullRemoteThumbnailUrl.startsWith('//')) {
+      fullRemoteThumbnailUrl = `${DEFAULT_PROTOCOL}:${fullRemoteThumbnailUrl}`;
+    }
+
     return (
       <>
         <Grid
@@ -274,11 +282,11 @@ class SyncScreen extends Component {
           })}
           xs={6}
         >
-          {remoteThumbnailUrl.length ? (
+          {fullRemoteThumbnailUrl.length ? (
             <img
               alt={t('Remote Space Image')}
               className={classes.spaceImage}
-              src={remoteThumbnailUrl}
+              src={fullRemoteThumbnailUrl}
             />
           ) : null}
         </Grid>
