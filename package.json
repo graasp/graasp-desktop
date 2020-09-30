@@ -1,6 +1,6 @@
 {
   "name": "graasp-desktop",
-  "version": "0.15.5",
+  "version": "0.15.6",
   "description": "Desktop application for the Graasp ecosystem.",
   "private": true,
   "author": "React EPFL",
@@ -54,7 +54,7 @@
     "dist:win:docker": "./scripts/buildWindowsWithDocker.sh",
     "dist:all": "run-s dist:posix dist:win",
     "release:manual": "run-s version dist:all",
-    "release": "git add CHANGELOG.md && standard-version -a && env-cmd -f ./.env electron-builder -ml && env-cmd -f ./.env electron-builder -w --x64 --ia32",
+    "release": "git fetch --tags && git add CHANGELOG.md && standard-version -a && env-cmd -f ./.env electron-builder -ml && env-cmd -f ./.env electron-builder -w --x64 --ia32",
     "hooks:uninstall": "node node_modules/husky/husky.js uninstall",
     "hooks:install": "node node_modules/husky/husky.js install",
     "postinstall": "electron-builder install-app-deps",
