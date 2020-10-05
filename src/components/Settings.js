@@ -12,7 +12,11 @@ import LanguageSelect from './common/LanguageSelect';
 import DeveloperSwitch from './common/DeveloperSwitch';
 import GeolocationControl from './common/GeolocationControl';
 import Main from './common/Main';
-import { SETTINGS_MAIN_ID, SETTINGS_TITLE_ID } from '../config/selectors';
+import {
+  SETTINGS_ACTIONS_CLASS,
+  SETTINGS_MAIN_ID,
+  SETTINGS_TITLE_ID,
+} from '../config/selectors';
 import SyncAdvancedSwitch from './space/sync/SyncAdvancedSwitch';
 import StudentModeSwitch from './common/StudentModeSwitch';
 import ActionEnabledSwitch from './common/ActionEnabledSwitch';
@@ -58,7 +62,7 @@ export class Settings extends Component {
         <Typography variant="h5" color="inherit" className="mt-2">
           {t('Actions')}
         </Typography>
-        <FormGroup>
+        <FormGroup className={SETTINGS_ACTIONS_CLASS}>
           <ActionEnabledSwitch />
           <ActionAccessibilitySwitch />
         </FormGroup>

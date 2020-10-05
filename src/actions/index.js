@@ -11,3 +11,4 @@ export * from './syncSpace';
 export * from './loadSpace';
 export * from './exportSpace';
 export * from './classroom';
+export * from './tour';

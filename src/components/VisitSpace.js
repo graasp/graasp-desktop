@@ -27,6 +27,7 @@ import {
   VISIT_BUTTON_ID,
   VISIT_INPUT_ID,
   VISIT_MAIN_ID,
+  VISIT_SPACE_INPUT,
 } from '../config/selectors';
 
 class VisitSpace extends Component {
@@ -118,7 +119,7 @@ class VisitSpace extends Component {
           </Typography>
           <Input
             id={VISIT_INPUT_ID}
-            className={classes.input}
+            className={classNames(classes.input, VISIT_SPACE_INPUT)}
             required
             onChange={this.handleChangeSpaceId}
             inputProps={{

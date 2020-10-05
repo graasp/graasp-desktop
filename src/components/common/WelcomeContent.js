@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router';
 import { withTranslation } from 'react-i18next';
@@ -14,6 +15,7 @@ import {
   VISIT_PATH,
   LOAD_SPACE_PATH,
 } from '../../config/paths';
+import { VISIT_SPACE_BUTTON } from '../../config/selectors';
 
 const styles = theme => ({
   ...Styles(theme),
@@ -114,7 +116,7 @@ class WelcomeContent extends Component {
               // class wrappedButton is necessary to match the layout when encapsulated with Online tag
             }
             <Button
-              className={classes.wrappedButton}
+              className={classNames(classes.wrappedButton, VISIT_SPACE_BUTTON)}
               onClick={this.handleGoToVisitSpace}
             >
               {t('Visit a Space')}
