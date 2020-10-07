@@ -31,6 +31,7 @@ import {
   CLASSROOMS_MENU_ITEM_ID,
   DRAWER_BUTTON_ID,
   DRAWER_HEADER_TEACHER_ICON_ID,
+  TOUR_END_SELECTOR,
 } from '../src/config/selectors';
 import {
   SETTINGS_LOAD_PAUSE,
@@ -83,6 +84,7 @@ export const menuGoToPhase = async (client, nb) => {
 
 export const menuGoToSettings = async client => {
   await menuGoTo(client, SETTINGS_MENU_ITEM_ID, SETTINGS_MAIN_ID);
+  await client.click(TOUR_END_SELECTOR);
 };
 
 export const menuGoToDeveloper = async client => {
@@ -236,13 +238,16 @@ export const toggleSyncAdvancedMode = async (client, value) => {
 /** sign in util function */
 export const userSignIn = async (
   client,
-  { name, mode = DEFAULT_USER_MODE }
+  { name, mode = DEFAULT_USER_MODE },
+  closeTour = true
 ) => {
   await client.setValue(`#${LOGIN_USERNAME_INPUT_ID}`, name);
   await client.pause(INPUT_TYPE_PAUSE);
   await client.click(`#${LOGIN_BUTTON_ID}`);
   await client.pause(LOGIN_PAUSE);
-
+  if (closeTour) {
+    await client.click(TOUR_END_SELECTOR);
+  }
   // change mode if it is not default mode
   if (mode !== DEFAULT_USER_MODE) {
     if (mode === USER_MODES.TEACHER) {

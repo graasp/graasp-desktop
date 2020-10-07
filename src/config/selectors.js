@@ -10,8 +10,8 @@ export const SPACES_NEARBY_MENU_ITEM_ID = 'spacesNearbyMenuItem';
 export const SPACES_NEARBY_MAIN_ID = 'spacesNearbyMain';
 export const SAVED_SPACES_MAIN_ID = 'savedSpacesMain';
 export const VISIT_MENU_ITEM_ID = 'visitMenuItem';
-export const VISIT_SPACE_BUTTON = 'VisitSpaceButton';
-export const VISIT_SPACE_INPUT = 'VisitSpaceInput';
+export const VISIT_SPACE_BUTTON_CLASS = 'VisitSpaceButton';
+export const VISIT_SPACE_INPUT_CLASS = 'VisitSpaceInput';
 export const VISIT_MAIN_ID = 'visit';
 export const LOAD_MENU_ITEM_ID = 'loadMenuItem';
 export const LOAD_MAIN_ID = 'load';
@@ -33,14 +33,14 @@ export const SIGN_IN_MAIN_ID = 'signInMain';
 export const PHASE_MENU_LIST_ID = 'phaseMenuList';
 export const PHASE_MENU_ITEM_HOME_ID = 'phaseMenuItemHome';
 
-export const SPACE_SCREEN = 'SpaceScreen';
+export const SPACE_SCREEN_CLASS = 'SpaceScreen';
 export const SPACE_THUMBNAIL_IMAGE_CLASS = 'spaceThumbnailImageClass';
 export const SPACE_START_PREVIEW_BUTTON = 'spaceStartPreviewButton';
 export const SPACE_DESCRIPTION_ID = 'spaceDescription';
 export const SPACE_SAVE_ICON_CLASS = 'spaceSaveIcon';
 export const SPACE_PREVIEW_ICON_CLASS = 'spacePreviewIcon';
 export const PHASE_DESCRIPTION_ID = 'phaseDescription';
-export const PHASE_DRAWER = 'PhasesDrawer';
+export const PHASE_DRAWER_CLASS = 'PhasesDrawer';
 export const SPACE_MEDIA_CARD_CLASS = 'spaceMediaCard';
 export const buildPhaseMenuItemId = id => `phaseMenuItemId-${id}`;
 export const BANNER_WARNING_PREVIEW_ID = 'bannerWarningPreview';
@@ -150,3 +150,6 @@ export const EDIT_CLASSROOM_DELETE_DATA_BUTTON_CLASS =
 export const buildTableCellSpaceId = id => `tableCellSpace-${id}`;
 
 export const DRAWER_HEADER_TEACHER_ICON_ID = 'drawerHeaderTeacherIcon';
+
+export const TOUR_END_SELECTOR =
+  '#react-joyride-step-0 > div > div > div.react-joyride__tooltip > div:nth-child(2) > div > button';

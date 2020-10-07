@@ -12,16 +12,23 @@ import {
   PATCH_APP_INSTANCE_RESOURCE,
   GET_APP_INSTANCE,
   POST_APP_INSTANCE_RESOURCE,
+  DELETE_APP_INSTANCE_RESOURCE,
   APP_INSTANCE_RESOURCE_TYPES,
   POST_ACTION,
   ACTION_TYPES,
+  POST_FILE,
+  FILE_TYPES,
+  DELETE_FILE,
 } from '../../types';
 import {
   getAppInstanceResources,
   patchAppInstanceResource,
   postAppInstanceResource,
+  deleteAppInstanceResource,
   getAppInstance,
   postAction,
+  postFile,
+  deleteFile,
 } from '../../actions';
 import {
   DEFAULT_LANGUAGE,
@@ -125,7 +132,13 @@ class PhaseApp extends Component {
       const { id: componentAppInstanceId } = appInstance || {};
       const { type, payload } = JSON.parse(event.data);
       let { id: messageAppInstanceId } = payload;
-      if ([...APP_INSTANCE_RESOURCE_TYPES, ...ACTION_TYPES].includes(type)) {
+      if (
+        [
+          ...APP_INSTANCE_RESOURCE_TYPES,
+          ...ACTION_TYPES,
+          ...FILE_TYPES,
+        ].includes(type)
+      ) {
         ({ appInstanceId: messageAppInstanceId } = payload);
       }
 
@@ -147,9 +160,26 @@ class PhaseApp extends Component {
               return patchAppInstanceResource(payload, this.postMessage);
             }
             break;
+          case DELETE_APP_INSTANCE_RESOURCE:
+            if (isSpaceSaved) {
+              return deleteAppInstanceResource(payload, this.postMessage);
+            }
+            break;
           case POST_ACTION: {
             if (isSpaceSaved) {
               return dispatchPostAction(payload, user, this.postMessage);
+            }
+            break;
+          }
+          case POST_FILE: {
+            if (isSpaceSaved) {
+              return postFile(payload, this.postMessage);
+            }
+            break;
+          }
+          case DELETE_FILE: {
+            if (isSpaceSaved) {
+              return deleteFile(payload, this.postMessage);
             }
             break;
           }

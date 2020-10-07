@@ -8,19 +8,24 @@ import {
   completeTour,
   initializeTour,
   navigateStopTour,
-  nextStepTour,
+  goToNextStep,
   resetTour,
   startTour,
 } from '../../actions';
 import { HOME_PATH, SETTINGS_PATH, VISIT_PATH } from '../../config/paths';
 import {
   AUTHENTICATED,
+  EXAMPLE_VISIT_SPACE_LINK,
   THEME_COLORS,
+  TOUR_DELAY_500,
+  TOUR_DELAY_750,
+  TOUR_Z_INDEX,
   USER_MODES,
 } from '../../config/constants';
 import {
+  DRAWER_BUTTON_ID,
   SPACE_PREVIEW_ICON_CLASS,
-  VISIT_SPACE_INPUT,
+  VISIT_SPACE_INPUT_CLASS,
 } from '../../config/selectors';
 import { waitForElement } from '../../utils/elements';
 import {
@@ -62,6 +67,7 @@ export class Tour extends Component {
       replace: PropTypes.func.isRequired,
       push: PropTypes.func.isRequired,
     }).isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   componentDidUpdate(prevProps) {
@@ -85,13 +91,14 @@ export class Tour extends Component {
       authenticated &&
       !visitSpaceTourRan
     ) {
+      // waits to ensure the first step element is rendered
       setTimeout(
         () =>
           dispatchInitializeTour({
             tour: tours.VISIT_SPACE_TOUR,
             steps: VISIT_SPACE_TOUR_STEPS,
           }),
-        750
+        TOUR_DELAY_750
       );
     }
 
@@ -112,7 +119,7 @@ export class Tour extends Component {
             tour: tours.SETTINGS_TOUR,
             steps: SETTINGS_TOUR_STEPS,
           }),
-        750
+        TOUR_DELAY_750
       );
     }
   }
@@ -130,6 +137,7 @@ export class Tour extends Component {
       dispatchNavigateAndStopTour,
       dispatchTourCompleted,
       currentTour,
+      t,
     } = this.props;
     const callback = async data => {
       const { action, index, type, status } = data;
@@ -150,11 +158,14 @@ export class Tour extends Component {
               case 1:
                 push(VISIT_PATH);
                 dispatchNavigateAndStopTour(newStepIndex);
-                await waitForElement({ selector: `.${VISIT_SPACE_INPUT}` });
-                dispatchStartTour();
+                await waitForElement({
+                  selector: `.${VISIT_SPACE_INPUT_CLASS}`,
+                });
+                document.getElementById(DRAWER_BUTTON_ID).click();
+                setTimeout(() => dispatchStartTour(), TOUR_DELAY_500);
                 break;
               case 2:
-                replace('/space/owozgj');
+                replace(EXAMPLE_VISIT_SPACE_LINK);
                 dispatchNavigateAndStopTour(newStepIndex);
                 await waitForElement({
                   selector: `.${SPACE_PREVIEW_ICON_CLASS}`,
@@ -207,7 +218,7 @@ export class Tour extends Component {
           },
           options: {
             primaryColor: THEME_COLORS[USER_MODES.TEACHER],
-            zIndex: 10000,
+            zIndex: TOUR_Z_INDEX,
           },
         }}
         floaterProps={{
@@ -215,8 +226,8 @@ export class Tour extends Component {
         }}
         callback={callback}
         locale={{
-          last: 'End tour',
-          skip: 'Close tour',
+          last: t('End tour'),
+          skip: t('Close tour'),
         }}
         showSkipButton
         hideBackButton
@@ -241,7 +252,7 @@ const mapStateToProps = ({ tour, authentication }) => ({
 });
 
 const mapDispatchToProps = {
-  dispatchNextStep: nextStepTour,
+  dispatchNextStep: goToNextStep,
   dispatchStartTour: startTour,
   dispatchNavigateAndStopTour: navigateStopTour,
   dispatchTourCompleted: completeTour,

@@ -68,7 +68,7 @@ class SpacesNearby extends Component {
     searchQuery: prevSearchQuery,
   }) {
     const { geolocation, spaces, searchQuery } = this.props;
-    if (!geolocation.equals(prevGeolocation)) {
+    if (!geolocation?.equals(prevGeolocation)) {
       this.getSpacesNearby();
     }
     if (!spaces.equals(prevSpaces) || searchQuery !== prevSearchQuery) {
@@ -78,7 +78,7 @@ class SpacesNearby extends Component {
 
   getSpacesNearby = () => {
     const { dispatchGetSpacesNearby, geolocation } = this.props;
-    if (!geolocation.isEmpty()) {
+    if (geolocation && !geolocation.isEmpty()) {
       const {
         coords: { latitude, longitude },
       } = geolocation.toJS();
@@ -130,7 +130,7 @@ class SpacesNearby extends Component {
 }
 
 const mapStateToProps = ({ authentication, Space }) => ({
-  geolocation: authentication.getIn(['user', 'settings', 'geolocation']),
+  geolocation: authentication.getIn(['user', 'geolocation']),
   spaces: Space.getIn(['nearby', 'content']),
   activity: Boolean(Space.getIn(['nearby', 'activity']).size),
   geolocationEnabled: authentication.getIn([

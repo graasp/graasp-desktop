@@ -1,4 +1,5 @@
-export const NEXT_OR_PREV_TOUR = 'NEXT_OR_PREV_TOUR';
+export const NEXT_TOUR_STEP = 'NEXT_TOUR_STEP';
+export const PREV_TOUR_STEP = 'PREV_TOUR_STEP';
 export const NAVIGATE_STOP_TOUR = 'NAVIGATE_STOP_TOUR';
 export const STOP_TOUR = 'STOP_TOUR';
 export const RESTART_TOUR = 'RESTART_TOUR';

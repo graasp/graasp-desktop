@@ -1,18 +1,25 @@
-import { TOUR_COMPLETED_CHANNEL } from '../config/channels';
+import { COMPLETE_TOUR_CHANNEL } from '../config/channels';
 import { ERROR_GENERAL } from '../config/errors';
 import {
   INITIALIZE_TOUR,
   NAVIGATE_STOP_TOUR,
-  NEXT_OR_PREV_TOUR,
+  NEXT_TOUR_STEP,
+  PREV_TOUR_STEP,
   RESET_TOUR,
   RESTART_TOUR,
   START_TOUR,
   STOP_TOUR,
 } from '../types/tour';
 
-const nextStepTour = payload => dispatch =>
+const goToNextStep = payload => dispatch =>
   dispatch({
-    type: NEXT_OR_PREV_TOUR,
+    type: NEXT_TOUR_STEP,
+    payload,
+  });
+
+const goToPrevStep = payload => dispatch =>
+  dispatch({
+    type: PREV_TOUR_STEP,
     payload,
   });
 
@@ -53,8 +60,8 @@ const completeTour = async tourName => dispatch => {
     dispatch({
       type: RESET_TOUR,
     });
-    window.ipcRenderer.send(TOUR_COMPLETED_CHANNEL, { tourName });
-    window.ipcRenderer.once(TOUR_COMPLETED_CHANNEL, async (event, error) => {
+    window.ipcRenderer.send(COMPLETE_TOUR_CHANNEL, { tourName });
+    window.ipcRenderer.once(COMPLETE_TOUR_CHANNEL, async (event, error) => {
       if (error === ERROR_GENERAL) {
         console.error(error);
       }
@@ -66,7 +73,8 @@ const completeTour = async tourName => dispatch => {
 
 export {
   stopTour,
-  nextStepTour,
+  goToNextStep,
+  goToPrevStep,
   restartTour,
   startTour,
   navigateStopTour,

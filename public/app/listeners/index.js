@@ -31,6 +31,7 @@ const signOut = require('./signOut');
 const isAuthenticated = require('./isAuthenticated');
 const getAppInstanceResources = require('./getAppInstanceResources');
 const postAppInstanceResource = require('./postAppInstanceResource');
+const deleteAppInstanceResource = require('./deleteAppInstanceResource');
 const patchAppInstanceResource = require('./patchAppInstanceResource');
 const getAppInstance = require('./getAppInstance');
 const setSpaceAsFavorite = require('./setSpaceAsFavorite');
@@ -51,6 +52,8 @@ const setActionAccessibility = require('./setActionAccessibility');
 const setActionsAsEnabled = require('./setActionsAsEnabled');
 const windowAllClosed = require('./windowAllClosed');
 const completeTour = require('./completeTour');
+const postFile = require('./postFile');
+const deleteFile = require('./deleteFile');
 
 module.exports = {
   loadSpace,
@@ -83,6 +86,7 @@ module.exports = {
   isAuthenticated,
   getAppInstanceResources,
   postAppInstanceResource,
+  deleteAppInstanceResource,
   patchAppInstanceResource,
   getAppInstance,
   getUserMode,
@@ -105,4 +109,6 @@ module.exports = {
   setActionsAsEnabled,
   windowAllClosed,
   completeTour,
+  postFile,
+  deleteFile,
 };

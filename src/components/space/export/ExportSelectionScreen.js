@@ -122,6 +122,7 @@ class ExportSelectionScreen extends Component {
       history: { goBack },
       dispatchClearExportSpace,
       space,
+      t,
     } = this.props;
 
     // when export is successful, redirect
@@ -131,7 +132,7 @@ class ExportSelectionScreen extends Component {
     }
     // during export return with error if space to export is not defined
     else if (space.isEmpty() && status === EXPORT_SPACE_STATUS.RUNNING) {
-      toastr.error(ERROR_MESSAGE_HEADER, UNEXPECTED_ERROR_MESSAGE);
+      toastr.error(t(ERROR_MESSAGE_HEADER), t(UNEXPECTED_ERROR_MESSAGE));
       goBack();
     }
   };

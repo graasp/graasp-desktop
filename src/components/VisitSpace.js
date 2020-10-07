@@ -27,7 +27,7 @@ import {
   VISIT_BUTTON_ID,
   VISIT_INPUT_ID,
   VISIT_MAIN_ID,
-  VISIT_SPACE_INPUT,
+  VISIT_SPACE_INPUT_CLASS,
 } from '../config/selectors';
 
 class VisitSpace extends Component {
@@ -71,14 +71,14 @@ class VisitSpace extends Component {
   };
 
   handleClick = () => {
-    const { history } = this.props;
+    const { history, t } = this.props;
     const { spaceId } = this.state;
     const id = extractSpaceId(spaceId) || spaceId;
     if (!window.navigator.onLine) {
-      return toastr.error(ERROR_MESSAGE_HEADER, OFFLINE_ERROR_MESSAGE);
+      return toastr.error(t(ERROR_MESSAGE_HEADER), t(OFFLINE_ERROR_MESSAGE));
     }
     if (!isValidSpaceId(id)) {
-      return toastr.error(ERROR_MESSAGE_HEADER, INVALID_SPACE_ID_OR_URL);
+      return toastr.error(t(ERROR_MESSAGE_HEADER), t(INVALID_SPACE_ID_OR_URL));
     }
     if (id && id !== '') {
       const { replace } = history;
@@ -119,7 +119,7 @@ class VisitSpace extends Component {
           </Typography>
           <Input
             id={VISIT_INPUT_ID}
-            className={classNames(classes.input, VISIT_SPACE_INPUT)}
+            className={classNames(classes.input, VISIT_SPACE_INPUT_CLASS)}
             required
             onChange={this.handleChangeSpaceId}
             inputProps={{

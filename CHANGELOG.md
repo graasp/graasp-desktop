@@ -2,6 +2,49 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.15.6](https://github.com/graasp/graasp-desktop/compare/v0.15.5...v0.15.6) (2020-09-30)
+
+### Features
+
+- add signin and signout actions, refactor dashboard ([442092b](https://github.com/graasp/graasp-desktop/commit/442092bae81ceb67fa8b1add4cc3ec6da6c8cce5))
+- add switch for action enabled and action access ([2e20609](https://github.com/graasp/graasp-desktop/commit/2e20609f1dcb01d76c836ce1822e64a7ce886563))
+- add teacher theme ([d95398b](https://github.com/graasp/graasp-desktop/commit/d95398b982c88427231d2ed4fccec289d96909e4)), closes [#283](https://github.com/graasp/graasp-desktop/issues/283)
+- add user filter in dashboard ([8d81829](https://github.com/graasp/graasp-desktop/commit/8d81829eb57fdcdb4edd6f031ab4814ec726ad6d)), closes [#284](https://github.com/graasp/graasp-desktop/issues/284)
+- add welcome screen when there si nothing to display in Home ([414cec5](https://github.com/graasp/graasp-desktop/commit/414cec5c0f27d2183a647a1f406e833f9542177b)), closes [#273](https://github.com/graasp/graasp-desktop/issues/273)
+- close app from mainmenu ([8503ee5](https://github.com/graasp/graasp-desktop/commit/8503ee583467965f56f0b36ed969dd9f81a087cc)), closes [#282](https://github.com/graasp/graasp-desktop/issues/282)
+- delete appInstanceResource and related file ([2d5b4e4](https://github.com/graasp/graasp-desktop/commit/2d5b4e4555b15556ca9b670a81840afd97a6f063))
+- display username in drawer ([a03ae5e](https://github.com/graasp/graasp-desktop/commit/a03ae5eceb67ba2d9666871080014a1c3807f017)), closes [#240](https://github.com/graasp/graasp-desktop/issues/240)
+- keep language when creating new user ([8845d5c](https://github.com/graasp/graasp-desktop/commit/8845d5c5804d7e8527ed708c25509bd9757df5b7))
+- save file locally when receiving postFile message ([d308f36](https://github.com/graasp/graasp-desktop/commit/d308f3635ae818a875e22d9657002a19fd1908fe))
+
+### Bug Fixes
+
+- **sync:** add default protocol for remote space image ([3219d99](https://github.com/graasp/graasp-desktop/commit/3219d99a050411b5922ec63d2e750f613e6af506))
+- fix saving login action twice on signin ([24a1155](https://github.com/graasp/graasp-desktop/commit/24a1155e262814b40ac7829e480dc89df47acbf6))
+- **spaces nearby:** get correctly geolocation from user ([0a63a6a](https://github.com/graasp/graasp-desktop/commit/0a63a6a98c0a1d062575ff15ea0e93cb24f41ec4))
+- define user in SignInScreen ([2c7aff3](https://github.com/graasp/graasp-desktop/commit/2c7aff36b329483a649c7861f438d2602185fbcf))
+- display connexion status toastr only on change ([8a725c3](https://github.com/graasp/graasp-desktop/commit/8a725c38d12427946631383f704d19966ef8e516)), closes [#254](https://github.com/graasp/graasp-desktop/issues/254)
+- do not add classroom when name already exists ([0c6c83e](https://github.com/graasp/graasp-desktop/commit/0c6c83eace335506301ac6c9eae5d7befb68be45)), closes [#300](https://github.com/graasp/graasp-desktop/issues/300)
+- does not save action and resource when space is not saved ([0b5bb5d](https://github.com/graasp/graasp-desktop/commit/0b5bb5de37470d977e317aa5138926843472b638)), closes [#296](https://github.com/graasp/graasp-desktop/issues/296)
+- fix database typo in user filter, fr translation ([83b90d6](https://github.com/graasp/graasp-desktop/commit/83b90d6185d43c64abf0d2a40f459c7b3a1184d4))
+- fix minor test issues ([d023709](https://github.com/graasp/graasp-desktop/commit/d023709660cf79548d26b596c68e63512a116495))
+- handle empty items in phases on space sync ([b82a02b](https://github.com/graasp/graasp-desktop/commit/b82a02bd41c0f3fc6c3b5ca4a21cdacd5b2b4f6e))
+- remove space in classroom instead of in saved spaces ([0434c50](https://github.com/graasp/graasp-desktop/commit/0434c503c42be6ebf4b4a4456e9fe64d1dc1c33b))
+- translations for sign in as guest ([76eaa8d](https://github.com/graasp/graasp-desktop/commit/76eaa8d6dad8316b0e01de58ba4cde4ff90290a1))
+- use logger in postFile, refactor postFile ([d9145b6](https://github.com/graasp/graasp-desktop/commit/d9145b66623a75043387c2e42fe2711ec1faf775))
+
+### Build System
+
+- **deps-dev:** update version and release deps ([b677150](https://github.com/graasp/graasp-desktop/commit/b67715015f359d92e78fbd47dbe6624332e06e56))
+
+### Tests
+
+- update test to work with student as default user mode ([ef975ce](https://github.com/graasp/graasp-desktop/commit/ef975ce26dc5aa1393c0d489cf126656479ab2f4))
+
+### Documentation
+
+- add login and user mode docs ([40d6f35](https://github.com/graasp/graasp-desktop/commit/40d6f35555ebf66cd2f35ff1a06d0b1aaf48b2a6))
+
 ### [0.15.5](https://github.com/graasp/graasp-desktop/compare/v0.15.4...v0.15.5) (2020-06-05)
 
 ### Features

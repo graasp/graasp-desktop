@@ -19,6 +19,13 @@ export const THEME_COLORS = {
   [USER_MODES.STUDENT]: '#5050d2',
   [USER_MODES.TEACHER]: '#3A31AF',
 };
+export const ACCENT_COLORS = [
+  '#5050d2',
+  '#6edbd3',
+  '#e36bd6',
+  '#fcfbf8',
+  '#efb642',
+];
 export const SHORT_ID_LENGTH = 6;
 export const LONG_ID_LENGTH = 24;
 export const SMART_GATEWAY_HOST = 'gateway.golabz.eu';
@@ -119,3 +126,9 @@ export const ACTION_VERBS = {
   LOGIN: 'login',
   LOGOUT: 'logout',
 };
+
+// tour
+export const TOUR_DELAY_750 = 750;
+export const TOUR_DELAY_500 = 500;
+export const EXAMPLE_VISIT_SPACE_LINK = '/space/owozgj';
+export const TOUR_Z_INDEX = 10000;

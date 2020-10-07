@@ -15,7 +15,7 @@ import {
   VISIT_PATH,
   LOAD_SPACE_PATH,
 } from '../../config/paths';
-import { VISIT_SPACE_BUTTON } from '../../config/selectors';
+import { VISIT_SPACE_BUTTON_CLASS } from '../../config/selectors';
 
 const styles = theme => ({
   ...Styles(theme),
@@ -116,7 +116,10 @@ class WelcomeContent extends Component {
               // class wrappedButton is necessary to match the layout when encapsulated with Online tag
             }
             <Button
-              className={classNames(classes.wrappedButton, VISIT_SPACE_BUTTON)}
+              className={classNames(
+                classes.wrappedButton,
+                VISIT_SPACE_BUTTON_CLASS
+              )}
               onClick={this.handleGoToVisitSpace}
             >
               {t('Visit a Space')}

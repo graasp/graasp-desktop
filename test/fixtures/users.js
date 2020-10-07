@@ -18,6 +18,12 @@ export const USER_BOB = {
   mode: USER_MODES.STUDENT,
 };
 
+export const USER_SAM = {
+  name: 'sam',
+  id: 'sam-id',
+  mode: USER_MODES.STUDENT,
+};
+
 export const USER_CEDRIC = {
   name: 'cedric',
   id: 'cedric-id',

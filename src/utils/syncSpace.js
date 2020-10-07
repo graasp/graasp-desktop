@@ -101,10 +101,10 @@ export const diffString = (localStr, remoteStr) => {
 
 // create a phase using tools
 // utility to process tools as a phase
-export const createToolsPhase = tools => {
+export const createToolsPhase = (tools, t) => {
   return {
     id: 'tools-id',
-    name: 'Tools',
+    name: t('Tools'),
     items: tools,
   };
 };

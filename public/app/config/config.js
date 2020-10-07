@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const { app } = require('electron');
+const ObjectId = require('bson-objectid');
 const isWindows = require('../utils/isWindows');
 
 const tours = {
@@ -93,6 +94,12 @@ const ACTIONS_VERBS = {
   LOGOUT: 'logout',
 };
 
+const buildFilePath = ({ userId, spaceId, name }) => {
+  // add generated id to handle duplicate files
+  const generatedId = ObjectId().str;
+  return `${VAR_FOLDER}/${spaceId}/files/${userId}/${generatedId}_${name}`;
+};
+
 module.exports = {
   DEFAULT_LOGGING_LEVEL,
   DEFAULT_PROTOCOL,
@@ -119,4 +126,5 @@ module.exports = {
   VISIBILITIES,
   DEFAULT_FORMAT,
   ACTIONS_VERBS,
+  buildFilePath,
 };

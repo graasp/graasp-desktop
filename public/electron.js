@@ -37,6 +37,7 @@ const {
   SET_LANGUAGE_CHANNEL,
   GET_APP_INSTANCE_RESOURCES_CHANNEL,
   POST_APP_INSTANCE_RESOURCE_CHANNEL,
+  DELETE_APP_INSTANCE_RESOURCE_CHANNEL,
   PATCH_APP_INSTANCE_RESOURCE_CHANNEL,
   GET_APP_INSTANCE_CHANNEL,
   GET_DEVELOPER_MODE_CHANNEL,
@@ -74,7 +75,9 @@ const {
   LOAD_SPACE_IN_CLASSROOM_CHANNEL,
   SET_ACTION_ACCESSIBILITY_CHANNEL,
   SET_ACTIONS_AS_ENABLED_CHANNEL,
-  TOUR_COMPLETED_CHANNEL,
+  COMPLETE_TOUR_CHANNEL,
+  POST_FILE_CHANNEL,
+  DELETE_FILE_CHANNEL,
 } = require('./app/config/channels');
 const env = require('./env.json');
 const {
@@ -104,6 +107,7 @@ const {
   getAppInstanceResources,
   postAppInstanceResource,
   patchAppInstanceResource,
+  deleteAppInstanceResource,
   getAppInstance,
   setSyncMode,
   getSyncMode,
@@ -129,6 +133,8 @@ const {
   setActionsAsEnabled,
   windowAllClosed,
   completeTour,
+  postFile,
+  deleteFile,
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
 
@@ -490,6 +496,13 @@ app.on('ready', async () => {
 
   // called when creating an action
   ipcMain.on(POST_ACTION_CHANNEL, postAction(mainWindow, db));
+
+  // called when creating a file
+  ipcMain.on(POST_FILE_CHANNEL, postFile(mainWindow, db));
+
+  // called when creating a file
+  ipcMain.on(DELETE_FILE_CHANNEL, deleteFile(mainWindow, db));
+
   // called when logging in a user
   ipcMain.on(SIGN_IN_CHANNEL, signIn(mainWindow, db));
 
@@ -515,6 +528,12 @@ app.on('ready', async () => {
   ipcMain.on(
     PATCH_APP_INSTANCE_RESOURCE_CHANNEL,
     patchAppInstanceResource(mainWindow, db)
+  );
+
+  // called when deleting an AppInstanceResource
+  ipcMain.on(
+    DELETE_APP_INSTANCE_RESOURCE_CHANNEL,
+    deleteAppInstanceResource(mainWindow, db)
   );
 
   // called when getting an AppInstance
@@ -604,7 +623,7 @@ app.on('ready', async () => {
   ipcMain.on(SYNC_SPACE_CHANNEL, syncSpace(mainWindow, db));
 
   // called when a tour is closed or completed
-  ipcMain.on(TOUR_COMPLETED_CHANNEL, completeTour(mainWindow, db));
+  ipcMain.on(COMPLETE_TOUR_CHANNEL, completeTour(mainWindow, db));
 });
 
 app.on('window-all-closed', () => windowAllClosed(mainWindow));

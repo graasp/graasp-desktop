@@ -2,7 +2,8 @@ import { Map } from 'immutable';
 import {
   INITIALIZE_TOUR,
   NAVIGATE_STOP_TOUR,
-  NEXT_OR_PREV_TOUR,
+  NEXT_TOUR_STEP,
+  PREV_TOUR_STEP,
   RESET_TOUR,
   RESTART_TOUR,
   START_TOUR,
@@ -27,10 +28,11 @@ export default (state = INITIAL_STATE, { type, payload }) => {
       return state
         .setIn(['run'], false)
         .setIn(['stepIndex'], 0)
-        .setIn(['key'], new Date());
+        .setIn(['key'], new Date().toISOString());
     case STOP_TOUR:
       return state.setIn(['run'], false);
-    case NEXT_OR_PREV_TOUR:
+    case NEXT_TOUR_STEP:
+    case PREV_TOUR_STEP:
       return state.setIn(['stepIndex'], payload);
     case RESTART_TOUR:
       return state

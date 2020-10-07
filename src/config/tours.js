@@ -1,9 +1,9 @@
 import {
-  PHASE_DRAWER,
+  PHASE_DRAWER_CLASS,
   SPACE_PREVIEW_ICON_CLASS,
-  SPACE_SCREEN,
-  VISIT_SPACE_BUTTON,
-  VISIT_SPACE_INPUT,
+  SPACE_SCREEN_CLASS,
+  VISIT_SPACE_BUTTON_CLASS,
+  VISIT_SPACE_INPUT_CLASS,
   SETTINGS_ACTIONS_CLASS,
   LANGUAGE_SELECT_ID,
   STUDENT_MODE_SWITCH_ID,
@@ -16,35 +16,35 @@ const tours = {
 
 const VISIT_SPACE_TOUR_STEPS = [
   {
-    target: `.${VISIT_SPACE_BUTTON}`,
+    target: `.${VISIT_SPACE_BUTTON_CLASS}`,
     title: 'Welcome to Graasp Desktop!',
-    content:
-      'Your first step would be visiting a space and importing it. Click NEXT to help you with that',
+    content: "Let's get started by visiting a space and saving it locally.",
     disableBeacon: true,
   },
   {
-    target: `.${VISIT_SPACE_INPUT}`,
-    title: 'Here you can place a link for the space to import',
+    target: `.${VISIT_SPACE_INPUT_CLASS}`,
+    title: 'Visiting a Space',
     content:
-      'For example, I will import that for you https://graasp.eu/s/owozgj',
+      "You can visit a space using its URL or ID. For example, let's have a look at space https://graasp.eu/s/owozgj or simply owozgj.",
     disableBeacon: true,
   },
   {
     target: `.${SPACE_PREVIEW_ICON_CLASS}`,
-    title: 'Here you are viewing the space in preview only.',
-    content: 'You can only save the space in teacher mode.',
+    title: 'Preview Mode',
+    content:
+      'When you visit a space, you can preview its contents to see what it looks like. Only teachers can save spaces locally.',
     disableBeacon: true,
   },
   {
-    target: `.${SPACE_SCREEN}`,
+    target: `.${SPACE_SCREEN_CLASS}`,
     title: 'Here you should be able to preview the space before saving it',
     content: '',
     disableBeacon: true,
   },
   {
-    target: `.${PHASE_DRAWER}`,
-    title: 'Here you can see a list of the phases within your space',
-    content: '',
+    target: `.${PHASE_DRAWER_CLASS}`,
+    title: 'Phases',
+    content: 'You can navigate within the space by using the menu on the left.',
     disableBeacon: true,
   },
 ];
@@ -52,17 +52,22 @@ const VISIT_SPACE_TOUR_STEPS = [
 const SETTINGS_TOUR_STEPS = [
   {
     target: `#${LANGUAGE_SELECT_ID}`,
-    content: 'Change Graasp language to one of our supported languages',
+    title: 'Language',
+    content:
+      'You can change the language to any of the ones supported by Graasp Desktop.',
     disableBeacon: true,
   },
   {
     target: `#${STUDENT_MODE_SWITCH_ID}`,
-    content: 'Here you change your mode between student/teacher/developer',
+    title: 'Mode',
+    content:
+      'You can use this switch to toggle between teacher and student modes. You can also activate developer mode for advanced functionality.',
     disableBeacon: true,
   },
   {
     target: `.${SETTINGS_ACTIONS_CLASS}`,
-    content: 'Here you can enable tracking of actions within spaces',
+    title: 'Analytics',
+    content: 'Track analytics by activating this switch.',
     disableBeacon: true,
   },
 ];

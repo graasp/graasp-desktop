@@ -1,4 +1,5 @@
 import { toastr } from 'react-redux-toastr';
+import i18n from '../config/i18n';
 import {
   GET_SPACES,
   FLAG_GETTING_SPACE,
@@ -47,6 +48,8 @@ import {
   SUCCESS_SAVING_MESSAGE,
   ERROR_CLEARING_USER_INPUT_MESSAGE,
   SUCCESS_CLEARING_USER_INPUT_MESSAGE,
+  PROMPT_DELETE_SPACE_MESSAGE,
+  PROMPT_CLEAR_USER_INPUT_MESSAGE,
 } from '../config/messages';
 import { createFlag, isErrorResponse } from './common';
 import {
@@ -110,7 +113,10 @@ const createGetLocalSpace = async (
     });
   } catch (err) {
     if (showError) {
-      toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_SPACE_MESSAGE);
+      toastr.error(
+        i18n.t(ERROR_MESSAGE_HEADER),
+        i18n.t(ERROR_GETTING_SPACE_MESSAGE)
+      );
     }
   } finally {
     dispatch(flagGettingSpace(false));
@@ -159,7 +165,10 @@ const createGetRemoteSpace = async (
       payload: remoteSpace,
     });
   } catch (err) {
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_SPACE_MESSAGE);
+    toastr.error(
+      i18n.t(ERROR_MESSAGE_HEADER),
+      i18n.t(ERROR_GETTING_SPACE_MESSAGE)
+    );
   } finally {
     dispatch(flagGettingSpace(false));
   }
@@ -194,24 +203,33 @@ const saveSpace = async ({ space }) => async dispatch => {
       // if there is no response, show error
       if (!response) {
         dispatch(flagSavingSpace(false));
-        return toastr.error(ERROR_MESSAGE_HEADER, ERROR_SAVING_SPACE_MESSAGE);
+        return toastr.error(
+          i18n.t(ERROR_MESSAGE_HEADER),
+          i18n.t(ERROR_SAVING_SPACE_MESSAGE)
+        );
       }
 
       switch (response) {
         case ERROR_SPACE_ALREADY_AVAILABLE:
           toastr.error(
-            ERROR_MESSAGE_HEADER,
-            ERROR_SPACE_ALREADY_AVAILABLE_MESSAGE
+            i18n.t(ERROR_MESSAGE_HEADER),
+            i18n.t(ERROR_SPACE_ALREADY_AVAILABLE_MESSAGE)
           );
           break;
 
         case ERROR_DOWNLOADING_FILE:
-          toastr.error(ERROR_MESSAGE_HEADER, ERROR_DOWNLOADING_MESSAGE);
+          toastr.error(
+            i18n.t(ERROR_MESSAGE_HEADER),
+            i18n.t(ERROR_DOWNLOADING_MESSAGE)
+          );
           break;
 
         // todo: check that it is actually a space before dispatching success
         default:
-          toastr.success(SUCCESS_MESSAGE_HEADER, SUCCESS_SAVING_MESSAGE);
+          toastr.success(
+            i18n.t(SUCCESS_MESSAGE_HEADER),
+            i18n.t(SUCCESS_SAVING_MESSAGE)
+          );
           dispatch({
             type: SAVE_SPACE_SUCCEEDED,
             payload: response,
@@ -220,7 +238,10 @@ const saveSpace = async ({ space }) => async dispatch => {
       return dispatch(flagSavingSpace(false));
     });
   } catch (err) {
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_SAVING_SPACE_MESSAGE);
+    toastr.error(
+      i18n.t(ERROR_MESSAGE_HEADER),
+      i18n.t(ERROR_SAVING_SPACE_MESSAGE)
+    );
     dispatch(flagSavingSpace(false));
   }
 };
@@ -234,7 +255,11 @@ const clearSpace = () => dispatch => {
 
 const deleteSpace = ({ id }) => dispatch => {
   // show confirmation prompt
-  window.ipcRenderer.send(SHOW_DELETE_SPACE_PROMPT_CHANNEL);
+  const buttons = [i18n.t('Cancel'), i18n.t('Delete')];
+  window.ipcRenderer.send(SHOW_DELETE_SPACE_PROMPT_CHANNEL, {
+    message: i18n.t(PROMPT_DELETE_SPACE_MESSAGE),
+    buttons,
+  });
   window.ipcRenderer.once(
     RESPOND_DELETE_SPACE_PROMPT_CHANNEL,
     (event, response) => {
@@ -246,12 +271,18 @@ const deleteSpace = ({ id }) => dispatch => {
   );
   window.ipcRenderer.once(DELETED_SPACE_CHANNEL, (event, response) => {
     if (response === ERROR_GENERAL) {
-      toastr.error(ERROR_MESSAGE_HEADER, ERROR_DELETING_MESSAGE);
+      toastr.error(
+        i18n.t(ERROR_MESSAGE_HEADER),
+        i18n.t(ERROR_DELETING_MESSAGE)
+      );
     } else {
       // update saved spaces in state
       dispatch(getSpaces());
 
-      toastr.success(SUCCESS_MESSAGE_HEADER, SUCCESS_DELETING_MESSAGE);
+      toastr.success(
+        i18n.t(SUCCESS_MESSAGE_HEADER),
+        i18n.t(SUCCESS_DELETING_MESSAGE)
+      );
       dispatch({
         type: DELETE_SPACE_SUCCESS,
         payload: true,
@@ -271,7 +302,11 @@ const deleteSpace = ({ id }) => dispatch => {
 const clearUserInput = async ({ spaceId, userId }) => async dispatch => {
   try {
     // show confirmation prompt
-    window.ipcRenderer.send(SHOW_CLEAR_USER_INPUT_PROMPT_CHANNEL);
+    const buttons = [i18n.t('Cancel'), i18n.t('Clear')];
+    window.ipcRenderer.send(SHOW_CLEAR_USER_INPUT_PROMPT_CHANNEL, {
+      message: i18n.t(PROMPT_CLEAR_USER_INPUT_MESSAGE),
+      buttons,
+    });
 
     // listen for response from prompt
     window.ipcRenderer.once(
@@ -290,11 +325,14 @@ const clearUserInput = async ({ spaceId, userId }) => async dispatch => {
     // listen for response from backend
     window.ipcRenderer.once(CLEARED_USER_INPUT_CHANNEL, (event, response) => {
       if (response === ERROR_GENERAL) {
-        toastr.error(ERROR_MESSAGE_HEADER, ERROR_CLEARING_USER_INPUT_MESSAGE);
+        toastr.error(
+          i18n.t(ERROR_MESSAGE_HEADER),
+          i18n.t(ERROR_CLEARING_USER_INPUT_MESSAGE)
+        );
       } else {
         toastr.success(
-          SUCCESS_MESSAGE_HEADER,
-          SUCCESS_CLEARING_USER_INPUT_MESSAGE
+          i18n.t(SUCCESS_MESSAGE_HEADER),
+          i18n.t(SUCCESS_CLEARING_USER_INPUT_MESSAGE)
         );
         dispatch({
           type: GET_SPACE_SUCCEEDED,
@@ -338,7 +376,10 @@ const getSpacesNearby = async ({
       payload: spaces,
     });
   } catch (err) {
-    toastr.error(ERROR_MESSAGE_HEADER, ERROR_GETTING_SPACES_NEARBY);
+    toastr.error(
+      i18n.t(ERROR_MESSAGE_HEADER),
+      i18n.t(ERROR_GETTING_SPACES_NEARBY)
+    );
   } finally {
     dispatch(flagGettingSpacesNearby(false));
   }
