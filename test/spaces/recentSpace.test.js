@@ -117,7 +117,6 @@ describe('Recent Spaces', function () {
           for (const card of mediaCards) {
             mediaCardsIds.push(await card.getAttribute('id'));
           }
-          console.log(mediaCardsIds);
           expect(mediaCardsIds.length).to.equal(MAX_RECENT_SPACES);
 
           // we do not check order because in the dom it doesn't have the same order
