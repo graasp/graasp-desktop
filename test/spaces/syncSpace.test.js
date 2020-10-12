@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
+/* eslint-disable func-names */
 import { expect } from 'chai';
 import {
   mochaAsync,
