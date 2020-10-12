@@ -6,23 +6,27 @@ const INPUT_TEXT_FIELD_SELECTOR = '#inputTextField';
 const SAVE_BUTTON_SELECTOR = 'button';
 
 export const typeInTextInputApp = async (client, id, text) => {
-  await client.frame(buildPhaseAppName(id));
-  await client.setValue(INPUT_TEXT_FIELD_SELECTOR, text);
+  await client.switchToFrame(
+    await client.$(`[name="${buildPhaseAppName(id)}"]`)
+  );
+  await (await client.$(INPUT_TEXT_FIELD_SELECTOR)).setValue(text);
   await client.pause(INPUT_TYPE_PAUSE);
 
   // click on save button
-  await client.click(SAVE_BUTTON_SELECTOR);
+  await (await client.$(SAVE_BUTTON_SELECTOR)).click();
   await client.pause(SAVE_USER_INPUT_PAUSE);
 
   // reset client on parent frame
-  await client.frame(null);
+  await client.switchToFrame(null);
 };
 
 export const checkTextInputAppContainsText = async (client, id, text) => {
-  await client.frame(buildPhaseAppName(id));
-  const inputText = await client.getText(INPUT_TEXT_FIELD_SELECTOR);
+  await client.switchToFrame(
+    await client.$(`[name="${buildPhaseAppName(id)}"]`)
+  );
+  const inputText = await (await client.$(INPUT_TEXT_FIELD_SELECTOR)).getText();
 
   expect(inputText).to.equal(text);
   // reset client on parent frame
-  await client.frame(null);
+  await client.switchToFrame(null);
 };

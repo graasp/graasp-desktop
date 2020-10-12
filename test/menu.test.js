@@ -14,7 +14,7 @@ import { createApplication, closeApplication } from './application';
 import { DEFAULT_GLOBAL_TIMEOUT } from './constants';
 import { USER_GRAASP } from './fixtures/users';
 
-describe('Menu Scenarios', function() {
+describe('Menu Scenarios', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
   before(
@@ -24,7 +24,7 @@ describe('Menu Scenarios', function() {
     })
   );
 
-  afterEach(function() {
+  afterEach(function () {
     return closeApplication(app);
   });
 

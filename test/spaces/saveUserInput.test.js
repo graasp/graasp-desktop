@@ -25,19 +25,19 @@ import {
   checkTextInputAppContainsText,
 } from '../apps/textInputApp';
 
-const userInputTextForUser = name => {
+const userInputTextForUser = (name) => {
   return `user input from ${name}`;
 };
 
-describe('Save User Input in a space', function() {
+describe('Save User Input in a space', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  afterEach(function() {
+  afterEach(function () {
     return closeApplication(app);
   });
 
-  describe('Use graasp user', function() {
+  describe('Use graasp user', function () {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication({ showMessageDialogResponse: 1 });
@@ -68,9 +68,10 @@ describe('Save User Input in a space', function() {
         await menuGoToSavedSpaces(client);
 
         // check user input is saved
-        await client.click(
+        const spaceCardLink = await client.$(
           `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
         );
+        await spaceCardLink.click();
         await client.pause(OPEN_SAVED_SPACE_PAUSE);
 
         await menuGoToPhase(client, 0);
@@ -79,7 +80,7 @@ describe('Save User Input in a space', function() {
     );
   });
 
-  describe('Multiple users scenarios', function() {
+  describe('Multiple users scenarios', function () {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication({ showMessageDialogResponse: 1 });
@@ -110,9 +111,10 @@ describe('Save User Input in a space', function() {
           // next users go to home
           // this should change if users don't share spaces
           else {
-            await client.click(
+            const spaceCard = await client.$(
               `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
             );
+            await spaceCard.click();
             await client.pause(OPEN_SAVED_SPACE_PAUSE);
           }
 
@@ -126,9 +128,10 @@ describe('Save User Input in a space', function() {
           await menuGoToSavedSpaces(client);
 
           // check user input is saved
-          await client.click(
+          const spaceCard = await client.$(
             `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
           );
+          await spaceCard.click();
           await client.pause(OPEN_SAVED_SPACE_PAUSE);
 
           await menuGoToPhase(client, 0);
@@ -143,9 +146,10 @@ describe('Save User Input in a space', function() {
           await menuGoToSavedSpaces(client);
           const text = userInputTextForUser(user.name);
 
-          await client.click(
+          const spaceCard = await client.$(
             `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
           );
+          await spaceCard.click();
           await client.pause(OPEN_SAVED_SPACE_PAUSE);
 
           await menuGoToPhase(client, 0);

@@ -2,7 +2,12 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
 import { expect } from 'chai';
-import { mochaAsync, userSignIn, menuGoToSavedSpaces } from '../utils';
+import {
+  mochaAsync,
+  userSignIn,
+  menuGoToSavedSpaces,
+  expectElementToExist,
+} from '../utils';
 import { createApplication, closeApplication } from '../application';
 import {
   buildSpaceCardId,
@@ -13,11 +18,11 @@ import { visitAndSaveSpaceById } from './visitSpace.test';
 import { DELETE_SPACE_PAUSE, DEFAULT_GLOBAL_TIMEOUT } from '../constants';
 import { USER_GRAASP } from '../fixtures/users';
 
-describe('Delete a space', function() {
+describe('Delete a space', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  afterEach(function() {
+  afterEach(function () {
     return closeApplication(app);
   });
 
@@ -38,13 +43,14 @@ describe('Delete a space', function() {
 
       await menuGoToSavedSpaces(client);
 
-      await client.click(
+      const deleteButton = await client.$(
         `#${buildSpaceCardId(id)} .${SPACE_DELETE_BUTTON_CLASS}`
       );
+      await deleteButton.click();
       await client.pause(DELETE_SPACE_PAUSE);
 
       // card not in saved spaces
-      const card = await client.element(`#${buildSpaceCardId(id)}`);
+      const card = await client.$(`#${buildSpaceCardId(id)}`);
       expect(card.value).to.not.exist;
     })
   );
@@ -64,11 +70,12 @@ describe('Delete a space', function() {
 
       await visitAndSaveSpaceById(client, id);
 
-      await client.click(`.${SPACE_DELETE_BUTTON_CLASS}`);
+      const deleteButton = await client.$(`.${SPACE_DELETE_BUTTON_CLASS}`);
+      await deleteButton.click();
       await client.pause(DELETE_SPACE_PAUSE);
 
       // card not in saved spaces
-      const card = await client.element(`#${buildSpaceCardId(id)}`);
+      const card = await client.$(`#${buildSpaceCardId(id)}`);
       expect(card.value).to.not.exist;
     })
   );
@@ -88,14 +95,14 @@ describe('Delete a space', function() {
 
       await visitAndSaveSpaceById(client, id);
 
-      await client.click(`.${SPACE_DELETE_BUTTON_CLASS}`);
+      const deleteButton = await client.$(`.${SPACE_DELETE_BUTTON_CLASS}`);
+      await deleteButton.click();
       await client.pause(DELETE_SPACE_PAUSE);
 
       await menuGoToSavedSpaces(client);
 
-      // card not in saved spaces
-      const card = await client.element(`#${buildSpaceCardId(id)}`);
-      expect(card.value).to.exist;
+      // card in saved spaces
+      expectElementToExist(client, `#${buildSpaceCardId(id)}`);
     })
   );
 });
