@@ -7,26 +7,26 @@ export const searchSpacesFixtures = [
   [
     [SPACE_ATOMIC_STRUCTURE_PATH, SPACE_APOLLO_11_PATH],
     '',
-    [SPACE_ATOMIC_STRUCTURE.space.id, SPACE_APOLLO_11.space.id].map(id =>
+    [SPACE_ATOMIC_STRUCTURE.space.id, SPACE_APOLLO_11.space.id].map((id) =>
       buildSpaceCardId(id)
     ),
   ],
   [
     [SPACE_ATOMIC_STRUCTURE_PATH, SPACE_APOLLO_11_PATH],
     'a',
-    [SPACE_ATOMIC_STRUCTURE.space.id, SPACE_APOLLO_11.space.id].map(id =>
+    [SPACE_ATOMIC_STRUCTURE.space.id, SPACE_APOLLO_11.space.id].map((id) =>
       buildSpaceCardId(id)
     ),
   ],
   [
     [SPACE_ATOMIC_STRUCTURE_PATH, SPACE_APOLLO_11_PATH],
     'atomic',
-    [SPACE_ATOMIC_STRUCTURE.space.id].map(id => buildSpaceCardId(id)),
+    [SPACE_ATOMIC_STRUCTURE.space.id].map((id) => buildSpaceCardId(id)),
   ],
   [
     [SPACE_ATOMIC_STRUCTURE_PATH, SPACE_APOLLO_11_PATH],
     'apollo',
-    [SPACE_APOLLO_11.space.id].map(id => buildSpaceCardId(id)),
+    [SPACE_APOLLO_11.space.id].map((id) => buildSpaceCardId(id)),
   ],
   [[SPACE_ATOMIC_STRUCTURE_PATH, SPACE_APOLLO_11_PATH], 'unknown', []],
 ];

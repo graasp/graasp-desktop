@@ -48,9 +48,9 @@ import {
 } from '../src/config/constants';
 
 /** util function to deal with asynchronous tests */
-export const mochaAsync = fn => {
-  return done => {
-    fn.call().then(done, err => {
+export const mochaAsync = (fn) => {
+  return (done) => {
+    fn.call().then(done, (err) => {
       done(err);
     });
   };
@@ -58,9 +58,10 @@ export const mochaAsync = fn => {
 
 /** menu util functions */
 
-export const openDrawer = async client => {
-  if (await client.isVisible(`#${DRAWER_BUTTON_ID}`)) {
-    await client.click(`#${DRAWER_BUTTON_ID}`);
+export const openDrawer = async (client) => {
+  const drawerButton = await client.$(`#${DRAWER_BUTTON_ID}`);
+  if (await drawerButton.isClickable()) {
+    await drawerButton.click();
   }
   await client.pause(OPEN_DRAWER_PAUSE);
 };
@@ -68,79 +69,82 @@ export const openDrawer = async client => {
 const menuGoTo = async (client, menuItemId, elementToExpectId = null) => {
   // open menu if it is closed
   await openDrawer(client);
-  await client.click(`#${menuItemId}`);
+  const menuItem = await client.$(`#${menuItemId}`);
+  await menuItem.click();
   if (elementToExpectId) {
-    expect(await client.isExisting(`#${elementToExpectId}`)).to.be.true;
+    const el = await client.$(`#${elementToExpectId}`);
+    expect(await el.isExisting()).to.be.true;
   }
   await client.pause(LOAD_TAB_PAUSE);
 };
 
 export const menuGoToPhase = async (client, nb) => {
   await openDrawer(client);
-  await client.click(`#${PHASE_MENU_LIST_ID} li#${buildPhaseMenuItemId(nb)}`);
+  const phaseItem = await client.$(
+    `#${PHASE_MENU_LIST_ID} li#${buildPhaseMenuItemId(nb)}`
+  );
+  await phaseItem.click();
   await client.pause(LOAD_PHASE_PAUSE);
 };
 
-export const menuGoToSettings = async client => {
+export const menuGoToSettings = async (client) => {
   await menuGoTo(client, SETTINGS_MENU_ITEM_ID, SETTINGS_MAIN_ID);
 };
 
-export const menuGoToDeveloper = async client => {
+export const menuGoToDeveloper = async (client) => {
   await menuGoTo(client, DEVELOPER_MENU_ITEM_ID, DEVELOPER_MAIN_ID);
 };
 
-export const menuGoToSpacesNearby = async client => {
+export const menuGoToSpacesNearby = async (client) => {
   await menuGoTo(client, SPACES_NEARBY_MENU_ITEM_ID, SPACES_NEARBY_MAIN_ID);
 };
 
-export const menuGoToVisitSpace = async client => {
+export const menuGoToVisitSpace = async (client) => {
   await menuGoTo(client, VISIT_MENU_ITEM_ID, VISIT_MAIN_ID);
 };
 
-export const menuGoToLoadSpace = async client => {
+export const menuGoToLoadSpace = async (client) => {
   await menuGoTo(client, LOAD_MENU_ITEM_ID, LOAD_MAIN_ID);
 };
 
-export const menuGoToDashboard = async client => {
+export const menuGoToDashboard = async (client) => {
   await menuGoTo(client, DASHBOARD_MENU_ITEM_ID, DASHBOARD_MAIN_ID);
 };
 
-export const menuGoToSignOut = async client => {
+export const menuGoToSignOut = async (client) => {
   await menuGoTo(client, SIGN_OUT_MENU_ITEM_ID);
 };
 
-export const menuGoToHome = async client => {
+export const menuGoToHome = async (client) => {
   await menuGoTo(client, HOME_MENU_ITEM_ID, HOME_MAIN_ID);
 };
 
-export const menuGoToSavedSpaces = async client => {
+export const menuGoToSavedSpaces = async (client) => {
   await menuGoTo(client, SAVED_SPACES_MENU_ITEM_ID, SAVED_SPACES_MAIN_ID);
 };
 
-export const menuGoToClassrooms = async client => {
+export const menuGoToClassrooms = async (client) => {
   await menuGoTo(client, CLASSROOMS_MENU_ITEM_ID, CLASSROOMS_MAIN_ID);
 };
 
 /** string util functions */
 
-export const removeSpace = text => {
+export const removeSpace = (text) => {
   return text.replace(/\s/g, '');
 };
 
-export const removeTags = html => {
+export const removeTags = (html) => {
   return html.replace(/<\/?[^>]+(>|$)/g, '');
 };
 
 export const createRandomString = () => {
-  return Math.random()
-    .toString(36)
-    .substring(7);
+  return Math.random().toString(36).substring(7);
 };
 
 /** assertion util functions */
 
 export const expectElementToNotExist = async (client, elementSelector) => {
-  const found = await client.isExisting(elementSelector);
+  const found = await (await client.$(elementSelector)).isExisting();
   expect(found).to.be.false;
 };
 
@@ -149,14 +153,14 @@ export const expectAnyElementToExist = async (client, elementSelectors) => {
   /* eslint-disable-next-line no-restricted-syntax */
   for (const selector of elementSelectors) {
     /* eslint-disable-next-line no-await-in-loop */
-    const found = await client.isExisting(selector);
+    const found = await (await client.$(selector)).isExisting();
     foundElements.push(found);
   }
   expect(foundElements).to.include(true);
 };
 
 export const expectElementToExist = async (client, elementSelector) => {
-  const found = await client.isExisting(elementSelector);
+  const found = await (await client.$(elementSelector)).isExisting();
   if (!found) {
     console.log(`${elementSelector} is not found`);
   }
@@ -164,71 +168,71 @@ export const expectElementToExist = async (client, elementSelector) => {
 };
 
 export const clearInput = async (client, selector) => {
-  const value = await client.getValue(selector);
+  const input = await client.$(selector);
+  const value = await input.getValue();
   const backSpaces = new Array(value.length).fill('Backspace');
-  await client.setValue(selector, backSpaces);
+  await input.setValue(backSpaces);
   await client.pause(CLEAR_INPUT_PAUSE);
 };
 
 /** settings utils */
 
 export const changeLanguage = async (client, value) => {
-  const lang = await client.getAttribute(
-    `#${LANGUAGE_SELECT_ID} input`,
-    'value'
-  );
+  const languageInput = await client.$(`#${LANGUAGE_SELECT_ID} input`);
+  const lang = await languageInput.getAttribute('value');
   if (lang !== value) {
-    await client.click(`#${LANGUAGE_SELECT_ID}`);
+    await (await client.$(`#${LANGUAGE_SELECT_ID}`)).click();
     await client.pause(1000);
-    await client.click(`[data-value='${value}']`);
+    await (await client.$(`[data-value='${value}']`)).click();
     await client.pause(LOAD_TAB_PAUSE);
   }
 };
 
 export const toggleGeolocationEnabled = async (client, value) => {
-  const geolocationEnabledSelector = `#${GEOLOCATION_CONTROL_ID} input`;
-  const geolocationEnabled = await client.getAttribute(
-    geolocationEnabledSelector,
+  const geolocationEnabledSelector = await client.$(
+    `#${GEOLOCATION_CONTROL_ID} input`
+  );
+  const geolocationEnabled = await geolocationEnabledSelector.getAttribute(
     'value'
   );
   if (JSON.parse(geolocationEnabled) !== value) {
-    await client.click(geolocationEnabledSelector);
+    await geolocationEnabledSelector.click();
     await client.pause(SETTINGS_LOAD_PAUSE);
   }
 };
 
 export const toggleDeveloperMode = async (client, value) => {
-  const developerSwitchSelector = `#${DEVELOPER_SWITCH_ID} input`;
-  const developerMode = await client.getAttribute(
-    developerSwitchSelector,
-    'value'
+  const developerSwitchSelector = await client.$(
+    `#${DEVELOPER_SWITCH_ID} input`
   );
+  const developerMode = await developerSwitchSelector.getAttribute('value');
   if (JSON.parse(developerMode) !== value) {
-    await client.click(developerSwitchSelector);
+    await developerSwitchSelector.click();
     await client.pause(SETTINGS_LOAD_PAUSE);
   }
 };
 
 export const toggleStudentMode = async (client, value) => {
-  const switchSelector = `#${STUDENT_MODE_SWITCH_ID} input`;
-  const userMode = await client.getAttribute(switchSelector, 'value');
+  const switchSelector = await client.$(`#${STUDENT_MODE_SWITCH_ID} input`);
+  const userMode = await switchSelector.getAttribute('value');
   if (JSON.parse(userMode) !== value) {
-    await client.click(switchSelector);
+    await switchSelector.click();
     await client.pause(SETTINGS_LOAD_PAUSE);
   }
 };
 
 export const toggleSyncAdvancedMode = async (client, value) => {
-  const syncAdvancedModeSwitchSelector = `#${SYNC_MODE_SWITCH_ID} input`;
-  const syncAdvancedMode = await client.getAttribute(
-    syncAdvancedModeSwitchSelector,
+  const syncAdvancedModeSwitchSelector = await client.$(
+    `#${SYNC_MODE_SWITCH_ID} input`
+  );
+  const syncAdvancedMode = await syncAdvancedModeSwitchSelector.getAttribute(
     'value'
   );
   const booleanToMode = JSON.parse(syncAdvancedMode)
     ? SYNC_MODES.ADVANCED
     : SYNC_MODES.VISUAL;
   if (booleanToMode !== value) {
-    await client.click(syncAdvancedModeSwitchSelector);
+    await syncAdvancedModeSwitchSelector.click();
     await client.pause(SETTINGS_LOAD_PAUSE);
   }
 };
@@ -238,9 +242,11 @@ export const userSignIn = async (
   client,
   { name, mode = DEFAULT_USER_MODE }
 ) => {
-  await client.setValue(`#${LOGIN_USERNAME_INPUT_ID}`, name);
+  const input = await client.$(`#${LOGIN_USERNAME_INPUT_ID}`);
+  await input.setValue(name);
   await client.pause(INPUT_TYPE_PAUSE);
-  await client.click(`#${LOGIN_BUTTON_ID}`);
+  const button = await client.$(`#${LOGIN_BUTTON_ID}`);
+  await button.click();
   await client.pause(LOGIN_PAUSE);
 
   // change mode if it is not default mode
@@ -248,9 +254,10 @@ export const userSignIn = async (
     if (mode === USER_MODES.TEACHER) {
       // open drawer to detect teacher icon
       await openDrawer(client);
-      const isTeacher = await client.isExisting(
+      const drawerTeacherIcon = await client.$(
         `#${DRAWER_HEADER_TEACHER_ICON_ID}`
       );
+      const isTeacher = await drawerTeacherIcon.isExisting();
       if (!isTeacher) {
         await menuGoToSettings(client);
         await toggleStudentMode(client, mode);

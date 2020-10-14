@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
+/* eslint-disable func-names */
 import { expect } from 'chai';
 import path from 'path';
 import {
@@ -58,22 +59,20 @@ export const setCheckboxesTo = async (
   client,
   { resources = false, actions = false }
 ) => {
-  const actionsCheckbox = `input[name="actions"]`;
-  const isActionsChecked = await client.getAttribute(
-    actionsCheckbox,
-    'checked'
-  );
+  const actionsCheckbox = await client.$(`input[name="actions"]`);
+  const isActionsChecked = await actionsCheckbox.getAttribute('checked');
   if (Boolean(isActionsChecked) !== actions) {
-    await client.click(`#${buildCheckboxLabel('actions')}`);
+    await (await client.$(`#${buildCheckboxLabel('actions')}`)).click();
   }
 
-  const resourcesCheckbox = `input[name="appInstanceResources"]`;
-  const isResourcesChecked = await client.getAttribute(
-    resourcesCheckbox,
-    'checked'
+  const resourcesCheckbox = await client.$(
+    `input[name="appInstanceResources"]`
   );
+  const isResourcesChecked = await resourcesCheckbox.getAttribute('checked');
   if (Boolean(isResourcesChecked) !== resources) {
-    await client.click(`#${buildCheckboxLabel('appInstanceResources')}`);
+    await (
+      await client.$(`#${buildCheckboxLabel('appInstanceResources')}`)
+    ).click();
   }
 };
 
@@ -81,44 +80,36 @@ export const checkLoadSelectionLayout = async (
   client,
   { space = true, resources = false, actions = false }
 ) => {
-  const spaceCheckbox = `input[name="space"]`;
-  const actionsCheckbox = `input[name="actions"]`;
-  const resourcesCheckbox = `input[name="appInstanceResources"]`;
-  await expectElementToExist(client, spaceCheckbox);
-  await expectElementToExist(client, actionsCheckbox);
-  await expectElementToExist(client, resourcesCheckbox);
+  const spaceCheckboxSelector = `input[name="space"]`;
+  const actionsCheckboxSelector = `input[name="actions"]`;
+  const resourcesCheckboxSelector = `input[name="appInstanceResources"]`;
+  await expectElementToExist(client, spaceCheckboxSelector);
+  await expectElementToExist(client, actionsCheckboxSelector);
+  await expectElementToExist(client, resourcesCheckboxSelector);
 
-  const isSpaceChecked = await client.getAttribute(spaceCheckbox, 'checked');
+  const spaceCheckbox = await client.$(spaceCheckboxSelector);
+  const actionsCheckbox = await client.$(actionsCheckboxSelector);
+  const resourcesCheckbox = await client.$(resourcesCheckboxSelector);
+
+  const isSpaceChecked = await spaceCheckbox.getAttribute('checked');
   expect(Boolean(isSpaceChecked)).to.equal(space);
 
   // space is always disabled
-  const isSpaceDisabled = await client.getAttribute(spaceCheckbox, 'disabled');
+  const isSpaceDisabled = await spaceCheckbox.getAttribute('disabled');
   expect(Boolean(isSpaceDisabled)).to.be.true;
 
-  const isActionsChecked = await client.getAttribute(
-    actionsCheckbox,
-    'checked'
-  );
+  const isActionsChecked = await actionsCheckbox.getAttribute('checked');
   expect(Boolean(isActionsChecked)).to.equal(actions);
 
   // if checkbox is false by default, it is also disabled
-  const isActionsDisabled = await client.getAttribute(
-    actionsCheckbox,
-    'disabled'
-  );
+  const isActionsDisabled = await actionsCheckbox.getAttribute('disabled');
   expect(Boolean(isActionsDisabled)).to.equal(!actions);
 
-  const isResourcesChecked = await client.getAttribute(
-    actionsCheckbox,
-    'checked'
-  );
+  const isResourcesChecked = await resourcesCheckbox.getAttribute('checked');
   expect(Boolean(isResourcesChecked) || false).to.equal(resources);
 
   // if checkbox is false by default, it is also disabled
-  const isResourcesDisabled = await client.getAttribute(
-    actionsCheckbox,
-    'disabled'
-  );
+  const isResourcesDisabled = await resourcesCheckbox.getAttribute('disabled');
   expect(Boolean(isResourcesDisabled)).to.equal(!resources);
 };
 
@@ -128,17 +119,18 @@ export const loadFilepath = async (
   isChecked = { space: true, actions: false, resources: false },
   shouldCheck = { actions: false, resources: false }
 ) => {
-  const loadInput = `#${LOAD_INPUT_ID}`;
+  const loadInput = await client.$(`#${LOAD_INPUT_ID}`);
 
   // input space id
   const absolutePath = path.resolve(__dirname, '../fixtures/spaces', filepath);
-  await client.setValue(loadInput, absolutePath);
+  await loadInput.setValue(absolutePath);
   await client.pause(INPUT_TYPE_PAUSE);
 
-  const value = await client.getValue(loadInput);
+  const value = await loadInput.getValue();
   expect(value).to.equal(absolutePath);
 
-  await client.click(`#${LOAD_SUBMIT_BUTTON_ID}`);
+  const loadSubmitButton = await client.$(`#${LOAD_SUBMIT_BUTTON_ID}`);
+  await loadSubmitButton.click();
   await client.pause(LOAD_SELECTION_SPACE_PAUSE);
 
   // check checkboxes default layout
@@ -147,7 +139,8 @@ export const loadFilepath = async (
   // check wanted checkboxes
   await setCheckboxesTo(client, shouldCheck);
 
-  await client.click(`#${LOAD_LOAD_BUTTON_ID}`);
+  const loadButton = await client.$(`#${LOAD_LOAD_BUTTON_ID}`);
+  await loadButton.click();
   await client.pause(LOAD_SPACE_PAUSE);
 };
 
@@ -166,22 +159,24 @@ export const loadSpaceById = async (
   await menuGoToSavedSpaces(client);
 
   if (id) {
-    await client.click(`#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`);
+    await (
+      await client.$(`#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`)
+    ).click();
 
     await client.pause(OPEN_SAVED_SPACE_PAUSE);
   }
 };
 
-describe('Load Space Scenarios', function() {
+describe('Load Space Scenarios', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
   let globalUser;
 
-  afterEach(function() {
+  afterEach(function () {
     return closeApplication(app);
   });
 
-  describe('predefined export spaces', function() {
+  describe('predefined export spaces', function () {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication();
@@ -197,12 +192,12 @@ describe('Load Space Scenarios', function() {
 
         // load space
         await menuGoToLoadSpace(client);
-
-        await client.setValue(`#${LOAD_INPUT_ID}`, 'somefilepath');
+        const loadInput = await client.$(`#${LOAD_INPUT_ID}`);
+        await loadInput.setValue('somefilepath');
         await client.pause(INPUT_TYPE_PAUSE);
 
-        const isLoadButtonDisabled = await client.getAttribute(
-          `#${LOAD_SUBMIT_BUTTON_ID}`,
+        const loadSubmitButton = await client.$(`#${LOAD_SUBMIT_BUTTON_ID}`);
+        const isLoadButtonDisabled = await loadSubmitButton.getAttribute(
           'disabled'
         );
         expect(isLoadButtonDisabled).to.equal('true');
@@ -222,11 +217,14 @@ describe('Load Space Scenarios', function() {
           '../fixtures/spaces',
           SPACE_ATOMIC_STRUCTURE_PATH
         );
-        await client.setValue(`#${LOAD_INPUT_ID}`, absolutePath);
+        const loadInput = await client.$(`#${LOAD_INPUT_ID}`);
+        await loadInput.setValue(absolutePath);
         await client.pause(INPUT_TYPE_PAUSE);
-        await client.click(`#${LOAD_SUBMIT_BUTTON_ID}`);
+        const loadSubmitButton = await client.$(`#${LOAD_SUBMIT_BUTTON_ID}`);
+        await loadSubmitButton.click();
         await client.pause(LOAD_SELECTION_SPACE_PAUSE);
-        await client.click(`#${LOAD_BACK_BUTTON_ID}`);
+        const loadBackButton = await client.$(`#${LOAD_BACK_BUTTON_ID}`);
+        await loadBackButton.click();
         await client.pause(LOAD_TAB_PAUSE);
 
         await loadSpaceById(
@@ -241,7 +239,7 @@ describe('Load Space Scenarios', function() {
       })
     );
 
-    describe('Load selection Layout', function() {
+    describe('Load selection Layout', function () {
       it(
         `Load changed and existing space of ${SPACE_WITH_MULTIPLE_CHANGES.space.name} replace database`,
         mochaAsync(async () => {
@@ -283,10 +281,10 @@ describe('Load Space Scenarios', function() {
             { space: false, actions: true, resources: true },
             { actions: true, resources: true }
           );
-
-          await client.click(
+          const spaceCardLink = await client.$(
             `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
           );
+          await spaceCardLink.click();
 
           // check content
           await hasSavedSpaceLayout(
@@ -313,9 +311,10 @@ describe('Load Space Scenarios', function() {
             { actions: false, resources: false }
           );
 
-          await client.click(
+          const spaceCard = await client.$(
             `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
           );
+          await spaceCard.click();
           // check content
           await hasSavedSpaceLayout(
             client,
@@ -327,7 +326,7 @@ describe('Load Space Scenarios', function() {
     });
   });
 
-  describe('Predefined Export Spaces for Student', function() {
+  describe('Predefined Export Spaces for Student', function () {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication();
@@ -350,9 +349,11 @@ describe('Load Space Scenarios', function() {
           '../fixtures/spaces',
           SPACE_ATOMIC_STRUCTURE_PATH
         );
-        await client.setValue(`#${LOAD_INPUT_ID}`, absolutePath);
+        const loadInput = await client.$(`#${LOAD_INPUT_ID}`);
+        await loadInput.setValue(absolutePath);
         await client.pause(INPUT_TYPE_PAUSE);
-        await client.click(`#${LOAD_SUBMIT_BUTTON_ID}`);
+        const loadSubmitButton = await client.$(`#${LOAD_SUBMIT_BUTTON_ID}`);
+        await loadSubmitButton.click();
         await client.pause(LOAD_SELECTION_SPACE_PAUSE);
 
         await menuGoToSavedSpaces(client);
@@ -399,12 +400,13 @@ describe('Load Space Scenarios', function() {
     );
   });
 
-  describe('Load from app created export files', function() {
-    globalUser = USER_GRAASP;
+  describe('Load from app created export files', function () {
+    this.retries(2);
 
     it(
       `Load exported space of ${SPACE_ATOMIC_STRUCTURE.space.name}`,
       mochaAsync(async () => {
+        globalUser = USER_GRAASP;
         const {
           space: { id },
         } = SPACE_ATOMIC_STRUCTURE;
@@ -422,7 +424,8 @@ describe('Load Space Scenarios', function() {
         await visitAndSaveSpaceById(client, id);
 
         // export space
-        await client.click(`.${SPACE_EXPORT_BUTTON_CLASS}`);
+        const exportButton = await client.$(`.${SPACE_EXPORT_BUTTON_CLASS}`);
+        await exportButton.click();
         await client.pause(EXPORT_SPACE_PAUSE);
 
         await exportSpaceWithSelected(client);
@@ -430,9 +433,10 @@ describe('Load Space Scenarios', function() {
         // delete space from home to avoid back error
         // see more here https://github.com/graasp/graasp-desktop/issues/263
         await menuGoToHome(client);
-        await client.click(
+        const deleteButton = await client.$(
           `#${buildSpaceCardId(id)} .${SPACE_DELETE_BUTTON_CLASS}`
         );
+        await deleteButton.click();
         await client.pause(DELETE_SPACE_PAUSE);
 
         // load space
@@ -448,6 +452,7 @@ describe('Load Space Scenarios', function() {
     it(
       `Load exported space of ${SPACE_ATOMIC_STRUCTURE.space.name} with added user input`,
       mochaAsync(async () => {
+        globalUser = USER_GRAASP;
         const {
           space: { id, phases },
         } = SPACE_ATOMIC_STRUCTURE;
@@ -465,9 +470,10 @@ describe('Load Space Scenarios', function() {
         await visitAndSaveSpaceById(client, id);
 
         // add user input
-        await client.click(
+        const phaseItem = await client.$(
           `#${PHASE_MENU_LIST_ID} li#${buildPhaseMenuItemId(0)}`
         );
+        await phaseItem.click();
         await client.pause(LOAD_PHASE_PAUSE);
 
         // type in text input app
@@ -481,16 +487,18 @@ describe('Load Space Scenarios', function() {
         await typeInTextInputApp(client, appId, resources[0].data);
 
         // export space
-        await client.click(`.${SPACE_EXPORT_BUTTON_CLASS}`);
+        const exportButton = await client.$(`.${SPACE_EXPORT_BUTTON_CLASS}`);
+        await exportButton.click();
         await client.pause(EXPORT_SPACE_PAUSE);
         await exportSpaceWithSelected(client);
 
         // delete space from home to avoid back error
         // see more here https://github.com/graasp/graasp-desktop/issues/263
         await menuGoToHome(client);
-        await client.click(
+        const deleteButton = await client.$(
           `#${buildSpaceCardId(id)} .${SPACE_DELETE_BUTTON_CLASS}`
         );
+        await deleteButton.click();
         await client.pause(DELETE_SPACE_PAUSE);
 
         // load space
@@ -519,6 +527,7 @@ describe('Load Space Scenarios', function() {
     it(
       `Load exported space of ${SPACE_ATOMIC_STRUCTURE.space.name} without added user input`,
       mochaAsync(async () => {
+        globalUser = USER_GRAASP;
         const {
           space: { id, phases },
         } = SPACE_ATOMIC_STRUCTURE;
@@ -537,9 +546,10 @@ describe('Load Space Scenarios', function() {
         await visitAndSaveSpaceById(client, id);
 
         // add user input
-        await client.click(
+        const phaseItem = await client.$(
           `#${PHASE_MENU_LIST_ID} li#${buildPhaseMenuItemId(0)}`
         );
+        await phaseItem.click();
         await client.pause(LOAD_PHASE_PAUSE);
 
         // type in text input app
@@ -553,16 +563,18 @@ describe('Load Space Scenarios', function() {
         await typeInTextInputApp(client, appId, resources[0].data);
 
         // export space
-        await client.click(`.${SPACE_EXPORT_BUTTON_CLASS}`);
+        const exportButton = await client.$(`.${SPACE_EXPORT_BUTTON_CLASS}`);
+        await exportButton.click();
         await client.pause(EXPORT_SPACE_PAUSE);
         await exportSpaceWithSelected(client);
 
         // delete space from home to avoid back error
         // see more here https://github.com/graasp/graasp-desktop/issues/263
         await menuGoToHome(client);
-        await client.click(
+        const deleteButton = await client.$(
           `#${buildSpaceCardId(id)} .${SPACE_DELETE_BUTTON_CLASS}`
         );
+        await deleteButton.click();
         await client.pause(DELETE_SPACE_PAUSE);
 
         // load space

@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
+/* eslint-disable func-names */
 import { expect } from 'chai';
 import fs from 'fs';
 import {
@@ -37,25 +38,24 @@ export const exportSpaceWithSelected = async (
   client,
   { actions = true, resources = true } = {}
 ) => {
-  const actionsCheckbox = `input[name="actions"]`;
-  const isActionsChecked = await client.getAttribute(
-    actionsCheckbox,
-    'checked'
-  );
+  const actionsCheckbox = await client.$(`input[name="actions"]`);
+  const isActionsChecked = await actionsCheckbox.getAttribute('checked');
   if (Boolean(isActionsChecked) !== actions) {
-    await client.click(`#${buildCheckboxLabel('actions')}`);
+    await (await client.$(`#${buildCheckboxLabel('actions')}`)).click();
   }
 
-  const resourcesCheckbox = `input[name="appInstanceResources"]`;
-  const isResourcesChecked = await client.getAttribute(
-    resourcesCheckbox,
-    'checked'
+  const resourcesCheckbox = await client.$(
+    `input[name="appInstanceResources"]`
   );
+  const isResourcesChecked = await resourcesCheckbox.getAttribute('checked');
   if (Boolean(isResourcesChecked) !== resources) {
-    await client.click(`#${buildCheckboxLabel('appInstanceResources')}`);
+    await (
+      await client.$(`#${buildCheckboxLabel('appInstanceResources')}`)
+    ).click();
   }
 
-  await client.click(`#${EXPORT_SPACE_BUTTON_ID}`);
+  const exportButton = await client.$(`#${EXPORT_SPACE_BUTTON_ID}`);
+  await exportButton.click();
   await client.pause(TOOLTIP_FADE_OUT_PAUSE);
 };
 
@@ -63,43 +63,34 @@ const checkExportSelectionLayout = async (
   client,
   { resources = false, actions = false } = {}
 ) => {
-  const actionsCheckbox = `input[name="actions"]`;
-  const resourcesCheckbox = `input[name="appInstanceResources"]`;
-  await expectElementToExist(client, actionsCheckbox);
-  await expectElementToExist(client, resourcesCheckbox);
+  const actionsCheckboxSelector = `input[name="actions"]`;
+  const resourcesCheckboxSelector = `input[name="appInstanceResources"]`;
+  await expectElementToExist(client, actionsCheckboxSelector);
+  await expectElementToExist(client, resourcesCheckboxSelector);
 
-  const isActionsChecked = await client.getAttribute(
-    actionsCheckbox,
-    'checked'
-  );
+  const actionsCheckbox = await client.$(actionsCheckboxSelector);
+  const resourcesCheckbox = await client.$(resourcesCheckboxSelector);
+
+  const isActionsChecked = await actionsCheckbox.getAttribute('checked');
   expect(Boolean(isActionsChecked)).to.equal(actions);
-  const isActionsDisabled = await client.getAttribute(
-    actionsCheckbox,
-    'disabled'
-  );
+  const isActionsDisabled = await actionsCheckbox.getAttribute('disabled');
   expect(Boolean(isActionsDisabled)).to.equal(!actions);
 
-  const isResourcesChecked = await client.getAttribute(
-    actionsCheckbox,
-    'checked'
-  );
+  const isResourcesChecked = await resourcesCheckbox.getAttribute('checked');
   expect(Boolean(isResourcesChecked) || false).to.equal(resources);
-  const isResourcesDisabled = await client.getAttribute(
-    actionsCheckbox,
-    'disabled'
-  );
+  const isResourcesDisabled = await resourcesCheckbox.getAttribute('disabled');
   expect(Boolean(isResourcesDisabled)).to.equal(!resources);
 };
 
-describe('Export a space', function() {
+describe('Export a space', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  afterEach(function() {
+  afterEach(function () {
     return closeApplication(app);
   });
 
-  describe('General', function() {
+  describe('General', function () {
     it(
       'Exporting from toolbar saves space in local computer',
       mochaAsync(async () => {
@@ -117,7 +108,8 @@ describe('Export a space', function() {
 
         await visitAndSaveSpaceById(client, id);
 
-        await client.click(`.${SPACE_EXPORT_BUTTON_CLASS}`);
+        const exportButton = await client.$(`.${SPACE_EXPORT_BUTTON_CLASS}`);
+        await exportButton.click();
         await client.pause(EXPORT_SELECTION_SPACE_PAUSE);
 
         await exportSpaceWithSelected(client);
@@ -145,17 +137,17 @@ describe('Export a space', function() {
 
         await menuGoToSavedSpaces(client);
 
-        await client.click(
+        const exportButton = await client.$(
           `#${buildSpaceCardId(id)} .${SPACE_EXPORT_BUTTON_CLASS}`
         );
+        await exportButton.click();
         await client.pause(EXPORT_SELECTION_SPACE_PAUSE);
 
         // back and export again
-        await client.click(`#${EXPORT_SPACE_BACK_BUTTON_ID}`);
+        const backButton = await client.$(`#${EXPORT_SPACE_BACK_BUTTON_ID}`);
+        await backButton.click();
         await client.pause(OPEN_SAVED_SPACE_PAUSE);
-        await client.click(
-          `#${buildSpaceCardId(id)} .${SPACE_EXPORT_BUTTON_CLASS}`
-        );
+        await exportButton.click();
         await client.pause(EXPORT_SELECTION_SPACE_PAUSE);
 
         await exportSpaceWithSelected(client);
@@ -166,7 +158,7 @@ describe('Export a space', function() {
     );
   });
 
-  describe('Can export space, actions and resources if exists', function() {
+  describe('Can export space, actions and resources if exists', function () {
     it(
       'space only',
       mochaAsync(async () => {
@@ -185,7 +177,7 @@ describe('Export a space', function() {
         await visitAndSaveSpaceById(client, id);
 
         // export from card
-        await client.click(`.${SPACE_EXPORT_BUTTON_CLASS}`);
+        await (await client.$(`.${SPACE_EXPORT_BUTTON_CLASS}`)).click();
         await client.pause(EXPORT_SPACE_PAUSE);
 
         await checkExportSelectionLayout(client);
@@ -220,7 +212,7 @@ describe('Export a space', function() {
         await typeInTextInputApp(client, textInputAppId0, text);
 
         // export from card
-        await client.click(`.${SPACE_EXPORT_BUTTON_CLASS}`);
+        await (await client.$(`.${SPACE_EXPORT_BUTTON_CLASS}`)).click();
         await client.pause(EXPORT_SPACE_PAUSE);
 
         await checkExportSelectionLayout(client, {

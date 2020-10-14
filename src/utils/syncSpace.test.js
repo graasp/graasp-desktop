@@ -79,7 +79,7 @@ describe('syncSpace', () => {
   describe('createDiffElements', () => {
     // build classes from existing changes
     const classes = {};
-    Object.values(SYNC_CHANGES).forEach(change => {
+    Object.values(SYNC_CHANGES).forEach((change) => {
       classes[change] = change;
     });
 

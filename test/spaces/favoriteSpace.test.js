@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
+/* eslint-disable func-names */
 import {
   mochaAsync,
   expectElementToExist,
@@ -26,15 +27,15 @@ import {
 } from '../constants';
 import { USER_GRAASP, USER_ALICE, USER_BOB } from '../fixtures/users';
 
-describe('Set space as favorite', function() {
+describe('Set space as favorite', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  afterEach(function() {
+  afterEach(function () {
     return closeApplication(app);
   });
 
-  describe('Buttons', function() {
+  describe('Buttons', function () {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication();
@@ -55,9 +56,10 @@ describe('Set space as favorite', function() {
 
         await menuGoToSavedSpaces(client);
 
-        await client.click(
+        const favoriteButton = await client.$(
           `#${buildSpaceCardId(id)} .${SPACE_FAVORITE_BUTTON_CLASS}`
         );
+        await favoriteButton.click();
         await client.pause(SET_SPACE_AS_FAVORITE_PAUSE);
 
         // check space is in home
@@ -68,9 +70,7 @@ describe('Set space as favorite', function() {
         );
 
         // uncheck favorite
-        await client.click(
-          `#${buildSpaceCardId(id)} .${SPACE_FAVORITE_BUTTON_CLASS}`
-        );
+        await favoriteButton.click();
         await client.pause(SET_SPACE_AS_FAVORITE_PAUSE);
 
         // space should not be in favorite spaces
@@ -92,7 +92,10 @@ describe('Set space as favorite', function() {
 
         await visitAndSaveSpaceById(client, id);
 
-        await client.click(`.${SPACE_FAVORITE_BUTTON_CLASS}`);
+        const favoriteButton = await client.$(
+          `.${SPACE_FAVORITE_BUTTON_CLASS}`
+        );
+        await favoriteButton.click();
         await client.pause(SET_SPACE_AS_FAVORITE_PAUSE);
 
         // check space is in home tab
@@ -104,11 +107,12 @@ describe('Set space as favorite', function() {
 
         // uncheck favorite
         await menuGoToSavedSpaces(client);
-        await client.click(
+        const spaceCardLink = await client.$(
           `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
         );
+        await spaceCardLink.click();
         await client.pause(OPEN_SAVED_SPACE_PAUSE);
-        await client.click(`.${SPACE_FAVORITE_BUTTON_CLASS}`);
+        await favoriteButton.click();
         await client.pause(SET_SPACE_AS_FAVORITE_PAUSE);
 
         // space should not be in home
@@ -121,7 +125,7 @@ describe('Set space as favorite', function() {
     );
   });
 
-  describe('Multi-users', function() {
+  describe('Multi-users', function () {
     it(
       'Set a space as favorite is different per user',
       mochaAsync(async () => {
@@ -136,7 +140,10 @@ describe('Set space as favorite', function() {
         // sign in with alice, add space and set as favorite
         await userSignIn(client, USER_ALICE);
         await visitAndSaveSpaceById(client, id);
-        await client.click(`.${SPACE_FAVORITE_BUTTON_CLASS}`);
+        const favoriteButton = await client.$(
+          `.${SPACE_FAVORITE_BUTTON_CLASS}`
+        );
+        await favoriteButton.click();
         await client.pause(SET_SPACE_AS_FAVORITE_PAUSE);
         await menuGoToSignOut(client);
 

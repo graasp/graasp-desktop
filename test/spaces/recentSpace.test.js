@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
+/* eslint-disable func-names */
 import { expect } from 'chai';
 import {
   mochaAsync,
@@ -31,11 +32,11 @@ import { USER_GRAASP, USER_BOB } from '../fixtures/users';
 import { loadSpaceById } from './loadSpace.test';
 import { MAX_RECENT_SPACES } from '../../src/config/constants';
 
-describe('Recent Spaces', function() {
+describe('Recent Spaces', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  afterEach(function() {
+  afterEach(function () {
     return closeApplication(app);
   });
 
@@ -46,7 +47,7 @@ describe('Recent Spaces', function() {
     })
   );
 
-  describe('Add to Recent Spaces when', function() {
+  describe('Add to Recent Spaces when', function () {
     it(
       'Loading',
       mochaAsync(async () => {
@@ -81,7 +82,7 @@ describe('Recent Spaces', function() {
       })
     );
 
-    describe('Opening saved spaces', function() {
+    describe('Opening saved spaces', function () {
       it(
         `Display only ${MAX_RECENT_SPACES} most recent spaces`,
         mochaAsync(async () => {
@@ -110,11 +111,14 @@ describe('Recent Spaces', function() {
 
           // check spaces is in home : first space should not be displayed
           await menuGoToHome(client);
-          const mediaCards = await client.getAttribute(
-            `#${RECENT_SPACES_WRAPPER_ID} .${SPACE_MEDIA_CARD_CLASS}`,
-            'id'
+          const mediaCards = await client.$$(
+            `#${RECENT_SPACES_WRAPPER_ID} .${SPACE_MEDIA_CARD_CLASS}`
           );
-          expect(mediaCards.length).to.equal(MAX_RECENT_SPACES);
+          const mediaCardsIds = [];
+          for (const card of mediaCards) {
+            mediaCardsIds.push(await card.getAttribute('id'));
+          }
+          expect(mediaCardsIds.length).to.equal(MAX_RECENT_SPACES);
 
           // we do not check order because in the dom it doesn't have the same order
           spaces
@@ -123,8 +127,8 @@ describe('Recent Spaces', function() {
             // get corresponding ids
             .map(({ space: { id } }) => buildSpaceCardId(id))
             // check all spaces are displayed in home
-            .forEach(id => {
-              expect(mediaCards.includes(id)).to.be.true;
+            .forEach((id) => {
+              expect(mediaCardsIds.includes(id)).to.be.true;
             });
         })
       );

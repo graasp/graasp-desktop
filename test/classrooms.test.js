@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
+/* eslint-disable func-names */
 import { expect } from 'chai';
 import path from 'path';
 import _ from 'lodash';
@@ -81,18 +82,24 @@ import {
 } from './fixtures/spaces';
 
 const openClassroom = async (client, name) => {
-  await client.click(`.${CLASSROOM_CARD_CLASS}[data-name='${name}']`);
+  const classroom = await client.$(
+    `.${CLASSROOM_CARD_CLASS}[data-name='${name}']`
+  );
+  await classroom.click();
   await client.pause(OPEN_CLASSROOM_PAUSE);
 };
 
 const addClassroom = async (client, name) => {
-  await client.click(`#${ADD_CLASSROOM_BUTTON_ID}`);
+  const addButton = await client.$(`#${ADD_CLASSROOM_BUTTON_ID}`);
+  await addButton.click();
   await client.pause(MODAL_OPEN_PAUSE);
   const inputSelector = `#${CLASSROOM_NAME_INPUT_ID}`;
+  const input = await client.$(inputSelector);
   await clearInput(client, inputSelector);
-  await client.setValue(inputSelector, name);
+  await input.setValue(name);
   await client.pause(INPUT_TYPE_PAUSE);
-  await client.click(`#${ADD_CLASSROOM_VALIDATE_BUTTON_ID}`);
+  const validateButton = await client.$(`#${ADD_CLASSROOM_VALIDATE_BUTTON_ID}`);
+  await validateButton.click();
   await client.pause(MODAL_CLOSE_PAUSE);
 };
 
@@ -105,20 +112,24 @@ const editClassroom = async (
   if (newName && newName !== name) {
     const editInput = `#${CLASSROOM_NAME_INPUT_ID}`;
     await clearInput(client, editInput);
-    await client.setValue(editInput, newName);
+    await (await client.$(editInput)).setValue(newName);
     await client.pause(INPUT_TYPE_PAUSE);
   }
 
   if (deletionSelection) {
     for (const [spaceId, toDelete] of Object.entries(deletionSelection)) {
       if (toDelete) {
-        await client.click(
+        const deleteDataButton = await client.$(
           `*[data-space-id='${spaceId}'] .${EDIT_CLASSROOM_DELETE_DATA_BUTTON_CLASS}`
         );
+        await deleteDataButton.click();
       }
     }
   }
-  await client.click(`#${EDIT_CLASSROOM_VALIDATE_BUTTON_ID}`);
+  const validateButton = await client.$(
+    `#${EDIT_CLASSROOM_VALIDATE_BUTTON_ID}`
+  );
+  await validateButton.click();
   await client.pause(MODAL_CLOSE_PAUSE);
 };
 
@@ -126,18 +137,23 @@ const deleteClassroom = async (client, name) => {
   // search based on name since id is generated on the fly
   const classroomSelector = `.${CLASSROOM_CARD_CLASS}[data-name='${name}']`;
 
-  await client.click(`${classroomSelector} .${DELETE_CLASSROOM_BUTTON_CLASS}`);
+  const deleteButton = await client.$(
+    `${classroomSelector} .${DELETE_CLASSROOM_BUTTON_CLASS}`
+  );
+  await deleteButton.click();
   await client.pause(DELETE_CLASSROOM_PAUSE);
 };
 
 const addUserInClassroom = async (client, username) => {
-  await client.click(`#${ADD_USER_IN_CLASSROOM_BUTTON_ID}`);
+  await (await client.$(`#${ADD_USER_IN_CLASSROOM_BUTTON_ID}`)).click();
   await client.pause(MODAL_OPEN_PAUSE);
   const usernameInput = `#${ADD_USER_IN_CLASSROOM_NAME_INPUT_ID}`;
   await clearInput(client, usernameInput);
-  await client.setValue(usernameInput, username);
+  await (await client.$(usernameInput)).setValue(username);
   await client.pause(INPUT_TYPE_PAUSE);
-  await client.click(`#${ADD_USER_IN_CLASSROOM_VALIDATE_BUTTON_ID}`);
+  await (
+    await client.$(`#${ADD_USER_IN_CLASSROOM_VALIDATE_BUTTON_ID}`)
+  ).click();
   await client.pause(MODAL_CLOSE_PAUSE);
 };
 
@@ -145,9 +161,10 @@ const deleteUserInClassroom = async (client, username) => {
   // search based on name since id is generated on the fly
   const userRowSelector = `#${CLASSROOM_TABLE_BODY_ID} tr[data-name='${username}']`;
 
-  await client.click(
+  const deleteUserButton = await client.$(
     `${userRowSelector} .${DELETE_USER_IN_CLASSROOM_BUTTON_CLASS}`
   );
+  await deleteUserButton.click();
   await client.pause(DELETE_USER_IN_CLASSROOM_PAUSE);
 };
 
@@ -156,9 +173,12 @@ const deleteUsersInClassroom = async (client, usernames) => {
   for (const username of usernames) {
     // search based on name since id is generated on the fly
     const userRowSelector = `#${CLASSROOM_TABLE_BODY_ID} tr[data-name='${username}']`;
-    await client.click(`${userRowSelector} .${SELECT_USER_IN_CLASSROOM_CLASS}`);
+    const selectUser = await client.$(
+      `${userRowSelector} .${SELECT_USER_IN_CLASSROOM_CLASS}`
+    );
+    await selectUser.click();
   }
-  await client.click(`#${DELETE_USERS_IN_CLASSROOM_BUTTON_ID}`);
+  await (await client.$(`#${DELETE_USERS_IN_CLASSROOM_BUTTON_ID}`)).click();
   await client.pause(DELETE_USER_IN_CLASSROOM_PAUSE);
 };
 
@@ -171,16 +191,16 @@ const editUserInClassroom = async (
   // search based on name since id is generated on the fly
   const userRowSelector = `tr[data-name='${username}']`;
 
-  await client.click(
-    `${userRowSelector} .${EDIT_USER_IN_CLASSROOM_BUTTON_CLASS}`
-  );
+  await (
+    await client.$(`${userRowSelector} .${EDIT_USER_IN_CLASSROOM_BUTTON_CLASS}`)
+  ).click();
   await client.pause(MODAL_OPEN_PAUSE);
 
   // edit username
   const editInput = `#${EDIT_USER_IN_CLASSROOM_USERNAME_INPUT_ID}`;
   if (newUsername) {
     await clearInput(client, editInput);
-    await client.setValue(editInput, newUsername);
+    await (await client.$(editInput)).setValue(newUsername);
     await client.pause(INPUT_TYPE_PAUSE);
   }
 
@@ -188,15 +208,19 @@ const editUserInClassroom = async (
   if (deletionSelection) {
     for (const [spaceId, toDelete] of Object.entries(deletionSelection)) {
       if (toDelete) {
-        await client.click(
-          `*[data-space-id='${spaceId}'] .${EDIT_USER_IN_CLASSROOM_DELETE_DATA_BUTTON_CLASS}`
-        );
+        await (
+          await client.$(
+            `*[data-space-id='${spaceId}'] .${EDIT_USER_IN_CLASSROOM_DELETE_DATA_BUTTON_CLASS}`
+          )
+        ).click();
       }
     }
   }
 
   // submit changes
-  await client.click(`#${EDIT_USER_IN_CLASSROOM_VALIDATE_BUTTON_ID}`);
+  await (
+    await client.$(`#${EDIT_USER_IN_CLASSROOM_VALIDATE_BUTTON_ID}`)
+  ).click();
   await client.pause(MODAL_CLOSE_PAUSE);
 };
 
@@ -261,21 +285,21 @@ const hasClassroomCardLayout = async (
   await expectElementToExist(client, classroomSelector);
 
   // check title
-  const title = await client.getText(
-    `${classroomSelector} .${CLASSROOM_CARD_NAME_CLASS}`
-  );
+  const title = await (
+    await client.$(`${classroomSelector} .${CLASSROOM_CARD_NAME_CLASS}`)
+  ).getText();
   expect(title).to.equal(name);
 
   // check space number
-  const spacesText = await client.getText(
-    `${classroomSelector} .${CLASSROOM_CARD_SPACES_CLASS}`
-  );
+  const spacesText = await (
+    await client.$(`${classroomSelector} .${CLASSROOM_CARD_SPACES_CLASS}`)
+  ).getText();
   expect(spacesText).to.include(nbSpace);
 
   // check student number
-  const studentsText = await client.getText(
-    `${classroomSelector} .${CLASSROOM_CARD_STUDENTS_CLASS}`
-  );
+  const studentsText = await (
+    await client.$(`${classroomSelector} .${CLASSROOM_CARD_STUDENTS_CLASS}`)
+  ).getText();
   expect(studentsText).to.include(nbStudent);
 };
 
@@ -288,27 +312,30 @@ const importDataInClassroom = async (
 ) => {
   // submit filepath
   const absolutePath = path.resolve(__dirname, './fixtures/spaces', filepath);
-  await client.click(`#${IMPORT_DATA_IN_CLASSROOM_BUTTON_ID}`);
+  await (await client.$(`#${IMPORT_DATA_IN_CLASSROOM_BUTTON_ID}`)).click();
   await client.pause(OPEN_IMPORT_DATA_IN_CLASSROOM_PAUSE);
-  await client.setValue(
-    `#${IMPORT_FILEPATH_IN_CLASSROOM_INPUT_ID}`,
+  await (await client.$(`#${IMPORT_FILEPATH_IN_CLASSROOM_INPUT_ID}`)).setValue(
     absolutePath
   );
   await client.pause(INPUT_TYPE_PAUSE);
-  await client.click(`#${IMPORT_DATA_IN_CLASSROOM_SUBMIT_BUTTON_ID}`);
+  await (
+    await client.$(`#${IMPORT_DATA_IN_CLASSROOM_SUBMIT_BUTTON_ID}`)
+  ).click();
   await client.pause(LOAD_SELECTION_SPACE_PAUSE);
 
-  const selectSelector = `.${IMPORT_DATA_IN_CLASSROOM_STUDENT_SELECT_CONTAINER_CLASS}`;
+  const select = await client.$(
+    `.${IMPORT_DATA_IN_CLASSROOM_STUDENT_SELECT_CONTAINER_CLASS}`
+  );
   // assign user
-  await client.click(selectSelector);
+  await select.click();
   const optionSelector = `.${IMPORT_DATA_IN_CLASSROOM_STUDENT_SELECT_PREFIX_CLASS}__option`;
-
+  const option = await client.$(optionSelector);
   // check username exists : have option and one of them contains username
-  let userExists = await client.isExisting(optionSelector);
+  let userExists = await option.isExisting();
   let index = -1;
   if (userExists) {
     // find position of username, click on this option
-    let options = await client.getText(optionSelector);
+    let options = await option.getText();
     if (!Array.isArray(options)) {
       options = [options];
     }
@@ -319,14 +346,15 @@ const importDataInClassroom = async (
   if (userExists) {
     // click on option
     await client.pause(SELECT_OPEN_PAUSE);
-    await client.click(`${optionSelector}:nth-child(${index + 1})`);
+    await (await client.$(`${optionSelector}:nth-child(${index + 1})`)).click();
     await client.pause(2000);
   } else {
     // create username
-    await client.setValue(
-      `.${IMPORT_DATA_IN_CLASSROOM_STUDENT_SELECT_PREFIX_CLASS}__input input`,
-      [username, 'Enter']
-    ); // set Enter to validate username in select
+    await (
+      await client.$(
+        `.${IMPORT_DATA_IN_CLASSROOM_STUDENT_SELECT_PREFIX_CLASS}__input input`
+      )
+    ).setValue([username, 'Enter']); // set Enter to validate username in select
     await client.pause(INPUT_TYPE_PAUSE);
   }
 
@@ -334,23 +362,25 @@ const importDataInClassroom = async (
   await checkLoadSelectionLayout(client, isChecked);
   await setCheckboxesTo(client, shouldCheck);
 
-  await client.click(`#${IMPORT_DATA_CLASSROOM_VALIDATE_BUTTON_ID}`);
+  await (
+    await client.$(`#${IMPORT_DATA_CLASSROOM_VALIDATE_BUTTON_ID}`)
+  ).click();
   await client.pause(LOAD_SELECTION_SPACE_PAUSE);
 
   // return to classroom
-  await client.click(`#${IMPORT_DATA_IN_CLASSROOM_BACK_BUTTON_ID}`);
+  await (await client.$(`#${IMPORT_DATA_IN_CLASSROOM_BACK_BUTTON_ID}`)).click();
   await client.pause(OPEN_CLASSROOM_PAUSE);
 };
 
-describe('Classrooms Scenarios', function() {
+describe('Classrooms Scenarios', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  afterEach(function() {
+  afterEach(function () {
     return closeApplication(app);
   });
 
-  describe('Student', function() {
+  describe('Student', function () {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication();
@@ -372,7 +402,7 @@ describe('Classrooms Scenarios', function() {
     );
   });
 
-  describe('Teacher', function() {
+  describe('Teacher', function () {
     it(
       'manage a classroom (add, edit, remove)',
       mochaAsync(async () => {
@@ -390,11 +420,11 @@ describe('Classrooms Scenarios', function() {
         const name = 'classroomname';
 
         // open and cancel modal
-        await client.click(`#${ADD_CLASSROOM_BUTTON_ID}`);
+        await (await client.$(`#${ADD_CLASSROOM_BUTTON_ID}`)).click();
         await client.pause(MODAL_OPEN_PAUSE);
-        await client.setValue(`#${CLASSROOM_NAME_INPUT_ID}`, name);
+        await (await client.$(`#${CLASSROOM_NAME_INPUT_ID}`)).setValue(name);
         await client.pause(INPUT_TYPE_PAUSE);
-        await client.click(`#${ADD_CLASSROOM_CANCEL_BUTTON_ID}`);
+        await (await client.$(`#${ADD_CLASSROOM_CANCEL_BUTTON_ID}`)).click();
         await client.pause(MODAL_CLOSE_PAUSE);
         await expectElementToExist(client, `#${NO_CLASSROOM_AVAILABLE_ID}`);
 
@@ -404,10 +434,10 @@ describe('Classrooms Scenarios', function() {
 
         // edit
         // search based on name since id is generated on the fly
-        const classroomSelector = `.${CLASSROOM_CARD_CLASS}[data-name='${name}']`;
-        await client.click(
-          `${classroomSelector} .${EDIT_CLASSROOM_BUTTON_CLASS}`
+        const editSelector = await client.$(
+          `.${CLASSROOM_CARD_CLASS}[data-name='${name}'] .${EDIT_CLASSROOM_BUTTON_CLASS}`
         );
+        await editSelector.click();
         const newName = 'new name';
         await editClassroom(client, name, { name: newName });
         await expectElementToExist(
@@ -521,7 +551,7 @@ describe('Classrooms Scenarios', function() {
         );
 
         // check classroom layout
-        await client.click(`#${CLASSROOM_SCREEN_BACK_BUTTON_ID}`);
+        await (await client.$(`#${CLASSROOM_SCREEN_BACK_BUTTON_ID}`)).click();
         await hasClassroomCardLayout(client, name, 0, 3);
 
         // check data is not shared between classrooms
@@ -546,7 +576,7 @@ describe('Classrooms Scenarios', function() {
       })
     );
 
-    describe('manage space data in classroom', function() {
+    describe('manage space data in classroom', function () {
       beforeEach(
         mochaAsync(async () => {
           app = await createApplication();
@@ -570,9 +600,11 @@ describe('Classrooms Scenarios', function() {
 
           // add classroom
           await addClassroom(client, classroomName);
-          await client.click(
-            `.${CLASSROOM_CARD_CLASS}[data-name='${classroomName}']`
-          );
+          await (
+            await client.$(
+              `.${CLASSROOM_CARD_CLASS}[data-name='${classroomName}']`
+            )
+          ).click();
           await client.pause(OPEN_CLASSROOM_PAUSE);
 
           // add user
@@ -614,7 +646,7 @@ describe('Classrooms Scenarios', function() {
           ]);
 
           // remove space from classroom
-          await client.click(`.${EDIT_CLASSROOM_BUTTON_CLASS}`);
+          await (await client.$(`.${EDIT_CLASSROOM_BUTTON_CLASS}`)).click();
           await editClassroom(client, classroomName, { deletionSelection });
 
           await hasStudentsTableLayout(
@@ -642,9 +674,11 @@ describe('Classrooms Scenarios', function() {
 
           // add classroom
           await addClassroom(client, classroomName);
-          await client.click(
-            `.${CLASSROOM_CARD_CLASS}[data-name='${classroomName}']`
-          );
+          await (
+            await client.$(
+              `.${CLASSROOM_CARD_CLASS}[data-name='${classroomName}']`
+            )
+          ).click();
           await client.pause(OPEN_CLASSROOM_PAUSE);
 
           const username = 'bob';
@@ -713,9 +747,11 @@ describe('Classrooms Scenarios', function() {
 
           // add classroom
           await addClassroom(client, classroomName);
-          await client.click(
-            `.${CLASSROOM_CARD_CLASS}[data-name='${classroomName}']`
-          );
+          await (
+            await client.$(
+              `.${CLASSROOM_CARD_CLASS}[data-name='${classroomName}']`
+            )
+          ).click();
           await client.pause(OPEN_CLASSROOM_PAUSE);
 
           const username = 'bob';
