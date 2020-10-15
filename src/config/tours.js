@@ -1,13 +1,13 @@
 import {
   PHASE_DRAWER_CLASS,
   SPACE_PREVIEW_ICON_CLASS,
-  SPACE_SCREEN_CLASS,
   VISIT_SPACE_BUTTON_CLASS,
   VISIT_SPACE_INPUT_CLASS,
   SETTINGS_ACTIONS_CLASS,
   LANGUAGE_SELECT_ID,
   STUDENT_MODE_SWITCH_ID,
 } from './selectors';
+import { TOUR_SPACE } from './constants';
 
 const tours = {
   VISIT_SPACE_TOUR: 'visitSpace',
@@ -24,8 +24,7 @@ const VISIT_SPACE_TOUR_STEPS = [
   {
     target: `.${VISIT_SPACE_INPUT_CLASS}`,
     title: 'Visiting a Space',
-    content:
-      "You can visit a space using its URL or ID. For example, let's have a look at space https://graasp.eu/s/owozgj or simply owozgj.",
+    content: `You can visit a space using its URL or ID. For example, let's have a look at space https://graasp.eu/s/${TOUR_SPACE} or simply ${TOUR_SPACE}.`,
     disableBeacon: true,
   },
   {
@@ -33,12 +32,6 @@ const VISIT_SPACE_TOUR_STEPS = [
     title: 'Preview Mode',
     content:
       'When you visit a space, you can preview its contents to see what it looks like. Only teachers can save spaces locally.',
-    disableBeacon: true,
-  },
-  {
-    target: `.${SPACE_SCREEN_CLASS}`,
-    title: 'Here you should be able to preview the space before saving it',
-    content: '',
     disableBeacon: true,
   },
   {

@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
+/* eslint-disable func-names */
 import { expect } from 'chai';
 import i18n from '../src/config/i18n';
 import {
@@ -92,15 +93,15 @@ const isSyncAdvancedModeSetTo = async (client, value) => {
   expect(booleanToMode).to.equal(value);
 };
 
-describe('Settings Scenarios', function() {
+describe('Settings Scenarios', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  afterEach(function() {
+  afterEach(function () {
     return closeApplication(app);
   });
 
-  describe('Use graasp user', function() {
+  describe('Use graasp user', function () {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication();
@@ -180,19 +181,21 @@ describe('Settings Scenarios', function() {
         await menuGoToSettings(client);
 
         // check settings screen displays in english
-        const settingsTitle = await client.getText(`#${SETTINGS_TITLE_ID}`);
+        const settingsTitle = await (
+          await client.$(`#${SETTINGS_TITLE_ID}`)
+        ).getText();
         expect(settingsTitle).to.equal(i18n.t('Settings'));
-        const languageSelectTitle = await client.getText(
-          `#${LANGUAGE_SELECT_ID} label`
-        );
+        const languageSelectTitle = await (
+          await client.$(`#${LANGUAGE_SELECT_ID} label`)
+        ).getText();
         expect(languageSelectTitle).to.equal(i18n.t('Language'));
-        const developerSwitchTitle = await client.getText(
-          `#${DEVELOPER_SWITCH_ID}`
-        );
+        const developerSwitchTitle = await (
+          await client.$(`#${DEVELOPER_SWITCH_ID}`)
+        ).getText();
         expect(developerSwitchTitle).to.equal(i18n.t('Developer Mode'));
-        const geolocationEnabledControlTitle = await client.getText(
-          `#${GEOLOCATION_CONTROL_ID}`
-        );
+        const geolocationEnabledControlTitle = await (
+          await client.$(`#${GEOLOCATION_CONTROL_ID}`)
+        ).getText();
         expect(geolocationEnabledControlTitle).to.equal(
           i18n.t('Geolocation Enabled')
         );
@@ -202,19 +205,21 @@ describe('Settings Scenarios', function() {
         await i18n.changeLanguage('fr');
 
         // check settings screen displays in english
-        const settingsTitleFr = await client.getText(`#${SETTINGS_TITLE_ID}`);
+        const settingsTitleFr = await (
+          await client.$(`#${SETTINGS_TITLE_ID}`)
+        ).getText();
         expect(settingsTitleFr).to.equal(i18n.t('Settings'));
-        const languageSelectTitleFr = await client.getText(
-          `#${LANGUAGE_SELECT_ID} label`
-        );
+        const languageSelectTitleFr = await (
+          await client.$(`#${LANGUAGE_SELECT_ID} label`)
+        ).getText();
         expect(languageSelectTitleFr).to.equal(i18n.t('Language'));
-        const developerSwitchTitleFr = await client.getText(
-          `#${DEVELOPER_SWITCH_ID}`
-        );
+        const developerSwitchTitleFr = await (
+          await client.$(`#${DEVELOPER_SWITCH_ID}`)
+        ).getText();
         expect(developerSwitchTitleFr).to.equal(i18n.t('Developer Mode'));
-        const geolocationEnabledControlTitleFr = await client.getText(
-          `#${GEOLOCATION_CONTROL_ID}`
-        );
+        const geolocationEnabledControlTitleFr = await (
+          await client.$(`#${GEOLOCATION_CONTROL_ID}`)
+        ).getText();
         expect(geolocationEnabledControlTitleFr).to.equal(
           i18n.t('Geolocation Enabled')
         );
@@ -232,15 +237,16 @@ describe('Settings Scenarios', function() {
         // init with a modified space
         await loadSpaceById(client, SPACE_WITH_REMOVAL_PATH);
 
-        await client.click(
+        const syncButton = await client.$(
           `#${buildSpaceCardId(id)} .${SPACE_SYNC_BUTTON_CLASS}`
         );
+        await syncButton.click();
         await client.pause(SYNC_OPEN_SCREEN_PAUSE);
 
         await expectElementToExist(client, `#${SYNC_VISUAL_MAIN_ID}`);
 
         // cancel sync and go to settings to enable sync advanced mode
-        await client.click(`#${SYNC_CANCEL_BUTTON_ID}`);
+        await (await client.$(`#${SYNC_CANCEL_BUTTON_ID}`)).click();
         await client.pause(LOAD_TAB_PAUSE);
         await menuGoToSettings(client);
         await toggleSyncAdvancedMode(client, true);
@@ -248,9 +254,7 @@ describe('Settings Scenarios', function() {
         // sync mode should be advanced
         await menuGoToSavedSpaces(client);
 
-        await client.click(
-          `#${buildSpaceCardId(id)} .${SPACE_SYNC_BUTTON_CLASS}`
-        );
+        await syncButton.click();
         await client.pause(SYNC_OPEN_SCREEN_PAUSE);
 
         await expectElementToExist(client, `#${SYNC_ADVANCED_MAIN_ID}`);
@@ -258,7 +262,7 @@ describe('Settings Scenarios', function() {
     );
   });
 
-  describe('Use multiple users', function() {
+  describe('Use multiple users', function () {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication();

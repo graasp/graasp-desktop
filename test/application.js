@@ -55,7 +55,7 @@ const createApplication = async (
   return app;
 };
 
-const closeApplication = app => {
+const closeApplication = (app) => {
   if (app && app.isRunning()) {
     return app.stop();
   }

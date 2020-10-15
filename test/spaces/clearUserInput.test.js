@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
+/* eslint-disable func-names */
 import {
   mochaAsync,
   userSignIn,
@@ -31,16 +32,16 @@ import {
 } from '../apps/textInputApp';
 
 // @TODO this should be changed to load user input from zip
-describe('Clear User Input in a space', function() {
+describe('Clear User Input in a space', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  afterEach(function() {
+  afterEach(function () {
     return closeApplication(app);
   });
 
-  describe('Use graasp user', function() {
-    describe('Mock positive response for dialog', function() {
+  describe('Use graasp user', function () {
+    describe('Mock positive response for dialog', function () {
       beforeEach(
         mochaAsync(async () => {
           app = await createApplication({ showMessageDialogResponse: 1 });
@@ -76,7 +77,8 @@ describe('Clear User Input in a space', function() {
           await checkTextInputAppContainsText(client, textInputAppId1, text1);
 
           // clear
-          await client.click(`.${SPACE_CLEAR_BUTTON_CLASS}`);
+          const clearButton = await client.$(`.${SPACE_CLEAR_BUTTON_CLASS}`);
+          await clearButton.click();
           await client.pause(TOOLTIP_FADE_OUT_PAUSE);
 
           // check space doesn't contain user input
@@ -117,15 +119,17 @@ describe('Clear User Input in a space', function() {
           await menuGoToSavedSpaces(client);
 
           // clear user input
-          await client.click(
+          const clearButton = await client.$(
             `#${buildSpaceCardId(id)} .${SPACE_CLEAR_BUTTON_CLASS}`
           );
+          await clearButton.click();
           await client.pause(TOOLTIP_FADE_OUT_PAUSE);
 
           // check app doesn't contain user input
-          await client.click(
+          const spaceCard = await client.$(
             `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
           );
+          await spaceCard.click();
           await client.pause(OPEN_SAVED_SPACE_PAUSE);
           await menuGoToPhase(client, 0);
           await checkTextInputAppContainsText(client, textInputAppId0, '');
@@ -135,7 +139,7 @@ describe('Clear User Input in a space', function() {
       );
     });
 
-    describe('Mock negative response for dialog', function() {
+    describe('Mock negative response for dialog', function () {
       beforeEach(
         mochaAsync(async () => {
           app = await createApplication({ showMessageDialogResponse: 0 });
@@ -164,7 +168,7 @@ describe('Clear User Input in a space', function() {
           await menuGoToPhase(client, 1);
           await typeInTextInputApp(client, textInputAppId1, text1);
 
-          await client.click(`.${SPACE_CLEAR_BUTTON_CLASS}`);
+          await (await client.$(`.${SPACE_CLEAR_BUTTON_CLASS}`)).click();
           await client.pause(TOOLTIP_FADE_OUT_PAUSE);
 
           // check it is still saved
@@ -177,7 +181,7 @@ describe('Clear User Input in a space', function() {
     });
   });
 
-  describe('Use graasp user', function() {
+  describe('Use graasp user', function () {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication({ showMessageDialogResponse: 1 });
@@ -214,9 +218,10 @@ describe('Clear User Input in a space', function() {
         // login as bob, save user input
         await userSignIn(client, USER_BOB);
         await menuGoToSavedSpaces(client);
-        await client.click(
+        const spaceCard = await client.$(
           `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
         );
+        await spaceCard.click();
         await menuGoToPhase(client, 0);
         await typeInTextInputApp(client, textInputAppId0, textBob0);
         await menuGoToPhase(client, 1);
@@ -226,9 +231,7 @@ describe('Clear User Input in a space', function() {
         // login as Alice, clear user input
         await userSignIn(client, USER_ALICE);
         await menuGoToSavedSpaces(client);
-        await client.click(
-          `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
-        );
+        await spaceCard.click();
         await menuGoToPhase(client, 0);
         await checkTextInputAppContainsText(
           client,
@@ -241,15 +244,15 @@ describe('Clear User Input in a space', function() {
           textInputAppId1,
           textAlice1
         );
-        await client.click(`.${SPACE_CLEAR_BUTTON_CLASS}`);
+        await (await client.$(`.${SPACE_CLEAR_BUTTON_CLASS}`)).click();
         await menuGoToSignOut(client);
 
         // login as Bob, check user input are still saved
         await userSignIn(client, USER_BOB);
         await menuGoToSavedSpaces(client);
-        await client.click(
-          `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
-        );
+        await (
+          await client.$(`#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`)
+        ).click();
         await menuGoToPhase(client, 0);
         await checkTextInputAppContainsText(client, textInputAppId0, textBob0);
         await menuGoToPhase(client, 1);

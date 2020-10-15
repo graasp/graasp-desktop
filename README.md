@@ -146,3 +146,22 @@ Following the `electron-log` defaults, logs are written to the following locatio
 - Linux: `~/.config/{app name}/logs/{process type}.log`
 - macOS: `~/Library/Logs/{app name}/{process type}.log`
 - Windows: `%USERPROFILE%\AppData\Roaming\{app name}\logs\{process type}.log`
+
+## Deploy and Publish
+
+**Note**: MacOS can compile the desktop application for every other platforms. Windows OS can only compile Windows executable files.
+
+### Requirements
+
+- You should try to update all dependencies, particularly any dependencies related to `electron` and `electron-builder` as this dependency will create the executable files for every OS.
+- Make sure your `.env` and `.env.test` files contain the correct values. Use your own github token `GH_TOKEN` in order to release the new version with your github account.
+- **Sign Apple executable files**: In order to sign the application and publish it on the mac store, you will need a corresponding **Developer ID** certificate installed on your apple computer. You need to be part of the apple developer team on the [Apple Developers Website](https://developer.apple.com/) as well as use the certificate containing the private key. [Here](https://help.apple.com/xcode/mac/current/#/dev154b28f09) you can find some indications to help you install this certificate. Once added to _Xcode_ (the should also be available in _My Certificates_ in Keychain), this certificate will be automatically be used during the creation of the executable files. You will also need the `assets/embedded.provisionprofile` file.
+  This command will tell you if your app was correctly signed: `codesign --display --verbose=2 dist/mac/Graasp.app`
+
+### Steps
+
+1. Run `yarn dist`. This command will first build the repository and compile it into multiple executable files. All the configuration is set in `package.json`.
+
+2. Run `yarn release`. This command will prepare the new release tag and push it on github.
+
+3. Sign in on Github and go to the **Tags** page. Here your release will be waiting for your approval. The release should contain every compiled files for Windows, Mac and Linux platforms (these might be only visible when the user is signed in). As `CHANGELOG.md` was automatically filled in with the release's changes, copy and paste the corresponding changes in the release's description. You can approve the release.

@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
+/* eslint-disable func-names */
 import { mochaAsync, userSignIn, menuGoToSavedSpaces } from '../utils';
 import { createApplication, closeApplication } from '../application';
 import {
@@ -17,12 +18,12 @@ import {
 import { OPEN_SAVED_SPACE_PAUSE, DEFAULT_GLOBAL_TIMEOUT } from '../constants';
 import { USER_GRAASP } from '../fixtures/users';
 
-describe('Save a space', function() {
+describe('Save a space', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
   let globalUser;
 
-  afterEach(function() {
+  afterEach(function () {
     return closeApplication(app);
   });
 
@@ -53,7 +54,10 @@ describe('Save a space', function() {
       await checkSpaceCardLayout(client, SPACE_ATOMIC_STRUCTURE);
 
       // go to space
-      await client.click(`#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`);
+      const spaceCardLink = await client.$(
+        `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
+      );
+      await spaceCardLink.click();
       await client.pause(OPEN_SAVED_SPACE_PAUSE);
 
       await hasSavedSpaceHomeLayout(client, { name, description });

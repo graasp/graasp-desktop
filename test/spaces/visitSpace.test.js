@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
+/* eslint-disable func-names */
 import { expect } from 'chai';
 import {
   removeSpace,
@@ -8,6 +9,7 @@ import {
   mochaAsync,
   userSignIn,
   menuGoToVisitSpace,
+  expectElementToExist,
 } from '../utils';
 import { closeApplication, createApplication } from '../application';
 import {
@@ -29,7 +31,6 @@ import {
   buildSpaceCardId,
   SPACE_DESCRIPTION_EXPAND_BUTTON_CLASS,
   buildSpaceCardDescriptionId,
-  buildPhaseAppName,
   TOOLS_BUTTON_CLASS,
   TOOLS_CONTENT_PANE_ID,
 } from '../../src/config/selectors';
@@ -46,27 +47,28 @@ import {
 } from '../constants';
 import { USER_GRAASP } from '../fixtures/users';
 import { USER_MODES, DEFAULT_USER_MODE } from '../../src/config/constants';
+import { checkTextInputAppContainsText } from '../apps/textInputApp';
 
 const PREVIEW = 'preview';
 const SAVED = 'saved';
 
-export const openTools = async client => {
-  const isToolsContentVisible = await client.isVisible(
-    `#${TOOLS_CONTENT_PANE_ID}`
-  );
+export const openTools = async (client) => {
+  const isToolsContentVisible = await (
+    await client.$(`#${TOOLS_CONTENT_PANE_ID}`)
+  ).isDisplayed();
   if (!isToolsContentVisible) {
-    await client.click(`.${TOOLS_BUTTON_CLASS}`);
+    await (await client.$(`.${TOOLS_BUTTON_CLASS}`)).click();
     await client.pause(OPEN_TOOLS_PAUSE);
   }
 };
 
 const testTextOfElement = async (client, selector, text) => {
+  const el = await client.$(selector);
+  const html = await el.getHTML();
   if (hasMath(text)) {
-    const html = await client.getHTML(selector);
     expect(html).to.include('<span class="katex">');
   } else {
-    const elementText = await client.getHTML(selector);
-    expect(removeSpace(removeTags(elementText))).to.include(
+    expect(removeSpace(removeTags(html))).to.include(
       removeSpace(removeTags(text))
     );
   }
@@ -76,12 +78,13 @@ export const visitSpaceById = async (client, id) => {
   await menuGoToVisitSpace(client);
 
   // input space id
-  await client.setValue(`#${VISIT_INPUT_ID}`, id);
+  const visitInput = await client.$(`#${VISIT_INPUT_ID}`);
+  await visitInput.setValue(id);
   await client.pause(INPUT_TYPE_PAUSE);
-  const value = await client.getValue(`#${VISIT_INPUT_ID}`);
+  const value = await visitInput.getValue();
   expect(value).to.equal(id);
 
-  await client.click(`#${VISIT_BUTTON_ID}`);
+  await (await client.$(`#${VISIT_BUTTON_ID}`)).click();
   await client.pause(VISIT_SPACE_PAUSE);
 };
 
@@ -89,7 +92,8 @@ export const visitAndSaveSpaceById = async (client, id) => {
   await visitSpaceById(client, id);
 
   // save space
-  await client.click(`.${SPACE_SAVE_ICON_CLASS}`);
+  const saveIcon = await client.$(`.${SPACE_SAVE_ICON_CLASS}`);
+  await saveIcon.click();
 
   await client.pause(SAVE_SPACE_PAUSE);
   await client.pause(TOOLTIP_FADE_OUT_PAUSE);
@@ -103,7 +107,8 @@ export const hasPreviewSpaceHomeLayout = async (
 ) => {
   // space name
   const spaceToolbarSelector = `#${SPACE_TOOLBAR_ID}`;
-  const toolbarText = await client.getText(spaceToolbarSelector);
+  const spaceToolbar = await client.$(spaceToolbarSelector);
+  const toolbarText = await spaceToolbar.getText();
   expect(toolbarText).to.include(spaceName);
 
   // space description
@@ -116,24 +121,24 @@ export const hasPreviewSpaceHomeLayout = async (
   }
 
   // space preview banner
-  const previewBanner = await client.element(`#${BANNER_WARNING_PREVIEW_ID}`);
-  expect(previewBanner.value).to.exist;
+  await expectElementToExist(client, `#${BANNER_WARNING_PREVIEW_ID}`);
 
   // space preview button
-  const previewButton = await client.getText(`#${SPACE_START_PREVIEW_BUTTON}`);
+  const previewButton = await (
+    await client.$(`#${SPACE_START_PREVIEW_BUTTON}`)
+  ).getText();
   expect(previewButton.toLowerCase()).to.equal('preview');
 
   // space save icon if teacher
   if (mode === USER_MODES.TEACHER) {
-    const saveIcon = await client.element(
+    await expectElementToExist(
+      client,
       `${spaceToolbarSelector} .${SPACE_SAVE_ICON_CLASS}`
     );
-    expect(saveIcon.value).to.exist;
   }
 
   // space preview icon
-  const previewIcon = await client.element(`.${SPACE_PREVIEW_ICON_CLASS}`);
-  expect(previewIcon.value).to.exist;
+  await expectElementToExist(client, `.${SPACE_PREVIEW_ICON_CLASS}`);
 };
 
 // check home phase of given space when saved
@@ -144,33 +149,34 @@ export const hasSavedSpaceHomeLayout = async (
 ) => {
   // space name
   const spaceToolbarSelector = `#${SPACE_TOOLBAR_ID}`;
-  const toolbarText = await client.getText(spaceToolbarSelector);
+  const spaceToolbar = await client.$(spaceToolbarSelector);
+  const toolbarText = await spaceToolbar.getText();
   expect(toolbarText).to.include(spaceName);
 
   // space export icon
-  const exportIcon = await client.element(
+  await expectElementToExist(
+    client,
     `${spaceToolbarSelector} .${SPACE_EXPORT_BUTTON_CLASS}`
   );
-  expect(exportIcon.value).to.exist;
 
   // space clear icon
-  const clearIcon = await client.element(
+  await expectElementToExist(
+    client,
     `${spaceToolbarSelector} .${SPACE_CLEAR_BUTTON_CLASS}`
   );
-  expect(clearIcon.value).to.exist;
 
   if (userMode !== USER_MODES.STUDENT) {
     // space delete icon
-    const deleteIcon = await client.element(
+    await expectElementToExist(
+      client,
       `${spaceToolbarSelector} .${SPACE_DELETE_BUTTON_CLASS}`
     );
-    expect(deleteIcon.value).to.exist;
 
     // space sync icon
-    const syncIcon = await client.element(
+    await expectElementToExist(
+      client,
       `${spaceToolbarSelector} .${SPACE_SYNC_BUTTON_CLASS}`
     );
-    expect(syncIcon.value).to.exist;
   }
 
   // space description
@@ -183,8 +189,9 @@ export const hasSavedSpaceHomeLayout = async (
   }
 
   // space start button
-  const previewButton = await client.getText(`#${SPACE_START_PREVIEW_BUTTON}`);
-  expect(previewButton.toLowerCase()).to.equal('start');
+  const previewButton = await client.$(`#${SPACE_START_PREVIEW_BUTTON}`);
+  const text = await previewButton.getText();
+  expect(text.toLowerCase()).to.equal('start');
 };
 
 const checkUserInputInApp = async (client, { id, url }, resources = []) => {
@@ -198,10 +205,8 @@ const checkUserInputInApp = async (client, { id, url }, resources = []) => {
   switch (url) {
     // text input app
     case 'https://apps.graasp.eu/5acb589d0d5d9464081c2d46/5cde9891226a7d20a8a16697/latest/index.html': {
-      await client.frame(buildPhaseAppName(id));
-      const text = await client.getText('#inputTextField');
+      await checkTextInputAppContainsText(client, id, data);
 
-      expect(text).to.equal(data);
       break;
     }
     default: {
@@ -210,7 +215,7 @@ const checkUserInputInApp = async (client, { id, url }, resources = []) => {
   }
 
   // reset client on parent frame
-  await client.frame(null);
+  await client.switchToFrame(null);
 };
 
 // check layout of a given phase
@@ -241,8 +246,7 @@ const hasPhaseLayout = async (
     const itemSelector = `[data-id="${id}"]`;
 
     // check item exists
-    const element = await client.element(itemSelector);
-    expect(element.value).to.exist;
+    await expectElementToExist(client, itemSelector);
 
     const urlForMode = mode === PREVIEW ? url : asset;
 
@@ -256,16 +260,15 @@ const hasPhaseLayout = async (
             break;
           }
           case 'video/quicktime': {
-            const src = await client.getAttribute(
-              `${itemSelector} video source`,
-              'src'
-            );
+            const videoSource = await client.$(`${itemSelector} video source`);
+            const src = await videoSource.getAttribute('src');
             expect(src).to.include(urlForMode);
             break;
           }
           case 'image/png':
           case 'image/jpeg': {
-            const src = await client.getAttribute(`${itemSelector} img`, 'src');
+            const img = await client.$(`${itemSelector} img`);
+            const src = await img.getAttribute('src');
             expect(src).to.include(urlForMode);
             break;
           }
@@ -278,19 +281,15 @@ const hasPhaseLayout = async (
       case 'Application': {
         switch (mode) {
           case PREVIEW: {
-            const src = await client.getAttribute(
-              `${itemSelector} iframe`,
-              'src'
-            );
+            const iframe = await client.$(`${itemSelector} iframe`);
+            const src = await iframe.getAttribute('src');
             expect(src).to.include(url);
             await checkUserInputInApp(client, { id, url });
             break;
           }
           case SAVED: {
-            const src = await client.getAttribute(
-              `${itemSelector} iframe`,
-              'src'
-            );
+            const iframe = await client.$(`${itemSelector} iframe`);
+            const src = await iframe.getAttribute('src');
             expect(src).to.include(asset);
             if (appInstance) {
               const { id: appInstanceId } = appInstance;
@@ -319,18 +318,21 @@ const hasPhaseLayout = async (
 // check phases layout
 const checkPhasesLayout = async (client, phases, mode, resources = []) => {
   // check each phase layout
-  const liTextArray = await client.getText(`#${PHASE_MENU_LIST_ID} li`);
-  liTextArray.shift();
+  const lis = await client.$$(`#${PHASE_MENU_LIST_ID} li`);
+  lis.shift();
   // remove first element since it is the home (already checked
   // and is not part of the phases' description)
-  for (const [idx, text] of liTextArray.entries()) {
+  for (const [idx, li] of lis.entries()) {
     // phase name
+    const text = await li.getText();
     expect(text).to.equal(phases[idx].name);
 
-    const liSelector = `#${PHASE_MENU_LIST_ID} li#${buildPhaseMenuItemId(idx)}`;
+    const liSelector = await client.$(
+      `#${PHASE_MENU_LIST_ID} li#${buildPhaseMenuItemId(idx)}`
+    );
 
     // go to phase
-    await client.click(liSelector);
+    await liSelector.click();
     await client.pause(LOAD_PHASE_PAUSE);
 
     // check phase content
@@ -365,52 +367,53 @@ export const checkSpaceCardLayout = async (
   { space: { id, name: spaceName, description: spaceDescription } }
 ) => {
   const spaceSelector = `#${buildSpaceCardId(id)}`;
-  const spaceCard = await client.element(spaceSelector);
-  expect(spaceCard.value).to.exist;
+  await expectElementToExist(client, spaceSelector);
 
   // space name
-  const name = await client.getText(`${spaceSelector} h2`);
-  expect(name).to.include(spaceName);
+  const name = await client.$(`${spaceSelector} h2`);
+  const text = await name.getText();
+  expect(text).to.include(spaceName);
 
   // space description
   if (spaceDescription && spaceDescription !== '') {
-    const expandIconSelector = `.${SPACE_DESCRIPTION_EXPAND_BUTTON_CLASS}`;
-    const expandIcon = await client.getText(expandIconSelector);
-    expect(expandIcon.value).to.exist;
-
-    const descriptionHtml = await client.getHTML(
-      `#${buildSpaceCardDescriptionId(id)}`
+    const expandIcon = await client.$(
+      `.${SPACE_DESCRIPTION_EXPAND_BUTTON_CLASS}`
     );
+    const expandIconText = await expandIcon.getText();
+    expect(expandIconText.value).to.exist;
+
+    const cardDesc = await client.$(`#${buildSpaceCardDescriptionId(id)}`);
+    const descriptionHtml = await cardDesc.getHTML();
     expect(removeSpace(descriptionHtml)).to.include(
       removeSpace(spaceDescription)
     );
   }
 
   // space save icon
-  const exportIcon = await client.element(
+  await expectElementToExist(
+    client,
     `${spaceSelector} .${SPACE_EXPORT_BUTTON_CLASS}`
   );
-  expect(exportIcon.value).to.exist;
 
   // space preview icon
-  const deleteIcon = await client.element(
+  await expectElementToExist(
+    client,
     `${spaceSelector} .${SPACE_DELETE_BUTTON_CLASS}`
   );
-  expect(deleteIcon.value).to.exist;
 
   // space preview icon
-  const syncIcon = await client.element(
+  await expectElementToExist(
+    client,
     `${spaceSelector} .${SPACE_SYNC_BUTTON_CLASS}`
   );
-  expect(syncIcon.value).to.exist;
 };
 
-describe('Visit Space Scenarios', function() {
+describe('Visit Space Scenarios', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
   let globalUser;
 
-  afterEach(function() {
+  afterEach(function () {
     return closeApplication(app);
   });
 
@@ -424,7 +427,7 @@ describe('Visit Space Scenarios', function() {
 
   const spaces = [SPACE_APOLLO_11, SPACE_ATOMIC_STRUCTURE];
 
-  spaces.forEach(function(space) {
+  spaces.forEach(function (space) {
     const {
       space: { id, name },
     } = space;

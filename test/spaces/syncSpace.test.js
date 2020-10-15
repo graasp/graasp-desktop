@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
+/* eslint-disable func-names */
 import { expect } from 'chai';
 import {
   mochaAsync,
@@ -74,30 +75,32 @@ const spaces = [
   ],
 ];
 
-const constructToolsPhase = items => ({
+const constructToolsPhase = (items) => ({
   name: 'Tools',
   items,
   change: items.length ? UPDATED : null,
 });
 
 const checkItemHasChange = async (client, selector, change) => {
-  const itemHtml = await client.getAttribute(selector, 'class');
+  const el = await client.$$(selector);
+  const prevEl = await el[0].getAttribute('class');
+  const afterEl = await el[1]?.getAttribute('class');
   switch (change) {
     case UPDATED:
       // there exist 2 elements with the same data-id on update
       // only one has the highlight class
-      expect(itemHtml[1]).to.include(change);
+      expect(afterEl).to.include(change);
       break;
     case MOVED:
       // there exist 2 elements with the same data-id on move
       // both have the highlight class
-      expect(itemHtml[0]).to.include(change);
-      expect(itemHtml[1]).to.include(change);
+      expect(prevEl).to.include(change);
+      expect(afterEl).to.include(change);
       break;
     // on added and removed, there is only one element
     case ADDED:
     case REMOVED:
-      expect(itemHtml).to.include(change);
+      expect(prevEl).to.include(change);
       break;
     default:
       console.log(`change "${change}" is not recognized`);
@@ -140,21 +143,21 @@ const hasSyncVisualScreenLayout = async (
     i,
     { name, previousName = '', change: phaseChange, items },
   ] of Object.entries([constructToolsPhase(tools), ...phases])) {
-    const phaseSelector = `#${buildPhaseMenuItemId(i)}`;
+    const phase = await client.$(`#${buildPhaseMenuItemId(i)}`);
 
     // check phase name change
-    const menuItemText = await client.getText(phaseSelector);
+    const menuItemText = await phase.getText();
     expect(menuItemText).to.include(name);
     expect(menuItemText).to.include(previousName);
 
     // check phase contains class of corresponding change
     if (phaseChange) {
-      const menuItemHtml = await client.getHTML(phaseSelector);
+      const menuItemHtml = await phase.getHTML();
       expect(menuItemHtml).to.include(phaseChange);
     }
 
     // go to phase
-    await client.click(phaseSelector);
+    await phase.click();
     await client.pause(LOAD_PHASE_PAUSE);
 
     // check phase item contains class of corresponding change
@@ -188,10 +191,9 @@ const checkChangesInSpace = async (client, { phases, items: tools = [] }) => {
   for (const { name, items, change: phaseChange } of phases) {
     switch (phaseChange) {
       case REMOVED: {
+        const li = await client.$(`#${PHASE_MENU_LIST_ID} li`);
         // check the removed phase text is not in phase menu
-        let phaseMenuItemsText = await client.getText(
-          `#${PHASE_MENU_LIST_ID} li`
-        );
+        let phaseMenuItemsText = await li.getText();
         if (Array.isArray(phaseMenuItemsText)) {
           phaseMenuItemsText = [phaseMenuItemsText];
         }
@@ -201,14 +203,14 @@ const checkChangesInSpace = async (client, { phases, items: tools = [] }) => {
       case ADDED:
       case UPDATED:
       default: {
-        const phaseSelector = `#${buildPhaseMenuItemId(phaseIdx)}`;
-        const menuItemText = await client.getText(phaseSelector);
+        const phase = await client.$(`#${buildPhaseMenuItemId(phaseIdx)}`);
+        const menuItemText = await phase.getText();
 
         // check phase name change
         expect(menuItemText).to.equal(name);
 
         // go to phase
-        await client.click(phaseSelector);
+        await phase.click();
         await client.pause(LOAD_PHASE_PAUSE);
 
         if (items) {
@@ -227,30 +229,32 @@ const checkChangesInSpace = async (client, { phases, items: tools = [] }) => {
   }
 };
 
-const hasSyncAdvancedScreenLayout = async client => {
+const hasSyncAdvancedScreenLayout = async (client) => {
   await expectElementToExist(client, `#${SYNC_ADVANCED_MAIN_ID}`);
 };
 
-const acceptSync = async client => {
-  await client.click(`#${SYNC_ACCEPT_BUTTON_ID}`);
+const acceptSync = async (client) => {
+  const acceptButton = await client.$(`#${SYNC_ACCEPT_BUTTON_ID}`);
+  await acceptButton.click();
   await client.pause(SYNC_SPACE_PAUSE);
 };
 
-const cancelSync = async client => {
-  await client.click(`#${SYNC_CANCEL_BUTTON_ID}`);
+const cancelSync = async (client) => {
+  const cancelButton = await client.$(`#${SYNC_CANCEL_BUTTON_ID}`);
+  await cancelButton.click();
   await client.pause(LOAD_TAB_PAUSE);
 };
 
-describe('Sync a space', function() {
+describe('Sync a space', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
   let globalUser;
 
-  afterEach(function() {
+  afterEach(function () {
     return closeApplication(app);
   });
 
-  describe('with advanced mode disabled (default)', function() {
+  describe('with advanced mode disabled (default)', function () {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication();
@@ -275,9 +279,10 @@ describe('Sync a space', function() {
 
             await loadSpaceById(client, spaceFilepath);
 
-            await client.click(
+            const syncButton = await client.$(
               `#${buildSpaceCardId(id)} .${SPACE_SYNC_BUTTON_CLASS}`
             );
+            await syncButton.click();
             await client.pause(SYNC_OPEN_SCREEN_PAUSE);
 
             await hasSyncVisualScreenLayout(client, changes);
@@ -302,7 +307,8 @@ describe('Sync a space', function() {
 
         await loadSpaceById(client, SPACE_WITH_MULTIPLE_CHANGES_PATH, id);
 
-        await client.click(`.${SPACE_SYNC_BUTTON_CLASS}`);
+        const syncButton = await client.$(`.${SPACE_SYNC_BUTTON_CLASS}`);
+        await syncButton.click();
         await client.pause(SYNC_OPEN_SCREEN_PAUSE);
 
         await hasSyncVisualScreenLayout(client, changes);
@@ -324,11 +330,13 @@ describe('Sync a space', function() {
 
         await loadSpaceById(client, SPACE_WITH_MULTIPLE_CHANGES_PATH, id);
 
-        await client.click(`.${SPACE_SYNC_BUTTON_CLASS}`);
+        const syncButton = await client.$(`.${SPACE_SYNC_BUTTON_CLASS}`);
+        await syncButton.click();
         await client.pause(SYNC_OPEN_SCREEN_PAUSE);
 
         // cancel sync
-        await client.click(`#${SYNC_CANCEL_BUTTON_ID}`);
+        const cancelButton = await client.$(`#${SYNC_CANCEL_BUTTON_ID}`);
+        await cancelButton.click();
         await client.pause(LOAD_TAB_PAUSE);
 
         // space still has local content
@@ -337,7 +345,7 @@ describe('Sync a space', function() {
     );
   });
 
-  describe('with advanced mode enabled (default)', function() {
+  describe('with advanced mode enabled (default)', function () {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication();
@@ -359,9 +367,10 @@ describe('Sync a space', function() {
 
         await loadSpaceById(client, SPACE_WITH_MULTIPLE_CHANGES_PATH);
 
-        await client.click(
+        const syncButton = await client.$(
           `#${buildSpaceCardId(id)} .${SPACE_SYNC_BUTTON_CLASS}`
         );
+        await syncButton.click();
         await client.pause(SYNC_OPEN_SCREEN_PAUSE);
 
         await hasSyncAdvancedScreenLayout(client);
@@ -384,7 +393,8 @@ describe('Sync a space', function() {
 
         await loadSpaceById(client, SPACE_WITH_MULTIPLE_CHANGES_PATH, id);
 
-        await client.click(`.${SPACE_SYNC_BUTTON_CLASS}`);
+        const syncButton = await client.$(`.${SPACE_SYNC_BUTTON_CLASS}`);
+        await syncButton.click();
         await client.pause(SYNC_OPEN_SCREEN_PAUSE);
 
         await hasSyncAdvancedScreenLayout(client);
@@ -406,7 +416,8 @@ describe('Sync a space', function() {
 
         await loadSpaceById(client, SPACE_WITH_MULTIPLE_CHANGES_PATH, id);
 
-        await client.click(`.${SPACE_SYNC_BUTTON_CLASS}`);
+        const syncButton = await client.$(`.${SPACE_SYNC_BUTTON_CLASS}`);
+        await syncButton.click();
         await client.pause(SYNC_OPEN_SCREEN_PAUSE);
 
         // cancel sync

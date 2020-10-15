@@ -2,7 +2,7 @@ import { COMPLETE_TOUR_CHANNEL } from '../config/channels';
 import { ERROR_GENERAL } from '../config/errors';
 import {
   INITIALIZE_TOUR,
-  NAVIGATE_STOP_TOUR,
+  STOP_TOUR_AND_NAVIGATE,
   NEXT_TOUR_STEP,
   PREV_TOUR_STEP,
   RESET_TOUR,
@@ -11,51 +11,51 @@ import {
   STOP_TOUR,
 } from '../types/tour';
 
-const goToNextStep = payload => dispatch =>
+const goToNextStep = (payload) => (dispatch) =>
   dispatch({
     type: NEXT_TOUR_STEP,
     payload,
   });
 
-const goToPrevStep = payload => dispatch =>
+const goToPrevStep = (payload) => (dispatch) =>
   dispatch({
     type: PREV_TOUR_STEP,
     payload,
   });
 
-const navigateStopTour = payload => dispatch =>
+const stopTourAndNavigate = (payload) => (dispatch) =>
   dispatch({
-    type: NAVIGATE_STOP_TOUR,
+    type: STOP_TOUR_AND_NAVIGATE,
     payload,
   });
 
-const stopTour = () => dispatch =>
+const stopTour = () => (dispatch) =>
   dispatch({
     type: STOP_TOUR,
   });
 
-const restartTour = () => dispatch =>
+const restartTour = () => (dispatch) =>
   dispatch({
     type: RESTART_TOUR,
   });
 
-const startTour = () => dispatch =>
+const startTour = () => (dispatch) =>
   dispatch({
     type: START_TOUR,
   });
 
-const initializeTour = payload => dispatch =>
+const initializeTour = (payload) => (dispatch) =>
   dispatch({
     type: INITIALIZE_TOUR,
     payload,
   });
 
-const resetTour = () => dispatch =>
+const resetTour = () => (dispatch) =>
   dispatch({
     type: RESET_TOUR,
   });
 
-const completeTour = async tourName => dispatch => {
+const completeTour = async (tourName) => (dispatch) => {
   try {
     dispatch({
       type: RESET_TOUR,
@@ -77,7 +77,7 @@ export {
   goToPrevStep,
   restartTour,
   startTour,
-  navigateStopTour,
+  stopTourAndNavigate,
   resetTour,
   completeTour,
   initializeTour,

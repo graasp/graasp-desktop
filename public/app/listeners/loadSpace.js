@@ -1,6 +1,5 @@
 const extract = require('extract-zip');
 const _ = require('lodash');
-const { promisify } = require('util');
 const fs = require('fs');
 const ObjectId = require('bson-objectid');
 const { VAR_FOLDER } = require('../config/config');
@@ -54,7 +53,7 @@ const renameSpaceFolder = async (prevPath, newPath) => {
   return wasRenamed;
 };
 
-const extractFileToLoadSpace = mainWindow => async (
+const extractFileToLoadSpace = (mainWindow) => async (
   event,
   { fileLocation }
 ) => {
@@ -63,7 +62,7 @@ const extractFileToLoadSpace = mainWindow => async (
   // make temporary folder hidden
   const extractPath = `${VAR_FOLDER}/.${tmpId}`;
   try {
-    await promisify(extract)(fileLocation, { dir: extractPath });
+    await extract(fileLocation, { dir: extractPath });
 
     // get basic information from manifest
     const manifestPath = `${extractPath}/manifest.json`;
@@ -102,7 +101,7 @@ const extractFileToLoadSpace = mainWindow => async (
   }
 };
 
-const clearLoadSpace = mainWindow => async (event, { extractPath }) => {
+const clearLoadSpace = (mainWindow) => async (event, { extractPath }) => {
   const isCleanSuccessful = clean(extractPath);
   mainWindow.webContents.send(CLEAR_LOAD_SPACE_CHANNEL);
   return isCleanSuccessful;
@@ -158,9 +157,7 @@ const loadSpace = (mainWindow, db) => async (
       deleteSpaceAndResources(db, id, tmpPath);
 
       // add new space in database
-      db.get(SPACES_COLLECTION)
-        .push(space)
-        .write();
+      db.get(SPACES_COLLECTION).push(space).write();
     } else {
       // clean temp space folder
       clean(extractPath);
@@ -181,7 +178,7 @@ const loadSpace = (mainWindow, db) => async (
         // keep only non-duplicate resources
         .filter(({ id }) => !savedResources.find({ id }).value())
         // change user id by current user id
-        .map(resource => ({
+        .map((resource) => ({
           ...resource,
           user: userId,
         }));
@@ -202,7 +199,7 @@ const loadSpace = (mainWindow, db) => async (
         // keep only non-duplicate actions
         .filter(({ id }) => !savedActions.find({ id }).value())
         // change user id by current user id
-        .map(action => ({ ...action, user: userId }));
+        .map((action) => ({ ...action, user: userId }));
 
       savedActions.push(...newActions).write();
     }

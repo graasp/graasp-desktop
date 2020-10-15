@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
+/* eslint-disable func-names */
 import { expect } from 'chai';
 import { mochaAsync, userSignIn } from './utils';
 import { createApplication, closeApplication } from './application';
@@ -18,11 +19,11 @@ import { loadSpaceById } from './spaces/loadSpace.test';
 import { searchSpacesFixtures } from './fixtures/searchSpaces';
 
 const searchQuery = async (client, query) => {
-  await client.setValue(`#${SPACE_SEARCH_INPUT_ID}`, query);
+  await (await client.$(`#${SPACE_SEARCH_INPUT_ID}`)).setValue(query);
   await client.pause(SPACE_SEARCH_PAUSE);
 };
 
-describe('Space Search Scenarios', function() {
+describe('Space Search Scenarios', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
   beforeEach(
@@ -32,7 +33,7 @@ describe('Space Search Scenarios', function() {
     })
   );
 
-  afterEach(function() {
+  afterEach(function () {
     return closeApplication(app);
   });
 
@@ -52,19 +53,15 @@ describe('Space Search Scenarios', function() {
 
         // if expect no matching space
         if (resultSpaceIds.length === 0) {
-          const isCardExisting = await client.isExisting(
-            `.${SPACE_MEDIA_CARD_CLASS}`
-          );
+          const isCardExisting = await (
+            await client.$(`.${SPACE_MEDIA_CARD_CLASS}`)
+          ).isExisting();
           expect(isCardExisting).to.be.false;
         } else {
           // check displayed cards are result space ids
-          let cardIds = await client.getAttribute(
-            `.${SPACE_MEDIA_CARD_CLASS}`,
-            'id'
-          );
-          // if only one card is found, change it to array
-          if (typeof cardIds === 'string') {
-            cardIds = [cardIds];
+          const cardIds = [];
+          for (const card of await client.$$(`.${SPACE_MEDIA_CARD_CLASS}`)) {
+            cardIds.push(await card.getAttribute('id'));
           }
           expect(cardIds).to.have.length(resultSpaceIds.length);
           expect(cardIds).to.include.members(resultSpaceIds);

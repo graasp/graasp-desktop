@@ -5,6 +5,7 @@ const {
   ipcMain,
   Menu,
   dialog,
+  protocol,
   // eslint-disable-next-line import/no-extraneous-dependencies
 } = require('electron');
 const path = require('path');
@@ -139,7 +140,7 @@ const {
 const isMac = require('./app/utils/isMac');
 
 // add keys to process
-Object.keys(env).forEach(key => {
+Object.keys(env).forEach((key) => {
   process.env[key] = env[key];
 });
 
@@ -201,25 +202,25 @@ const createWindow = () => {
 
   if (isDev) {
     const {
-      default: installExtension,
+      default: loadExtension,
       REACT_DEVELOPER_TOOLS,
       REDUX_DEVTOOLS,
       // eslint-disable-next-line global-require
     } = require('electron-devtools-installer');
 
-    installExtension(REACT_DEVELOPER_TOOLS)
-      .then(name => {
+    loadExtension(REACT_DEVELOPER_TOOLS)
+      .then((name) => {
         logger.info(`added extension: ${name}`);
       })
-      .catch(err => {
+      .catch((err) => {
         logger.error(err);
       });
 
-    installExtension(REDUX_DEVTOOLS)
-      .then(name => {
+    loadExtension(REDUX_DEVTOOLS)
+      .then((name) => {
         logger.info(`added extension: ${name}`);
       })
-      .catch(err => {
+      .catch((err) => {
         logger.error(err);
       });
   }
@@ -375,7 +376,7 @@ app.on('ready', async () => {
   autoUpdater
     .checkForUpdatesAndNotify()
     .then()
-    .catch(err => logger.error(err));
+    .catch((err) => logger.error(err));
 
   await ensureDatabaseExists(DATABASE_PATH);
   const db = bootstrapDatabase(DATABASE_PATH);
@@ -636,4 +637,13 @@ app.on('activate', () => {
 
 ipcMain.on('load-page', (event, arg) => {
   mainWindow.loadURL(arg);
+});
+
+// enable file:// url scheme
+// solution from https://github.com/electron/electron/issues/23757
+app.whenReady().then(() => {
+  protocol.registerFileProtocol('file', (request, callback) => {
+    const pathname = decodeURI(request.url.replace('file:///', ''));
+    callback(pathname);
+  });
 });
