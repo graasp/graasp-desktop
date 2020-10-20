@@ -162,6 +162,8 @@ Following the `electron-log` defaults, logs are written to the following locatio
 
 The whole process is handled in Github Actions, which is triggered for each push in a tag release. The next section will go through the steps for setting up this workflow, while the following sections will describe how to deploy and publish manually.
 
+To release a new version and thus trigger the workflow to create the corresponding release draft, run the command `yarn release:tags` and then `git push --follow-tags origin master`.
+
 The workflow publishing the release on github is located at `.github/workflows/release.yml`. This workflow uses an [electron-builder action](https://github.com/samuelmeuli/action-electron-builder) which generates a release draft. Each platform (Windows, MacOS and Linux) generates its own executable to be added to the corresponding release.
 
 The workflow takes as environment variable:
@@ -184,9 +186,9 @@ Github Actions uses environment variables as `secrets`. These are set in `Settin
 
 #### Mac Signing
 
-1. Export the necessary certificates as one file (eg `certs.p12`). This will ask for a password.
-2. Run `base64 -i certs.p12 -o encoded.txt`
-3. In your project's GitHub repository, go to `Settings → Secrets` and add the following two variables:
+1.  Export the necessary certificates as one file (eg `certs.p12`). This will ask for a password.
+2.  Run `base64 -i certs.p12 -o encoded.txt`
+3.  In your project's GitHub repository, go to `Settings → Secrets` and add the following two variables:
 
 - `MAC_CERTS`: Your encoded certificates, i.e. the content of the encoded.txt file you created before
 - `MAC_CERTS_PASSWORD`: The password you set when exporting the certificates
