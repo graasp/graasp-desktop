@@ -149,16 +149,55 @@ Following the `electron-log` defaults, logs are written to the following locatio
 
 ## Deploy and Publish
 
-**Note**: MacOS can compile the desktop application for every other platforms. Windows OS can only compile Windows executable files.
-
 ### Requirements
 
 - You should try to update all dependencies, particularly any dependencies related to `electron` and `electron-builder` as this dependency will create the executable files for every OS.
-- Make sure your `.env` and `.env.test` files contain the correct values. Use your own github token `GH_TOKEN` in order to release the new version with your github account.
+- Make sure your `.env` and `.env.test` files contain the correct values. Use your own github token `GH_TOKEN` in order to release the new version with your github account. If you are using the Github Actions, make sure the sensitive data are reported to Github's `Secrets` and are input in the corresponding workflow.
 - **Sign Apple executable files**: In order to sign the application and publish it on the mac store, you will need a corresponding **Developer ID** certificate installed on your apple computer. You need to be part of the apple developer team on the [Apple Developers Website](https://developer.apple.com/) as well as use the certificate containing the private key. [Here](https://help.apple.com/xcode/mac/current/#/dev154b28f09) you can find some indications to help you install this certificate. Once added to _Xcode_ (the should also be available in _My Certificates_ in Keychain), this certificate will be automatically be used during the creation of the executable files. You will also need the `assets/embedded.provisionprofile` file.
   This command will tell you if your app was correctly signed: `codesign --display --verbose=2 dist/mac/Graasp.app`
 
-### Steps
+**Note**: MacOS can compile the desktop application for every other platforms. Windows OS can only compile Windows executable files.
+
+### Github Actions Release
+
+The whole process is handled in Github Actions, which is triggered for each push in a tag release. The next section will go through the steps for setting up this workflow, while the following sections will describe how to deploy and publish manually.
+
+To release a new version and thus trigger the workflow to create the corresponding release draft, run the command `yarn release:tags` and then `git push --follow-tags origin master`.
+
+The workflow publishing the release on github is located at `.github/workflows/release.yml`. This workflow uses an [electron-builder action](https://github.com/samuelmeuli/action-electron-builder) which generates a release draft. Each platform (Windows, MacOS and Linux) generates its own executable to be added to the corresponding release.
+
+The workflow takes as environment variable:
+
+- the Application Developer ID certificate (to sign mac executables)
+- the certificate password
+- the provision profile passphrase
+- other necessary environment variables such endpoints, google api key, etc...
+
+#### Environment Variables
+
+Github Actions uses environment variables as `secrets`. These are set in `Settings → Secrets`, and then reported in the workflow under `env` with the following syntax:
+
+```
+- name: your step's name
+        run: commands
+        env:
+          YOUR_ENV_VARIABLE_NAME: ${{secrets.YOUR_SECRET_NAME}}
+```
+
+#### Mac Signing
+
+1.  Export the necessary certificates as one file (eg `certs.p12`). This will ask for a password.
+2.  Run `base64 -i certs.p12 -o encoded.txt`
+3.  In your project's GitHub repository, go to `Settings → Secrets` and add the following two variables:
+
+- `MAC_CERTS`: Your encoded certificates, i.e. the content of the encoded.txt file you created before
+- `MAC_CERTS_PASSWORD`: The password you set when exporting the certificates
+
+4. The `embedded.provisionprofile` needs to be encrypted with gpg. Run `gpg -c embedded.provisionprofile`. Enter a password to validate the encryption.
+5. A new `embedded.provisionprofile.gpg` should have been created. This file should be pushed in the repo in `assets`.
+6. The password used to encrypt the file should be added to `secrets` as `PROVISION_PROFILE_PASSPHRASE`
+
+### Manual Release Steps
 
 1. Run `yarn dist`. This command will first build the repository and compile it into multiple executable files. All the configuration is set in `package.json`.
 

@@ -30,6 +30,7 @@
   "scripts": {
     "dev": "yarn react-scripts start",
     "build": "env-cmd -f ./.env react-scripts build",
+    "build:github": "node scripts/setup.js && react-scripts build",
     "start": "concurrently \"env-cmd -f ./.env.local react-scripts start\" \"wait-on http://localhost:3000 && env-cmd -f ./.env.local electron .\"",
     "pack": "electron-builder --dir",
     "prestart": "env-cmd -f ./.env.local node scripts/setup.js",
@@ -53,7 +54,8 @@
     "dist:win:docker": "./scripts/buildWindowsWithDocker.sh",
     "dist:all": "run-s dist:posix dist:win",
     "release:manual": "run-s version dist:all",
-    "release": "git fetch --tags && git add CHANGELOG.md && standard-version -a && env-cmd -f ./.env electron-builder -ml && env-cmd -f ./.env electron-builder -w --x64 --ia32",
+    "release:tags": "git fetch --tags && git add CHANGELOG.md && standard-version -a",
+    "release": "yarn release:tags && env-cmd -f ./.env electron-builder -ml && env-cmd -f ./.env electron-builder -w --x64 --ia32",
     "hooks:uninstall": "node node_modules/husky/husky.js uninstall",
     "hooks:install": "node node_modules/husky/husky.js install",
     "postinstall": "electron-builder install-app-deps",
