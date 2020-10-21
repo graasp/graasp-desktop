@@ -37,6 +37,10 @@ jobs:
           REACT_APP_GRAASP_API_HOST: ${{secrets.REACT_APP_GRAASP_API_HOST}}
           REACT_APP_GRAASP_HOST: ${{secrets.REACT_APP_GRAASP_HOST}}
           GOOGLE_API_KEY: ${{secrets.GOOGLE_API_KEY}}
+          GOOGLE_ANALYTICS_ID: ${{secrets.GOOGLE_ANALYTICS_ID}}
+          LOGGING_LEVEL: ${{secrets.LOGGING_LEVEL}}
+          SENTRY_DSN: ${{secrets.SENTRY_DSN}}
+          SENTRY_SUBMIT_URL: ${{secrets.SENTRY_SUBMIT_URL}}
         with:
           build_script_name: build:github
           # GitHub token, automatically provided to the action
