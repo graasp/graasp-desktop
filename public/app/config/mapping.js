@@ -11,6 +11,8 @@ module.exports = {
     'https://utwente.graasp.eu/preproduction/observationTool/build/observationTool.one.html',
   'https://utwente.graasp.eu/preproduction/refquest/build/quizTool.html':
     'https://utwente.graasp.eu/preproduction/refquest/build/quizTool.one.html',
+  'https://utwente.graasp.eu/preproduction/sharedWiki/build/sharedWiki.html':
+    'https://utwente.graasp.eu/preproduction/sharedWiki/build/sharedWiki.one.html',
   'https://utwente.graasp.eu/preproduction/tableTool/build/tableTool.html':
     'https://utwente.graasp.eu/preproduction/tableTool/build/tableTool.one.html',
 
@@ -26,6 +28,8 @@ module.exports = {
     'https://utwente.graasp.eu/production/observationTool/build/observationTool.one.html',
   'https://utwente.graasp.eu/production/refquest/build/quizTool.html':
     'https://utwente.graasp.eu/production/refquest/build/quizTool.one.html',
+  'https://utwente.graasp.eu/production/sharedWiki/build/sharedWiki.html':
+    'https://utwente.graasp.eu/production/sharedWiki/build/sharedWiki.one.html',
   'https://utwente.graasp.eu/production/tableTool/build/tableTool.html':
     'https://utwente.graasp.eu/production/tableTool/build/tableTool.one.html',
 };
