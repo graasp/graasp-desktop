@@ -1,8 +1,9 @@
 const { autoUpdater } = require('electron-updater');
 const logger = require('../logger');
 const { INSTALL_APP_UPGRADE_CHANNEL } = require('../config/channels');
+const { ERROR_GENERAL } = require('../config/errors');
 
-const installAppUpgrade = mainwindow => async (event, shouldUpgrade) => {
+const installAppUpgrade = mainWindow => async (event, shouldUpgrade) => {
   try {
     if (shouldUpgrade) {
       autoUpdater.once('update-downloaded', () => {
@@ -11,16 +12,16 @@ const installAppUpgrade = mainwindow => async (event, shouldUpgrade) => {
         autoUpdater.quitAndInstall();
       });
 
-      mainwindow.webContents.send(INSTALL_APP_UPGRADE_CHANNEL, true);
+      mainWindow.webContents.send(INSTALL_APP_UPGRADE_CHANNEL, true);
 
       autoUpdater.downloadUpdate().catch(err => {
         logger.error(err);
-        mainwindow.webContents.send(INSTALL_APP_UPGRADE_CHANNEL, false);
+        mainWindow.webContents.send(INSTALL_APP_UPGRADE_CHANNEL, ERROR_GENERAL);
       });
     }
   } catch (err) {
     logger.error(err);
-    mainwindow.webContents.send(INSTALL_APP_UPGRADE_CHANNEL, false);
+    mainWindow.webContents.send(INSTALL_APP_UPGRADE_CHANNEL, ERROR_GENERAL);
   }
 };
 

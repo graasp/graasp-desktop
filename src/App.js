@@ -54,7 +54,7 @@ import {
   getGeolocationEnabled,
   isAuthenticated,
 } from './actions';
-import { DEFAULT_LANGUAGE, USER_MODES } from './config/constants';
+import { DEFAULT_LANGUAGE, USER_MODES, PRODUCT_NAME } from './config/constants';
 import {
   CONNECTION_MESSAGE_HEADER,
   CONNECTION_OFFLINE_MESSAGE,
@@ -73,7 +73,6 @@ import {
 } from './config/channels';
 import Loader from './components/common/Loader';
 import { ERROR_GENERAL } from './config/errors';
-import { PRODUCT_NAME } from '../public/app/config/config';
 
 const styles = () => ({
   toastrIcon: { marginBottom: '-20px', fontSize: '45px' },
@@ -201,24 +200,26 @@ export class App extends Component {
             cancelText: t('Ask next time'),
             onOk: () => {
               window.ipcRenderer.send(INSTALL_APP_UPGRADE_CHANNEL, true);
-              window.ipcRenderer.on(
-                INSTALL_APP_UPGRADE_CHANNEL,
-                (e, payload) => {
-                  if (payload === ERROR_GENERAL) {
-                    toastr.error(
-                      ERROR_MESSAGE_HEADER,
-                      t(ERROR_INSTALL_APP_UPGRADE_MESSAGE)
-                    );
-                    this.setState({ isDownloadingUpdate: false });
-                  } else {
-                    this.setState({ isDownloadingUpdate: true });
-                  }
-                }
-              );
+              
             },
-            onCancel: () =>
-              window.ipcRenderer.send(INSTALL_APP_UPGRADE_CHANNEL, false),
+            onCancel: () => {
+            // do nothing
+            }
           };
+          window.ipcRenderer.on(
+            INSTALL_APP_UPGRADE_CHANNEL,
+            (e, payload) => {
+              if (payload === ERROR_GENERAL) {
+                toastr.error(
+                  ERROR_MESSAGE_HEADER,
+                  t(ERROR_INSTALL_APP_UPGRADE_MESSAGE)
+                );
+                this.setState({ isDownloadingUpdate: false });
+              } else {
+                this.setState({ isDownloadingUpdate: true });
+              }
+            }
+          );
           toastr.confirm(t(UPDATE_AVAILABLE_MESSAGE), toastrConfirmOptions);
         }
       }
@@ -249,7 +250,7 @@ export class App extends Component {
 
   render() {
     const { height, isDownloadingUpdate } = this.state;
-    const { userMode, connexionStatus, classes } = this.props;
+    const { userMode, connexionStatus, classes, t } = this.props;
 
     let content = null;
     if (isDownloadingUpdate) {
@@ -260,6 +261,7 @@ export class App extends Component {
             <Toolbar />
           </AppBar>
           <main className={classes.fullScreen}>
+            {t('Downloading update...')}
             <Loader />
           </main>
         </>

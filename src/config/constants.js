@@ -1,3 +1,5 @@
+export const PRODUCT_NAME = 'Graasp';
+
 // phase item types
 export const TEXT = 'text/html';
 export const VIDEO = new RegExp('video/*');
