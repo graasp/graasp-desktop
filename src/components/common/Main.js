@@ -8,12 +8,9 @@ import { connect } from 'react-redux';
 import Styles from '../../Styles';
 import Header from './Header';
 import Sidebar from './Sidebar';
+import { setSideBarIsOpen } from '../../actions';
 
 class Main extends Component {
-  state = {
-    open: false,
-  };
-
   static propTypes = {
     classes: PropTypes.shape({
       appBar: PropTypes.string.isRequired,
@@ -42,6 +39,8 @@ class Main extends Component {
     }),
     showSearch: PropTypes.bool,
     handleOnSearch: PropTypes.func,
+    dispatchSetSideBarIsOpen: PropTypes.func.isRequired,
+    open: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -50,14 +49,17 @@ class Main extends Component {
     handleOnSearch: () => {},
     id: null,
     style: {},
+    open: false,
   };
 
   handleDrawerOpen = () => {
-    this.setState({ open: true });
+    const { dispatchSetSideBarIsOpen } = this.props;
+    dispatchSetSideBarIsOpen(true);
   };
 
   handleDrawerClose = () => {
-    this.setState({ open: false });
+    const { dispatchSetSideBarIsOpen } = this.props;
+    dispatchSetSideBarIsOpen(false);
   };
 
   render() {
@@ -69,8 +71,8 @@ class Main extends Component {
       style,
       showSearch,
       handleOnSearch,
+      open,
     } = this.props;
-    const { open } = this.state;
 
     return (
       <div className={classes.root} style={style}>
@@ -102,11 +104,14 @@ class Main extends Component {
   }
 }
 
-const mapStateToProps = ({ authentication }) => ({
+const mapStateToProps = ({ authentication, layout }) => ({
   activity: Boolean(authentication.getIn(['current', 'activity']).size),
+  open: layout.getIn(['sideBarState', 'open']),
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  dispatchSetSideBarIsOpen: setSideBarIsOpen,
+};
 
 const ConnectedComponent = connect(mapStateToProps, mapDispatchToProps)(Main);
 
