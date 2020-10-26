@@ -59,7 +59,7 @@ import {
   CONNECTION_MESSAGE_HEADER,
   CONNECTION_OFFLINE_MESSAGE,
   CONNECTION_ONLINE_MESSAGE,
-  ERROR_INSTALL_APP_UPGRADE_MESSAGE,
+  ERROR_INSTALLING_APP_UPGRADE_MESSAGE,
   ERROR_MESSAGE_HEADER,
   UPDATE_AVAILABLE_MESSAGE,
 } from './config/messages';
@@ -200,26 +200,22 @@ export class App extends Component {
             cancelText: t('Ask next time'),
             onOk: () => {
               window.ipcRenderer.send(INSTALL_APP_UPGRADE_CHANNEL, true);
-              
             },
             onCancel: () => {
-            // do nothing
-            }
+              // do nothing
+            },
           };
-          window.ipcRenderer.on(
-            INSTALL_APP_UPGRADE_CHANNEL,
-            (e, payload) => {
-              if (payload === ERROR_GENERAL) {
-                toastr.error(
-                  ERROR_MESSAGE_HEADER,
-                  t(ERROR_INSTALL_APP_UPGRADE_MESSAGE)
-                );
-                this.setState({ isDownloadingUpdate: false });
-              } else {
-                this.setState({ isDownloadingUpdate: true });
-              }
+          window.ipcRenderer.on(INSTALL_APP_UPGRADE_CHANNEL, (e, payload) => {
+            if (payload === ERROR_GENERAL) {
+              toastr.error(
+                ERROR_MESSAGE_HEADER,
+                t(ERROR_INSTALLING_APP_UPGRADE_MESSAGE)
+              );
+              this.setState({ isDownloadingUpdate: false });
+            } else {
+              this.setState({ isDownloadingUpdate: true });
             }
-          );
+          });
           toastr.confirm(t(UPDATE_AVAILABLE_MESSAGE), toastrConfirmOptions);
         }
       }
