@@ -166,6 +166,13 @@
     "appId": "com.graasp",
     "compression": "normal",
     "productName": "Graasp",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "graasp",
+        "repo": "graasp-desktop"
+      }
+    ],
     "directories": {
       "buildResources": "build",
       "output": "dist"

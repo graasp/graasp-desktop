@@ -2,6 +2,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { App } from './App';
 
+window.ipcRenderer = { once: jest.fn(), send: jest.fn() };
+
 describe('<App />', () => {
   const props = {
     i18n: {
@@ -16,6 +18,7 @@ describe('<App />', () => {
     dispatchGetGeolocationEnabled: jest.fn(),
     dispatchIsAuthenticated: jest.fn(),
     geolocationEnabled: false,
+    classes: {},
   };
 
   // eslint-disable-next-line react/jsx-props-no-spreading

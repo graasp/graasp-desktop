@@ -109,6 +109,10 @@ const PROMPT_DELETE_SPACE_MESSAGE =
 const PROMPT_CLEAR_USER_INPUT_MESSAGE =
   'Are you sure you want to clear all of the user input in this space?';
 const ERROR_CANT_LAUNCH_TOUR = `There was an error showing the tour`;
+const ERROR_INSTALLING_APP_UPGRADE_MESSAGE =
+  'An unexpected error occured while downloading or installing the upgrade.';
+const UPDATE_AVAILABLE_MESSAGE =
+  'A new version of Graasp Desktop is available. Do you want to quit the application and install it now?';
 
 module.exports = {
   ERROR_GETTING_DEVELOPER_MODE,
@@ -184,4 +188,6 @@ module.exports = {
   PROMPT_DELETE_SPACE_MESSAGE,
   PROMPT_CLEAR_USER_INPUT_MESSAGE,
   ERROR_CANT_LAUNCH_TOUR,
+  ERROR_INSTALLING_APP_UPGRADE_MESSAGE,
+  UPDATE_AVAILABLE_MESSAGE,
 };

@@ -62,5 +62,8 @@ build/*
 # exclude tarballs
 *.tgz
 
-# excluse test outputs
+# exclude test outputs
 test/tmp
+
+# exclude app update file
+dev-app-update.yml
