@@ -9,6 +9,7 @@ import syncSpace from './syncSpaceReducer';
 import loadSpace from './loadSpaceReducer';
 import exportSpace from './exportSpaceReducer';
 import classroom from './classroomReducer';
+import tour from './tour';
 
 export default combineReducers({
   // todo: keys should always be camelCase
@@ -22,4 +23,5 @@ export default combineReducers({
   exportSpace,
   loadSpace,
   classroom,
+  tour,
 });

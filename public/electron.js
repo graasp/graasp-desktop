@@ -76,6 +76,7 @@ const {
   LOAD_SPACE_IN_CLASSROOM_CHANNEL,
   SET_ACTION_ACCESSIBILITY_CHANNEL,
   SET_ACTIONS_AS_ENABLED_CHANNEL,
+  COMPLETE_TOUR_CHANNEL,
   POST_FILE_CHANNEL,
   DELETE_FILE_CHANNEL,
 } = require('./app/config/channels');
@@ -132,6 +133,7 @@ const {
   setActionAccessibility,
   setActionsAsEnabled,
   windowAllClosed,
+  completeTour,
   postFile,
   deleteFile,
 } = require('./app/listeners');
@@ -620,6 +622,9 @@ app.on('ready', async () => {
 
   // called when syncing a space
   ipcMain.on(SYNC_SPACE_CHANNEL, syncSpace(mainWindow, db));
+
+  // called when a tour is closed or completed
+  ipcMain.on(COMPLETE_TOUR_CHANNEL, completeTour(mainWindow, db));
 });
 
 app.on('window-all-closed', () => windowAllClosed(mainWindow));

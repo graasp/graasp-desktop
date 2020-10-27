@@ -36,7 +36,9 @@ exports[`<Settings /> renders correctly 1`] = `
     >
       Actions
     </WithStyles(ForwardRef(Typography))>
-    <WithStyles(ForwardRef(FormGroup))>
+    <WithStyles(ForwardRef(FormGroup))
+      className="SettingsActions"
+    >
       <withI18nextTranslation(WithStyles(Connect(ActionEnabledSwitch))) />
       <withI18nextTranslation(WithStyles(Connect(ActionAccessibilitySwitch))) />
     </WithStyles(ForwardRef(FormGroup))>

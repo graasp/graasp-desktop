@@ -51,6 +51,7 @@ const loadSpaceInClassroom = require('./loadSpaceInClassroom');
 const setActionAccessibility = require('./setActionAccessibility');
 const setActionsAsEnabled = require('./setActionsAsEnabled');
 const windowAllClosed = require('./windowAllClosed');
+const completeTour = require('./completeTour');
 const postFile = require('./postFile');
 const deleteFile = require('./deleteFile');
 
@@ -107,6 +108,7 @@ module.exports = {
   setActionAccessibility,
   setActionsAsEnabled,
   windowAllClosed,
+  completeTour,
   postFile,
   deleteFile,
 };

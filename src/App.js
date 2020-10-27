@@ -59,6 +59,7 @@ import {
 import './App.css';
 import SavedSpaces from './components/SavedSpaces';
 import ClassroomScreen from './components/classrooms/ClassroomScreen';
+import Tour from './components/common/Tour';
 
 const styles = () => ({
   toastrIcon: { marginBottom: '-20px', fontSize: '45px' },
@@ -170,6 +171,7 @@ export class App extends Component {
         theme={connexionStatus ? OnlineTheme(userMode) : OfflineTheme}
       >
         <Router>
+          <Tour />
           <div className="app" style={{ height }}>
             <Switch>
               <Route exact path={SIGN_IN_PATH} component={SignInScreen} />

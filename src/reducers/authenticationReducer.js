@@ -48,6 +48,7 @@ import {
   DEFAULT_ACTION_ACCESSIBILITY,
   DEFAULT_ACTIONS_AS_ENABLED,
 } from '../config/constants';
+import { tours } from '../config/tours';
 
 const updateFavoriteSpaces = ({ favorite, spaceId }) => favoriteSpaces => {
   const tmp = new Set(favoriteSpaces);
@@ -98,6 +99,10 @@ export const DEFAULT_USER_SETTINGS = {
 export const DEFAULT_USER = {
   geolocation: Map(),
   settings: { ...DEFAULT_USER_SETTINGS },
+  tour: {
+    [tours.VISIT_SPACE_TOUR]: false,
+    [tours.SETTINGS_TOUR]: false,
+  },
   // redux doesn't seem to detect updates with sets
   favoriteSpaces: List(),
   recentSpaces: List(),

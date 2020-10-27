@@ -36,6 +36,8 @@ import MainMenu from '../common/MainMenu';
 import {
   PHASE_MENU_LIST_ID,
   buildPhaseMenuItemId,
+  SPACE_SCREEN_CLASS,
+  PHASE_DRAWER_CLASS,
 } from '../../config/selectors';
 import DrawerHeader from '../common/DrawerHeader';
 
@@ -185,7 +187,7 @@ class SpaceScreen extends Component {
     const phases = space.get('phases') || [];
     //  const description = space.get('description');
     return (
-      <div className={classes.root}>
+      <div className={classNames(classes.root, SPACE_SCREEN_CLASS)}>
         <CssBaseline />
         <SpaceHeader
           handleDrawerOpen={this.handleDrawerOpen}
@@ -206,6 +208,7 @@ class SpaceScreen extends Component {
               onClick={this.handleClearPhase}
               button
               selected={selected === -1}
+              className={PHASE_DRAWER_CLASS}
             >
               <ListItemIcon>
                 <HomeIcon />

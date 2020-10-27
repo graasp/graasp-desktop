@@ -3,6 +3,11 @@ const { app } = require('electron');
 const ObjectId = require('bson-objectid');
 const isWindows = require('../utils/isWindows');
 
+const tours = {
+  VISIT_SPACE_TOUR: 'visitSpace',
+  SETTINGS_TOUR: 'settings',
+};
+
 // types that we support downloading
 const DOWNLOADABLE_MIME_TYPES = [
   // video
@@ -69,6 +74,10 @@ const buildDefaultUser = (lang = DEFAULT_LANG) => ({
   },
   favoriteSpaces: [],
   recentSpaces: [],
+  tour: {
+    [tours.VISIT_SPACE_TOUR]: false,
+    [tours.SETTINGS_TOUR]: false,
+  },
 });
 
 const ANONYMOUS_USERNAME = 'Anonymous';

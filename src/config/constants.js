@@ -126,3 +126,10 @@ export const ACTION_VERBS = {
   LOGIN: 'login',
   LOGOUT: 'logout',
 };
+
+// tour
+export const TOUR_DELAY_750 = 750;
+export const TOUR_DELAY_500 = 500;
+export const TOUR_Z_INDEX = 10000;
+export const TOUR_SPACE = 'owozgj';
+export const EXAMPLE_VISIT_SPACE_LINK = `/space/${TOUR_SPACE}`;

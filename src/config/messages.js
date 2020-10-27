@@ -108,6 +108,7 @@ const PROMPT_DELETE_SPACE_MESSAGE =
   'Are you sure you want to delete this space?';
 const PROMPT_CLEAR_USER_INPUT_MESSAGE =
   'Are you sure you want to clear all of the user input in this space?';
+const ERROR_CANT_LAUNCH_TOUR = `There was an error showing the tour`;
 
 module.exports = {
   ERROR_GETTING_DEVELOPER_MODE,
@@ -182,4 +183,5 @@ module.exports = {
   ERROR_DELETING_FILE_MESSAGE,
   PROMPT_DELETE_SPACE_MESSAGE,
   PROMPT_CLEAR_USER_INPUT_MESSAGE,
+  ERROR_CANT_LAUNCH_TOUR,
 };
