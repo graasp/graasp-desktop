@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.15.7](https://github.com/graasp/graasp-desktop/compare/v0.15.6...v0.15.7) (2020-10-27)
+
+### Features
+
+- add offline mapping for sharedWiki ([d1d6ffe](https://github.com/graasp/graasp-desktop/commit/d1d6ffecb04a61ca8e39d2357a81bdaa4b3b29cd))
+- add tour for launch ([7610b53](https://github.com/graasp/graasp-desktop/commit/7610b5389c9c6107b36dde6ff3c6827738611a3d)), closes [#323](https://github.com/graasp/graasp-desktop/issues/323)
+- ask user before updating app ([a943527](https://github.com/graasp/graasp-desktop/commit/a943527bd9aa68606adaefe4c9c6c8b6a60cdbac))
+
+### Documentation
+
+- update readme with deployement steps ([8456345](https://github.com/graasp/graasp-desktop/commit/8456345feca27228f57d0415c55d73594e4fa9c5))
+
+### Build System
+
+- add encrypted provision profile in assts ([5ce0216](https://github.com/graasp/graasp-desktop/commit/5ce0216eb3cc858a29bcf59e952821a1dcc441f6))
+- add github actions workflow and docs ([99906b5](https://github.com/graasp/graasp-desktop/commit/99906b5fc39f1a17aa85a4b258be3a216c2f4912))
+- update archiver, history, extract-zip ([64dc25b](https://github.com/graasp/graasp-desktop/commit/64dc25b9a9795e499b297907c72ed62bf569c5dd))
+- update dependencies, update katex fixtures to mathnormal ([bd0e104](https://github.com/graasp/graasp-desktop/commit/bd0e1047df7f84cdab216f06a879601e55bb2656))
+- upgrade electron and related dep, update tests ([09e4ac4](https://github.com/graasp/graasp-desktop/commit/09e4ac4f42594b1b3c9e99eb13ba17b77f58e033))
+
 ### [0.15.6](https://github.com/graasp/graasp-desktop/compare/v0.15.5...v0.15.6) (2020-09-30)
 
 ### Features
