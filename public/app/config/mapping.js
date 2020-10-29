@@ -62,6 +62,7 @@ module.exports = {
   'https://apps.graasp.eu/5acb589d0d5d9464081c2d46/5d84ba5978f7f92b3d219b60/latest/index.html': {
     main: 'index.html',
     name: 'file-drop',
-    url: 'http://localhost/build/build.zip',
+    url:
+      'https://apps.graasp.eu/5acb589d0d5d9464081c2d46/5d84ba5978f7f92b3d219b60/latest/index.html',
   },
 };

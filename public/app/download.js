@@ -1,6 +1,7 @@
 const _ = require('lodash');
+const path = require('path');
+const fse = require('fs-extra');
 const request = require('request-promise');
-const { promisify } = require('util');
 const cheerio = require('cheerio');
 const extract = require('extract-zip');
 const download = require('download');
@@ -12,6 +13,7 @@ const {
   DEFAULT_PROTOCOL,
   DEFAULT_LANG,
   APPLICATION,
+  PREPACKAGED_APPS_FOLDER_NAME,
 } = require('./config/config');
 const {
   getExtension,
@@ -49,6 +51,13 @@ const getDownloadUrl = async ({ url, lang }) => {
   return false;
 };
 
+const extractZip = async (zipPath, destinationFolder) => {
+  await extract(zipPath, {
+    dir: destinationFolder,
+  });
+  fse.unlinkSync(zipPath);
+};
+
 const downloadFile = async ({
   ext,
   hash,
@@ -82,38 +91,64 @@ const downloadApplication = async ({
   relativeSpacePath,
   absoluteSpacePath,
   app,
+  hash,
 }) => {
   const { name, url, main } = app;
   // generate hash to save file
-  const tmpZipName = `application.${ext}`;
-  const tmpZipPath = `${absoluteSpacePath}/${tmpZipName}`;
-  const absoluteMainFilePath = `${absoluteSpacePath}/${name}/${main}`;
+  const tmpZipName = `${name}.zip`;
+  const tmpZipPath = path.join(absoluteSpacePath, tmpZipName);
+  const destinationFolder = path.join(absoluteSpacePath, name);
+  const absoluteMainFilePath = path.join(destinationFolder, main);
+  const prepackagedPath = path.join(
+    __dirname,
+    PREPACKAGED_APPS_FOLDER_NAME,
+    tmpZipName
+  );
+  let relativeFilePath = `${relativeSpacePath}/${name}/${main}`;
 
-  // eslint-disable-next-line no-await-in-loop
   const fileAvailable = await isFileAvailable(absoluteMainFilePath);
 
-  // if the file is available, point this resource to its path
-  if (!fileAvailable) {
-    logger.debug(`downloading application ${url}`);
-    // eslint-disable-next-line no-await-in-loop
-    await download(url, absoluteSpacePath, {
-      filename: tmpZipName,
-    });
-    logger.debug(`downloaded application ${url} to ${tmpZipPath}`);
-  }
-  // unzip application files
   try {
-    await promisify(extract)(tmpZipPath, {
-      dir: `${absoluteSpacePath}/${name}`,
-    });
+    // download app if the file is not available
+    // todo: update app if deprecated
+    if (!fileAvailable) {
+      // copy and extract prepackaged application if exists
+      if (fse.existsSync(prepackagedPath)) {
+        // copy app in space
+        logger.debug(`copying prepackaged application from ${prepackagedPath}`);
+        fse.copySync(prepackagedPath, tmpZipPath);
+
+        await extractZip(tmpZipPath, destinationFolder);
+      }
+      // download application packaged as a zip file
+      else if (ext === 'zip') {
+        logger.debug(`downloading application ${url}`);
+        // eslint-disable-next-line no-await-in-loop
+        await download(url, absoluteSpacePath, {
+          filename: tmpZipName,
+        });
+        logger.debug(`downloaded application ${url} to ${tmpZipPath}`);
+
+        await extractZip(tmpZipPath, destinationFolder);
+      }
+      // download one-file application
+      else if (ext === 'html') {
+        relativeFilePath = downloadFile({
+          ext,
+          relativeSpacePath,
+          absoluteSpacePath,
+          hash,
+          url: app.url,
+        });
+      }
+    }
   } catch (e) {
     console.log(e);
     return false;
   }
 
   // returning this indicates that resource was downloaded successfully
-  const relativeMainFilePath = `${relativeSpacePath}/${name}/${main}`;
-  return relativeMainFilePath;
+  return relativeFilePath;
 };
 
 const downloadResource = async ({
@@ -155,12 +190,14 @@ const downloadResource = async ({
     // generate hash to save file
     const hash = generateHash(resource);
     let asset = null;
-    if (ext === 'zip' && resource.category === APPLICATION) {
+    // follow a particular process to download an applicationp
+    if (resource.category === APPLICATION) {
       asset = await downloadApplication({
         ext,
         relativeSpacePath,
         absoluteSpacePath,
         app: resourceObj,
+        hash,
       });
     }
     // only download if extension is present

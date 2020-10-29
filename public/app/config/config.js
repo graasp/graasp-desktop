@@ -34,7 +34,7 @@ const DOWNLOADABLE_MIME_TYPES = [
 ];
 
 // resolve path for windows '\'
-const escapeEscapeCharacter = str => {
+const escapeEscapeCharacter = (str) => {
   return isWindows() ? str.replace(/\\/g, '\\\\') : str;
 };
 
@@ -43,6 +43,7 @@ const RESOURCE = 'Resource';
 const APPLICATION = 'Application';
 
 const VAR_FOLDER = `${escapeEscapeCharacter(app.getPath('userData'))}/var`;
+const PREPACKAGED_APPS_FOLDER_NAME = 'prepackagedApps';
 const DATABASE_PATH = `${VAR_FOLDER}/db.json`;
 const ICON_PATH = 'app/assets/icon.png';
 const PRODUCT_NAME = 'Graasp';
@@ -127,4 +128,5 @@ module.exports = {
   DEFAULT_FORMAT,
   ACTIONS_VERBS,
   buildFilePath,
+  PREPACKAGED_APPS_FOLDER_NAME,
 };
