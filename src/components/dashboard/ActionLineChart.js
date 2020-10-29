@@ -46,19 +46,21 @@ class ActionLineChart extends PureComponent {
     }).isRequired,
     t: PropTypes.func.isRequired,
     actions: PropTypes.arrayOf(PropTypes.object),
+    id: PropTypes.string,
   };
 
   static defaultProps = {
     actions: [],
+    id: null,
   };
 
-  formatDate = date => {
+  formatDate = (date) => {
     const d = new Date(date);
     return `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}`;
   };
 
   render() {
-    const { theme, t, actions } = this.props;
+    const { theme, t, actions, id: elementId } = this.props;
     const {
       palette: { primary, type },
     } = theme;
@@ -71,7 +73,7 @@ class ActionLineChart extends PureComponent {
       return <p>{t('No action has been recorded.')}</p>;
     }
 
-    const dataWithDateFormatted = actions.map(action => ({
+    const dataWithDateFormatted = actions.map((action) => ({
       date: [this.formatDate(action.createdAt)],
       data: action.data,
     }));
@@ -88,7 +90,7 @@ class ActionLineChart extends PureComponent {
     return (
       <>
         <Typography variant="h5">{t('Action Count Per Space')}</Typography>
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer id={elementId} width="100%" height="100%">
           <LineChart
             data={data}
             margin={{

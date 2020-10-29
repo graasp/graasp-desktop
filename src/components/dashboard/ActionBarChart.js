@@ -47,15 +47,17 @@ class ActionBarChart extends PureComponent {
     t: PropTypes.func.isRequired,
     actions: PropTypes.arrayOf(PropTypes.object),
     spaces: PropTypes.arrayOf(PropTypes.object),
+    id: PropTypes.string,
   };
 
   static defaultProps = {
     actions: [],
     spaces: [],
+    id: null,
   };
 
-  renderChart = actions => {
-    const { spaces, theme, t } = this.props;
+  renderChart = (actions) => {
+    const { spaces, theme, t, id: elementId } = this.props;
     const {
       palette: { primary, type },
     } = theme;
@@ -75,7 +77,7 @@ class ActionBarChart extends PureComponent {
         });
 
     return (
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer id={elementId} width="100%" height="100%">
         <BarChart
           width="100%"
           height="100%"

@@ -22,14 +22,16 @@ class ActionTotalCount extends PureComponent {
     classes: PropTypes.shape({
       actionCounter: PropTypes.string.isRequired,
     }).isRequired,
+    id: PropTypes.string,
   };
 
   static defaultProps = {
     actions: [],
+    id: null,
   };
 
   render() {
-    const { classes, t, actions } = this.props;
+    const { classes, t, actions, id } = this.props;
 
     if (!actions) {
       return <Loader />;
@@ -38,12 +40,12 @@ class ActionTotalCount extends PureComponent {
     const count = actions.length;
 
     return (
-      <>
+      <div id={id}>
         <Typography variant="h5">{t('Total Action Count')}</Typography>
         <Grid container justify="center" alignItems="center">
           <CountUp end={count} duration={5} className={classes.actionCounter} />
         </Grid>
-      </>
+      </div>
     );
   }
 }

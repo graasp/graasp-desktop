@@ -1,0 +1,74 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Dashboard /> default props renders correctly 1`] = `
+<withI18nextTranslation(WithStyles(Connect(Main)))
+  id="dashboardMain"
+>
+  <div
+    className=""
+  >
+    <WithStyles(ForwardRef(Grid))
+      alignItems="center"
+      container={true}
+      justify="center"
+      spacing={3}
+      style={
+        Object {
+          "display": "flex",
+        }
+      }
+    >
+      <WithStyles(ForwardRef(Grid))
+        item={true}
+        sm={6}
+        xs={12}
+      >
+        <WithStyles(ForwardRef(Typography))
+          className=""
+          variant="h4"
+        >
+          Dashboard
+        </WithStyles(ForwardRef(Typography))>
+      </WithStyles(ForwardRef(Grid))>
+      <WithStyles(ForwardRef(Grid))
+        item={true}
+        sm={3}
+        xs={12}
+      />
+      <WithStyles(ForwardRef(Grid))
+        item={true}
+        sm={3}
+        xs={12}
+      >
+        <WithStyles(ForwardRef(FormControl))
+          fullWidth={true}
+          id="dashboardSpaceFilter"
+          variant="outlined"
+        >
+          <WithStyles(ForwardRef(InputLabel))>
+            Filter by Space
+          </WithStyles(ForwardRef(InputLabel))>
+          <WithStyles(ForwardRef(Select))
+            label="Filter by Space"
+            onChange={[Function]}
+            value="allSpacesSelectId"
+          >
+            <WithStyles(ForwardRef(MenuItem))
+              value="allSpacesSelectId"
+            >
+              <em>
+                All Spaces
+              </em>
+            </WithStyles(ForwardRef(MenuItem))>
+          </WithStyles(ForwardRef(Select))>
+        </WithStyles(ForwardRef(FormControl))>
+      </WithStyles(ForwardRef(Grid))>
+    </WithStyles(ForwardRef(Grid))>
+    <WithStyles(ForwardRef(Typography))
+      id="dashboardNoActionMessage"
+    >
+      No action has been recorded.
+    </WithStyles(ForwardRef(Typography))>
+  </div>
+</withI18nextTranslation(WithStyles(Connect(Main)))>
+`;
