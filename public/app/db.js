@@ -1,9 +1,17 @@
 const mkdirp = require('mkdirp');
 const low = require('lowdb');
 const fs = require('fs');
+const path = require('path');
 const FileSync = require('lowdb/adapters/FileSync');
+const extract = require('extract-zip');
 const logger = require('./logger');
-const { DATABASE_PATH, VAR_FOLDER, DEFAULT_LANG } = require('./config/config');
+const {
+  DATABASE_PATH,
+  VAR_FOLDER,
+  APPS_FOLDER,
+  DEFAULT_LANG,
+  PREPACKAGED_APPS_FOLDER_NAME,
+} = require('./config/config');
 
 // use promisified fs
 const fsPromises = fs.promises;
@@ -46,6 +54,34 @@ const bootstrapDatabase = (dbPath = DATABASE_PATH) => {
   return db;
 };
 
+// save all prepackaged apps in var folder
+const ensurePrepackagedAppsExist = () => {
+  try {
+    // create the results folder if it doesn't already exist
+    if (!fs.existsSync(APPS_FOLDER)) {
+      mkdirp(APPS_FOLDER);
+    }
+
+    const localAppsFolder = path.join(__dirname, PREPACKAGED_APPS_FOLDER_NAME);
+    const apps = fs
+      .readdirSync(localAppsFolder, { withFileTypes: true })
+      .filter(({ name }) => !name.startsWith('.')); // remove hidden files
+    apps.forEach(({ name }) => {
+      const srcPath = path.join(localAppsFolder, name);
+      const nameWithoutExt = name.substr(0, name.indexOf('.'));
+      const destPath = path.join(APPS_FOLDER, nameWithoutExt);
+      // check if file is in apps folder
+      if (!fs.existsSync(destPath)) {
+        // extract zip in var/apps folder
+        extract(srcPath, { dir: destPath });
+      }
+    });
+    logger.debug('prepackaged apps are successfully copied');
+  } catch (e) {
+    logger.error(e);
+  }
+};
+
 module.exports = {
   SPACES_COLLECTION,
   USER_COLLECTION,
@@ -55,4 +91,5 @@ module.exports = {
   CLASSROOMS_COLLECTION,
   ensureDatabaseExists,
   bootstrapDatabase,
+  ensurePrepackagedAppsExist,
 };

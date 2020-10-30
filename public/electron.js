@@ -15,7 +15,11 @@ const ua = require('universal-analytics');
 const { machineIdSync } = require('node-machine-id');
 const openAboutWindow = require('about-window').default;
 const logger = require('./app/logger');
-const { ensureDatabaseExists, bootstrapDatabase } = require('./app/db');
+const {
+  ensureDatabaseExists,
+  bootstrapDatabase,
+  ensurePrepackagedAppsExist,
+} = require('./app/db');
 const {
   DATABASE_PATH,
   ICON_PATH,
@@ -374,6 +378,8 @@ const generateMenu = () => {
 app.on('ready', async () => {
   await ensureDatabaseExists(DATABASE_PATH);
   const db = bootstrapDatabase(DATABASE_PATH);
+
+  await ensurePrepackagedAppsExist();
 
   createWindow();
   generateMenu();

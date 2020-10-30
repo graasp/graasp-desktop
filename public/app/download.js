@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const path = require('path');
-const fse = require('fs-extra');
+const fs = require('fs');
 const request = require('request-promise');
 const cheerio = require('cheerio');
 const extract = require('extract-zip');
@@ -13,7 +13,7 @@ const {
   DEFAULT_PROTOCOL,
   DEFAULT_LANG,
   APPLICATION,
-  PREPACKAGED_APPS_FOLDER_NAME,
+  APPS_FOLDER,
 } = require('./config/config');
 const {
   getExtension,
@@ -51,13 +51,6 @@ const getDownloadUrl = async ({ url, lang }) => {
   return false;
 };
 
-const extractZip = async (zipPath, destinationFolder) => {
-  await extract(zipPath, {
-    dir: destinationFolder,
-  });
-  fse.unlinkSync(zipPath);
-};
-
 const downloadFile = async ({
   ext,
   hash,
@@ -86,64 +79,55 @@ const downloadFile = async ({
   return relativeFilePath;
 };
 
-const downloadApplication = async ({
+const downloadMultipleFilesApplication = async ({
   ext,
   relativeSpacePath,
   absoluteSpacePath,
   app,
-  hash,
 }) => {
   const { name, url, main } = app;
-  // generate hash to save file
-  const tmpZipName = `${name}.zip`;
-  const tmpZipPath = path.join(absoluteSpacePath, tmpZipName);
+
   const destinationFolder = path.join(absoluteSpacePath, name);
   const absoluteMainFilePath = path.join(destinationFolder, main);
-  const prepackagedPath = path.join(
-    __dirname,
-    PREPACKAGED_APPS_FOLDER_NAME,
-    tmpZipName
-  );
-  let relativeFilePath = `${relativeSpacePath}/${name}/${main}`;
 
-  const fileAvailable = await isFileAvailable(absoluteMainFilePath);
+  let relativeFilePath = `${relativeSpacePath}/${name}/${main}`;
 
   try {
     // download app if the file is not available
     // todo: update app if deprecated
+    const fileAvailable = await isFileAvailable(absoluteMainFilePath);
     if (!fileAvailable) {
-      // copy and extract prepackaged application if exists
-      if (fse.existsSync(prepackagedPath)) {
-        // copy app in space
-        logger.debug(`copying prepackaged application from ${prepackagedPath}`);
-        fse.copySync(prepackagedPath, tmpZipPath);
-
-        await extractZip(tmpZipPath, destinationFolder);
+      // use prepackaged application if exists
+      const prepackagedMainPath = path.join(APPS_FOLDER, name, main);
+      if (fs.existsSync(prepackagedMainPath)) {
+        logger.debug(`refer app ${name} at ${prepackagedMainPath}`);
+        relativeFilePath = prepackagedMainPath;
       }
       // download application packaged as a zip file
       else if (ext === 'zip') {
+        const tmpZipName = `${name}.zip`;
+        const tmpZipPath = path.join(absoluteSpacePath, tmpZipName);
+
         logger.debug(`downloading application ${url}`);
-        // eslint-disable-next-line no-await-in-loop
         await download(url, absoluteSpacePath, {
           filename: tmpZipName,
         });
         logger.debug(`downloaded application ${url} to ${tmpZipPath}`);
 
-        await extractZip(tmpZipPath, destinationFolder);
+        await extract(tmpZipPath, {
+          dir: destinationFolder,
+        });
+
+        // remove downloaded zip file
+        fs.unlinkSync(tmpZipPath);
       }
       // download one-file application
-      else if (ext === 'html') {
-        relativeFilePath = downloadFile({
-          ext,
-          relativeSpacePath,
-          absoluteSpacePath,
-          hash,
-          url: app.url,
-        });
+      else {
+        throw new Error(`Multiple Files App could not be downloaded.`);
       }
     }
   } catch (e) {
-    console.log(e);
+    console.error(e);
     return false;
   }
 
@@ -190,14 +174,18 @@ const downloadResource = async ({
     // generate hash to save file
     const hash = generateHash(resource);
     let asset = null;
-    // follow a particular process to download an applicationp
-    if (resource.category === APPLICATION) {
-      asset = await downloadApplication({
+    // follow a particular process to download an application
+    // name and main are necessary for multiple files app
+    if (
+      resource.category === APPLICATION &&
+      resourceObj.name &&
+      resourceObj.main
+    ) {
+      asset = await downloadMultipleFilesApplication({
         ext,
         relativeSpacePath,
         absoluteSpacePath,
         app: resourceObj,
-        hash,
       });
     }
     // only download if extension is present
