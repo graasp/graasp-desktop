@@ -42,7 +42,7 @@ export const SPACE_PREVIEW_ICON_CLASS = 'spacePreviewIcon';
 export const PHASE_DESCRIPTION_ID = 'phaseDescription';
 export const PHASE_DRAWER_CLASS = 'PhasesDrawer';
 export const SPACE_MEDIA_CARD_CLASS = 'spaceMediaCard';
-export const buildPhaseMenuItemId = id => `phaseMenuItemId-${id}`;
+export const buildPhaseMenuItemId = (id) => `phaseMenuItemId-${id}`;
 export const BANNER_WARNING_PREVIEW_ID = 'bannerWarningPreview';
 export const SPACE_EXPORT_BUTTON_CLASS = 'spaceExportButton';
 export const SPACE_DELETE_BUTTON_CLASS = 'spaceDeleteButton';
@@ -54,10 +54,10 @@ export const TOOLS_CONTENT_PANE_ID = 'toolsContentPane';
 export const SPACE_SEARCH_INPUT_ID = 'searchInput';
 
 export const SPACE_CARD_CLASS = 'spaceCard';
-export const buildSpaceCardId = id => `spaceCard-${id}`;
+export const buildSpaceCardId = (id) => `spaceCard-${id}`;
 export const SPACE_DESCRIPTION_EXPAND_BUTTON_CLASS =
   'spaceDescriptionExpandButton';
-export const buildSpaceCardDescriptionId = id => `spaceCardDescription-${id}`;
+export const buildSpaceCardDescriptionId = (id) => `spaceCardDescription-${id}`;
 export const SPACE_CARD_LINK_CLASS = 'spaceCardLink';
 export const SPACE_NOT_AVAILABLE_TEXT_ID = 'noSpaceAvailableText';
 
@@ -66,7 +66,7 @@ export const LOAD_INPUT_ID = 'loadInput';
 export const LOAD_SUBMIT_BUTTON_ID = 'loadSubmitButton';
 export const LOAD_LOAD_BUTTON_ID = 'loadLoadButton';
 export const LOAD_BACK_BUTTON_ID = 'loadCancelButton';
-export const buildCheckboxLabel = name => `checkboxLabel-${name}`;
+export const buildCheckboxLabel = (name) => `checkboxLabel-${name}`;
 
 export const EXPORT_SPACE_BUTTON_ID = 'exportSpaceButton';
 export const EXPORT_SPACE_BACK_BUTTON_ID = 'exportSpaceBackButton';
@@ -78,7 +78,7 @@ export const GEOLOCATION_CONTROL_ID = 'settingsGeolocationControl';
 export const SYNC_MODE_SWITCH_ID = 'syncModeSwitch';
 export const STUDENT_MODE_SWITCH_ID = 'studentModeSwitch';
 
-export const buildPhaseAppName = id => `phaseApp-${id}`;
+export const buildPhaseAppName = (id) => `phaseApp-${id}`;
 
 export const LOGIN_USERNAME_INPUT_ID = 'loginUsernameInput';
 export const LOGIN_BUTTON_ID = 'loginButton';
@@ -96,7 +96,7 @@ export const CLASSROOM_NAME_INPUT_ID = 'classroomNameInput';
 export const ADD_CLASSROOM_VALIDATE_BUTTON_ID = 'addClassroomValidateButton';
 export const ADD_CLASSROOM_CANCEL_BUTTON_ID = 'addClassroomCancelButton';
 export const CLASSROOM_CARD_CLASS = 'classroomCard';
-export const buildClassroomCardId = id => `classroomCard-${id}`;
+export const buildClassroomCardId = (id) => `classroomCard-${id}`;
 export const EDIT_CLASSROOM_BUTTON_CLASS = 'editClassroomButton';
 export const EDIT_CLASSROOM_INPUT_ID = 'editClassroomInput';
 export const EDIT_CLASSROOM_VALIDATE_BUTTON_ID = 'editClassroomValidateButton';
@@ -147,9 +147,18 @@ export const EDIT_USER_IN_CLASSROOM_DELETE_DATA_BUTTON_CLASS =
   'editUserInClassroomDeleteDataButton';
 export const EDIT_CLASSROOM_DELETE_DATA_BUTTON_CLASS =
   'editClassroomDeleteDataButton';
-export const buildTableCellSpaceId = id => `tableCellSpace-${id}`;
+export const buildTableCellSpaceId = (id) => `tableCellSpace-${id}`;
 
 export const DRAWER_HEADER_TEACHER_ICON_ID = 'drawerHeaderTeacherIcon';
 
 export const TOUR_END_SELECTOR =
   '#react-joyride-step-0 > div > div > div.react-joyride__tooltip > div:nth-child(2) > div > button';
+
+export const DASHBOARD_ACTION_EDITOR_ID = 'dashboardActionEditor';
+export const DASHBOARD_BAR_CHART_ID = 'dashboardBarChart';
+export const DASHBOARD_USER_FILTER_ID = 'dashboardUserFilter';
+export const DASHBOARD_LINE_CHART_ID = 'dashboardLineChart';
+export const DASHBOARD_NO_ACTION_MESSAGE_ID = 'dashboardNoActionMessage';
+export const DASHBOARD_PIE_CHART_ID = 'dashboardPieChart';
+export const DASHBOARD_SPACE_FILTER_ID = 'dashboardSpaceFilter';
+export const DASHBOARD_TOTAL_COUNT_ID = 'dashboardTotalCount';

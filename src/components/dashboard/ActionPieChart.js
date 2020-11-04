@@ -10,7 +10,7 @@ import { ACCENT_COLORS } from '../../config/constants';
 
 const RADIAN = Math.PI / 180;
 
-const styles = theme => ({
+const styles = (theme) => ({
   customTooltip: {
     backgroundColor: 'white',
     padding: '0.05rem 0.5rem',
@@ -86,10 +86,12 @@ class ActionPieChart extends PureComponent {
     }).isRequired,
     t: PropTypes.func.isRequired,
     actions: PropTypes.arrayOf(PropTypes.object),
+    id: PropTypes.string,
   };
 
   static defaultProps = {
     actions: [],
+    id: null,
   };
 
   renderCustomizedLabel = ({
@@ -118,7 +120,7 @@ class ActionPieChart extends PureComponent {
   };
 
   render() {
-    const { actions, classes, t } = this.props;
+    const { actions, classes, t, id } = this.props;
 
     if (!actions) {
       return <Loader />;
@@ -141,7 +143,7 @@ class ActionPieChart extends PureComponent {
     return (
       <>
         <Typography variant="h5">{t('Action Type Chart')}</Typography>
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer id={id} width="100%" height="100%">
           <PieChart>
             <Pie
               data={data}

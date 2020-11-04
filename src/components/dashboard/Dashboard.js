@@ -24,9 +24,19 @@ import {
   SELECT_ALL_USERS_ID,
   USER_MODES,
 } from '../../config/constants';
-import { DASHBOARD_MAIN_ID } from '../../config/selectors';
+import {
+  DASHBOARD_BAR_CHART_ID,
+  DASHBOARD_ACTION_EDITOR_ID,
+  DASHBOARD_MAIN_ID,
+  DASHBOARD_NO_ACTION_MESSAGE_ID,
+  DASHBOARD_LINE_CHART_ID,
+  DASHBOARD_PIE_CHART_ID,
+  DASHBOARD_TOTAL_COUNT_ID,
+  DASHBOARD_USER_FILTER_ID,
+  DASHBOARD_SPACE_FILTER_ID,
+} from '../../config/selectors';
 
-const styles = theme => ({
+const styles = (theme) => ({
   dashboard: { padding: theme.spacing(3) },
   dashboardGridItem: { height: '350px' },
   drawerHeader: {
@@ -91,24 +101,25 @@ export class Dashboard extends Component {
     dispatchGetDatabase();
   }
 
-  handleSpaceChange = event => {
+  handleSpaceChange = (event) => {
     this.setState({ spaceId: event.target.value });
   };
 
-  handleUserChange = event => {
+  handleUserChange = (event) => {
     this.setState({ filteredUserId: event.target.value });
   };
 
   renderSpaceFilter = () => {
     const { database, t } = this.props;
     const { spaceId } = this.state;
+    const { spaces = [] } = database;
 
     if (!database) {
       return <Loader />;
     }
 
     return (
-      <FormControl variant="outlined" fullWidth>
+      <FormControl id={DASHBOARD_SPACE_FILTER_ID} variant="outlined" fullWidth>
         <InputLabel>{t('Filter by Space')}</InputLabel>
         <Select
           label="Filter by Space"
@@ -118,7 +129,7 @@ export class Dashboard extends Component {
           <MenuItem value={SELECT_ALL_SPACES_ID}>
             <em>{t('All Spaces')}</em>
           </MenuItem>
-          {database.spaces.map(space => (
+          {spaces.map((space) => (
             <MenuItem value={space.id}>{space.name}</MenuItem>
           ))}
         </Select>
@@ -139,7 +150,7 @@ export class Dashboard extends Component {
     }
 
     return (
-      <FormControl variant="outlined" fullWidth>
+      <FormControl id={DASHBOARD_USER_FILTER_ID} variant="outlined" fullWidth>
         <InputLabel>{t('Filter by User')}</InputLabel>
         <Select
           label="Filter by User"
@@ -149,7 +160,7 @@ export class Dashboard extends Component {
           <MenuItem value={SELECT_ALL_USERS_ID}>
             <em>{t('All Users')}</em>
           </MenuItem>
-          {database.users.map(user => (
+          {database.users.map((user) => (
             <MenuItem value={user.id}>{user.username}</MenuItem>
           ))}
         </Select>
@@ -157,7 +168,7 @@ export class Dashboard extends Component {
     );
   };
 
-  renderActionWidgets = filteredActions => {
+  renderActionWidgets = (filteredActions) => {
     const { database, classes } = this.props;
 
     return (
@@ -169,16 +180,29 @@ export class Dashboard extends Component {
         alignItems="center"
       >
         <Grid item xs={12} sm={6} className={classes.dashboardGridItem}>
-          <ActionBarChart spaces={database.spaces} actions={filteredActions} />
+          <ActionBarChart
+            id={DASHBOARD_BAR_CHART_ID}
+            spaces={database.spaces}
+            actions={filteredActions}
+          />
         </Grid>
         <Grid item xs={12} sm={6} className={classes.dashboardGridItem}>
-          <ActionLineChart actions={filteredActions} />
+          <ActionLineChart
+            id={DASHBOARD_LINE_CHART_ID}
+            actions={filteredActions}
+          />
         </Grid>
         <Grid item xs={12} sm={6} className={classes.dashboardGridItem}>
-          <ActionPieChart actions={filteredActions} />
+          <ActionPieChart
+            id={DASHBOARD_PIE_CHART_ID}
+            actions={filteredActions}
+          />
         </Grid>
         <Grid item xs={12} sm={6} className={classes.dashboardGridItem}>
-          <ActionTotalCount actions={filteredActions} />
+          <ActionTotalCount
+            id={DASHBOARD_TOTAL_COUNT_ID}
+            actions={filteredActions}
+          />
         </Grid>
       </Grid>
     );
@@ -188,15 +212,14 @@ export class Dashboard extends Component {
     const { t, database, userMode, userId } = this.props;
     const { spaceId, filteredUserId } = this.state;
 
-    let filteredActions = database.actions;
-    const { users } = database;
+    let filteredActions = database.actions || [];
+    const { users = [] } = database;
     const isStudent = userMode === USER_MODES.STUDENT;
 
     filteredActions = filteredActions.filter(({ user }) => {
       const isOwnAction = user === userId;
       const actionUser = users.find(({ id }) => id === user);
-      const isAccessible =
-        actionUser && actionUser.settings.actionAccessibility;
+      const isAccessible = actionUser?.settings?.actionAccessibility;
       const filteredUserSelected = filteredUserId !== SELECT_ALL_USERS_ID;
 
       // filter action per user if userMode is student
@@ -222,10 +245,15 @@ export class Dashboard extends Component {
     return filteredActions.length ? (
       <>
         {this.renderActionWidgets(filteredActions)}
-        <ActionEditor actions={filteredActions} />
+        <ActionEditor
+          id={DASHBOARD_ACTION_EDITOR_ID}
+          actions={filteredActions}
+        />
       </>
     ) : (
-      <Typography>{t('No action has been recorded.')}</Typography>
+      <Typography id={DASHBOARD_NO_ACTION_MESSAGE_ID}>
+        {t('No action has been recorded.')}
+      </Typography>
     );
   };
 
