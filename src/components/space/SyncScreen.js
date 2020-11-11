@@ -27,7 +27,7 @@ import Styles from '../../Styles';
 import Loader from '../common/Loader';
 import { DEFAULT_SYNC_MODE, SYNC_MODES } from '../../config/constants';
 
-const styles = theme => ({
+const styles = (theme) => ({
   ...Styles(theme),
   centerText: {
     textAlign: 'center',
@@ -53,7 +53,6 @@ class SyncScreen extends Component {
       id: PropTypes.string,
       description: PropTypes.string,
       name: PropTypes.string,
-      deleted: PropTypes.bool,
     }),
     remoteSpace: ImmutablePropTypes.contains({
       id: PropTypes.string,

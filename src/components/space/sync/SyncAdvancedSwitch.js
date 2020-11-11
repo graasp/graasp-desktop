@@ -15,7 +15,7 @@ import {
   FORM_CONTROL_MIN_WIDTH,
 } from '../../../config/constants';
 
-const styles = theme => ({
+const styles = (theme) => ({
   formControl: {
     margin: theme.spacing(),
     minWidth: FORM_CONTROL_MIN_WIDTH,

@@ -42,7 +42,6 @@ import {
   selectPhaseForSync,
 } from '../../actions';
 import Styles from '../../Styles';
-import { HOME_PATH } from '../../config/paths';
 import SpaceNotFound from './SpaceNotFound';
 import Text from '../common/Text';
 import SyncPhases from './sync/SyncPhases';
@@ -65,7 +64,7 @@ import {
 
 const { ADDED, REMOVED, UPDATED } = SYNC_CHANGES;
 
-const styles = theme => ({
+const styles = (theme) => ({
   ...Styles(theme),
   syncWrapper: {
     padding: '0 20px',
@@ -124,7 +123,6 @@ class SyncScreen extends Component {
       replace: PropTypes.func.isRequired,
     }).isRequired,
     t: PropTypes.func.isRequired,
-    deleted: PropTypes.bool.isRequired,
     folder: PropTypes.string.isRequired,
   };
 
@@ -183,17 +181,6 @@ class SyncScreen extends Component {
     }
   }
 
-  componentDidUpdate() {
-    const {
-      deleted,
-      history: { replace },
-    } = this.props;
-    // redirect to home if space is deleted
-    if (deleted) {
-      replace(HOME_PATH);
-    }
-  }
-
   componentWillUnmount() {
     const { dispatchClearSpaces, dispatchClearPhases } = this.props;
     dispatchClearSpaces();
@@ -215,7 +202,7 @@ class SyncScreen extends Component {
     this.setState({ openDrawer: false });
   };
 
-  handlePhaseClicked = i => {
+  handlePhaseClicked = (i) => {
     const { dispatchSelectPhase } = this.props;
     const { syncPhases } = this.state;
 
@@ -358,7 +345,7 @@ class SyncScreen extends Component {
             lChanges.length + rChanges.length
         )
         // return whether one of the element has a change
-        .some(nbChange => nbChange > 0);
+        .some((nbChange) => nbChange > 0);
 
     return (
       <MenuItem

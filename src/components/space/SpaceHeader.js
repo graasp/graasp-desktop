@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import clsx from 'clsx';
 import MenuIcon from '@material-ui/icons/Menu';
 import AppBar from '@material-ui/core/AppBar/AppBar';
@@ -48,6 +49,9 @@ class SpaceHeader extends Component {
     dispatchSaveSpace: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
     userMode: PropTypes.oneOf(Object.values(USER_MODES)).isRequired,
+    history: PropTypes.shape({
+      goBack: PropTypes.func.isRequired,
+    }).isRequired,
   };
 
   handleSave = () => {
@@ -93,10 +97,16 @@ class SpaceHeader extends Component {
   }
 
   renderDeleteButton() {
-    const { space } = this.props;
+    const {
+      space,
+      history: { goBack },
+    } = this.props;
     const { saved, id } = space;
     if (saved) {
-      return <DeleteButton spaceId={id} />;
+      const onSuccess = () => {
+        goBack();
+      };
+      return <DeleteButton spaceId={id} onSuccess={onSuccess} />;
     }
     return null;
   }
@@ -203,9 +213,7 @@ class SpaceHeader extends Component {
 }
 
 const mapStateToProps = ({ Space, authentication }) => ({
-  space: Space.get('current')
-    .get('content')
-    .toJS(),
+  space: Space.get('current').get('content').toJS(),
   userMode: authentication.getIn(['user', 'settings', 'userMode']),
 });
 
@@ -224,4 +232,4 @@ const StyledComponent = withStyles(Styles, { withTheme: true })(
 
 const TranslatedComponent = withTranslation()(StyledComponent);
 
-export default TranslatedComponent;
+export default withRouter(TranslatedComponent);

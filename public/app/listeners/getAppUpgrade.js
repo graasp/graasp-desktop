@@ -7,6 +7,11 @@ const {
 const { ERROR_GENERAL } = require('../config/errors');
 
 const getAppUpgrade = (mainWindow) => async () => {
+  // disable app upgrade on test
+  if (process.env.NODE_ENV === 'test') {
+    mainWindow.webContents.send(GET_APP_UPGRADE_CHANNEL, false);
+  }
+
   // app update
   autoUpdater.logger = logger;
   autoUpdater.autoDownload = false;

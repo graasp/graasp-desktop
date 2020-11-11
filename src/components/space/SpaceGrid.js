@@ -149,7 +149,7 @@ class SpaceGrid extends Component {
 
     const MediaCards = [];
 
-    columnWrapper.items.forEach(column => {
+    columnWrapper.items.forEach((column) => {
       MediaCards.push(
         <div
           style={{
@@ -173,9 +173,8 @@ class SpaceGrid extends Component {
   }
 }
 
-const mapStateToProps = ({ authentication, Space }) => ({
+const mapStateToProps = ({ authentication }) => ({
   folder: authentication.getIn(['current', 'folder']),
-  deleted: Space.getIn(['current', 'deleted']),
 });
 
 const mapDispatchToProps = {
