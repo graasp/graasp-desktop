@@ -17,7 +17,6 @@ import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText/ListItemText';
 import { withStyles } from '@material-ui/core';
-import { withRouter } from 'react-router';
 import Loader from '../common/Loader';
 import PhaseComponent from '../phase/Phase';
 import {
@@ -77,10 +76,6 @@ class SpaceScreen extends Component {
     }).isRequired,
     location: PropTypes.shape({
       search: PropTypes.string.isRequired,
-    }).isRequired,
-    history: PropTypes.shape({
-      length: PropTypes.number.isRequired,
-      goBack: PropTypes.func.isRequired,
     }).isRequired,
     recentSpaces: PropTypes.instanceOf(ImmList).isRequired,
     dispatchSetSpaceAsRecent: PropTypes.func.isRequired,
@@ -262,4 +257,4 @@ const StyledComponent = withStyles(Styles, { withTheme: true })(
   ConnectedComponent
 );
 
-export default withRouter(StyledComponent);
+export default StyledComponent;
