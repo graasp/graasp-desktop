@@ -140,6 +140,10 @@ export const removeTags = (html) => {
   return html.replace(/<\/?[^>]+(>|$)/g, '');
 };
 
+export const removePathSeparators = (path) => {
+  return path.replace(/[/\\]/g, '');
+};
+
 export const createRandomString = () => {
   return Math.random().toString(36).substring(7);
 };

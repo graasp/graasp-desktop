@@ -51,6 +51,11 @@ const createApplication = async (
   });
 
   await app.start();
+
+  app.client.addCommand('getUserDataPath', function () {
+    return path.join(app.client.capabilities.chrome.userDataDir, 'var');
+  });
+
   await app.client.pause(1000);
   return app;
 };

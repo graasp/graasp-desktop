@@ -37,6 +37,8 @@ import {
   SPACE_WITH_MULTIPLE_CHANGES_PATH,
   SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES,
   SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES_PATH,
+  SPACE_WITH_FILE_DROP_PATH,
+  SPACE_WITH_FILE_DROP,
 } from '../fixtures/spaces';
 import { hasSavedSpaceLayout, visitAndSaveSpaceById } from './visitSpace.test';
 import {
@@ -234,6 +236,23 @@ describe('Load Space Scenarios', function () {
         );
 
         await hasSavedSpaceLayout(client, SPACE_ATOMIC_STRUCTURE, {
+          user: globalUser,
+        });
+      })
+    );
+
+    it(
+      `Load space ${SPACE_WITH_FILE_DROP.space.name} with prepackaged app`,
+      mochaAsync(async () => {
+        const { client } = app;
+
+        await loadSpaceById(
+          client,
+          SPACE_WITH_FILE_DROP_PATH,
+          SPACE_WITH_FILE_DROP.space.id
+        );
+
+        await hasSavedSpaceLayout(client, SPACE_WITH_FILE_DROP, {
           user: globalUser,
         });
       })

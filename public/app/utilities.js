@@ -17,9 +17,9 @@ const {
 // use promisified fs
 const fsPromises = fs.promises;
 
-const isFileAvailable = filePath =>
-  new Promise(resolve =>
-    fs.access(filePath, fs.constants.F_OK, err => resolve(!err))
+const isFileAvailable = (filePath) =>
+  new Promise((resolve) =>
+    fs.access(filePath, fs.constants.F_OK, (err) => resolve(!err))
   );
 
 const getExtension = ({ url, mimeType }) => {
@@ -30,7 +30,9 @@ const getExtension = ({ url, mimeType }) => {
   }
   logger.debug(`url is: ${url}`);
   logger.debug(`mime type is: ${mimeType}`);
-  const matchExtension = url.match(/[^\\]*\.(\w+)$/);
+  // split url to only keep base url without # fragments
+  // get extention from url
+  const matchExtension = url.split(/[?#]/)[0].match(/[^\\]*\.(\w+)$/);
   logger.debug('result of getting extension from url is:', matchExtension);
   if (matchExtension && matchExtension.length) {
     // extension is in index 1
@@ -41,7 +43,7 @@ const getExtension = ({ url, mimeType }) => {
   return null;
 };
 
-const isDownloadable = resource => {
+const isDownloadable = (resource) => {
   const { category, mimeType, url } = resource;
   // can only download resources with url from where to download them
   if (!url) {
@@ -58,7 +60,7 @@ const isDownloadable = resource => {
   }
 };
 
-const generateHash = resource => {
+const generateHash = (resource) => {
   const { hash, url } = resource;
   if (hash) {
     return hash;
@@ -97,7 +99,7 @@ const createClassroomDirectory = ({ id, tmp }) => {
 
 // wraps file system operation so that it can be retried
 // many times for windows operating systems
-const performFileSystemOperation = functionToWrap => (...args) => {
+const performFileSystemOperation = (functionToWrap) => (...args) => {
   let tryOperation = true;
   // windows operations require silly amounts of retries
   // because it will not release handles promptly (#159)
@@ -125,7 +127,7 @@ const performFileSystemOperation = functionToWrap => (...args) => {
 
 // waits until directory is accessed before removing it
 // and thus allowing windows to release the file handle
-const clean = async dir => {
+const clean = async (dir) => {
   try {
     await fsPromises.access(dir);
   } catch (err) {

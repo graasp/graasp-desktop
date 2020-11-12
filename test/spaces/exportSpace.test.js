@@ -20,8 +20,11 @@ import {
   buildCheckboxLabel,
   EXPORT_SPACE_BACK_BUTTON_ID,
 } from '../../src/config/selectors';
-import { SPACE_ATOMIC_STRUCTURE } from '../fixtures/spaces';
-import { visitAndSaveSpaceById } from './visitSpace.test';
+import {
+  SPACE_ATOMIC_STRUCTURE,
+  SPACE_WITH_FILE_DROP,
+} from '../fixtures/spaces';
+import { hasSavedSpaceLayout, visitAndSaveSpaceById } from './visitSpace.test';
 import {
   EXPORT_SPACE_PAUSE,
   EXPORT_FILEPATH,
@@ -154,6 +157,43 @@ describe('Export a space', function () {
 
         // check exported files locally
         expect(fs.existsSync(filepath)).to.be.true;
+      })
+    );
+
+    it(
+      'Export correctly space with prepackaged app',
+      mochaAsync(async () => {
+        const { space } = SPACE_WITH_FILE_DROP;
+        const { id } = space;
+
+        const filepath = `${EXPORT_FILEPATH}_${createRandomString()}`;
+        app = await createApplication({ showSaveDialogResponse: filepath });
+
+        const { client } = app;
+
+        await userSignIn(client, USER_GRAASP);
+
+        await visitAndSaveSpaceById(client, id);
+
+        await menuGoToSavedSpaces(client);
+
+        const exportButton = await client.$(
+          `#${buildSpaceCardId(id)} .${SPACE_EXPORT_BUTTON_CLASS}`
+        );
+        await exportButton.click();
+        await client.pause(EXPORT_SELECTION_SPACE_PAUSE);
+
+        await exportSpaceWithSelected(client);
+
+        // check exported files locally
+        expect(fs.existsSync(filepath)).to.be.true;
+
+        const viewButton = await client.$(`#${buildSpaceCardId(id)}`);
+        await viewButton.click();
+        await client.pause(OPEN_SAVED_SPACE_PAUSE);
+
+        // check space is still displayed correctly
+        await hasSavedSpaceLayout(client, SPACE_WITH_FILE_DROP);
       })
     );
   });

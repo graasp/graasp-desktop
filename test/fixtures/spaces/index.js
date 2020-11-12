@@ -16,6 +16,10 @@ import { SPACE_LIGHT_COLOR } from './lightColor';
 import { SPACE_WITH_TOOLS_CHANGED } from './spaceWithToolsChanged';
 import { SPACE_AMPHIBIANS } from './amphibians';
 import { SPACE_MOON } from './moon';
+import {
+  SPACE_WITH_FILE_DROP,
+  SPACE_WITH_FILE_DROP_PATH,
+} from './spaceWithFileDrop';
 
 export {
   SPACE_ATOMIC_STRUCTURE,
@@ -31,4 +35,6 @@ export {
   SPACE_MOON,
   SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES,
   SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES_PATH,
+  SPACE_WITH_FILE_DROP,
+  SPACE_WITH_FILE_DROP_PATH,
 };
