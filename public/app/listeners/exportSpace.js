@@ -86,7 +86,6 @@ const prepareArchive = async (
       const { items = [] } = phase;
       // eslint-disable-next-line no-restricted-syntax
       for (const [itemIdx, item] of items.entries()) {
-        console.log(isPrepackagedApp(item));
         if (isPrepackagedApp(item)) {
           const { asset, name } = item;
           const assetFolder = path.dirname(asset);
@@ -97,10 +96,8 @@ const prepareArchive = async (
 
           // change asset in json
           // eslint-disable-next-line no-param-reassign
-          spaceToExport.phases[phaseIdx].items[itemIdx].asset = path.join(
-            spaceId,
-            name,
-            mainFilename
+          spaceToExport.phases[phaseIdx].items[itemIdx].asset = encodeURI(
+            path.join(spaceId, name, mainFilename)
           );
         }
       }

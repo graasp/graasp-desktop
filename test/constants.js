@@ -1,6 +1,7 @@
 import path from 'path';
 
 export const EXPORT_FILEPATH = path.join(__dirname, './tmp/exportSpace');
+export const APPS_FOLDER = 'apps';
 
 export const DEFAULT_GLOBAL_TIMEOUT = 270000;
 export const TOOLTIP_FADE_OUT_PAUSE = 10000;

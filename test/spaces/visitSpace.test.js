@@ -3,6 +3,8 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable func-names */
 import { expect } from 'chai';
+import path from 'path'
+import fs from 'fs'
 import {
   removeSpace,
   removeTags,
@@ -44,10 +46,12 @@ import {
   DEFAULT_GLOBAL_TIMEOUT,
   LOAD_PHASE_PAUSE,
   OPEN_TOOLS_PAUSE,
+  APPS_FOLDER
 } from '../constants';
 import { USER_GRAASP } from '../fixtures/users';
 import { USER_MODES, DEFAULT_USER_MODE } from '../../src/config/constants';
 import { checkTextInputAppContainsText } from '../apps/textInputApp';
+import mapping from '../../public/app/config/mapping';
 
 const PREVIEW = 'preview';
 const SAVED = 'saved';
@@ -290,7 +294,25 @@ const hasPhaseLayout = async (
           case SAVED: {
             const iframe = await client.$(`${itemSelector} iframe`);
             const src = await iframe.getAttribute('src');
-            expect(src).to.include(asset);
+            const {name, main} = mapping[url]
+
+            const varFolder = await client.getUserDataPath();
+
+            if(src.includes(asset)) {
+              const absolutePath = path.join(varFolder, decodeURI(asset))
+              expect(fs.existsSync(absolutePath)).to.be.true;
+            }
+            // check for prepackaged links
+            else if(name) {
+              // todo: use shared constant with public, src
+              // src should contain prepackaged path
+              const prepackagedAppsFolder = path.join(varFolder,APPS_FOLDER, name, main)
+              expect(src).to.include(prepackagedAppsFolder);
+            }
+            else {
+              throw new Error(`${src} does not match ${asset}`)
+            }
+
             if (appInstance) {
               const { id: appInstanceId } = appInstance;
               const filteredResources = resources.filter(
