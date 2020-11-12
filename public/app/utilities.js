@@ -30,6 +30,8 @@ const getExtension = ({ url, mimeType }) => {
   }
   logger.debug(`url is: ${url}`);
   logger.debug(`mime type is: ${mimeType}`);
+  // split url to only keep base url without # fragments
+  // get extention from url
   const matchExtension = url.split(/[?#]/)[0].match(/[^\\]*\.(\w+)$/);
   logger.debug('result of getting extension from url is:', matchExtension);
   if (matchExtension && matchExtension.length) {

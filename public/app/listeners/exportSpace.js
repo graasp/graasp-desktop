@@ -3,9 +3,15 @@ const { app } = require('electron');
 const archiver = require('archiver');
 const path = require('path');
 const fs = require('fs');
+const _ = require('lodash');
 const logger = require('../logger');
 
-const { VAR_FOLDER, VISIBILITIES, APPLICATION } = require('../config/config');
+const {
+  VAR_FOLDER,
+  VISIBILITIES,
+  APPLICATION,
+  APPS_FOLDER,
+} = require('../config/config');
 const { ERROR_GENERAL } = require('../config/errors');
 const {
   SPACES_COLLECTION,
@@ -45,6 +51,9 @@ const prepareArchive = async (
     resources: isResourcesSelected,
   } = selection;
 
+  // deep copy
+  const spaceToExport = _.cloneDeep(space);
+
   const isStudent = db.get('user.settings.studentMode').value();
 
   // export the user's resources, private and public
@@ -70,13 +79,14 @@ const prepareArchive = async (
   if (isSpaceSelected) {
     // get prepackaged apps
     const isPrepackagedApp = (item) =>
-      item?.category === APPLICATION && item?.asset?.startsWith(VAR_FOLDER);
+      item?.category === APPLICATION && item?.asset?.startsWith(APPS_FOLDER);
 
     // eslint-disable-next-line no-restricted-syntax
-    for (const [phaseIdx, phase] of space.phases.entries()) {
+    for (const [phaseIdx, phase] of spaceToExport.phases.entries()) {
       const { items = [] } = phase;
       // eslint-disable-next-line no-restricted-syntax
       for (const [itemIdx, item] of items.entries()) {
+        console.log(isPrepackagedApp(item));
         if (isPrepackagedApp(item)) {
           const { asset, name } = item;
           const assetFolder = path.dirname(asset);
@@ -87,7 +97,7 @@ const prepareArchive = async (
 
           // change asset in json
           // eslint-disable-next-line no-param-reassign
-          space.phases[phaseIdx].items[itemIdx].asset = path.join(
+          spaceToExport.phases[phaseIdx].items[itemIdx].asset = path.join(
             spaceId,
             name,
             mainFilename
@@ -99,7 +109,7 @@ const prepareArchive = async (
 
   // write space and manifest to json file inside space folder
   const data = {
-    space,
+    space: spaceToExport,
     [APP_INSTANCE_RESOURCES_COLLECTION]: resources,
     [ACTIONS_COLLECTION]: actions,
   };

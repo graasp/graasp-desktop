@@ -57,7 +57,7 @@ const bootstrapDatabase = (dbPath = DATABASE_PATH) => {
 // save all prepackaged apps in var folder
 const ensurePrepackagedAppsExist = () => {
   try {
-    // create the results folder if it doesn't already exist
+    // create the apps folder if it doesn't already exist
     if (!fs.existsSync(APPS_FOLDER)) {
       mkdirp(APPS_FOLDER);
     }

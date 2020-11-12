@@ -43,7 +43,7 @@ const RESOURCE = 'Resource';
 const APPLICATION = 'Application';
 
 const VAR_FOLDER = `${escapeEscapeCharacter(app.getPath('userData'))}/var`;
-const PREPACKAGED_APPS_FOLDER_NAME = 'prepackagedApps';
+const PREPACKAGED_APPS_FOLDER_NAME = 'prepackaged-apps';
 const DATABASE_PATH = `${VAR_FOLDER}/db.json`;
 const APPS_FOLDER = `${VAR_FOLDER}/apps`;
 const ICON_PATH = 'app/assets/icon.png';
