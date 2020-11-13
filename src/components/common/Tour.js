@@ -51,7 +51,7 @@ export class Tour extends Component {
     dispatchResetTour: PropTypes.func.isRequired,
     dispatchInitializeTour: PropTypes.func.isRequired,
     tourKey: PropTypes.string.isRequired,
-    currentTour: PropTypes.oneOf(tours).isRequired,
+    currentTour: PropTypes.oneOf(Object.values(tours)).isRequired,
     run: PropTypes.bool.isRequired,
     continuous: PropTypes.bool.isRequired,
     stepIndex: PropTypes.number.isRequired,

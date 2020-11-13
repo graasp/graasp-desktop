@@ -22,7 +22,7 @@ export class DatabaseEditor extends Component {
     dispatchGetDatabase: PropTypes.func.isRequired,
     dispatchSetDatabase: PropTypes.func.isRequired,
     database: PropTypes.shape({
-      spaces: PropTypes.array,
+      spaces: PropTypes.arrayOf({}),
     }),
     user: PropTypes.instanceOf(Map).isRequired,
     dispatchSignOut: PropTypes.func.isRequired,

@@ -37,7 +37,7 @@ exports[`<GeolocationControl /> <GeolocationControl /> as switch renders correct
 >
   <WithStyles(ForwardRef(FormControlLabel))
     control={
-      <ForwardRef(WithStyles)
+      <WithStyles(ForwardRef(Switch))
         checked={false}
         color="primary"
         onChange={[Function]}
@@ -56,7 +56,7 @@ exports[`<GeolocationControl /> <GeolocationControl /> as switch renders correct
 >
   <WithStyles(ForwardRef(FormControlLabel))
     control={
-      <ForwardRef(WithStyles)
+      <WithStyles(ForwardRef(Switch))
         checked={true}
         color="primary"
         onChange={[Function]}

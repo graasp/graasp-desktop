@@ -24,7 +24,7 @@ exports[`<Settings /> renders correctly 1`] = `
     <WithStyles(ForwardRef(Divider))
       classes={
         Object {
-          "root": undefined,
+          "root": "",
         }
       }
       variant="middle"

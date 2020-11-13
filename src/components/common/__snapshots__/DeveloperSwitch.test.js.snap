@@ -7,7 +7,7 @@ exports[`<DeveloperSwitch /> <DeveloperSwitch /> renders renders correctly 1`] =
 >
   <WithStyles(ForwardRef(FormControlLabel))
     control={
-      <ForwardRef(WithStyles)
+      <WithStyles(ForwardRef(Switch))
         checked={false}
         color="primary"
         onChange={[Function]}
@@ -26,7 +26,7 @@ exports[`<DeveloperSwitch /> <DeveloperSwitch /> renders renders correctly 2`] =
 >
   <WithStyles(ForwardRef(FormControlLabel))
     control={
-      <ForwardRef(WithStyles)
+      <WithStyles(ForwardRef(Switch))
         checked={true}
         color="primary"
         onChange={[Function]}
