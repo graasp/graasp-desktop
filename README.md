@@ -41,6 +41,12 @@
       src="https://img.shields.io/badge/license-AGPLv3.0-blue.svg"
     />
   </a>
+  <a href="https://coveralls.io/github/graasp/graasp-desktop?branch=master">
+    <img
+      alt="Coverage Status"
+      src="https://coveralls.io/repos/github/graasp/graasp-desktop/badge.svg?branch=master"
+    />
+  </a>
 </p>
 
 ## Official Distributions
