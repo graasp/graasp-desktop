@@ -76,4 +76,5 @@ module.exports = {
   COMPLETE_TOUR_CHANNEL: 'tour:complete',
   GET_APP_UPGRADE_CHANNEL: 'app:upgrade:get',
   INSTALL_APP_UPGRADE_CHANNEL: 'app:upgrade:install',
+  GET_TOURS_ENABLED_CHANNEL: 'tour:enabled:get',
 };

@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 import { DEFAULT_GLOBAL_TIMEOUT } from './constants';
 import {
   expectElementToExist,
@@ -10,18 +11,25 @@ import { closeApplication, createApplication } from './application';
 import { USER_BOB, USER_SAM } from './fixtures/users';
 import { TOUR_END_SELECTOR } from '../src/config/selectors';
 
-describe('Tour Scenarios', function() {
+describe('Tour Scenarios', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
   beforeEach(
     mochaAsync(async () => {
-      app = await createApplication();
+      app = await createApplication({
+        showOpenDialogResponse: 1,
+        showTours: true,
+      });
     })
   );
 
-  describe('Display tour on sign in', function() {
-    afterEach(function() {
+  after(function () {
+    return closeApplication(app);
+  });
+
+  describe('Display tour on sign in', function () {
+    afterEach(function () {
       return closeApplication(app);
     });
 
@@ -35,7 +43,7 @@ describe('Tour Scenarios', function() {
     );
   });
 
-  describe('Tour close state store', function() {
+  describe('Tour close state store', function () {
     it(
       `does not display the tour again after closing and logging back in`,
       mochaAsync(async () => {

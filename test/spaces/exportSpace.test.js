@@ -149,7 +149,6 @@ describe('Export a space', function () {
         // back and export again
         const backButton = await client.$(`#${EXPORT_SPACE_BACK_BUTTON_ID}`);
         await backButton.click();
-        await client.pause(OPEN_SAVED_SPACE_PAUSE);
         await exportButton.click();
         await client.pause(EXPORT_SELECTION_SPACE_PAUSE);
 

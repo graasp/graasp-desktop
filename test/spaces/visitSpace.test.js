@@ -219,6 +219,7 @@ const checkUserInputInApp = async (client, { id, url }, resources = []) => {
       break;
     }
     default: {
+      // eslint-disable-next-line no-console
       console.log(`app with url : ${url} is not handled`);
     }
   }
@@ -282,6 +283,7 @@ const hasPhaseLayout = async (
             break;
           }
           default: {
+            // eslint-disable-next-line no-console
             console.log('Unhandled mimeType: ', mimeType);
           }
         }
@@ -299,7 +301,7 @@ const hasPhaseLayout = async (
           case SAVED: {
             const iframe = await client.$(`${itemSelector} iframe`);
             const src = await iframe.getAttribute('src');
-            const { name, main } = mapping[url];
+            const { name, main } = mapping[url] || {};
 
             const varFolder = await client.getUserDataPath();
 
@@ -335,12 +337,14 @@ const hasPhaseLayout = async (
             break;
           }
           default:
+            // eslint-disable-next-line no-console
             console.log(`mode: ${mode} is not handled`);
             break;
         }
         break;
       }
       default: {
+        // eslint-disable-next-line no-console
         console.log(`category: ${category} is not handled`);
         expect(false).to.equal(true);
       }

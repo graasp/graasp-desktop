@@ -19,7 +19,7 @@ import {
   SPACE_ATOMIC_STRUCTURE_PATH,
 } from '../fixtures/spaces';
 import { loadSpaceById } from './loadSpace.test';
-import { DEFAULT_GLOBAL_TIMEOUT, OPEN_SAVED_SPACE_PAUSE } from '../constants';
+import { SAVE_USER_INPUT_TIMEOUT, OPEN_SAVED_SPACE_PAUSE } from '../constants';
 import { USER_GRAASP, USER_BOB, USER_ALICE } from '../fixtures/users';
 import {
   typeInTextInputApp,
@@ -31,7 +31,7 @@ const userInputTextForUser = (name) => {
 };
 
 describe('Save User Input in a space', function () {
-  this.timeout(DEFAULT_GLOBAL_TIMEOUT);
+  this.timeout(SAVE_USER_INPUT_TIMEOUT);
   let app;
 
   afterEach(function () {
@@ -133,7 +133,6 @@ describe('Save User Input in a space', function () {
             `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
           );
           await spaceCard.click();
-          await client.pause(OPEN_SAVED_SPACE_PAUSE);
 
           await menuGoToPhase(client, 0);
           await checkTextInputAppContainsText(client, textInputAppId, text);
@@ -151,7 +150,6 @@ describe('Save User Input in a space', function () {
             `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
           );
           await spaceCard.click();
-          await client.pause(OPEN_SAVED_SPACE_PAUSE);
 
           await menuGoToPhase(client, 0);
           await checkTextInputAppContainsText(client, textInputAppId, text);

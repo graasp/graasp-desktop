@@ -84,6 +84,7 @@ const {
   DELETE_FILE_CHANNEL,
   GET_APP_UPGRADE_CHANNEL,
   INSTALL_APP_UPGRADE_CHANNEL,
+  GET_TOURS_ENABLED_CHANNEL,
 } = require('./app/config/channels');
 const env = require('./env.json');
 const {
@@ -143,6 +144,7 @@ const {
   deleteFile,
   installAppUpgrade,
   getAppUpgrade,
+  getToursEnabled,
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
 
@@ -599,6 +601,9 @@ app.on('ready', async () => {
     GET_SPACE_IN_CLASSROOM_CHANNEL,
     getSpaceInClassroom(mainWindow, db)
   );
+
+  // called when getting tours enabled
+  ipcMain.on(GET_TOURS_ENABLED_CHANNEL, getToursEnabled(mainWindow, db));
 
   // called when getting the database
   ipcMain.on(GET_DATABASE_CHANNEL, async () => {

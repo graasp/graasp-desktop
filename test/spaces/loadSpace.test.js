@@ -51,7 +51,6 @@ import {
   OPEN_SAVED_SPACE_PAUSE,
   LOAD_PHASE_PAUSE,
   DEFAULT_GLOBAL_TIMEOUT,
-  LOAD_TAB_PAUSE,
 } from '../constants';
 import { USER_GRAASP, USER_BOB } from '../fixtures/users';
 import { typeInTextInputApp } from '../apps/textInputApp';
@@ -224,10 +223,8 @@ describe('Load Space Scenarios', function () {
         await client.pause(INPUT_TYPE_PAUSE);
         const loadSubmitButton = await client.$(`#${LOAD_SUBMIT_BUTTON_ID}`);
         await loadSubmitButton.click();
-        await client.pause(LOAD_SELECTION_SPACE_PAUSE);
         const loadBackButton = await client.$(`#${LOAD_BACK_BUTTON_ID}`);
         await loadBackButton.click();
-        await client.pause(LOAD_TAB_PAUSE);
 
         await loadSpaceById(
           client,

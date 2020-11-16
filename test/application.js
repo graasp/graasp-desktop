@@ -7,13 +7,15 @@ const createApplication = async (
     showMessageDialogResponse,
     showSaveDialogResponse,
     showOpenDialogResponse,
+    showTours,
   } = {
     showMessageDialogResponse: undefined,
     showSaveDialogResponse: undefined,
     showOpenDialogResponse: undefined,
+    showTours: 0,
   }
 ) => {
-  const env = { NODE_ENV: 'test', ELECTRON_IS_DEV: 0 };
+  const env = { NODE_ENV: 'test', ELECTRON_IS_DEV: 0, SHOW_TOURS: showTours };
 
   if (showMessageDialogResponse !== undefined) {
     env.SHOW_MESSAGE_DIALOG_RESPONSE = showMessageDialogResponse;
@@ -52,7 +54,7 @@ const createApplication = async (
 
   await app.start();
 
-  app.client.addCommand('getUserDataPath', function () {
+  app.client.addCommand('getUserDataPath', () => {
     return path.join(app.client.capabilities.chrome.userDataDir, 'var');
   });
 

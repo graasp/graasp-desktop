@@ -56,6 +56,7 @@ const postFile = require('./postFile');
 const deleteFile = require('./deleteFile');
 const installAppUpgrade = require('./installAppUpgrade');
 const getAppUpgrade = require('./getAppUpgrade');
+const getToursEnabled = require('./getToursEnabled');
 
 module.exports = {
   loadSpace,
@@ -115,4 +116,5 @@ module.exports = {
   deleteFile,
   installAppUpgrade,
   getAppUpgrade,
+  getToursEnabled,
 };

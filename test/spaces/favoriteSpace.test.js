@@ -23,7 +23,6 @@ import { visitAndSaveSpaceById } from './visitSpace.test';
 import {
   SET_SPACE_AS_FAVORITE_PAUSE,
   DEFAULT_GLOBAL_TIMEOUT,
-  OPEN_SAVED_SPACE_PAUSE,
 } from '../constants';
 import { USER_GRAASP, USER_ALICE, USER_BOB } from '../fixtures/users';
 
@@ -71,7 +70,6 @@ describe('Set space as favorite', function () {
 
         // uncheck favorite
         await favoriteButton.click();
-        await client.pause(SET_SPACE_AS_FAVORITE_PAUSE);
 
         // space should not be in favorite spaces
         await expectElementToNotExist(
@@ -96,7 +94,6 @@ describe('Set space as favorite', function () {
           `.${SPACE_FAVORITE_BUTTON_CLASS}`
         );
         await favoriteButton.click();
-        await client.pause(SET_SPACE_AS_FAVORITE_PAUSE);
 
         // check space is in home tab
         await menuGoToHome(client);
@@ -111,9 +108,7 @@ describe('Set space as favorite', function () {
           `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
         );
         await spaceCardLink.click();
-        await client.pause(OPEN_SAVED_SPACE_PAUSE);
         await favoriteButton.click();
-        await client.pause(SET_SPACE_AS_FAVORITE_PAUSE);
 
         // space should not be in home
         await menuGoToHome(client);
@@ -144,7 +139,6 @@ describe('Set space as favorite', function () {
           `.${SPACE_FAVORITE_BUTTON_CLASS}`
         );
         await favoriteButton.click();
-        await client.pause(SET_SPACE_AS_FAVORITE_PAUSE);
         await menuGoToSignOut(client);
 
         // sign in with bob, no favorite

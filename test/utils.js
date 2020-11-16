@@ -8,30 +8,21 @@ import {
   STUDENT_MODE_SWITCH_ID,
   LOGIN_USERNAME_INPUT_ID,
   LOGIN_BUTTON_ID,
-  LOAD_MAIN_ID,
   LOAD_MENU_ITEM_ID,
-  VISIT_MAIN_ID,
   VISIT_MENU_ITEM_ID,
-  SETTINGS_MAIN_ID,
   SETTINGS_MENU_ITEM_ID,
   SPACES_NEARBY_MENU_ITEM_ID,
-  SPACES_NEARBY_MAIN_ID,
   HOME_MENU_ITEM_ID,
-  HOME_MAIN_ID,
-  DASHBOARD_MAIN_ID,
   DASHBOARD_MENU_ITEM_ID,
   DEVELOPER_MENU_ITEM_ID,
-  DEVELOPER_MAIN_ID,
   SIGN_OUT_MENU_ITEM_ID,
   PHASE_MENU_LIST_ID,
   buildPhaseMenuItemId,
   SAVED_SPACES_MENU_ITEM_ID,
-  SAVED_SPACES_MAIN_ID,
-  CLASSROOMS_MAIN_ID,
   CLASSROOMS_MENU_ITEM_ID,
   DRAWER_BUTTON_ID,
-  DRAWER_HEADER_TEACHER_ICON_ID,
   TOUR_END_SELECTOR,
+  DRAWER_HEADER_STUDENT_ICON_ID,
 } from '../src/config/selectors';
 import {
   SETTINGS_LOAD_PAUSE,
@@ -39,7 +30,6 @@ import {
   CLEAR_INPUT_PAUSE,
   INPUT_TYPE_PAUSE,
   LOGIN_PAUSE,
-  OPEN_DRAWER_PAUSE,
   LOAD_PHASE_PAUSE,
 } from './constants';
 import {
@@ -64,19 +54,13 @@ export const openDrawer = async (client) => {
   if (await drawerButton.isClickable()) {
     await drawerButton.click();
   }
-  await client.pause(OPEN_DRAWER_PAUSE);
 };
 
-const menuGoTo = async (client, menuItemId, elementToExpectId = null) => {
+const menuGoTo = async (client, menuItemId) => {
   // open menu if it is closed
   await openDrawer(client);
   const menuItem = await client.$(`#${menuItemId}`);
   await menuItem.click();
-  if (elementToExpectId) {
-    const el = await client.$(`#${elementToExpectId}`);
-    expect(await el.isExisting()).to.be.true;
-  }
-  await client.pause(LOAD_TAB_PAUSE);
 };
 
 export const menuGoToPhase = async (client, nb) => {
@@ -88,30 +72,34 @@ export const menuGoToPhase = async (client, nb) => {
   await client.pause(LOAD_PHASE_PAUSE);
 };
 
-export const menuGoToSettings = async (client) => {
-  await menuGoTo(client, SETTINGS_MENU_ITEM_ID, SETTINGS_MAIN_ID);
-  const tourEndButton = await client.$(TOUR_END_SELECTOR);
-  await tourEndButton.click();
+export const menuGoToSettings = async (client, closeTour = false) => {
+  await menuGoTo(client, SETTINGS_MENU_ITEM_ID);
+  if (closeTour) {
+    const tourEndButton = await client.$(TOUR_END_SELECTOR);
+    if (await tourEndButton.isExisting()) {
+      await tourEndButton.click();
+    }
+  }
 };
 
 export const menuGoToDeveloper = async (client) => {
-  await menuGoTo(client, DEVELOPER_MENU_ITEM_ID, DEVELOPER_MAIN_ID);
+  await menuGoTo(client, DEVELOPER_MENU_ITEM_ID);
 };
 
 export const menuGoToSpacesNearby = async (client) => {
-  await menuGoTo(client, SPACES_NEARBY_MENU_ITEM_ID, SPACES_NEARBY_MAIN_ID);
+  await menuGoTo(client, SPACES_NEARBY_MENU_ITEM_ID);
 };
 
 export const menuGoToVisitSpace = async (client) => {
-  await menuGoTo(client, VISIT_MENU_ITEM_ID, VISIT_MAIN_ID);
+  await menuGoTo(client, VISIT_MENU_ITEM_ID);
 };
 
 export const menuGoToLoadSpace = async (client) => {
-  await menuGoTo(client, LOAD_MENU_ITEM_ID, LOAD_MAIN_ID);
+  await menuGoTo(client, LOAD_MENU_ITEM_ID);
 };
 
 export const menuGoToDashboard = async (client) => {
-  await menuGoTo(client, DASHBOARD_MENU_ITEM_ID, DASHBOARD_MAIN_ID);
+  await menuGoTo(client, DASHBOARD_MENU_ITEM_ID);
 };
 
 export const menuGoToSignOut = async (client) => {
@@ -119,15 +107,15 @@ export const menuGoToSignOut = async (client) => {
 };
 
 export const menuGoToHome = async (client) => {
-  await menuGoTo(client, HOME_MENU_ITEM_ID, HOME_MAIN_ID);
+  await menuGoTo(client, HOME_MENU_ITEM_ID);
 };
 
 export const menuGoToSavedSpaces = async (client) => {
-  await menuGoTo(client, SAVED_SPACES_MENU_ITEM_ID, SAVED_SPACES_MAIN_ID);
+  await menuGoTo(client, SAVED_SPACES_MENU_ITEM_ID);
 };
 
 export const menuGoToClassrooms = async (client) => {
-  await menuGoTo(client, CLASSROOMS_MENU_ITEM_ID, CLASSROOMS_MAIN_ID);
+  await menuGoTo(client, CLASSROOMS_MENU_ITEM_ID);
 };
 
 /** string util functions */
@@ -169,6 +157,7 @@ export const expectAnyElementToExist = async (client, elementSelectors) => {
 export const expectElementToExist = async (client, elementSelector) => {
   const found = await (await client.$(elementSelector)).isExisting();
   if (!found) {
+    // eslint-disable-next-line no-console
     console.log(`${elementSelector} is not found`);
   }
   expect(found).to.be.true;
@@ -189,7 +178,6 @@ export const changeLanguage = async (client, value) => {
   const lang = await languageInput.getAttribute('value');
   if (lang !== value) {
     await (await client.$(`#${LANGUAGE_SELECT_ID}`)).click();
-    await client.pause(1000);
     await (await client.$(`[data-value='${value}']`)).click();
     await client.pause(LOAD_TAB_PAUSE);
   }
@@ -248,7 +236,7 @@ export const toggleSyncAdvancedMode = async (client, value) => {
 export const userSignIn = async (
   client,
   { name, mode = DEFAULT_USER_MODE },
-  closeTour = true
+  closeTour = false
 ) => {
   const input = await client.$(`#${LOGIN_USERNAME_INPUT_ID}`);
   await input.setValue(name);
@@ -258,18 +246,20 @@ export const userSignIn = async (
   await client.pause(LOGIN_PAUSE);
   if (closeTour) {
     const tourEndButton = await client.$(TOUR_END_SELECTOR);
-    await tourEndButton.click();
+    if (await tourEndButton.isExisting()) {
+      await tourEndButton.click();
+    }
   }
   // change mode if it is not default mode
   if (mode !== DEFAULT_USER_MODE) {
     if (mode === USER_MODES.TEACHER) {
       // open drawer to detect teacher icon
       await openDrawer(client);
-      const drawerTeacherIcon = await client.$(
-        `#${DRAWER_HEADER_TEACHER_ICON_ID}`
+      const drawerStudentIcon = await client.$(
+        `#${DRAWER_HEADER_STUDENT_ICON_ID}`
       );
-      const isTeacher = await drawerTeacherIcon.isExisting();
-      if (!isTeacher) {
+      const isStudent = await drawerStudentIcon.isExisting();
+      if (isStudent) {
         await menuGoToSettings(client);
         await toggleStudentMode(client, mode);
       }

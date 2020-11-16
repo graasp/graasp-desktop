@@ -103,6 +103,7 @@ const checkItemHasChange = async (client, selector, change) => {
       expect(prevEl).to.include(change);
       break;
     default:
+      // eslint-disable-next-line no-console
       console.log(`change "${change}" is not recognized`);
   }
 };
@@ -181,6 +182,7 @@ const checkItemsAfterSync = async (client, items) => {
         await expectElementToNotExist(client, itemSelector);
         break;
       default:
+        // eslint-disable-next-line no-console
         console.log(`change "${itemChange}" not recognized`);
     }
   }

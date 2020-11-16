@@ -66,8 +66,6 @@ import {
   OPEN_CLASSROOM_PAUSE,
   TOOLTIP_FADE_OUT_PAUSE,
   LOAD_SELECTION_SPACE_PAUSE,
-  SELECT_OPEN_PAUSE,
-  OPEN_IMPORT_DATA_IN_CLASSROOM_PAUSE,
 } from './constants';
 import { USER_GRAASP, USER_ALICE } from './fixtures/users';
 import {
@@ -92,7 +90,6 @@ const openClassroom = async (client, name) => {
 const addClassroom = async (client, name) => {
   const addButton = await client.$(`#${ADD_CLASSROOM_BUTTON_ID}`);
   await addButton.click();
-  await client.pause(MODAL_OPEN_PAUSE);
   const inputSelector = `#${CLASSROOM_NAME_INPUT_ID}`;
   const input = await client.$(inputSelector);
   await clearInput(client, inputSelector);
@@ -130,7 +127,6 @@ const editClassroom = async (
     `#${EDIT_CLASSROOM_VALIDATE_BUTTON_ID}`
   );
   await validateButton.click();
-  await client.pause(MODAL_CLOSE_PAUSE);
 };
 
 const deleteClassroom = async (client, name) => {
@@ -146,7 +142,6 @@ const deleteClassroom = async (client, name) => {
 
 const addUserInClassroom = async (client, username) => {
   await (await client.$(`#${ADD_USER_IN_CLASSROOM_BUTTON_ID}`)).click();
-  await client.pause(MODAL_OPEN_PAUSE);
   const usernameInput = `#${ADD_USER_IN_CLASSROOM_NAME_INPUT_ID}`;
   await clearInput(client, usernameInput);
   await (await client.$(usernameInput)).setValue(username);
@@ -194,7 +189,6 @@ const editUserInClassroom = async (
   await (
     await client.$(`${userRowSelector} .${EDIT_USER_IN_CLASSROOM_BUTTON_CLASS}`)
   ).click();
-  await client.pause(MODAL_OPEN_PAUSE);
 
   // edit username
   const editInput = `#${EDIT_USER_IN_CLASSROOM_USERNAME_INPUT_ID}`;
@@ -313,7 +307,6 @@ const importDataInClassroom = async (
   // submit filepath
   const absolutePath = path.resolve(__dirname, './fixtures/spaces', filepath);
   await (await client.$(`#${IMPORT_DATA_IN_CLASSROOM_BUTTON_ID}`)).click();
-  await client.pause(OPEN_IMPORT_DATA_IN_CLASSROOM_PAUSE);
   await (await client.$(`#${IMPORT_FILEPATH_IN_CLASSROOM_INPUT_ID}`)).setValue(
     absolutePath
   );
@@ -345,7 +338,6 @@ const importDataInClassroom = async (
 
   if (userExists) {
     // click on option
-    await client.pause(SELECT_OPEN_PAUSE);
     await (await client.$(`${optionSelector}:nth-child(${index + 1})`)).click();
     await client.pause(2000);
   } else {
@@ -365,11 +357,9 @@ const importDataInClassroom = async (
   await (
     await client.$(`#${IMPORT_DATA_CLASSROOM_VALIDATE_BUTTON_ID}`)
   ).click();
-  await client.pause(LOAD_SELECTION_SPACE_PAUSE);
 
   // return to classroom
   await (await client.$(`#${IMPORT_DATA_IN_CLASSROOM_BACK_BUTTON_ID}`)).click();
-  await client.pause(OPEN_CLASSROOM_PAUSE);
 };
 
 describe('Classrooms Scenarios', function () {
@@ -421,11 +411,9 @@ describe('Classrooms Scenarios', function () {
 
         // open and cancel modal
         await (await client.$(`#${ADD_CLASSROOM_BUTTON_ID}`)).click();
-        await client.pause(MODAL_OPEN_PAUSE);
         await (await client.$(`#${CLASSROOM_NAME_INPUT_ID}`)).setValue(name);
         await client.pause(INPUT_TYPE_PAUSE);
         await (await client.$(`#${ADD_CLASSROOM_CANCEL_BUTTON_ID}`)).click();
-        await client.pause(MODAL_CLOSE_PAUSE);
         await expectElementToExist(client, `#${NO_CLASSROOM_AVAILABLE_ID}`);
 
         // add classroom
@@ -752,7 +740,6 @@ describe('Classrooms Scenarios', function () {
               `.${CLASSROOM_CARD_CLASS}[data-name='${classroomName}']`
             )
           ).click();
-          await client.pause(OPEN_CLASSROOM_PAUSE);
 
           const username = 'bob';
 

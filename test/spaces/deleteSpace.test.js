@@ -16,7 +16,7 @@ import {
 } from '../../src/config/selectors';
 import { SPACE_ATOMIC_STRUCTURE } from '../fixtures/spaces';
 import { visitAndSaveSpaceById } from './visitSpace.test';
-import { DELETE_SPACE_PAUSE, DEFAULT_GLOBAL_TIMEOUT } from '../constants';
+import { DEFAULT_GLOBAL_TIMEOUT } from '../constants';
 import { USER_GRAASP } from '../fixtures/users';
 
 describe('Delete a space', function () {
@@ -48,7 +48,6 @@ describe('Delete a space', function () {
         `#${buildSpaceCardId(id)} .${SPACE_DELETE_BUTTON_CLASS}`
       );
       await deleteButton.click();
-      await client.pause(DELETE_SPACE_PAUSE);
 
       // card not in saved spaces
       const card = await client.$(`#${buildSpaceCardId(id)}`);
@@ -73,7 +72,6 @@ describe('Delete a space', function () {
 
       const deleteButton = await client.$(`.${SPACE_DELETE_BUTTON_CLASS}`);
       await deleteButton.click();
-      await client.pause(DELETE_SPACE_PAUSE);
 
       // card not in saved spaces
       const card = await client.$(`#${buildSpaceCardId(id)}`);
@@ -98,7 +96,6 @@ describe('Delete a space', function () {
 
       const deleteButton = await client.$(`.${SPACE_DELETE_BUTTON_CLASS}`);
       await deleteButton.click();
-      await client.pause(DELETE_SPACE_PAUSE);
 
       await menuGoToSavedSpaces(client);
 

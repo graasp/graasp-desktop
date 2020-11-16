@@ -20,11 +20,7 @@ import {
   SPACE_ATOMIC_STRUCTURE_PATH,
 } from '../fixtures/spaces';
 import { loadSpaceById } from './loadSpace.test';
-import {
-  DEFAULT_GLOBAL_TIMEOUT,
-  TOOLTIP_FADE_OUT_PAUSE,
-  OPEN_SAVED_SPACE_PAUSE,
-} from '../constants';
+import { DEFAULT_GLOBAL_TIMEOUT, TOOLTIP_FADE_OUT_PAUSE } from '../constants';
 import { USER_GRAASP, USER_BOB, USER_ALICE } from '../fixtures/users';
 import {
   typeInTextInputApp,
@@ -130,7 +126,6 @@ describe('Clear User Input in a space', function () {
             `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
           );
           await spaceCard.click();
-          await client.pause(OPEN_SAVED_SPACE_PAUSE);
           await menuGoToPhase(client, 0);
           await checkTextInputAppContainsText(client, textInputAppId0, '');
           await menuGoToPhase(client, 1);

@@ -96,6 +96,8 @@ const ACTIONS_VERBS = {
   LOGOUT: 'logout',
 };
 
+const DEFAULT_TOURS_ENABLED = true;
+
 const buildFilePath = ({ userId, spaceId, name }) => {
   // add generated id to handle duplicate files
   const generatedId = ObjectId().str;
@@ -131,4 +133,5 @@ module.exports = {
   buildFilePath,
   PREPACKAGED_APPS_FOLDER_NAME,
   APPS_FOLDER,
+  DEFAULT_TOURS_ENABLED,
 };
