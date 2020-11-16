@@ -19,6 +19,7 @@ const patchAppInstanceResource = (mainWindow, db) => (event, payload = {}) => {
     db.write();
     mainWindow.webContents.send(PATCH_APP_INSTANCE_RESOURCE_CHANNEL, resource);
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
     mainWindow.webContents.send(PATCH_APP_INSTANCE_RESOURCE_CHANNEL, null);
   }

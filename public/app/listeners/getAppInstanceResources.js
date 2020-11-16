@@ -32,6 +32,7 @@ const getAppInstanceResources = (mainWindow, db) => (event, data = {}) => {
       }
     );
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
     // error is sent back to channel specific for this app instance
     mainWindow.webContents.send(

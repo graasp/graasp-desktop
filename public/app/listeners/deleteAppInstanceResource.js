@@ -11,6 +11,7 @@ const deleteAppInstanceResource = (mainWindow, db) => (event, payload = {}) => {
 
     mainWindow.webContents.send(DELETE_APP_INSTANCE_RESOURCE_CHANNEL, payload);
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
     mainWindow.webContents.send(DELETE_APP_INSTANCE_RESOURCE_CHANNEL, null);
   }

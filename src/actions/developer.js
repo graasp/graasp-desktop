@@ -18,7 +18,7 @@ import {
 const flagGettingDatabase = createFlag(FLAG_GETTING_DATABASE);
 const flagSettingDatabase = createFlag(FLAG_SETTING_DATABASE);
 
-const getDatabase = async () => dispatch => {
+const getDatabase = async () => (dispatch) => {
   try {
     dispatch(flagGettingDatabase(true));
     window.ipcRenderer.send(GET_DATABASE_CHANNEL);
@@ -37,12 +37,13 @@ const getDatabase = async () => dispatch => {
       dispatch(flagGettingDatabase(false));
     });
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error(err);
     toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_GETTING_DATABASE));
   }
 };
 
-const setDatabase = async database => dispatch => {
+const setDatabase = async (database) => (dispatch) => {
   try {
     dispatch(flagSettingDatabase(true));
     window.ipcRenderer.send(SET_DATABASE_CHANNEL, database);
@@ -61,6 +62,7 @@ const setDatabase = async database => dispatch => {
       dispatch(flagSettingDatabase(false));
     });
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error(err);
     toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_SETTING_DATABASE));
   }

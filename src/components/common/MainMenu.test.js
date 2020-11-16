@@ -29,13 +29,14 @@ const createMainMenuProps = (
   return {
     t: (text) => text,
     developerMode,
-    history: { replace: jest.fn() },
+    history: { push: jest.fn() },
     match: { path },
     authenticated,
     userMode,
     location: {
       pathname: 'somepath',
     },
+    dispatchSignOut: jest.fn(),
   };
 };
 

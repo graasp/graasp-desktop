@@ -16,6 +16,8 @@ const env = JSON.stringify({
   GOOGLE_API_KEY,
   GOOGLE_ANALYTICS_ID,
   LOGGING_LEVEL,
+  HELLO: 'er',
+  REACT_APP_HELLO_D: 'wef',
 });
 
 fs.writeFileSync(path.join(DEFAULT_PATH, NAME), env, { encoding: 'utf8' });

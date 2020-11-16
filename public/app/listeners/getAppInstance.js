@@ -17,8 +17,8 @@ const getAppInstance = (mainWindow, db) => (event, payload = {}) => {
         .get('phases')
         .find({ id: subSpaceId })
         .get('items')
-        .filter(item => item.appInstance)
-        .map(item => item.appInstance)
+        .filter((item) => item.appInstance)
+        .map((item) => item.appInstance)
         .find({ id })
         .value();
     } else {
@@ -26,14 +26,15 @@ const getAppInstance = (mainWindow, db) => (event, payload = {}) => {
         .get('spaces')
         .find({ id: spaceId })
         .get('items')
-        .filter(item => item.appInstance)
-        .map(item => item.appInstance)
+        .filter((item) => item.appInstance)
+        .map((item) => item.appInstance)
         .find({ id })
         .value();
     }
 
     mainWindow.webContents.send(GET_APP_INSTANCE_CHANNEL, appInstance);
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
     mainWindow.webContents.send(GET_APP_INSTANCE_CHANNEL, null);
   }

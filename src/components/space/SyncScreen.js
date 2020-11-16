@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import CssBaseline from '@material-ui/core/CssBaseline/CssBaseline';
 import AppBar from '@material-ui/core/AppBar/AppBar';
 import Toolbar from '@material-ui/core/Toolbar/Toolbar';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import Qs from 'qs';
 import { withTranslation } from 'react-i18next';
 import { withRouter } from 'react-router';
@@ -49,16 +48,8 @@ class SyncScreen extends Component {
     location: PropTypes.shape({
       search: PropTypes.string.isRequired,
     }).isRequired,
-    localSpace: ImmutablePropTypes.contains({
-      id: PropTypes.string,
-      description: PropTypes.string,
-      name: PropTypes.string,
-    }),
-    remoteSpace: ImmutablePropTypes.contains({
-      id: PropTypes.string,
-      description: PropTypes.string,
-      name: PropTypes.string,
-    }),
+    localSpace: PropTypes.instanceOf(Map),
+    remoteSpace: PropTypes.instanceOf(Map),
     t: PropTypes.func.isRequired,
     history: PropTypes.shape({
       goBack: PropTypes.func.isRequired,

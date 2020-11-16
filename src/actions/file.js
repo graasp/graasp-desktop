@@ -72,6 +72,7 @@ export const deleteFile = async (payload = {}, callback) => {
       }
     });
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error(err);
   }
 };

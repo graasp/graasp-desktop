@@ -12,6 +12,7 @@ i18n.use(initReactI18next).init({
     ja,
     sw,
   },
+  lng: 'en',
   fallbackLng: 'en',
   // debug only when not in production
   debug: process.env.NODE_ENV !== 'production',

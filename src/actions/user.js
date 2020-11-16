@@ -95,7 +95,7 @@ const flagSettingActionAccessibility = createFlag(
 );
 const flagSettingActionsAsEnabled = createFlag(FLAG_SETTING_ACTIONS_AS_ENABLED);
 
-const getGeolocation = async () => async dispatch => {
+const getGeolocation = async () => async (dispatch) => {
   // only fetch location if online
   if (window.navigator.onLine) {
     try {
@@ -117,6 +117,7 @@ const getGeolocation = async () => async dispatch => {
         payload,
       });
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error(e);
       toastr.error(
         i18n.t(ERROR_MESSAGE_HEADER),
@@ -126,7 +127,7 @@ const getGeolocation = async () => async dispatch => {
   }
 };
 
-const getUserFolder = async () => dispatch => {
+const getUserFolder = async () => (dispatch) => {
   try {
     dispatch(flagGettingUserFolder(true));
     window.ipcRenderer.send(GET_USER_FOLDER_CHANNEL);
@@ -145,6 +146,7 @@ const getUserFolder = async () => dispatch => {
       dispatch(flagGettingUserFolder(false));
     });
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(
       i18n.t(ERROR_MESSAGE_HEADER),
@@ -154,7 +156,7 @@ const getUserFolder = async () => dispatch => {
   }
 };
 
-const getLanguage = async () => dispatch => {
+const getLanguage = async () => (dispatch) => {
   try {
     dispatch(flagGettingLanguage(true));
     window.ipcRenderer.send(GET_LANGUAGE_CHANNEL);
@@ -173,12 +175,13 @@ const getLanguage = async () => dispatch => {
       dispatch(flagGettingLanguage(false));
     });
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_GETTING_LANGUAGE));
   }
 };
 
-const setLanguage = async ({ lang }) => dispatch => {
+const setLanguage = async ({ lang }) => (dispatch) => {
   try {
     dispatch(flagSettingLanguage(true));
     window.ipcRenderer.send(SET_LANGUAGE_CHANNEL, lang);
@@ -197,12 +200,13 @@ const setLanguage = async ({ lang }) => dispatch => {
       dispatch(flagSettingLanguage(false));
     });
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_SETTING_LANGUAGE));
   }
 };
 
-const getDeveloperMode = async () => dispatch => {
+const getDeveloperMode = async () => (dispatch) => {
   try {
     dispatch(flagGettingDeveloperMode(true));
     window.ipcRenderer.send(GET_DEVELOPER_MODE_CHANNEL);
@@ -224,6 +228,7 @@ const getDeveloperMode = async () => dispatch => {
       }
     );
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(
       i18n.t(ERROR_MESSAGE_HEADER),
@@ -232,7 +237,7 @@ const getDeveloperMode = async () => dispatch => {
   }
 };
 
-const setDeveloperMode = async developerMode => dispatch => {
+const setDeveloperMode = async (developerMode) => (dispatch) => {
   try {
     dispatch(flagSettingDeveloperMode(true));
     window.ipcRenderer.send(SET_DEVELOPER_MODE_CHANNEL, developerMode);
@@ -251,6 +256,7 @@ const setDeveloperMode = async developerMode => dispatch => {
       dispatch(flagSettingDeveloperMode(false));
     });
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(
       i18n.t(ERROR_MESSAGE_HEADER),
@@ -259,7 +265,7 @@ const setDeveloperMode = async developerMode => dispatch => {
   }
 };
 
-const getGeolocationEnabled = async () => dispatch => {
+const getGeolocationEnabled = async () => (dispatch) => {
   try {
     dispatch(flagGettingGeolocationEnabled(true));
     window.ipcRenderer.send(GET_GEOLOCATION_ENABLED_CHANNEL);
@@ -281,6 +287,7 @@ const getGeolocationEnabled = async () => dispatch => {
       }
     );
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(
       i18n.t(ERROR_MESSAGE_HEADER),
@@ -289,7 +296,7 @@ const getGeolocationEnabled = async () => dispatch => {
   }
 };
 
-const setGeolocationEnabled = async geolocationEnabled => dispatch => {
+const setGeolocationEnabled = async (geolocationEnabled) => (dispatch) => {
   try {
     dispatch(flagSettingGeolocationEnabled(true));
     window.ipcRenderer.send(
@@ -314,6 +321,7 @@ const setGeolocationEnabled = async geolocationEnabled => dispatch => {
       }
     );
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(
       i18n.t(ERROR_MESSAGE_HEADER),
@@ -322,7 +330,7 @@ const setGeolocationEnabled = async geolocationEnabled => dispatch => {
   }
 };
 
-const getSyncMode = async () => dispatch => {
+const getSyncMode = async () => (dispatch) => {
   try {
     dispatch(flagGettingSyncMode(true));
     window.ipcRenderer.send(GET_SYNC_MODE_CHANNEL);
@@ -341,12 +349,13 @@ const getSyncMode = async () => dispatch => {
       dispatch(flagGettingSyncMode(false));
     });
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_GETTING_SYNC_MODE));
   }
 };
 
-const setSyncMode = async syncMode => dispatch => {
+const setSyncMode = async (syncMode) => (dispatch) => {
   try {
     dispatch(flagSettingSyncMode(true));
     window.ipcRenderer.send(SET_SYNC_MODE_CHANNEL, syncMode);
@@ -365,12 +374,13 @@ const setSyncMode = async syncMode => dispatch => {
       dispatch(flagSettingSyncMode(false));
     });
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_SETTING_SYNC_MODE));
   }
 };
 
-const getUserMode = async () => dispatch => {
+const getUserMode = async () => (dispatch) => {
   try {
     dispatch(flagGettingUserMode(true));
     window.ipcRenderer.send(GET_USER_MODE_CHANNEL);
@@ -389,12 +399,13 @@ const getUserMode = async () => dispatch => {
       dispatch(flagGettingUserMode(false));
     });
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_GETTING_USER_MODE));
   }
 };
 
-const setUserMode = async userMode => dispatch => {
+const setUserMode = async (userMode) => (dispatch) => {
   try {
     dispatch(flagSettingUserMode(true));
     window.ipcRenderer.send(SET_USER_MODE_CHANNEL, userMode);
@@ -413,12 +424,13 @@ const setUserMode = async userMode => dispatch => {
       dispatch(flagSettingUserMode(false));
     });
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_SETTING_USER_MODE));
   }
 };
 
-const setSpaceAsFavorite = payload => dispatch => {
+const setSpaceAsFavorite = (payload) => (dispatch) => {
   try {
     dispatch(flagSettingSpaceAsFavorite(true));
     window.ipcRenderer.send(SET_SPACE_AS_FAVORITE_CHANNEL, payload);
@@ -440,6 +452,7 @@ const setSpaceAsFavorite = payload => dispatch => {
       }
     );
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(
       i18n.t(ERROR_MESSAGE_HEADER),
@@ -448,7 +461,7 @@ const setSpaceAsFavorite = payload => dispatch => {
   }
 };
 
-const setSpaceAsRecent = payload => dispatch => {
+const setSpaceAsRecent = (payload) => (dispatch) => {
   try {
     dispatch(flagSettingSpaceAsRecent(true));
     window.ipcRenderer.send(SET_SPACE_AS_RECENT_CHANNEL, payload);
@@ -467,6 +480,7 @@ const setSpaceAsRecent = payload => dispatch => {
       dispatch(flagSettingSpaceAsRecent(false));
     });
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(
       i18n.t(ERROR_MESSAGE_HEADER),
@@ -475,7 +489,7 @@ const setSpaceAsRecent = payload => dispatch => {
   }
 };
 
-const setActionAccessibility = payload => dispatch => {
+const setActionAccessibility = (payload) => (dispatch) => {
   try {
     dispatch(flagSettingActionAccessibility(true));
     window.ipcRenderer.send(SET_ACTION_ACCESSIBILITY_CHANNEL, payload);
@@ -497,6 +511,7 @@ const setActionAccessibility = payload => dispatch => {
       }
     );
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(
       i18n.t(ERROR_MESSAGE_HEADER),
@@ -505,7 +520,7 @@ const setActionAccessibility = payload => dispatch => {
   }
 };
 
-const setActionsAsEnabled = payload => dispatch => {
+const setActionsAsEnabled = (payload) => (dispatch) => {
   try {
     dispatch(flagSettingActionsAsEnabled(true));
     window.ipcRenderer.send(SET_ACTIONS_AS_ENABLED_CHANNEL, payload);
@@ -527,6 +542,7 @@ const setActionsAsEnabled = payload => dispatch => {
       }
     );
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(
       i18n.t(ERROR_MESSAGE_HEADER),

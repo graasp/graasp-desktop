@@ -99,7 +99,7 @@ class PhaseApp extends Component {
     window.removeEventListener('message', this.handleReceiveMessage);
   }
 
-  postMessage = data => {
+  postMessage = (data) => {
     // get component app instance id
     const { appInstance } = this.props;
     const { id: componentAppInstanceId } = appInstance || {};
@@ -113,12 +113,13 @@ class PhaseApp extends Component {
       if (this.iframe.contentWindow.postMessage) {
         this.iframe.contentWindow.postMessage(message, '*');
       } else {
+        // eslint-disable-next-line no-console
         console.error('unable to find postMessage');
       }
     }
   };
 
-  handleReceiveMessage = event => {
+  handleReceiveMessage = (event) => {
     try {
       const {
         dispatchGetAppInstance,
@@ -130,6 +131,7 @@ class PhaseApp extends Component {
 
       // get app instance id in message
       const { id: componentAppInstanceId } = appInstance || {};
+
       const { type, payload } = JSON.parse(event.data);
       let { id: messageAppInstanceId } = payload;
       if (
@@ -189,6 +191,7 @@ class PhaseApp extends Component {
       }
       return false;
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error(e);
       return false;
     }
@@ -322,7 +325,7 @@ class PhaseApp extends Component {
             className="App"
             name={buildPhaseAppName(id)}
             src={uri + divider + queryString}
-            ref={c => {
+            ref={(c) => {
               this.iframe = c;
             }}
           />

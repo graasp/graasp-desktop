@@ -19,7 +19,10 @@ import {
   THEME_COLORS,
   AUTHENTICATED,
 } from '../../config/constants';
-import { DRAWER_HEADER_TEACHER_ICON_ID } from '../../config/selectors';
+import {
+  DRAWER_HEADER_STUDENT_ICON_ID,
+  DRAWER_HEADER_TEACHER_ICON_ID,
+} from '../../config/selectors';
 
 const styles = () => ({
   drawerHeader: {
@@ -60,7 +63,7 @@ const DrawerHeader = ({
                 id={DRAWER_HEADER_TEACHER_ICON_ID}
               />
             ) : (
-              <PersonIcon />
+              <PersonIcon id={DRAWER_HEADER_STUDENT_ICON_ID} />
             )}
           </ListItemIcon>
 
