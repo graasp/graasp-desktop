@@ -467,7 +467,8 @@ describe('Visit Space Scenarios', function () {
       } = space;
       it(
         `Visit space ${name} (${id})`,
-        mochaAsync(async () => {
+        mochaAsync(async function () {
+          this.retries(2);
           const { client } = app;
 
           await visitSpaceById(client, id);
