@@ -17,7 +17,7 @@ import PhaseVideo from '../../phase/PhaseVideo';
 
 // prop types gets confused when dealing with helper renderers
 // eslint-disable-next-line react/prop-types
-const renderResource = item => {
+const renderResource = (item) => {
   const { id, idx, mimeType, content, asset, url, name, classNames } = item;
   if (mimeType === TEXT) {
     return (

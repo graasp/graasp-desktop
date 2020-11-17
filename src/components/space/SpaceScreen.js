@@ -17,7 +17,6 @@ import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText/ListItemText';
 import { withStyles } from '@material-ui/core';
-import { withRouter } from 'react-router';
 import Loader from '../common/Loader';
 import PhaseComponent from '../phase/Phase';
 import {
@@ -29,7 +28,6 @@ import {
 } from '../../actions';
 import './SpaceScreen.css';
 import Styles from '../../Styles';
-import { HOME_PATH } from '../../config/paths';
 import SpaceHeader from './SpaceHeader';
 import SpaceNotFound from './SpaceNotFound';
 import MainMenu from '../common/MainMenu';
@@ -60,7 +58,6 @@ class SpaceScreen extends Component {
     dispatchGetSpace: PropTypes.func.isRequired,
     dispatchClearSpace: PropTypes.func.isRequired,
     activity: PropTypes.bool.isRequired,
-    deleted: PropTypes.bool.isRequired,
     classes: PropTypes.shape({
       root: PropTypes.string.isRequired,
       appBar: PropTypes.string.isRequired,
@@ -79,10 +76,6 @@ class SpaceScreen extends Component {
     }).isRequired,
     location: PropTypes.shape({
       search: PropTypes.string.isRequired,
-    }).isRequired,
-    history: PropTypes.shape({
-      length: PropTypes.number.isRequired,
-      replace: PropTypes.func.isRequired,
     }).isRequired,
     recentSpaces: PropTypes.instanceOf(ImmList).isRequired,
     dispatchSetSpaceAsRecent: PropTypes.func.isRequired,
@@ -104,18 +97,8 @@ class SpaceScreen extends Component {
 
   componentDidUpdate() {
     const { selected } = this.state;
-    const {
-      deleted,
-      phase,
-      history: { replace },
-      space,
-      recentSpaces,
-      dispatchSetSpaceAsRecent,
-    } = this.props;
-    // redirect to home if space is deleted
-    if (deleted) {
-      replace(HOME_PATH);
-    } else if (selected !== -1 && (!phase || phase.isEmpty())) {
+    const { phase, space, recentSpaces, dispatchSetSpaceAsRecent } = this.props;
+    if (selected !== -1 && (!phase || phase.isEmpty())) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ selected: -1 });
     }
@@ -145,7 +128,7 @@ class SpaceScreen extends Component {
     this.setState({ openDrawer: false });
   };
 
-  handlePhaseClicked = i => {
+  handlePhaseClicked = (i) => {
     const { dispatchSelectPhase, space } = this.props;
     const phases = space.get('phases');
     dispatchSelectPhase(phases[i]);
@@ -251,12 +234,9 @@ class SpaceScreen extends Component {
 
 const mapStateToProps = ({ Space, Phase, authentication }) => ({
   space: Space.get('current').get('content'),
-  open: Space.get('current')
-    .get('menu')
-    .get('open'),
+  open: Space.get('current').get('menu').get('open'),
   phase: Phase.get('current').get('content'),
   activity: Boolean(Space.getIn(['current', 'activity']).size),
-  deleted: Space.get('current').get('deleted'),
   recentSpaces: authentication.getIn(['user', 'recentSpaces']),
 });
 
@@ -277,4 +257,4 @@ const StyledComponent = withStyles(Styles, { withTheme: true })(
   ConnectedComponent
 );
 
-export default withRouter(StyledComponent);
+export default StyledComponent;

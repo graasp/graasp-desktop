@@ -13,6 +13,7 @@ import {
   menuGoToVisitSpace,
   expectElementToExist,
   removePathSeparators,
+  menuGoToSavedSpaces,
 } from '../utils';
 import { closeApplication, createApplication } from '../application';
 import {
@@ -36,6 +37,8 @@ import {
   buildSpaceCardDescriptionId,
   TOOLS_BUTTON_CLASS,
   TOOLS_CONTENT_PANE_ID,
+  VISIT_MAIN_ID,
+  SAVED_SPACES_MAIN_ID,
 } from '../../src/config/selectors';
 import { hasMath } from '../../src/utils/math';
 import { SPACE_ATOMIC_STRUCTURE, SPACE_APOLLO_11 } from '../fixtures/spaces';
@@ -48,6 +51,7 @@ import {
   LOAD_PHASE_PAUSE,
   OPEN_TOOLS_PAUSE,
   APPS_FOLDER,
+  DELETE_SPACE_PAUSE,
 } from '../constants';
 import { USER_GRAASP } from '../fixtures/users';
 import { USER_MODES, DEFAULT_USER_MODE } from '../../src/config/constants';
@@ -446,28 +450,80 @@ describe('Visit Space Scenarios', function () {
     return closeApplication(app);
   });
 
-  beforeEach(
-    mochaAsync(async () => {
-      app = await createApplication();
-      globalUser = USER_GRAASP;
-      await userSignIn(app.client, globalUser);
-    })
-  );
+  describe('Visit a space just after delete', () => {
+    beforeEach(
+      mochaAsync(async () => {
+        app = await createApplication();
+        globalUser = USER_GRAASP;
+        await userSignIn(app.client, globalUser);
+      })
+    );
 
-  const spaces = [SPACE_APOLLO_11, SPACE_ATOMIC_STRUCTURE];
+    const spaces = [SPACE_APOLLO_11, SPACE_ATOMIC_STRUCTURE];
 
-  spaces.forEach(function (space) {
-    const {
-      space: { id, name },
-    } = space;
+    spaces.forEach(function (space) {
+      const {
+        space: { id, name },
+      } = space;
+      it(
+        `Visit space ${name} (${id})`,
+        mochaAsync(async function () {
+          this.retries(2);
+          const { client } = app;
+
+          await visitSpaceById(client, id);
+
+          await hasPreviewSpaceLayout(client, space, globalUser);
+        })
+      );
+    });
+  });
+
+  describe('Visit a space just after delete', () => {
+    beforeEach(
+      mochaAsync(async () => {
+        app = await createApplication({ showMessageDialogResponse: 1 });
+        globalUser = USER_GRAASP;
+        await userSignIn(app.client, globalUser);
+      })
+    );
+
     it(
-      `Visit space ${name} (${id})`,
+      'Visit a space just after delete from card',
       mochaAsync(async () => {
         const { client } = app;
+        const {
+          space: { id },
+        } = SPACE_ATOMIC_STRUCTURE;
+        await visitAndSaveSpaceById(client, id);
+        await menuGoToSavedSpaces(client);
 
+        const deleteButton = await client.$(
+          `#${buildSpaceCardId(id)} .${SPACE_DELETE_BUTTON_CLASS}`
+        );
+        await deleteButton.click();
+        await client.pause(DELETE_SPACE_PAUSE);
+
+        await expectElementToExist(client, `#${SAVED_SPACES_MAIN_ID}`);
         await visitSpaceById(client, id);
+      })
+    );
 
-        await hasPreviewSpaceLayout(client, space, globalUser);
+    it(
+      'Visit a space just after delete from space',
+      mochaAsync(async () => {
+        const { client } = app;
+        const {
+          space: { id },
+        } = SPACE_ATOMIC_STRUCTURE;
+        await visitAndSaveSpaceById(client, id);
+
+        const deleteButton = await client.$(`.${SPACE_DELETE_BUTTON_CLASS}`);
+        await deleteButton.click();
+        await client.pause(DELETE_SPACE_PAUSE);
+
+        await expectElementToExist(client, `#${VISIT_MAIN_ID}`);
+        await visitSpaceById(client, id);
       })
     );
   });

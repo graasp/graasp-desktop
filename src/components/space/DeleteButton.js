@@ -20,11 +20,16 @@ class DeleteButton extends Component {
     }).isRequired,
     dispatchDeleteSpace: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
+    onSuccess: PropTypes.func,
+  };
+
+  static defaultProps = {
+    onSuccess: null,
   };
 
   handleDelete = () => {
-    const { spaceId: id, dispatchDeleteSpace } = this.props;
-    dispatchDeleteSpace({ id });
+    const { spaceId: id, dispatchDeleteSpace, onSuccess } = this.props;
+    dispatchDeleteSpace({ id }, onSuccess);
   };
 
   render() {

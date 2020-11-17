@@ -97,7 +97,7 @@ const createGetLocalSpace = async (
   type,
   flagType,
   showError = true
-) => async dispatch => {
+) => async (dispatch) => {
   const flagGettingSpace = createFlag(flagType);
   try {
     dispatch(flagGettingSpace(true));
@@ -123,14 +123,12 @@ const createGetLocalSpace = async (
   }
 };
 
-const getLocalSpace = payload =>
+const getLocalSpace = (payload) =>
   createGetLocalSpace(payload, GET_SPACE_SUCCEEDED, FLAG_GETTING_SPACE);
 
-const createGetRemoteSpace = async (
-  { id },
-  type,
-  flagType
-) => async dispatch => {
+const createGetRemoteSpace = async ({ id }, type, flagType) => async (
+  dispatch
+) => {
   const flagGettingSpace = createFlag(flagType);
   try {
     dispatch(flagGettingSpace(true));
@@ -174,10 +172,10 @@ const createGetRemoteSpace = async (
   }
 };
 
-const getRemoteSpace = payload =>
+const getRemoteSpace = (payload) =>
   createGetRemoteSpace(payload, GET_SPACE_SUCCEEDED, FLAG_GETTING_SPACE);
 
-const getSpaces = () => dispatch => {
+const getSpaces = () => (dispatch) => {
   dispatch(flagGettingSpaces(true));
   window.ipcRenderer.send(GET_SPACES_CHANNEL);
   // create listener
@@ -191,7 +189,7 @@ const getSpaces = () => dispatch => {
   });
 };
 
-const saveSpace = async ({ space }) => async dispatch => {
+const saveSpace = async ({ space }) => async (dispatch) => {
   try {
     dispatch(flagSavingSpace(true));
 
@@ -246,14 +244,14 @@ const saveSpace = async ({ space }) => async dispatch => {
   }
 };
 
-const clearSpace = () => dispatch => {
+const clearSpace = () => (dispatch) => {
   dispatch(clearPhase());
   return dispatch({
     type: CLEAR_SPACE,
   });
 };
 
-const deleteSpace = ({ id }) => dispatch => {
+const deleteSpace = ({ id }, onSuccess) => (dispatch) => {
   // show confirmation prompt
   const buttons = [i18n.t('Cancel'), i18n.t('Delete')];
   window.ipcRenderer.send(SHOW_DELETE_SPACE_PROMPT_CHANNEL, {
@@ -276,6 +274,9 @@ const deleteSpace = ({ id }) => dispatch => {
         i18n.t(ERROR_DELETING_MESSAGE)
       );
     } else {
+      // eslint-disable-next-line no-unused-expressions
+      onSuccess?.();
+
       // update saved spaces in state
       dispatch(getSpaces());
 
@@ -299,7 +300,7 @@ const deleteSpace = ({ id }) => dispatch => {
   });
 };
 
-const clearUserInput = async ({ spaceId, userId }) => async dispatch => {
+const clearUserInput = async ({ spaceId, userId }) => async (dispatch) => {
   try {
     // show confirmation prompt
     const buttons = [i18n.t('Cancel'), i18n.t('Clear')];
@@ -346,7 +347,7 @@ const clearUserInput = async ({ spaceId, userId }) => async dispatch => {
   }
 };
 
-const getSpace = ({ id, saved = false, user }) => dispatch => {
+const getSpace = ({ id, saved = false, user }) => (dispatch) => {
   // only get the space from the api if not saved
   if (!saved) {
     dispatch(getRemoteSpace({ id }));
@@ -359,7 +360,7 @@ const getSpacesNearby = async ({
   latitude,
   longitude,
   radius = DEFAULT_RADIUS,
-}) => async dispatch => {
+}) => async (dispatch) => {
   try {
     dispatch(flagGettingSpacesNearby(true));
 
@@ -385,7 +386,7 @@ const getSpacesNearby = async ({
   }
 };
 
-const setSearchQuery = async payload => async dispatch => {
+const setSearchQuery = async (payload) => async (dispatch) => {
   dispatch({
     type: SET_SPACE_SEARCH_QUERY_SUCCEEDED,
     payload,

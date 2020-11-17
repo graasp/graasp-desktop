@@ -57,7 +57,7 @@ class VisitSpace extends Component {
     }).isRequired,
     activity: PropTypes.bool,
     history: PropTypes.shape({
-      replace: PropTypes.func.isRequired,
+      push: PropTypes.func.isRequired,
     }).isRequired,
   };
 
@@ -65,7 +65,7 @@ class VisitSpace extends Component {
     activity: false,
   };
 
-  handleChangeSpaceId = event => {
+  handleChangeSpaceId = (event) => {
     const spaceId = event.target.value;
     this.setState({ spaceId });
   };
@@ -81,13 +81,13 @@ class VisitSpace extends Component {
       return toastr.error(t(ERROR_MESSAGE_HEADER), t(INVALID_SPACE_ID_OR_URL));
     }
     if (id && id !== '') {
-      const { replace } = history;
-      return replace(`/space/${id}`);
+      const { push } = history;
+      return push(`/space/${id}`);
     }
     return false;
   };
 
-  handleKeyPress = event => {
+  handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       this.handleClick();
     }

@@ -16,7 +16,6 @@ import Loader from '../common/Loader';
 import { clearSpacesForSync } from '../../actions';
 import './SpaceScreen.css';
 import Styles from '../../Styles';
-import { HOME_PATH } from '../../config/paths';
 import SpaceNotFound from './SpaceNotFound';
 import { SYNC_SPACE_PROPERTIES } from '../../config/constants';
 import SyncCancelButton from './sync/SyncCancelButton';
@@ -76,17 +75,6 @@ class SyncAdvancedScreen extends Component {
     }).isRequired,
     t: PropTypes.func.isRequired,
   };
-
-  componentDidUpdate() {
-    const {
-      localSpace: { deleted },
-      history: { replace },
-    } = this.props;
-    // redirect to home if space is deleted
-    if (deleted) {
-      replace(HOME_PATH);
-    }
-  }
 
   componentWillUnmount() {
     const { dispatchClearSpaces } = this.props;
