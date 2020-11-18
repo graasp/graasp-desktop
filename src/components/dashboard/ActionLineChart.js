@@ -35,7 +35,7 @@ class ActionLineChart extends PureComponent {
     theme: PropTypes.shape({
       palette: PropTypes.shape({
         type: PropTypes.string.isRequired,
-        primary: PropTypes.shape().isRequired,
+        primary: PropTypes.shape({}).isRequired,
       }).isRequired,
     }).isRequired,
     i18n: PropTypes.shape({
