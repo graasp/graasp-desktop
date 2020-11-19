@@ -35,11 +35,8 @@ class ActionBarChart extends PureComponent {
     theme: PropTypes.shape({
       palette: PropTypes.shape({
         type: PropTypes.string.isRequired,
-        primary: PropTypes.arrayOf(PropTypes.string).isRequired,
+        primary: PropTypes.shape({}).isRequired,
       }).isRequired,
-    }).isRequired,
-    history: PropTypes.shape({
-      replace: PropTypes.func.isRequired,
     }).isRequired,
     i18n: PropTypes.shape({
       changeLanguage: PropTypes.func.isRequired,

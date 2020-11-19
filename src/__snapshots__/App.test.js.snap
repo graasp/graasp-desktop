@@ -95,9 +95,9 @@ exports[`<App /> renders correctly 1`] = `
         },
         "primary": Object {
           "contrastText": "#fff",
-          "dark": "#737373",
-          "light": "#737373",
-          "main": "#737373",
+          "dark": "#5050d2",
+          "light": "#5050d2",
+          "main": "#5050d2",
         },
         "secondary": Object {
           "contrastText": "rgba(0, 0, 0, 0.87)",
@@ -316,7 +316,6 @@ exports[`<App /> renders correctly 1`] = `
               "$$typeof": Symbol(react.memo),
               "WrappedComponent": [Function],
               "compare": null,
-              "displayName": "Connect(ComposedComponent)",
               "type": [Function],
             }
           }
@@ -329,7 +328,6 @@ exports[`<App /> renders correctly 1`] = `
               "$$typeof": Symbol(react.memo),
               "WrappedComponent": [Function],
               "compare": null,
-              "displayName": "Connect(ComposedComponent)",
               "type": [Function],
             }
           }
@@ -342,7 +340,6 @@ exports[`<App /> renders correctly 1`] = `
               "$$typeof": Symbol(react.memo),
               "WrappedComponent": [Function],
               "compare": null,
-              "displayName": "Connect(ComposedComponent)",
               "type": [Function],
             }
           }
@@ -355,7 +352,6 @@ exports[`<App /> renders correctly 1`] = `
               "$$typeof": Symbol(react.memo),
               "WrappedComponent": [Function],
               "compare": null,
-              "displayName": "Connect(ComposedComponent)",
               "type": [Function],
             }
           }
@@ -368,7 +364,6 @@ exports[`<App /> renders correctly 1`] = `
               "$$typeof": Symbol(react.memo),
               "WrappedComponent": [Function],
               "compare": null,
-              "displayName": "Connect(ComposedComponent)",
               "type": [Function],
             }
           }
@@ -381,7 +376,6 @@ exports[`<App /> renders correctly 1`] = `
               "$$typeof": Symbol(react.memo),
               "WrappedComponent": [Function],
               "compare": null,
-              "displayName": "Connect(ComposedComponent)",
               "type": [Function],
             }
           }
@@ -399,7 +393,6 @@ exports[`<App /> renders correctly 1`] = `
               "$$typeof": Symbol(react.memo),
               "WrappedComponent": [Function],
               "compare": null,
-              "displayName": "Connect(ComposedComponent)",
               "type": [Function],
             }
           }
@@ -412,7 +405,6 @@ exports[`<App /> renders correctly 1`] = `
               "$$typeof": Symbol(react.memo),
               "WrappedComponent": [Function],
               "compare": null,
-              "displayName": "Connect(ComposedComponent)",
               "type": [Function],
             }
           }
@@ -425,7 +417,6 @@ exports[`<App /> renders correctly 1`] = `
               "$$typeof": Symbol(react.memo),
               "WrappedComponent": [Function],
               "compare": null,
-              "displayName": "Connect(ComposedComponent)",
               "type": [Function],
             }
           }
@@ -438,7 +429,6 @@ exports[`<App /> renders correctly 1`] = `
               "$$typeof": Symbol(react.memo),
               "WrappedComponent": [Function],
               "compare": null,
-              "displayName": "Connect(ComposedComponent)",
               "type": [Function],
             }
           }
@@ -451,7 +441,6 @@ exports[`<App /> renders correctly 1`] = `
               "$$typeof": Symbol(react.memo),
               "WrappedComponent": [Function],
               "compare": null,
-              "displayName": "Connect(ComposedComponent)",
               "type": [Function],
             }
           }
@@ -464,7 +453,6 @@ exports[`<App /> renders correctly 1`] = `
               "$$typeof": Symbol(react.memo),
               "WrappedComponent": [Function],
               "compare": null,
-              "displayName": "Connect(ComposedComponent)",
               "type": [Function],
             }
           }
@@ -477,7 +465,6 @@ exports[`<App /> renders correctly 1`] = `
               "$$typeof": Symbol(react.memo),
               "WrappedComponent": [Function],
               "compare": null,
-              "displayName": "Connect(ComposedComponent)",
               "type": [Function],
             }
           }
@@ -490,7 +477,6 @@ exports[`<App /> renders correctly 1`] = `
               "$$typeof": Symbol(react.memo),
               "WrappedComponent": [Function],
               "compare": null,
-              "displayName": "Connect(ComposedComponent)",
               "type": [Function],
             }
           }

@@ -46,6 +46,9 @@ const styles = (theme) => ({
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end',
   },
+  screenTitle: {
+    marginBottom: theme.spacing(2),
+  },
 });
 
 export class Dashboard extends Component {
@@ -59,17 +62,7 @@ export class Dashboard extends Component {
     classes: PropTypes.shape({
       dashboard: PropTypes.string.isRequired,
       dashboardGridItem: PropTypes.string.isRequired,
-      root: PropTypes.string.isRequired,
-      appBar: PropTypes.string.isRequired,
-      appBarShift: PropTypes.string.isRequired,
-      menuButton: PropTypes.string.isRequired,
-      hide: PropTypes.string.isRequired,
-      drawer: PropTypes.string.isRequired,
-      drawerPaper: PropTypes.string.isRequired,
       drawerHeader: PropTypes.string.isRequired,
-      content: PropTypes.string.isRequired,
-      contentShift: PropTypes.string.isRequired,
-      developer: PropTypes.string.isRequired,
       screenTitle: PropTypes.string.isRequired,
     }).isRequired,
     theme: PropTypes.shape({
@@ -82,18 +75,19 @@ export class Dashboard extends Component {
       changeLanguage: PropTypes.func.isRequired,
     }).isRequired,
     database: PropTypes.shape({
-      user: PropTypes.object,
-      spaces: PropTypes.arrayOf(PropTypes.object),
-      users: PropTypes.arrayOf(PropTypes.object),
-      actions: PropTypes.arrayOf(PropTypes.object),
+      user: PropTypes.shape({}),
+      spaces: PropTypes.arrayOf(PropTypes.shape({})),
+      users: PropTypes.arrayOf(PropTypes.shape({})),
+      actions: PropTypes.arrayOf(PropTypes.shape({})),
     }),
     dispatchGetDatabase: PropTypes.func.isRequired,
     userMode: PropTypes.oneOf(Object.values(USER_MODES)).isRequired,
-    userId: PropTypes.string.isRequired,
+    userId: PropTypes.string,
   };
 
   static defaultProps = {
     database: {},
+    userId: null,
   };
 
   componentDidMount() {
@@ -130,7 +124,9 @@ export class Dashboard extends Component {
             <em>{t('All Spaces')}</em>
           </MenuItem>
           {spaces.map((space) => (
-            <MenuItem value={space.id}>{space.name}</MenuItem>
+            <MenuItem key={space.id} value={space.id}>
+              {space.name}
+            </MenuItem>
           ))}
         </Select>
       </FormControl>
@@ -160,8 +156,10 @@ export class Dashboard extends Component {
           <MenuItem value={SELECT_ALL_USERS_ID}>
             <em>{t('All Users')}</em>
           </MenuItem>
-          {database.users.map((user) => (
-            <MenuItem value={user.id}>{user.username}</MenuItem>
+          {database.users.map(({ id, username }) => (
+            <MenuItem key={id} value={id}>
+              {username}
+            </MenuItem>
           ))}
         </Select>
       </FormControl>

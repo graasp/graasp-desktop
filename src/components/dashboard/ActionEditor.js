@@ -15,7 +15,7 @@ export class ActionEditor extends Component {
     classes: PropTypes.shape({
       button: PropTypes.string.isRequired,
     }).isRequired,
-    actions: PropTypes.shape(PropTypes.object),
+    actions: PropTypes.arrayOf(PropTypes.shape({}).isRequired),
   };
 
   static defaultProps = {

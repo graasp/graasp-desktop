@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';

@@ -32,9 +32,7 @@ const postAppInstanceResource = (mainWindow, db) => (event, payload = {}) => {
     };
 
     // write the resource to the database
-    db.get(APP_INSTANCE_RESOURCES_COLLECTION)
-      .push(resourceToWrite)
-      .write();
+    db.get(APP_INSTANCE_RESOURCES_COLLECTION).push(resourceToWrite).write();
 
     // send back the resource
     mainWindow.webContents.send(
@@ -42,6 +40,7 @@ const postAppInstanceResource = (mainWindow, db) => (event, payload = {}) => {
       resourceToWrite
     );
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
     mainWindow.webContents.send(POST_APP_INSTANCE_RESOURCE_CHANNEL, null);
   }

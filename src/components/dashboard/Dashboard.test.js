@@ -34,7 +34,7 @@ const sampleDatabase = {
 };
 
 const createDashboardProps = ({
-  userId,
+  userId = 'userId',
   userMode = DEFAULT_USER_MODE,
   users,
   actions,

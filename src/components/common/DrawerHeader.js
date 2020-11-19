@@ -17,8 +17,12 @@ import {
   DRAWER_HEADER_HEIGHT,
   USER_MODES,
   THEME_COLORS,
+  AUTHENTICATED,
 } from '../../config/constants';
-import { DRAWER_HEADER_TEACHER_ICON_ID } from '../../config/selectors';
+import {
+  DRAWER_HEADER_STUDENT_ICON_ID,
+  DRAWER_HEADER_TEACHER_ICON_ID,
+} from '../../config/selectors';
 
 const styles = () => ({
   drawerHeader: {
@@ -42,6 +46,7 @@ const DrawerHeader = ({
   handleDrawerClose,
   username,
   isTeacher,
+  authenticated,
 }) => {
   return (
     <ListItem
@@ -49,27 +54,31 @@ const DrawerHeader = ({
       divider
       ContainerComponent="div"
     >
-      <ListItemIcon>
-        {isTeacher ? (
-          <TeacherIcon
-            className={classes.teacherColor}
-            id={DRAWER_HEADER_TEACHER_ICON_ID}
-          />
-        ) : (
-          <PersonIcon />
-        )}
-      </ListItemIcon>
+      {authenticated && (
+        <>
+          <ListItemIcon>
+            {isTeacher ? (
+              <TeacherIcon
+                className={classes.teacherColor}
+                id={DRAWER_HEADER_TEACHER_ICON_ID}
+              />
+            ) : (
+              <PersonIcon id={DRAWER_HEADER_STUDENT_ICON_ID} />
+            )}
+          </ListItemIcon>
 
-      <Tooltip title={username}>
-        <Typography
-          variant="inherit"
-          color="inherit"
-          noWrap
-          classes={{ root: classes.username }}
-        >
-          {username}
-        </Typography>
-      </Tooltip>
+          <Tooltip title={username}>
+            <Typography
+              variant="inherit"
+              color="inherit"
+              noWrap
+              classes={{ root: classes.username }}
+            >
+              {username}
+            </Typography>
+          </Tooltip>
+        </>
+      )}
 
       <ListItemSecondaryAction classes={{ root: classes.secondaryAction }}>
         <IconButton onClick={handleDrawerClose}>
@@ -95,8 +104,13 @@ DrawerHeader.propTypes = {
     direction: PropTypes.string.isRequired,
   }).isRequired,
   handleDrawerClose: PropTypes.func.isRequired,
-  username: PropTypes.string.isRequired,
+  authenticated: PropTypes.bool.isRequired,
+  username: PropTypes.string,
   isTeacher: PropTypes.bool.isRequired,
+};
+
+DrawerHeader.defaultProps = {
+  username: '',
 };
 
 const mapStateToProps = ({ authentication }) => ({
@@ -104,6 +118,7 @@ const mapStateToProps = ({ authentication }) => ({
   isTeacher:
     authentication.getIn(['user', 'settings', 'userMode']) ===
     USER_MODES.TEACHER,
+  authenticated: authentication.get('authenticated') === AUTHENTICATED,
 });
 
 const ConnectedComponent = connect(mapStateToProps, null)(DrawerHeader);

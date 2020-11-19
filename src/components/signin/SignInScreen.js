@@ -51,9 +51,9 @@ const CssTextField = withStyles({
   },
 })(TextField);
 
-const styles = theme => ({
+const styles = (theme) => ({
   ...Styles(theme),
-  graaspLogo: { padding: '0px 45px', width: '95%' },
+  graaspLogo: { padding: theme.spacing(2), width: '95%' },
 });
 
 class SignInScreen extends Component {
@@ -151,13 +151,13 @@ class SignInScreen extends Component {
     dispatchSignIn({ anonymous: true, lang });
   };
 
-  handleUsername = event => {
+  handleUsername = (event) => {
     const username = event.target ? event.target.value : event;
     const usernameIsEmpty = !username.length;
     this.setState({ username, usernameIsEmpty });
   };
 
-  handleKeyPressed = event => {
+  handleKeyPressed = (event) => {
     if (event.key === 'Enter') {
       this.handleSignIn();
     }

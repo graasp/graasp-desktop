@@ -21,7 +21,7 @@ const styles = (theme) => ({
 });
 
 const CustomTooltip = ({ classes, active, payload }) => {
-  if (active) {
+  if (active && payload) {
     return (
       <div className={classes.customTooltip}>
         <p className="label">{`${payload[0].payload.verb} : ${payload[0].value}`}</p>
@@ -34,21 +34,9 @@ const CustomTooltip = ({ classes, active, payload }) => {
 
 CustomTooltip.propTypes = {
   classes: PropTypes.shape({
-    root: PropTypes.string.isRequired,
-    appBar: PropTypes.string.isRequired,
-    appBarShift: PropTypes.string.isRequired,
-    menuButton: PropTypes.string.isRequired,
-    hide: PropTypes.string.isRequired,
-    drawer: PropTypes.string.isRequired,
-    drawerPaper: PropTypes.string.isRequired,
-    drawerHeader: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
-    contentShift: PropTypes.string.isRequired,
-    developer: PropTypes.string.isRequired,
-    screenTitle: PropTypes.string.isRequired,
     customTooltip: PropTypes.string.isRequired,
   }).isRequired,
-  active: PropTypes.bool.isRequired,
+  active: PropTypes.bool,
   payload: PropTypes.arrayOf(
     PropTypes.shape({
       payload: PropTypes.shape({
@@ -56,30 +44,19 @@ CustomTooltip.propTypes = {
       }).isRequired,
       value: PropTypes.number.isRequired,
     })
-  ).isRequired,
+  ),
+};
+
+CustomTooltip.defaultProps = {
+  payload: null,
+  active: false,
 };
 
 class ActionPieChart extends PureComponent {
   static propTypes = {
-    classes: PropTypes.shape({
-      root: PropTypes.string.isRequired,
-      appBar: PropTypes.string.isRequired,
-      appBarShift: PropTypes.string.isRequired,
-      menuButton: PropTypes.string.isRequired,
-      hide: PropTypes.string.isRequired,
-      drawer: PropTypes.string.isRequired,
-      drawerPaper: PropTypes.string.isRequired,
-      drawerHeader: PropTypes.string.isRequired,
-      content: PropTypes.string.isRequired,
-      contentShift: PropTypes.string.isRequired,
-      developer: PropTypes.string.isRequired,
-      screenTitle: PropTypes.string.isRequired,
-    }).isRequired,
+    classes: PropTypes.shape({}).isRequired,
     theme: PropTypes.shape({
       direction: PropTypes.string.isRequired,
-    }).isRequired,
-    history: PropTypes.shape({
-      replace: PropTypes.func.isRequired,
     }).isRequired,
     i18n: PropTypes.shape({
       changeLanguage: PropTypes.func.isRequired,

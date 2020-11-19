@@ -210,6 +210,11 @@
     "Space was exported successfully": "Space was exported successfully",
     "There was a problem exporting this space": "There was a problem exporting this space",
     "There was a problem loading your space": "There was a problem loading your space",
-    "There was a problem downloading your files": "There was a problem downloading your files"
+    "There was a problem downloading your files": "There was a problem downloading your files",
+    "Close Tour": "Close Tour",
+    "End Tour": "End Tour",
+    "Add this space to your Favorite Spaces": "Add this space to your Favorite Spaces",
+    "Synchronization": "Synchronization",
+    "Cancel Synchronization": "Cancel Synchronization"
   }
 }

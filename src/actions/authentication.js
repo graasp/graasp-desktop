@@ -28,7 +28,7 @@ const flagSigningIn = createFlag(FLAG_SIGNING_IN);
 const flagSigningOut = createFlag(FLAG_SIGNING_OUT);
 const flagGettingAuthenticated = createFlag(FLAG_GETTING_AUTHENTICATED);
 
-const signIn = async ({ username, lang, anonymous }) => async dispatch => {
+const signIn = async ({ username, lang, anonymous }) => async (dispatch) => {
   try {
     dispatch(flagSigningIn(true));
     window.ipcRenderer.send(SIGN_IN_CHANNEL, { username, lang, anonymous });
@@ -50,7 +50,7 @@ const signIn = async ({ username, lang, anonymous }) => async dispatch => {
   }
 };
 
-const signOut = user => dispatch => {
+const signOut = (user) => (dispatch) => {
   try {
     dispatch(flagSigningOut(true));
     window.ipcRenderer.send(SIGN_OUT_CHANNEL);
@@ -78,13 +78,14 @@ const signOut = user => dispatch => {
       dispatch(flagSigningOut(false));
     });
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_SIGNING_OUT));
     dispatch(flagSigningOut(false));
   }
 };
 
-const isAuthenticated = async () => dispatch => {
+const isAuthenticated = async () => (dispatch) => {
   try {
     dispatch(flagGettingAuthenticated(true));
     window.ipcRenderer.send(IS_AUTHENTICATED_CHANNEL);
@@ -106,6 +107,7 @@ const isAuthenticated = async () => dispatch => {
       }
     );
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(
       i18n.t(ERROR_MESSAGE_HEADER),

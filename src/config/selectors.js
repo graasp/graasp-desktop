@@ -150,6 +150,7 @@ export const EDIT_CLASSROOM_DELETE_DATA_BUTTON_CLASS =
 export const buildTableCellSpaceId = (id) => `tableCellSpace-${id}`;
 
 export const DRAWER_HEADER_TEACHER_ICON_ID = 'drawerHeaderTeacherIcon';
+export const DRAWER_HEADER_STUDENT_ICON_ID = 'drawerHeaderStudentIcon';
 
 export const TOUR_END_SELECTOR =
   '#react-joyride-step-0 > div > div > div.react-joyride__tooltip > div:nth-child(2) > div > button';

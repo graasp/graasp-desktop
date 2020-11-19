@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { App } from './App';
+import { DEFAULT_USER_MODE } from './config/constants';
 
 window.ipcRenderer = { once: jest.fn(), send: jest.fn() };
 
@@ -18,7 +19,12 @@ describe('<App />', () => {
     dispatchGetGeolocationEnabled: jest.fn(),
     dispatchIsAuthenticated: jest.fn(),
     geolocationEnabled: false,
-    classes: {},
+    classes: {
+      toastrIcon: '',
+      fullScreen: '',
+    },
+    userMode: DEFAULT_USER_MODE,
+    connexionStatus: true,
   };
 
   // eslint-disable-next-line react/jsx-props-no-spreading

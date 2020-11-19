@@ -25,10 +25,6 @@ const styles = theme => ({
 
 class FavoriteButton extends Component {
   static propTypes = {
-    space: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-    }).isRequired,
     classes: PropTypes.shape({
       appBar: PropTypes.string.isRequired,
       button: PropTypes.string.isRequired,

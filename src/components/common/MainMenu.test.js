@@ -15,17 +15,28 @@ import {
   DASHBOARD_PATH,
   SAVED_SPACES_PATH,
 } from '../../config/paths';
+import { DEFAULT_USER_MODE } from '../../config/constants';
 
 const MENUITEM_OFFLINE_NUMBER = 2;
 const MENUITEM_OFFLINE_ONLINE_COUNT = 11;
 
-const createMainMenuProps = (developerMode, path, authenticated = true) => {
+const createMainMenuProps = (
+  developerMode,
+  path,
+  authenticated = true,
+  userMode = DEFAULT_USER_MODE
+) => {
   return {
-    t: text => text,
+    t: (text) => text,
     developerMode,
-    history: { replace: jest.fn() },
+    history: { push: jest.fn() },
     match: { path },
     authenticated,
+    userMode,
+    location: {
+      pathname: 'somepath',
+    },
+    dispatchSignOut: jest.fn(),
   };
 };
 
@@ -93,8 +104,9 @@ describe('<MainMenu />', () => {
       );
     });
 
-    it(`renders ${MENUITEM_OFFLINE_ONLINE_COUNT +
-      1} <MenuItem /> components`, () => {
+    it(`renders ${
+      MENUITEM_OFFLINE_ONLINE_COUNT + 1
+    } <MenuItem /> components`, () => {
       expect(wrapper.find(MenuItem)).toHaveLength(
         MENUITEM_OFFLINE_ONLINE_COUNT + 1
       );
@@ -118,7 +130,7 @@ describe('<MainMenu />', () => {
       const selectedMenuItem = wrapper.find({ selected: true });
       expect(selectedMenuItem.length).toBeLessThanOrEqual(2);
       expect(
-        selectedMenuItem.map(menuItem =>
+        selectedMenuItem.map((menuItem) =>
           menuItem.find(ListItemText).prop('primary')
         )
       ).toEqual(Array(selectedMenuItem.length).fill(text));

@@ -21,9 +21,7 @@ export class DatabaseEditor extends Component {
     }).isRequired,
     dispatchGetDatabase: PropTypes.func.isRequired,
     dispatchSetDatabase: PropTypes.func.isRequired,
-    database: PropTypes.shape({
-      spaces: PropTypes.array,
-    }),
+    database: PropTypes.shape({}),
     user: PropTypes.instanceOf(Map).isRequired,
     dispatchSignOut: PropTypes.func.isRequired,
   };

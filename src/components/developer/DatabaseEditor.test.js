@@ -1,4 +1,5 @@
 import React from 'react';
+import { Map } from 'immutable';
 import { shallow } from 'enzyme';
 import ReactJson from 'react-json-view';
 import Button from '@material-ui/core/Button';
@@ -10,9 +11,9 @@ const sampleDatabase = {
   spaces: [{}],
 };
 
-const createDatabaseEditorProps = database => {
+const createDatabaseEditorProps = (database) => {
   return {
-    t: text => text,
+    t: (text) => text,
     classes: {
       button: '',
     },
@@ -20,6 +21,9 @@ const createDatabaseEditorProps = database => {
     dispatchSetDatabase: jest.fn(),
     dispatchSignOut: jest.fn(),
     database,
+    user: Map({
+      id: 'someuserid',
+    }),
   };
 };
 
@@ -59,7 +63,7 @@ describe('<DatabaseEditor />', () => {
 
   describe.each([undefined, {}])(
     '<DatabaseEditor /> on undefined or empty database',
-    database => {
+    (database) => {
       let wrapper;
 
       it('renders empty text ', () => {

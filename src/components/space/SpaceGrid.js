@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import ImmutablePropTypes from 'react-immutable-proptypes';
+import { List, Set } from 'immutable';
 import { withStyles } from '@material-ui/core';
 import { withRouter } from 'react-router';
 import Grid from '@material-ui/core/Grid/Grid';
@@ -26,11 +26,7 @@ class SpaceGrid extends Component {
 
   static propTypes = {
     folder: PropTypes.string,
-    spaces: ImmutablePropTypes.setOf(
-      PropTypes.shape({
-        id: PropTypes.string.isRequired,
-      })
-    ).isRequired,
+    spaces: PropTypes.oneOfType([List, Set]).isRequired,
     history: PropTypes.shape({
       length: PropTypes.number.isRequired,
       push: PropTypes.func.isRequired,
@@ -149,13 +145,15 @@ class SpaceGrid extends Component {
 
     const MediaCards = [];
 
-    columnWrapper.items.forEach((column) => {
+    columnWrapper.items.forEach((column, i) => {
       MediaCards.push(
         <div
           style={{
             flex: 1,
             flexWrap: 'wrap',
           }}
+          // eslint-disable-next-line react/no-array-index-key
+          key={`column-${i}`}
         >
           {column}
         </div>

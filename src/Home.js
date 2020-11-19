@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import { List } from 'immutable';
+import { List, Set } from 'immutable';
 import { withRouter } from 'react-router';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
@@ -27,7 +27,7 @@ import Main from './components/common/Main';
 import { HOME_PATH } from './config/paths';
 import WelcomeContent from './components/common/WelcomeContent';
 
-const styles = theme => ({
+const styles = (theme) => ({
   ...Styles(theme),
   wrapper: {
     marginTop: theme.spacing(2),
@@ -66,7 +66,7 @@ class Home extends Component {
     history: PropTypes.shape({
       replace: PropTypes.func.isRequired,
     }).isRequired,
-    spaces: PropTypes.instanceOf(List).isRequired,
+    spaces: PropTypes.instanceOf(Set).isRequired,
     activity: PropTypes.bool,
     favoriteSpaces: PropTypes.instanceOf(List).isRequired,
     recentSpaces: PropTypes.instanceOf(List).isRequired,
@@ -123,14 +123,14 @@ class Home extends Component {
     }
   }
 
-  filterSpaces = spaces => {
+  filterSpaces = (spaces) => {
     const { searchQuery, spaces: originalSpaces } = this.props;
     // get space content by id
     let filteredSpaces = spaces
-      .map(id => originalSpaces.find(({ id: spaceId }) => id === spaceId))
+      .map((id) => originalSpaces.find(({ id: spaceId }) => id === spaceId))
       // remove undefined space
       // this case can happen if originalSpaces is updated before spaces
-      .filter(space => space);
+      .filter((space) => space);
 
     filteredSpaces = searchSpacesByQuery(filteredSpaces, searchQuery);
     return filteredSpaces;

@@ -39,6 +39,7 @@ const getAppInstanceResources = async (
       }
     );
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error(err);
   }
 };
@@ -70,6 +71,7 @@ const postAppInstanceResource = async (
       }
     );
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error(err);
   }
 };
@@ -98,6 +100,7 @@ const patchAppInstanceResource = async (
       }
     );
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error(err);
   }
 };
@@ -127,6 +130,7 @@ const deleteAppInstanceResource = async (
       }
     );
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error(err);
   }
 };

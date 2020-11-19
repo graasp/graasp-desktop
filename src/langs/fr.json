@@ -210,6 +210,10 @@
     "Space was exported successfully": "L'espace a été exporté avec succès",
     "There was a problem exporting this space": "Une erreur s'est produite lors de l'export de l'espace",
     "There was a problem loading your space": "Une erreur s'est produite lors du chargement de l'espace",
-    "There was a problem downloading your files": "Une erreur s'est produite lors du téléchargement des fichiers"
+    "There was a problem downloading your files": "Une erreur s'est produite lors du téléchargement des fichiers",
+    "Close Tour": "Fermer le Tour",
+    "End Tour": "Finir le Tour",
+    "Synchronization": "Synchronisation",
+    "Cancel Synchronization": "Annuler la Synchronisation"
   }
 }

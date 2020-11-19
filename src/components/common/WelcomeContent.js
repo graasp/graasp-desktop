@@ -17,7 +17,7 @@ import {
 } from '../../config/paths';
 import { VISIT_SPACE_BUTTON_CLASS } from '../../config/selectors';
 
-const styles = theme => ({
+const styles = (theme) => ({
   ...Styles(theme),
   wrapper: {
     display: 'flex',

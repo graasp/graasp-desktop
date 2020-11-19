@@ -21,9 +21,13 @@ import SyncAdvancedSwitch from './space/sync/SyncAdvancedSwitch';
 import StudentModeSwitch from './common/StudentModeSwitch';
 import ActionEnabledSwitch from './common/ActionEnabledSwitch';
 import ActionAccessibilitySwitch from './common/ActionAccessibilitySwitch';
-import { USER_MODES, DEFAULT_USER_MODE } from '../config/constants';
+import {
+  USER_MODES,
+  DEFAULT_USER_MODE,
+  AUTHENTICATED,
+} from '../config/constants';
 
-const styles = theme => ({
+const styles = (theme) => ({
   ...Styles(theme),
   divider: {
     margin: theme.spacing(2, 0),
@@ -100,7 +104,7 @@ export class Settings extends Component {
 }
 
 const mapStateToProps = ({ authentication }) => ({
-  authenticated: authentication.getIn(['authenticated']),
+  authenticated: authentication.getIn(['authenticated']) === AUTHENTICATED,
   userMode:
     authentication.getIn(['user', 'settings', 'userMode']) || DEFAULT_USER_MODE,
 });

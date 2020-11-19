@@ -155,15 +155,12 @@ describe('<Phase />', () => {
     });
   });
 
-  describe.each([undefined, Map({})])(
-    '<Phase /> when phase is undefined or empty',
-    phase => {
-      it('renders <SpaceDescription />', () => {
-        const props = createPhaseProps(phase, sampleTools, false);
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        const wrapper = shallow(<Phase {...props} />);
-        expect(wrapper.find(SpaceDescription)).toHaveLength(1);
-      });
-    }
-  );
+  describe.each([Map({})])('<Phase /> when phase is empty', (phase) => {
+    it('renders <SpaceDescription />', () => {
+      const props = createPhaseProps(phase, sampleTools, false);
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      const wrapper = shallow(<Phase {...props} />);
+      expect(wrapper.find(SpaceDescription)).toHaveLength(1);
+    });
+  });
 });

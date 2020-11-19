@@ -1,14 +1,11 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import { Set } from 'immutable';
-import { withStyles } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import Typography from '@material-ui/core/Typography/Typography';
 import PropTypes from 'prop-types';
 import ClassroomCard from './ClassroomCard';
 import { NO_CLASSROOM_AVAILABLE_ID } from '../../config/selectors';
-
-const styles = () => ({});
 
 const ClassroomGrid = ({ classrooms, t }) => {
   if (classrooms.isEmpty()) {
@@ -24,7 +21,7 @@ const ClassroomGrid = ({ classrooms, t }) => {
   return (
     <>
       <Grid container spacing={3}>
-        {classrooms.map(classroom => (
+        {classrooms.map((classroom) => (
           <Grid item key={classroom.id} xs={6} sm={3}>
             <ClassroomCard key={classroom.id} classroom={classroom} />
           </Grid>
@@ -39,7 +36,6 @@ ClassroomGrid.propTypes = {
   classrooms: PropTypes.instanceOf(Set).isRequired,
 };
 
-const StyledComponent = withStyles(styles, { withTheme: true })(ClassroomGrid);
-const TranslatedComponent = withTranslation()(StyledComponent);
+const TranslatedComponent = withTranslation()(ClassroomGrid);
 
 export default TranslatedComponent;

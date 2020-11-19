@@ -9,7 +9,7 @@ import { USER_MODES } from '../config/constants';
 
 const createSettingsProps = () => {
   return {
-    t: text => text,
+    t: (text) => text,
     classes: {
       appBar: '',
       root: '',
@@ -22,6 +22,7 @@ const createSettingsProps = () => {
       content: '',
       contentShift: '',
       settings: '',
+      divider: '',
     },
     theme: {
       direction: 'ltr',

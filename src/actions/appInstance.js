@@ -20,8 +20,8 @@ const getAppInstance = async (
 
     // only consider items that have app instances
     const appInstances = items
-      .filter(item => item.appInstance)
-      .map(item => item.appInstance);
+      .filter((item) => item.appInstance)
+      .map((item) => item.appInstance);
 
     // find the app instance with this id
     const appInstance = _.find(appInstances, ['id', id]);
@@ -51,6 +51,7 @@ const getAppInstance = async (
       );
     }
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error(err);
   }
 };
@@ -78,6 +79,7 @@ const patchAppInstance = async (
       }
     );
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error(err);
   }
 };
