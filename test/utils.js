@@ -23,6 +23,8 @@ import {
   DRAWER_BUTTON_ID,
   TOUR_END_SELECTOR,
   DRAWER_HEADER_STUDENT_ICON_ID,
+  buildSpaceCardId,
+  SPACE_CARD_LINK_CLASS,
 } from '../src/config/selectors';
 import {
   SETTINGS_LOAD_PAUSE,
@@ -31,6 +33,7 @@ import {
   INPUT_TYPE_PAUSE,
   LOGIN_PAUSE,
   LOAD_PHASE_PAUSE,
+  OPEN_SAVED_SPACE_PAUSE,
 } from './constants';
 import {
   SYNC_MODES,
@@ -138,17 +141,25 @@ export const createRandomString = () => {
 
 /** assertion util functions */
 
-export const expectElementToNotExist = async (client, elementSelector) => {
-  const found = await (await client.$(elementSelector)).isExisting();
-  expect(found).to.be.false;
+export const expectElementToNotExist = async (
+  client,
+  containerSelector,
+  elementSelector
+) => {
+  const found = await (await client.$(containerSelector)).getHTML();
+  expect(found).to.not.contain(elementSelector);
 };
 
-export const expectAnyElementToExist = async (client, elementSelectors) => {
+export const expectAnyElementToExist = async (
+  client,
+  containerSelector,
+  elementSelectors
+) => {
   const foundElements = [];
-  /* eslint-disable-next-line no-restricted-syntax */
+  const content = await (await client.$(containerSelector)).getHTML();
+  // eslint-disable-next-line no-restricted-syntax
   for (const selector of elementSelectors) {
-    /* eslint-disable-next-line no-await-in-loop */
-    const found = await (await client.$(selector)).isExisting();
+    const found = content.includes(selector);
     foundElements.push(found);
   }
   expect(foundElements).to.include(true);
@@ -235,11 +246,11 @@ export const toggleSyncAdvancedMode = async (client, value) => {
 /** sign in util function */
 export const userSignIn = async (
   client,
-  { name, mode = DEFAULT_USER_MODE },
+  { username, settings: { userMode = DEFAULT_USER_MODE } },
   closeTour = false
 ) => {
   const input = await client.$(`#${LOGIN_USERNAME_INPUT_ID}`);
-  await input.setValue(name);
+  await input.setValue(username);
   await client.pause(INPUT_TYPE_PAUSE);
   const button = await client.$(`#${LOGIN_BUTTON_ID}`);
   await button.click();
@@ -251,8 +262,8 @@ export const userSignIn = async (
     }
   }
   // change mode if it is not default mode
-  if (mode !== DEFAULT_USER_MODE) {
-    if (mode === USER_MODES.TEACHER) {
+  if (userMode !== DEFAULT_USER_MODE) {
+    if (userMode === USER_MODES.TEACHER) {
       // open drawer to detect teacher icon
       await openDrawer(client);
       const drawerStudentIcon = await client.$(
@@ -261,8 +272,16 @@ export const userSignIn = async (
       const isStudent = await drawerStudentIcon.isExisting();
       if (isStudent) {
         await menuGoToSettings(client);
-        await toggleStudentMode(client, mode);
+        await toggleStudentMode(client, userMode);
       }
     }
   }
+};
+
+export const clickOnSpaceCard = async (client, id) => {
+  const spaceCardLink = await client.$(
+    `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
+  );
+  await spaceCardLink.click();
+  await client.pause(OPEN_SAVED_SPACE_PAUSE);
 };

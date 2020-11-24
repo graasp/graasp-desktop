@@ -1,4 +1,5 @@
-const SPACE_WITH_MULTIPLE_CHANGES = {
+export default {
+  path: 'spaceWithMultipleChanges.zip',
   space: {
     id: '5ea029f5f851e7716e3722fe',
     name: 'Sync Space with Multiple Changes',
@@ -148,7 +149,3 @@ const SPACE_WITH_MULTIPLE_CHANGES = {
   appInstanceResources: [],
   actions: [],
 };
-
-const SPACE_WITH_MULTIPLE_CHANGES_PATH = 'spaceWithMultipleChanges.zip';
-
-export { SPACE_WITH_MULTIPLE_CHANGES, SPACE_WITH_MULTIPLE_CHANGES_PATH };

@@ -1,31 +1,41 @@
 import { USER_MODES } from '../../src/config/constants';
 
 export const USER_GRAASP = {
-  name: 'graasp',
+  username: 'graasp',
   id: 'graasp-id',
-  mode: USER_MODES.TEACHER,
+  settings: {
+    userMode: USER_MODES.TEACHER,
+  },
 };
 
 export const USER_ALICE = {
-  name: 'alice',
+  username: 'alice',
   id: 'alice-id',
-  mode: USER_MODES.TEACHER,
+  settings: {
+    userMode: USER_MODES.TEACHER,
+  },
 };
 
 export const USER_BOB = {
-  name: 'bob',
+  username: 'bob',
   id: 'bob-id',
-  mode: USER_MODES.STUDENT,
+  settings: {
+    userMode: USER_MODES.STUDENT,
+  },
 };
 
 export const USER_SAM = {
-  name: 'sam',
+  username: 'sam',
   id: 'sam-id',
-  mode: USER_MODES.STUDENT,
+  settings: {
+    userMode: USER_MODES.STUDENT,
+  },
 };
 
 export const USER_CEDRIC = {
-  name: 'cedric',
+  username: 'cedric',
   id: 'cedric-id',
-  mode: USER_MODES.TEACHER,
+  settings: {
+    userMode: USER_MODES.TEACHER,
+  },
 };

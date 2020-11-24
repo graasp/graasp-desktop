@@ -1,4 +1,5 @@
-export const SPACE_APOLLO_11 = {
+export default {
+  path: 'apollo11.zip',
   space: {
     id: '5d2db762fcb4d60e33ad32fe',
     name: 'Apollo 11',
@@ -206,5 +207,3 @@ export const SPACE_APOLLO_11 = {
   actions: [],
   appInstanceResources: [],
 };
-
-export const SPACE_APOLLO_11_PATH = 'apollo11.zip';

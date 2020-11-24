@@ -16,10 +16,10 @@ import {
   buildSpaceCardId,
   SPACE_MEDIA_CARD_CLASS,
   RECENT_SPACES_WRAPPER_ID,
+  HOME_MAIN_ID,
 } from '../../src/config/selectors';
 import {
   SPACE_ATOMIC_STRUCTURE,
-  SPACE_ATOMIC_STRUCTURE_PATH,
   SPACE_APOLLO_11,
   SPACE_AIR_POLLUTION,
   SPACE_LIGHT_COLOR,
@@ -43,7 +43,6 @@ describe('Recent Spaces', function () {
   beforeEach(
     mochaAsync(async () => {
       app = await createApplication();
-      await userSignIn(app.client, USER_GRAASP);
     })
   );
 
@@ -53,11 +52,12 @@ describe('Recent Spaces', function () {
       mochaAsync(async () => {
         const {
           space: { id },
+          path,
         } = SPACE_ATOMIC_STRUCTURE;
 
         const { client } = app;
 
-        await loadSpaceById(client, SPACE_ATOMIC_STRUCTURE_PATH);
+        await loadSpaceById(client, path);
 
         // check space is in home
         await menuGoToHome(client);
@@ -153,7 +153,11 @@ describe('Recent Spaces', function () {
 
       // sign in as Bob, no recent spaces
       await userSignIn(client, USER_BOB);
-      await expectElementToNotExist(client, `#${buildSpaceCardId(id)}`);
+      await expectElementToNotExist(
+        client,
+        `#${HOME_MAIN_ID}`,
+        buildSpaceCardId(id)
+      );
       await menuGoToSignOut(client);
 
       // sign in as graasp, recent spaces still saved

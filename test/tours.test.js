@@ -18,21 +18,20 @@ describe('Tour Scenarios', function () {
   beforeEach(
     mochaAsync(async () => {
       app = await createApplication({
-        showOpenDialogResponse: 1,
-        showTours: true,
+        database: {},
+        responses: {
+          showOpenDialogResponse: 1,
+          showTours: true,
+        },
       });
     })
   );
 
-  after(function () {
+  afterEach(function () {
     return closeApplication(app);
   });
 
   describe('Display tour on sign in', function () {
-    afterEach(function () {
-      return closeApplication(app);
-    });
-
     it(
       `displays the tour after signing in`,
       mochaAsync(async () => {
@@ -51,7 +50,7 @@ describe('Tour Scenarios', function () {
         await userSignIn(client, USER_BOB, true);
         await menuGoToSignOut(client);
         await userSignIn(client, USER_BOB, false);
-        await expectElementToNotExist(client, TOUR_END_SELECTOR);
+        await expectElementToNotExist(client, '#root', TOUR_END_SELECTOR);
       })
     );
     it(

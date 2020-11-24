@@ -1,4 +1,5 @@
-const SPACE_WITH_FILE_DROP = {
+export default {
+  path: 'spaceWithFileDrop.zip',
   space: {
     id: '5fad26da467d165d53ef784b',
     name: 'Space with File Drop',
@@ -44,7 +45,3 @@ const SPACE_WITH_FILE_DROP = {
   appInstanceResources: [],
   actions: [],
 };
-
-const SPACE_WITH_FILE_DROP_PATH = 'spaceWithFileDrop.zip';
-
-export { SPACE_WITH_FILE_DROP, SPACE_WITH_FILE_DROP_PATH };

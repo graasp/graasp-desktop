@@ -1,20 +1,83 @@
 import { Application } from 'spectron';
 import electronPath from 'electron'; // Require Electron from the binaries included in node_modules.
 import path from 'path';
+import fse from 'fs-extra';
+import extract from 'extract-zip';
+import { buildSignedUserForDatabase } from './constants';
 
-const createApplication = async (
-  {
-    showMessageDialogResponse,
-    showSaveDialogResponse,
-    showOpenDialogResponse,
-    showTours,
-  } = {
+const getFormattedTime = () => {
+  const today = new Date();
+  const y = today.getFullYear();
+  // JavaScript months are 0-based.
+  const m = today.getMonth() + 1;
+  const d = today.getDate();
+  const h = today.getHours();
+  const mi = today.getMinutes();
+  const s = today.getSeconds();
+  return `${y}${m}${d}_${h}-${mi}-${s}`;
+};
+
+const setUpDatabase = async (database = buildSignedUserForDatabase()) => {
+  const tmpDatabasePath = path.join(__dirname, 'tmp', getFormattedTime());
+  const varFolder = path.join(tmpDatabasePath, 'var');
+  fse.ensureDirSync(varFolder);
+
+  const db = {
+    ...database,
+    spaces: [],
+    appInstanceResources: [],
+    actions: [],
+  };
+
+  if (database) {
+    // add paths data in var
+    const spaces = database?.spaces || [];
+    // eslint-disable-next-line no-restricted-syntax
+    for (const {
+      path: spacePath,
+      space,
+      appInstanceResources,
+      actions,
+    } of spaces) {
+      // eslint-disable-next-line no-await-in-loop
+      await extract(path.join(__dirname, './fixtures/spaces', spacePath), {
+        dir: `${varFolder}/${space.id}`,
+      });
+      db.spaces.push(space);
+      db.appInstanceResources = db.appInstanceResources.concat(
+        appInstanceResources
+      );
+      db.actions = db.actions.concat(actions);
+    }
+
+    const classrooms = database?.classrooms || [];
+    // eslint-disable-next-line no-restricted-syntax
+    for (const { id } of classrooms) {
+      fse.ensureDirSync(path.join(varFolder, id));
+    }
+
+    // set db
+    fse.writeFileSync(`${varFolder}/db.json`, JSON.stringify(db));
+  }
+
+  return tmpDatabasePath;
+};
+
+const createApplication = async ({
+  database = buildSignedUserForDatabase(),
+  responses = {
     showMessageDialogResponse: undefined,
     showSaveDialogResponse: undefined,
     showOpenDialogResponse: undefined,
     showTours: 0,
-  }
-) => {
+  },
+} = {}) => {
+  const {
+    showMessageDialogResponse,
+    showSaveDialogResponse,
+    showOpenDialogResponse,
+    showTours,
+  } = responses;
   const env = { NODE_ENV: 'test', ELECTRON_IS_DEV: 0, SHOW_TOURS: showTours };
 
   if (showMessageDialogResponse !== undefined) {
@@ -28,6 +91,9 @@ const createApplication = async (
   if (showOpenDialogResponse !== undefined) {
     env.SHOW_OPEN_DIALOG_RESPONSE = showOpenDialogResponse;
   }
+
+  // set up database
+  const tmpDatabasePath = await setUpDatabase(database);
 
   const app = new Application({
     // Your electron path can be any binary
@@ -49,6 +115,7 @@ const createApplication = async (
     // The following line tells spectron to look and use the main.js file
     // and the package.json located 1 level above.
     args: [path.join(__dirname, '../public/electron.js')],
+    chromeDriverArgs: [`--user-data-dir=${tmpDatabasePath}`],
     env,
   });
 

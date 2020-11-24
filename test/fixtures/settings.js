@@ -9,19 +9,19 @@ import { USER_ALICE, USER_GRAASP, USER_CEDRIC } from './users';
 
 /* eslint-disable-next-line import/prefer-default-export */
 export const settingsPerUser = {
-  [USER_GRAASP.name]: {
+  [USER_GRAASP.username]: {
     lang: DEFAULT_LANGUAGE,
     developerMode: DEFAULT_DEVELOPER_MODE,
     geolocationEnabled: DEFAULT_GEOLOCATION_ENABLED,
     syncMode: DEFAULT_SYNC_MODE,
   },
-  [USER_ALICE.name]: {
+  [USER_ALICE.username]: {
     lang: 'fr',
     developerMode: DEFAULT_DEVELOPER_MODE,
     geolocationEnabled: true,
     syncMode: SYNC_MODES.ADVANCED,
   },
-  [USER_CEDRIC.name]: {
+  [USER_CEDRIC.username]: {
     lang: 'ja',
     developerMode: true,
     geolocationEnabled: DEFAULT_GEOLOCATION_ENABLED,

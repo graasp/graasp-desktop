@@ -4,14 +4,11 @@
 /* eslint-disable func-names */
 import { expect } from 'chai';
 import path from 'path';
-import _ from 'lodash';
 import {
   mochaAsync,
   expectElementToNotExist,
   expectElementToExist,
-  toggleStudentMode,
   clearInput,
-  menuGoToSettings,
   menuGoToClassrooms,
   menuGoToSignOut,
   userSignIn,
@@ -55,6 +52,7 @@ import {
   EDIT_USER_IN_CLASSROOM_DELETE_DATA_BUTTON_CLASS,
   buildTableCellSpaceId,
   EDIT_CLASSROOM_DELETE_DATA_BUTTON_CLASS,
+  MAINMENU_ID,
 } from '../src/config/selectors';
 import {
   DEFAULT_GLOBAL_TIMEOUT,
@@ -66,16 +64,15 @@ import {
   OPEN_CLASSROOM_PAUSE,
   TOOLTIP_FADE_OUT_PAUSE,
   LOAD_SELECTION_SPACE_PAUSE,
+  buildSignedUserForDatabase,
 } from './constants';
-import { USER_GRAASP, USER_ALICE } from './fixtures/users';
+import { USER_GRAASP, USER_ALICE, USER_BOB } from './fixtures/users';
 import {
   checkLoadSelectionLayout,
   setCheckboxesTo,
 } from './spaces/loadSpace.test';
 import {
-  SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES_PATH,
   SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES,
-  SPACE_APOLLO_11_PATH,
   SPACE_APOLLO_11,
 } from './fixtures/spaces';
 
@@ -228,42 +225,37 @@ const editUserInClassroom = async (
 const hasStudentsTableLayout = async (client, spaces = [], usernames = []) => {
   // no user should have no table row
   if (!usernames.length) {
-    await expectElementToNotExist(
-      client,
-      `#${CLASSROOM_TABLE_BODY_ID} tr[data-name]`
-    );
+    const users = await (
+      await client.$(`#${CLASSROOM_TABLE_BODY_ID}`)
+    ).getText();
+    expect(users).to.equal('');
   }
 
   // check space columns
   for (const spaceId of spaces) {
     const headCellSelector = `#${buildTableCellSpaceId(spaceId)}`;
     await expectElementToExist(client, headCellSelector);
-  }
-
-  // check user rows
-  for (const { username, actions = {}, resources = {} } of usernames) {
-    const userRowSelector = `#${CLASSROOM_TABLE_BODY_ID} tr[data-name='${username}']`;
-    await expectElementToExist(client, userRowSelector);
-
-    if (!_.isEmpty(actions)) {
-      for (const [spaceId, exists] of Object.entries(actions)) {
-        const actionsSelector = `${userRowSelector} *[data-head-cell-id='${spaceId}'] .${STUDENT_ROW_ACTIONS_CLASS}`;
-        if (exists) {
-          await expectElementToExist(client, actionsSelector);
-        } else {
-          await expectElementToNotExist(client, actionsSelector);
-        }
+    for (const { username, actions = {}, resources = {} } of usernames) {
+      const userRowSelector = `#${CLASSROOM_TABLE_BODY_ID} tr[data-name='${username}']`;
+      await expectElementToExist(client, userRowSelector);
+      const cellSelector = `${userRowSelector} *[data-head-cell-id='${spaceId}']`;
+      if (actions[spaceId]) {
+        await expectElementToExist(client, `.${STUDENT_ROW_ACTIONS_CLASS}`);
+      } else {
+        await expectElementToNotExist(
+          client,
+          cellSelector,
+          STUDENT_ROW_ACTIONS_CLASS
+        );
       }
-    }
-
-    if (!_.isEmpty(resources)) {
-      for (const [spaceId, exists] of Object.entries(resources)) {
-        const resourcesSelector = `${userRowSelector} *[data-head-cell-id='${spaceId}'] .${STUDENT_ROW_RESOURCES_CLASS}`;
-        if (exists) {
-          await expectElementToExist(client, resourcesSelector);
-        } else {
-          await expectElementToNotExist(client, resourcesSelector);
-        }
+      if (resources[spaceId]) {
+        await expectElementToExist(client, `.${STUDENT_ROW_RESOURCES_CLASS}`);
+      } else {
+        await expectElementToNotExist(
+          client,
+          cellSelector,
+          STUDENT_ROW_RESOURCES_CLASS
+        );
       }
     }
   }
@@ -373,11 +365,9 @@ describe('Classrooms Scenarios', function () {
   describe('Student', function () {
     beforeEach(
       mochaAsync(async () => {
-        app = await createApplication();
+        app = await createApplication({ database: {} });
         const { client } = app;
-        await userSignIn(client, USER_GRAASP);
-        await menuGoToSettings(client);
-        await toggleStudentMode(client, true);
+        await userSignIn(client, USER_BOB);
       })
     );
 
@@ -387,7 +377,11 @@ describe('Classrooms Scenarios', function () {
         const { client } = app;
 
         await openDrawer(client);
-        await expectElementToNotExist(client, `#${CLASSROOMS_MENU_ITEM_ID}`);
+        await expectElementToNotExist(
+          client,
+          `#${MAINMENU_ID}`,
+          CLASSROOMS_MENU_ITEM_ID
+        );
       })
     );
   });
@@ -396,11 +390,11 @@ describe('Classrooms Scenarios', function () {
     it(
       'manage a classroom (add, edit, remove)',
       mochaAsync(async () => {
-        app = await createApplication({ showMessageDialogResponse: 1 });
+        app = await createApplication({
+          responses: { showMessageDialogResponse: 1 },
+        });
 
         const { client } = app;
-
-        await userSignIn(client, USER_GRAASP);
 
         await menuGoToClassrooms(client);
 
@@ -442,7 +436,7 @@ describe('Classrooms Scenarios', function () {
     it(
       'classrooms are saved for a given teacher',
       mochaAsync(async () => {
-        app = await createApplication({});
+        app = await createApplication({ database: {} });
 
         const { client } = app;
 
@@ -487,21 +481,33 @@ describe('Classrooms Scenarios', function () {
     it(
       'manage a student in a classroom (add, remove, edit)',
       mochaAsync(async () => {
-        app = await createApplication({ showMessageDialogResponse: 1 });
+        const name = 'classroomname';
+        const id = 'classroomId';
+
+        app = await createApplication({
+          database: {
+            classrooms: [
+              {
+                spaces: [],
+                appInstanceResources: [],
+                actions: [],
+                users: [],
+                id,
+                name,
+                createdAt: Date.now(),
+                updatedAt: Date.now(),
+                teacherId: USER_GRAASP.id,
+              },
+            ],
+            ...buildSignedUserForDatabase(),
+          },
+          responses: { showMessageDialogResponse: 1 },
+        });
 
         const { client } = app;
 
-        await userSignIn(client, USER_GRAASP);
-
         await menuGoToClassrooms(client);
 
-        // default content empty
-        await expectElementToExist(client, `#${NO_CLASSROOM_AVAILABLE_ID}`);
-
-        const name = 'classroomname';
-
-        // add classroom
-        await addClassroom(client, name);
         await openClassroom(client, name);
 
         // add user
@@ -565,13 +571,31 @@ describe('Classrooms Scenarios', function () {
     );
 
     describe('manage space data in classroom', function () {
+      const classroomName = 'classroomname';
+      const user = USER_ALICE;
+
       beforeEach(
         mochaAsync(async () => {
-          app = await createApplication();
+          app = await createApplication({
+            database: {
+              classrooms: [
+                {
+                  spaces: [],
+                  appInstanceResources: [],
+                  actions: [],
+                  users: [],
+                  id: 'someid',
+                  name: classroomName,
+                  createdAt: Date.now(),
+                  updatedAt: Date.now(),
+                  teacherId: USER_GRAASP.id,
+                },
+              ],
+              ...buildSignedUserForDatabase(),
+            },
+          });
 
           const { client } = app;
-
-          await userSignIn(client, USER_GRAASP);
 
           await menuGoToClassrooms(client);
         })
@@ -582,12 +606,9 @@ describe('Classrooms Scenarios', function () {
         mochaAsync(async () => {
           const { client } = app;
 
-          const filepath = SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES_PATH;
+          const filepath =
+            SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES.path;
 
-          const classroomName = 'classroomname';
-
-          // add classroom
-          await addClassroom(client, classroomName);
           await (
             await client.$(
               `.${CLASSROOM_CARD_CLASS}[data-name='${classroomName}']`
@@ -595,9 +616,7 @@ describe('Classrooms Scenarios', function () {
           ).click();
           await client.pause(OPEN_CLASSROOM_PAUSE);
 
-          // add user
-          const username = 'anna';
-          await addUserInClassroom(client, username);
+          const { username } = user;
 
           // import data
           await importDataInClassroom(
@@ -656,12 +675,9 @@ describe('Classrooms Scenarios', function () {
         mochaAsync(async () => {
           const { client } = app;
 
-          const filepath = SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES_PATH;
+          const filepath =
+            SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES.path;
 
-          const classroomName = 'classroomname';
-
-          // add classroom
-          await addClassroom(client, classroomName);
           await (
             await client.$(
               `.${CLASSROOM_CARD_CLASS}[data-name='${classroomName}']`
@@ -698,7 +714,7 @@ describe('Classrooms Scenarios', function () {
           const username1 = 'cedric';
           await importDataInClassroom(
             client,
-            SPACE_APOLLO_11_PATH,
+            SPACE_APOLLO_11.path,
             username1,
             { space: true, actions: false, resources: false },
             { space: true, actions: false, resources: false }
@@ -729,12 +745,9 @@ describe('Classrooms Scenarios', function () {
         mochaAsync(async () => {
           const { client } = app;
 
-          const filepath = SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES_PATH;
+          const filepath =
+            SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES.path;
 
-          const classroomName = 'classroomname';
-
-          // add classroom
-          await addClassroom(client, classroomName);
           await (
             await client.$(
               `.${CLASSROOM_CARD_CLASS}[data-name='${classroomName}']`

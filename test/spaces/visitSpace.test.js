@@ -9,7 +9,6 @@ import {
   removeSpace,
   removeTags,
   mochaAsync,
-  userSignIn,
   menuGoToVisitSpace,
   expectElementToExist,
   removePathSeparators,
@@ -383,8 +382,11 @@ export const hasSavedSpaceLayout = async (
   { space: { phases, description, name } },
   { resources = [], user = {} } = {}
 ) => {
-  const { mode = DEFAULT_USER_MODE } = user;
-  await hasSavedSpaceHomeLayout(client, { description, name }, mode);
+  await hasSavedSpaceHomeLayout(
+    client,
+    { description, name },
+    user?.settings?.userMode || DEFAULT_USER_MODE
+  );
   await checkPhasesLayout(client, phases, SAVED, resources);
 };
 
@@ -392,9 +394,9 @@ export const hasSavedSpaceLayout = async (
 export const hasPreviewSpaceLayout = async (
   client,
   { space: { phases, description, name }, resources = [] },
-  { mode }
+  { settings: { userMode } }
 ) => {
-  await hasPreviewSpaceHomeLayout(client, { description, name }, mode);
+  await hasPreviewSpaceHomeLayout(client, { description, name }, userMode);
   await checkPhasesLayout(client, phases, PREVIEW, resources);
 };
 
@@ -448,7 +450,6 @@ export const checkSpaceCardLayout = async (
 describe('Visit Space Scenarios', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
-  let globalUser;
 
   afterEach(function () {
     return closeApplication(app);
@@ -458,26 +459,23 @@ describe('Visit Space Scenarios', function () {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication();
-        globalUser = USER_GRAASP;
-        await userSignIn(app.client, globalUser);
       })
     );
 
     const spaces = [SPACE_APOLLO_11, SPACE_ATOMIC_STRUCTURE];
 
-    spaces.forEach(function (space) {
+    spaces.forEach((space) => {
       const {
         space: { id, name },
       } = space;
       it(
         `Visit space ${name} (${id})`,
-        mochaAsync(async function () {
-          this.retries(2);
+        mochaAsync(async () => {
           const { client } = app;
 
           await visitSpaceById(client, id);
 
-          await hasPreviewSpaceLayout(client, space, globalUser);
+          await hasPreviewSpaceLayout(client, space, USER_GRAASP);
         })
       );
     });
@@ -486,9 +484,9 @@ describe('Visit Space Scenarios', function () {
   describe('Visit a space just after delete', () => {
     beforeEach(
       mochaAsync(async () => {
-        app = await createApplication({ showMessageDialogResponse: 1 });
-        globalUser = USER_GRAASP;
-        await userSignIn(app.client, globalUser);
+        app = await createApplication({
+          responses: { showMessageDialogResponse: 1 },
+        });
       })
     );
 

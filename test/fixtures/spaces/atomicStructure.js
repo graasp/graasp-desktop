@@ -1,4 +1,5 @@
-const SPACE_ATOMIC_STRUCTURE = {
+export default {
+  path: 'atomicStructure.zip',
   space: {
     id: '5d3f0cb5fd555f7e3fbe7ee2',
     name: 'Atomic structure',
@@ -1821,7 +1822,3 @@ const SPACE_ATOMIC_STRUCTURE = {
   appInstanceResources: [],
   actions: [],
 };
-
-const SPACE_ATOMIC_STRUCTURE_PATH = 'atomicStructure.zip';
-
-export { SPACE_ATOMIC_STRUCTURE, SPACE_ATOMIC_STRUCTURE_PATH };

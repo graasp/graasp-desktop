@@ -5,9 +5,9 @@
 import { expect } from 'chai';
 import {
   mochaAsync,
-  userSignIn,
   menuGoToSavedSpaces,
   expectElementToExist,
+  clickOnSpaceCard,
 } from '../utils';
 import { createApplication, closeApplication } from '../application';
 import {
@@ -15,9 +15,10 @@ import {
   SPACE_DELETE_BUTTON_CLASS,
 } from '../../src/config/selectors';
 import { SPACE_ATOMIC_STRUCTURE } from '../fixtures/spaces';
-import { visitAndSaveSpaceById } from './visitSpace.test';
-import { DEFAULT_GLOBAL_TIMEOUT } from '../constants';
-import { USER_GRAASP } from '../fixtures/users';
+import {
+  buildSignedUserForDatabase,
+  DEFAULT_GLOBAL_TIMEOUT,
+} from '../constants';
 
 describe('Delete a space', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
@@ -34,13 +35,15 @@ describe('Delete a space', function () {
         space: { id },
       } = SPACE_ATOMIC_STRUCTURE;
 
-      app = await createApplication({ showMessageDialogResponse: 1 });
+      app = await createApplication({
+        database: {
+          spaces: [SPACE_ATOMIC_STRUCTURE],
+          ...buildSignedUserForDatabase(),
+        },
+        responses: { showMessageDialogResponse: 1 },
+      });
 
       const { client } = app;
-
-      await userSignIn(client, USER_GRAASP);
-
-      await visitAndSaveSpaceById(client, id);
 
       await menuGoToSavedSpaces(client);
 
@@ -62,13 +65,18 @@ describe('Delete a space', function () {
         space: { id },
       } = SPACE_ATOMIC_STRUCTURE;
 
-      app = await createApplication({ showMessageDialogResponse: 1 });
+      app = await createApplication({
+        database: {
+          spaces: [SPACE_ATOMIC_STRUCTURE],
+          ...buildSignedUserForDatabase(),
+        },
+        responses: { showMessageDialogResponse: 1 },
+      });
 
       const { client } = app;
 
-      await userSignIn(client, USER_GRAASP);
-
-      await visitAndSaveSpaceById(client, id);
+      await menuGoToSavedSpaces(client);
+      await clickOnSpaceCard(client, id);
 
       const deleteButton = await client.$(`.${SPACE_DELETE_BUTTON_CLASS}`);
       await deleteButton.click();
@@ -86,15 +94,21 @@ describe('Delete a space', function () {
         space: { id },
       } = SPACE_ATOMIC_STRUCTURE;
 
-      app = await createApplication({ showMessageDialogResponse: 0 });
+      app = await createApplication({
+        database: {
+          spaces: [SPACE_ATOMIC_STRUCTURE],
+          ...buildSignedUserForDatabase(),
+        },
+        responses: { showMessageDialogResponse: 0 },
+      });
 
       const { client } = app;
 
-      await userSignIn(client, USER_GRAASP);
+      await menuGoToSavedSpaces(client);
 
-      await visitAndSaveSpaceById(client, id);
-
-      const deleteButton = await client.$(`.${SPACE_DELETE_BUTTON_CLASS}`);
+      const deleteButton = await client.$(
+        `#${buildSpaceCardId(id)} .${SPACE_DELETE_BUTTON_CLASS}`
+      );
       await deleteButton.click();
 
       await menuGoToSavedSpaces(client);

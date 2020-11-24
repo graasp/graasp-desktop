@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 1`] = `
-<WithStyles(ForwardRef(List))>
+<WithStyles(ForwardRef(List))
+  id="mainMenu"
+>
   <WithStyles(ForwardRef(MenuItem))
     button={true}
     id="homeMenuItem"
@@ -183,7 +185,9 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
 `;
 
 exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1`] = `
-<WithStyles(ForwardRef(List))>
+<WithStyles(ForwardRef(List))
+  id="mainMenu"
+>
   <WithStyles(ForwardRef(MenuItem))
     button={true}
     id="homeMenuItem"

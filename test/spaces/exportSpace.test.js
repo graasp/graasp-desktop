@@ -9,8 +9,7 @@ import {
   createRandomString,
   expectElementToExist,
   menuGoToSavedSpaces,
-  menuGoToPhase,
-  userSignIn,
+  clickOnSpaceCard,
 } from '../utils';
 import { createApplication, closeApplication } from '../application';
 import {
@@ -22,19 +21,17 @@ import {
 } from '../../src/config/selectors';
 import {
   SPACE_ATOMIC_STRUCTURE,
+  SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES,
   SPACE_WITH_FILE_DROP,
 } from '../fixtures/spaces';
-import { hasSavedSpaceLayout, visitAndSaveSpaceById } from './visitSpace.test';
+import { hasSavedSpaceLayout } from './visitSpace.test';
 import {
-  EXPORT_SPACE_PAUSE,
   EXPORT_FILEPATH,
   DEFAULT_GLOBAL_TIMEOUT,
-  EXPORT_SELECTION_SPACE_PAUSE,
   TOOLTIP_FADE_OUT_PAUSE,
   OPEN_SAVED_SPACE_PAUSE,
+  buildSignedUserForDatabase,
 } from '../constants';
-import { USER_GRAASP } from '../fixtures/users';
-import { typeInTextInputApp } from '../apps/textInputApp';
 
 // eslint-disable-next-line import/prefer-default-export
 export const exportSpaceWithSelected = async (
@@ -97,23 +94,22 @@ describe('Export a space', function () {
     it(
       'Exporting from toolbar saves space in local computer',
       mochaAsync(async () => {
-        const {
-          space: { id },
-        } = SPACE_ATOMIC_STRUCTURE;
-
         const filepath = `${EXPORT_FILEPATH}_${createRandomString()}`;
 
-        app = await createApplication({ showSaveDialogResponse: filepath });
+        app = await createApplication({
+          database: {
+            spaces: [SPACE_ATOMIC_STRUCTURE],
+            ...buildSignedUserForDatabase(),
+          },
+          responses: { showSaveDialogResponse: filepath },
+        });
 
         const { client } = app;
 
-        await userSignIn(client, USER_GRAASP);
-
-        await visitAndSaveSpaceById(client, id);
-
+        await menuGoToSavedSpaces(client);
+        await clickOnSpaceCard(client, SPACE_ATOMIC_STRUCTURE.space.id);
         const exportButton = await client.$(`.${SPACE_EXPORT_BUTTON_CLASS}`);
         await exportButton.click();
-        await client.pause(EXPORT_SELECTION_SPACE_PAUSE);
 
         await exportSpaceWithSelected(client);
 
@@ -130,13 +126,15 @@ describe('Export a space', function () {
         } = SPACE_ATOMIC_STRUCTURE;
 
         const filepath = `${EXPORT_FILEPATH}_${createRandomString()}`;
-        app = await createApplication({ showSaveDialogResponse: filepath });
+        app = await createApplication({
+          database: {
+            spaces: [SPACE_ATOMIC_STRUCTURE],
+            ...buildSignedUserForDatabase(),
+          },
+          responses: { showSaveDialogResponse: filepath },
+        });
 
         const { client } = app;
-
-        await userSignIn(client, USER_GRAASP);
-
-        await visitAndSaveSpaceById(client, id);
 
         await menuGoToSavedSpaces(client);
 
@@ -144,13 +142,11 @@ describe('Export a space', function () {
           `#${buildSpaceCardId(id)} .${SPACE_EXPORT_BUTTON_CLASS}`
         );
         await exportButton.click();
-        await client.pause(EXPORT_SELECTION_SPACE_PAUSE);
 
         // back and export again
         const backButton = await client.$(`#${EXPORT_SPACE_BACK_BUTTON_ID}`);
         await backButton.click();
         await exportButton.click();
-        await client.pause(EXPORT_SELECTION_SPACE_PAUSE);
 
         await exportSpaceWithSelected(client);
 
@@ -166,13 +162,15 @@ describe('Export a space', function () {
         const { id } = space;
 
         const filepath = `${EXPORT_FILEPATH}_${createRandomString()}`;
-        app = await createApplication({ showSaveDialogResponse: filepath });
+        app = await createApplication({
+          database: {
+            spaces: [SPACE_WITH_FILE_DROP],
+            ...buildSignedUserForDatabase(),
+          },
+          responses: { showSaveDialogResponse: filepath },
+        });
 
         const { client } = app;
-
-        await userSignIn(client, USER_GRAASP);
-
-        await visitAndSaveSpaceById(client, id);
 
         await menuGoToSavedSpaces(client);
 
@@ -180,7 +178,6 @@ describe('Export a space', function () {
           `#${buildSpaceCardId(id)} .${SPACE_EXPORT_BUTTON_CLASS}`
         );
         await exportButton.click();
-        await client.pause(EXPORT_SELECTION_SPACE_PAUSE);
 
         await exportSpaceWithSelected(client);
 
@@ -201,23 +198,26 @@ describe('Export a space', function () {
     it(
       'space only',
       mochaAsync(async () => {
-        const {
-          space: { id },
-        } = SPACE_ATOMIC_STRUCTURE;
-
         const filepath = `${EXPORT_FILEPATH}_${createRandomString()}`;
-        app = await createApplication({ showSaveDialogResponse: filepath });
+        app = await createApplication({
+          database: {
+            spaces: [SPACE_ATOMIC_STRUCTURE],
+            ...buildSignedUserForDatabase(),
+          },
+          responses: { showSaveDialogResponse: filepath },
+        });
 
         const { client } = app;
 
-        await userSignIn(client, USER_GRAASP);
-
-        // visit and save space
-        await visitAndSaveSpaceById(client, id);
+        await menuGoToSavedSpaces(client);
 
         // export from card
-        await (await client.$(`.${SPACE_EXPORT_BUTTON_CLASS}`)).click();
-        await client.pause(EXPORT_SPACE_PAUSE);
+        const exportButton = await client.$(
+          `#${buildSpaceCardId(
+            SPACE_ATOMIC_STRUCTURE.space.id
+          )} .${SPACE_EXPORT_BUTTON_CLASS}`
+        );
+        await exportButton.click();
 
         await checkExportSelectionLayout(client);
 
@@ -230,29 +230,26 @@ describe('Export a space', function () {
     it(
       'space with actions and resources',
       mochaAsync(async () => {
-        const {
-          space: { id, phases },
-        } = SPACE_ATOMIC_STRUCTURE;
-        const { id: textInputAppId0 } = phases[0].items[1];
-        const text = 'some user input orientation';
-
         const filepath = `${EXPORT_FILEPATH}_${createRandomString()}`;
-        app = await createApplication({ showSaveDialogResponse: filepath });
+        app = await createApplication({
+          database: {
+            spaces: [SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES],
+            ...buildSignedUserForDatabase(),
+          },
+          responses: { showSaveDialogResponse: filepath },
+        });
 
         const { client } = app;
 
-        await userSignIn(client, USER_GRAASP);
-
-        // visit and save space
-        await visitAndSaveSpaceById(client, id);
-
-        // write in text input
-        await menuGoToPhase(client, 0);
-        await typeInTextInputApp(client, textInputAppId0, text);
+        await menuGoToSavedSpaces(client);
 
         // export from card
-        await (await client.$(`.${SPACE_EXPORT_BUTTON_CLASS}`)).click();
-        await client.pause(EXPORT_SPACE_PAUSE);
+        const exportButton = await client.$(
+          `#${buildSpaceCardId(
+            SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES.space.id
+          )} .${SPACE_EXPORT_BUTTON_CLASS}`
+        );
+        await exportButton.click();
 
         await checkExportSelectionLayout(client, {
           actions: true,

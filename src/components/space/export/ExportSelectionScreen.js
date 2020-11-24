@@ -32,8 +32,9 @@ import {
   ERROR_MESSAGE_HEADER,
   UNEXPECTED_ERROR_MESSAGE,
 } from '../../../config/messages';
+import { USER_MODES } from '../../../config/constants';
 
-const styles = theme => ({
+const styles = (theme) => ({
   ...Styles(theme),
   buttonGroup: {
     textAlign: 'center',
@@ -95,6 +96,7 @@ class ExportSelectionScreen extends Component {
     }).isRequired,
     space: PropTypes.instanceOf(Map).isRequired,
     status: PropTypes.oneOf(Object.values(EXPORT_SPACE_STATUS)).isRequired,
+    isTeacher: PropTypes.bool.isRequired,
   };
 
   state = {
@@ -137,7 +139,7 @@ class ExportSelectionScreen extends Component {
     }
   };
 
-  handleChange = event => {
+  handleChange = (event) => {
     this.setState({ [event.target.name]: event.target.checked });
   };
 
@@ -168,12 +170,12 @@ class ExportSelectionScreen extends Component {
   };
 
   renderCheckbox(collectionName, label, isChecked, emptyHelperText) {
-    const { database, space, userId } = this.props;
+    const { database, space, userId, isTeacher } = this.props;
 
     const id = space.get('id');
     const content = database ? database[collectionName] : [];
     const hasContent = content.filter(
-      ({ user, spaceId }) => user === userId && spaceId === id
+      ({ user, spaceId }) => (isTeacher || user === userId) && spaceId === id
     ).length;
 
     const checkbox = (
@@ -313,6 +315,9 @@ const mapStateToProps = ({
   Developer,
 }) => ({
   userId: authentication.getIn(['user', 'id']),
+  isTeacher:
+    authentication.getIn(['user', 'settings', 'userMode']) ===
+    USER_MODES.TEACHER,
   database: Developer.get('database'),
   activity: Boolean(exportSpaceReducer.getIn(['activity']).size),
   space: exportSpaceReducer.getIn(['space']),
