@@ -39,3 +39,8 @@ export const USER_CEDRIC = {
     userMode: USER_MODES.TEACHER,
   },
 };
+
+export const USER_EMPTY = {
+  id: 'empty',
+  username: 'emptyuser',
+};

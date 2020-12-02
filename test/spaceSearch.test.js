@@ -1,20 +1,17 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable func-names */
 import { expect } from 'chai';
-import { menuGoToSavedSpaces, mochaAsync, clearInput } from './utils';
+import {
+  menuGoToSavedSpaces,
+  mochaAsync,
+  clearInput,
+  buildSignedInUserForDatabase,
+} from './utils';
 import { createApplication, closeApplication } from './application';
 import {
   SPACE_SEARCH_INPUT_ID,
   SPACE_MEDIA_CARD_CLASS,
   SPACE_NOT_AVAILABLE_TEXT_ID,
 } from '../src/config/selectors';
-import {
-  buildSignedUserForDatabase,
-  DEFAULT_GLOBAL_TIMEOUT,
-  SPACE_SEARCH_PAUSE,
-} from './constants';
+import { DEFAULT_GLOBAL_TIMEOUT, SPACE_SEARCH_PAUSE } from './constants';
 import { searchSpacesFixtures } from './fixtures/searchSpaces';
 import { SPACE_ATOMIC_STRUCTURE, SPACE_APOLLO_11 } from './fixtures/spaces';
 
@@ -33,13 +30,13 @@ describe('Space Search Scenarios', function () {
       app = await createApplication({
         database: {
           spaces: [SPACE_ATOMIC_STRUCTURE, SPACE_APOLLO_11],
-          ...buildSignedUserForDatabase(),
+          ...buildSignedInUserForDatabase(),
         },
       });
     })
   );
 
-  after(function () {
+  after(() => {
     return closeApplication(app);
   });
 

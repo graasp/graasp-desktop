@@ -1,12 +1,9 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable func-names */
 import { expect } from 'chai';
 import {
   mochaAsync,
   menuGoToSavedSpaces,
   expectElementToExist,
+  buildSignedInUserForDatabase,
   clickOnSpaceCard,
 } from '../utils';
 import { createApplication, closeApplication } from '../application';
@@ -15,16 +12,13 @@ import {
   SPACE_DELETE_BUTTON_CLASS,
 } from '../../src/config/selectors';
 import { SPACE_ATOMIC_STRUCTURE } from '../fixtures/spaces';
-import {
-  buildSignedUserForDatabase,
-  DEFAULT_GLOBAL_TIMEOUT,
-} from '../constants';
+import { DEFAULT_GLOBAL_TIMEOUT } from '../constants';
 
 describe('Delete a space', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  afterEach(function () {
+  afterEach(() => {
     return closeApplication(app);
   });
 
@@ -38,7 +32,7 @@ describe('Delete a space', function () {
       app = await createApplication({
         database: {
           spaces: [SPACE_ATOMIC_STRUCTURE],
-          ...buildSignedUserForDatabase(),
+          ...buildSignedInUserForDatabase(),
         },
         responses: { showMessageDialogResponse: 1 },
       });
@@ -68,7 +62,7 @@ describe('Delete a space', function () {
       app = await createApplication({
         database: {
           spaces: [SPACE_ATOMIC_STRUCTURE],
-          ...buildSignedUserForDatabase(),
+          ...buildSignedInUserForDatabase(),
         },
         responses: { showMessageDialogResponse: 1 },
       });
@@ -97,7 +91,7 @@ describe('Delete a space', function () {
       app = await createApplication({
         database: {
           spaces: [SPACE_ATOMIC_STRUCTURE],
-          ...buildSignedUserForDatabase(),
+          ...buildSignedInUserForDatabase(),
         },
         responses: { showMessageDialogResponse: 0 },
       });

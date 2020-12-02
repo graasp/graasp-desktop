@@ -104,6 +104,8 @@ const buildFilePath = ({ userId, spaceId, name }) => {
   return `${VAR_FOLDER}/${spaceId}/files/${userId}/${generatedId}_${name}`;
 };
 
+const SHOW_TOURS = 'SHOW_TOURS';
+
 module.exports = {
   DEFAULT_LOGGING_LEVEL,
   DEFAULT_PROTOCOL,
@@ -134,4 +136,5 @@ module.exports = {
   PREPACKAGED_APPS_FOLDER_NAME,
   APPS_FOLDER,
   DEFAULT_TOURS_ENABLED,
+  SHOW_TOURS,
 };

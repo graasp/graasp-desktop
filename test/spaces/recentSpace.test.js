@@ -1,7 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable func-names */
 import { expect } from 'chai';
 import {
   mochaAsync,
@@ -36,7 +32,7 @@ describe('Recent Spaces', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  afterEach(function () {
+  afterEach(() => {
     return closeApplication(app);
   });
 
@@ -46,7 +42,7 @@ describe('Recent Spaces', function () {
     })
   );
 
-  describe('Add to Recent Spaces when', function () {
+  describe('Add to Recent Spaces when', () => {
     it(
       'Loading',
       mochaAsync(async () => {
@@ -82,7 +78,7 @@ describe('Recent Spaces', function () {
       })
     );
 
-    describe('Opening saved spaces', function () {
+    describe('Opening saved spaces', () => {
       it(
         `Display only ${MAX_RECENT_SPACES} most recent spaces`,
         mochaAsync(async () => {

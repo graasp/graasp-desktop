@@ -1,7 +1,4 @@
 /* eslint-disable no-unused-expressions */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable func-names */
 import { mochaAsync, menuGoToSavedSpaces, clickOnSpaceCard } from '../utils';
 import { createApplication, closeApplication } from '../application';
 import { SPACE_ATOMIC_STRUCTURE } from '../fixtures/spaces';
@@ -18,7 +15,7 @@ describe('Save a space', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  afterEach(function () {
+  afterEach(() => {
     return closeApplication(app);
   });
 

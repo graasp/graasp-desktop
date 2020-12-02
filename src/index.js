@@ -14,6 +14,7 @@ import 'katex/dist/katex.min.css';
 import 'react-quill/dist/quill.core.css';
 import App from './App';
 import configureStore from './store/configure';
+import { ROOT_ID } from './config/selectors';
 
 // bind katex to the window object
 window.katex = katex;
@@ -52,5 +53,5 @@ ReactDOM.render(
       />
     </I18nextProvider>
   </Provider>,
-  document.getElementById('root')
+  document.getElementById(ROOT_ID)
 );

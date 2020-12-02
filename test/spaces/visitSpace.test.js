@@ -1,7 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable func-names */
 import { expect } from 'chai';
 import path from 'path';
 import fs from 'fs';
@@ -242,7 +238,6 @@ const hasPhaseLayout = async (
     await testTextOfElement(client, `#${PHASE_DESCRIPTION_ID}`, description);
   }
 
-  // eslint-disable-block no-await-in-loop
   for (const {
     id,
     content,
@@ -451,7 +446,7 @@ describe('Visit Space Scenarios', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  afterEach(function () {
+  afterEach(() => {
     return closeApplication(app);
   });
 

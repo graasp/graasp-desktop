@@ -1,43 +1,7 @@
 import path from 'path';
-import {
-  AUTHENTICATED,
-  DEFAULT_SYNC_MODE,
-  DEFAULT_USER_MODE,
-} from '../src/config/constants';
-import { USER_GRAASP } from './fixtures/users';
 
 export const EXPORT_FILEPATH = path.join(__dirname, './tmp/exportSpace');
 export const APPS_FOLDER = 'apps';
-
-export const buildSignedUserForDatabase = ({
-  syncMode = DEFAULT_SYNC_MODE,
-} = {}) => ({
-  users: [USER_GRAASP],
-  user: {
-    id: USER_GRAASP.id,
-    username: USER_GRAASP.username,
-    createdAt: '2020-11-23T14:54:49.092Z',
-    anonymous: false,
-    geolocation: null,
-    settings: {
-      lang: 'en',
-      developerMode: false,
-      geolocationEnabled: false,
-      syncMode,
-      userMode: USER_GRAASP?.settings?.userMode || DEFAULT_USER_MODE,
-      actionAccessibility: false,
-      actionsEnabled: true,
-    },
-    favoriteSpaces: [],
-    recentSpaces: [],
-    tour: {
-      visitSpace: true,
-      settings: true,
-    },
-    lastSignIn: '2020-11-23T14:54:49.092Z',
-    authenticated: AUTHENTICATED,
-  },
-});
 
 export const DEFAULT_GLOBAL_TIMEOUT = 270000;
 export const SAVE_USER_INPUT_TIMEOUT = 370000;

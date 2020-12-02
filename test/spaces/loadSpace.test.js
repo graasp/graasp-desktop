@@ -1,7 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable func-names */
 import { expect } from 'chai';
 import path from 'path';
 import {
@@ -167,11 +163,11 @@ describe('Load Space Scenarios', function () {
   let app;
   let globalUser;
 
-  afterEach(function () {
+  afterEach(() => {
     return closeApplication(app);
   });
 
-  describe('predefined export spaces', function () {
+  describe('predefined export spaces', () => {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication();
@@ -247,7 +243,7 @@ describe('Load Space Scenarios', function () {
       })
     );
 
-    describe('Load selection Layout', function () {
+    describe('Load selection Layout', () => {
       it(
         `Load changed and existing space of ${SPACE_WITH_MULTIPLE_CHANGES.space.name} replace database`,
         mochaAsync(async () => {
@@ -334,7 +330,7 @@ describe('Load Space Scenarios', function () {
     });
   });
 
-  describe('Predefined Export Spaces for Student', function () {
+  describe('Predefined Export Spaces for Student', () => {
     it(
       `Cannot load non-existing space ${SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES.space.name}`,
       mochaAsync(async () => {
@@ -401,7 +397,7 @@ describe('Load Space Scenarios', function () {
     );
   });
 
-  describe('Load from app created export files', function () {
+  describe('Load from app created export files', () => {
     it(
       `Load exported space of ${SPACE_ATOMIC_STRUCTURE.space.name}`,
       mochaAsync(async () => {

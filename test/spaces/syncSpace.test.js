@@ -1,11 +1,8 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable func-names */
 import { expect } from 'chai';
 import {
   mochaAsync,
   expectElementToNotExist,
+  buildSignedInUserForDatabase,
   expectElementToExist,
   menuGoToSavedSpaces,
   clickOnSpaceCard,
@@ -44,7 +41,6 @@ import {
   DEFAULT_GLOBAL_TIMEOUT,
   LOAD_PHASE_PAUSE,
   LOAD_TAB_PAUSE,
-  buildSignedUserForDatabase,
 } from '../constants';
 import { openTools, hasSavedSpaceLayout } from './visitSpace.test';
 import { SYNC_CHANGES, SYNC_MODES } from '../../src/config/constants';
@@ -237,18 +233,18 @@ describe('Sync a space', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  afterEach(function () {
+  afterEach(() => {
     return closeApplication(app);
   });
 
-  describe('with advanced mode disabled (default)', function () {
+  describe('with advanced mode disabled (default)', () => {
     spaces.forEach(([space, changes]) => {
       it(
         `Syncing from card open Visual Syncing Space Screen for "${space.space.name}"`,
         mochaAsync(async () => {
           app = await createApplication({
             database: {
-              ...buildSignedUserForDatabase({ syncMode: SYNC_MODES.VISUAL }),
+              ...buildSignedInUserForDatabase({ syncMode: SYNC_MODES.VISUAL }),
             },
           });
           const { client } = app;
@@ -279,7 +275,7 @@ describe('Sync a space', function () {
         app = await createApplication({
           database: {
             spaces: [SPACE_WITH_MULTIPLE_CHANGES],
-            ...buildSignedUserForDatabase({ syncMode: SYNC_MODES.VISUAL }),
+            ...buildSignedInUserForDatabase({ syncMode: SYNC_MODES.VISUAL }),
           },
         });
         const { client } = app;
@@ -307,7 +303,7 @@ describe('Sync a space', function () {
         app = await createApplication({
           database: {
             spaces: [SPACE_WITH_MULTIPLE_CHANGES],
-            ...buildSignedUserForDatabase({ syncMode: SYNC_MODES.VISUAL }),
+            ...buildSignedInUserForDatabase({ syncMode: SYNC_MODES.VISUAL }),
           },
         });
         const { client } = app;
@@ -331,13 +327,13 @@ describe('Sync a space', function () {
     );
   });
 
-  describe('with advanced mode enabled (default)', function () {
+  describe('with advanced mode enabled (default)', () => {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication({
           database: {
             spaces: [SPACE_WITH_MULTIPLE_CHANGES],
-            ...buildSignedUserForDatabase({ syncMode: SYNC_MODES.ADVANCED }),
+            ...buildSignedInUserForDatabase({ syncMode: SYNC_MODES.ADVANCED }),
           },
         });
       })

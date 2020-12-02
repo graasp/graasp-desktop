@@ -3,7 +3,7 @@ import electronPath from 'electron'; // Require Electron from the binaries inclu
 import path from 'path';
 import fse from 'fs-extra';
 import extract from 'extract-zip';
-import { buildSignedUserForDatabase } from './constants';
+import { buildSignedInUserForDatabase } from './utils';
 
 const getFormattedTime = () => {
   const today = new Date();
@@ -17,7 +17,7 @@ const getFormattedTime = () => {
   return `${y}${m}${d}_${h}-${mi}-${s}`;
 };
 
-const setUpDatabase = async (database = buildSignedUserForDatabase()) => {
+const setUpDatabase = async (database = buildSignedInUserForDatabase()) => {
   const tmpDatabasePath = path.join(__dirname, 'tmp', getFormattedTime());
   const varFolder = path.join(tmpDatabasePath, 'var');
   fse.ensureDirSync(varFolder);
@@ -64,7 +64,7 @@ const setUpDatabase = async (database = buildSignedUserForDatabase()) => {
 };
 
 const createApplication = async ({
-  database = buildSignedUserForDatabase(),
+  database = buildSignedInUserForDatabase(),
   responses = {
     showMessageDialogResponse: undefined,
     showSaveDialogResponse: undefined,
@@ -115,6 +115,7 @@ const createApplication = async ({
     // The following line tells spectron to look and use the main.js file
     // and the package.json located 1 level above.
     args: [path.join(__dirname, '../public/electron.js')],
+    // use a specific application folder and var folder to save data
     chromeDriverArgs: [`--user-data-dir=${tmpDatabasePath}`],
     env,
   });

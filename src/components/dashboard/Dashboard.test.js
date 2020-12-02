@@ -15,14 +15,11 @@ import {
   DASHBOARD_SPACE_FILTER_ID,
   DASHBOARD_TOTAL_COUNT_ID,
 } from '../../config/selectors';
+import { USER_ALICE, USER_BOB, USER_EMPTY } from '../../../test/fixtures/users';
 
-const sampleUserId = '123456';
-const emptyUserId = 'empty';
-const sampleUsers = [
-  { id: sampleUserId, username: 'bob' },
-  { id: 'randomId', username: 'anna' },
-  { id: emptyUserId, username: 'cedric' },
-];
+const sampleUserId = USER_BOB.id;
+const emptyUserId = USER_EMPTY.id;
+const sampleUsers = [USER_BOB, USER_ALICE, USER_EMPTY];
 const sampleSpaces = [{ id: 'spaceId', name: 'spaceName' }];
 const sampleActions = [
   { id: 'actionId', user: sampleUserId, spaceId: 'spaceId' },

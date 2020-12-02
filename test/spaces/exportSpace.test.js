@@ -1,7 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable func-names */
 import { expect } from 'chai';
 import fs from 'fs';
 import {
@@ -10,6 +6,7 @@ import {
   expectElementToExist,
   menuGoToSavedSpaces,
   clickOnSpaceCard,
+  buildSignedInUserForDatabase,
 } from '../utils';
 import { createApplication, closeApplication } from '../application';
 import {
@@ -30,7 +27,6 @@ import {
   DEFAULT_GLOBAL_TIMEOUT,
   TOOLTIP_FADE_OUT_PAUSE,
   OPEN_SAVED_SPACE_PAUSE,
-  buildSignedUserForDatabase,
 } from '../constants';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -86,11 +82,11 @@ describe('Export a space', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  afterEach(function () {
+  afterEach(() => {
     return closeApplication(app);
   });
 
-  describe('General', function () {
+  describe('General', () => {
     it(
       'Exporting from toolbar saves space in local computer',
       mochaAsync(async () => {
@@ -99,7 +95,7 @@ describe('Export a space', function () {
         app = await createApplication({
           database: {
             spaces: [SPACE_ATOMIC_STRUCTURE],
-            ...buildSignedUserForDatabase(),
+            ...buildSignedInUserForDatabase(),
           },
           responses: { showSaveDialogResponse: filepath },
         });
@@ -129,7 +125,7 @@ describe('Export a space', function () {
         app = await createApplication({
           database: {
             spaces: [SPACE_ATOMIC_STRUCTURE],
-            ...buildSignedUserForDatabase(),
+            ...buildSignedInUserForDatabase(),
           },
           responses: { showSaveDialogResponse: filepath },
         });
@@ -165,7 +161,7 @@ describe('Export a space', function () {
         app = await createApplication({
           database: {
             spaces: [SPACE_WITH_FILE_DROP],
-            ...buildSignedUserForDatabase(),
+            ...buildSignedInUserForDatabase(),
           },
           responses: { showSaveDialogResponse: filepath },
         });
@@ -194,7 +190,7 @@ describe('Export a space', function () {
     );
   });
 
-  describe('Can export space, actions and resources if exists', function () {
+  describe('Can export space, actions and resources if exists', () => {
     it(
       'space only',
       mochaAsync(async () => {
@@ -202,7 +198,7 @@ describe('Export a space', function () {
         app = await createApplication({
           database: {
             spaces: [SPACE_ATOMIC_STRUCTURE],
-            ...buildSignedUserForDatabase(),
+            ...buildSignedInUserForDatabase(),
           },
           responses: { showSaveDialogResponse: filepath },
         });
@@ -234,7 +230,7 @@ describe('Export a space', function () {
         app = await createApplication({
           database: {
             spaces: [SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES],
-            ...buildSignedUserForDatabase(),
+            ...buildSignedInUserForDatabase(),
           },
           responses: { showSaveDialogResponse: filepath },
         });

@@ -1,7 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable func-names */
 import { expect } from 'chai';
 import i18n from '../src/config/i18n';
 import {
@@ -36,7 +32,7 @@ import {
   SYNC_ADVANCED_MAIN_ID,
   SYNC_CANCEL_BUTTON_ID,
   SETTINGS_TITLE_ID,
-  MAINMENU_ID,
+  MAIN_MENU_ID,
   SPACES_NEARBY_MAIN_ID,
 } from '../src/config/selectors';
 import {
@@ -92,11 +88,11 @@ describe('Settings Scenarios', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  afterEach(function () {
+  afterEach(() => {
     return closeApplication(app);
   });
 
-  describe('Use graasp user', function () {
+  describe('Use graasp user', () => {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication();
@@ -129,7 +125,7 @@ describe('Settings Scenarios', function () {
         await openDrawer(client);
         await expectElementToNotExist(
           client,
-          `#${MAINMENU_ID}`,
+          `#${MAIN_MENU_ID}`,
           DEVELOPER_MENU_ITEM_ID
         );
 
@@ -265,7 +261,7 @@ describe('Settings Scenarios', function () {
     );
   });
 
-  describe('Use multiple users', function () {
+  describe('Use multiple users', () => {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication({ database: {} });

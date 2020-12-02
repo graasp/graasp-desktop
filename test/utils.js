@@ -39,7 +39,10 @@ import {
   SYNC_MODES,
   DEFAULT_USER_MODE,
   USER_MODES,
+  DEFAULT_SYNC_MODE,
+  AUTHENTICATED,
 } from '../src/config/constants';
+import { USER_GRAASP } from './fixtures/users';
 
 /** util function to deal with asynchronous tests */
 export const mochaAsync = (fn) => {
@@ -285,3 +288,33 @@ export const clickOnSpaceCard = async (client, id) => {
   await spaceCardLink.click();
   await client.pause(OPEN_SAVED_SPACE_PAUSE);
 };
+
+export const buildSignedInUserForDatabase = ({
+  syncMode = DEFAULT_SYNC_MODE,
+} = {}) => ({
+  users: [USER_GRAASP],
+  user: {
+    id: USER_GRAASP.id,
+    username: USER_GRAASP.username,
+    createdAt: '2020-11-23T14:54:49.092Z',
+    anonymous: false,
+    geolocation: null,
+    settings: {
+      lang: 'en',
+      developerMode: false,
+      geolocationEnabled: false,
+      syncMode,
+      userMode: USER_GRAASP?.settings?.userMode || DEFAULT_USER_MODE,
+      actionAccessibility: false,
+      actionsEnabled: true,
+    },
+    favoriteSpaces: [],
+    recentSpaces: [],
+    tour: {
+      visitSpace: true,
+      settings: true,
+    },
+    lastSignIn: '2020-11-23T14:54:49.092Z',
+    authenticated: AUTHENTICATED,
+  },
+});

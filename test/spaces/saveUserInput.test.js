@@ -1,21 +1,16 @@
-/* eslint-disable no-unused-expressions */
 /* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable func-names */
 import {
   mochaAsync,
   userSignIn,
   menuGoToSavedSpaces,
   menuGoToSignOut,
+  buildSignedInUserForDatabase,
   menuGoToPhase,
   clickOnSpaceCard,
 } from '../utils';
 import { createApplication, closeApplication } from '../application';
 import { SPACE_ATOMIC_STRUCTURE } from '../fixtures/spaces';
-import {
-  SAVE_USER_INPUT_TIMEOUT,
-  buildSignedUserForDatabase,
-} from '../constants';
+import { SAVE_USER_INPUT_TIMEOUT } from '../constants';
 import { USER_GRAASP, USER_BOB, USER_ALICE } from '../fixtures/users';
 import {
   typeInTextInputApp,
@@ -30,17 +25,17 @@ describe('Save User Input in a space', function () {
   this.timeout(SAVE_USER_INPUT_TIMEOUT);
   let app;
 
-  afterEach(function () {
+  afterEach(() => {
     return closeApplication(app);
   });
 
-  describe('Use graasp user', function () {
+  describe('Use graasp user', () => {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication({
           database: {
             spaces: [SPACE_ATOMIC_STRUCTURE],
-            ...buildSignedUserForDatabase(),
+            ...buildSignedInUserForDatabase(),
           },
           responses: { showMessageDialogResponse: 1 },
         });
@@ -78,7 +73,7 @@ describe('Save User Input in a space', function () {
     );
   });
 
-  describe('Multiple users scenarios', function () {
+  describe('Multiple users scenarios', () => {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication({

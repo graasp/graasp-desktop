@@ -1,12 +1,9 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable func-names */
 import {
   mochaAsync,
   expectElementToExist,
   expectElementToNotExist,
   menuGoToSavedSpaces,
+  buildSignedInUserForDatabase,
   menuGoToHome,
   menuGoToSignOut,
   userSignIn,
@@ -24,7 +21,6 @@ import { visitAndSaveSpaceById } from './visitSpace.test';
 import {
   SET_SPACE_AS_FAVORITE_PAUSE,
   DEFAULT_GLOBAL_TIMEOUT,
-  buildSignedUserForDatabase,
 } from '../constants';
 import { USER_GRAASP, USER_ALICE, USER_BOB } from '../fixtures/users';
 
@@ -32,17 +28,17 @@ describe('Set space as favorite', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  afterEach(function () {
+  afterEach(() => {
     return closeApplication(app);
   });
 
-  describe('Buttons', function () {
+  describe('Buttons', () => {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication({
           database: {
             spaces: [SPACE_ATOMIC_STRUCTURE],
-            ...buildSignedUserForDatabase(USER_GRAASP),
+            ...buildSignedInUserForDatabase(USER_GRAASP),
           },
         });
       })
@@ -127,7 +123,7 @@ describe('Set space as favorite', function () {
     );
   });
 
-  describe('Multi-users', function () {
+  describe('Multi-users', () => {
     it(
       'Set a space as favorite is different per user',
       mochaAsync(async () => {
