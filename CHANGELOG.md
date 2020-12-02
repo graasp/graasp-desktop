@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.15.8](https://github.com/graasp/graasp-desktop/compare/v0.15.7...v0.15.8) (2020-12-02)
+
+### Features
+
+- download multiple files apps ([44b3c6c](https://github.com/graasp/graasp-desktop/commit/44b3c6cb44923acb4c59a5902c1ef7960625962f))
+- handle prepackaged apps ([c2f3338](https://github.com/graasp/graasp-desktop/commit/c2f3338a01c271bcd5348c646a6c6438f6c5b91f))
+- keep drawer state ([cde0bd5](https://github.com/graasp/graasp-desktop/commit/cde0bd531600673bdf9cf7f41d3871f2b5263394)), closes [#277](https://github.com/graasp/graasp-desktop/issues/277)
+
+### Bug Fixes
+
+- visit a space just after delete ([2823cf2](https://github.com/graasp/graasp-desktop/commit/2823cf2d30a31327f6e669bdc1989f22dbab0978))
+- **dashboard:** add fallback data, add tests ([9b1dd21](https://github.com/graasp/graasp-desktop/commit/9b1dd21b960ce09665474a738882f5c9c9d2630d))
+
+### Build System
+
+- update dep, change proptypes object to shape ([ce58df1](https://github.com/graasp/graasp-desktop/commit/ce58df1060eee1bc008f10d5d6c4a984cf208372))
+- update dependencies, resolve console errors ([6d1cbc3](https://github.com/graasp/graasp-desktop/commit/6d1cbc3b8b727c0d7a9515f1ee326644675fd782))
+- **coverage:** add coveralls badge ([f88a61d](https://github.com/graasp/graasp-desktop/commit/f88a61d782a7ebb74c5fd0cba73ab1ce2bf99395))
+- **coverage:** use coveralls with github action ([e282661](https://github.com/graasp/graasp-desktop/commit/e2826610e790fad8839e9ecec16355b66678f0c1))
+
+### Tests
+
+- add retries in a visit space test ([dde059e](https://github.com/graasp/graasp-desktop/commit/dde059eeabb5c2713aa238032a875ed68dcc3b5e))
+- handle unix and windows path ([5f15dcb](https://github.com/graasp/graasp-desktop/commit/5f15dcb4dc93575413e1b14c4df25b30bbd53e59))
+- update tests, update tour tests ([8d2097d](https://github.com/graasp/graasp-desktop/commit/8d2097d21d739d47efa62f7af23495d2015969b2))
+- use initial db ([5f19a1f](https://github.com/graasp/graasp-desktop/commit/5f19a1f5a79f5630aa2b5dd0147dfc2082f1c243))
+
 ### [0.15.7](https://github.com/graasp/graasp-desktop/compare/v0.15.6...v0.15.7) (2020-10-27)
 
 ### Features
