@@ -67,12 +67,10 @@ const completeTour = async (tourName) => (dispatch) => {
     window.ipcRenderer.send(COMPLETE_TOUR_CHANNEL, { tourName });
     window.ipcRenderer.once(COMPLETE_TOUR_CHANNEL, async (event, error) => {
       if (error === ERROR_GENERAL) {
-        // eslint-disable-next-line no-console
         console.error(error);
       }
     });
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e);
   }
 };
@@ -84,7 +82,6 @@ const getToursEnabled = async (tourName) => (dispatch) => {
       GET_TOURS_ENABLED_CHANNEL,
       async (event, payload) => {
         if (payload === ERROR_GENERAL) {
-          // eslint-disable-next-line no-console
           console.error(payload);
         } else {
           dispatch({
@@ -95,7 +92,6 @@ const getToursEnabled = async (tourName) => (dispatch) => {
       }
     );
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e);
   }
 };

@@ -34,7 +34,6 @@ const getAppInstance = (mainWindow, db) => (event, payload = {}) => {
 
     mainWindow.webContents.send(GET_APP_INSTANCE_CHANNEL, appInstance);
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e);
     mainWindow.webContents.send(GET_APP_INSTANCE_CHANNEL, null);
   }

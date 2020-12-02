@@ -19,7 +19,6 @@ const deleteFile = (mainWindow) => (event, payload = {}) => {
 
     mainWindow.webContents.send(DELETE_FILE_CHANNEL, payload);
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e);
     mainWindow.webContents.send(DELETE_FILE_CHANNEL, ERROR_GENERAL);
   }

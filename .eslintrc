@@ -35,7 +35,8 @@
     ],
     "import/no-named-as-default": 0,
     "react/static-property-placement": ["error", "static public field"],
-    "react/state-in-constructor": ["error", "never"]
+    "react/state-in-constructor": ["error", "never"],
+    "no-console": [2, { "allow": ["error"] }]
   },
 
   "overrides": [

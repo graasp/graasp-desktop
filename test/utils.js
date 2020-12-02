@@ -171,8 +171,7 @@ export const expectAnyElementToExist = async (
 export const expectElementToExist = async (client, elementSelector) => {
   const found = await (await client.$(elementSelector)).isExisting();
   if (!found) {
-    // eslint-disable-next-line no-console
-    console.log(`${elementSelector} is not found`);
+    console.error(`${elementSelector} is not found`);
   }
   expect(found).to.be.true;
 };

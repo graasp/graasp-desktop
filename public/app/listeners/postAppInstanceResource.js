@@ -40,7 +40,6 @@ const postAppInstanceResource = (mainWindow, db) => (event, payload = {}) => {
       resourceToWrite
     );
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e);
     mainWindow.webContents.send(POST_APP_INSTANCE_RESOURCE_CHANNEL, null);
   }

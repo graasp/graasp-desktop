@@ -78,7 +78,6 @@ const signOut = (user) => (dispatch) => {
       dispatch(flagSigningOut(false));
     });
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_SIGNING_OUT));
     dispatch(flagSigningOut(false));
@@ -107,7 +106,6 @@ const isAuthenticated = async () => (dispatch) => {
       }
     );
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(
       i18n.t(ERROR_MESSAGE_HEADER),

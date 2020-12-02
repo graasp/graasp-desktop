@@ -6,7 +6,7 @@ const { ERROR_GENERAL } = require('../config/errors');
 const getToursEnabled = (mainWindow) => async () => {
   try {
     const enabled = process.env[SHOW_TOURS]
-      ? process.env.SHOW_TOURS === 'true'
+      ? process.env[SHOW_TOURS] === 'true'
       : DEFAULT_TOURS_ENABLED;
     mainWindow.webContents.send(GET_TOURS_ENABLED_CHANNEL, enabled);
   } catch (e) {
