@@ -96,11 +96,15 @@ const ACTIONS_VERBS = {
   LOGOUT: 'logout',
 };
 
+const DEFAULT_TOURS_ENABLED = true;
+
 const buildFilePath = ({ userId, spaceId, name }) => {
   // add generated id to handle duplicate files
   const generatedId = ObjectId().str;
   return `${VAR_FOLDER}/${spaceId}/files/${userId}/${generatedId}_${name}`;
 };
+
+const SHOW_TOURS = 'SHOW_TOURS';
 
 module.exports = {
   DEFAULT_LOGGING_LEVEL,
@@ -131,4 +135,6 @@ module.exports = {
   buildFilePath,
   PREPACKAGED_APPS_FOLDER_NAME,
   APPS_FOLDER,
+  DEFAULT_TOURS_ENABLED,
+  SHOW_TOURS,
 };

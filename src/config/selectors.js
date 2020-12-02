@@ -1,8 +1,11 @@
+export const ROOT_ID = 'root';
+
 export const DRAWER_BUTTON_ID = 'drawerButton';
 
 export const FAVORITE_SPACES_WRAPPER_ID = 'favoriteSpacesWrapper';
 export const RECENT_SPACES_WRAPPER_ID = 'recentSpacesWrapper';
 
+export const MAIN_MENU_ID = 'mainMenu';
 export const CLASSROOMS_MENU_ITEM_ID = 'classroomsMenuItem';
 export const CLASSROOMS_MAIN_ID = 'classroomsMain';
 export const SAVED_SPACES_MENU_ITEM_ID = 'savedSpacesMenuItem';

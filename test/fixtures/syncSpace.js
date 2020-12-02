@@ -5,10 +5,9 @@
 import { SYNC_CHANGES } from '../../src/config/constants';
 
 const { ADDED, REMOVED, UPDATED, MOVED } = SYNC_CHANGES;
-
-export const SPACE_WITH_ADDITION_PATH = './spaceWithAddition.zip';
 export const SPACE_WITH_ADDITION = {
   space: { id: '5e9edef4dbea5955c7f5bbea', name: 'Space with addition' },
+  path: './spaceWithAddition.zip',
 };
 
 export const SPACE_WITH_ADDITION_CHANGES = {
@@ -29,9 +28,9 @@ export const SPACE_WITH_ADDITION_CHANGES = {
   ],
 };
 
-export const SPACE_WITH_REMOVAL_PATH = './spaceWithRemoval.zip';
 export const SPACE_WITH_REMOVAL = {
   space: { id: '5e9efe77f130f510ae709466', name: 'Space with removal' },
+  path: './spaceWithRemoval.zip',
 };
 
 export const SPACE_WITH_REMOVAL_CHANGES = {
@@ -60,9 +59,9 @@ export const SPACE_WITH_REMOVAL_CHANGES = {
   ],
 };
 
-export const SPACE_WITH_UPDATE_PATH = './spaceWithUpdate.zip';
 export const SPACE_WITH_UPDATE = {
   space: { id: '5e9f0ccde272c3572ddf0524', name: 'Space with update' },
+  path: './spaceWithUpdate.zip',
 };
 
 export const SPACE_WITH_UPDATE_CHANGES = {
@@ -86,9 +85,9 @@ export const SPACE_WITH_UPDATE_CHANGES = {
   ],
 };
 
-export const SPACE_WITH_MOVE_PATH = './spaceWithMove.zip';
 export const SPACE_WITH_MOVE = {
   space: { id: '5ea003b2e1540856e519cc3e', name: 'Space with move' },
+  path: './spaceWithMove.zip',
 };
 
 export const SPACE_WITH_MOVE_CHANGES = {
@@ -135,9 +134,9 @@ export const SPACE_WITH_MOVE_CHANGES = {
   ],
 };
 
-export const SPACE_WITH_TOOLS_UPDATE_PATH = './spaceWithToolsUpdate.zip';
 export const SPACE_WITH_TOOLS_UPDATE = {
   space: { id: '5ea00ac4e1540856e519dfe8', name: 'Space with tools updated' },
+  path: './spaceWithToolsUpdate.zip',
 };
 
 export const SPACE_WITH_TOOLS_UPDATE_CHANGES = {
@@ -160,9 +159,8 @@ export const SPACE_WITH_TOOLS_UPDATE_CHANGES = {
   ],
 };
 
-export const SPACE_WITH_MULTIPLE_CHANGES_PATH =
-  './spaceWithMultipleChanges.zip';
 export const SPACE_WITH_MULTIPLE_CHANGES = {
+  path: './spaceWithMultipleChanges.zip',
   space: {
     id: '5ea029f5f851e7716e3722fe',
     name: 'Sync Space with Multiple Changes',
@@ -321,6 +319,7 @@ export const SPACE_WITH_MULTIPLE_CHANGES_CHANGES = {
   },
   phases: [
     {
+      id: '5ea029f9f851e7716e372302',
       name: 'Orientation',
       change: UPDATED,
       items: [
@@ -332,6 +331,7 @@ export const SPACE_WITH_MULTIPLE_CHANGES_CHANGES = {
     },
     {
       name: 'Investigation',
+      id: '5ea029faf851e7716e372308',
       change: ADDED,
       items: [
         {
@@ -342,6 +342,7 @@ export const SPACE_WITH_MULTIPLE_CHANGES_CHANGES = {
     },
     {
       name: 'Conceptualisation',
+      id: '5ea029faf851e7716e372305',
       change: UPDATED,
       items: [
         {
@@ -352,6 +353,7 @@ export const SPACE_WITH_MULTIPLE_CHANGES_CHANGES = {
     },
     {
       name: 'Investigation',
+      id: '5ea029faf851e7716e372308',
       change: REMOVED,
       items: [
         {
@@ -362,6 +364,7 @@ export const SPACE_WITH_MULTIPLE_CHANGES_CHANGES = {
     },
     {
       name: 'Conclusion',
+      id: '5ea029fbf851e7716e37230b',
       change: UPDATED,
       items: [
         {

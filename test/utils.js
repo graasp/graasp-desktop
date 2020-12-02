@@ -8,30 +8,23 @@ import {
   STUDENT_MODE_SWITCH_ID,
   LOGIN_USERNAME_INPUT_ID,
   LOGIN_BUTTON_ID,
-  LOAD_MAIN_ID,
   LOAD_MENU_ITEM_ID,
-  VISIT_MAIN_ID,
   VISIT_MENU_ITEM_ID,
-  SETTINGS_MAIN_ID,
   SETTINGS_MENU_ITEM_ID,
   SPACES_NEARBY_MENU_ITEM_ID,
-  SPACES_NEARBY_MAIN_ID,
   HOME_MENU_ITEM_ID,
-  HOME_MAIN_ID,
-  DASHBOARD_MAIN_ID,
   DASHBOARD_MENU_ITEM_ID,
   DEVELOPER_MENU_ITEM_ID,
-  DEVELOPER_MAIN_ID,
   SIGN_OUT_MENU_ITEM_ID,
   PHASE_MENU_LIST_ID,
   buildPhaseMenuItemId,
   SAVED_SPACES_MENU_ITEM_ID,
-  SAVED_SPACES_MAIN_ID,
-  CLASSROOMS_MAIN_ID,
   CLASSROOMS_MENU_ITEM_ID,
   DRAWER_BUTTON_ID,
-  DRAWER_HEADER_TEACHER_ICON_ID,
   TOUR_END_SELECTOR,
+  DRAWER_HEADER_STUDENT_ICON_ID,
+  buildSpaceCardId,
+  SPACE_CARD_LINK_CLASS,
 } from '../src/config/selectors';
 import {
   SETTINGS_LOAD_PAUSE,
@@ -39,14 +32,17 @@ import {
   CLEAR_INPUT_PAUSE,
   INPUT_TYPE_PAUSE,
   LOGIN_PAUSE,
-  OPEN_DRAWER_PAUSE,
   LOAD_PHASE_PAUSE,
+  OPEN_SAVED_SPACE_PAUSE,
 } from './constants';
 import {
   SYNC_MODES,
   DEFAULT_USER_MODE,
   USER_MODES,
+  DEFAULT_SYNC_MODE,
+  AUTHENTICATED,
 } from '../src/config/constants';
+import { USER_GRAASP } from './fixtures/users';
 
 /** util function to deal with asynchronous tests */
 export const mochaAsync = (fn) => {
@@ -64,19 +60,13 @@ export const openDrawer = async (client) => {
   if (await drawerButton.isClickable()) {
     await drawerButton.click();
   }
-  await client.pause(OPEN_DRAWER_PAUSE);
 };
 
-const menuGoTo = async (client, menuItemId, elementToExpectId = null) => {
+const menuGoTo = async (client, menuItemId) => {
   // open menu if it is closed
   await openDrawer(client);
   const menuItem = await client.$(`#${menuItemId}`);
   await menuItem.click();
-  if (elementToExpectId) {
-    const el = await client.$(`#${elementToExpectId}`);
-    expect(await el.isExisting()).to.be.true;
-  }
-  await client.pause(LOAD_TAB_PAUSE);
 };
 
 export const menuGoToPhase = async (client, nb) => {
@@ -88,30 +78,34 @@ export const menuGoToPhase = async (client, nb) => {
   await client.pause(LOAD_PHASE_PAUSE);
 };
 
-export const menuGoToSettings = async (client) => {
-  await menuGoTo(client, SETTINGS_MENU_ITEM_ID, SETTINGS_MAIN_ID);
-  const tourEndButton = await client.$(TOUR_END_SELECTOR);
-  await tourEndButton.click();
+export const menuGoToSettings = async (client, closeTour = false) => {
+  await menuGoTo(client, SETTINGS_MENU_ITEM_ID);
+  if (closeTour) {
+    const tourEndButton = await client.$(TOUR_END_SELECTOR);
+    if (await tourEndButton.isExisting()) {
+      await tourEndButton.click();
+    }
+  }
 };
 
 export const menuGoToDeveloper = async (client) => {
-  await menuGoTo(client, DEVELOPER_MENU_ITEM_ID, DEVELOPER_MAIN_ID);
+  await menuGoTo(client, DEVELOPER_MENU_ITEM_ID);
 };
 
 export const menuGoToSpacesNearby = async (client) => {
-  await menuGoTo(client, SPACES_NEARBY_MENU_ITEM_ID, SPACES_NEARBY_MAIN_ID);
+  await menuGoTo(client, SPACES_NEARBY_MENU_ITEM_ID);
 };
 
 export const menuGoToVisitSpace = async (client) => {
-  await menuGoTo(client, VISIT_MENU_ITEM_ID, VISIT_MAIN_ID);
+  await menuGoTo(client, VISIT_MENU_ITEM_ID);
 };
 
 export const menuGoToLoadSpace = async (client) => {
-  await menuGoTo(client, LOAD_MENU_ITEM_ID, LOAD_MAIN_ID);
+  await menuGoTo(client, LOAD_MENU_ITEM_ID);
 };
 
 export const menuGoToDashboard = async (client) => {
-  await menuGoTo(client, DASHBOARD_MENU_ITEM_ID, DASHBOARD_MAIN_ID);
+  await menuGoTo(client, DASHBOARD_MENU_ITEM_ID);
 };
 
 export const menuGoToSignOut = async (client) => {
@@ -119,15 +113,15 @@ export const menuGoToSignOut = async (client) => {
 };
 
 export const menuGoToHome = async (client) => {
-  await menuGoTo(client, HOME_MENU_ITEM_ID, HOME_MAIN_ID);
+  await menuGoTo(client, HOME_MENU_ITEM_ID);
 };
 
 export const menuGoToSavedSpaces = async (client) => {
-  await menuGoTo(client, SAVED_SPACES_MENU_ITEM_ID, SAVED_SPACES_MAIN_ID);
+  await menuGoTo(client, SAVED_SPACES_MENU_ITEM_ID);
 };
 
 export const menuGoToClassrooms = async (client) => {
-  await menuGoTo(client, CLASSROOMS_MENU_ITEM_ID, CLASSROOMS_MAIN_ID);
+  await menuGoTo(client, CLASSROOMS_MENU_ITEM_ID);
 };
 
 /** string util functions */
@@ -150,17 +144,25 @@ export const createRandomString = () => {
 
 /** assertion util functions */
 
-export const expectElementToNotExist = async (client, elementSelector) => {
-  const found = await (await client.$(elementSelector)).isExisting();
-  expect(found).to.be.false;
+export const expectElementToNotExist = async (
+  client,
+  containerSelector,
+  elementSelector
+) => {
+  const found = await (await client.$(containerSelector)).getHTML();
+  expect(found).to.not.contain(elementSelector);
 };
 
-export const expectAnyElementToExist = async (client, elementSelectors) => {
+export const expectAnyElementToExist = async (
+  client,
+  containerSelector,
+  elementSelectors
+) => {
   const foundElements = [];
-  /* eslint-disable-next-line no-restricted-syntax */
+  const content = await (await client.$(containerSelector)).getHTML();
+  // eslint-disable-next-line no-restricted-syntax
   for (const selector of elementSelectors) {
-    /* eslint-disable-next-line no-await-in-loop */
-    const found = await (await client.$(selector)).isExisting();
+    const found = content.includes(selector);
     foundElements.push(found);
   }
   expect(foundElements).to.include(true);
@@ -169,7 +171,7 @@ export const expectAnyElementToExist = async (client, elementSelectors) => {
 export const expectElementToExist = async (client, elementSelector) => {
   const found = await (await client.$(elementSelector)).isExisting();
   if (!found) {
-    console.log(`${elementSelector} is not found`);
+    console.error(`${elementSelector} is not found`);
   }
   expect(found).to.be.true;
 };
@@ -189,7 +191,6 @@ export const changeLanguage = async (client, value) => {
   const lang = await languageInput.getAttribute('value');
   if (lang !== value) {
     await (await client.$(`#${LANGUAGE_SELECT_ID}`)).click();
-    await client.pause(1000);
     await (await client.$(`[data-value='${value}']`)).click();
     await client.pause(LOAD_TAB_PAUSE);
   }
@@ -247,32 +248,72 @@ export const toggleSyncAdvancedMode = async (client, value) => {
 /** sign in util function */
 export const userSignIn = async (
   client,
-  { name, mode = DEFAULT_USER_MODE },
-  closeTour = true
+  { username, settings: { userMode = DEFAULT_USER_MODE } },
+  closeTour = false
 ) => {
   const input = await client.$(`#${LOGIN_USERNAME_INPUT_ID}`);
-  await input.setValue(name);
+  await input.setValue(username);
   await client.pause(INPUT_TYPE_PAUSE);
   const button = await client.$(`#${LOGIN_BUTTON_ID}`);
   await button.click();
   await client.pause(LOGIN_PAUSE);
   if (closeTour) {
     const tourEndButton = await client.$(TOUR_END_SELECTOR);
-    await tourEndButton.click();
+    if (await tourEndButton.isExisting()) {
+      await tourEndButton.click();
+    }
   }
   // change mode if it is not default mode
-  if (mode !== DEFAULT_USER_MODE) {
-    if (mode === USER_MODES.TEACHER) {
+  if (userMode !== DEFAULT_USER_MODE) {
+    if (userMode === USER_MODES.TEACHER) {
       // open drawer to detect teacher icon
       await openDrawer(client);
-      const drawerTeacherIcon = await client.$(
-        `#${DRAWER_HEADER_TEACHER_ICON_ID}`
+      const drawerStudentIcon = await client.$(
+        `#${DRAWER_HEADER_STUDENT_ICON_ID}`
       );
-      const isTeacher = await drawerTeacherIcon.isExisting();
-      if (!isTeacher) {
+      const isStudent = await drawerStudentIcon.isExisting();
+      if (isStudent) {
         await menuGoToSettings(client);
-        await toggleStudentMode(client, mode);
+        await toggleStudentMode(client, userMode);
       }
     }
   }
 };
+
+export const clickOnSpaceCard = async (client, id) => {
+  const spaceCardLink = await client.$(
+    `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
+  );
+  await spaceCardLink.click();
+  await client.pause(OPEN_SAVED_SPACE_PAUSE);
+};
+
+export const buildSignedInUserForDatabase = ({
+  syncMode = DEFAULT_SYNC_MODE,
+} = {}) => ({
+  users: [USER_GRAASP],
+  user: {
+    id: USER_GRAASP.id,
+    username: USER_GRAASP.username,
+    createdAt: '2020-11-23T14:54:49.092Z',
+    anonymous: false,
+    geolocation: null,
+    settings: {
+      lang: 'en',
+      developerMode: false,
+      geolocationEnabled: false,
+      syncMode,
+      userMode: USER_GRAASP?.settings?.userMode || DEFAULT_USER_MODE,
+      actionAccessibility: false,
+      actionsEnabled: true,
+    },
+    favoriteSpaces: [],
+    recentSpaces: [],
+    tour: {
+      visitSpace: true,
+      settings: true,
+    },
+    lastSignIn: '2020-11-23T14:54:49.092Z',
+    authenticated: AUTHENTICATED,
+  },
+});

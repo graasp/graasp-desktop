@@ -1,7 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable func-names */
 import { expect } from 'chai';
 import i18n from '../src/config/i18n';
 import {
@@ -36,6 +32,8 @@ import {
   SYNC_ADVANCED_MAIN_ID,
   SYNC_CANCEL_BUTTON_ID,
   SETTINGS_TITLE_ID,
+  MAIN_MENU_ID,
+  SPACES_NEARBY_MAIN_ID,
 } from '../src/config/selectors';
 import {
   DEFAULT_GLOBAL_TIMEOUT,
@@ -53,40 +51,33 @@ import {
 import { USER_GRAASP, USER_ALICE, USER_CEDRIC } from './fixtures/users';
 import { settingsPerUser } from './fixtures/settings';
 import { loadSpaceById } from './spaces/loadSpace.test';
-import {
-  SPACE_WITH_REMOVAL,
-  SPACE_WITH_REMOVAL_PATH,
-} from './fixtures/syncSpace';
+import { SPACE_WITH_REMOVAL } from './fixtures/syncSpace';
 
 const isLanguageSetTo = async (client, value) => {
-  const lang = await client.getAttribute(
-    `#${LANGUAGE_SELECT_ID} input`,
-    'value'
-  );
+  const lang = await (
+    await client.$(`#${LANGUAGE_SELECT_ID} input`)
+  ).getAttribute('value');
   expect(lang).to.equal(value);
 };
 
 const isGeolocationEnabledSetTo = async (client, value) => {
-  const geolocationEnabled = await client.getAttribute(
-    `#${GEOLOCATION_CONTROL_ID} input`,
-    'value'
-  );
+  const geolocationEnabled = await (
+    await client.$(`#${GEOLOCATION_CONTROL_ID} input`)
+  ).getAttribute('value');
   expect(JSON.parse(geolocationEnabled)).to.equal(value);
 };
 
 const isDeveloperModeSetTo = async (client, value) => {
-  const developer = await client.getAttribute(
-    `#${DEVELOPER_SWITCH_ID} input`,
-    'value'
-  );
+  const developer = await (
+    await client.$(`#${DEVELOPER_SWITCH_ID} input`)
+  ).getAttribute('value');
   expect(JSON.parse(developer)).to.equal(value);
 };
 
 const isSyncAdvancedModeSetTo = async (client, value) => {
-  const mode = await client.getAttribute(
-    `#${SYNC_MODE_SWITCH_ID} input`,
-    'value'
-  );
+  const mode = await (
+    await client.$(`#${SYNC_MODE_SWITCH_ID} input`)
+  ).getAttribute('value');
   const booleanToMode = JSON.parse(mode)
     ? SYNC_MODES.ADVANCED
     : SYNC_MODES.VISUAL;
@@ -97,15 +88,14 @@ describe('Settings Scenarios', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  afterEach(function () {
+  afterEach(() => {
     return closeApplication(app);
   });
 
-  describe('Use graasp user', function () {
+  describe('Use graasp user', () => {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication();
-        await userSignIn(app.client, USER_GRAASP);
       })
     );
 
@@ -133,7 +123,11 @@ describe('Settings Scenarios', function () {
 
         // check developer mode tab doesn't exist
         await openDrawer(client);
-        await expectElementToNotExist(client, `#${DEVELOPER_MENU_ITEM_ID}`);
+        await expectElementToNotExist(
+          client,
+          `#${MAIN_MENU_ID}`,
+          DEVELOPER_MENU_ITEM_ID
+        );
 
         // enable developer mode, check tab exist
         await menuGoToSettings(client);
@@ -162,12 +156,16 @@ describe('Settings Scenarios', function () {
         await client.pause(LOAD_SPACE_PAUSE);
 
         // geolocation button should not exist
-        await expectElementToNotExist(client, `#${GEOLOCATION_CONTROL_ID}`);
+        await expectElementToNotExist(
+          client,
+          `#${SPACES_NEARBY_MAIN_ID}`,
+          GEOLOCATION_CONTROL_ID
+        );
 
         // spaces should be displayed
-        await expectAnyElementToExist(client, [
-          `.${SPACE_CARD_CLASS}`,
-          `#${SPACE_NOT_AVAILABLE_TEXT_ID}`,
+        await expectAnyElementToExist(client, `#${SPACES_NEARBY_MAIN_ID}`, [
+          SPACE_CARD_CLASS,
+          SPACE_NOT_AVAILABLE_TEXT_ID,
         ]);
       })
     );
@@ -232,10 +230,11 @@ describe('Settings Scenarios', function () {
         const { client } = app;
         const {
           space: { id },
+          path: spacePath,
         } = SPACE_WITH_REMOVAL;
 
         // init with a modified space
-        await loadSpaceById(client, SPACE_WITH_REMOVAL_PATH);
+        await loadSpaceById(client, spacePath);
 
         const syncButton = await client.$(
           `#${buildSpaceCardId(id)} .${SPACE_SYNC_BUTTON_CLASS}`
@@ -262,10 +261,10 @@ describe('Settings Scenarios', function () {
     );
   });
 
-  describe('Use multiple users', function () {
+  describe('Use multiple users', () => {
     beforeEach(
       mochaAsync(async () => {
-        app = await createApplication();
+        app = await createApplication({ database: {} });
       })
     );
 
@@ -280,7 +279,7 @@ describe('Settings Scenarios', function () {
             developerMode,
             geolocationEnabled,
             syncMode,
-          } = settingsPerUser[user.name];
+          } = settingsPerUser[user.username];
 
           await userSignIn(client, user);
 
@@ -311,7 +310,7 @@ describe('Settings Scenarios', function () {
             developerMode,
             geolocationEnabled,
             syncMode,
-          } = settingsPerUser[user.name];
+          } = settingsPerUser[user.username];
 
           await userSignIn(client, user);
 

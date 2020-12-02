@@ -3,3 +3,4 @@ dist
 coverage
 src/registerServiceWorker.js
 cypress/integration/examples
+test/tmp

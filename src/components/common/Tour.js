@@ -13,6 +13,7 @@ import {
   goToNextStep,
   resetTour,
   startTour,
+  getToursEnabled,
 } from '../../actions';
 import { HOME_PATH, SETTINGS_PATH, VISIT_PATH } from '../../config/paths';
 import {
@@ -50,7 +51,8 @@ export class Tour extends Component {
     dispatchCompleteTour: PropTypes.func.isRequired,
     dispatchResetTour: PropTypes.func.isRequired,
     dispatchInitializeTour: PropTypes.func.isRequired,
-    tourKey: PropTypes.string.isRequired,
+    tourKey: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+      .isRequired,
     currentTour: PropTypes.oneOf(Object.values(tours)).isRequired,
     run: PropTypes.bool.isRequired,
     continuous: PropTypes.bool.isRequired,
@@ -75,7 +77,14 @@ export class Tour extends Component {
       push: PropTypes.func.isRequired,
     }).isRequired,
     t: PropTypes.func.isRequired,
+    showTours: PropTypes.bool.isRequired,
+    dispatchGetToursEnabled: PropTypes.func.isRequired,
   };
+
+  componentDidMount() {
+    const { dispatchGetToursEnabled } = this.props;
+    dispatchGetToursEnabled();
+  }
 
   componentDidUpdate(prevProps) {
     const {
@@ -145,7 +154,13 @@ export class Tour extends Component {
       dispatchCompleteTour,
       currentTour,
       t,
+      showTours,
     } = this.props;
+
+    if (!showTours) {
+      return null;
+    }
+
     const callback = async (data) => {
       const { action, index, type, status } = data;
       if (
@@ -255,6 +270,7 @@ export class Tour extends Component {
 }
 
 const mapStateToProps = ({ tour, authentication }) => ({
+  showTours: tour.getIn(['enabled']),
   tourKey: tour.getIn(['key']),
   currentTour: tour.getIn(['tour']),
   run: tour.getIn(['run']),
@@ -275,6 +291,7 @@ const mapDispatchToProps = {
   dispatchCompleteTour: completeTour,
   dispatchResetTour: resetTour,
   dispatchInitializeTour: initializeTour,
+  dispatchGetToursEnabled: getToursEnabled,
 };
 
 const ConnectedComponent = connect(mapStateToProps, mapDispatchToProps)(Tour);

@@ -1,12 +1,9 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable func-names */
 import {
   mochaAsync,
   expectElementToExist,
   expectElementToNotExist,
   menuGoToSavedSpaces,
+  buildSignedInUserForDatabase,
   menuGoToHome,
   menuGoToSignOut,
   userSignIn,
@@ -17,13 +14,13 @@ import {
   SPACE_FAVORITE_BUTTON_CLASS,
   SPACE_CARD_LINK_CLASS,
   FAVORITE_SPACES_WRAPPER_ID,
+  HOME_MAIN_ID,
 } from '../../src/config/selectors';
 import { SPACE_ATOMIC_STRUCTURE } from '../fixtures/spaces';
 import { visitAndSaveSpaceById } from './visitSpace.test';
 import {
   SET_SPACE_AS_FAVORITE_PAUSE,
   DEFAULT_GLOBAL_TIMEOUT,
-  OPEN_SAVED_SPACE_PAUSE,
 } from '../constants';
 import { USER_GRAASP, USER_ALICE, USER_BOB } from '../fixtures/users';
 
@@ -31,15 +28,19 @@ describe('Set space as favorite', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  afterEach(function () {
+  afterEach(() => {
     return closeApplication(app);
   });
 
-  describe('Buttons', function () {
+  describe('Buttons', () => {
     beforeEach(
       mochaAsync(async () => {
-        app = await createApplication();
-        await userSignIn(app.client, USER_GRAASP);
+        app = await createApplication({
+          database: {
+            spaces: [SPACE_ATOMIC_STRUCTURE],
+            ...buildSignedInUserForDatabase(USER_GRAASP),
+          },
+        });
       })
     );
 
@@ -51,8 +52,6 @@ describe('Set space as favorite', function () {
         } = SPACE_ATOMIC_STRUCTURE;
 
         const { client } = app;
-
-        await visitAndSaveSpaceById(client, id);
 
         await menuGoToSavedSpaces(client);
 
@@ -71,12 +70,12 @@ describe('Set space as favorite', function () {
 
         // uncheck favorite
         await favoriteButton.click();
-        await client.pause(SET_SPACE_AS_FAVORITE_PAUSE);
 
         // space should not be in favorite spaces
         await expectElementToNotExist(
           client,
-          `#${FAVORITE_SPACES_WRAPPER_ID} #${buildSpaceCardId(id)}`
+          `#${HOME_MAIN_ID}`,
+          buildSpaceCardId(id)
         );
       })
     );
@@ -90,13 +89,12 @@ describe('Set space as favorite', function () {
 
         const { client } = app;
 
-        await visitAndSaveSpaceById(client, id);
+        await menuGoToSavedSpaces(client);
 
         const favoriteButton = await client.$(
           `.${SPACE_FAVORITE_BUTTON_CLASS}`
         );
         await favoriteButton.click();
-        await client.pause(SET_SPACE_AS_FAVORITE_PAUSE);
 
         // check space is in home tab
         await menuGoToHome(client);
@@ -111,25 +109,25 @@ describe('Set space as favorite', function () {
           `#${buildSpaceCardId(id)} .${SPACE_CARD_LINK_CLASS}`
         );
         await spaceCardLink.click();
-        await client.pause(OPEN_SAVED_SPACE_PAUSE);
         await favoriteButton.click();
-        await client.pause(SET_SPACE_AS_FAVORITE_PAUSE);
 
         // space should not be in home
         await menuGoToHome(client);
+        // no favorite spaces at all
         await expectElementToNotExist(
           client,
-          `#${FAVORITE_SPACES_WRAPPER_ID} #${buildSpaceCardId(id)}`
+          `#${HOME_MAIN_ID}`,
+          FAVORITE_SPACES_WRAPPER_ID
         );
       })
     );
   });
 
-  describe('Multi-users', function () {
+  describe('Multi-users', () => {
     it(
       'Set a space as favorite is different per user',
       mochaAsync(async () => {
-        app = await createApplication();
+        app = await createApplication({ database: {} });
 
         const {
           space: { id },
@@ -144,12 +142,15 @@ describe('Set space as favorite', function () {
           `.${SPACE_FAVORITE_BUTTON_CLASS}`
         );
         await favoriteButton.click();
-        await client.pause(SET_SPACE_AS_FAVORITE_PAUSE);
         await menuGoToSignOut(client);
 
         // sign in with bob, no favorite
         await userSignIn(app.client, USER_BOB);
-        await expectElementToNotExist(client, `#${buildSpaceCardId(id)}`);
+        await expectElementToNotExist(
+          client,
+          `#${HOME_MAIN_ID}`,
+          buildSpaceCardId(id)
+        );
         await menuGoToSignOut(client);
 
         // sign in with alice, still favorite

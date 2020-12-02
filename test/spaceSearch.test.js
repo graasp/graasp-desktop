@@ -1,62 +1,61 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable func-names */
 import { expect } from 'chai';
-import { mochaAsync, userSignIn } from './utils';
+import {
+  menuGoToSavedSpaces,
+  mochaAsync,
+  clearInput,
+  buildSignedInUserForDatabase,
+} from './utils';
 import { createApplication, closeApplication } from './application';
 import {
   SPACE_SEARCH_INPUT_ID,
   SPACE_MEDIA_CARD_CLASS,
+  SPACE_NOT_AVAILABLE_TEXT_ID,
 } from '../src/config/selectors';
-import {
-  DEFAULT_GLOBAL_TIMEOUT,
-  SPACE_SEARCH_PAUSE,
-  TOOLTIP_FADE_OUT_PAUSE,
-} from './constants';
-import { USER_GRAASP } from './fixtures/users';
-import { loadSpaceById } from './spaces/loadSpace.test';
+import { DEFAULT_GLOBAL_TIMEOUT, SPACE_SEARCH_PAUSE } from './constants';
 import { searchSpacesFixtures } from './fixtures/searchSpaces';
+import { SPACE_ATOMIC_STRUCTURE, SPACE_APOLLO_11 } from './fixtures/spaces';
 
 const searchQuery = async (client, query) => {
-  await (await client.$(`#${SPACE_SEARCH_INPUT_ID}`)).setValue(query);
+  await clearInput(client, `#${SPACE_SEARCH_INPUT_ID}`);
+  const input = await client.$(`#${SPACE_SEARCH_INPUT_ID}`);
+  await input.setValue(query);
   await client.pause(SPACE_SEARCH_PAUSE);
 };
 
 describe('Space Search Scenarios', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
-  beforeEach(
+  before(
     mochaAsync(async () => {
-      app = await createApplication();
-      await userSignIn(app.client, USER_GRAASP);
+      app = await createApplication({
+        database: {
+          spaces: [SPACE_ATOMIC_STRUCTURE, SPACE_APOLLO_11],
+          ...buildSignedInUserForDatabase(),
+        },
+      });
     })
   );
 
-  afterEach(function () {
+  after(() => {
     return closeApplication(app);
   });
 
-  searchSpacesFixtures.forEach(([spaceFilepaths, query, resultSpaceIds]) => {
+  searchSpacesFixtures.forEach(([query, resultSpaceIds]) => {
     it(
       `Search query "${query}" displays correct spaces`,
       mochaAsync(async () => {
         const { client } = app;
 
-        for (const filepath of spaceFilepaths) {
-          await loadSpaceById(client, filepath);
-        }
-
-        await client.pause(TOOLTIP_FADE_OUT_PAUSE);
+        await menuGoToSavedSpaces(client);
 
         await searchQuery(client, query);
 
         // if expect no matching space
         if (resultSpaceIds.length === 0) {
           const isCardExisting = await (
-            await client.$(`.${SPACE_MEDIA_CARD_CLASS}`)
+            await client.$(`#${SPACE_NOT_AVAILABLE_TEXT_ID}`)
           ).isExisting();
-          expect(isCardExisting).to.be.false;
+          expect(isCardExisting).to.be.true;
         } else {
           // check displayed cards are result space ids
           const cardIds = [];

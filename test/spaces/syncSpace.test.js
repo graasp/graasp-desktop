@@ -1,15 +1,11 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable func-names */
 import { expect } from 'chai';
 import {
   mochaAsync,
   expectElementToNotExist,
+  buildSignedInUserForDatabase,
   expectElementToExist,
-  toggleSyncAdvancedMode,
-  userSignIn,
-  menuGoToSettings,
+  menuGoToSavedSpaces,
+  clickOnSpaceCard,
 } from '../utils';
 import { createApplication, closeApplication } from '../application';
 import {
@@ -23,26 +19,21 @@ import {
   SPACE_THUMBNAIL_IMAGE_CLASS,
   SYNC_CANCEL_BUTTON_ID,
   SYNC_ADVANCED_MAIN_ID,
+  TOOLS_CONTENT_PANE_ID,
 } from '../../src/config/selectors';
 import {
   SPACE_WITH_ADDITION,
-  SPACE_WITH_ADDITION_PATH,
   SPACE_WITH_ADDITION_CHANGES,
   SPACE_WITH_REMOVAL,
   SPACE_WITH_REMOVAL_CHANGES,
-  SPACE_WITH_REMOVAL_PATH,
   SPACE_WITH_UPDATE,
   SPACE_WITH_UPDATE_CHANGES,
-  SPACE_WITH_UPDATE_PATH,
   SPACE_WITH_MOVE,
   SPACE_WITH_MOVE_CHANGES,
-  SPACE_WITH_MOVE_PATH,
   SPACE_WITH_TOOLS_UPDATE,
   SPACE_WITH_TOOLS_UPDATE_CHANGES,
-  SPACE_WITH_TOOLS_UPDATE_PATH,
   SPACE_WITH_MULTIPLE_CHANGES,
   SPACE_WITH_MULTIPLE_CHANGES_CHANGES,
-  SPACE_WITH_MULTIPLE_CHANGES_PATH,
 } from '../fixtures/syncSpace';
 import {
   SYNC_SPACE_PAUSE,
@@ -51,29 +42,12 @@ import {
   LOAD_PHASE_PAUSE,
   LOAD_TAB_PAUSE,
 } from '../constants';
+import { openTools, hasSavedSpaceLayout } from './visitSpace.test';
+import { SYNC_CHANGES, SYNC_MODES } from '../../src/config/constants';
 import { USER_GRAASP } from '../fixtures/users';
 import { loadSpaceById } from './loadSpace.test';
-import { openTools, hasSavedSpaceLayout } from './visitSpace.test';
-import { SYNC_CHANGES } from '../../src/config/constants';
 
 const { ADDED, REMOVED, UPDATED, MOVED } = SYNC_CHANGES;
-
-const spaces = [
-  [SPACE_WITH_ADDITION, SPACE_WITH_ADDITION_CHANGES, SPACE_WITH_ADDITION_PATH],
-  [SPACE_WITH_REMOVAL, SPACE_WITH_REMOVAL_CHANGES, SPACE_WITH_REMOVAL_PATH],
-  [SPACE_WITH_UPDATE, SPACE_WITH_UPDATE_CHANGES, SPACE_WITH_UPDATE_PATH],
-  [SPACE_WITH_MOVE, SPACE_WITH_MOVE_CHANGES, SPACE_WITH_MOVE_PATH],
-  [
-    SPACE_WITH_TOOLS_UPDATE,
-    SPACE_WITH_TOOLS_UPDATE_CHANGES,
-    SPACE_WITH_TOOLS_UPDATE_PATH,
-  ],
-  [
-    SPACE_WITH_MULTIPLE_CHANGES,
-    SPACE_WITH_MULTIPLE_CHANGES_CHANGES,
-    SPACE_WITH_MULTIPLE_CHANGES_PATH,
-  ],
-];
 
 const constructToolsPhase = (items) => ({
   name: 'Tools',
@@ -103,7 +77,7 @@ const checkItemHasChange = async (client, selector, change) => {
       expect(prevEl).to.include(change);
       break;
     default:
-      console.log(`change "${change}" is not recognized`);
+      console.error(`change "${change}" is not recognized`);
   }
 };
 
@@ -167,7 +141,7 @@ const hasSyncVisualScreenLayout = async (
   }
 };
 
-const checkItemsAfterSync = async (client, items) => {
+const checkItemsAfterSync = async (client, phaseSelector, items) => {
   for (const { id, change: itemChange } of items) {
     // check item change was applied
     const itemSelector = `[data-id='${id}']`;
@@ -178,10 +152,10 @@ const checkItemsAfterSync = async (client, items) => {
         await expectElementToExist(client, itemSelector);
         break;
       case REMOVED:
-        await expectElementToNotExist(client, itemSelector);
+        await expectElementToNotExist(client, phaseSelector, id);
         break;
       default:
-        console.log(`change "${itemChange}" not recognized`);
+        console.error(`change "${itemChange}" not recognized`);
     }
   }
 };
@@ -189,6 +163,7 @@ const checkItemsAfterSync = async (client, items) => {
 const checkChangesInSpace = async (client, { phases, items: tools = [] }) => {
   let phaseIdx = 0;
   for (const { name, items, change: phaseChange } of phases) {
+    const phase = await client.$(`#${buildPhaseMenuItemId(phaseIdx)}`);
     switch (phaseChange) {
       case REMOVED: {
         const li = await client.$(`#${PHASE_MENU_LIST_ID} li`);
@@ -203,7 +178,6 @@ const checkChangesInSpace = async (client, { phases, items: tools = [] }) => {
       case ADDED:
       case UPDATED:
       default: {
-        const phase = await client.$(`#${buildPhaseMenuItemId(phaseIdx)}`);
         const menuItemText = await phase.getText();
 
         // check phase name change
@@ -214,9 +188,8 @@ const checkChangesInSpace = async (client, { phases, items: tools = [] }) => {
         await client.pause(LOAD_PHASE_PAUSE);
 
         if (items) {
-          await checkItemsAfterSync(client, items);
+          await checkItemsAfterSync(client, `#${PHASE_MENU_LIST_ID}`, items);
         }
-
         phaseIdx += 1;
       }
     }
@@ -225,7 +198,7 @@ const checkChangesInSpace = async (client, { phases, items: tools = [] }) => {
   // check Tools
   if (tools.length) {
     await openTools(client);
-    await checkItemsAfterSync(client, tools);
+    await checkItemsAfterSync(client, `#${TOOLS_CONTENT_PANE_ID}`, tools);
   }
 };
 
@@ -245,67 +218,70 @@ const cancelSync = async (client) => {
   await client.pause(LOAD_TAB_PAUSE);
 };
 
+const spaces = [
+  [SPACE_WITH_ADDITION, SPACE_WITH_ADDITION_CHANGES],
+  [SPACE_WITH_REMOVAL, SPACE_WITH_REMOVAL_CHANGES],
+  [SPACE_WITH_UPDATE, SPACE_WITH_UPDATE_CHANGES],
+  [SPACE_WITH_MOVE, SPACE_WITH_MOVE_CHANGES],
+  [SPACE_WITH_TOOLS_UPDATE, SPACE_WITH_TOOLS_UPDATE_CHANGES],
+  [SPACE_WITH_MULTIPLE_CHANGES, SPACE_WITH_MULTIPLE_CHANGES_CHANGES],
+];
+
 describe('Sync a space', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
-  let globalUser;
 
-  afterEach(function () {
+  afterEach(() => {
     return closeApplication(app);
   });
 
-  describe('with advanced mode disabled (default)', function () {
-    beforeEach(
-      mochaAsync(async () => {
-        app = await createApplication();
-        const { client } = app;
-        globalUser = USER_GRAASP;
-        await userSignIn(client, globalUser);
-      })
-    );
+  describe('with advanced mode disabled (default)', () => {
+    spaces.forEach(([space, changes]) => {
+      it(
+        `Syncing from card open Visual Syncing Space Screen for "${space.space.name}"`,
+        mochaAsync(async () => {
+          app = await createApplication({
+            database: {
+              ...buildSignedInUserForDatabase({ syncMode: SYNC_MODES.VISUAL }),
+            },
+          });
+          const { client } = app;
+          const {
+            space: { id },
+          } = space;
 
-    spaces.forEach(
-      ([
-        {
-          space: { id, name },
-        },
-        changes,
-        spaceFilepath,
-      ]) => {
-        it(
-          `Syncing from card open Visual Syncing Space Screen for "${name}"`,
-          mochaAsync(async () => {
-            const { client } = app;
+          await loadSpaceById(client, space.path);
 
-            await loadSpaceById(client, spaceFilepath);
+          const syncButton = await client.$(
+            `#${buildSpaceCardId(id)} .${SPACE_SYNC_BUTTON_CLASS}`
+          );
+          await syncButton.click();
+          await client.pause(SYNC_OPEN_SCREEN_PAUSE);
 
-            const syncButton = await client.$(
-              `#${buildSpaceCardId(id)} .${SPACE_SYNC_BUTTON_CLASS}`
-            );
-            await syncButton.click();
-            await client.pause(SYNC_OPEN_SCREEN_PAUSE);
+          await hasSyncVisualScreenLayout(client, changes);
 
-            await hasSyncVisualScreenLayout(client, changes);
+          await acceptSync(client);
 
-            await acceptSync(client);
-
-            await checkChangesInSpace(client, changes);
-          })
-        );
-      }
-    );
+          await checkChangesInSpace(client, changes);
+        })
+      );
+    });
 
     it(
       'Syncing from toolbar open Visual Syncing Space Screen',
       mochaAsync(async () => {
+        app = await createApplication({
+          database: {
+            spaces: [SPACE_WITH_MULTIPLE_CHANGES],
+            ...buildSignedInUserForDatabase({ syncMode: SYNC_MODES.VISUAL }),
+          },
+        });
         const { client } = app;
 
-        const {
-          space: { id },
-        } = SPACE_WITH_MULTIPLE_CHANGES;
         const changes = SPACE_WITH_MULTIPLE_CHANGES_CHANGES;
 
-        await loadSpaceById(client, SPACE_WITH_MULTIPLE_CHANGES_PATH, id);
+        await menuGoToSavedSpaces(client);
+        await clickOnSpaceCard(client, SPACE_WITH_MULTIPLE_CHANGES.space.id);
 
         const syncButton = await client.$(`.${SPACE_SYNC_BUTTON_CLASS}`);
         await syncButton.click();
@@ -322,13 +298,17 @@ describe('Sync a space', function () {
     it(
       'Cancel syncing keeps original space in Saved Spaces',
       mochaAsync(async () => {
+        app = await createApplication({
+          database: {
+            spaces: [SPACE_WITH_MULTIPLE_CHANGES],
+            ...buildSignedInUserForDatabase({ syncMode: SYNC_MODES.VISUAL }),
+          },
+        });
         const { client } = app;
         const space = SPACE_WITH_MULTIPLE_CHANGES;
-        const {
-          space: { id },
-        } = space;
 
-        await loadSpaceById(client, SPACE_WITH_MULTIPLE_CHANGES_PATH, id);
+        await menuGoToSavedSpaces(client);
+        await clickOnSpaceCard(client, SPACE_WITH_MULTIPLE_CHANGES.space.id);
 
         const syncButton = await client.$(`.${SPACE_SYNC_BUTTON_CLASS}`);
         await syncButton.click();
@@ -340,24 +320,25 @@ describe('Sync a space', function () {
         await client.pause(LOAD_TAB_PAUSE);
 
         // space still has local content
-        await hasSavedSpaceLayout(client, space, { user: globalUser });
+        await hasSavedSpaceLayout(client, space, { user: USER_GRAASP });
       })
     );
   });
 
-  describe('with advanced mode enabled (default)', function () {
+  describe('with advanced mode enabled (default)', () => {
     beforeEach(
       mochaAsync(async () => {
-        app = await createApplication();
-        const { client } = app;
-        await userSignIn(client, USER_GRAASP);
-        await menuGoToSettings(client);
-        await toggleSyncAdvancedMode(client, true);
+        app = await createApplication({
+          database: {
+            spaces: [SPACE_WITH_MULTIPLE_CHANGES],
+            ...buildSignedInUserForDatabase({ syncMode: SYNC_MODES.ADVANCED }),
+          },
+        });
       })
     );
 
     it(
-      'Syncing from card open Visual Syncing Space Screen',
+      'Syncing from card open Advanced Syncing Space Screen',
       mochaAsync(async () => {
         const { client } = app;
 
@@ -365,7 +346,7 @@ describe('Sync a space', function () {
           space: { id },
         } = SPACE_WITH_MULTIPLE_CHANGES;
 
-        await loadSpaceById(client, SPACE_WITH_MULTIPLE_CHANGES_PATH);
+        await menuGoToSavedSpaces(client);
 
         const syncButton = await client.$(
           `#${buildSpaceCardId(id)} .${SPACE_SYNC_BUTTON_CLASS}`
@@ -382,7 +363,7 @@ describe('Sync a space', function () {
     );
 
     it(
-      'Syncing from toolbar open Visual Syncing Space Screen',
+      'Syncing from toolbar open Advanced Syncing Space Screen',
       mochaAsync(async () => {
         const { client } = app;
 
@@ -391,7 +372,8 @@ describe('Sync a space', function () {
         } = SPACE_WITH_MULTIPLE_CHANGES;
         const changes = SPACE_WITH_MULTIPLE_CHANGES_CHANGES;
 
-        await loadSpaceById(client, SPACE_WITH_MULTIPLE_CHANGES_PATH, id);
+        await menuGoToSavedSpaces(client);
+        await clickOnSpaceCard(client, id);
 
         const syncButton = await client.$(`.${SPACE_SYNC_BUTTON_CLASS}`);
         await syncButton.click();
@@ -414,7 +396,8 @@ describe('Sync a space', function () {
           space: { id },
         } = space;
 
-        await loadSpaceById(client, SPACE_WITH_MULTIPLE_CHANGES_PATH, id);
+        await menuGoToSavedSpaces(client);
+        await clickOnSpaceCard(client, id);
 
         const syncButton = await client.$(`.${SPACE_SYNC_BUTTON_CLASS}`);
         await syncButton.click();
@@ -424,7 +407,7 @@ describe('Sync a space', function () {
         await cancelSync(client);
 
         // space still has local content
-        await hasSavedSpaceLayout(client, space, { user: globalUser });
+        await hasSavedSpaceLayout(client, space, { user: USER_GRAASP });
       })
     );
   });

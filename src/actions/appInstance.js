@@ -51,7 +51,6 @@ const getAppInstance = async (
       );
     }
   } catch (err) {
-    // eslint-disable-next-line no-console
     console.error(err);
   }
 };
@@ -79,7 +78,6 @@ const patchAppInstance = async (
       }
     );
   } catch (err) {
-    // eslint-disable-next-line no-console
     console.error(err);
   }
 };

@@ -44,6 +44,7 @@ import {
   SIGN_OUT_MENU_ITEM_ID,
   SAVED_SPACES_MENU_ITEM_ID,
   CLASSROOMS_MENU_ITEM_ID,
+  MAIN_MENU_ID,
 } from '../../config/selectors';
 import { signOut } from '../../actions/authentication';
 import { AUTHENTICATED, USER_MODES } from '../../config/constants';
@@ -66,7 +67,7 @@ export class MainMenu extends Component {
     user: Map(),
   };
 
-  handleClick = path => {
+  handleClick = (path) => {
     const {
       history: { push },
     } = this.props;
@@ -145,7 +146,7 @@ export class MainMenu extends Component {
     return null;
   }
 
-  renderOfflineMenuItem = child => {
+  renderOfflineMenuItem = (child) => {
     const { t } = this.props;
 
     return (
@@ -325,7 +326,7 @@ export class MainMenu extends Component {
       t,
     } = this.props;
     return (
-      <List>
+      <List id={MAIN_MENU_ID}>
         {this.renderAuthenticatedMenu()}
         <MenuItem
           id={SETTINGS_MENU_ITEM_ID}

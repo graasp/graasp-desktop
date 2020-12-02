@@ -117,7 +117,6 @@ const getGeolocation = async () => async (dispatch) => {
         payload,
       });
     } catch (e) {
-      // eslint-disable-next-line no-console
       console.error(e);
       toastr.error(
         i18n.t(ERROR_MESSAGE_HEADER),
@@ -146,7 +145,6 @@ const getUserFolder = async () => (dispatch) => {
       dispatch(flagGettingUserFolder(false));
     });
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(
       i18n.t(ERROR_MESSAGE_HEADER),
@@ -175,7 +173,6 @@ const getLanguage = async () => (dispatch) => {
       dispatch(flagGettingLanguage(false));
     });
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_GETTING_LANGUAGE));
   }
@@ -200,7 +197,6 @@ const setLanguage = async ({ lang }) => (dispatch) => {
       dispatch(flagSettingLanguage(false));
     });
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_SETTING_LANGUAGE));
   }
@@ -228,7 +224,6 @@ const getDeveloperMode = async () => (dispatch) => {
       }
     );
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(
       i18n.t(ERROR_MESSAGE_HEADER),
@@ -256,7 +251,6 @@ const setDeveloperMode = async (developerMode) => (dispatch) => {
       dispatch(flagSettingDeveloperMode(false));
     });
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(
       i18n.t(ERROR_MESSAGE_HEADER),
@@ -287,7 +281,6 @@ const getGeolocationEnabled = async () => (dispatch) => {
       }
     );
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(
       i18n.t(ERROR_MESSAGE_HEADER),
@@ -321,7 +314,6 @@ const setGeolocationEnabled = async (geolocationEnabled) => (dispatch) => {
       }
     );
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(
       i18n.t(ERROR_MESSAGE_HEADER),
@@ -349,7 +341,6 @@ const getSyncMode = async () => (dispatch) => {
       dispatch(flagGettingSyncMode(false));
     });
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_GETTING_SYNC_MODE));
   }
@@ -374,7 +365,6 @@ const setSyncMode = async (syncMode) => (dispatch) => {
       dispatch(flagSettingSyncMode(false));
     });
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_SETTING_SYNC_MODE));
   }
@@ -399,7 +389,6 @@ const getUserMode = async () => (dispatch) => {
       dispatch(flagGettingUserMode(false));
     });
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_GETTING_USER_MODE));
   }
@@ -424,7 +413,6 @@ const setUserMode = async (userMode) => (dispatch) => {
       dispatch(flagSettingUserMode(false));
     });
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_SETTING_USER_MODE));
   }
@@ -452,7 +440,6 @@ const setSpaceAsFavorite = (payload) => (dispatch) => {
       }
     );
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(
       i18n.t(ERROR_MESSAGE_HEADER),
@@ -480,7 +467,6 @@ const setSpaceAsRecent = (payload) => (dispatch) => {
       dispatch(flagSettingSpaceAsRecent(false));
     });
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(
       i18n.t(ERROR_MESSAGE_HEADER),
@@ -511,7 +497,6 @@ const setActionAccessibility = (payload) => (dispatch) => {
       }
     );
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(
       i18n.t(ERROR_MESSAGE_HEADER),
@@ -542,7 +527,6 @@ const setActionsAsEnabled = (payload) => (dispatch) => {
       }
     );
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e);
     toastr.error(
       i18n.t(ERROR_MESSAGE_HEADER),

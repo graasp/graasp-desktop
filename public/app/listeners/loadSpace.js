@@ -172,18 +172,23 @@ const loadSpace = (mainWindow, db) => async (
         return mainWindow.webContents.send(LOADED_SPACE_CHANNEL, ERROR_GENERAL);
       }
 
-      const savedResources = db.get(APP_INSTANCE_RESOURCES_COLLECTION);
+      // remove already existing resources
+      db.get(APP_INSTANCE_RESOURCES_COLLECTION)
+        .remove(({ id }) =>
+          appInstanceResources.find(({ id: thisId }) => thisId === id)
+        )
+        .write();
 
       const newResources = appInstanceResources
-        // keep only non-duplicate resources
-        .filter(({ id }) => !savedResources.find({ id }).value())
         // change user id by current user id
         .map((resource) => ({
           ...resource,
           user: userId,
         }));
 
-      savedResources.push(...newResources).write();
+      db.get(APP_INSTANCE_RESOURCES_COLLECTION)
+        .push(...newResources)
+        .write();
     }
 
     // write actions to database if selected

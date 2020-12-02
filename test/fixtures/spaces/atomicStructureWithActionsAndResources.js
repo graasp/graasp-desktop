@@ -1,4 +1,5 @@
-const SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES = {
+export default {
+  path: 'atomicStructureWithActionsAndResources.zip',
   space: {
     id: '5d3f0cb5fd555f7e3fbe7ee2',
     name: 'Atomic structure',
@@ -1848,12 +1849,4 @@ const SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES = {
       id: '5eb15ffc4d95183958e74f25',
     },
   ],
-};
-
-const SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES_PATH =
-  'atomicStructureWithActionsAndResources.zip';
-
-export {
-  SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES,
-  SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES_PATH,
 };

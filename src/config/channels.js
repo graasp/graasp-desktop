@@ -76,4 +76,5 @@ module.exports = {
   DELETE_FILE_CHANNEL: 'file:delete',
   GET_APP_UPGRADE_CHANNEL: 'app:upgrade:get',
   INSTALL_APP_UPGRADE_CHANNEL: 'app:upgrade:install',
+  GET_TOURS_ENABLED_CHANNEL: 'tour:enabled:get',
 };

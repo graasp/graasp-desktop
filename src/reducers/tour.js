@@ -8,8 +8,10 @@ import {
   RESTART_TOUR,
   START_TOUR,
   STOP_TOUR,
+  GET_TOURS_ENABLED_SUCCESS,
 } from '../types/tour';
 import { tours, VISIT_SPACE_TOUR_STEPS } from '../config/tours';
+import { DEFAULT_TOURS_ENABLED } from '../config/constants';
 
 const INITIAL_STATE = Map({
   key: 0, // This field makes the tour to re-render when we restart the tour
@@ -18,6 +20,7 @@ const INITIAL_STATE = Map({
   stepIndex: 0, // Make the component controlled
   tour: tours.VISIT_SPACE_TOUR,
   steps: VISIT_SPACE_TOUR_STEPS,
+  enabled: DEFAULT_TOURS_ENABLED,
 });
 
 export default (state = INITIAL_STATE, { type, payload }) => {
@@ -48,7 +51,8 @@ export default (state = INITIAL_STATE, { type, payload }) => {
         .setIn(['tour'], payload.tour)
         .setIn(['steps'], payload.steps)
         .setIn(['key'], new Date().toISOString());
-
+    case GET_TOURS_ENABLED_SUCCESS:
+      return state.setIn(['enabled'], payload);
     default:
       return state;
   }

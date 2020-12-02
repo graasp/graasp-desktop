@@ -113,7 +113,6 @@ class PhaseApp extends Component {
       if (this.iframe.contentWindow.postMessage) {
         this.iframe.contentWindow.postMessage(message, '*');
       } else {
-        // eslint-disable-next-line no-console
         console.error('unable to find postMessage');
       }
     }
@@ -191,7 +190,6 @@ class PhaseApp extends Component {
       }
       return false;
     } catch (e) {
-      // eslint-disable-next-line no-console
       console.error(e);
       return false;
     }
