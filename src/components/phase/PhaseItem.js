@@ -9,17 +9,44 @@ import {
   APPLICATION,
   IFRAME,
   DEFAULT_PROTOCOL,
+  PDF,
 } from '../../config/constants';
 import PhaseText from './PhaseText';
 import PhaseImage from './PhaseImage';
 import PhaseVideo from './PhaseVideo';
 import PhaseApp from './PhaseApp';
+import PhasePdf from './PhasePdf';
 
 // prop types gets confused when dealing with helper renderers
 // eslint-disable-next-line react/prop-types
-const renderResource = ({ id, mimeType, content, asset, url, name }) => {
+const renderResource = ({
+  id,
+  mimeType,
+  content,
+  asset,
+  url,
+  name,
+  spaceId,
+  phaseId,
+  appInstance,
+}) => {
   if (mimeType === TEXT) {
     return <PhaseText key={id} id={id} content={content} />;
+  }
+
+  if (mimeType === PDF) {
+    return (
+      <PhasePdf
+        key={id}
+        id={id}
+        url={url}
+        asset={asset}
+        name={name}
+        spaceId={spaceId}
+        phaseId={phaseId}
+        appInstance={appInstance}
+      />
+    );
   }
 
   if (IMAGE.test(mimeType)) {
