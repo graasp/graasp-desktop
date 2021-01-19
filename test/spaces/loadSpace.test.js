@@ -163,9 +163,7 @@ describe('Load Space Scenarios', function () {
   let app;
   let globalUser;
 
-  afterEach(() => {
-    return closeApplication(app);
-  });
+  afterEach(() => closeApplication(app));
 
   describe('predefined export spaces', () => {
     beforeEach(

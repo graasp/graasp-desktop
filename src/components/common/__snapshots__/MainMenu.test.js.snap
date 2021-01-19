@@ -11,7 +11,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
     selected={true}
   >
     <WithStyles(ForwardRef(ListItemIcon))>
-      <HomeIcon />
+      <Memo(ForwardRef(HomeIcon)) />
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
       primary="Home"
@@ -24,7 +24,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
     selected={false}
   >
     <WithStyles(ForwardRef(ListItemIcon))>
-      <SaveIcon />
+      <Memo(ForwardRef(SaveIcon)) />
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
       primary="Saved Spaces"
@@ -47,7 +47,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
           selected={false}
         >
           <WithStyles(ForwardRef(ListItemIcon))>
-            <SearchIcon />
+            <Memo(ForwardRef(SearchIcon)) />
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))
             primary="Spaces Nearby"
@@ -67,7 +67,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
       selected={false}
     >
       <WithStyles(ForwardRef(ListItemIcon))>
-        <SearchIcon />
+        <Memo(ForwardRef(SearchIcon)) />
       </WithStyles(ForwardRef(ListItemIcon))>
       <WithStyles(ForwardRef(ListItemText))
         primary="Spaces Nearby"
@@ -91,7 +91,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
           selected={false}
         >
           <WithStyles(ForwardRef(ListItemIcon))>
-            <LanguageIcon />
+            <Memo(ForwardRef(LanguageIcon)) />
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))
             primary="Visit a Space"
@@ -111,7 +111,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
       selected={false}
     >
       <WithStyles(ForwardRef(ListItemIcon))>
-        <LanguageIcon />
+        <Memo(ForwardRef(LanguageIcon)) />
       </WithStyles(ForwardRef(ListItemIcon))>
       <WithStyles(ForwardRef(ListItemText))
         primary="Visit a Space"
@@ -125,7 +125,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
     selected={false}
   >
     <WithStyles(ForwardRef(ListItemIcon))>
-      <PublishIcon />
+      <Memo(ForwardRef(PublishIcon)) />
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
       primary="Load"
@@ -138,7 +138,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
     selected={false}
   >
     <WithStyles(ForwardRef(ListItemIcon))>
-      <SettingsIcon />
+      <Memo(ForwardRef(SettingsIcon)) />
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
       primary="Settings"
@@ -151,7 +151,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
     selected={false}
   >
     <WithStyles(ForwardRef(ListItemIcon))>
-      <ShowChartIcon />
+      <Memo(ForwardRef(ShowChartIcon)) />
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
       primary="Dashboard"
@@ -164,7 +164,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
     selected={false}
   >
     <WithStyles(ForwardRef(ListItemIcon))>
-      <AccountCircleIcon />
+      <Memo(ForwardRef(AccountCircleIcon)) />
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
       primary="Sign Out"
@@ -175,7 +175,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
     onClick={[Function]}
   >
     <WithStyles(ForwardRef(ListItemIcon))>
-      <ExitToAppIcon />
+      <Memo(ForwardRef(ExitToAppIcon)) />
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
       primary="Quit"
@@ -195,7 +195,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
     selected={true}
   >
     <WithStyles(ForwardRef(ListItemIcon))>
-      <HomeIcon />
+      <Memo(ForwardRef(HomeIcon)) />
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
       primary="Home"
@@ -208,7 +208,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
     selected={false}
   >
     <WithStyles(ForwardRef(ListItemIcon))>
-      <SaveIcon />
+      <Memo(ForwardRef(SaveIcon)) />
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
       primary="Saved Spaces"
@@ -231,7 +231,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
           selected={false}
         >
           <WithStyles(ForwardRef(ListItemIcon))>
-            <SearchIcon />
+            <Memo(ForwardRef(SearchIcon)) />
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))
             primary="Spaces Nearby"
@@ -251,7 +251,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
       selected={false}
     >
       <WithStyles(ForwardRef(ListItemIcon))>
-        <SearchIcon />
+        <Memo(ForwardRef(SearchIcon)) />
       </WithStyles(ForwardRef(ListItemIcon))>
       <WithStyles(ForwardRef(ListItemText))
         primary="Spaces Nearby"
@@ -275,7 +275,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
           selected={false}
         >
           <WithStyles(ForwardRef(ListItemIcon))>
-            <LanguageIcon />
+            <Memo(ForwardRef(LanguageIcon)) />
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))
             primary="Visit a Space"
@@ -295,7 +295,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
       selected={false}
     >
       <WithStyles(ForwardRef(ListItemIcon))>
-        <LanguageIcon />
+        <Memo(ForwardRef(LanguageIcon)) />
       </WithStyles(ForwardRef(ListItemIcon))>
       <WithStyles(ForwardRef(ListItemText))
         primary="Visit a Space"
@@ -309,7 +309,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
     selected={false}
   >
     <WithStyles(ForwardRef(ListItemIcon))>
-      <PublishIcon />
+      <Memo(ForwardRef(PublishIcon)) />
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
       primary="Load"
@@ -322,7 +322,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
     selected={false}
   >
     <WithStyles(ForwardRef(ListItemIcon))>
-      <SettingsIcon />
+      <Memo(ForwardRef(SettingsIcon)) />
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
       primary="Settings"
@@ -335,7 +335,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
     selected={false}
   >
     <WithStyles(ForwardRef(ListItemIcon))>
-      <ShowChartIcon />
+      <Memo(ForwardRef(ShowChartIcon)) />
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
       primary="Dashboard"
@@ -348,7 +348,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
     selected={false}
   >
     <WithStyles(ForwardRef(ListItemIcon))>
-      <CodeIcon />
+      <Memo(ForwardRef(CodeIcon)) />
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
       primary="Developer"
@@ -361,7 +361,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
     selected={false}
   >
     <WithStyles(ForwardRef(ListItemIcon))>
-      <AccountCircleIcon />
+      <Memo(ForwardRef(AccountCircleIcon)) />
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
       primary="Sign Out"
@@ -372,7 +372,7 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
     onClick={[Function]}
   >
     <WithStyles(ForwardRef(ListItemIcon))>
-      <ExitToAppIcon />
+      <Memo(ForwardRef(ExitToAppIcon)) />
     </WithStyles(ForwardRef(ListItemIcon))>
     <WithStyles(ForwardRef(ListItemText))
       primary="Quit"

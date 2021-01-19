@@ -112,7 +112,7 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text defined r
       className="spaceDescriptionExpandButton"
       onClick={[Function]}
     >
-      <ExpandMoreIcon />
+      <Memo(ForwardRef(ExpandMoreIcon)) />
     </WithStyles(ForwardRef(IconButton))>
   </WithStyles(ForwardRef(CardActions))>
 </WithStyles(ForwardRef(Card))>

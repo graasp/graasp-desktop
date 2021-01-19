@@ -26,7 +26,7 @@ import { DEFAULT_GET_REQUEST } from '../config/rest';
 
 const flagSyncingSpace = createFlag(FLAG_SYNCING_SPACE);
 
-export const syncSpace = async ({ id }) => async dispatch => {
+export const syncSpace = async ({ id }) => async (dispatch) => {
   try {
     const url = generateGetSpaceEndpoint(id);
     const response = await fetch(url, DEFAULT_GET_REQUEST);
@@ -65,33 +65,31 @@ export const syncSpace = async ({ id }) => async dispatch => {
   }
 };
 
-export const getRemoteSpaceForSync = payload =>
+export const getRemoteSpaceForSync = (payload) =>
   createGetRemoteSpace(
     payload,
     GET_SYNC_REMOTE_SPACE_SUCCEEDED,
     FLAG_GETTING_SYNC_REMOTE_SPACE
   );
 
-export const getLocalSpaceForSync = payload =>
+export const getLocalSpaceForSync = (payload) =>
   createGetLocalSpace(
     payload,
     GET_SYNC_LOCAL_SPACE_SUCCEEDED,
     FLAG_GETTING_SYNC_LOCAL_SPACE
   );
 
-export const clearSpacesForSync = () => dispatch => {
-  return dispatch({
+export const clearSpacesForSync = () => (dispatch) =>
+  dispatch({
     type: CLEAR_SYNC_SPACES,
   });
-};
 
-export const clearPhasesForSync = () => dispatch => {
-  return dispatch({
+export const clearPhasesForSync = () => (dispatch) =>
+  dispatch({
     type: CLEAR_SYNC_PHASES,
   });
-};
 
-export const selectPhaseForSync = phase => dispatch => {
+export const selectPhaseForSync = (phase) => (dispatch) => {
   dispatch({
     type: SELECT_SYNC_PHASE,
     payload: phase,

@@ -9,19 +9,16 @@ import {
   INLINE_MATH_REGEX,
 } from '../config/constants';
 
-const hasMath = (input = '') => {
-  return (
-    _.isString(input) &&
-    (input.includes(BLOCK_MATH_INDICATOR) ||
-      input.includes(INLINE_MATH_INDICATOR))
-  );
-};
+const hasMath = (input = '') =>
+  _.isString(input) &&
+  (input.includes(BLOCK_MATH_INDICATOR) ||
+    input.includes(INLINE_MATH_INDICATOR));
 
 const renderToString = (input = '', indicator, regex, div) => {
   let output = input;
   if (input.includes(indicator)) {
     const matches = [...input.matchAll(regex)];
-    matches.forEach(match => {
+    matches.forEach((match) => {
       const text = match[2];
       const matched = match[0];
       const parsed = `<${div} class="ql-formula" data-value="${text}">
@@ -37,9 +34,9 @@ const renderToString = (input = '', indicator, regex, div) => {
   return output;
 };
 
-const renderMathBlock = input =>
+const renderMathBlock = (input) =>
   renderToString(input, BLOCK_MATH_INDICATOR, BLOCK_MATH_REGEX, BLOCK_MATH_DIV);
-const renderMathInline = input =>
+const renderMathInline = (input) =>
   renderToString(
     input,
     INLINE_MATH_INDICATOR,
@@ -47,7 +44,7 @@ const renderMathInline = input =>
     INLINE_MATH_DIV
   );
 
-const renderMath = input => {
+const renderMath = (input) => {
   let rvalue = input;
   rvalue = renderMathInline(rvalue);
   rvalue = renderMathBlock(rvalue);

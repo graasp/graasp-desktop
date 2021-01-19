@@ -157,23 +157,19 @@ Object.keys(env).forEach((key) => {
 if (process.env.NODE_ENV === 'test') {
   if (process.env.SHOW_MESSAGE_DIALOG_RESPONSE) {
     const response = JSON.parse(process.env.SHOW_MESSAGE_DIALOG_RESPONSE);
-    dialog.showMessageBox = () => {
-      return Promise.resolve({ response });
-    };
+    dialog.showMessageBox = () => Promise.resolve({ response });
   }
   if (process.env.SHOW_SAVE_DIALOG_RESPONSE) {
-    dialog.showSaveDialog = () => {
-      return Promise.resolve({
+    dialog.showSaveDialog = () =>
+      Promise.resolve({
         filePath: process.env.SHOW_SAVE_DIALOG_RESPONSE,
       });
-    };
   }
   if (process.env.SHOW_OPEN_DIALOG_RESPONSE) {
-    dialog.showOpenDialog = () => {
-      return Promise.resolve({
+    dialog.showOpenDialog = () =>
+      Promise.resolve({
         filePaths: process.env.SHOW_OPEN_DIALOG_RESPONSE,
       });
-    };
   }
 }
 

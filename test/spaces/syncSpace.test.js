@@ -231,9 +231,7 @@ describe('Sync a space', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  afterEach(() => {
-    return closeApplication(app);
-  });
+  afterEach(() => closeApplication(app));
 
   describe('with advanced mode disabled (default)', () => {
     spaces.forEach(([space, changes]) => {

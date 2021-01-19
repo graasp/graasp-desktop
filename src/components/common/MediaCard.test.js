@@ -17,28 +17,26 @@ import ClearButton from '../space/ClearButton';
 import Text from './Text';
 import { USER_MODES } from '../../config/constants';
 
-const createMediaCardProps = (showActions, text) => {
-  return {
-    space: {
-      id: 'id',
-      name: 'name',
-    },
-    image: 'image',
-    text,
-    viewLink: jest.fn(),
-    showActions,
-    userMode: USER_MODES.TEACHER,
-    classes: {
-      card: '',
-      cardDescription: '',
-      cardDescriptionText: '',
-      media: '',
-      leftIcon: '',
-      expand: '',
-      expandOpen: '',
-    },
-  };
-};
+const createMediaCardProps = (showActions, text) => ({
+  space: {
+    id: 'id',
+    name: 'name',
+  },
+  image: 'image',
+  text,
+  viewLink: jest.fn(),
+  showActions,
+  userMode: USER_MODES.TEACHER,
+  classes: {
+    card: '',
+    cardDescription: '',
+    cardDescriptionText: '',
+    media: '',
+    leftIcon: '',
+    expand: '',
+    expandOpen: '',
+  },
+});
 
 describe('<MediaCard />', () => {
   // use defaultProps = false
@@ -332,11 +330,7 @@ describe('<MediaCard />', () => {
       });
 
       it('renders math', () => {
-        const parsedContent = wrapper
-          .find(Collapse)
-          .find(Text)
-          .dive()
-          .debug();
+        const parsedContent = wrapper.find(Collapse).find(Text).dive().debug();
         expect(parsedContent).toEqual(expect.stringMatching('class="katex"'));
       });
     });

@@ -4,25 +4,23 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { DeveloperSwitch } from './DeveloperSwitch';
 import Loader from './Loader';
 
-const createDeveloperSwitchProps = (developerMode, activity = false) => {
-  return {
-    developerMode,
-    activity,
-    t: text => text,
-    dispatchGetDeveloperMode: jest.fn(),
-    dispatchSetDeveloperMode: jest.fn(),
-    classes: {
-      formControl: '',
-    },
-  };
-};
+const createDeveloperSwitchProps = (developerMode, activity = false) => ({
+  developerMode,
+  activity,
+  t: (text) => text,
+  dispatchGetDeveloperMode: jest.fn(),
+  dispatchSetDeveloperMode: jest.fn(),
+  classes: {
+    formControl: '',
+  },
+});
 
 const developerModeValues = [false, true];
 
 describe('<DeveloperSwitch />', () => {
   describe.each(developerModeValues)(
     '<DeveloperSwitch /> renders',
-    developerMode => {
+    (developerMode) => {
       let wrapper;
 
       beforeAll(() => {
@@ -48,7 +46,7 @@ describe('<DeveloperSwitch />', () => {
 
   describe.each(developerModeValues)(
     '<DeveloperSwitch /> on activity',
-    developerMode => {
+    (developerMode) => {
       let wrapper;
 
       it('renders <Loader />', () => {

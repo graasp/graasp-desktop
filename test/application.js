@@ -122,9 +122,9 @@ const createApplication = async ({
 
   await app.start();
 
-  app.client.addCommand('getUserDataPath', () => {
-    return path.join(app.client.capabilities.chrome.userDataDir, 'var');
-  });
+  app.client.addCommand('getUserDataPath', () =>
+    path.join(app.client.capabilities.chrome.userDataDir, 'var')
+  );
 
   await app.client.pause(1000);
   return app;

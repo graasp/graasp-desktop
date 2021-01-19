@@ -446,9 +446,7 @@ describe('Visit Space Scenarios', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  afterEach(() => {
-    return closeApplication(app);
-  });
+  afterEach(() => closeApplication(app));
 
   describe('Visit a space just after delete', () => {
     beforeEach(

@@ -20,9 +20,7 @@ describe('Menu Scenarios', function () {
     })
   );
 
-  afterEach(() => {
-    return closeApplication(app);
-  });
+  afterEach(() => closeApplication(app));
 
   it(
     'MainMenu redirects to correct path',

@@ -5,34 +5,32 @@ import { DeveloperScreen } from './DeveloperScreen';
 import DatabaseEditor from './DatabaseEditor';
 import Banner from '../common/Banner';
 
-const createDeveloperScreenProps = () => {
-  return {
-    t: text => text,
-    classes: {
-      root: '',
-      appBar: '',
-      appBarShift: '',
-      menuButton: '',
-      hide: '',
-      drawer: '',
-      drawerPaper: '',
-      drawerHeader: '',
-      content: '',
-      contentShift: '',
-      developer: 'developer',
-      screenTitle: 'screenTitle',
-    },
-    theme: {
-      direction: 'ltr',
-    },
-    history: {
-      replace: jest.fn(),
-    },
-    i18n: {
-      changeLanguage: jest.fn(),
-    },
-  };
-};
+const createDeveloperScreenProps = () => ({
+  t: (text) => text,
+  classes: {
+    root: '',
+    appBar: '',
+    appBarShift: '',
+    menuButton: '',
+    hide: '',
+    drawer: '',
+    drawerPaper: '',
+    drawerHeader: '',
+    content: '',
+    contentShift: '',
+    developer: 'developer',
+    screenTitle: 'screenTitle',
+  },
+  theme: {
+    direction: 'ltr',
+  },
+  history: {
+    replace: jest.fn(),
+  },
+  i18n: {
+    changeLanguage: jest.fn(),
+  },
+});
 
 describe('<DeveloperScreen />', () => {
   let wrapper;

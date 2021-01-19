@@ -17,22 +17,20 @@ const samplePhase = Map({
 
 const sampleTools = [{ id: 'spaceItemsId' }];
 
-const createPhaseProps = (phase, items, toolsVisible) => {
-  return {
-    space: Map({
-      id: 'spaceId',
-      description: 'spaceDescription',
-      items,
-    }),
-    phase,
-    dispatchSelectPhase: jest.fn(),
-    dispatchClearPhase: jest.fn(),
-    dispatchSetToolsWidth: jest.fn(),
-    start: jest.fn(),
-    toolsVisible,
-    toolsWidth: 3,
-  };
-};
+const createPhaseProps = (phase, items, toolsVisible) => ({
+  space: Map({
+    id: 'spaceId',
+    description: 'spaceDescription',
+    items,
+  }),
+  phase,
+  dispatchSelectPhase: jest.fn(),
+  dispatchClearPhase: jest.fn(),
+  dispatchSetToolsWidth: jest.fn(),
+  start: jest.fn(),
+  toolsVisible,
+  toolsWidth: 3,
+});
 
 describe('<Phase />', () => {
   describe('without tools', () => {

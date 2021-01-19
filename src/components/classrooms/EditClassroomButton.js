@@ -26,7 +26,7 @@ import {
 import ClassroomNameTextField from './ClassroomNameTextField';
 import { isClassroomNameValid } from '../../utils/classroom';
 
-const styles = theme => ({
+const styles = (theme) => ({
   deleted: {
     color: 'lightgrey',
   },
@@ -38,11 +38,11 @@ const styles = theme => ({
   },
 });
 
-const buildDeleteSelection = spaces => {
-  return spaces.reduce((selection, { id: spaceId }) => {
-    return { ...selection, [spaceId]: false };
-  }, {});
-};
+const buildDeleteSelection = (spaces) =>
+  spaces.reduce(
+    (selection, { id: spaceId }) => ({ ...selection, [spaceId]: false }),
+    {}
+  );
 
 class EditClassroomButton extends Component {
   static propTypes = {
@@ -105,7 +105,7 @@ class EditClassroomButton extends Component {
     }
   };
 
-  handleChange = event => {
+  handleChange = (event) => {
     const { target } = event;
     this.setState({ name: target.value });
   };
@@ -132,12 +132,14 @@ class EditClassroomButton extends Component {
           <Grid container direction="row" justify="center" alignItems="center">
             {spaces.map(({ id: spaceId, name: spaceName }) => {
               const isSelected = deleteSelection[spaceId];
+              const onDeleteSelectionChange = (select) => (e) =>
+                this.changeDeleteSelection(e, spaceId, select);
 
               const button = isSelected ? (
                 <Tooltip title={t(`Cancel delete`)}>
                   <IconButton
                     color="primary"
-                    onClick={e => this.changeDeleteSelection(e, spaceId, false)}
+                    onClick={onDeleteSelectionChange(false)}
                   >
                     <CancelIcon />
                   </IconButton>
@@ -147,7 +149,7 @@ class EditClassroomButton extends Component {
                   <IconButton
                     className={EDIT_CLASSROOM_DELETE_DATA_BUTTON_CLASS}
                     color="primary"
-                    onClick={e => this.changeDeleteSelection(e, spaceId, true)}
+                    onClick={onDeleteSelectionChange(true)}
                   >
                     <DeleteIcon />
                   </IconButton>

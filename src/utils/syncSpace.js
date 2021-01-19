@@ -8,7 +8,7 @@ import {
 
 const { ADDED, REMOVED, UPDATED, MOVED } = SYNC_CHANGES;
 
-export const filterSpace = space => {
+export const filterSpace = (space) => {
   const filteredSpace = _.pick(_.cloneDeep(space), SYNC_SPACE_PROPERTIES);
 
   // remove local space specific keys
@@ -19,7 +19,9 @@ export const filterSpace = space => {
   // eslint-disable-next-line no-restricted-syntax
   for (const phase of filteredSpace.phases) {
     if (!_.isEmpty(phase.items)) {
-      phase.items = phase.items.map(item => _.pick(item, SYNC_ITEM_PROPERTIES));
+      phase.items = phase.items.map((item) =>
+        _.pick(item, SYNC_ITEM_PROPERTIES)
+      );
     }
   }
 
@@ -40,15 +42,12 @@ export const isSpaceUpToDate = (localSpace, remoteSpace) => {
  * @param {immutable Map} localSpace : saved space in local database,
  * @param {immutable Map} remoteSpace: space to load
  */
-export const isSpaceDifferent = (localSpace, remoteSpace) => {
+export const isSpaceDifferent = (localSpace, remoteSpace) =>
   // space is different if remoteSpace is not empty and the localSpace does not exist locally or
   // there is a difference between localSpace and remoteSpace
-  return (
-    !remoteSpace.isEmpty() &&
-    (localSpace.isEmpty() ||
-      !isSpaceUpToDate(localSpace.toJS(), remoteSpace.toJS()))
-  );
-};
+  !remoteSpace.isEmpty() &&
+  (localSpace.isEmpty() ||
+    !isSpaceUpToDate(localSpace.toJS(), remoteSpace.toJS()));
 
 /** change object creator
  * @param {String} status : type of change
@@ -101,13 +100,11 @@ export const diffString = (localStr, remoteStr) => {
 
 // create a phase using tools
 // utility to process tools as a phase
-export const createToolsPhase = (tools, t) => {
-  return {
-    id: 'tools-id',
-    name: t('Tools'),
-    items: tools,
-  };
-};
+export const createToolsPhase = (tools, t) => ({
+  id: 'tools-id',
+  name: t('Tools'),
+  items: tools,
+});
 
 // return whether the element should be ignored
 export const countConditions = (changes, { id }) => {
@@ -138,10 +135,8 @@ const applyDiffToObject = (obj, diff, classes) => {
 // get relative index in object array
 // utility to detect moved changes and report it on further changes
 // ex: an added element does not move next elements
-export const getRelativeIdx = (arr, originalIdx, changes) => {
-  return arr.slice(0, originalIdx).filter(el => countConditions(changes, el))
-    .length;
-};
+export const getRelativeIdx = (arr, originalIdx, changes) =>
+  arr.slice(0, originalIdx).filter((el) => countConditions(changes, el)).length;
 
 // return array of differences between given objects for given properties
 export const findDiffInElementArray = (localObj, remoteObj, properties) => {
@@ -153,7 +148,7 @@ export const findDiffInElementArray = (localObj, remoteObj, properties) => {
   const movedEls = [];
   const changes = [];
 
-  uniqueItemIds.forEach(id => {
+  uniqueItemIds.forEach((id) => {
     // compare same id elements
     const localEl = localObj.find(({ id: objectId }) => id === objectId);
     const remoteEl = remoteObj.find(({ id: objectId }) => id === objectId);
@@ -225,10 +220,10 @@ export const createDiffElements = (
   const remoteDiff = diff.filter(({ status }) =>
     [UPDATED, MOVED, ADDED].includes(status)
   );
-  const localObjects = lElements.map(obj =>
+  const localObjects = lElements.map((obj) =>
     applyDiffToObject(obj, localDiff, classes)
   );
-  const remoteObjects = rElements.map(obj =>
+  const remoteObjects = rElements.map((obj) =>
     applyDiffToObject(obj, remoteDiff, classes)
   );
 

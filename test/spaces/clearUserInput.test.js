@@ -26,9 +26,7 @@ describe('Clear User Input in a space', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  afterEach(() => {
-    return closeApplication(app);
-  });
+  afterEach(() => closeApplication(app));
 
   describe('Use graasp user', () => {
     describe('Mock positive response for dialog', () => {

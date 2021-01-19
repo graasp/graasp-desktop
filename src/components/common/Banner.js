@@ -12,7 +12,7 @@ import Box from '@material-ui/core/Box';
 import { withStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
-const styles = theme => ({
+const styles = (theme) => ({
   banner: {
     marginBottom: theme.spacing(2),
   },
@@ -21,7 +21,7 @@ const styles = theme => ({
   },
 });
 
-const renderButton = buttonText => (
+const renderButton = (buttonText) => (
   <Grid container justify="flex-end" spacing={8}>
     <Grid item>
       <Button color="primary">{buttonText}</Button>
@@ -29,7 +29,7 @@ const renderButton = buttonText => (
   </Grid>
 );
 
-const renderIcon = type => {
+const renderIcon = (type) => {
   switch (type) {
     case 'warning':
       return <WarningIcon color="error" fontSize="large" />;
@@ -41,25 +41,23 @@ const renderIcon = type => {
   }
 };
 
-const Banner = ({ text, buttonText, classes, type, id }) => {
-  return (
-    <div className={classes.banner}>
-      <CssBaseline />
-      <Paper id={id} elevation={0} className={classes.paper}>
-        <Box pt={2} pr={1} pb={1} pl={2}>
-          <Grid container spacing={6} alignItems="center" wrap="nowrap">
-            <Grid item>{renderIcon(type)}</Grid>
-            <Grid item>
-              <Typography>{text}</Typography>
-            </Grid>
+const Banner = ({ text, buttonText, classes, type, id }) => (
+  <div className={classes.banner}>
+    <CssBaseline />
+    <Paper id={id} elevation={0} className={classes.paper}>
+      <Box pt={2} pr={1} pb={1} pl={2}>
+        <Grid container spacing={6} alignItems="center" wrap="nowrap">
+          <Grid item>{renderIcon(type)}</Grid>
+          <Grid item>
+            <Typography>{text}</Typography>
           </Grid>
-          {buttonText ? renderButton() : null}
-        </Box>
-      </Paper>
-      <Divider />
-    </div>
-  );
-};
+        </Grid>
+        {buttonText ? renderButton() : null}
+      </Box>
+    </Paper>
+    <Divider />
+  </div>
+);
 
 Banner.propTypes = {
   type: PropTypes.oneOf(['warning', 'error', 'info']),

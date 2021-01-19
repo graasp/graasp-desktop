@@ -10,27 +10,25 @@ const createGeolocationControlProps = (
   geolocationEnabled,
   controlType,
   activity = false
-) => {
-  return {
-    geolocationEnabled,
-    activity,
-    t: text => text,
-    dispatchGetGeolocationEnabled: jest.fn(),
-    dispatchSetGeolocationEnabled: jest.fn(),
-    classes: {
-      formControl: '',
-      button: '',
-    },
-    controlType,
-  };
-};
+) => ({
+  geolocationEnabled,
+  activity,
+  t: (text) => text,
+  dispatchGetGeolocationEnabled: jest.fn(),
+  dispatchSetGeolocationEnabled: jest.fn(),
+  classes: {
+    formControl: '',
+    button: '',
+  },
+  controlType,
+});
 
 describe('<GeolocationControl />', () => {
   const geolocationValues = [false, true];
 
   describe.each(geolocationValues)(
     '<GeolocationControl /> as switch',
-    geolocationEnabled => {
+    (geolocationEnabled) => {
       let wrapper;
 
       beforeAll(() => {
@@ -59,7 +57,7 @@ describe('<GeolocationControl />', () => {
 
   describe.each(geolocationValues)(
     '<GeolocationControl /> as button',
-    geolocationEnabled => {
+    (geolocationEnabled) => {
       let wrapper;
 
       beforeAll(() => {

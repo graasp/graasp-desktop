@@ -67,3 +67,6 @@ test/tmp
 
 # exclude app update file
 dev-app-update.yml
+
+# exclude eslint cache
+.eslintcache

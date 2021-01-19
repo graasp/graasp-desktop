@@ -45,12 +45,10 @@ import {
 import { USER_GRAASP } from './fixtures/users';
 
 /** util function to deal with asynchronous tests */
-export const mochaAsync = (fn) => {
-  return (done) => {
-    fn.call().then(done, (err) => {
-      done(err);
-    });
-  };
+export const mochaAsync = (fn) => (done) => {
+  fn.call().then(done, (err) => {
+    done(err);
+  });
 };
 
 /** menu util functions */
@@ -126,21 +124,13 @@ export const menuGoToClassrooms = async (client) => {
 
 /** string util functions */
 
-export const removeSpace = (text) => {
-  return text.replace(/\s/g, '');
-};
+export const removeSpace = (text) => text.replace(/\s/g, '');
 
-export const removeTags = (html) => {
-  return html.replace(/<\/?[^>]+(>|$)/g, '');
-};
+export const removeTags = (html) => html.replace(/<\/?[^>]+(>|$)/g, '');
 
-export const removePathSeparators = (path) => {
-  return path.replace(/[/\\]/g, '');
-};
+export const removePathSeparators = (path) => path.replace(/[/\\]/g, '');
 
-export const createRandomString = () => {
-  return Math.random().toString(36).substring(7);
-};
+export const createRandomString = () => Math.random().toString(36).substring(7);
 
 /** assertion util functions */
 
