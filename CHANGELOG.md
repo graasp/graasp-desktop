@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.15.9](https://github.com/graasp/graasp-desktop/compare/v0.15.8...v0.15.9) (2021-01-22)
+
+### Features
+
+- display pdf files ([b919c27](https://github.com/graasp/graasp-desktop/commit/b919c276afa106fd7a7d111ab9c7e8c630ac861d))
+
+### Bug Fixes
+
+- delete related resources when deleting user in classroom ([78e0284](https://github.com/graasp/graasp-desktop/commit/78e02847613e0d8c735df09f83bac949a0d3ca4f))
+
+### Build System
+
+- update dependencies ([5b4233c](https://github.com/graasp/graasp-desktop/commit/5b4233cda7267af08b0be2159147de01286216bf))
+
 ### [0.15.8](https://github.com/graasp/graasp-desktop/compare/v0.15.7...v0.15.8) (2020-12-02)
 
 ### Features
