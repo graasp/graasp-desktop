@@ -12,7 +12,7 @@ import Styles from '../../Styles';
 import { DRAWER_BUTTON_ID } from '../../config/selectors';
 import SearchSpaceBar from './SearchSpaceBar';
 
-const styles = theme => ({
+const styles = (theme) => ({
   ...Styles(theme),
 });
 
@@ -22,32 +22,30 @@ const Header = ({
   isSidebarOpen,
   showSearch,
   handleOnSearch,
-}) => {
-  return (
-    <AppBar
-      position="fixed"
-      className={classNames(classes.appBar, {
-        [classes.appBarShift]: isSidebarOpen,
-      })}
-    >
-      <Toolbar disableGutters={!isSidebarOpen}>
-        <IconButton
-          id={DRAWER_BUTTON_ID}
-          color="inherit"
-          aria-label="Open drawer"
-          onClick={handleDrawerOpen}
-          className={classNames(
-            classes.menuButton,
-            isSidebarOpen && classes.hide
-          )}
-        >
-          <MenuIcon />
-        </IconButton>
-        {showSearch && <SearchSpaceBar handleOnInputChange={handleOnSearch} />}
-      </Toolbar>
-    </AppBar>
-  );
-};
+}) => (
+  <AppBar
+    position="fixed"
+    className={classNames(classes.appBar, {
+      [classes.appBarShift]: isSidebarOpen,
+    })}
+  >
+    <Toolbar disableGutters={!isSidebarOpen}>
+      <IconButton
+        id={DRAWER_BUTTON_ID}
+        color="inherit"
+        aria-label="Open drawer"
+        onClick={handleDrawerOpen}
+        className={classNames(
+          classes.menuButton,
+          isSidebarOpen && classes.hide
+        )}
+      >
+        <MenuIcon />
+      </IconButton>
+      {showSearch && <SearchSpaceBar handleOnInputChange={handleOnSearch} />}
+    </Toolbar>
+  </AppBar>
+);
 
 Header.propTypes = {
   classes: PropTypes.shape({

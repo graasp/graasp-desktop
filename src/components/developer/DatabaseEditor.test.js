@@ -11,21 +11,19 @@ const sampleDatabase = {
   spaces: [{}],
 };
 
-const createDatabaseEditorProps = (database) => {
-  return {
-    t: (text) => text,
-    classes: {
-      button: '',
-    },
-    dispatchGetDatabase: jest.fn(),
-    dispatchSetDatabase: jest.fn(),
-    dispatchSignOut: jest.fn(),
-    database,
-    user: Map({
-      id: 'someuserid',
-    }),
-  };
-};
+const createDatabaseEditorProps = (database) => ({
+  t: (text) => text,
+  classes: {
+    button: '',
+  },
+  dispatchGetDatabase: jest.fn(),
+  dispatchSetDatabase: jest.fn(),
+  dispatchSignOut: jest.fn(),
+  database,
+  user: Map({
+    id: 'someuserid',
+  }),
+});
 
 describe('<DatabaseEditor />', () => {
   describe('<DatabaseEditor /> renders', () => {

@@ -17,17 +17,13 @@ import {
   checkTextInputAppContainsText,
 } from '../apps/textInputApp';
 
-const userInputTextForUser = (name) => {
-  return `user input from ${name}`;
-};
+const userInputTextForUser = (name) => `user input from ${name}`;
 
 describe('Save User Input in a space', function () {
   this.timeout(SAVE_USER_INPUT_TIMEOUT);
   let app;
 
-  afterEach(() => {
-    return closeApplication(app);
-  });
+  afterEach(() => closeApplication(app));
 
   describe('Use graasp user', () => {
     beforeEach(

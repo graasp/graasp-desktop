@@ -25,20 +25,18 @@ const createMainMenuProps = (
   path,
   authenticated = true,
   userMode = DEFAULT_USER_MODE
-) => {
-  return {
-    t: (text) => text,
-    developerMode,
-    history: { push: jest.fn() },
-    match: { path },
-    authenticated,
-    userMode,
-    location: {
-      pathname: 'somepath',
-    },
-    dispatchSignOut: jest.fn(),
-  };
-};
+) => ({
+  t: (text) => text,
+  developerMode,
+  history: { push: jest.fn() },
+  match: { path },
+  authenticated,
+  userMode,
+  location: {
+    pathname: 'somepath',
+  },
+  dispatchSignOut: jest.fn(),
+});
 
 describe('<MainMenu />', () => {
   describe('<MainMenu /> with developerMode = false', () => {

@@ -18,9 +18,7 @@ describe('Delete a space', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  afterEach(() => {
-    return closeApplication(app);
-  });
+  afterEach(() => closeApplication(app));
 
   it(
     'Deleting from card removes space from Saved Spaces',

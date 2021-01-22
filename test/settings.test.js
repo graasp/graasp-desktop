@@ -88,9 +88,7 @@ describe('Settings Scenarios', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  afterEach(() => {
-    return closeApplication(app);
-  });
+  afterEach(() => closeApplication(app));
 
   describe('Use graasp user', () => {
     beforeEach(

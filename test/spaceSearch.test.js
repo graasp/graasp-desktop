@@ -36,9 +36,7 @@ describe('Space Search Scenarios', function () {
     })
   );
 
-  after(() => {
-    return closeApplication(app);
-  });
+  after(() => closeApplication(app));
 
   searchSpacesFixtures.forEach(([query, resultSpaceIds]) => {
     it(

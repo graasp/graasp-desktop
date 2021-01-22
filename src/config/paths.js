@@ -12,18 +12,13 @@ export const SYNC_SPACE_PATH = '/space/sync/:id';
 export const SAVED_SPACES_PATH = '/saved-spaces';
 export const CLASSROOMS_PATH = '/classrooms';
 
-export const buildExportSelectionPathForSpaceId = (id = ':id') => {
-  return `/space/export/${id}/selection`;
-};
+export const buildExportSelectionPathForSpaceId = (id = ':id') =>
+  `/space/export/${id}/selection`;
 
-export const buildSpacePath = (id = ':id', saved = false) => {
-  return `/space/${id}?saved=${saved}`;
-};
+export const buildSpacePath = (id = ':id', saved = false) =>
+  `/space/${id}?saved=${saved}`;
 
-export const buildClassroomPath = (id = ':id') => {
-  return `/classrooms/${id}`;
-};
+export const buildClassroomPath = (id = ':id') => `/classrooms/${id}`;
 
-export const buildImportDataInClassroomPath = (id = ':id') => {
-  return `/classrooms/${id}/import`;
-};
+export const buildImportDataInClassroomPath = (id = ':id') =>
+  `/classrooms/${id}/import`;

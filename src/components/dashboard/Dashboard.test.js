@@ -36,44 +36,42 @@ const createDashboardProps = ({
   users,
   actions,
   spaces,
-} = {}) => {
-  return {
-    t: jest.fn((text) => text),
-    classes: {
-      dashboard: '',
-      dashboardGridItem: '',
-      root: '',
-      appBar: '',
-      appBarShift: '',
-      menuButton: '',
-      hide: '',
-      drawer: '',
-      drawerPaper: '',
-      drawerHeader: '',
-      content: '',
-      contentShift: '',
-      developer: '',
-      screenTitle: '',
-    },
-    theme: {
-      direction: '',
-    },
-    history: {
-      replace: jest.fn(),
-    },
-    i18n: {
-      changeLanguage: jest.fn(),
-    },
-    database: {
-      spaces,
-      users,
-      actions,
-    },
-    dispatchGetDatabase: jest.fn(),
-    userMode,
-    userId,
-  };
-};
+} = {}) => ({
+  t: jest.fn((text) => text),
+  classes: {
+    dashboard: '',
+    dashboardGridItem: '',
+    root: '',
+    appBar: '',
+    appBarShift: '',
+    menuButton: '',
+    hide: '',
+    drawer: '',
+    drawerPaper: '',
+    drawerHeader: '',
+    content: '',
+    contentShift: '',
+    developer: '',
+    screenTitle: '',
+  },
+  theme: {
+    direction: '',
+  },
+  history: {
+    replace: jest.fn(),
+  },
+  i18n: {
+    changeLanguage: jest.fn(),
+  },
+  database: {
+    spaces,
+    users,
+    actions,
+  },
+  dispatchGetDatabase: jest.fn(),
+  userMode,
+  userId,
+});
 
 describe('<Dashboard />', () => {
   let wrapper;

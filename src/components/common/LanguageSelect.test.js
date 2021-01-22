@@ -7,26 +7,24 @@ import { LanguageSelect } from './LanguageSelect';
 import { langs } from '../../config/i18n';
 import Loader from './Loader';
 
-const createLanguageSelectProps = (lang, activity = false) => {
-  return {
-    activity,
-    i18n: {
-      changeLanguage: jest.fn(),
-    },
-    lang,
-    t: text => text,
-    dispatchSetLanguage: jest.fn(),
-    dispatchGetLanguage: jest.fn(),
-    classes: {
-      formControl: '',
-    },
-  };
-};
+const createLanguageSelectProps = (lang, activity = false) => ({
+  activity,
+  i18n: {
+    changeLanguage: jest.fn(),
+  },
+  lang,
+  t: (text) => text,
+  dispatchSetLanguage: jest.fn(),
+  dispatchGetLanguage: jest.fn(),
+  classes: {
+    formControl: '',
+  },
+});
 
 describe('<LanguageSelect />', () => {
   const langValues = ['en', 'fr', 'de'];
 
-  describe.each(langValues)('<LanguageSelect /> renders', lang => {
+  describe.each(langValues)('<LanguageSelect /> renders', (lang) => {
     let wrapper;
 
     beforeAll(() => {
@@ -50,7 +48,7 @@ describe('<LanguageSelect />', () => {
       expect(select).toHaveLength(1);
 
       // check select displays all langs
-      Object.keys(langs).forEach(langKey => {
+      Object.keys(langs).forEach((langKey) => {
         const menuItem = select.find(MenuItem).find({ value: langKey });
         expect(menuItem).toHaveLength(1);
         expect(menuItem.contains(langs[langKey])).toBeTruthy();
@@ -60,7 +58,7 @@ describe('<LanguageSelect />', () => {
     });
   });
 
-  describe.each(langValues)('<LanguageSelect /> on activity', lang => {
+  describe.each(langValues)('<LanguageSelect /> on activity', (lang) => {
     it('renders <Loader />', () => {
       const props = createLanguageSelectProps(lang, true);
       // eslint-disable-next-line react/jsx-props-no-spreading

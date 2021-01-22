@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core';
 import ResourceIcon from './ResourceIcon';
 import ActionIcon from './ActionIcon';
 
-const styles = theme => ({
+const styles = (theme) => ({
   legend: {
     display: 'flex',
     justifyContent: 'flex-end',
@@ -17,14 +17,12 @@ const styles = theme => ({
   },
 });
 
-const ClassroomLegend = ({ classes }) => {
-  return (
-    <div className={classes.legend}>
-      <ResourceIcon text />
-      <ActionIcon text />
-    </div>
-  );
-};
+const ClassroomLegend = ({ classes }) => (
+  <div className={classes.legend}>
+    <ResourceIcon text />
+    <ActionIcon text />
+  </div>
+);
 
 ClassroomLegend.propTypes = {
   classes: PropTypes.shape({

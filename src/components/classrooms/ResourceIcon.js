@@ -3,14 +3,12 @@ import PropTypes from 'prop-types';
 import Icon from '@material-ui/icons/AssignmentInd';
 import { withTranslation } from 'react-i18next';
 
-const ResourceIcon = ({ className, text, t }) => {
-  return (
-    <>
-      <Icon className={className} />
-      {text && <span>{t('Resources')}</span>}
-    </>
-  );
-};
+const ResourceIcon = ({ className, text, t }) => (
+  <>
+    <Icon className={className} />
+    {text && <span>{t('Resources')}</span>}
+  </>
+);
 
 ResourceIcon.propTypes = {
   className: PropTypes.string,

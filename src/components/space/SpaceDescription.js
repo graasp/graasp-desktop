@@ -14,17 +14,15 @@ import {
   SPACE_DESCRIPTION_TEXT_CLASS,
 } from '../../config/selectors';
 
-const renderPreviewWarning = t => {
-  return (
-    <Banner
-      id={BANNER_WARNING_PREVIEW_ID}
-      type="warning"
-      text={t(
-        'You are previewing this space. Any input or changes will not be saved.'
-      )}
-    />
-  );
-};
+const renderPreviewWarning = (t) => (
+  <Banner
+    id={BANNER_WARNING_PREVIEW_ID}
+    type="warning"
+    text={t(
+      'You are previewing this space. Any input or changes will not be saved.'
+    )}
+  />
+);
 
 const SpaceDescription = ({ description, classes, start, saved }) => {
   const { t } = useTranslation();

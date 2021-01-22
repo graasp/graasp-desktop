@@ -15,9 +15,7 @@ describe('Save a space', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
-  afterEach(() => {
-    return closeApplication(app);
-  });
+  afterEach(() => closeApplication(app));
 
   beforeEach(
     mochaAsync(async () => {

@@ -9,38 +9,36 @@ import Styles from '../../Styles';
 import { HOME_PATH, VISIT_PATH } from '../../config/paths';
 import Main from '../common/Main';
 
-const SpaceNotFound = ({ history: { replace }, classes, t }) => {
-  return (
-    <Main fullScreen>
-      <div>
-        <Typography
-          align="center"
-          variant="h5"
-          color="inherit"
-          style={{ margin: '2rem' }}
-        >
-          {t('Space Not Found')}
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          className={classes.button}
-          onClick={() => replace(HOME_PATH)}
-        >
-          {t('Home')}
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          className={classes.button}
-          onClick={() => replace(VISIT_PATH)}
-        >
-          {t('Visit Another Space')}
-        </Button>
-      </div>
-    </Main>
-  );
-};
+const SpaceNotFound = ({ history: { replace }, classes, t }) => (
+  <Main fullScreen>
+    <div>
+      <Typography
+        align="center"
+        variant="h5"
+        color="inherit"
+        style={{ margin: '2rem' }}
+      >
+        {t('Space Not Found')}
+      </Typography>
+      <Button
+        variant="contained"
+        color="primary"
+        className={classes.button}
+        onClick={() => replace(HOME_PATH)}
+      >
+        {t('Home')}
+      </Button>
+      <Button
+        variant="contained"
+        color="primary"
+        className={classes.button}
+        onClick={() => replace(VISIT_PATH)}
+      >
+        {t('Visit Another Space')}
+      </Button>
+    </div>
+  </Main>
+);
 
 SpaceNotFound.propTypes = {
   t: PropTypes.func.isRequired,

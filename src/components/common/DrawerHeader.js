@@ -47,51 +47,45 @@ const DrawerHeader = ({
   username,
   isTeacher,
   authenticated,
-}) => {
-  return (
-    <ListItem
-      classes={{ root: classes.drawerHeader }}
-      divider
-      ContainerComponent="div"
-    >
-      {authenticated && (
-        <>
-          <ListItemIcon>
-            {isTeacher ? (
-              <TeacherIcon
-                className={classes.teacherColor}
-                id={DRAWER_HEADER_TEACHER_ICON_ID}
-              />
-            ) : (
-              <PersonIcon id={DRAWER_HEADER_STUDENT_ICON_ID} />
-            )}
-          </ListItemIcon>
-
-          <Tooltip title={username}>
-            <Typography
-              variant="inherit"
-              color="inherit"
-              noWrap
-              classes={{ root: classes.username }}
-            >
-              {username}
-            </Typography>
-          </Tooltip>
-        </>
-      )}
-
-      <ListItemSecondaryAction classes={{ root: classes.secondaryAction }}>
-        <IconButton onClick={handleDrawerClose}>
-          {theme.direction === 'ltr' ? (
-            <ChevronLeftIcon />
+}) => (
+  <ListItem
+    classes={{ root: classes.drawerHeader }}
+    divider
+    ContainerComponent="div"
+  >
+    {authenticated && (
+      <>
+        <ListItemIcon>
+          {isTeacher ? (
+            <TeacherIcon
+              className={classes.teacherColor}
+              id={DRAWER_HEADER_TEACHER_ICON_ID}
+            />
           ) : (
-            <ChevronRightIcon />
+            <PersonIcon id={DRAWER_HEADER_STUDENT_ICON_ID} />
           )}
-        </IconButton>
-      </ListItemSecondaryAction>
-    </ListItem>
-  );
-};
+        </ListItemIcon>
+
+        <Tooltip title={username}>
+          <Typography
+            variant="inherit"
+            color="inherit"
+            noWrap
+            classes={{ root: classes.username }}
+          >
+            {username}
+          </Typography>
+        </Tooltip>
+      </>
+    )}
+
+    <ListItemSecondaryAction classes={{ root: classes.secondaryAction }}>
+      <IconButton onClick={handleDrawerClose}>
+        {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+      </IconButton>
+    </ListItemSecondaryAction>
+  </ListItem>
+);
 
 DrawerHeader.propTypes = {
   classes: PropTypes.shape({

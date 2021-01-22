@@ -7,36 +7,34 @@ import DeveloperSwitch from './common/DeveloperSwitch';
 import GeolocationControl from './common/GeolocationControl';
 import { USER_MODES } from '../config/constants';
 
-const createSettingsProps = () => {
-  return {
-    t: (text) => text,
-    classes: {
-      appBar: '',
-      root: '',
-      appBarShift: '',
-      menuButton: '',
-      hide: '',
-      drawer: '',
-      drawerPaper: '',
-      drawerHeader: '',
-      content: '',
-      contentShift: '',
-      settings: '',
-      divider: '',
-    },
-    theme: {
-      direction: 'ltr',
-    },
-    history: {
-      replace: jest.fn(),
-    },
-    i18n: {
-      changeLanguage: jest.fn(),
-    },
-    userMode: USER_MODES.TEACHER,
-    authenticated: true,
-  };
-};
+const createSettingsProps = () => ({
+  t: (text) => text,
+  classes: {
+    appBar: '',
+    root: '',
+    appBarShift: '',
+    menuButton: '',
+    hide: '',
+    drawer: '',
+    drawerPaper: '',
+    drawerHeader: '',
+    content: '',
+    contentShift: '',
+    settings: '',
+    divider: '',
+  },
+  theme: {
+    direction: 'ltr',
+  },
+  history: {
+    replace: jest.fn(),
+  },
+  i18n: {
+    changeLanguage: jest.fn(),
+  },
+  userMode: USER_MODES.TEACHER,
+  authenticated: true,
+});
 
 describe('<Settings />', () => {
   let wrapper;

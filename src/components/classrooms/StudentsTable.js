@@ -40,7 +40,7 @@ import {
 import ActionIcon from './ActionIcon';
 import ResourceIcon from './ResourceIcon';
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     width: '100%',
   },
@@ -60,11 +60,10 @@ const descendingComparator = (a, b, orderBy) => {
   return 0;
 };
 
-const getComparator = (order, orderBy) => {
-  return order === TABLE_ORDER.DESC
+const getComparator = (order, orderBy) =>
+  order === TABLE_ORDER.DESC
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
-};
 
 const stableSort = (array, comparator) => {
   const stabilizedThis = array.map((el, index) => [el, index]);
@@ -73,7 +72,7 @@ const stableSort = (array, comparator) => {
     if (order !== 0) return order;
     return a[1] - b[1];
   });
-  return stabilizedThis.map(el => el[0]);
+  return stabilizedThis.map((el) => el[0]);
 };
 
 const createHeadCell = (id, label, numeric = false) => ({
@@ -82,8 +81,8 @@ const createHeadCell = (id, label, numeric = false) => ({
   label,
 });
 
-const createRows = classroom => {
-  return classroom.get('users').map(({ id: userId, username }) => {
+const createRows = (classroom) =>
+  classroom.get('users').map(({ id: userId, username }) => {
     // create map for a given user of its data for each space
     const spaceData = classroom.get('spaces').reduce((data, { id }) => {
       const resources = getUserResourcesForSpaceInClassroom(
@@ -101,7 +100,6 @@ const createRows = classroom => {
       ...spaceData,
     };
   });
-};
 
 const buildHeadCells = (classroom, t) => {
   // create header cell for each space
@@ -177,7 +175,7 @@ class StudentsTable extends Component {
     });
   };
 
-  handleSelectAllClick = event => {
+  handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const { rows } = this.state;
       const newSelecteds = _.cloneDeep(rows);
@@ -189,7 +187,7 @@ class StudentsTable extends Component {
 
   handleClick = (event, row) => {
     const { selected } = this.state;
-    const selectedIndex = selected.findIndex(thisRow =>
+    const selectedIndex = selected.findIndex((thisRow) =>
       _.isEqual(row, thisRow)
     );
     let newSelected = [];
@@ -214,12 +212,12 @@ class StudentsTable extends Component {
     this.setState({ page });
   };
 
-  handleChangeRowsPerPage = event => {
+  handleChangeRowsPerPage = (event) => {
     const rowsPerPage = parseInt(event.target.value, 10);
     this.setState({ page: 0, rowsPerPage });
   };
 
-  handleDeleteUser = row => {
+  handleDeleteUser = (row) => {
     const {
       dispatchDeleteUsersInClassroom,
       classroom,
@@ -232,7 +230,7 @@ class StudentsTable extends Component {
     });
   };
 
-  renderDeleteUserButton = row => {
+  renderDeleteUserButton = (row) => {
     const { t } = this.props;
     return (
       <Tooltip title={t('Delete this user.')}>
@@ -247,7 +245,7 @@ class StudentsTable extends Component {
     );
   };
 
-  renderUserOperations = row => {
+  renderUserOperations = (row) => {
     const { classroom } = this.props;
     return (
       <TableCell>
@@ -257,15 +255,15 @@ class StudentsTable extends Component {
     );
   };
 
-  findRowSelectedIndex = row => {
+  findRowSelectedIndex = (row) => {
     const { selected } = this.state;
-    return selected.findIndex(thisRow => _.isEqual(row, thisRow));
+    return selected.findIndex((thisRow) => _.isEqual(row, thisRow));
   };
 
   renderRow = (row, isItemSelected) => {
     const { headCells } = this.state;
 
-    const handleOnClick = event => {
+    const handleOnClick = (event) => {
       this.handleClick(event, row);
     };
 
@@ -337,7 +335,7 @@ class StudentsTable extends Component {
               <TableBody id={CLASSROOM_TABLE_BODY_ID}>
                 {stableSort(rows, getComparator(order, orderBy))
                   .slice(startingIndex, endingIndex)
-                  .map(row => {
+                  .map((row) => {
                     const username = row[TABLE_HEAD_CELL_IDS.USERNAME];
 
                     const isItemSelected =

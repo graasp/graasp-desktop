@@ -22,6 +22,7 @@ exports[`<DatabaseEditor /> <DatabaseEditor /> renders renders correctly 1`] = `
     onDelete={[Function]}
     onEdit={[Function]}
     onSelect={false}
+    quotesOnKeys={true}
     shouldCollapse={false}
     sortKeys={false}
     src={

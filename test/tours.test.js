@@ -26,9 +26,7 @@ describe('Tour Scenarios', function () {
     })
   );
 
-  afterEach(() => {
-    return closeApplication(app);
-  });
+  afterEach(() => closeApplication(app));
 
   describe('Display tour on sign in', () => {
     it(

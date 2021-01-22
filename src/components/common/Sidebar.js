@@ -7,22 +7,20 @@ import MainMenu from './MainMenu';
 import Styles from '../../Styles';
 import DrawerHeader from './DrawerHeader';
 
-const Sidebar = ({ classes, isSidebarOpen, handleDrawerClose }) => {
-  return (
-    <Drawer
-      className={classes.drawer}
-      variant="persistent"
-      anchor="left"
-      open={isSidebarOpen}
-      classes={{
-        paper: classes.drawerPaper,
-      }}
-    >
-      <DrawerHeader handleDrawerClose={handleDrawerClose} />
-      <MainMenu />
-    </Drawer>
-  );
-};
+const Sidebar = ({ classes, isSidebarOpen, handleDrawerClose }) => (
+  <Drawer
+    className={classes.drawer}
+    variant="persistent"
+    anchor="left"
+    open={isSidebarOpen}
+    classes={{
+      paper: classes.drawerPaper,
+    }}
+  >
+    <DrawerHeader handleDrawerClose={handleDrawerClose} />
+    <MainMenu />
+  </Drawer>
+);
 
 Sidebar.propTypes = {
   classes: PropTypes.shape({

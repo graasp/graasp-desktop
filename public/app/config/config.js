@@ -34,9 +34,8 @@ const DOWNLOADABLE_MIME_TYPES = [
 ];
 
 // resolve path for windows '\'
-const escapeEscapeCharacter = (str) => {
-  return isWindows() ? str.replace(/\\/g, '\\\\') : str;
-};
+const escapeEscapeCharacter = (str) =>
+  isWindows() ? str.replace(/\\/g, '\\\\') : str;
 
 // categories
 const RESOURCE = 'Resource';
