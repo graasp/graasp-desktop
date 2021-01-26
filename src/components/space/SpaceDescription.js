@@ -12,6 +12,7 @@ import {
   BANNER_WARNING_PREVIEW_ID,
   SPACE_DESCRIPTION_ID,
   SPACE_DESCRIPTION_TEXT_CLASS,
+  buildSpaceDescriptionId,
 } from '../../config/selectors';
 
 const renderPreviewWarning = (t) => (
@@ -24,7 +25,7 @@ const renderPreviewWarning = (t) => (
   />
 );
 
-const SpaceDescription = ({ description, classes, start, saved }) => {
+const SpaceDescription = ({ description, classes, start, saved, id }) => {
   const { t } = useTranslation();
 
   return (
@@ -33,6 +34,7 @@ const SpaceDescription = ({ description, classes, start, saved }) => {
         {saved ? null : renderPreviewWarning(t)}
         <div className={classes.spaceDescription} id={SPACE_DESCRIPTION_ID}>
           <Text
+            id={buildSpaceDescriptionId(id)}
             content={description}
             className={SPACE_DESCRIPTION_TEXT_CLASS}
           />
@@ -62,6 +64,7 @@ SpaceDescription.propTypes = {
   }).isRequired,
   start: PropTypes.func.isRequired,
   saved: PropTypes.bool,
+  id: PropTypes.string.isRequired,
 };
 
 SpaceDescription.defaultProps = {

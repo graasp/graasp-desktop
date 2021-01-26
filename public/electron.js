@@ -85,6 +85,8 @@ const {
   GET_APP_UPGRADE_CHANNEL,
   INSTALL_APP_UPGRADE_CHANNEL,
   GET_TOURS_ENABLED_CHANNEL,
+  SET_FONT_SIZE_CHANNEL,
+  GET_FONT_SIZE_CHANNEL,
 } = require('./app/config/channels');
 const env = require('./env.json');
 const {
@@ -145,6 +147,8 @@ const {
   installAppUpgrade,
   getAppUpgrade,
   getToursEnabled,
+  setFontSize,
+  getFontSize,
 } = require('./app/listeners');
 const isMac = require('./app/utils/isMac');
 
@@ -492,6 +496,12 @@ app.on('ready', async () => {
     SET_ACTIONS_AS_ENABLED_CHANNEL,
     setActionsAsEnabled(mainWindow, db)
   );
+
+  // called when getting the font size
+  ipcMain.on(GET_FONT_SIZE_CHANNEL, getFontSize(mainWindow, db));
+
+  // called when setting the font size
+  ipcMain.on(SET_FONT_SIZE_CHANNEL, setFontSize(mainWindow, db));
 
   // called when getting student mode
   ipcMain.on(GET_USER_MODE_CHANNEL, getUserMode(mainWindow, db));

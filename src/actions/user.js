@@ -33,6 +33,10 @@ import {
   SET_ACTION_ACCESSIBILITY_SUCCEEDED,
   FLAG_SETTING_ACTIONS_AS_ENABLED,
   SET_ACTIONS_AS_ENABLED_SUCCEEDED,
+  FLAG_SETTING_FONT_SIZE,
+  SET_FONT_SIZE_SUCCEEDED,
+  GET_FONT_SIZE_SUCCEEDED,
+  FLAG_GETTING_FONT_SIZE,
 } from '../types';
 import {
   ERROR_GETTING_GEOLOCATION,
@@ -52,6 +56,8 @@ import {
   ERROR_SETTING_SPACE_AS_RECENT,
   ERROR_SETTING_ACTION_ACCESSIBILITY,
   ERROR_SETTING_ACTIONS_AS_ENABLED,
+  ERROR_SETTING_FONT_SIZE,
+  ERROR_GETTING_FONT_SIZE,
 } from '../config/messages';
 import {
   GET_USER_FOLDER_CHANNEL,
@@ -69,6 +75,8 @@ import {
   SET_SPACE_AS_RECENT_CHANNEL,
   SET_ACTION_ACCESSIBILITY_CHANNEL,
   SET_ACTIONS_AS_ENABLED_CHANNEL,
+  SET_FONT_SIZE_CHANNEL,
+  GET_FONT_SIZE_CHANNEL,
 } from '../config/channels';
 import { createFlag } from './common';
 import { ERROR_GENERAL } from '../config/errors';
@@ -94,6 +102,8 @@ const flagSettingActionAccessibility = createFlag(
   FLAG_SETTING_ACTION_ACCESSIBILITY
 );
 const flagSettingActionsAsEnabled = createFlag(FLAG_SETTING_ACTIONS_AS_ENABLED);
+const flagSettingFontSize = createFlag(FLAG_SETTING_FONT_SIZE);
+const flagGettingFontSize = createFlag(FLAG_GETTING_FONT_SIZE);
 
 const getGeolocation = async () => async (dispatch) => {
   // only fetch location if online
@@ -535,6 +545,54 @@ const setActionsAsEnabled = (payload) => (dispatch) => {
   }
 };
 
+const setFontSize = (payload) => (dispatch) => {
+  try {
+    dispatch(flagSettingFontSize(true));
+    window.ipcRenderer.send(SET_FONT_SIZE_CHANNEL, payload);
+    window.ipcRenderer.once(SET_FONT_SIZE_CHANNEL, (event, response) => {
+      if (response === ERROR_GENERAL) {
+        toastr.error(
+          i18n.t(ERROR_MESSAGE_HEADER),
+          i18n.t(ERROR_SETTING_FONT_SIZE)
+        );
+      } else {
+        dispatch({
+          type: SET_FONT_SIZE_SUCCEEDED,
+          payload,
+        });
+      }
+      dispatch(flagSettingFontSize(false));
+    });
+  } catch (e) {
+    console.error(e);
+    toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_SETTING_FONT_SIZE));
+  }
+};
+
+const getFontSize = () => (dispatch) => {
+  try {
+    dispatch(flagGettingFontSize(true));
+    window.ipcRenderer.send(GET_FONT_SIZE_CHANNEL);
+    window.ipcRenderer.once(GET_FONT_SIZE_CHANNEL, (event, response) => {
+      if (response === ERROR_GENERAL) {
+        toastr.error(
+          i18n.t(ERROR_MESSAGE_HEADER),
+          i18n.t(ERROR_GETTING_FONT_SIZE)
+        );
+      } else {
+        dispatch({
+          type: GET_FONT_SIZE_SUCCEEDED,
+          payload: response,
+        });
+      }
+      dispatch(flagGettingFontSize(false));
+    });
+  } catch (e) {
+    console.error(e);
+    toastr.error(i18n.t(ERROR_MESSAGE_HEADER), i18n.t(ERROR_GETTING_FONT_SIZE));
+  }
+};
+
 export {
   getUserFolder,
   getGeolocation,
@@ -552,4 +610,6 @@ export {
   setSpaceAsRecent,
   setActionAccessibility,
   setActionsAsEnabled,
+  setFontSize,
+  getFontSize,
 };

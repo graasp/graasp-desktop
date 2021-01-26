@@ -104,6 +104,8 @@ const ERROR_SETTING_ACTION_ACCESSIBILITY =
 const ERROR_SETTING_ACTIONS_AS_ENABLED = 'There was an error enabling actions';
 const ERROR_POSTING_FILE_MESSAGE = 'There was an error uploading the file';
 const ERROR_DELETING_FILE_MESSAGE = 'There was an error deleting the file';
+const ERROR_SETTING_FONT_SIZE = 'There was an error setting the font size';
+const ERROR_GETTING_FONT_SIZE = 'There was an error getting the font size';
 
 module.exports = {
   ERROR_GETTING_DEVELOPER_MODE,
@@ -176,4 +178,6 @@ module.exports = {
   ERROR_SETTING_ACTIONS_AS_ENABLED,
   ERROR_POSTING_FILE_MESSAGE,
   ERROR_DELETING_FILE_MESSAGE,
+  ERROR_GETTING_FONT_SIZE,
+  ERROR_SETTING_FONT_SIZE,
 };

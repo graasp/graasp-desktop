@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import InfoIcon from '@material-ui/icons/Info';
 import Text from '../common/Text';
 import './PhaseItemDescription.css';
+import { buildPhaseItemDescriptionId } from '../../config/selectors';
 
 const style = {
   marginTop: '1rem',
@@ -14,12 +15,13 @@ const style = {
   alignItems: 'center',
 };
 
-const PhaseItemDescription = ({ description, className }) => {
+const PhaseItemDescription = ({ description, className, id }) => {
   if (description && description !== '') {
     return (
       <div style={style}>
         <InfoIcon color="primary" />
         <Text
+          id={buildPhaseItemDescriptionId(id)}
           content={description}
           className={clsx('PhaseItemDescriptionText', className)}
         />
@@ -32,6 +34,7 @@ const PhaseItemDescription = ({ description, className }) => {
 PhaseItemDescription.propTypes = {
   description: PropTypes.string,
   className: PropTypes.string,
+  id: PropTypes.string.isRequired,
 };
 
 PhaseItemDescription.defaultProps = {

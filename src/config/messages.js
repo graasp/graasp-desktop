@@ -113,6 +113,8 @@ const ERROR_INSTALLING_APP_UPGRADE_MESSAGE =
   'An unexpected error occured while downloading or installing the upgrade.';
 const UPDATE_AVAILABLE_MESSAGE =
   'A new version of Graasp Desktop is available. Do you want to quit the application and install it now?';
+const ERROR_SETTING_FONT_SIZE = 'There was an error setting the font size';
+const ERROR_GETTING_FONT_SIZE = 'There was an error getting the font size';
 
 module.exports = {
   ERROR_GETTING_DEVELOPER_MODE,
@@ -190,4 +192,6 @@ module.exports = {
   ERROR_CANT_LAUNCH_TOUR,
   ERROR_INSTALLING_APP_UPGRADE_MESSAGE,
   UPDATE_AVAILABLE_MESSAGE,
+  ERROR_SETTING_FONT_SIZE,
+  ERROR_GETTING_FONT_SIZE,
 };

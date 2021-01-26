@@ -21,6 +21,7 @@ exports[`<Phase /> with tools <Phase /> with toolsVisible = false renders correc
   >
     <PhaseDescription
       description="phaseDescription"
+      id="phaseId"
     />
     <PhaseItems
       items={
@@ -70,6 +71,7 @@ exports[`<Phase /> with tools <Phase /> with toolsVisible = true renders correct
     >
       <PhaseDescription
         description="phaseDescription"
+        id="phaseId"
       />
       <PhaseItems
         items={
@@ -133,6 +135,7 @@ exports[`<Phase /> without tools renders correctly 1`] = `
   >
     <PhaseDescription
       description="phaseDescription"
+      id="phaseId"
     />
     <PhaseItems
       items={

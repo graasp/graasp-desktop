@@ -57,6 +57,8 @@ const deleteFile = require('./deleteFile');
 const installAppUpgrade = require('./installAppUpgrade');
 const getAppUpgrade = require('./getAppUpgrade');
 const getToursEnabled = require('./getToursEnabled');
+const setFontSize = require('./setFontSize');
+const getFontSize = require('./getFontSize');
 
 module.exports = {
   loadSpace,
@@ -117,4 +119,6 @@ module.exports = {
   installAppUpgrade,
   getAppUpgrade,
   getToursEnabled,
+  setFontSize,
+  getFontSize,
 };

@@ -2,7 +2,7 @@
 
 exports[`<Text /> trivial cases renders correctly 1`] = `
 <div
-  id={null}
+  id="text-idf"
   style={
     Object {
       "color": "red",

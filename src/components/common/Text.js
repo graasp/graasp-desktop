@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ReactQuill from 'react-quill';
+import { connect } from 'react-redux';
 import { hasMath, renderMath } from '../../utils/math';
+import { DEFAULT_FONT_SIZE } from '../../config/constants';
+import { getFontSize } from '../../actions';
 
 const modules = {
   toolbar: false,
@@ -22,7 +25,21 @@ const formats = [
   'formula',
 ];
 
-export const Text = ({ content, style, className, id }) => {
+export const Text = ({
+  content,
+  style,
+  className,
+  id,
+  fontSize,
+  dispatchGetFontSize,
+}) => {
+  useEffect(() => {
+    dispatchGetFontSize();
+    document.querySelector(
+      `#${id} .ql-container`
+    ).style.fontSize = `${fontSize}px`;
+  }, []);
+
   let parsedContent = content;
   if (hasMath(content)) {
     parsedContent = renderMath(parsedContent);
@@ -45,14 +62,26 @@ Text.propTypes = {
   content: PropTypes.string,
   className: PropTypes.string,
   style: PropTypes.shape({}),
-  id: PropTypes.string,
+  id: PropTypes.string.isRequired,
+  fontSize: PropTypes.number,
+  dispatchGetFontSize: PropTypes.func.isRequired,
 };
 
 Text.defaultProps = {
   content: '',
   className: '',
   style: {},
-  id: null,
+  fontSize: DEFAULT_FONT_SIZE,
 };
 
-export default Text;
+const mapStateToProps = ({ authentication }) => ({
+  fontSize: authentication.getIn(['user', 'settings', 'fontSize']),
+});
+
+const mapDispatchToProps = {
+  dispatchGetFontSize: getFontSize,
+};
+
+const ConnectedComponent = connect(mapStateToProps, mapDispatchToProps)(Text);
+
+export default ConnectedComponent;

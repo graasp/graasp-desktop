@@ -3,11 +3,15 @@ import { shallow } from 'enzyme';
 import ReactQuill from 'react-quill';
 import { Text } from './Text';
 import * as FIXTURES from '../../test/fixtures/text';
+import { DEFAULT_FONT_SIZE } from '../../config/constants';
 
-const createTextProps = content => ({
+const createTextProps = (content) => ({
   content,
   style: { color: 'red' },
   className: 'textClass',
+  dispatchGetFontSize: jest.fn(),
+  fontSize: DEFAULT_FONT_SIZE,
+  id: 'text-idf',
 });
 
 describe('<Text />', () => {
