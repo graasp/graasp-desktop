@@ -13,6 +13,7 @@ import {
   FONT_SIZE_MAX_VALUE,
   DEFAULT_FONT_SIZE,
   FONT_SIZE_MIN_VALUE,
+  FONT_SIZE_STEP,
 } from '../../config/constants';
 
 const useStyles = makeStyles({
@@ -72,7 +73,7 @@ const FontSizeSlider = ({ fontSize, dispatchSetFontSize }) => {
             onChange={handleInputChange}
             onBlur={handleBlur}
             inputProps={{
-              step: 1,
+              step: FONT_SIZE_STEP,
               min: FONT_SIZE_MIN_VALUE,
               max: FONT_SIZE_MAX_VALUE,
               type: 'number',

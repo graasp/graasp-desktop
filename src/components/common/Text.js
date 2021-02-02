@@ -34,6 +34,7 @@ export const Text = ({
   dispatchGetFontSize,
 }) => {
   useEffect(() => {
+    // apply font size to quill component
     dispatchGetFontSize();
     document.querySelector(
       `#${id} .ql-container`

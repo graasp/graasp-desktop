@@ -1,24 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
 import InfoIcon from '@material-ui/icons/Info';
 import Text from '../common/Text';
-import './PhaseItemDescription.css';
 import { buildPhaseItemDescriptionId } from '../../config/selectors';
 
-const style = {
-  marginTop: '1rem',
-  marginBottom: '1rem',
-  flexDirection: 'row',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-};
+const useStyles = makeStyles(() => ({
+  wrapper: {
+    marginTop: '1rem',
+    marginBottom: '1rem',
+    flexDirection: 'row',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    '& p': {
+      fontSize: '1em',
+      textAlign: 'center',
+    },
+  },
+}));
 
 const PhaseItemDescription = ({ description, className, id }) => {
+  const classes = useStyles();
   if (description && description !== '') {
     return (
-      <div style={style}>
+      <div className={classes.wrapper}>
         <InfoIcon color="primary" />
         <Text
           id={buildPhaseItemDescriptionId(id)}
