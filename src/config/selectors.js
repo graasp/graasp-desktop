@@ -170,3 +170,5 @@ export const DASHBOARD_TOTAL_COUNT_ID = 'dashboardTotalCount';
 export const buildPhaseTextId = (id) => `phaseText-${id}`;
 export const buildSpaceDescriptionId = (id) => `spaceDescription-${id}`;
 export const buildPhaseItemDescriptionId = (id) => `phaseItemDescription-${id}`;
+
+export const FONT_SIZE_SETTING_LABEL_ID = 'fontSizeSettingLabel';

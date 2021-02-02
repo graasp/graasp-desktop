@@ -15,6 +15,7 @@ import {
   FONT_SIZE_MIN_VALUE,
   FONT_SIZE_STEP,
 } from '../../config/constants';
+import { FONT_SIZE_SETTING_LABEL_ID } from '../../config/selectors';
 
 const useStyles = makeStyles({
   root: {
@@ -49,7 +50,7 @@ const FontSizeSlider = ({ fontSize, dispatchSetFontSize }) => {
 
   return (
     <div className={classes.root}>
-      <Typography id="font-size" gutterBottom>
+      <Typography id={FONT_SIZE_SETTING_LABEL_ID} gutterBottom>
         {t('Font Size')}
       </Typography>
       <Grid container spacing={2} alignItems="center">
@@ -60,9 +61,11 @@ const FontSizeSlider = ({ fontSize, dispatchSetFontSize }) => {
           <Slider
             value={typeof fontSize === 'number' ? fontSize : DEFAULT_FONT_SIZE}
             onChange={handleSliderChange}
-            aria-labelledby="font-size"
+            aria-labelledby={FONT_SIZE_SETTING_LABEL_ID}
             min={FONT_SIZE_MIN_VALUE}
             max={FONT_SIZE_MAX_VALUE}
+            marks
+            step={FONT_SIZE_STEP}
           />
         </Grid>
         <Grid item>
@@ -73,11 +76,10 @@ const FontSizeSlider = ({ fontSize, dispatchSetFontSize }) => {
             onChange={handleInputChange}
             onBlur={handleBlur}
             inputProps={{
-              step: FONT_SIZE_STEP,
               min: FONT_SIZE_MIN_VALUE,
               max: FONT_SIZE_MAX_VALUE,
               type: 'number',
-              'aria-labelledby': 'font-size',
+              'aria-labelledby': FONT_SIZE_SETTING_LABEL_ID,
             }}
           />
         </Grid>
