@@ -26,7 +26,10 @@ class SpaceGrid extends Component {
 
   static propTypes = {
     folder: PropTypes.string,
-    spaces: PropTypes.oneOfType([List, Set]).isRequired,
+    spaces: PropTypes.oneOfType([
+      PropTypes.instanceOf(List),
+      PropTypes.instanceOf(Set),
+    ]).isRequired,
     history: PropTypes.shape({
       length: PropTypes.number.isRequired,
       push: PropTypes.func.isRequired,

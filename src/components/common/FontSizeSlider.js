@@ -17,16 +17,16 @@ import {
 } from '../../config/constants';
 import { FONT_SIZE_SETTING_LABEL_ID } from '../../config/selectors';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(() => ({
   root: {
     width: 250,
   },
   input: {
     width: 42,
   },
-});
+}));
 
-const FontSizeSlider = ({ fontSize, dispatchSetFontSize }) => {
+export const FontSizeSlider = ({ fontSize, dispatchSetFontSize }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -90,12 +90,15 @@ const FontSizeSlider = ({ fontSize, dispatchSetFontSize }) => {
 
 FontSizeSlider.propTypes = {
   dispatchSetFontSize: PropTypes.func.isRequired,
-  fontSize: PropTypes.string.isRequired,
+  fontSize: PropTypes.number,
+};
+
+FontSizeSlider.defaultProps = {
+  fontSize: DEFAULT_FONT_SIZE,
 };
 
 const mapStateToProps = ({ authentication }) => ({
-  fontSize:
-    authentication.getIn(['user', 'settings', 'fontSize']) || DEFAULT_FONT_SIZE,
+  fontSize: authentication.getIn(['user', 'settings', 'fontSize']),
 });
 
 const mapDispatchToProps = {
