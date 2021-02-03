@@ -36,7 +36,7 @@ const FontSizeSlider = ({ fontSize, dispatchSetFontSize }) => {
 
   const handleInputChange = (event) => {
     dispatchSetFontSize(
-      event.target.value === '' ? '' : Number(event.target.value)
+      event.target.value === '' ? DEFAULT_FONT_SIZE : Number(event.target.value)
     );
   };
 
@@ -59,7 +59,7 @@ const FontSizeSlider = ({ fontSize, dispatchSetFontSize }) => {
         </Grid>
         <Grid item xs>
           <Slider
-            value={typeof fontSize === 'number' ? fontSize : DEFAULT_FONT_SIZE}
+            value={fontSize}
             onChange={handleSliderChange}
             aria-labelledby={FONT_SIZE_SETTING_LABEL_ID}
             min={FONT_SIZE_MIN_VALUE}
