@@ -138,3 +138,8 @@ export const TOUR_SPACE = 'owozgj';
 export const EXAMPLE_VISIT_SPACE_LINK = `/space/${TOUR_SPACE}`;
 
 export const DEFAULT_TOURS_ENABLED = true;
+
+export const FONT_SIZE_MIN_VALUE = 10;
+export const FONT_SIZE_MAX_VALUE = 20;
+export const DEFAULT_FONT_SIZE = 14;
+export const FONT_SIZE_STEP = 2;

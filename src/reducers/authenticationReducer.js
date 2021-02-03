@@ -35,6 +35,8 @@ import {
   SET_ACTION_ACCESSIBILITY_SUCCEEDED,
   SET_ACTIONS_AS_ENABLED_SUCCEEDED,
   FLAG_SETTING_ACTIONS_AS_ENABLED,
+  SET_FONT_SIZE_SUCCEEDED,
+  GET_FONT_SIZE_SUCCEEDED,
 } from '../types';
 import { updateActivityList } from './common';
 import {
@@ -47,10 +49,11 @@ import {
   MAX_RECENT_SPACES,
   DEFAULT_ACTION_ACCESSIBILITY,
   DEFAULT_ACTIONS_AS_ENABLED,
+  DEFAULT_FONT_SIZE,
 } from '../config/constants';
 import { tours } from '../config/tours';
 
-const updateFavoriteSpaces = ({ favorite, spaceId }) => favoriteSpaces => {
+const updateFavoriteSpaces = ({ favorite, spaceId }) => (favoriteSpaces) => {
   const tmp = new Set(favoriteSpaces);
   if (favorite) {
     tmp.add(spaceId);
@@ -60,7 +63,7 @@ const updateFavoriteSpaces = ({ favorite, spaceId }) => favoriteSpaces => {
   return List(tmp);
 };
 
-const updateRecentSpaces = ({ recent, spaceId }) => recentSpaces => {
+const updateRecentSpaces = ({ recent, spaceId }) => (recentSpaces) => {
   let tmp = recentSpaces;
   const index = tmp.indexOf(spaceId);
 
@@ -94,6 +97,7 @@ export const DEFAULT_USER_SETTINGS = {
   userMode: DEFAULT_USER_MODE,
   actionAccessibility: DEFAULT_ACTION_ACCESSIBILITY,
   actionsEnabled: DEFAULT_ACTIONS_AS_ENABLED,
+  fontSize: DEFAULT_FONT_SIZE,
 };
 
 export const DEFAULT_USER = {
@@ -185,6 +189,9 @@ export default (state = INITIAL_STATE, { type, payload }) => {
       return state.setIn(['user', 'settings', 'actionsEnabled'], payload);
     case SET_ACTION_ACCESSIBILITY_SUCCEEDED:
       return state.setIn(['user', 'settings', 'actionAccessibility'], payload);
+    case SET_FONT_SIZE_SUCCEEDED:
+    case GET_FONT_SIZE_SUCCEEDED:
+      return state.setIn(['user', 'settings', 'fontSize'], payload);
     default:
       return state;
   }

@@ -57,7 +57,7 @@ export class Phase extends Component {
     dispatchClearPhase();
   }
 
-  handleResizeTools = width => {
+  handleResizeTools = (width) => {
     const { dispatchSetToolsWidth } = this.props;
     dispatchSetToolsWidth({ width });
   };
@@ -71,7 +71,7 @@ export class Phase extends Component {
     const items = phase.get('items');
     return (
       <div style={mainContentStyle}>
-        <PhaseDescription description={phaseDescription} />
+        <PhaseDescription id={phaseId} description={phaseDescription} />
         <PhaseItems items={items} spaceId={spaceId} phaseId={phaseId} />
       </div>
     );
@@ -126,6 +126,7 @@ export class Phase extends Component {
     if (!phase || phase.isEmpty()) {
       return (
         <SpaceDescription
+          id={space.get('id')}
           phases={phases}
           description={description}
           selectPhase={dispatchSelectPhase}

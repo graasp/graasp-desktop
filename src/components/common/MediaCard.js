@@ -27,7 +27,7 @@ import {
   SPACE_MEDIA_CARD_CLASS,
 } from '../../config/selectors';
 
-const styles = theme => ({
+const styles = (theme) => ({
   card: {
     width: '100%',
     minWidth: MIN_CARD_WIDTH,
@@ -58,7 +58,7 @@ const styles = theme => ({
   },
 });
 
-export const MediaCard = props => {
+export const MediaCard = (props) => {
   const {
     classes,
     image,

@@ -32,11 +32,10 @@ exports[`<MediaCard /> <MediaCard /> with showActions = false renders correctly 
     <WithStyles(ForwardRef(CardContent))
       className=""
     >
-      <Text
+      <Connect(Text)
         className=""
         content="text"
         id="spaceCardDescription-id"
-        style={Object {}}
       />
     </WithStyles(ForwardRef(CardContent))>
   </WithStyles(ForwardRef(Collapse))>
@@ -75,11 +74,10 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text defined r
     <WithStyles(ForwardRef(CardContent))
       className=""
     >
-      <Text
+      <Connect(Text)
         className=""
         content="text"
         id="spaceCardDescription-id"
-        style={Object {}}
       />
     </WithStyles(ForwardRef(CardContent))>
   </WithStyles(ForwardRef(Collapse))>
@@ -150,11 +148,10 @@ exports[`<MediaCard /> <MediaCard /> with showActions = true with text undefined
     <WithStyles(ForwardRef(CardContent))
       className=""
     >
-      <Text
+      <Connect(Text)
         className=""
         content=""
         id="spaceCardDescription-id"
-        style={Object {}}
       />
     </WithStyles(ForwardRef(CardContent))>
   </WithStyles(ForwardRef(Collapse))>
@@ -217,11 +214,10 @@ exports[`<MediaCard /> <MediaCard /> with showActions = undefined renders correc
     <WithStyles(ForwardRef(CardContent))
       className=""
     >
-      <Text
+      <Connect(Text)
         className=""
         content="text"
         id="spaceCardDescription-id"
-        style={Object {}}
       />
     </WithStyles(ForwardRef(CardContent))>
   </WithStyles(ForwardRef(Collapse))>

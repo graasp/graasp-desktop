@@ -328,6 +328,9 @@ export class MainMenu extends Component {
     return (
       <List id={MAIN_MENU_ID}>
         {this.renderAuthenticatedMenu()}
+        {this.renderDashboard()}
+        {this.renderClassrooms()}
+        {this.renderDeveloperMode()}
         <MenuItem
           id={SETTINGS_MENU_ITEM_ID}
           onClick={() => this.handleClick(SETTINGS_PATH)}
@@ -339,9 +342,6 @@ export class MainMenu extends Component {
           </ListItemIcon>
           <ListItemText primary={t('Settings')} />
         </MenuItem>
-        {this.renderDashboard()}
-        {this.renderClassrooms()}
-        {this.renderDeveloperMode()}
         {this.renderSignOut()}
         {this.renderCloseApp()}
       </List>

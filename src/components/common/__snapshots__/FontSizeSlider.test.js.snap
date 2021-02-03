@@ -1,0 +1,115 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<FontSizeSlider /> correct font size render renders correctly 1`] = `
+<div
+  className="makeStyles-root-1"
+>
+  <WithStyles(ForwardRef(Typography))
+    gutterBottom={true}
+    id="fontSizeSettingLabel"
+  >
+    Font Size
+  </WithStyles(ForwardRef(Typography))>
+  <WithStyles(ForwardRef(Grid))
+    alignItems="center"
+    container={true}
+    spacing={2}
+  >
+    <WithStyles(ForwardRef(Grid))
+      item={true}
+    >
+      <Memo(ForwardRef(FormatSizeIcon)) />
+    </WithStyles(ForwardRef(Grid))>
+    <WithStyles(ForwardRef(Grid))
+      item={true}
+      xs={true}
+    >
+      <WithStyles(ForwardRef(Slider))
+        aria-labelledby="fontSizeSettingLabel"
+        marks={true}
+        max={20}
+        min={10}
+        onChange={[Function]}
+        step={2}
+        value={10}
+      />
+    </WithStyles(ForwardRef(Grid))>
+    <WithStyles(ForwardRef(Grid))
+      item={true}
+    >
+      <WithStyles(ForwardRef(Input))
+        className="makeStyles-input-2"
+        inputProps={
+          Object {
+            "aria-labelledby": "fontSizeSettingLabel",
+            "max": 20,
+            "min": 10,
+            "type": "number",
+          }
+        }
+        margin="dense"
+        onBlur={[Function]}
+        onChange={[Function]}
+        value={10}
+      />
+    </WithStyles(ForwardRef(Grid))>
+  </WithStyles(ForwardRef(Grid))>
+</div>
+`;
+
+exports[`<FontSizeSlider /> default render renders correctly 1`] = `
+<div
+  className="makeStyles-root-1"
+>
+  <WithStyles(ForwardRef(Typography))
+    gutterBottom={true}
+    id="fontSizeSettingLabel"
+  >
+    Font Size
+  </WithStyles(ForwardRef(Typography))>
+  <WithStyles(ForwardRef(Grid))
+    alignItems="center"
+    container={true}
+    spacing={2}
+  >
+    <WithStyles(ForwardRef(Grid))
+      item={true}
+    >
+      <Memo(ForwardRef(FormatSizeIcon)) />
+    </WithStyles(ForwardRef(Grid))>
+    <WithStyles(ForwardRef(Grid))
+      item={true}
+      xs={true}
+    >
+      <WithStyles(ForwardRef(Slider))
+        aria-labelledby="fontSizeSettingLabel"
+        marks={true}
+        max={20}
+        min={10}
+        onChange={[Function]}
+        step={2}
+        value={14}
+      />
+    </WithStyles(ForwardRef(Grid))>
+    <WithStyles(ForwardRef(Grid))
+      item={true}
+    >
+      <WithStyles(ForwardRef(Input))
+        className="makeStyles-input-2"
+        inputProps={
+          Object {
+            "aria-labelledby": "fontSizeSettingLabel",
+            "max": 20,
+            "min": 10,
+            "type": "number",
+          }
+        }
+        margin="dense"
+        onBlur={[Function]}
+        onChange={[Function]}
+        value={14}
+      />
+    </WithStyles(ForwardRef(Grid))>
+  </WithStyles(ForwardRef(Grid))>
+</div>
+`;

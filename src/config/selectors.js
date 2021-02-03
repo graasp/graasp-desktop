@@ -166,3 +166,9 @@ export const DASHBOARD_NO_ACTION_MESSAGE_ID = 'dashboardNoActionMessage';
 export const DASHBOARD_PIE_CHART_ID = 'dashboardPieChart';
 export const DASHBOARD_SPACE_FILTER_ID = 'dashboardSpaceFilter';
 export const DASHBOARD_TOTAL_COUNT_ID = 'dashboardTotalCount';
+
+export const buildPhaseTextId = (id) => `phaseText-${id}`;
+export const buildSpaceDescriptionId = (id) => `spaceDescription-${id}`;
+export const buildPhaseItemDescriptionId = (id) => `phaseItemDescription-${id}`;
+
+export const FONT_SIZE_SETTING_LABEL_ID = 'fontSizeSettingLabel';

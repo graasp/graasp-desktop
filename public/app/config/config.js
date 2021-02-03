@@ -61,6 +61,7 @@ const AUTHENTICATED = 'authenticated';
 const DEFAULT_AUTHENTICATION = false;
 const DEFAULT_ACTION_ACCESSIBILITY = false;
 const DEFAULT_ACTIONS_AS_ENABLED = true;
+const DEFAULT_FONT_SIZE = 14;
 
 const buildDefaultUser = (lang = DEFAULT_LANG) => ({
   geolocation: null,
@@ -79,6 +80,7 @@ const buildDefaultUser = (lang = DEFAULT_LANG) => ({
     [tours.VISIT_SPACE_TOUR]: false,
     [tours.SETTINGS_TOUR]: false,
   },
+  fontSize: DEFAULT_FONT_SIZE,
 });
 
 const ANONYMOUS_USERNAME = 'Anonymous';

@@ -34,6 +34,22 @@ exports[`<Settings /> renders correctly 1`] = `
       color="inherit"
       variant="h5"
     >
+      Spaces
+    </WithStyles(ForwardRef(Typography))>
+    <Connect(FontSizeSlider) />
+    <WithStyles(ForwardRef(Divider))
+      classes={
+        Object {
+          "root": "",
+        }
+      }
+      variant="middle"
+    />
+    <WithStyles(ForwardRef(Typography))
+      className="mt-2"
+      color="inherit"
+      variant="h5"
+    >
       Actions
     </WithStyles(ForwardRef(Typography))>
     <WithStyles(ForwardRef(FormGroup))

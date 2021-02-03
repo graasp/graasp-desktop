@@ -12,7 +12,7 @@ const PhaseItem = ({ item, spaceId, phaseId }) => {
   const { description, id, className } = item;
   return (
     <Grid xs={6} item className={clsx(SYNC_ITEM_CLASS, className)} data-id={id}>
-      <PhaseItemDescription description={description} />
+      <PhaseItemDescription id={id} description={description} />
       <SyncPhaseItem idx={id} item={item} spaceId={spaceId} phaseId={phaseId} />
     </Grid>
   );

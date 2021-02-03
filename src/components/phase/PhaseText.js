@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Text from '../common/Text';
+import { buildPhaseTextId } from '../../config/selectors';
 
 const style = {
   marginTop: '2rem',
@@ -8,7 +9,7 @@ const style = {
 };
 
 const PhaseText = ({ content, id }) => (
-  <Text id={id} content={content} style={style} />
+  <Text id={buildPhaseTextId(id)} content={content} style={style} />
 );
 
 PhaseText.propTypes = {

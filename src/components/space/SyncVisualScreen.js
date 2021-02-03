@@ -33,6 +33,7 @@ import {
   SPACE_DESCRIPTION_TEXT_CLASS,
   SPACE_THUMBNAIL_IMAGE_CLASS,
   SYNC_VISUAL_MAIN_ID,
+  buildSpaceDescriptionId,
 } from '../../config/selectors';
 import Banner from '../common/Banner';
 import Loader from '../common/Loader';
@@ -283,7 +284,7 @@ class SyncScreen extends Component {
 
   renderDiffDescription = () => {
     const { classes, localSpace, remoteSpace } = this.props;
-    const { description: localDescription } = localSpace;
+    const { description: localDescription, id } = localSpace;
     const { description: remoteDescription } = remoteSpace;
 
     // display nothing if both elements are undefined
@@ -303,7 +304,12 @@ class SyncScreen extends Component {
           })}
           xs={6}
         >
-          {localDescription.length ? <Text content={localDescription} /> : null}
+          {localDescription.length ? (
+            <Text
+              content={localDescription}
+              id={`${buildSpaceDescriptionId(id)}-local`}
+            />
+          ) : null}
         </Grid>
         <Grid
           item
@@ -315,7 +321,10 @@ class SyncScreen extends Component {
           xs={6}
         >
           {remoteDescription.length ? (
-            <Text content={remoteDescription} />
+            <Text
+              content={remoteDescription}
+              id={`${buildSpaceDescriptionId(id)}-remote`}
+            />
           ) : null}
         </Grid>
       </>

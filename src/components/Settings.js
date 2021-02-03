@@ -26,6 +26,7 @@ import {
   DEFAULT_USER_MODE,
   AUTHENTICATED,
 } from '../config/constants';
+import FontSizeSlider from './common/FontSizeSlider';
 
 const styles = (theme) => ({
   ...Styles(theme),
@@ -74,6 +75,18 @@ export class Settings extends Component {
     );
   };
 
+  renderSpaceSettings = () => {
+    const { t } = this.props;
+    return (
+      <>
+        <Typography variant="h5" color="inherit" className="mt-2">
+          {t('Spaces')}
+        </Typography>
+        <FontSizeSlider />
+      </>
+    );
+  };
+
   render() {
     const { classes, t, authenticated } = this.props;
 
@@ -94,6 +107,10 @@ export class Settings extends Component {
               </>
             )}
           </FormGroup>
+          <Divider variant="middle" classes={{ root: classes.divider }} />
+
+          {this.renderSpaceSettings()}
+
           <Divider variant="middle" classes={{ root: classes.divider }} />
 
           {authenticated && this.renderActionSettings()}

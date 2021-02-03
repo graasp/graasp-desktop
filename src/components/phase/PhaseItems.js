@@ -7,11 +7,11 @@ const PhaseItems = ({ items, phaseId, spaceId }) => {
   if (!items) {
     return null;
   }
-  return items.map(item => {
+  return items.map((item) => {
     const { description, id } = item;
     return (
       <div key={id} data-id={id}>
-        <PhaseItemDescription description={description} />
+        <PhaseItemDescription id={id} description={description} />
         <PhaseItem phaseId={phaseId} spaceId={spaceId} item={item} />
       </div>
     );
