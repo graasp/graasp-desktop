@@ -21,6 +21,14 @@ exports[`<LanguageSelect /> <LanguageSelect /> renders renders correctly 1`] = `
     value="en"
   >
     <WithStyles(ForwardRef(MenuItem))
+      key="de"
+      value="de"
+    >
+      <em>
+        Deutsch
+      </em>
+    </WithStyles(ForwardRef(MenuItem))>
+    <WithStyles(ForwardRef(MenuItem))
       key="en"
       value="en"
     >
@@ -77,6 +85,14 @@ exports[`<LanguageSelect /> <LanguageSelect /> renders renders correctly 2`] = `
     value="fr"
   >
     <WithStyles(ForwardRef(MenuItem))
+      key="de"
+      value="de"
+    >
+      <em>
+        Deutsch
+      </em>
+    </WithStyles(ForwardRef(MenuItem))>
+    <WithStyles(ForwardRef(MenuItem))
       key="en"
       value="en"
     >
@@ -132,6 +148,14 @@ exports[`<LanguageSelect /> <LanguageSelect /> renders renders correctly 3`] = `
     onChange={[Function]}
     value="de"
   >
+    <WithStyles(ForwardRef(MenuItem))
+      key="de"
+      value="de"
+    >
+      <em>
+        Deutsch
+      </em>
+    </WithStyles(ForwardRef(MenuItem))>
     <WithStyles(ForwardRef(MenuItem))
       key="en"
       value="en"
