@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.15.10](https://github.com/graasp/graasp-desktop/compare/v0.15.9...v0.15.10) (2021-02-11)
+
+### Features
+
+- add font size setting ([5a255d7](https://github.com/graasp/graasp-desktop/commit/5a255d7b33d3e24c809097227b998030658a9b48))
+- add german translations ([0ae447f](https://github.com/graasp/graasp-desktop/commit/0ae447f0dd276e31a666e7e3868cfae538fd7541))
+
+### Tests
+
+- add Font Size Slider and translations ([c13e719](https://github.com/graasp/graasp-desktop/commit/c13e719bdfb11aa9cece329fe2a41d51d43e76bb))
+
 ### [0.15.9](https://github.com/graasp/graasp-desktop/compare/v0.15.8...v0.15.9) (2021-01-22)
 
 ### Features
