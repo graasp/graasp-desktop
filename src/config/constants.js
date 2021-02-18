@@ -37,7 +37,7 @@ export const CONTROL_TYPES = {
   BUTTON: 'BUTTON',
   SWITCH: 'SWITCH',
 };
-export const MIN_CARD_WIDTH = 345;
+export const MAX_CARD_WIDTH = 600;
 export const DEFAULT_PROTOCOL = 'https';
 
 export const DEFAULT_ACTION_ACCESSIBILITY = false;
