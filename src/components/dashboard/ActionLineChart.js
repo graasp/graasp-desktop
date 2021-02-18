@@ -86,7 +86,7 @@ class ActionLineChart extends PureComponent {
 
     return (
       <>
-        <Typography variant="h5">{t('Action Count Per Space')}</Typography>
+        <Typography variant="h5">{t('Action Count Over Time')}</Typography>
         <ResponsiveContainer id={elementId} width="100%" height="100%">
           <LineChart
             data={data}

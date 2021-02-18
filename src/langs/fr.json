@@ -39,6 +39,7 @@
     "You need an internet connection.": "Une connexion internet est requise.",
     "Dashboard": "Dashboard",
     "Action Type Chart": "Graphique des types d'actions",
+    "Action Count Over Time": "Nombre d'actions dans le temps",
     "Total Action Count": "Nombre total d'actions",
     "Action Count Per Space": "Nombre d'actions par Espace",
     "Action Database": "Base de données des actions",
