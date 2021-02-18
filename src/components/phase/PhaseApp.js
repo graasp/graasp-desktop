@@ -339,13 +339,6 @@ const mapStateToProps = ({ authentication, Space }) => ({
   lang:
     Space.getIn(['current', 'content', 'language']) ||
     authentication.getIn(['user', 'settings', 'lang']),
-
-  geolocation: authentication.getIn(['user', 'settings', 'geolocation']),
-  geolocationEnabled: authentication.getIn([
-    'user',
-    'settings',
-    'geolocationEnabled',
-  ]),
   userId: authentication.getIn(['user', 'id']),
   user: authentication.getIn(['user']),
   actionsEnabled: authentication.getIn(['user', 'settings', 'actionsEnabled']),

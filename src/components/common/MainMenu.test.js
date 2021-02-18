@@ -17,8 +17,8 @@ import {
 } from '../../config/paths';
 import { DEFAULT_USER_MODE } from '../../config/constants';
 
-const MENUITEM_OFFLINE_NUMBER = 2;
-const MENUITEM_OFFLINE_ONLINE_COUNT = 11;
+const MENUITEM_OFFLINE_NUMBER = 1;
+const MENUITEM_OFFLINE_ONLINE_COUNT = 9;
 
 const createMainMenuProps = (
   developerMode,
@@ -103,10 +103,10 @@ describe('<MainMenu />', () => {
     });
 
     it(`renders ${
-      MENUITEM_OFFLINE_ONLINE_COUNT + 1
+      MENUITEM_OFFLINE_ONLINE_COUNT + MENUITEM_OFFLINE_NUMBER
     } <MenuItem /> components`, () => {
       expect(wrapper.find(MenuItem)).toHaveLength(
-        MENUITEM_OFFLINE_ONLINE_COUNT + 1
+        MENUITEM_OFFLINE_ONLINE_COUNT + MENUITEM_OFFLINE_NUMBER
       );
     });
   });

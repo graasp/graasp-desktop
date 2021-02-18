@@ -18,7 +18,7 @@ export const settingsPerUser = {
   [USER_ALICE.username]: {
     lang: 'fr',
     developerMode: DEFAULT_DEVELOPER_MODE,
-    geolocationEnabled: true,
+    geolocationEnabled: DEFAULT_GEOLOCATION_ENABLED,
     syncMode: SYNC_MODES.ADVANCED,
   },
   [USER_CEDRIC.username]: {

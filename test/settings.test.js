@@ -4,27 +4,21 @@ import {
   mochaAsync,
   expectElementToNotExist,
   expectElementToExist,
-  expectAnyElementToExist,
   toggleDeveloperMode,
-  toggleGeolocationEnabled,
   toggleSyncAdvancedMode,
   changeLanguage,
   openDrawer,
   menuGoToSettings,
   menuGoToSavedSpaces,
   menuGoToDeveloper,
-  menuGoToSpacesNearby,
   menuGoToSignOut,
   userSignIn,
 } from './utils';
 import { createApplication, closeApplication } from './application';
 import {
   LANGUAGE_SELECT_ID,
-  GEOLOCATION_CONTROL_ID,
   DEVELOPER_SWITCH_ID,
   DEVELOPER_MENU_ITEM_ID,
-  SPACE_CARD_CLASS,
-  SPACE_NOT_AVAILABLE_TEXT_ID,
   SYNC_MODE_SWITCH_ID,
   SPACE_SYNC_BUTTON_CLASS,
   buildSpaceCardId,
@@ -33,17 +27,14 @@ import {
   SYNC_CANCEL_BUTTON_ID,
   SETTINGS_TITLE_ID,
   MAIN_MENU_ID,
-  SPACES_NEARBY_MAIN_ID,
 } from '../src/config/selectors';
 import {
   DEFAULT_GLOBAL_TIMEOUT,
-  LOAD_SPACE_PAUSE,
   LOAD_TAB_PAUSE,
   SYNC_OPEN_SCREEN_PAUSE,
 } from './constants';
 import {
   DEFAULT_LANGUAGE,
-  DEFAULT_GEOLOCATION_ENABLED,
   DEFAULT_DEVELOPER_MODE,
   DEFAULT_SYNC_MODE,
   SYNC_MODES,
@@ -58,13 +49,6 @@ const isLanguageSetTo = async (client, value) => {
     await client.$(`#${LANGUAGE_SELECT_ID} input`)
   ).getAttribute('value');
   expect(lang).to.equal(value);
-};
-
-const isGeolocationEnabledSetTo = async (client, value) => {
-  const geolocationEnabled = await (
-    await client.$(`#${GEOLOCATION_CONTROL_ID} input`)
-  ).getAttribute('value');
-  expect(JSON.parse(geolocationEnabled)).to.equal(value);
 };
 
 const isDeveloperModeSetTo = async (client, value) => {
@@ -106,8 +90,6 @@ describe('Settings Scenarios', function () {
 
         await isLanguageSetTo(client, DEFAULT_LANGUAGE);
 
-        await isGeolocationEnabledSetTo(client, DEFAULT_GEOLOCATION_ENABLED);
-
         await isDeveloperModeSetTo(client, DEFAULT_DEVELOPER_MODE);
 
         await isSyncAdvancedModeSetTo(client, DEFAULT_SYNC_MODE);
@@ -136,39 +118,6 @@ describe('Settings Scenarios', function () {
     );
 
     it(
-      'Enable Geolocation displays Spaces Nearby',
-      mochaAsync(async () => {
-        const { client } = app;
-
-        // check geolocation button shows in Spaces Nearby
-        await menuGoToSpacesNearby(client);
-        await expectElementToExist(client, `#${GEOLOCATION_CONTROL_ID}`);
-
-        // enable spaces nearby
-        await menuGoToSettings(client);
-        await toggleGeolocationEnabled(client, true);
-
-        await menuGoToSpacesNearby(client);
-
-        // make sure spaces are loaded
-        await client.pause(LOAD_SPACE_PAUSE);
-
-        // geolocation button should not exist
-        await expectElementToNotExist(
-          client,
-          `#${SPACES_NEARBY_MAIN_ID}`,
-          GEOLOCATION_CONTROL_ID
-        );
-
-        // spaces should be displayed
-        await expectAnyElementToExist(client, `#${SPACES_NEARBY_MAIN_ID}`, [
-          SPACE_CARD_CLASS,
-          SPACE_NOT_AVAILABLE_TEXT_ID,
-        ]);
-      })
-    );
-
-    it(
       'Change Language updates application with translations (settings only)',
       mochaAsync(async () => {
         const { client } = app;
@@ -189,12 +138,6 @@ describe('Settings Scenarios', function () {
           await client.$(`#${DEVELOPER_SWITCH_ID}`)
         ).getText();
         expect(developerSwitchTitle).to.equal(i18n.t('Developer Mode'));
-        const geolocationEnabledControlTitle = await (
-          await client.$(`#${GEOLOCATION_CONTROL_ID}`)
-        ).getText();
-        expect(geolocationEnabledControlTitle).to.equal(
-          i18n.t('Geolocation Enabled')
-        );
 
         await changeLanguage(client, 'fr');
         // update i18n locally
@@ -213,12 +156,6 @@ describe('Settings Scenarios', function () {
           await client.$(`#${DEVELOPER_SWITCH_ID}`)
         ).getText();
         expect(developerSwitchTitleFr).to.equal(i18n.t('Developer Mode'));
-        const geolocationEnabledControlTitleFr = await (
-          await client.$(`#${GEOLOCATION_CONTROL_ID}`)
-        ).getText();
-        expect(geolocationEnabledControlTitleFr).to.equal(
-          i18n.t('Geolocation Enabled')
-        );
       })
     );
 
@@ -272,12 +209,9 @@ describe('Settings Scenarios', function () {
         const { client } = app;
         const users = [USER_GRAASP, USER_ALICE, USER_CEDRIC];
         for (const user of users) {
-          const {
-            lang,
-            developerMode,
-            geolocationEnabled,
-            syncMode,
-          } = settingsPerUser[user.username];
+          const { lang, developerMode, syncMode } = settingsPerUser[
+            user.username
+          ];
 
           await userSignIn(client, user);
 
@@ -286,7 +220,6 @@ describe('Settings Scenarios', function () {
           // change settings to user's preferences
           await changeLanguage(client, lang);
           await toggleDeveloperMode(client, developerMode);
-          await toggleGeolocationEnabled(client, geolocationEnabled);
           await toggleSyncAdvancedMode(client, syncMode);
 
           await menuGoToSavedSpaces(client);
@@ -295,7 +228,6 @@ describe('Settings Scenarios', function () {
           await menuGoToSettings(client);
           await isLanguageSetTo(client, lang);
           await isDeveloperModeSetTo(client, developerMode);
-          await isGeolocationEnabledSetTo(client, geolocationEnabled);
           await isSyncAdvancedModeSetTo(client, syncMode);
 
           await menuGoToSignOut(client);
@@ -303,12 +235,9 @@ describe('Settings Scenarios', function () {
 
         // check settings are saved after logout
         for (const user of users) {
-          const {
-            lang,
-            developerMode,
-            geolocationEnabled,
-            syncMode,
-          } = settingsPerUser[user.username];
+          const { lang, developerMode, syncMode } = settingsPerUser[
+            user.username
+          ];
 
           await userSignIn(client, user);
 
@@ -316,7 +245,6 @@ describe('Settings Scenarios', function () {
 
           await isLanguageSetTo(client, lang);
           await isDeveloperModeSetTo(client, developerMode);
-          await isGeolocationEnabledSetTo(client, geolocationEnabled);
           await isSyncAdvancedModeSetTo(client, syncMode);
 
           await menuGoToSignOut(client);

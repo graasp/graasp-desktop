@@ -42,50 +42,6 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = false renders correctly 
         <WithStyles(ForwardRef(MenuItem))
           button={true}
           disabled={true}
-          id="spacesNearbyMenuItem"
-          onClick={[Function]}
-          selected={false}
-        >
-          <WithStyles(ForwardRef(ListItemIcon))>
-            <Memo(ForwardRef(SearchIcon)) />
-          </WithStyles(ForwardRef(ListItemIcon))>
-          <WithStyles(ForwardRef(ListItemText))
-            primary="Spaces Nearby"
-          />
-        </WithStyles(ForwardRef(MenuItem))>
-      </div>
-    </WithStyles(ForwardRef(Tooltip))>
-  </Offline>
-  <Online
-    polling={true}
-    wrapperType="span"
-  >
-    <WithStyles(ForwardRef(MenuItem))
-      button={true}
-      id="spacesNearbyMenuItem"
-      onClick={[Function]}
-      selected={false}
-    >
-      <WithStyles(ForwardRef(ListItemIcon))>
-        <Memo(ForwardRef(SearchIcon)) />
-      </WithStyles(ForwardRef(ListItemIcon))>
-      <WithStyles(ForwardRef(ListItemText))
-        primary="Spaces Nearby"
-      />
-    </WithStyles(ForwardRef(MenuItem))>
-  </Online>
-  <Offline
-    polling={true}
-    wrapperType="span"
-  >
-    <WithStyles(ForwardRef(Tooltip))
-      placement="right"
-      title="You need an internet connection."
-    >
-      <div>
-        <WithStyles(ForwardRef(MenuItem))
-          button={true}
-          disabled={true}
           id="visitMenuItem"
           onClick={[Function]}
           selected={false}
@@ -214,50 +170,6 @@ exports[`<MainMenu /> <MainMenu /> with developerMode = true renders correctly 1
       primary="Saved Spaces"
     />
   </WithStyles(ForwardRef(MenuItem))>
-  <Offline
-    polling={true}
-    wrapperType="span"
-  >
-    <WithStyles(ForwardRef(Tooltip))
-      placement="right"
-      title="You need an internet connection."
-    >
-      <div>
-        <WithStyles(ForwardRef(MenuItem))
-          button={true}
-          disabled={true}
-          id="spacesNearbyMenuItem"
-          onClick={[Function]}
-          selected={false}
-        >
-          <WithStyles(ForwardRef(ListItemIcon))>
-            <Memo(ForwardRef(SearchIcon)) />
-          </WithStyles(ForwardRef(ListItemIcon))>
-          <WithStyles(ForwardRef(ListItemText))
-            primary="Spaces Nearby"
-          />
-        </WithStyles(ForwardRef(MenuItem))>
-      </div>
-    </WithStyles(ForwardRef(Tooltip))>
-  </Offline>
-  <Online
-    polling={true}
-    wrapperType="span"
-  >
-    <WithStyles(ForwardRef(MenuItem))
-      button={true}
-      id="spacesNearbyMenuItem"
-      onClick={[Function]}
-      selected={false}
-    >
-      <WithStyles(ForwardRef(ListItemIcon))>
-        <Memo(ForwardRef(SearchIcon)) />
-      </WithStyles(ForwardRef(ListItemIcon))>
-      <WithStyles(ForwardRef(ListItemText))
-        primary="Spaces Nearby"
-      />
-    </WithStyles(ForwardRef(MenuItem))>
-  </Online>
   <Offline
     polling={true}
     wrapperType="span"

@@ -1,3 +1,7 @@
+/**
+ * @deprecated
+ */
+
 const { SET_GEOLOCATION_ENABLED_CHANNEL } = require('../config/channels');
 const { ERROR_GENERAL } = require('../config/errors');
 const logger = require('../logger');
