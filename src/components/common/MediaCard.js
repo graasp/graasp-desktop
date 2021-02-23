@@ -18,7 +18,7 @@ import ExportButton from '../space/ExportButton';
 import FavoriteButton from '../space/FavoriteButton';
 import SyncButton from '../space/SyncButton';
 import Text from './Text';
-import { MIN_CARD_WIDTH, USER_MODES } from '../../config/constants';
+import { MAX_CARD_WIDTH, USER_MODES } from '../../config/constants';
 import {
   buildSpaceCardId,
   SPACE_DESCRIPTION_EXPAND_BUTTON_CLASS,
@@ -30,8 +30,7 @@ import {
 const styles = (theme) => ({
   card: {
     width: '100%',
-    minWidth: MIN_CARD_WIDTH,
-    margin: 'auto',
+    maxWidth: MAX_CARD_WIDTH,
     marginBottom: 15,
   },
   cardDescription: { margin: 0, paddingTop: 0, paddingBottom: 0 },

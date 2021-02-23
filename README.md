@@ -202,6 +202,7 @@ Github Actions uses environment variables as `secrets`. These are set in `Settin
 4. The `embedded.provisionprofile` needs to be encrypted with gpg. Run `gpg -c embedded.provisionprofile`. Enter a password to validate the encryption.
 5. A new `embedded.provisionprofile.gpg` should have been created. This file should be pushed in the repo in `assets`.
 6. The password used to encrypt the file should be added to `secrets` as `PROVISION_PROFILE_PASSPHRASE`
+7. You might need to correctly set up the permission for the file `./.github/workflows/decrypt_secret.sh` by running `git update-index --chmod=+x ./.github/workflows/decrypt_secret.sh`
 
 ### Manual Release Steps
 
