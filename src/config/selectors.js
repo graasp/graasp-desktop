@@ -77,7 +77,7 @@ export const EXPORT_SPACE_BACK_BUTTON_ID = 'exportSpaceBackButton';
 export const SETTINGS_TITLE_ID = 'settingsTitle';
 export const LANGUAGE_SELECT_ID = 'settingsLanguageSelect';
 export const DEVELOPER_SWITCH_ID = 'settingsDeveloperSwitch';
-export const GEOLOCATION_CONTROL_ID = 'settingsGeolocationControl';
+export const GEOLOCATION_CONTROL_ID = 'settingsGeolocationControl'; // todo: remove
 export const SYNC_MODE_SWITCH_ID = 'syncModeSwitch';
 export const STUDENT_MODE_SWITCH_ID = 'studentModeSwitch';
 

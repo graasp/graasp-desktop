@@ -11,7 +11,7 @@ export const IFRAME = 'application/octet-stream';
 export const DEFAULT_RADIUS = 50;
 export const DEFAULT_LANGUAGE = 'en';
 export const DEFAULT_DEVELOPER_MODE = false;
-export const DEFAULT_GEOLOCATION_ENABLED = false;
+export const DEFAULT_GEOLOCATION_ENABLED = false; // todo: remove
 export const USER_MODES = {
   STUDENT: 'student',
   TEACHER: 'teacher',

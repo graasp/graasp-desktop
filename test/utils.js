@@ -186,6 +186,7 @@ export const changeLanguage = async (client, value) => {
   }
 };
 
+// todo: remove
 export const toggleGeolocationEnabled = async (client, value) => {
   const geolocationEnabledSelector = await client.$(
     `#${GEOLOCATION_CONTROL_ID} input`
@@ -287,11 +288,11 @@ export const buildSignedInUserForDatabase = ({
     username: USER_GRAASP.username,
     createdAt: '2020-11-23T14:54:49.092Z',
     anonymous: false,
-    geolocation: null,
+    geolocation: null, // todo: remove
     settings: {
       lang: 'en',
       developerMode: false,
-      geolocationEnabled: false,
+      geolocationEnabled: false, // todo: remove
       syncMode,
       userMode: USER_GRAASP?.settings?.userMode || DEFAULT_USER_MODE,
       actionAccessibility: false,

@@ -52,7 +52,7 @@ const DEFAULT_LANG = 'en';
 const DEFAULT_DEVELOPER_MODE = false;
 const STUDENT_USER_MODE = 'student';
 const DEFAULT_USER_MODE = STUDENT_USER_MODE;
-const DEFAULT_GEOLOCATION_ENABLED = false;
+const DEFAULT_GEOLOCATION_ENABLED = false; // todo: remove
 const VISUAL_SYNC_MODE = 'visual';
 const DEFAULT_SYNC_MODE = VISUAL_SYNC_MODE;
 const DEFAULT_PROTOCOL = 'https';
@@ -64,11 +64,11 @@ const DEFAULT_ACTIONS_AS_ENABLED = true;
 const DEFAULT_FONT_SIZE = 14;
 
 const buildDefaultUser = (lang = DEFAULT_LANG) => ({
-  geolocation: null,
+  geolocation: null, // todo: remove
   settings: {
     lang,
     developerMode: DEFAULT_DEVELOPER_MODE,
-    geolocationEnabled: DEFAULT_GEOLOCATION_ENABLED,
+    geolocationEnabled: DEFAULT_GEOLOCATION_ENABLED, // todo: remove
     syncMode: DEFAULT_SYNC_MODE,
     userMode: DEFAULT_USER_MODE,
     actionAccessibility: DEFAULT_ACTION_ACCESSIBILITY,
@@ -111,7 +111,7 @@ module.exports = {
   DEFAULT_LOGGING_LEVEL,
   DEFAULT_PROTOCOL,
   DEFAULT_DEVELOPER_MODE,
-  DEFAULT_GEOLOCATION_ENABLED,
+  DEFAULT_GEOLOCATION_ENABLED, // todo: remove
   DOWNLOADABLE_MIME_TYPES,
   TMP_FOLDER,
   RESOURCE,
