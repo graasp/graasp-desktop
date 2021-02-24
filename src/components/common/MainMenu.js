@@ -7,7 +7,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Tooltip from '@material-ui/core/Tooltip';
 import SaveIcon from '@material-ui/icons/Save';
-import SearchIcon from '@material-ui/icons/Search';
 import Language from '@material-ui/icons/Language';
 import CodeIcon from '@material-ui/icons/Code';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -25,7 +24,6 @@ import {
   HOME_PATH,
   LOAD_SPACE_PATH,
   SETTINGS_PATH,
-  SPACES_NEARBY_PATH,
   VISIT_PATH,
   DEVELOPER_PATH,
   DASHBOARD_PATH,
@@ -38,7 +36,6 @@ import {
   LOAD_MENU_ITEM_ID,
   HOME_MENU_ITEM_ID,
   VISIT_MENU_ITEM_ID,
-  SPACES_NEARBY_MENU_ITEM_ID,
   DASHBOARD_MENU_ITEM_ID,
   DEVELOPER_MENU_ITEM_ID,
   SIGN_OUT_MENU_ITEM_ID,
@@ -264,19 +261,6 @@ export class MainMenu extends Component {
             </ListItemIcon>
             <ListItemText primary={t('Saved Spaces')} />
           </MenuItem>
-          {this.renderOfflineMenuItem(
-            <MenuItem
-              id={SPACES_NEARBY_MENU_ITEM_ID}
-              onClick={() => this.handleClick(SPACES_NEARBY_PATH)}
-              button
-              selected={path === SPACES_NEARBY_PATH}
-            >
-              <ListItemIcon>
-                <SearchIcon />
-              </ListItemIcon>
-              <ListItemText primary={t('Spaces Nearby')} />
-            </MenuItem>
-          )}
           {this.renderOfflineMenuItem(
             <MenuItem
               id={VISIT_MENU_ITEM_ID}

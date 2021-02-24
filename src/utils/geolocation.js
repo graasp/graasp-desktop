@@ -1,8 +1,12 @@
+/**
+ * @decapreted
+ */
+
 const getCurrentPosition = () =>
   new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(
-      position => resolve(position),
-      err => reject(err),
+      (position) => resolve(position),
+      (err) => reject(err),
       { timeout: 10000 }
     );
   });

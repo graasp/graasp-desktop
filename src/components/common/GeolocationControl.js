@@ -1,3 +1,7 @@
+/**
+ * @deprecated
+ */
+
 import React, { Component } from 'react';
 import FormControl from '@material-ui/core/FormControl';
 import { withStyles } from '@material-ui/core/styles';
@@ -12,7 +16,7 @@ import Loader from './Loader';
 import { CONTROL_TYPES, FORM_CONTROL_MIN_WIDTH } from '../../config/constants';
 import { GEOLOCATION_CONTROL_ID } from '../../config/selectors';
 
-const styles = theme => ({
+const styles = (theme) => ({
   formControl: {
     margin: theme.spacing(),
     minWidth: FORM_CONTROL_MIN_WIDTH,

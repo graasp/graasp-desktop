@@ -10,7 +10,6 @@ import Divider from '@material-ui/core/Divider';
 import Styles from '../Styles';
 import LanguageSelect from './common/LanguageSelect';
 import DeveloperSwitch from './common/DeveloperSwitch';
-import GeolocationControl from './common/GeolocationControl';
 import Main from './common/Main';
 import {
   SETTINGS_ACTIONS_CLASS,
@@ -100,7 +99,6 @@ export class Settings extends Component {
             <LanguageSelect />
             {authenticated && (
               <>
-                <GeolocationControl />
                 <SyncAdvancedSwitch />
                 <StudentModeSwitch />
                 {this.renderDeveloperModeSwitch()}

@@ -47,11 +47,9 @@ import {
   buildImportDataInClassroomPath,
 } from './config/paths';
 import {
-  getGeolocation,
   getUserFolder,
   getLanguage,
   getDeveloperMode,
-  getGeolocationEnabled,
   isAuthenticated,
 } from './actions';
 import { DEFAULT_LANGUAGE, USER_MODES, PRODUCT_NAME } from './config/constants';
@@ -89,17 +87,14 @@ export class App extends Component {
   state = { height: 0, isDownloadingUpdate: false };
 
   static propTypes = {
-    dispatchGetGeolocation: PropTypes.func.isRequired,
     dispatchGetUserFolder: PropTypes.func.isRequired,
     dispatchGetLanguage: PropTypes.func.isRequired,
     dispatchGetDeveloperMode: PropTypes.func.isRequired,
-    dispatchGetGeolocationEnabled: PropTypes.func.isRequired,
     dispatchIsAuthenticated: PropTypes.func.isRequired,
     lang: PropTypes.string,
     i18n: PropTypes.shape({
       changeLanguage: PropTypes.func.isRequired,
     }).isRequired,
-    geolocationEnabled: PropTypes.bool.isRequired,
     classes: PropTypes.shape({
       toastrIcon: PropTypes.string.isRequired,
       fullScreen: PropTypes.string.isRequired,
@@ -119,7 +114,6 @@ export class App extends Component {
       dispatchGetUserFolder,
       dispatchGetLanguage,
       dispatchGetDeveloperMode,
-      dispatchGetGeolocationEnabled,
       dispatchIsAuthenticated,
       userMode,
     } = this.props;
@@ -128,7 +122,6 @@ export class App extends Component {
     dispatchGetLanguage();
     dispatchGetDeveloperMode();
     dispatchGetUserFolder();
-    dispatchGetGeolocationEnabled();
 
     if (userMode === USER_MODES.TEACHER) {
       this.checkAppUpgrade();
@@ -142,25 +135,12 @@ export class App extends Component {
 
   componentDidUpdate({
     lang: prevLang,
-    geolocationEnabled: prevGeolocationEnabled,
-    dispatchGetGeolocation,
     connexionStatus: prevConnexionStatus,
     userMode: prevUserMode,
   }) {
-    const {
-      lang,
-      i18n,
-      geolocationEnabled,
-      connexionStatus,
-      userMode,
-    } = this.props;
+    const { lang, i18n, connexionStatus, userMode } = this.props;
     if (lang !== prevLang) {
       i18n.changeLanguage(lang);
-    }
-
-    // fetch geolocation only if enabled
-    if (geolocationEnabled && geolocationEnabled !== prevGeolocationEnabled) {
-      dispatchGetGeolocation();
     }
 
     // display toastr when connexion status changes
@@ -353,20 +333,13 @@ export class App extends Component {
 
 const mapStateToProps = ({ authentication }) => ({
   lang: authentication.getIn(['user', 'settings', 'lang']),
-  geolocationEnabled: authentication.getIn([
-    'user',
-    'settings',
-    'geolocationEnabled',
-  ]),
   userMode: authentication.getIn(['user', 'settings', 'userMode']),
 });
 
 const mapDispatchToProps = {
-  dispatchGetGeolocation: getGeolocation,
   dispatchGetUserFolder: getUserFolder,
   dispatchGetLanguage: getLanguage,
   dispatchGetDeveloperMode: getDeveloperMode,
-  dispatchGetGeolocationEnabled: getGeolocationEnabled,
   dispatchIsAuthenticated: isAuthenticated,
 };
 

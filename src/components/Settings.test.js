@@ -4,7 +4,6 @@ import Typography from '@material-ui/core/Typography';
 import { Settings } from './Settings';
 import LanguageSelect from './common/LanguageSelect';
 import DeveloperSwitch from './common/DeveloperSwitch';
-import GeolocationControl from './common/GeolocationControl';
 import FontSizeSlider from './common/FontSizeSlider';
 import { USER_MODES } from '../config/constants';
 
@@ -62,10 +61,6 @@ describe('<Settings />', () => {
 
   it('renders one <DeveloperSwitch /> component', () => {
     expect(wrapper.find(DeveloperSwitch)).toHaveLength(1);
-  });
-
-  it('renders one <GeolocationControl /> component', () => {
-    expect(wrapper.find(GeolocationControl)).toHaveLength(1);
   });
 
   it('renders one <FontSizeSlider /> component', () => {

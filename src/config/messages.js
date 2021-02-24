@@ -21,10 +21,13 @@ const ERROR_MESSAGE_HEADER = 'Error';
 const ERROR_SAVING_SPACE_MESSAGE = 'There was an error saving the space';
 const SUCCESS_SAVING_MESSAGE = 'Space was saved successfully';
 const SUCCESS_MESSAGE_HEADER = 'Success';
+
+// todo: remove
 const ERROR_GETTING_GEOLOCATION =
   'There was an error getting your current location';
 const ERROR_GETTING_SPACES_NEARBY =
   'There was an error getting the spaces nearby';
+
 const ERROR_GETTING_USER_FOLDER =
   'There was an error getting your user folder.';
 const ERROR_GETTING_LANGUAGE = 'There was an error getting the language.';
@@ -35,10 +38,13 @@ const ERROR_GETTING_DEVELOPER_MODE =
   'There was an error getting the developer mode';
 const ERROR_SETTING_DEVELOPER_MODE =
   'There was an error setting the developer mode';
+
+// todo: remove
 const ERROR_GETTING_GEOLOCATION_ENABLED =
   'There was an error getting the geolocation enabled';
 const ERROR_SETTING_GEOLOCATION_ENABLED =
   'There was an error setting the geolocation enabled';
+
 const ERROR_GETTING_DATABASE = 'There was an error getting the database.';
 const ERROR_SETTING_DATABASE = 'There was an error updating the database.';
 const SUCCESS_SYNCING_MESSAGE = 'Space was successfully synced';

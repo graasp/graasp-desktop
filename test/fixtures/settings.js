@@ -12,19 +12,19 @@ export const settingsPerUser = {
   [USER_GRAASP.username]: {
     lang: DEFAULT_LANGUAGE,
     developerMode: DEFAULT_DEVELOPER_MODE,
-    geolocationEnabled: DEFAULT_GEOLOCATION_ENABLED,
+    geolocationEnabled: DEFAULT_GEOLOCATION_ENABLED, // todo: remove
     syncMode: DEFAULT_SYNC_MODE,
   },
   [USER_ALICE.username]: {
     lang: 'fr',
     developerMode: DEFAULT_DEVELOPER_MODE,
-    geolocationEnabled: true,
+    geolocationEnabled: DEFAULT_GEOLOCATION_ENABLED, // todo: remove
     syncMode: SYNC_MODES.ADVANCED,
   },
   [USER_CEDRIC.username]: {
     lang: 'ja',
     developerMode: true,
-    geolocationEnabled: DEFAULT_GEOLOCATION_ENABLED,
+    geolocationEnabled: DEFAULT_GEOLOCATION_ENABLED, // todo: remove
     syncMode: SYNC_MODES.VISUAL,
   },
 };

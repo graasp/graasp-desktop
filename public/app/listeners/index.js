@@ -9,8 +9,6 @@ const getSpaces = require('./getSpaces');
 const { deleteSpace, deleteSpaceAndResources } = require('./deleteSpace');
 const syncSpace = require('./syncSpace');
 const exportSpace = require('./exportSpace');
-const getGeolocationEnabled = require('./getGeolocationEnabled');
-const setGeolocationEnabled = require('./setGeolocationEnabled');
 const showLoadSpacePrompt = require('./showLoadSpacePrompt');
 const showExportSpacePrompt = require('./showExportSpacePrompt');
 const showDeleteSpacePrompt = require('./showDeleteSpacePrompt');
@@ -71,8 +69,6 @@ module.exports = {
   deleteSpace,
   deleteSpaceAndResources,
   exportSpace,
-  getGeolocationEnabled,
-  setGeolocationEnabled,
   showLoadSpacePrompt,
   showExportSpacePrompt,
   showDeleteSpacePrompt,

@@ -13,7 +13,7 @@ const postAction = (mainWindow, db) => (event, payload = {}) => {
       format = DEFAULT_FORMAT,
       verb,
       data,
-      geolocation,
+      geolocation, // todo: remove
       visibility = 'private',
     } = payload;
 
@@ -30,16 +30,14 @@ const postAction = (mainWindow, db) => (event, payload = {}) => {
       data,
       format,
       verb,
-      geolocation,
+      geolocation, // todo: remove
       visibility,
       user: userId,
       id: ObjectId().str,
     };
 
     // write the action to the database
-    db.get('actions')
-      .push(actionToWrite)
-      .write();
+    db.get('actions').push(actionToWrite).write();
 
     // send back the action to the app
     if (appInstanceId) {

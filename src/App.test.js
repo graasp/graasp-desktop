@@ -12,13 +12,10 @@ describe('<App />', () => {
       changeLanguage: jest.fn(),
     },
     t: jest.fn(),
-    dispatchGetGeolocation: jest.fn(),
     dispatchGetUserFolder: jest.fn(),
     dispatchGetLanguage: jest.fn(),
     dispatchGetDeveloperMode: jest.fn(),
-    dispatchGetGeolocationEnabled: jest.fn(),
     dispatchIsAuthenticated: jest.fn(),
-    geolocationEnabled: false,
     classes: {
       toastrIcon: '',
       fullScreen: '',

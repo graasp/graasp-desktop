@@ -1,3 +1,7 @@
+/**
+ * @deprecated
+ */
+
 const { DEFAULT_GEOLOCATION_ENABLED } = require('../config/config');
 const { GET_GEOLOCATION_ENABLED_CHANNEL } = require('../config/channels');
 const { ERROR_GENERAL } = require('../config/errors');

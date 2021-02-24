@@ -48,8 +48,6 @@ const {
   SET_DEVELOPER_MODE_CHANNEL,
   GET_SYNC_MODE_CHANNEL,
   SET_SYNC_MODE_CHANNEL,
-  GET_GEOLOCATION_ENABLED_CHANNEL,
-  SET_GEOLOCATION_ENABLED_CHANNEL,
   GET_DATABASE_CHANNEL,
   SET_DATABASE_CHANNEL,
   SYNC_SPACE_CHANNEL,
@@ -100,8 +98,6 @@ const {
   showLoadSpacePrompt,
   showExportSpacePrompt,
   showDeleteSpacePrompt,
-  getGeolocationEnabled,
-  setGeolocationEnabled,
   getUserFolder,
   setLanguage,
   getLanguage,
@@ -472,18 +468,6 @@ app.on('ready', async () => {
 
   // called when setting space as recent
   ipcMain.on(SET_SPACE_AS_RECENT_CHANNEL, setSpaceAsRecent(mainWindow, db));
-
-  // called when getting geolocation enabled
-  ipcMain.on(
-    GET_GEOLOCATION_ENABLED_CHANNEL,
-    getGeolocationEnabled(mainWindow, db)
-  );
-
-  // called when setting geolocation enabled
-  ipcMain.on(
-    SET_GEOLOCATION_ENABLED_CHANNEL,
-    setGeolocationEnabled(mainWindow, db)
-  );
 
   // called when setting action accessibility
   ipcMain.on(

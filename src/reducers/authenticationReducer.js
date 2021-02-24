@@ -92,7 +92,7 @@ const updateRecentSpaces = ({ recent, spaceId }) => (recentSpaces) => {
 export const DEFAULT_USER_SETTINGS = {
   lang: DEFAULT_LANGUAGE,
   developerMode: DEFAULT_DEVELOPER_MODE,
-  geolocationEnabled: DEFAULT_GEOLOCATION_ENABLED,
+  geolocationEnabled: DEFAULT_GEOLOCATION_ENABLED, // todo: remove
   syncMode: DEFAULT_SYNC_MODE,
   userMode: DEFAULT_USER_MODE,
   actionAccessibility: DEFAULT_ACTION_ACCESSIBILITY,
@@ -101,7 +101,7 @@ export const DEFAULT_USER_SETTINGS = {
 };
 
 export const DEFAULT_USER = {
-  geolocation: Map(),
+  geolocation: Map(), // todo: remove
   settings: { ...DEFAULT_USER_SETTINGS },
   tour: {
     [tours.VISIT_SPACE_TOUR]: false,
@@ -130,8 +130,8 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case FLAG_GETTING_DEVELOPER_MODE:
     case FLAG_SETTING_SYNC_MODE:
     case FLAG_GETTING_SYNC_MODE:
-    case FLAG_SETTING_GEOLOCATION_ENABLED:
-    case FLAG_GETTING_GEOLOCATION_ENABLED:
+    case FLAG_SETTING_GEOLOCATION_ENABLED: // todo: remove
+    case FLAG_GETTING_GEOLOCATION_ENABLED: // todo: remove
     case FLAG_SETTING_USER_MODE:
     case FLAG_GETTING_USER_MODE:
     case FLAG_SETTING_SPACE_AS_FAVORITE:
@@ -166,8 +166,8 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case GET_DEVELOPER_MODE_SUCCEEDED:
     case SET_DEVELOPER_MODE_SUCCEEDED:
       return state.setIn(['user', 'settings', 'developerMode'], payload);
-    case GET_GEOLOCATION_ENABLED_SUCCEEDED:
-    case SET_GEOLOCATION_ENABLED_SUCCEEDED:
+    case GET_GEOLOCATION_ENABLED_SUCCEEDED: // todo: remove
+    case SET_GEOLOCATION_ENABLED_SUCCEEDED: // todo: remove
       return state.setIn(['user', 'settings', 'geolocationEnabled'], payload);
     case SET_SYNC_MODE_SUCCEEDED:
     case GET_SYNC_MODE_SUCCEEDED:

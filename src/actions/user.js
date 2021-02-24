@@ -86,12 +86,15 @@ const flagGettingLanguage = createFlag(FLAG_GETTING_LANGUAGE);
 const flagSettingLanguage = createFlag(FLAG_SETTING_LANGUAGE);
 const flagGettingDeveloperMode = createFlag(FLAG_GETTING_DEVELOPER_MODE);
 const flagSettingDeveloperMode = createFlag(FLAG_SETTING_DEVELOPER_MODE);
+
+// todo: remove geolocation
 const flagGettingGeolocationEnabled = createFlag(
   FLAG_GETTING_GEOLOCATION_ENABLED
 );
 const flagSettingGeolocationEnabled = createFlag(
   FLAG_SETTING_GEOLOCATION_ENABLED
 );
+
 const flagGettingSyncMode = createFlag(FLAG_GETTING_SYNC_MODE);
 const flagSettingSyncMode = createFlag(FLAG_SETTING_SYNC_MODE);
 const flagGettingUserMode = createFlag(FLAG_GETTING_USER_MODE);
@@ -105,6 +108,7 @@ const flagSettingActionsAsEnabled = createFlag(FLAG_SETTING_ACTIONS_AS_ENABLED);
 const flagSettingFontSize = createFlag(FLAG_SETTING_FONT_SIZE);
 const flagGettingFontSize = createFlag(FLAG_GETTING_FONT_SIZE);
 
+// todo: remove
 const getGeolocation = async () => async (dispatch) => {
   // only fetch location if online
   if (window.navigator.onLine) {
@@ -269,6 +273,7 @@ const setDeveloperMode = async (developerMode) => (dispatch) => {
   }
 };
 
+// todo: remove
 const getGeolocationEnabled = async () => (dispatch) => {
   try {
     dispatch(flagGettingGeolocationEnabled(true));
@@ -299,6 +304,7 @@ const getGeolocationEnabled = async () => (dispatch) => {
   }
 };
 
+// todo: remove
 const setGeolocationEnabled = async (geolocationEnabled) => (dispatch) => {
   try {
     dispatch(flagSettingGeolocationEnabled(true));

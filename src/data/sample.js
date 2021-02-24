@@ -5,6 +5,8 @@ import {
   DEFAULT_ACTIONS_AS_ENABLED,
 } from '../config/constants';
 
+// todo: remove geolocation
+
 const SampleDatabase = {
   spaces: [
     {

@@ -25,7 +25,7 @@ const postAction = async (
       id,
       settings: {
         actionsEnabled = DEFAULT_ACTIONS_AS_ENABLED,
-        geolocationEnabled = DEFAULT_GEOLOCATION_ENABLED,
+        geolocationEnabled = DEFAULT_GEOLOCATION_ENABLED, // todo: remove
       },
       geolocation,
     } = mutableUser;
@@ -37,6 +37,7 @@ const postAction = async (
         userId = id;
       }
 
+      // todo: remove geolocation
       // add geolocation to action if enabled
       let geolocationLatLong = null;
       if (geolocationEnabled) {
