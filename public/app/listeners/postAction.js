@@ -33,7 +33,7 @@ const postAction = (mainWindow, db) => (event, payload = {}) => {
       geolocation, // todo: remove
       visibility,
       user: userId,
-      id: ObjectId().str,
+      id: ObjectId().toHexString(),
     };
 
     // write the action to the database

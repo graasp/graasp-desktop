@@ -28,7 +28,7 @@ const postAppInstanceResource = (mainWindow, db) => (event, payload = {}) => {
       type,
       visibility,
       user: userId,
-      id: ObjectId().str,
+      id: ObjectId().toHexString(),
     };
 
     // write the resource to the database

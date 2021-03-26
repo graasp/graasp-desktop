@@ -57,8 +57,7 @@ const extractFileToLoadSpace = (mainWindow) => async (
   event,
   { fileLocation }
 ) => {
-  const tmpId = ObjectId().str;
-
+  const tmpId = ObjectId().toHexString();
   // make temporary folder hidden
   const extractPath = `${VAR_FOLDER}/.${tmpId}`;
   try {

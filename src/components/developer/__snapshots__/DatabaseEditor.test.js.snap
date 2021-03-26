@@ -7,10 +7,11 @@ exports[`<DatabaseEditor /> <DatabaseEditor /> renders renders correctly 1`] = `
   >
     Manually Edit the Database
   </WithStyles(ForwardRef(Typography))>
-  <t
+  <n
     collapseStringsAfterLength={false}
     collapsed={true}
     defaultValue={null}
+    displayArrayKey={true}
     displayDataTypes={true}
     displayObjectSize={true}
     enableClipboard={true}

@@ -194,6 +194,8 @@ const createWindow = () => {
       nodeIntegration: false,
       preload: `${__dirname}/app/preload.js`,
       webSecurity: false,
+      // contextIsolation should be false to allow preload to affect the browser window
+      contextIsolation: false,
     },
     height: 860,
     width: 1280,

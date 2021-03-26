@@ -101,7 +101,7 @@ const DEFAULT_TOURS_ENABLED = true;
 
 const buildFilePath = ({ userId, spaceId, name }) => {
   // add generated id to handle duplicate files
-  const generatedId = ObjectId().str;
+  const generatedId = ObjectId().toHexString();
   return `${VAR_FOLDER}/${spaceId}/files/${userId}/${generatedId}_${name}`;
 };
 
