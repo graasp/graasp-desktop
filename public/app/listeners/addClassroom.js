@@ -39,8 +39,7 @@ const addClassroom = (mainWindow, db) => async (event, { name, userId }) => {
     }
 
     // create new classroom
-    const id = ObjectId().str;
-
+    const id = ObjectId().toHexString();
     // create directory where resources will be stored
     createClassroomDirectory({ id });
 
@@ -54,9 +53,7 @@ const addClassroom = (mainWindow, db) => async (event, { name, userId }) => {
       teacherId: userId,
     };
 
-    db.get(CLASSROOMS_COLLECTION)
-      .push(newClassroom)
-      .write();
+    db.get(CLASSROOMS_COLLECTION).push(newClassroom).write();
 
     return mainWindow.webContents.send(ADD_CLASSROOM_CHANNEL, newClassroom);
   } catch (err) {

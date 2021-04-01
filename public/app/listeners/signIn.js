@@ -14,7 +14,7 @@ const createNewUser = (
   lang = DEFAULT_LANG,
   anonymous = false
 ) => {
-  const id = ObjectId().str;
+  const id = ObjectId().toHexString();
 
   return {
     id,

@@ -70,3 +70,6 @@ dev-app-update.yml
 
 # exclude eslint cache
 .eslintcache
+
+# husky
+.husky

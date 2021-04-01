@@ -675,7 +675,7 @@ describe('Classrooms Scenarios', function () {
       );
 
       it(
-        'and create new student',
+        'create new student',
         mochaAsync(async () => {
           const { client } = app;
 
