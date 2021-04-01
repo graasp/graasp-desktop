@@ -26,7 +26,6 @@ describe('Menu Scenarios', function () {
     'MainMenu redirects to correct path',
     mochaAsync(async () => {
       const { client } = app;
-      await menuGoToSpacesNearby(client);
       await menuGoToVisitSpace(client);
       await menuGoToLoadSpace(client);
       await menuGoToSettings(client);
