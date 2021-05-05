@@ -6,6 +6,8 @@ import {
   userSignIn,
   menuGoToHome,
   menuGoToSignOut,
+  buildSignedInUserForDatabase,
+  menuGoToSavedSpaces,
 } from '../utils';
 import { createApplication, closeApplication } from '../application';
 import {
@@ -21,6 +23,7 @@ import {
   SPACE_LIGHT_COLOR,
   SPACE_MOON,
   SPACE_AMPHIBIANS,
+  SPACE_WITH_MULTIPLE_CHANGES,
 } from '../fixtures/spaces';
 import { visitAndSaveSpaceById } from './visitSpace.test';
 import { DEFAULT_GLOBAL_TIMEOUT } from '../constants';
@@ -32,11 +35,26 @@ describe('Recent Spaces', function () {
   this.timeout(DEFAULT_GLOBAL_TIMEOUT);
   let app;
 
+  const spaces = [
+    SPACE_WITH_MULTIPLE_CHANGES,
+    SPACE_APOLLO_11,
+    SPACE_AIR_POLLUTION,
+    SPACE_LIGHT_COLOR,
+    SPACE_MOON,
+    SPACE_AMPHIBIANS,
+  ];
+
   afterEach(() => closeApplication(app));
 
   beforeEach(
     mochaAsync(async () => {
-      app = await createApplication();
+      app = await createApplication({
+        api: [...spaces, SPACE_ATOMIC_STRUCTURE],
+        database: {
+          ...buildSignedInUserForDatabase(),
+          spaces,
+        },
+      });
     })
   );
 
@@ -82,25 +100,19 @@ describe('Recent Spaces', function () {
         mochaAsync(async () => {
           const { client } = app;
 
-          const spaces = [
-            SPACE_ATOMIC_STRUCTURE,
-            SPACE_APOLLO_11,
-            SPACE_AIR_POLLUTION,
-            SPACE_LIGHT_COLOR,
-            SPACE_MOON,
-            SPACE_AMPHIBIANS,
-          ];
           if (spaces.length < MAX_RECENT_SPACES + 1) {
             throw new Error(
               "spaces don't contain enough spaces to make the test work correctly"
             );
           }
 
-          // visit and save one more space than MAX_RECENT_SPACES
+          // open one more space than MAX_RECENT_SPACES
           for (const {
             space: { id },
           } of spaces.slice(-(MAX_RECENT_SPACES + 1))) {
-            await visitAndSaveSpaceById(client, id);
+            await menuGoToSavedSpaces(client);
+            const card = await client.$(`#${buildSpaceCardId(id)}`);
+            await card.click();
           }
 
           // check spaces is in home : first space should not be displayed

@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
+import _ from 'lodash';
 import {
   LANGUAGE_SELECT_ID,
   GEOLOCATION_CONTROL_ID,
@@ -308,3 +309,29 @@ export const buildSignedInUserForDatabase = ({
     authenticated: AUTHENTICATED,
   },
 });
+
+// check necessary property for a space
+// remove asset field from item (it is an offline property)
+export const prepareSpaceForApi = (json) => {
+  // depending on the space fixture, we use the space property
+  const space = _.cloneDeep(json?.space || json);
+
+  // id is necessary
+  if (!space.id) {
+    throw new Error('The mocked space requires an id.');
+  }
+
+  space.saved = false;
+
+  space.phases = space.phases.map((phase) => {
+    const newPhase = _.cloneDeep(phase);
+    newPhase.items = newPhase.items.map((item) => {
+      const newItem = _.cloneDeep(item);
+      newItem.asset = null;
+      return newItem;
+    });
+    return newPhase;
+  });
+
+  return space;
+};

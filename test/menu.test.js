@@ -1,7 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import {
   mochaAsync,
-  menuGoToSpacesNearby,
   menuGoToVisitSpace,
   menuGoToLoadSpace,
   menuGoToSettings,

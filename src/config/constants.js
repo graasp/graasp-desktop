@@ -1,5 +1,12 @@
 export const PRODUCT_NAME = 'Graasp';
 
+export const NOTIFICATIONS_TYPES = {
+  TOASTR: 'toastr',
+};
+
+export const SHOW_NOTIFICATIONS =
+  process?.env?.REACT_APP_SHOW_NOTIFICATIONS || false;
+
 // phase item types
 export const TEXT = 'text/html';
 export const PDF = 'application/pdf';
@@ -64,11 +71,11 @@ export const SYNC_CHANGES = {
   UPDATED: 'updated',
 };
 
-const DIFF_COLORS = {
+export const DIFF_COLORS = {
   [SYNC_CHANGES.ADDED]: '#ddffde',
   [SYNC_CHANGES.REMOVED]: '#fddedb',
   [SYNC_CHANGES.UPDATED]: '#f9edc5',
-  [SYNC_CHANGES.MOVED]: 'lightgrey',
+  [SYNC_CHANGES.MOVED]: '#d3d3d3',
 };
 
 export const DIFF_STYLES = {

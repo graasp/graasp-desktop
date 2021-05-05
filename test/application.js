@@ -3,7 +3,7 @@ import electronPath from 'electron'; // Require Electron from the binaries inclu
 import path from 'path';
 import fse from 'fs-extra';
 import extract from 'extract-zip';
-import { buildSignedInUserForDatabase } from './utils';
+import { buildSignedInUserForDatabase, prepareSpaceForApi } from './utils';
 
 const getFormattedTime = () => {
   const today = new Date();
@@ -71,6 +71,7 @@ const createApplication = async ({
     showOpenDialogResponse: undefined,
     showTours: 0,
   },
+  api = [],
 } = {}) => {
   const {
     showMessageDialogResponse,
@@ -92,8 +93,20 @@ const createApplication = async ({
     env.SHOW_OPEN_DIALOG_RESPONSE = showOpenDialogResponse;
   }
 
+  // mock spaces fetch using the api
+  // when not defined, provide default api database
+  env.API_DATABASE = JSON.stringify(
+    api.map((space) => prepareSpaceForApi(space))
+  );
+
   // set up database
   const tmpDatabasePath = await setUpDatabase(database);
+
+  // locally use the public electron application
+  // for CI use the build application
+  const applicationPath = process.env.CI
+    ? path.join(__dirname, '../build/electron.js')
+    : path.join(__dirname, '../public/electron.js');
 
   const app = new Application({
     // Your electron path can be any binary
@@ -114,7 +127,7 @@ const createApplication = async ({
 
     // The following line tells spectron to look and use the main.js file
     // and the package.json located 1 level above.
-    args: [path.join(__dirname, '../public/electron.js')],
+    args: [applicationPath],
     // use a specific application folder and var folder to save data
     chromeDriverArgs: [`--user-data-dir=${tmpDatabasePath}`],
     env,

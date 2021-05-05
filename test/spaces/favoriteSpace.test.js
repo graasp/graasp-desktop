@@ -125,11 +125,14 @@ describe('Set space as favorite', function () {
     it(
       'Set a space as favorite is different per user',
       mochaAsync(async () => {
-        app = await createApplication({ database: {} });
+        const { space } = SPACE_ATOMIC_STRUCTURE;
 
-        const {
-          space: { id },
-        } = SPACE_ATOMIC_STRUCTURE;
+        app = await createApplication({
+          database: {},
+          api: [space],
+        });
+
+        const { id } = space;
 
         const { client } = app;
 

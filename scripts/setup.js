@@ -9,6 +9,7 @@ const {
   GOOGLE_API_KEY = '',
   GOOGLE_ANALYTICS_ID = '',
   LOGGING_LEVEL = 'info',
+  SHOW_NOTIFICATIONS = false,
 } = process.env;
 
 const env = JSON.stringify({
@@ -16,6 +17,7 @@ const env = JSON.stringify({
   GOOGLE_API_KEY,
   GOOGLE_ANALYTICS_ID,
   LOGGING_LEVEL,
+  SHOW_NOTIFICATIONS,
 });
 
 fs.writeFileSync(path.join(DEFAULT_PATH, NAME), env, { encoding: 'utf8' });

@@ -176,7 +176,7 @@ if (process.env.NODE_ENV === 'test') {
 let mainWindow;
 
 // only set up sentry if dsn is provided
-const { SENTRY_DSN, GOOGLE_ANALYTICS_ID } = process.env;
+const { SENTRY_DSN, GOOGLE_ANALYTICS_ID, CI } = process.env;
 if (SENTRY_DSN) {
   Sentry.init({ dsn: SENTRY_DSN });
 }
@@ -202,7 +202,7 @@ const createWindow = () => {
   });
 
   mainWindow.loadURL(
-    isDev || process.env.NODE_ENV === 'test'
+    CI !== 'true' && (isDev || process.env.NODE_ENV === 'test')
       ? 'http://localhost:3000'
       : `file://${path.join(__dirname, './index.html')}`
   );

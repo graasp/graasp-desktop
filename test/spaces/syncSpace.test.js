@@ -34,6 +34,11 @@ import {
   SPACE_WITH_TOOLS_UPDATE_CHANGES,
   SPACE_WITH_MULTIPLE_CHANGES,
   SPACE_WITH_MULTIPLE_CHANGES_CHANGES,
+  SPACE_WITH_REMOVAL_ORIGINAL,
+  SPACE_WITH_MOVE_ORIGINAL,
+  SPACE_WITH_MULTIPLE_CHANGES_ORIGINAL,
+  SPACE_WITH_ADDITION_ORIGINAL,
+  SPACE_WITH_UPDATE_ORIGINAL,
 } from '../fixtures/syncSpace';
 import {
   SYNC_SPACE_PAUSE,
@@ -43,9 +48,14 @@ import {
   LOAD_TAB_PAUSE,
 } from '../constants';
 import { openTools, hasSavedSpaceLayout } from './visitSpace.test';
-import { SYNC_CHANGES, SYNC_MODES } from '../../src/config/constants';
+import {
+  DIFF_COLORS,
+  SYNC_CHANGES,
+  SYNC_MODES,
+} from '../../src/config/constants';
 import { USER_GRAASP } from '../fixtures/users';
 import { loadSpaceById } from './loadSpace.test';
+import { SPACE_WITH_TOOLS_CHANGED } from '../fixtures/spaces';
 
 const { ADDED, REMOVED, UPDATED, MOVED } = SYNC_CHANGES;
 
@@ -57,24 +67,28 @@ const constructToolsPhase = (items) => ({
 
 const checkItemHasChange = async (client, selector, change) => {
   const el = await client.$$(selector);
-  const prevEl = await el[0].getAttribute('class');
-  const afterEl = await el[1]?.getAttribute('class');
+
+  // checking background color to detect change status
+  // this works for both dev and build application
+  const prevEl = (await el[0].getCSSProperty('background-color'))?.parsed?.hex;
+  const afterEl = (await el[1]?.getCSSProperty('background-color'))?.parsed
+    ?.hex;
   switch (change) {
     case UPDATED:
       // there exist 2 elements with the same data-id on update
       // only one has the highlight class
-      expect(afterEl).to.include(change);
+      expect(afterEl).to.include(DIFF_COLORS[change]);
       break;
     case MOVED:
       // there exist 2 elements with the same data-id on move
       // both have the highlight class
-      expect(prevEl).to.include(change);
-      expect(afterEl).to.include(change);
+      expect(prevEl).to.include(DIFF_COLORS[change]);
+      expect(afterEl).to.include(DIFF_COLORS[change]);
       break;
     // on added and removed, there is only one element
     case ADDED:
     case REMOVED:
-      expect(prevEl).to.include(change);
+      expect(prevEl).to.include(DIFF_COLORS[change]);
       break;
     default:
       console.error(`change "${change}" is not recognized`);
@@ -126,8 +140,9 @@ const hasSyncVisualScreenLayout = async (
 
     // check phase contains class of corresponding change
     if (phaseChange) {
-      const menuItemHtml = await phase.getHTML();
-      expect(menuItemHtml).to.include(phaseChange);
+      const menuItemColor = (await phase.getCSSProperty('background-color'))
+        ?.parsed?.hex;
+      expect(menuItemColor).to.include(DIFF_COLORS[phaseChange]);
     }
 
     // go to phase
@@ -219,12 +234,24 @@ const cancelSync = async (client) => {
 };
 
 const spaces = [
-  [SPACE_WITH_ADDITION, SPACE_WITH_ADDITION_CHANGES],
-  [SPACE_WITH_REMOVAL, SPACE_WITH_REMOVAL_CHANGES],
-  [SPACE_WITH_UPDATE, SPACE_WITH_UPDATE_CHANGES],
-  [SPACE_WITH_MOVE, SPACE_WITH_MOVE_CHANGES],
-  [SPACE_WITH_TOOLS_UPDATE, SPACE_WITH_TOOLS_UPDATE_CHANGES],
-  [SPACE_WITH_MULTIPLE_CHANGES, SPACE_WITH_MULTIPLE_CHANGES_CHANGES],
+  [
+    SPACE_WITH_ADDITION,
+    SPACE_WITH_ADDITION_CHANGES,
+    SPACE_WITH_ADDITION_ORIGINAL,
+  ],
+  [SPACE_WITH_REMOVAL, SPACE_WITH_REMOVAL_CHANGES, SPACE_WITH_REMOVAL_ORIGINAL],
+  [SPACE_WITH_UPDATE, SPACE_WITH_UPDATE_CHANGES, SPACE_WITH_UPDATE_ORIGINAL],
+  [SPACE_WITH_MOVE, SPACE_WITH_MOVE_CHANGES, SPACE_WITH_MOVE_ORIGINAL],
+  [
+    SPACE_WITH_TOOLS_UPDATE,
+    SPACE_WITH_TOOLS_UPDATE_CHANGES,
+    SPACE_WITH_TOOLS_CHANGED,
+  ],
+  [
+    SPACE_WITH_MULTIPLE_CHANGES,
+    SPACE_WITH_MULTIPLE_CHANGES_CHANGES,
+    SPACE_WITH_MULTIPLE_CHANGES_ORIGINAL,
+  ],
 ];
 
 describe('Sync a space', function () {
@@ -234,7 +261,7 @@ describe('Sync a space', function () {
   afterEach(() => closeApplication(app));
 
   describe('with advanced mode disabled (default)', () => {
-    spaces.forEach(([space, changes]) => {
+    spaces.forEach(([space, changes, original]) => {
       it(
         `Syncing from card open Visual Syncing Space Screen for "${space.space.name}"`,
         mochaAsync(async () => {
@@ -242,6 +269,7 @@ describe('Sync a space', function () {
             database: {
               ...buildSignedInUserForDatabase({ syncMode: SYNC_MODES.VISUAL }),
             },
+            api: [original],
           });
           const { client } = app;
           const {
@@ -268,18 +296,23 @@ describe('Sync a space', function () {
     it(
       'Syncing from toolbar open Visual Syncing Space Screen',
       mochaAsync(async () => {
+        const [localSpace, changes, remoteSpace] = [
+          SPACE_WITH_MULTIPLE_CHANGES,
+          SPACE_WITH_MULTIPLE_CHANGES_CHANGES,
+          SPACE_WITH_MULTIPLE_CHANGES_ORIGINAL,
+        ];
+
         app = await createApplication({
           database: {
-            spaces: [SPACE_WITH_MULTIPLE_CHANGES],
+            spaces: [localSpace],
             ...buildSignedInUserForDatabase({ syncMode: SYNC_MODES.VISUAL }),
           },
+          api: [remoteSpace],
         });
         const { client } = app;
 
-        const changes = SPACE_WITH_MULTIPLE_CHANGES_CHANGES;
-
         await menuGoToSavedSpaces(client);
-        await clickOnSpaceCard(client, SPACE_WITH_MULTIPLE_CHANGES.space.id);
+        await clickOnSpaceCard(client, localSpace.space.id);
 
         const syncButton = await client.$(`.${SPACE_SYNC_BUTTON_CLASS}`);
         await syncButton.click();
@@ -296,17 +329,23 @@ describe('Sync a space', function () {
     it(
       'Cancel syncing keeps original space in Saved Spaces',
       mochaAsync(async () => {
+        const [localSpace, remoteSpace] = [
+          SPACE_WITH_MULTIPLE_CHANGES,
+          SPACE_WITH_MULTIPLE_CHANGES_ORIGINAL,
+        ];
+
         app = await createApplication({
           database: {
-            spaces: [SPACE_WITH_MULTIPLE_CHANGES],
+            spaces: [localSpace],
             ...buildSignedInUserForDatabase({ syncMode: SYNC_MODES.VISUAL }),
           },
+          api: [remoteSpace],
         });
         const { client } = app;
         const space = SPACE_WITH_MULTIPLE_CHANGES;
 
         await menuGoToSavedSpaces(client);
-        await clickOnSpaceCard(client, SPACE_WITH_MULTIPLE_CHANGES.space.id);
+        await clickOnSpaceCard(client, localSpace.space.id);
 
         const syncButton = await client.$(`.${SPACE_SYNC_BUTTON_CLASS}`);
         await syncButton.click();
@@ -323,7 +362,7 @@ describe('Sync a space', function () {
     );
   });
 
-  describe('with advanced mode enabled (default)', () => {
+  describe('with advanced mode enabled', () => {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication({
@@ -331,6 +370,7 @@ describe('Sync a space', function () {
             spaces: [SPACE_WITH_MULTIPLE_CHANGES],
             ...buildSignedInUserForDatabase({ syncMode: SYNC_MODES.ADVANCED }),
           },
+          api: [SPACE_WITH_MULTIPLE_CHANGES_ORIGINAL],
         });
       })
     );

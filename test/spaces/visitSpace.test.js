@@ -41,7 +41,6 @@ import {
   INPUT_TYPE_PAUSE,
   VISIT_SPACE_PAUSE,
   SAVE_SPACE_PAUSE,
-  TOOLTIP_FADE_OUT_PAUSE,
   DEFAULT_GLOBAL_TIMEOUT,
   LOAD_PHASE_PAUSE,
   OPEN_TOOLS_PAUSE,
@@ -100,7 +99,6 @@ export const visitAndSaveSpaceById = async (client, id) => {
   await saveIcon.click();
 
   await client.pause(SAVE_SPACE_PAUSE);
-  await client.pause(TOOLTIP_FADE_OUT_PAUSE);
 };
 
 // check home phase of given space when preview
@@ -448,14 +446,14 @@ describe('Visit Space Scenarios', function () {
 
   afterEach(() => closeApplication(app));
 
-  describe('Visit a space just after delete', () => {
+  describe('Visit a space', () => {
+    const spaces = [SPACE_ATOMIC_STRUCTURE, SPACE_APOLLO_11];
+
     beforeEach(
       mochaAsync(async () => {
-        app = await createApplication();
+        app = await createApplication({ api: spaces });
       })
     );
-
-    const spaces = [SPACE_APOLLO_11, SPACE_ATOMIC_STRUCTURE];
 
     spaces.forEach((space) => {
       const {
@@ -475,10 +473,13 @@ describe('Visit Space Scenarios', function () {
   });
 
   describe('Visit a space just after delete', () => {
+    const { space } = SPACE_ATOMIC_STRUCTURE;
+
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication({
           responses: { showMessageDialogResponse: 1 },
+          api: [space],
         });
       })
     );
@@ -487,9 +488,7 @@ describe('Visit Space Scenarios', function () {
       'Visit a space just after delete from card',
       mochaAsync(async () => {
         const { client } = app;
-        const {
-          space: { id },
-        } = SPACE_ATOMIC_STRUCTURE;
+        const { id } = space;
         await visitAndSaveSpaceById(client, id);
         await menuGoToSavedSpaces(client);
 
@@ -508,9 +507,7 @@ describe('Visit Space Scenarios', function () {
       'Visit a space just after delete from space',
       mochaAsync(async () => {
         const { client } = app;
-        const {
-          space: { id },
-        } = SPACE_ATOMIC_STRUCTURE;
+        const { id } = space;
         await visitAndSaveSpaceById(client, id);
 
         const deleteButton = await client.$(`.${SPACE_DELETE_BUTTON_CLASS}`);

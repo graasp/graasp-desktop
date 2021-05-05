@@ -41,6 +41,7 @@ jobs:
           LOGGING_LEVEL: ${{secrets.LOGGING_LEVEL}}
           SENTRY_DSN: ${{secrets.SENTRY_DSN}}
           SENTRY_SUBMIT_URL: ${{secrets.SENTRY_SUBMIT_URL}}
+          REACT_APP_SHOW_NOTIFICATIONS: toastr
         with:
           build_script_name: build:github
           # GitHub token, automatically provided to the action
