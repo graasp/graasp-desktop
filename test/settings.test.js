@@ -80,7 +80,9 @@ describe('Settings Scenarios', function () {
   describe('Use graasp user', () => {
     beforeEach(
       mochaAsync(async () => {
-        app = await createApplication({ api: [SPACE_WITH_REMOVAL_ORIGINAL] });
+        app = await createApplication({
+          api: { spaces: [SPACE_WITH_REMOVAL_ORIGINAL] },
+        });
       })
     );
 

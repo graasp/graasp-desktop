@@ -451,7 +451,7 @@ describe('Visit Space Scenarios', function () {
 
     beforeEach(
       mochaAsync(async () => {
-        app = await createApplication({ api: spaces });
+        app = await createApplication({ api: { spaces } });
       })
     );
 
@@ -479,7 +479,7 @@ describe('Visit Space Scenarios', function () {
       mochaAsync(async () => {
         app = await createApplication({
           responses: { showMessageDialogResponse: 1 },
-          api: [space],
+          api: { spaces: [space] },
         });
       })
     );

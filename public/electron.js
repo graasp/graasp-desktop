@@ -201,6 +201,9 @@ const createWindow = () => {
     width: 1280,
   });
 
+  // on continuous integration, the built version of the application is tested.
+  // thus the file needs to be loaded
+  // development and local testing uses the development version of the application
   mainWindow.loadURL(
     CI !== 'true' && (isDev || process.env.NODE_ENV === 'test')
       ? 'http://localhost:3000'

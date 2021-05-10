@@ -71,7 +71,7 @@ const createApplication = async ({
     showOpenDialogResponse: undefined,
     showTours: 0,
   },
-  api = [],
+  api = { spaces: [] },
 } = {}) => {
   const {
     showMessageDialogResponse,
@@ -96,7 +96,7 @@ const createApplication = async ({
   // mock spaces fetch using the api
   // when not defined, provide default api database
   env.API_DATABASE = JSON.stringify(
-    api.map((space) => prepareSpaceForApi(space))
+    api.spaces.map((space) => prepareSpaceForApi(space))
   );
 
   // set up database

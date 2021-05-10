@@ -43,7 +43,7 @@ ReactDOM.render(
       <Detector
         render={({ online }) => (
           <>
-            {SHOW_NOTIFICATIONS === NOTIFICATIONS_TYPES.TOASTR && (
+            {[NOTIFICATIONS_TYPES.TOASTR].includes(SHOW_NOTIFICATIONS) && (
               <ReduxToastr
                 transitionIn="fadeIn"
                 preventDuplicates

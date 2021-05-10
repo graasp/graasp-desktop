@@ -49,7 +49,7 @@ describe('Recent Spaces', function () {
   beforeEach(
     mochaAsync(async () => {
       app = await createApplication({
-        api: [...spaces, SPACE_ATOMIC_STRUCTURE],
+        api: { spaces: [...spaces, SPACE_ATOMIC_STRUCTURE] },
         database: {
           ...buildSignedInUserForDatabase(),
           spaces,

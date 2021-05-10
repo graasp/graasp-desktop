@@ -269,7 +269,7 @@ describe('Sync a space', function () {
             database: {
               ...buildSignedInUserForDatabase({ syncMode: SYNC_MODES.VISUAL }),
             },
-            api: [original],
+            api: { spaces: [original] },
           });
           const { client } = app;
           const {
@@ -307,7 +307,7 @@ describe('Sync a space', function () {
             spaces: [localSpace],
             ...buildSignedInUserForDatabase({ syncMode: SYNC_MODES.VISUAL }),
           },
-          api: [remoteSpace],
+          api: { spaces: [remoteSpace] },
         });
         const { client } = app;
 
@@ -339,7 +339,7 @@ describe('Sync a space', function () {
             spaces: [localSpace],
             ...buildSignedInUserForDatabase({ syncMode: SYNC_MODES.VISUAL }),
           },
-          api: [remoteSpace],
+          api: { spaces: [remoteSpace] },
         });
         const { client } = app;
         const space = SPACE_WITH_MULTIPLE_CHANGES;
@@ -370,7 +370,7 @@ describe('Sync a space', function () {
             spaces: [SPACE_WITH_MULTIPLE_CHANGES],
             ...buildSignedInUserForDatabase({ syncMode: SYNC_MODES.ADVANCED }),
           },
-          api: [SPACE_WITH_MULTIPLE_CHANGES_ORIGINAL],
+          api: { spaces: [SPACE_WITH_MULTIPLE_CHANGES_ORIGINAL] },
         });
       })
     );

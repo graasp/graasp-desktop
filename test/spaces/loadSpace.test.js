@@ -169,10 +169,12 @@ describe('Load Space Scenarios', function () {
     beforeEach(
       mochaAsync(async () => {
         app = await createApplication({
-          api: [
-            SPACE_WITH_MULTIPLE_CHANGES,
-            SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES,
-          ],
+          api: {
+            spaces: [
+              SPACE_WITH_MULTIPLE_CHANGES,
+              SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES,
+            ],
+          },
         });
       })
     );
@@ -414,7 +416,7 @@ describe('Load Space Scenarios', function () {
             showSaveDialogResponse: filepath,
             showMessageDialogResponse: 1,
           },
-          api: [space],
+          api: { spaces: [space] },
         });
 
         const { id } = space;
@@ -462,7 +464,7 @@ describe('Load Space Scenarios', function () {
             showSaveDialogResponse: filepath,
             showMessageDialogResponse: 1,
           },
-          api: [space],
+          api: { spaces: [space] },
         });
 
         const { id, phases } = space;
@@ -539,7 +541,7 @@ describe('Load Space Scenarios', function () {
             showSaveDialogResponse: filepath,
             showMessageDialogResponse: 1,
           },
-          api: [space],
+          api: { spaces: [space] },
         });
 
         const { id, phases } = space;

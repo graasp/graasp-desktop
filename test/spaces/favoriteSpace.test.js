@@ -129,7 +129,7 @@ describe('Set space as favorite', function () {
 
         app = await createApplication({
           database: {},
-          api: [space],
+          api: { spaces: [space] },
         });
 
         const { id } = space;
