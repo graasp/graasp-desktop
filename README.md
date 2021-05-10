@@ -11,12 +11,6 @@
 </p>
 
 <p align="center">
-  <a href="https://app.codeship.com/projects/315997">
-    <img
-      alt="CodeShip"
-      src="https://app.codeship.com/projects/e0ef44e0-cff2-0136-9889-2aa8b2e23b88/status?branch=master"
-    />
-  </a>
   <a href="https://www.codacy.com/app/graasp/graasp-desktop">
     <img
       alt="Codacy Badge"
