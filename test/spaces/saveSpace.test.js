@@ -19,7 +19,9 @@ describe('Save a space', function () {
 
   beforeEach(
     mochaAsync(async () => {
-      app = await createApplication();
+      app = await createApplication({
+        api: { spaces: [SPACE_ATOMIC_STRUCTURE] },
+      });
     })
   );
   it(

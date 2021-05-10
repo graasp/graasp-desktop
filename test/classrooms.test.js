@@ -59,7 +59,6 @@ import {
   DELETE_CLASSROOM_PAUSE,
   DELETE_USER_IN_CLASSROOM_PAUSE,
   OPEN_CLASSROOM_PAUSE,
-  TOOLTIP_FADE_OUT_PAUSE,
   LOAD_SELECTION_SPACE_PAUSE,
 } from './constants';
 import {
@@ -561,7 +560,6 @@ describe('Classrooms Scenarios', function () {
         // delete user in first classroom
         await openClassroom(client, name);
         await deleteUserInClassroom(client, newName);
-        await client.pause(TOOLTIP_FADE_OUT_PAUSE);
         await hasStudentsTableLayout(
           client,
           [],

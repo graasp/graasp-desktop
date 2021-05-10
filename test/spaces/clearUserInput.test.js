@@ -14,7 +14,7 @@ import {
   SPACE_CARD_LINK_CLASS,
 } from '../../src/config/selectors';
 import { SPACE_ATOMIC_STRUCTURE } from '../fixtures/spaces';
-import { DEFAULT_GLOBAL_TIMEOUT, TOOLTIP_FADE_OUT_PAUSE } from '../constants';
+import { DEFAULT_GLOBAL_TIMEOUT } from '../constants';
 import { USER_BOB, USER_ALICE } from '../fixtures/users';
 import {
   typeInTextInputApp,
@@ -72,7 +72,6 @@ describe('Clear User Input in a space', function () {
           // clear
           const clearButton = await client.$(`.${SPACE_CLEAR_BUTTON_CLASS}`);
           await clearButton.click();
-          await client.pause(TOOLTIP_FADE_OUT_PAUSE);
 
           // check space doesn't contain user input
           await menuGoToPhase(client, 0);
@@ -165,7 +164,6 @@ describe('Clear User Input in a space', function () {
           await typeInTextInputApp(client, textInputAppId1, text1);
 
           await (await client.$(`.${SPACE_CLEAR_BUTTON_CLASS}`)).click();
-          await client.pause(TOOLTIP_FADE_OUT_PAUSE);
 
           // check it is still saved
           await menuGoToPhase(client, 0);

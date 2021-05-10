@@ -168,7 +168,14 @@ describe('Load Space Scenarios', function () {
   describe('predefined export spaces', () => {
     beforeEach(
       mochaAsync(async () => {
-        app = await createApplication();
+        app = await createApplication({
+          api: {
+            spaces: [
+              SPACE_WITH_MULTIPLE_CHANGES,
+              SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES,
+            ],
+          },
+        });
       })
     );
 
@@ -332,7 +339,9 @@ describe('Load Space Scenarios', function () {
     it(
       `Cannot load non-existing space ${SPACE_ATOMIC_STRUCTURE_WITH_ACTIONS_AND_RESOURCES.space.name}`,
       mochaAsync(async () => {
-        app = await createApplication({ database: {} });
+        app = await createApplication({
+          database: {},
+        });
         await userSignIn(app.client, USER_BOB);
 
         const { client } = app;
@@ -399,9 +408,7 @@ describe('Load Space Scenarios', function () {
     it(
       `Load exported space of ${SPACE_ATOMIC_STRUCTURE.space.name}`,
       mochaAsync(async () => {
-        const {
-          space: { id },
-        } = SPACE_ATOMIC_STRUCTURE;
+        const { space } = SPACE_ATOMIC_STRUCTURE;
 
         const filepath = `${EXPORT_FILEPATH}_${createRandomString()}.zip`;
         app = await createApplication({
@@ -409,7 +416,10 @@ describe('Load Space Scenarios', function () {
             showSaveDialogResponse: filepath,
             showMessageDialogResponse: 1,
           },
+          api: { spaces: [space] },
         });
+
+        const { id } = space;
 
         const { client } = app;
 
@@ -446,9 +456,7 @@ describe('Load Space Scenarios', function () {
       `Load exported space of ${SPACE_ATOMIC_STRUCTURE.space.name} with added user input`,
       mochaAsync(async () => {
         globalUser = USER_GRAASP;
-        const {
-          space: { id, phases },
-        } = SPACE_ATOMIC_STRUCTURE;
+        const { space } = SPACE_ATOMIC_STRUCTURE;
 
         const filepath = `${EXPORT_FILEPATH}_${createRandomString()}.zip`;
         app = await createApplication({
@@ -456,7 +464,10 @@ describe('Load Space Scenarios', function () {
             showSaveDialogResponse: filepath,
             showMessageDialogResponse: 1,
           },
+          api: { spaces: [space] },
         });
+
+        const { id, phases } = space;
 
         const { client } = app;
 
@@ -522,9 +533,7 @@ describe('Load Space Scenarios', function () {
       `Load exported space of ${SPACE_ATOMIC_STRUCTURE.space.name} without added user input`,
       mochaAsync(async () => {
         globalUser = USER_GRAASP;
-        const {
-          space: { id, phases },
-        } = SPACE_ATOMIC_STRUCTURE;
+        const { space } = SPACE_ATOMIC_STRUCTURE;
 
         const filepath = `${EXPORT_FILEPATH}_${createRandomString()}.zip`;
         app = await createApplication({
@@ -532,7 +541,10 @@ describe('Load Space Scenarios', function () {
             showSaveDialogResponse: filepath,
             showMessageDialogResponse: 1,
           },
+          api: { spaces: [space] },
         });
+
+        const { id, phases } = space;
 
         const { client } = app;
 

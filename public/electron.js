@@ -176,7 +176,7 @@ if (process.env.NODE_ENV === 'test') {
 let mainWindow;
 
 // only set up sentry if dsn is provided
-const { SENTRY_DSN, GOOGLE_ANALYTICS_ID } = process.env;
+const { SENTRY_DSN, GOOGLE_ANALYTICS_ID, CI } = process.env;
 if (SENTRY_DSN) {
   Sentry.init({ dsn: SENTRY_DSN });
 }
@@ -201,8 +201,11 @@ const createWindow = () => {
     width: 1280,
   });
 
+  // on continuous integration, the built version of the application is tested.
+  // thus the file needs to be loaded
+  // development and local testing uses the development version of the application
   mainWindow.loadURL(
-    isDev || process.env.NODE_ENV === 'test'
+    CI !== 'true' && (isDev || process.env.NODE_ENV === 'test')
       ? 'http://localhost:3000'
       : `file://${path.join(__dirname, './index.html')}`
   );

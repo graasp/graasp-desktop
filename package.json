@@ -67,8 +67,9 @@
     "report": "cat ./coverage/lcov.info | env-cmd -f ./.env.test codacy-coverage",
     "report:ci": "cat ./coverage/lcov.info | codacy-coverage",
     "version": "git add CHANGELOG.md && standard-version -a",
-    "mocha:run": "mocha --require @babel/register --retries 3 'test/**/*.test.js'",
-    "mocha": "mkdirp test/tmp && concurrently \"env-cmd -f ./.env.test react-scripts start\" \"wait-on http://localhost:3000 && yarn mocha:run\""
+    "mocha:run": "mocha --exit --require @babel/register --retries 3 'test/**/*.test.js'",
+    "mocha": "mkdirp test/tmp && concurrently \"env-cmd -f ./.env.test react-scripts start\" \"wait-on http://localhost:3000 && yarn mocha:run\"",
+    "mocha:coverage": "nyc --reporter=lcov yarn mocha:run"
   },
   "dependencies": {
     "@material-ui/core": "4.11.4",
@@ -143,6 +144,8 @@
     "@babel/register": "7.13.16",
     "@commitlint/cli": "12.1.1",
     "@commitlint/config-conventional": "12.1.1",
+    "@istanbuljs/nyc-config-babel": "3.0.0",
+    "babel-plugin-istanbul": "6.0.0",
     "codacy-coverage": "3.4.0",
     "concurrently": "6.0.2",
     "cross-env": "7.0.3",
@@ -155,6 +158,7 @@
     "eslint-plugin-mocha": "8.1.0",
     "husky": "6.0.0",
     "npm-run-all": "4.1.5",
+    "nyc": "15.1.0",
     "prettier": "2.2.1",
     "pretty-quick": "3.1.0",
     "react-scripts": "4.0.3",
@@ -228,6 +232,10 @@
   "jest": {
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/registerServiceWorker.js"
     ]
   }
 }

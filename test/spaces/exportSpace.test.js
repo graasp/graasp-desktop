@@ -25,8 +25,8 @@ import { hasSavedSpaceLayout } from './visitSpace.test';
 import {
   EXPORT_FILEPATH,
   DEFAULT_GLOBAL_TIMEOUT,
-  TOOLTIP_FADE_OUT_PAUSE,
   OPEN_SAVED_SPACE_PAUSE,
+  EXPORT_SPACE_PAUSE,
 } from '../constants';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -52,7 +52,8 @@ export const exportSpaceWithSelected = async (
 
   const exportButton = await client.$(`#${EXPORT_SPACE_BUTTON_ID}`);
   await exportButton.click();
-  await client.pause(TOOLTIP_FADE_OUT_PAUSE);
+
+  await client.pause(EXPORT_SPACE_PAUSE);
 };
 
 const checkExportSelectionLayout = async (

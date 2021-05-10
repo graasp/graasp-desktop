@@ -42,7 +42,10 @@ import {
 import { USER_GRAASP, USER_ALICE, USER_CEDRIC } from './fixtures/users';
 import { settingsPerUser } from './fixtures/settings';
 import { loadSpaceById } from './spaces/loadSpace.test';
-import { SPACE_WITH_REMOVAL } from './fixtures/syncSpace';
+import {
+  SPACE_WITH_REMOVAL,
+  SPACE_WITH_REMOVAL_ORIGINAL,
+} from './fixtures/syncSpace';
 
 const isLanguageSetTo = async (client, value) => {
   const lang = await (
@@ -77,7 +80,9 @@ describe('Settings Scenarios', function () {
   describe('Use graasp user', () => {
     beforeEach(
       mochaAsync(async () => {
-        app = await createApplication();
+        app = await createApplication({
+          api: { spaces: [SPACE_WITH_REMOVAL_ORIGINAL] },
+        });
       })
     );
 

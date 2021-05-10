@@ -5,7 +5,6 @@ export const APPS_FOLDER = 'apps';
 
 export const DEFAULT_GLOBAL_TIMEOUT = 270000;
 export const SAVE_USER_INPUT_TIMEOUT = 370000;
-export const TOOLTIP_FADE_OUT_PAUSE = 10000;
 export const INPUT_TYPE_PAUSE = 2000;
 export const VISIT_SPACE_PAUSE = 5000;
 export const OPEN_SAVED_SPACE_PAUSE = 2000;

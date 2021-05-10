@@ -15,6 +15,7 @@ import 'react-quill/dist/quill.core.css';
 import App from './App';
 import configureStore from './store/configure';
 import { ROOT_ID } from './config/selectors';
+import { NOTIFICATIONS_TYPES, SHOW_NOTIFICATIONS } from './config/constants';
 
 // bind katex to the window object
 window.katex = katex;
@@ -42,11 +43,13 @@ ReactDOM.render(
       <Detector
         render={({ online }) => (
           <>
-            <ReduxToastr
-              transitionIn="fadeIn"
-              preventDuplicates
-              transitionOut="fadeOut"
-            />
+            {[NOTIFICATIONS_TYPES.TOASTR].includes(SHOW_NOTIFICATIONS) && (
+              <ReduxToastr
+                transitionIn="fadeIn"
+                preventDuplicates
+                transitionOut="fadeOut"
+              />
+            )}
             <App connexionStatus={online} />
           </>
         )}
