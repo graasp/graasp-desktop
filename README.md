@@ -11,6 +11,10 @@
 </p>
 
 <p align="center">
+    <img
+      alt="Coverage"
+      src="https://github.com/graasp/graasp-desktop/actions/workflows/coverage.yml/badge.svg?branch=master"
+    />
   <a href="https://www.codacy.com/app/graasp/graasp-desktop">
     <img
       alt="Codacy Badge"
