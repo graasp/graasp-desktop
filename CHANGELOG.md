@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.15.11](https://github.com/graasp/graasp-desktop/compare/v0.15.10...v0.15.11) (2021-05-11)
+
+
+### Features
+
+* turn off spaces nearby and geolocation setting ([372ee1f](https://github.com/graasp/graasp-desktop/commit/372ee1fb9cc8200b9d092523fd1477fc9d10de9d))
+
+
+### Documentation
+
+* update readme with an additional line ([088ff49](https://github.com/graasp/graasp-desktop/commit/088ff49b75ecd72cdacd569d8af5432d1c9ba95f))
+
+
+### Build System
+
+* coverage check with spectron and send to coveralls ([be99a9d](https://github.com/graasp/graasp-desktop/commit/be99a9d38c8590d83f63972006ae2ddeecbd3515))
+* update dependencies ([1f4f18b](https://github.com/graasp/graasp-desktop/commit/1f4f18b1b750c4949b8c45f2464bdef03095a86b))
+* update dependencies ([844a5a8](https://github.com/graasp/graasp-desktop/commit/844a5a8dca0934d62b5757d7b50aea382ae543b5))
+
 ### [0.15.10](https://github.com/graasp/graasp-desktop/compare/v0.15.9...v0.15.10) (2021-02-11)
 
 ### Features
